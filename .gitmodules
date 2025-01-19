@@ -1,3 +1,6 @@
 [submodule "winboll-x"]
 	path = winboll-x
 	url = https://gitea.winboll.cc/Studio/WinBollX.git
+[submodule "libjc/jcc/libs"]
+	path = libjc/jcc/libs
+	url = https://gitea.winboll.cc/Studio/APP_libjc_jcc_libs.git
