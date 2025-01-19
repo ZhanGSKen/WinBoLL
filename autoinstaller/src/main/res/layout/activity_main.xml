@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".MainActivity"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_horizontal">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Watching File :"/>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical">
+
+			<EditText
+				android:layout_width="0dp"
+				android:ems="10"
+				android:layout_height="wrap_content"
+				android:layout_weight="1.0"
+				android:id="@+id/activitymainEditText1"/>
+
+			<Switch
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:onClick="onLockPath"
+				android:id="@+id/activitymainSwitch1"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<RadioButton
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/activitymainRadioButton1"
+				android:text="直接安装"
+				android:onClick="onChangeSetupMode"/>
+
+			<RadioButton
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/activitymainRadioButton2"
+				android:text="用[应用信息查看器]打开"
+				android:onClick="onChangeSetupMode"/>
+
+		</LinearLayout>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Times Now :"/>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical">
+
+			<AnalogClock
+				android:layout_width="40dp"
+				android:layout_height="40dp"/>
+
+			<TextClock
+				android:textSize="20sp"
+				android:id="@+id/activitymainTextClock1"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Installed Times :"/>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:gravity="center"
+		android:layout_weight="1.0">
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<cc.winboll.studio.autoinstaller.views.ListViewForScrollView
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:id="@+id/activitymainListViewForScrollView1"/>
+
+		</ScrollView>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="right">
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="安装应用包"
+			android:onClick="onInstallAPK"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="打开应用"
+			android:onClick="onOpenAPP"/>
+
+	</LinearLayout>
+
+	<cc.winboll.studio.shared.log.LogView
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="200dp"
+		android:id="@+id/logview"/>
+
+</LinearLayout>
+

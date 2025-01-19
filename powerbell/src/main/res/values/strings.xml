@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PowerBell</string>
+    <string name="app_projectname">PowerBell</string>
+    <string name="app_description">Mobile phone power change ringtone alert app.</string>
+    <string name="about_crashed">This application has crashed, the author level is limited, please understand!</string>
+    <string name="item_mainview">Main View</string>
+    <string name="item_aboutview">About</string>
+    <string name="item_clearrecord">Clear Record</string>
+    <string name="item_changepicture">Change Picture</string>
+    <string name="item_devoloperoptionsview">Developer View</string>
+    <string name="item_logview">Log View</string>
+    <string name="item_cleanlog">Clean Log</string>
+    <string name="item_sourceview">Source View</string>
+    <string name="txt_aboveswitch">Message master switch</string>
+    <string name="txt_aboveswitchtips">Send a remind ringtone, when power is lower than left (usage state) or higher than right (charged state).</string>
+    <string name="texthint_CustomSlideToCleanRecord">Slide Right To Clean Up APP Record.</string>
+    <string name="subtitle_activity_clearrecord">Clean Record</string>
+    <string name="subtitle_activity_backgroundpicture">Background Picture</string>
+    <string name="subtitle_activity_about">About The APP</string>
+    <string name="msg_AOHPCTCSeekBar_ClearRecord">&gt;&gt;&gt;Seek 100% To Clear Battery Record.&gt;&gt;&gt;</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="appTheme" format="reference"/>
+    <declare-styleable name="AToolbar">
+        <attr name="attrAToolbarStartColor" format="color" />
+        <attr name="attrAToolbarCenterColor" format="color" />
+        <attr name="attrAToolbarEndColor" format="color" />
+    </declare-styleable>
+</resources>

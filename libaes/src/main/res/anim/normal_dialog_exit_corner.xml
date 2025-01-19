@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shareInterpolator="false">
+    <scale
+        android:fromXScale="1.0"
+        android:toXScale="0.1"
+        android:fromYScale="1.0"
+        android:toYScale="0.1"
+        android:pivotX="@dimen/dialogPivotX"
+        android:pivotY="@dimen/dialogPivotY"
+        android:duration="500"
+        android:fillBefore="false" />
+</set>

@@ -1,0 +1,58 @@
+apply plugin: 'com.android.application'
+apply from: '../.winboll/winboll_app_build.gradle'
+apply from: '../.winboll/winboll_lint_build.gradle'
+
+def genVersionName(def versionName){
+    // 检查编译标志位配置
+    assert (winbollBuildProps['stageCount'] != null)
+    assert (winbollBuildProps['baseVersion'] != null)
+    // 保存基础版本号
+    winbollBuildProps.setProperty("baseVersion", "${versionName}");
+    //保存编译标志配置
+    FileOutputStream fos = new FileOutputStream(winbollBuildPropsFile)
+    winbollBuildProps.store(fos, "${winbollBuildPropsDesc}");
+    fos.close();
+    
+    // 返回编译版本号
+    return "${versionName}." + winbollBuildProps['stageCount']
+}
+
+android {
+    compileSdkVersion 32
+    buildToolsVersion "33.0.3"
+
+    defaultConfig {
+        applicationId "cc.winboll.studio.wvmapp"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+    }
+    
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    api 'cc.winboll.studio:winboll-shared:1.6.5'
+    api 'io.github.medyo:android-about-page:2.0.0'
+    api 'com.github.getActivity:ToastUtils:10.5'
+    api 'com.jcraft:jsch:0.1.55'
+    api 'org.jsoup:jsoup:1.13.1'
+    api 'com.squareup.okhttp3:okhttp:4.4.1'
+    
+    api 'androidx.appcompat:appcompat:1.0.0'
+    api 'androidx.fragment:fragment:1.0.0'
+    api 'com.google.android.material:material:1.0.0'
+    
+    api fileTree(dir: 'libs', include: ['*.jar'])
+}

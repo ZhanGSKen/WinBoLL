@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<ImageView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/fragmentmainviewImageView1">
+
+	</ImageView>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/fragmentmainviewLinearLayout3"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:layout_marginTop="10dp">
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:background="@drawable/bg_frame">
+
+				<Switch
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:id="@+id/fragmentandroidviewSwitch1"
+					android:padding="10dp"
+					android:layout_weight="1.0"
+					android:textSize="@dimen/text_title_size"/>
+
+			</LinearLayout>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Tips"
+				android:textSize="@dimen/text_content_size"
+				android:id="@+id/fragmentandroidviewTextView1"
+				android:background="@drawable/bg_frame"
+				android:padding="10dp"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1.0"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp">
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1.0">
+
+				<LinearLayout
+					android:orientation="vertical"
+					android:layout_width="50dp"
+					android:layout_height="match_parent"
+					android:layout_marginTop="20dp"
+					android:layout_marginBottom="20dp"
+					android:id="@+id/fragmentmainviewLinearLayout1">
+
+					<ImageView
+						android:layout_width="36dp"
+						android:layout_height="36dp"
+						android:background="@drawable/usege"
+						android:layout_gravity="center_horizontal"
+						android:layout_marginTop="10dp"/>
+
+					<CheckBox
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center_horizontal"
+						android:layout_marginTop="10dp"
+						android:id="@+id/fragmentmainviewCheckBox2"/>
+
+					<cc.winboll.studio.powerbell.views.VerticalSeekBar
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:id="@+id/fragmentandroidviewVerticalSeekBar2"
+						android:progressTint="@color/colorUsege"
+						android:progressBackgroundTint="@color/colorUsege"
+						android:layout_weight="1.0"
+						android:layout_margin="10dp"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="vertical"
+					android:layout_width="80dp"
+					android:layout_height="match_parent">
+
+					<TextView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:text="100%"
+						android:textSize="@dimen/text_title_size"
+						android:layout_gravity="center_horizontal"
+						android:id="@+id/fragmentandroidviewTextView3"
+						android:gravity="center_horizontal"/>
+
+					<ImageView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:id="@+id/fragmentandroidviewImageView2"
+						android:layout_weight="1.0"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="vertical"
+					android:layout_width="wrap_content"
+					android:layout_height="match_parent"
+					android:layout_weight="1.0">
+
+					<TextView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:text="100%"
+						android:textSize="@dimen/text_title_size"
+						android:layout_gravity="center_horizontal"
+						android:gravity="center_horizontal"
+						android:id="@+id/fragmentandroidviewTextView4"/>
+
+					<ImageView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:id="@+id/fragmentandroidviewImageView1"
+						android:layout_weight="1.0"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="vertical"
+					android:layout_width="80dp"
+					android:layout_height="match_parent">
+
+					<TextView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:text="100%"
+						android:textSize="@dimen/text_title_size"
+						android:layout_gravity="center_horizontal"
+						android:id="@+id/fragmentandroidviewTextView2"
+						android:gravity="center_horizontal"/>
+
+					<ImageView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:id="@+id/fragmentandroidviewImageView3"
+						android:layout_weight="1.0"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="vertical"
+					android:layout_width="50dp"
+					android:layout_height="match_parent"
+					android:layout_marginBottom="20dp"
+					android:layout_marginTop="20dp"
+					android:id="@+id/fragmentmainviewLinearLayout2">
+
+					<ImageView
+						android:layout_width="36dp"
+						android:layout_height="36dp"
+						android:background="@drawable/charge"
+						android:layout_gravity="center_horizontal"
+						android:layout_marginTop="10dp"/>
+
+					<CheckBox
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center_horizontal"
+						android:layout_marginTop="10dp"
+						android:id="@+id/fragmentmainviewCheckBox1"/>
+
+					<cc.winboll.studio.powerbell.views.VerticalSeekBar
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:id="@+id/fragmentandroidviewVerticalSeekBar1"
+						android:progressTint="@color/colorCharge"
+						android:progressBackgroundTint="@color/colorCharge"
+						android:layout_weight="1.0"
+						android:layout_margin="10dp"/>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</RelativeLayout>
+

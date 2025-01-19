@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<cc.winboll.studio.libaes.views.AToolbar
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/toolbar_height"
+		android:id="@+id/toolbar"
+		style="@style/DefaultAToolbar"/>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="30dp">
+
+		<cc.winboll.studio.libaes.views.AOHPCTCSeekBar
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/activityclearrecordAOHPCTCSeekBar1"/>
+
+	</LinearLayout>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/activityclearrecordTextView1"
+		android:gravity="center_horizontal"
+		android:layout_gravity="center_horizontal"/>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_marginTop="10dp"
+		android:layout_weight="1.0"
+		android:background="@drawable/bg_frame">
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Record Text"
+			android:textStyle="bold"
+			android:gravity="center_horizontal"/>
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1.0"
+			android:padding="10dp">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:textSize="@dimen/text_content_size"
+				android:id="@+id/activityclearrecordTextView2"/>
+
+		</ScrollView>
+
+	</LinearLayout>
+
+</LinearLayout>
+

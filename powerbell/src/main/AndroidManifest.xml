@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='utf-8'?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cc.winboll.studio.powerbell">
+    
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <!-- 运行前台服务 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <!-- 读取您共享存储空间中的内容 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!-- 修改或删除您共享存储空间中的内容 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <!-- 开机启动 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <!-- MANAGE_EXTERNAL_STORAGE -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+
+    <application
+        android:name=".GlobalApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme_Default"
+        android:persistent="true"
+        android:resizeableActivity="true"
+        android:requestLegacyExternalStorage="true">
+
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTask">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name="cc.winboll.studio.powerbell.activities.ClearRecordActivity"
+            android:parentActivityName="cc.winboll.studio.powerbell.MainActivity"
+            android:launchMode="singleTask">
+
+        </activity>
+
+        <activity
+            android:name="cc.winboll.studio.powerbell.activities.BackgroundPictureActivity"
+            android:parentActivityName="cc.winboll.studio.powerbell.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.SEND"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data android:mimeType="image/jpeg"/>
+
+                <data android:mimeType="image/jpg"/>
+
+                <data android:mimeType="image/png"/>
+
+                <data android:mimeType="image/webp"/>
+
+                <data android:mimeType="image/*"/>
+
+            </intent-filter>
+
+        </activity>
+
+        <receiver
+            android:name=".receivers.MainReceiver"
+            android:enabled="true"
+            android:exported="false"
+            android:directBootAware="true">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+
+            </intent-filter>
+
+        </receiver>
+
+        <service
+            android:name="cc.winboll.studio.powerbell.services.ControlCenterService"
+            android:priority="1000"
+            android:enabled="true"
+            android:exported="false"
+            android:process=".controlcenterservice"/>
+
+        <service
+            android:name="cc.winboll.studio.powerbell.services.AssistantService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=".assistantservice"/>
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="4.0"/>
+
+        <activity android:name="cc.winboll.studio.powerbell.activities.AboutActivity"/>
+
+    </application>
+
+</manifest>

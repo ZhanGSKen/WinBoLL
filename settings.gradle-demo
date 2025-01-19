@@ -1,0 +1,39 @@
+// WinBoll-Demo 项目编译设置
+//include ':demo'
+//rootProject.name = "demo"
+
+// WinBoll-APP 项目编译设置
+//include ':app'
+//include ':winboll-shared'
+//rootProject.name = "app"
+
+// AutoInstaller 项目编译设置
+//include ':autoinstaller'
+//rootProject.name = "autoinstaller"
+
+// MJ 项目编译设置
+//include ':mj'
+//rootProject.name = "mj"
+
+// PowerBell 项目编译设置
+//include ':powerbell'
+//rootProject.name = "powerbell"
+
+// APPBase 项目编译设置
+//include ':appbase'
+//include ':libappbase'
+//rootProject.name = "appbase"
+
+// APPUtils 项目编译设置
+//include ':apputils'
+//include ':libapputils'
+//rootProject.name = "apputils"
+
+// JC 项目编译设置
+//include ':jc'
+//rootProject.name = "jc"
+
+// AES 项目编译设置
+//include ':aes'
+//include ':libaes'
+//rootProject.name = "aes"

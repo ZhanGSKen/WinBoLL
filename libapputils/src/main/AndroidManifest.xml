@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cc.winboll.studio.libapputils">
+
+    <!-- 此应用可显示在其他应用上方 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <!-- 对正在运行的应用重新排序 -->
+    <uses-permission android:name="android.permission.REORDER_TASKS"/>
+
+    <!-- MOVE_TASK_TO_FRONT -->
+    <uses-permission android:name="android.permission.MOVE_TASK_TO_FRONT"/>
+
+    <!-- 检索正在运行的应用 -->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+
+    <!-- 拍摄照片和视频 -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <application android:networkSecurityConfig="@xml/network_security_config">
+
+        <activity
+            android:name=".app.CrashHandler$CrashActiviy"
+            android:label="CrashActiviy"
+            android:launchMode="standard"/>
+
+        <activity
+            android:name=".log.LogActivity"
+            android:label="LogActivity"
+            android:launchMode="standard"/>
+
+        <activity
+            android:name=".activities.AboutActivity"
+            android:label="AboutActivity"
+            android:launchMode="standard"/>
+
+        <activity
+            android:name=".activities.AssetsHtmlActivity"
+            android:label="AssetsHtmlActivity"/>
+
+        <activity
+            android:name=".activities.QRCodeDecodeActivity"
+            android:label="QRCodeDecodeActivity"/>
+
+    </application>
+
+</manifest>

@@ -1,0 +1,26 @@
+Signature-Version: 1.0
+Created-By: 1.0 (Android)
+SHA1-Digest-Manifest: bu8k0On7Dhh5SmMHhFIiFNy8VsE=
+X-Android-APK-Signed: 2,3
+
+Name: AndroidManifest.xml
+SHA1-Digest: 650KiNkJz8zR0YjtU60p9JLk6DM=
+
+Name: jni/Android.mk
+SHA1-Digest: GCbLdrenTX+es3yN2Kxr5JFTmqI=
+
+Name: jni/Application.mk
+SHA1-Digest: Ej81608yiBv2xXvZNNdOqAX6inY=
+
+Name: jni/hello-jni.cpp
+SHA1-Digest: JnFzQ87JOmgl03YXyU4KXOoIEVw=
+
+Name: project.properties
+SHA1-Digest: J4uuFC9e5midbRb0CLjwmCe9yzI=
+
+Name: res/values/strings.xml
+SHA1-Digest: b0ttc6FsJASe2A/iHmjJc46Roe4=
+
+Name: src/$package_name$/HelloJni.java
+SHA1-Digest: bCqE6Coyb2Z88XANCeKu6L+lflw=
+

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_log"
+        android:title="LogActivity"/>
+    <item
+        android:id="@+id/item_colordialog"
+        android:title="ColorDialog"/>
+    <item
+        android:id="@+id/item_dialogstoragepath"
+        android:title="StoragePathDialog"/>
+
+    <item
+        android:id="@+id/item_localfileselectdialog"
+        android:title="LocalFileSelectDialog"/>
+    
+    <item
+        android:id="@+id/item_atoolbar"
+        android:title="Test AToolbar"/>
+    <item
+        android:id="@+id/item_asupporttoolbar"
+        android:title="Test ASupportToolbar"/>
+    <item
+        android:id="@+id/item_atoast"
+        android:title="Test AToast"/>
+    <item
+        android:id="@+id/item_secondarylibraryactivity"
+        android:title="Test SecondaryLibraryActivity"/>
+    <item
+        android:id="@+id/item_drawerfragmentactivity"
+        android:title="Test DrawerFragmentActivity"/>
+</menu>

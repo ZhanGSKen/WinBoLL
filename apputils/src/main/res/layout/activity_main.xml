@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<androidx.appcompat.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/activitymainToolbar1"/>
+
+	<LinearLayout
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:gravity="right"
+		android:layout_weight="1.0">
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="TestLog"
+                android:textAllCaps="false"
+				android:onClick="onTestLogClick"/>
+
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="LogUtils"
+				android:textAllCaps="false"
+				android:onClick="onLogUtilsClick"/>
+
+		</LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="Test Javascript Html Activity"
+                android:onClick="onTestJavascriptHtmlActivity"/>
+
+        </LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>
+
