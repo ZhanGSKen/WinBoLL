@@ -20,6 +20,7 @@ import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.AppVersionUtils;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.app.WinBollApplication;
+import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.bean.DebugBean;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import cc.winboll.studio.libapputils.util.PrefUtils;
@@ -41,6 +42,8 @@ public class AboutView extends LinearLayout {
     public static final int MSG_APPUPDATE_CHECKED = 0;
 
     Context mContext;
+    APPInfo mAPPInfo;
+
     WinBollServiceStatusView mWinBollServiceStatusView;
     OnRequestDevUserInfoAutofillListener mOnRequestDevUserInfoAutofillListener;
     String mszAppName = "";
@@ -59,23 +62,46 @@ public class AboutView extends LinearLayout {
     EditText metDevUserName;
     EditText metDevUserPassword;
 
+    public AboutView(Context context, APPInfo appInfo) {
+        super(context);
+        setAPPInfo(appInfo);
+        initView(context);
+    }
+
     public AboutView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView(context, attrs);
     }
 
-    void initView(Context context, AttributeSet attrs) {
-        mContext = context;
-        mszWinBollServerHost = WinBollApplication.isDebug() ?  "http://10.8.0.13": "https://www.winboll.cc";
+    public void setAPPInfo(APPInfo appInfo) {
+        mAPPInfo = appInfo;
+    }
+
+    APPInfo createAppInfo(Context context, AttributeSet attrs) {
+        APPInfo appInfo = new APPInfo();
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.AboutView);
-        mszAppName = typedArray.getString(R.styleable.AboutView_app_name);
-        mszAppAPKFolderName = typedArray.getString(R.styleable.AboutView_app_apkfoldername);
-        mszAppAPKName = typedArray.getString(R.styleable.AboutView_app_apkname);
-        mszAppGitName = typedArray.getString(R.styleable.AboutView_app_gitname);
-        mszAppDescription = typedArray.getString(R.styleable.AboutView_appdescription);
-        mnAppIcon = typedArray.getResourceId(R.styleable.AboutView_appicon, R.drawable.ic_winboll);
+        appInfo.setAppName(typedArray.getString(R.styleable.AboutView_app_name));
+        appInfo.setAppAPKFolderName(typedArray.getString(R.styleable.AboutView_app_apkfoldername));
+        appInfo.setAppAPKName(typedArray.getString(R.styleable.AboutView_app_apkname));
+        appInfo.setAppGitName(typedArray.getString(R.styleable.AboutView_app_gitname));
+        appInfo.setAppDescription(typedArray.getString(R.styleable.AboutView_appdescription));
+        appInfo.setAppIcon(typedArray.getResourceId(R.styleable.AboutView_appicon, R.drawable.ic_winboll));
         // 返回一个绑定资源结束的信号给资源
         typedArray.recycle();
+        return appInfo;
+    }
+
+    void initView(Context context) {
+        mContext = context;
+
+        mszAppName = mAPPInfo.getAppName();
+        mszAppAPKFolderName = mAPPInfo.getAppAPKFolderName();
+        mszAppAPKName = mAPPInfo.getAppAPKName();
+        mszAppGitName = mAPPInfo.getAppGitName();
+        mszAppDescription = mAPPInfo.getAppDescription();
+        mnAppIcon = mAPPInfo.getAppIcon();
+
+        mszWinBollServerHost = WinBollApplication.isDebug() ?  "http://10.8.0.13": "https://www.winboll.cc";
 
         try {
             mszAppVersionName = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
@@ -129,6 +155,11 @@ public class AboutView extends LinearLayout {
         mszReleaseAPKName = mszAppAPKName + "_" + szReleaseAppVersionName + ".apk";
 
 
+    }
+
+    void initView(Context context, AttributeSet attrs) {
+        mAPPInfo = createAppInfo(context, attrs);
+        initView(context);
     }
 
     public static String subBetaSuffix(String input) {

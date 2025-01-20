@@ -14,6 +14,8 @@ import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.log.LogActivity;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import com.hjq.toast.ToastUtils;
+import cc.winboll.studio.libapputils.activities.AboutActivity;
+import cc.winboll.studio.libapputils.bean.APPInfo;
 
 final public class MainActivity extends WinBollActivity {
 
@@ -160,6 +162,15 @@ final public class MainActivity extends WinBollActivity {
             startActivityForResult(intent, REQUEST_QRCODEDECODE_ACTIVITY);
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    public void onTestAboutActivity(View view) {
+        Intent intent = new Intent(this, AboutActivity.class);
+        APPInfo appInfo = new APPInfo();
+        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
+        appInfo.setAppName("Test APP");
+        intent.putExtra(AboutActivity.EXTRA_APPINFO, appInfo);
+        WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, AboutActivity.class);
     }
 
     public void onTestJavascriptHtmlActivity(View view) {

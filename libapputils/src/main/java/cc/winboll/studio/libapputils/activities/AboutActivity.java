@@ -1,24 +1,30 @@
 package cc.winboll.studio.libapputils.activities;
 
+/**
+ * @Author ZhanGSKen@QQ.COM
+ * @Date 2024/07/14 13:20:33
+ * @Describe 应用介绍页
+ */
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.WinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
-import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libapputils.bean.APPInfo;
+import cc.winboll.studio.libapputils.view.AboutView;
+import com.hjq.toast.ToastUtils;
 
-/**
- * @Author ZhanGSKen@QQ.COM
- * @Date 2024/07/14 13:20:33
- * @Describe AboutFragment Test
- */
 final public class AboutActivity extends WinBollActivity {
 
     public static final String TAG = "AboutActivity";
+    public static final String EXTRA_APPINFO = "EXTRA_APPINFO";
 
+
+    APPInfo mAPPInfo;
 
     @Override
     public String getTag() {
@@ -34,21 +40,19 @@ final public class AboutActivity extends WinBollActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-
-        /*AboutView aboutView = findViewById(R.id.activityaboutAboutView1);
-         aboutView.setOnRequestDevUserInfoAutofillListener(new AboutView.OnRequestDevUserInfoAutofillListener(){
-
-         @Override
-         public void requestAutofill(EditText etDevUserName, EditText etDevUserPassword) {
-         AutofillManager autofillManager = (AutofillManager) getSystemService(AutofillManager.class);
-         if (autofillManager!= null) {
-         //ToastUtils.show("0");
-         autofillManager.requestAutofill(findViewById(R.id.usernameEditText));
-         autofillManager.requestAutofill(findViewById(R.id.passwordEditText));
-         }
-         }
-         });*/
-
+        Intent intent = getIntent();
+        if (intent != null) {
+            mAPPInfo = (APPInfo)intent.getSerializableExtra(EXTRA_APPINFO);
+        }
+        if (mAPPInfo == null) {
+            mAPPInfo = new APPInfo();
+        }
+        
+        AboutView aboutView = new AboutView(this, mAPPInfo);
+        LinearLayout llMain = findViewById(R.id.activityaboutLinearLayout1);
+        llMain.addView(aboutView);
+        
+        ToastUtils.show(TAG);
     }
 
     @Override
@@ -79,9 +83,8 @@ final public class AboutActivity extends WinBollActivity {
         if (item.getItemId() == R.id.item_help) {
             WinBollActivityManager.getInstance(this).startWinBollActivity(this, AssetsHtmlActivity.class);
         }
-//        else if (item.getItemId() == android.R.id.home) {
-//            WinBollActivityManager.getInstance(this).finish(this);
-//        }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
