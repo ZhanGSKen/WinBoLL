@@ -8,8 +8,8 @@
 	app:cardElevation="4dp"
 	app:cardCornerRadius="4dp"
 	android:id="@+id/listviewauthinfoCardView1"
-	android:layout_marginLeft="10dp"
-	android:layout_marginRight="10dp">
+	android:layout_marginLeft="0dp"
+	android:layout_marginRight="5dp">
 
 	<LinearLayout
 		android:orientation="horizontal"
@@ -19,6 +19,7 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="24dp"
+            android:layout_marginLeft="5dp"
 			android:id="@+id/viewlogtagTextView1"/>
 
         <CheckBox
