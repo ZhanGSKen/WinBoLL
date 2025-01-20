@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.core.app.TaskStackBuilder;
 import cc.winboll.studio.libapputils.log.LogUtils;
-import com.hjq.toast.ToastUtils;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -21,17 +20,16 @@ import java.util.Map;
 public class WinBollActivityManager {
 
     public static final String TAG = "WinBollActivityManager";
+    public static final String EXTRA_TAG = "EXTRA_TAG";
 
     Context mContext;
     static WinBollActivityManager _mWinBollActivityManager;
     static Map<String, WinBollActivity> _mapActivityList;
-    //static ArrayList<WinBollActivity> _mWinBollActivityList;
 
     public WinBollActivityManager(Context context) {
         mContext = context;
         LogUtils.d(TAG, "WinBollActivityManager()");
         _mapActivityList = new HashMap<String, WinBollActivity>();
-        //_mWinBollActivityList = new ArrayList<WinBollActivity>();
     }
 
     public static synchronized WinBollActivityManager getInstance(Context context) {
@@ -43,19 +41,10 @@ public class WinBollActivityManager {
         return _mWinBollActivityManager;
     }
 
-    /**
-     * 把Activity添加到管理中
-     */
+    //
+    // 把Activity添加到管理中
+    //
     public <T extends WinBollActivity> void add(T activity) {
-        /*for (int i = 0; i < _mWinBollActivityList.size(); i++) {
-         LogUtils.d(TAG, String.format("add for i %d\nget(i).getTag() %s", i, _mWinBollActivityList.get(i).getTag()));
-         if (_mWinBollActivityList.get(i).getTag().equals(activity.getTag())) {
-         _mWinBollActivityList.add(i, activity);
-         _mWinBollActivityList.remove(i);
-         LogUtils.d(TAG, String.format("Replace activity : %s\nSize %d", activity.getTag(), _mWinBollActivityList.size()));
-         return;
-         }
-         }*/
         if (isActive(activity.getTag())) {
             LogUtils.d(TAG, String.format("add(...) %s is active.", activity.getTag()));
         } else {
@@ -67,7 +56,7 @@ public class WinBollActivityManager {
 
     //
     // activity: 为 null 时，
-    // intent.putExtra 函数 "tag" 参数为 tag
+    // intent.putExtra 函数 EXTRA_TAG 参数为 tag
     // activity: 不为 null 时，
     // intent.putExtra 函数 "tag" 参数为 activity.getTag()
     //
@@ -85,7 +74,7 @@ public class WinBollActivityManager {
             //打开多任务窗口 flags
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            intent.putExtra("tag", tag);
+            intent.putExtra(EXTRA_TAG, tag);
             mContext.startActivity(intent);
         } catch (InstantiationException | IllegalAccessException e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
@@ -106,18 +95,18 @@ public class WinBollActivityManager {
             //打开多任务窗口 flags
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            intent.putExtra("tag", tag);
+            intent.putExtra(EXTRA_TAG, tag);
             mContext.startActivity(intent);
         } catch (InstantiationException | IllegalAccessException e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }
     }
 
-    /**
-     * 判断 tag绑定的 MyActivity是否存在
-     */
+    //
+    // 判断 tag绑定的 MyActivity是否存在
+    //
     public boolean isActive(String tag) {
-        printAvtivityListInfo();
+        //printAvtivityListInfo();
         WinBollActivity activity = getWinBollActivity(tag);
         if (activity != null) {
             LogUtils.d(TAG, "isActive(...) activity != null tag " + tag);
@@ -142,21 +131,21 @@ public class WinBollActivityManager {
         return _mapActivityList.get(tag);
     }
 
-    /**
-     * 找到tag 绑定的 BaseActivity ，通过 getTaskId() 移动到前台
-     */
+    //
+    // 找到tag 绑定的 BaseActivity ，通过 getTaskId() 移动到前台
+    //
     public <T extends WinBollActivity> void resumeActivity(Context context, String tag) {
         LogUtils.d(TAG, "resumeActivty");
         T activity = (T)getWinBollActivity(tag);
-        LogUtils.d(TAG, "activity " + activity.getTag());
+        //LogUtils.d(TAG, "activity " + activity.getTag());
         if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
             resumeActivity(context, activity);
         }
     }
 
-    /**
-     * 找到tag 绑定的 BaseActivity ，通过 getTaskId() 移动到前台
-     */
+    //
+    // 找到tag 绑定的 BaseActivity ，通过 getTaskId() 移动到前台
+    //
     public <T extends WinBollActivity> void resumeActivity(Context context, T activity) {
         ActivityManager am = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         //返回启动它的根任务（home 或者 MainActivity）
@@ -171,9 +160,9 @@ public class WinBollActivityManager {
     }
 
 
-    /**
-     * 结束所有 Activity
-     */
+    //
+    // 结束所有 Activity
+    //
     public void finishAll() {
         try {
             for (String key : _mapActivityList.keySet()) {
@@ -201,9 +190,9 @@ public class WinBollActivityManager {
         }
     }
 
-    /**
-     * 结束指定Activity
-     */
+    //
+    // 结束指定Activity
+    //
     public <T extends WinBollActivity> void finish(T activity) {
         try {
             if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
@@ -226,22 +215,6 @@ public class WinBollActivityManager {
                 if (preActivity != null) {
                     resumeActivity(mContext, preActivity);
                 }
-
-//                for (int i = 0; i < _mWinBollActivityList.size(); i++) {
-//                    if (_mWinBollActivityList.get(i).getTag().equals(activity.getTag())) {
-//                        //ToastUtils.show(String.format("equals i : %d\nTag : %s\nSize : %d", i, activity.getTag(), _mWinBollActivityList.size()));
-//                        if (i == 0) {
-//                            finishAll();
-//                            //ToastUtils.show("finish finishAll");
-//                            return;
-//                        }
-//                        if (i > 0) {
-//                            activity.finish();
-//                            resumeActivity(mContext, _mWinBollActivityList.get(i - 1));
-//                            return;
-//                        }
-//                    }
-//                }
             }
 
         } catch (Exception e) {
@@ -249,6 +222,9 @@ public class WinBollActivityManager {
         }
     }
 
+    //
+    // 获取窗口队列中的前一个窗口
+    //
     WinBollActivity getPreActivity(WinBollActivity activity) {
         try {
             boolean bingo = false;
@@ -272,12 +248,10 @@ public class WinBollActivityManager {
         return null;
     }
 
+    //
+    // 从管理列表中移除管理项
+    //
     public <T extends WinBollActivity> boolean registeRemove(T activity) {
-//        for (int i = 0; i < _mWinBollActivityList.size(); i++) {
-//            if (registeRemove(activity, i)) {
-//                return true;
-//            }
-//        }
         WinBollActivity activityTest = _mapActivityList.get(activity.getTag());
         if (activityTest != null) {
             _mapActivityList.remove(activity.getTag());
@@ -286,15 +260,9 @@ public class WinBollActivityManager {
         return false;
     }
 
-//    public <T extends WinBollActivity> boolean registeRemove(T activity, int position) {
-//        if (_mWinBollActivityList.get(position) == activity) {
-//            _mWinBollActivityList.remove(position);
-//            //ToastUtils.show(String.format("registeRemove remove.\nTag %s\nposition %d", activity.getTag(), position));
-//            return true;
-//        }
-//        return false;
-//    }
-
+    //
+    // 打印管理列表项列表里的信息
+    //
     public static void printAvtivityListInfo() {
         //LogUtils.d(TAG, "printAvtivityListInfo");
         if (!_mapActivityList.isEmpty()) {
@@ -311,6 +279,4 @@ public class WinBollActivityManager {
             LogUtils.d(TAG, "The map is empty.");
         }
     }
-
-
 }
