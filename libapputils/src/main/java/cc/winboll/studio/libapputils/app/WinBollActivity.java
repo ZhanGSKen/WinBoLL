@@ -366,10 +366,16 @@ abstract public class WinBollActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         LogUtils.d(TAG, "onOptionsItemSelected");
         if (item.getItemId() == R.id.item_log) {
-            LogUtils.d(TAG, "item_log not yet.");
+//            LogUtils.d(TAG, "item_log not yet.");
+//            Intent intent = new Intent(this, LogActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+//            startActivity(intent);
+
             //WinBollActivityManager.getInstance().printAvtivityListInfo();
-            //WinBollActivityManager.getInstance(this).startWinBollActivity(this, LogActivity.class);
+            WinBollActivityManager.getInstance(this).startWinBollActivity(this, LogActivity.class);
         } else if (item.getItemId() == R.id.item_exit) {
+            //ToastUtils.show("item_exit");
             WinBollActivityManager.getInstance(this).finishAll();
         } else if (item.getItemId() == R.id.item_info) {
             WinBollApplication application = (WinBollApplication) getApplication();

@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.core.app.TaskStackBuilder;
 import cc.winboll.studio.libapputils.log.LogUtils;
+import com.hjq.toast.ToastUtils;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -175,26 +176,26 @@ public class WinBollActivityManager {
      */
     public void finishAll() {
         try {
-            LogUtils.d(TAG, "finishAll no yet.");
-            //ToastUtils.show(String.format("finishAll() size : %d", _mWinBollActivityList.size()));
-//            for (int i = _mWinBollActivityList.size() - 1; i > -1; i--) {
-//                WinBollActivity activity = _mWinBollActivityList.get(i);
-//                ToastUtils.show("finishAll() activity");
-//                if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
-//                    //ToastUtils.show("activity != null ...");
-//                    if (WinBollApplication.getWinBollUI_TYPE() == WinBollApplication.WinBollUI_TYPE.Service) {
-//                        // 结束窗口和最近任务栏, 建议前台服务类应用使用，可以方便用户再次调用 UI 操作。
-//                        activity.finishAndRemoveTask();
-//                        //ToastUtils.show("finishAll() activity.finishAndRemoveTask();");
-//                    } else if (WinBollApplication.getWinBollUI_TYPE() == WinBollApplication.WinBollUI_TYPE.Aplication) {
-//                        // 结束窗口保留最近任务栏，建议前台服务类应用使用，可以保持应用的系统自觉性。
-//                        activity.finish();
-//                        //ToastUtils.show("finishAll() activity.finish();");
-//                    } else {
-//                        ToastUtils.show("WinBollApplication.WinBollUI_TYPE error.");
-//                    }
-//                }
-//            }
+            for (String key : _mapActivityList.keySet()) {
+                //System.out.println("Key: " + key + ", Value: " + _mapActivityList.get(key));
+                WinBollActivity activity = _mapActivityList.get(key);
+                //ToastUtils.show("finishAll() activity");
+                if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+                    //ToastUtils.show("activity != null ...");
+                    if (WinBollApplication.getWinBollUI_TYPE() == WinBollApplication.WinBollUI_TYPE.Service) {
+                        // 结束窗口和最近任务栏, 建议前台服务类应用使用，可以方便用户再次调用 UI 操作。
+                        activity.finishAndRemoveTask();
+                        //ToastUtils.show("finishAll() activity.finishAndRemoveTask();");
+                    } else if (WinBollApplication.getWinBollUI_TYPE() == WinBollApplication.WinBollUI_TYPE.Aplication) {
+                        // 结束窗口保留最近任务栏，建议前台服务类应用使用，可以保持应用的系统自觉性。
+                        activity.finish();
+                        //ToastUtils.show("finishAll() activity.finish();");
+                    } else {
+                        LogUtils.d(TAG, "WinBollApplication.WinBollUI_TYPE error.");
+                        //ToastUtils.show("WinBollApplication.WinBollUI_TYPE error.");
+                    }
+                }
+            }
         } catch (Exception e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }

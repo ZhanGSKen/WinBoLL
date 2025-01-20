@@ -1,30 +1,41 @@
 package cc.winboll.studio.libapputils.log;
 
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.WinBollActivity;
-import cc.winboll.studio.libapputils.ads.ADsView;
 import cc.winboll.studio.libapputils.app.WinBollApplication;
-import android.view.View;
-import android.app.Activity;
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * @Author ZhanGSKen@QQ.COM
  * @Date 2024/08/12 15:07:58
  * @Describe WinBoll 应用日志窗口
  */
-public class LogActivity extends Activity {
+public class LogActivity extends WinBollActivity {
 
     public static final String TAG = "LogActivity";
 
     LogView mLogView;
-    //ADsView mADsView;
 
-//    @Override
-//    protected boolean isEnableDisplayHomeAsUp() {
-//        return false;
-//    }
+    @Override
+    public String getTag() {
+        return TAG;
+    }
+
+    @Override
+    protected Toolbar initToolBar() {
+        return null;
+    }
+
+    @Override
+    protected boolean isEnableDisplayHomeAsUp() {
+        return false;
+    }
+
+    @Override
+    protected boolean isAddWinBollToolBar() {
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +47,8 @@ public class LogActivity extends Activity {
         //mADsView.loadUrl("https://www.winboll.cc");
         //mLogView.setVisibility(WinBollApplication.isDebug()?View.GONE:View.VISIBLE);
         //mADsView.setVisibility(WinBollApplication.isDebug()?View.GONE:View.VISIBLE);
-        
-        if(WinBollApplication.isDebug()) { mLogView.start(); }
+
+        if (WinBollApplication.isDebug()) { mLogView.start(); }
     }
 
     @Override
