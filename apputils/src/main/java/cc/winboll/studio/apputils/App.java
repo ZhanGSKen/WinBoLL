@@ -22,7 +22,7 @@ public class App extends GlobalApplication {
     public void onCreate() {
         super.onCreate();
         // 初始化 WinBoll 框架
-        WinBollUtils.getInstance(this).init(this);
+        WinBollUtils.init(this);
         // 初始化 Toast 框架
         ToastUtils.init(this);
         // 设置 Toast 布局样式

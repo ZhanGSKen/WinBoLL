@@ -7,6 +7,7 @@ import cc.winboll.studio.libapputils.bean.DebugBean;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import com.hjq.toast.ToastUtils;
 import com.hjq.toast.style.WhiteToastStyle;
+import cc.winboll.studio.GlobalApplication;
 
 public class WinBollUtils {
 
@@ -16,13 +17,13 @@ public class WinBollUtils {
     // 单件结构模块
     //
     static volatile WinBollUtils _WinBollUtils;
-    Context mContext;
-    WinBollUtils(Context context) {
-        mContext = context;
+    Application mApplication;
+    WinBollUtils(Application application) {
+        mApplication = application;
     }
-    public static synchronized WinBollUtils getInstance(Context context) {
+    static synchronized WinBollUtils getInstance(Application application) {
         if (_WinBollUtils == null) {
-            _WinBollUtils = new WinBollUtils(context);
+            _WinBollUtils = new WinBollUtils(application);
         }
         return _WinBollUtils;
     }
@@ -59,7 +60,7 @@ public class WinBollUtils {
     //
     // 获取 WinBoll 应用 UI 类型
     //
-    public static WinBollUI_TYPE getWinBollUI_TYPE() {
+    public synchronized static WinBollUI_TYPE getWinBollUI_TYPE() {
         return _mWinBollUI_TYPE;
     }
 
@@ -67,13 +68,14 @@ public class WinBollUtils {
         return mMyActivityLifecycleCallbacks;
     }
 
-    public void init(Application application) {
+    public static void init(Application application) {
+        WinBollUtils winBollUtils = WinBollUtils.getInstance(application);
         // 应用环境初始化, 基本调试环境
         //
         // 初始化日志模块
-        LogUtils.init(mContext);
+        LogUtils.init(application);
         // 设置应用调试标志
-        DebugBean debugBean = DebugBean.loadBean(mContext, DebugBean.class);
+        DebugBean debugBean = DebugBean.loadBean(application, DebugBean.class);
         if (debugBean == null) {
             //ToastUtils.show("debugBean == null");
             setIsDebug(false);
@@ -83,8 +85,8 @@ public class WinBollUtils {
         }
         // 应用窗口管理模块参数设置
         //
-        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks(application);
-        application.registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
+        winBollUtils.mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks(application);
+        application.registerActivityLifecycleCallbacks(winBollUtils.mMyActivityLifecycleCallbacks);
         // 设置默认 WinBoll 应用 UI 类型
         setWinBollUI_TYPE(WinBollUI_TYPE.Service);
         //ToastUtils.show("WinBollUI_TYPE " + getWinBollUI_TYPE());
