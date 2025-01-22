@@ -20,6 +20,10 @@ public class APPInfo implements Serializable {
     String appDescription;
     // 应用Git仓库地址
     String appGitName;
+    // 应用Git仓库分支
+    String appGitAPPBranch;
+    // 应用Git仓库子项目文件夹
+    String appGitAPPSubProjectFolder;
     // 应用主页
     String appHomePage;
     // 应用包名称
@@ -27,25 +31,44 @@ public class APPInfo implements Serializable {
     // 应用包存储文件夹名称
     String appAPKFolderName;
 
-    public APPInfo(String appName, int appIcon, String appDescription, String appGitName, String appHomePage, String appAPKName, String appAPKFolderName) {
+    public APPInfo(String appName, int appIcon, String appDescription, String appGitName, String appGitAPPBranch, String appGitAPPSubProjectFolder, String appHomePage, String appAPKName, String appAPKFolderName) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.appDescription = appDescription;
         this.appGitName = appGitName;
+        this.appGitAPPBranch = appGitAPPBranch;
+        this.appGitAPPSubProjectFolder = appGitAPPSubProjectFolder;
         this.appHomePage = appHomePage;
         this.appAPKName = appAPKName;
         this.appAPKFolderName = appAPKFolderName;
     }
-
 
     public APPInfo() {
         this.appName = "WinBoll-APP";
         this.appIcon = R.drawable.ic_launcher;
         this.appDescription = "WinBoll APP";
         this.appGitName = "APP";
+        this.appGitAPPBranch = "app";
+        this.appGitAPPSubProjectFolder = "app";
         this.appHomePage = "https://www.winboll.cc/studio/details.php?app=APP";
         this.appAPKName = "APP";
         this.appAPKFolderName = "APP";
+    }
+
+    public void setAppGitAPPBranch(String appGitAPPBranch) {
+        this.appGitAPPBranch = appGitAPPBranch;
+    }
+
+    public String getAppGitAPPBranch() {
+        return appGitAPPBranch;
+    }
+
+    public void setAppGitAPPSubProjectFolder(String appGitAPPSubProjectFolder) {
+        this.appGitAPPSubProjectFolder = appGitAPPSubProjectFolder;
+    }
+
+    public String getAppGitAPPSubProjectFolder() {
+        return appGitAPPSubProjectFolder;
     }
 
     public void setAppIcon(int appIcon) {

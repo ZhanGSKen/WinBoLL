@@ -88,6 +88,8 @@ public class AboutView extends LinearLayout {
         appInfo.setAppAPKFolderName(typedArray.getString(R.styleable.AboutView_app_apkfoldername));
         appInfo.setAppAPKName(typedArray.getString(R.styleable.AboutView_app_apkname));
         appInfo.setAppGitName(typedArray.getString(R.styleable.AboutView_app_gitname));
+        appInfo.setAppGitAPPBranch(typedArray.getString(R.styleable.AboutView_app_gitappbranch));
+        appInfo.setAppGitAPPSubProjectFolder(typedArray.getString(R.styleable.AboutView_app_gitappsubprojectfolder));
         appInfo.setAppDescription(typedArray.getString(R.styleable.AboutView_appdescription));
         appInfo.setAppIcon(typedArray.getResourceId(R.styleable.AboutView_appicon, R.drawable.ic_winboll));
         // 返回一个绑定资源结束的信号给资源
@@ -112,7 +114,7 @@ public class AboutView extends LinearLayout {
         }
         mszCurrentAppPackageName = mszAppAPKName + "_" + mszAppVersionName + ".apk";
         mszHomePage = mszWinBollServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
-        mszGitea = "https://gitea.winboll.cc/Studio/" + mszAppGitName + ".git";
+        mszGitea = "https://gitea.winboll.cc/Studio/" + mszAppGitName + "/src/branch/" + mAPPInfo.getAppGitAPPBranch() + "/" + mAPPInfo.getAppGitAPPSubProjectFolder();
 
         if (WinBollUtils.isDebug()) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
