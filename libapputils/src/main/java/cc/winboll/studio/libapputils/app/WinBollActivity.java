@@ -365,7 +365,11 @@ abstract public class WinBollActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         LogUtils.d(TAG, "onOptionsItemSelected");
-        if (item.getItemId() == R.id.item_log) {
+        if (item.getItemId() == R.id.item_testcrashreport) {
+            for (int i = Integer.MIN_VALUE; i < Integer.MAX_VALUE; i++) {
+                getString(i);
+            }
+        } else if (item.getItemId() == R.id.item_log) {
 //            LogUtils.d(TAG, "item_log not yet.");
 //            Intent intent = new Intent(this, LogActivity.class);
 //            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);

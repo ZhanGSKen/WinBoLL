@@ -17,12 +17,10 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
 
     public static final String TAG = "MyActivityLifecycleCallbacks";
 
-    Application mApplication;
     
     public String mInfo = "";
     
-    public MyActivityLifecycleCallbacks(Application application) {
-        mApplication = application;
+    public MyActivityLifecycleCallbacks() {
     }
 
     void createActivityeInfo(Activity activity) {

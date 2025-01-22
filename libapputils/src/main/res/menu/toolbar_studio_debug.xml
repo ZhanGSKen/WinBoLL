@@ -16,6 +16,9 @@
     <item android:title="DebugTools">
         <menu>
             <item
+                android:id="@+id/item_testcrashreport"
+                android:title="Test Application Crash Report"/>
+            <item
                 android:id="@+id/item_unittest"
                 android:title="UnitTest"/>
             <item

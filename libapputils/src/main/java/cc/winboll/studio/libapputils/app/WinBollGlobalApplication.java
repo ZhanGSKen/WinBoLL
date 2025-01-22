@@ -27,7 +27,7 @@ public class WinBollGlobalApplication extends GlobalApplication {
     // 标记当前应用是否处于调试状态
     static volatile boolean isDebug = false;
 
-    public static void setIsDebug(boolean isDebug) {
+    public synchronized static void setIsDebug(boolean isDebug) {
         WinBollGlobalApplication.isDebug = isDebug;
     }
 
@@ -38,7 +38,7 @@ public class WinBollGlobalApplication extends GlobalApplication {
     //
     // 设置 WinBoll 应用 UI 类型
     //
-    public static void setWinBollUI_TYPE(WinBollUI_TYPE mWinBollUI_TYPE) {
+    public synchronized static void setWinBollUI_TYPE(WinBollUI_TYPE mWinBollUI_TYPE) {
         _mWinBollUI_TYPE = mWinBollUI_TYPE;
     }
 
@@ -71,7 +71,7 @@ public class WinBollGlobalApplication extends GlobalApplication {
         }
         // 应用窗口管理模块参数设置
         //
-        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks(this);
+        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
         registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
         // 设置默认 WinBoll 应用 UI 类型
         setWinBollUI_TYPE(WinBollUI_TYPE.Service);
