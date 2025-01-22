@@ -240,7 +240,7 @@ public class AboutView extends LinearLayout {
             //.addItem(versionElement)
             //.addItem(adsElement)
             //.addGroup("Connect with us")
-            .addEmail("ZhanGSKen@QQ.COM")
+            .addEmail("ZhanGSKen@AliYun.Com")
             .addWebsite(mszHomePage)
             .addItem(elementAppMode)
             .addItem(elementGitWeb)
