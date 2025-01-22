@@ -174,8 +174,9 @@ public class LogUtils {
                             mapTAGList.put(tagValue, false);
                         }
                     }
-                } catch (ClassNotFoundException | IllegalAccessException e) {
-                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+                } catch (NoClassDefFoundError | ClassNotFoundException | IllegalAccessException e) {
+                    LogUtils.d(TAG, e.getMessage(), Thread.currentThread().getStackTrace());
+                    //LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
                     //Toast.makeText(context, TAG + " : " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

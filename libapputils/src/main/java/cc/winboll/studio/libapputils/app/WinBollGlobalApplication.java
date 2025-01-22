@@ -78,8 +78,8 @@ public class WinBollGlobalApplication extends GlobalApplication {
         }
         // 应用窗口管理模块参数设置
         //
-        //mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
-        //registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
+        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
+        registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
         // 设置默认 WinBoll 应用 UI 类型
         setWinBollUI_TYPE(WinBollUI_TYPE.Service);
         //ToastUtils.show("WinBollUI_TYPE " + getWinBollUI_TYPE());
