@@ -81,7 +81,7 @@ public class AssetsHtmlActivity extends WinBollActivity {
             if (szTemp != null && !szTemp.trim().equals("")) {
                 mszHtmlFileName = szTemp.trim();
             }
-            ToastUtils.show(mszHtmlFileName);
+            //ToastUtils.show(mszHtmlFileName);
         }
 
         // 与其他应用分享 html 帮助
