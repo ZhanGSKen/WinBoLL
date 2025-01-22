@@ -20,6 +20,8 @@ public class APPInfo implements Serializable {
     String appDescription;
     // 应用Git仓库地址
     String appGitName;
+    // 应用Git仓库拥有者
+    String appGitOwner;
     // 应用Git仓库分支
     String appGitAPPBranch;
     // 应用Git仓库子项目文件夹
@@ -31,11 +33,12 @@ public class APPInfo implements Serializable {
     // 应用包存储文件夹名称
     String appAPKFolderName;
 
-    public APPInfo(String appName, int appIcon, String appDescription, String appGitName, String appGitAPPBranch, String appGitAPPSubProjectFolder, String appHomePage, String appAPKName, String appAPKFolderName) {
+    public APPInfo(String appName, int appIcon, String appDescription, String appGitName, String appGitOwner, String appGitAPPBranch, String appGitAPPSubProjectFolder, String appHomePage, String appAPKName, String appAPKFolderName) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.appDescription = appDescription;
         this.appGitName = appGitName;
+        this.appGitOwner = appGitOwner;
         this.appGitAPPBranch = appGitAPPBranch;
         this.appGitAPPSubProjectFolder = appGitAPPSubProjectFolder;
         this.appHomePage = appHomePage;
@@ -48,11 +51,20 @@ public class APPInfo implements Serializable {
         this.appIcon = R.drawable.ic_launcher;
         this.appDescription = "WinBoll APP";
         this.appGitName = "APP";
+        this.appGitOwner = "Studio";
         this.appGitAPPBranch = "app";
         this.appGitAPPSubProjectFolder = "app";
         this.appHomePage = "https://www.winboll.cc/studio/details.php?app=APP";
         this.appAPKName = "APP";
         this.appAPKFolderName = "APP";
+    }
+
+    public void setAppGitOwner(String appGitOwner) {
+        this.appGitOwner = appGitOwner;
+    }
+
+    public String getAppGitOwner() {
+        return appGitOwner;
     }
 
     public void setAppGitAPPBranch(String appGitAPPBranch) {

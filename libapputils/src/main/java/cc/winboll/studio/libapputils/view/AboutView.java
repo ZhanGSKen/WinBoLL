@@ -88,6 +88,7 @@ public class AboutView extends LinearLayout {
         appInfo.setAppAPKFolderName(typedArray.getString(R.styleable.AboutView_app_apkfoldername));
         appInfo.setAppAPKName(typedArray.getString(R.styleable.AboutView_app_apkname));
         appInfo.setAppGitName(typedArray.getString(R.styleable.AboutView_app_gitname));
+        appInfo.setAppGitOwner(typedArray.getString(R.styleable.AboutView_app_gitowner));
         appInfo.setAppGitAPPBranch(typedArray.getString(R.styleable.AboutView_app_gitappbranch));
         appInfo.setAppGitAPPSubProjectFolder(typedArray.getString(R.styleable.AboutView_app_gitappsubprojectfolder));
         appInfo.setAppDescription(typedArray.getString(R.styleable.AboutView_appdescription));
@@ -114,7 +115,7 @@ public class AboutView extends LinearLayout {
         }
         mszCurrentAppPackageName = mszAppAPKName + "_" + mszAppVersionName + ".apk";
         mszHomePage = mszWinBollServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
-        mszGitea = "https://gitea.winboll.cc/Studio/" + mszAppGitName + "/src/branch/" + mAPPInfo.getAppGitAPPBranch() + "/" + mAPPInfo.getAppGitAPPSubProjectFolder();
+        mszGitea = "https://gitea.winboll.cc/" + mAPPInfo.getAppGitOwner() + "/" + mszAppGitName + "/src/branch/" + mAPPInfo.getAppGitAPPBranch() + "/" + mAPPInfo.getAppGitAPPSubProjectFolder();
 
         if (WinBollGlobalApplication.isDebug()) {
             LayoutInflater inflater = LayoutInflater.from(mContext);

@@ -174,6 +174,7 @@ final public class MainActivity extends WinBollActivity {
         appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
         appInfo.setAppDescription("APPUtils Description");
         appInfo.setAppGitName("APP");
+        appInfo.setAppGitOwner("Studio");
         appInfo.setAppGitAPPBranch("apputils");
         appInfo.setAppGitAPPSubProjectFolder("apputils");
         appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=APP");
