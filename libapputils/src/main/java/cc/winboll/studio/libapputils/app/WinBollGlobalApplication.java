@@ -60,6 +60,13 @@ public class WinBollGlobalApplication extends GlobalApplication {
         //
         // 初始化日志模块
         LogUtils.init(this);
+        
+        // 初始化 Toast 框架
+        ToastUtils.init(this);
+        // 设置 Toast 布局样式
+        //ToastUtils.setView(R.layout.view_toast);
+        ToastUtils.setStyle(new WhiteToastStyle());
+        ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
         // 设置应用调试标志
         DebugBean debugBean = DebugBean.loadBean(this, DebugBean.class);
         if (debugBean == null) {
@@ -71,8 +78,8 @@ public class WinBollGlobalApplication extends GlobalApplication {
         }
         // 应用窗口管理模块参数设置
         //
-        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
-        registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
+        //mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
+        //registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
         // 设置默认 WinBoll 应用 UI 类型
         setWinBollUI_TYPE(WinBollUI_TYPE.Service);
         //ToastUtils.show("WinBollUI_TYPE " + getWinBollUI_TYPE());

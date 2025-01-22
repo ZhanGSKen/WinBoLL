@@ -19,12 +19,6 @@ public class App extends WinBollGlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        // 初始化 Toast 框架
-        ToastUtils.init(this);
-        // 设置 Toast 布局样式
-        //ToastUtils.setView(R.layout.view_toast);
-        ToastUtils.setStyle(new WhiteToastStyle());
-        ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
     }
 
 }
