@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -194,6 +195,7 @@ public final class CrashHandler {
                 case MENUITEM_COPY: 
                     ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                     cm.setPrimaryClip(ClipData.newPlainText(getPackageName(), mLog));
+                    Toast.makeText(getApplication(), "The text is copied.", Toast.LENGTH_SHORT).show();
                     break;
                 case MENUITEM_RESTART: 
                     restart();
