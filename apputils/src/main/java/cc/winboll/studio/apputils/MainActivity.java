@@ -160,17 +160,31 @@ final public class MainActivity extends WinBollActivity {
         } else if (item.getItemId() == R.id.item_testqrcodedecodeactivity) {
             Intent intent = new Intent(this, QRCodeDecodeActivity.class);
             startActivityForResult(intent, REQUEST_QRCODEDECODE_ACTIVITY);
+        } else if(item.getItemId() == R.id.item_about) {
+            openAboutActivity();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
     
-    public void onTestAboutActivity(View view) {
+    void openAboutActivity() {
         Intent intent = new Intent(this, AboutActivity.class);
         APPInfo appInfo = new APPInfo();
+        appInfo.setAppName("APPUtils");
         appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
-        appInfo.setAppName("Test APP");
+        appInfo.setAppDescription("APPUtils Description");
+        appInfo.setAppGitName("APP");
+        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=APP");
+        appInfo.setAppAPKName("APPUtils");
+        appInfo.setAppAPKFolderName("APPUtils");
         intent.putExtra(AboutActivity.EXTRA_APPINFO, appInfo);
         WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, AboutActivity.class);
+    }
+    
+    
+    public void onTestAboutActivity(View view) {
+        //ToastUtils.show("onTestAboutActivity");
+        openAboutActivity();
     }
 
     public void onTestJavascriptHtmlActivity(View view) {

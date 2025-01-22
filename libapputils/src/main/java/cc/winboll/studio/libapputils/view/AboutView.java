@@ -58,18 +58,22 @@ public class AboutView extends LinearLayout {
     String mszGitea = "";
     int mnAppIcon = 0;
     String mszWinBollServerHost;
-    String mszReleaseAPKName;
+    //String mszReleaseAPKName;
     EditText metDevUserName;
     EditText metDevUserPassword;
 
     public AboutView(Context context, APPInfo appInfo) {
         super(context);
+        mContext = context;
+        
         setAPPInfo(appInfo);
         initView(context);
     }
 
     public AboutView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
+        
         initView(context, attrs);
     }
 
@@ -92,8 +96,6 @@ public class AboutView extends LinearLayout {
     }
 
     void initView(Context context) {
-        mContext = context;
-
         mszAppName = mAPPInfo.getAppName();
         mszAppAPKFolderName = mAPPInfo.getAppAPKFolderName();
         mszAppAPKName = mAPPInfo.getAppAPKName();
@@ -101,14 +103,14 @@ public class AboutView extends LinearLayout {
         mszAppDescription = mAPPInfo.getAppDescription();
         mnAppIcon = mAPPInfo.getAppIcon();
 
-        mszWinBollServerHost = WinBollUtils.isDebug() ?  "http://10.8.0.13": "https://www.winboll.cc";
+        mszWinBollServerHost = WinBollUtils.isDebug() ?  "https://dev.winboll.cc": "https://www.winboll.cc";
 
         try {
             mszAppVersionName = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }
-        mszCurrentAppPackageName = mszAppName + "_" + mszAppVersionName + ".apk";
+        mszCurrentAppPackageName = mszAppAPKName + "_" + mszAppVersionName + ".apk";
         mszHomePage = mszWinBollServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
         mszGitea = "https://gitea.winboll.cc/Studio/" + mszAppGitName + ".git";
 
@@ -146,15 +148,16 @@ public class AboutView extends LinearLayout {
         //llMain.addView(createAboutPage());
 
         // 就读取正式版应用包版本号，设置 Release 应用包文件名
-        String szReleaseAppVersionName = "";
-        try {
-            szReleaseAppVersionName = mContext.getPackageManager().getPackageInfo(subBetaSuffix(mContext.getPackageName()), 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-        }
-        mszReleaseAPKName = mszAppAPKName + "_" + szReleaseAppVersionName + ".apk";
-
-
+//        String szReleaseAppVersionName = "";
+//        try {
+//            //LogUtils.d(TAG, String.format("mContext.getPackageName() %s", mContext.getPackageName()));
+//            String szSubBetaSuffix = subBetaSuffix(mContext.getPackageName());
+//            //LogUtils.d(TAG, String.format("szSubBetaSuffix : %s", szSubBetaSuffix));
+//            szReleaseAppVersionName = mContext.getPackageManager().getPackageInfo(szSubBetaSuffix, 0).versionName;
+//        } catch (PackageManager.NameNotFoundException e) {
+//            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+//        }
+//        mszReleaseAPKName = mszAppAPKName + "_" + szReleaseAppVersionName + ".apk";
     }
 
     void initView(Context context, AttributeSet attrs) {
@@ -181,10 +184,13 @@ public class AboutView extends LinearLayout {
                          return;
                          }*/
 
-                        if (!AppVersionUtils.isHasNewStageReleaseVersion(mszReleaseAPKName, mszNewestAppPackageName)) {
+//                        if (!AppVersionUtils.isHasNewStageReleaseVersion(mszReleaseAPKName, mszNewestAppPackageName)) {
+//                            ToastUtils.delayedShow("Current app is the newest.", 5000);
+//                        } 
+                        if (!AppVersionUtils.isHasNewVersion2(mszCurrentAppPackageName, mszNewestAppPackageName)) {
                             ToastUtils.delayedShow("Current app is the newest.", 5000);
                         } else {
-                            String szMsg = "Current app is :\n[ " + mszReleaseAPKName
+                            String szMsg = "Current app is :\n[ " + mszCurrentAppPackageName
                                 + " ]\nThe last app is :\n[ " + mszNewestAppPackageName
                                 + " ]\nIs download the last app?";
                             YesNoAlertDialog.show(mContext, "Application Update Prompt", szMsg, mIsDownlaodUpdateListener);
