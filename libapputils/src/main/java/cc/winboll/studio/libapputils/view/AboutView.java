@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.AppVersionUtils;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
-import cc.winboll.studio.libapputils.app.WinBollUtils;
+import cc.winboll.studio.libapputils.app.WinBollGlobalApplication;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.bean.DebugBean;
 import cc.winboll.studio.libapputils.log.LogUtils;
@@ -105,7 +105,7 @@ public class AboutView extends LinearLayout {
         mszAppDescription = mAPPInfo.getAppDescription();
         mnAppIcon = mAPPInfo.getAppIcon();
 
-        mszWinBollServerHost = WinBollUtils.isDebug() ?  "https://dev.winboll.cc": "https://www.winboll.cc";
+        mszWinBollServerHost = WinBollGlobalApplication.isDebug() ?  "https://dev.winboll.cc": "https://www.winboll.cc";
 
         try {
             mszAppVersionName = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
@@ -116,7 +116,7 @@ public class AboutView extends LinearLayout {
         mszHomePage = mszWinBollServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
         mszGitea = "https://gitea.winboll.cc/Studio/" + mszAppGitName + "/src/branch/" + mAPPInfo.getAppGitAPPBranch() + "/" + mAPPInfo.getAppGitAPPSubProjectFolder();
 
-        if (WinBollUtils.isDebug()) {
+        if (WinBollGlobalApplication.isDebug()) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View addedView = inflater.inflate(R.layout.view_about_dev, this, false);
             LinearLayout llMain = addedView.findViewById(R.id.viewaboutdevLinearLayout1);
@@ -207,7 +207,7 @@ public class AboutView extends LinearLayout {
         // 定义应用调试按钮
         //
         Element elementAppMode;
-        if (WinBollUtils.isDebug()) {
+        if (WinBollGlobalApplication.isDebug()) {
             elementAppMode = new Element(mContext.getString(R.string.app_normal), R.drawable.ic_winboll);
             elementAppMode.setOnClickListener(mAppNormalOnClickListener);
         } else {
@@ -273,7 +273,7 @@ public class AboutView extends LinearLayout {
         if (intent != null) {
             intent.setAction(cc.winboll.studio.libapputils.intent.action.DEBUGVIEW);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            WinBollUtils.setIsDebug(true);
+            WinBollGlobalApplication.setIsDebug(true);
             DebugBean.saveBean(context, new DebugBean(true));
 
             WinBollActivityManager.getInstance(context).finishAll();
@@ -285,7 +285,7 @@ public class AboutView extends LinearLayout {
         Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
         if (intent != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            WinBollUtils.setIsDebug(false);
+            WinBollGlobalApplication.setIsDebug(false);
             DebugBean.saveBean(context, new DebugBean(false));
 
             WinBollActivityManager.getInstance(context).finishAll();
@@ -311,7 +311,7 @@ public class AboutView extends LinearLayout {
                         String szUrl = mszWinBollServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
                         // 构建包含认证信息的请求
                         String credential = "";
-                        if (WinBollUtils.isDebug()) {
+                        if (WinBollGlobalApplication.isDebug()) {
                             credential = Credentials.basic(metDevUserName.getText().toString(), metDevUserPassword.getText().toString());
                             PrefUtils.saveString(mContext, "metDevUserName", metDevUserName.getText().toString());
                             PrefUtils.saveString(mContext, "metDevUserPassword", metDevUserPassword.getText().toString());

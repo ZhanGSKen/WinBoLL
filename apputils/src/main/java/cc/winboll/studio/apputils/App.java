@@ -5,14 +5,12 @@ package cc.winboll.studio.apputils;
  * @Date 2024/12/08 15:10:51
  * @Describe 全局应用类
  */
-import android.app.Application;
 import android.view.Gravity;
-import cc.winboll.studio.GlobalApplication;
+import cc.winboll.studio.libapputils.app.WinBollGlobalApplication;
 import com.hjq.toast.ToastUtils;
 import com.hjq.toast.style.WhiteToastStyle;
-import cc.winboll.studio.libapputils.app.WinBollUtils;
 
-public class App extends GlobalApplication {
+public class App extends WinBollGlobalApplication {
 
     public static final String TAG = "App";
 
@@ -21,8 +19,6 @@ public class App extends GlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        // 初始化 WinBoll 框架
-        WinBollUtils.init(this);
         // 初始化 Toast 框架
         ToastUtils.init(this);
         // 设置 Toast 布局样式

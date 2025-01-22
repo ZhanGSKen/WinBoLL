@@ -7,7 +7,7 @@ package cc.winboll.studio.libapputils.log;
  * @Describe 应用日志类
  */
 import android.content.Context;
-import cc.winboll.studio.libapputils.app.WinBollUtils;
+import cc.winboll.studio.libapputils.app.WinBollGlobalApplication;
 import cc.winboll.studio.libapputils.util.FileUtils;
 import dalvik.system.DexFile;
 import java.io.BufferedReader;
@@ -61,7 +61,7 @@ public class LogUtils {
     // 初始化函数
     //
     public static void init(Context context, LOG_LEVEL logLevel) {
-        if (WinBollUtils.isDebug()) {
+        if (WinBollGlobalApplication.isDebug()) {
             // 初始化日志缓存文件路径
             _mfLogCacheDir = new File(context.getApplicationContext().getExternalCacheDir(), TAG);
             if (!_mfLogCacheDir.exists()) {
