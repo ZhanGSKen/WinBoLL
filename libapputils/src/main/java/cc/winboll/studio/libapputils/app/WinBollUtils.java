@@ -72,12 +72,6 @@ public class WinBollUtils {
         //
         // 初始化日志模块
         LogUtils.init(mContext);
-        // 初始化 Toast 框架
-        ToastUtils.init(application);
-        // 设置 Toast 布局样式
-        //ToastUtils.setView(R.layout.view_toast);
-        ToastUtils.setStyle(new WhiteToastStyle());
-        ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
         // 设置应用调试标志
         DebugBean debugBean = DebugBean.loadBean(mContext, DebugBean.class);
         if (debugBean == null) {

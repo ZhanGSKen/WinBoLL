@@ -23,7 +23,12 @@ public class App extends GlobalApplication {
         super.onCreate();
         // 初始化 WinBoll 框架
         WinBollUtils.getInstance(this).init(this);
-        
+        // 初始化 Toast 框架
+        ToastUtils.init(this);
+        // 设置 Toast 布局样式
+        //ToastUtils.setView(R.layout.view_toast);
+        ToastUtils.setStyle(new WhiteToastStyle());
+        ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
     }
 
 }
