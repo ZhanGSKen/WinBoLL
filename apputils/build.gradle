@@ -50,6 +50,8 @@ android {
 
 dependencies {
 	api project(':libapputils')
-    api 'cc.winboll.studio:libappbase:1.0.3'
+    
+    api 'cc.winboll.studio:libappbase:1.1.0'
+    
     api fileTree(dir: 'libs', include: ['*.jar'])
 }

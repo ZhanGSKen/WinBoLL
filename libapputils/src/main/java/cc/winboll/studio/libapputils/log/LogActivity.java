@@ -9,7 +9,7 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.WinBollActivity;
-import cc.winboll.studio.libapputils.app.WinBollApplication;
+import cc.winboll.studio.libapputils.app.WinBollUtils;
 
 public class LogActivity extends WinBollActivity {
 
@@ -44,7 +44,7 @@ public class LogActivity extends WinBollActivity {
         setContentView(R.layout.activity_log);
         mLogView = findViewById(R.id.logview);
 
-        if (WinBollApplication.isDebug()) { mLogView.start(); }
+        if (WinBollUtils.isDebug()) { mLogView.start(); }
     }
 
     @Override

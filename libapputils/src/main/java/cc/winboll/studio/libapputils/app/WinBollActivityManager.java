@@ -171,11 +171,11 @@ public class WinBollActivityManager {
                 //ToastUtils.show("finishAll() activity");
                 if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
                     //ToastUtils.show("activity != null ...");
-                    if (WinBollApplication.getWinBollUI_TYPE() == WinBollApplication.WinBollUI_TYPE.Service) {
+                    if (WinBollUtils.getInstance(mContext).getWinBollUI_TYPE() == WinBollUtils.WinBollUI_TYPE.Service) {
                         // 结束窗口和最近任务栏, 建议前台服务类应用使用，可以方便用户再次调用 UI 操作。
                         activity.finishAndRemoveTask();
                         //ToastUtils.show("finishAll() activity.finishAndRemoveTask();");
-                    } else if (WinBollApplication.getWinBollUI_TYPE() == WinBollApplication.WinBollUI_TYPE.Aplication) {
+                    } else if (WinBollUtils.getInstance(mContext).getWinBollUI_TYPE() == WinBollUtils.WinBollUI_TYPE.Aplication) {
                         // 结束窗口保留最近任务栏，建议前台服务类应用使用，可以保持应用的系统自觉性。
                         activity.finish();
                         //ToastUtils.show("finishAll() activity.finish();");

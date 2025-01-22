@@ -1,11 +1,31 @@
 package cc.winboll.studio.libapputils.app;
 
+import android.app.Application;
+import android.content.Context;
+import android.view.Gravity;
 import cc.winboll.studio.libapputils.bean.DebugBean;
 import cc.winboll.studio.libapputils.log.LogUtils;
+import com.hjq.toast.ToastUtils;
+import com.hjq.toast.style.WhiteToastStyle;
 
-public class WinBollApplication extends cc.winboll.studio.libappbase.GlobalApplication {
+public class WinBollUtils {
 
-    public static final String TAG = "WinBollApplication";
+    public static final String TAG = "WinBollUtils";
+
+    //
+    // 单件结构模块
+    //
+    static volatile WinBollUtils _WinBollUtils;
+    Context mContext;
+    WinBollUtils(Context context) {
+        mContext = context;
+    }
+    public static synchronized WinBollUtils getInstance(Context context) {
+        if (_WinBollUtils == null) {
+            _WinBollUtils = new WinBollUtils(context);
+        }
+        return _WinBollUtils;
+    }
 
     public static enum WinBollUI_TYPE {
         Aplication, // 退出应用后，保持最近任务栏任务记录主窗口
@@ -15,14 +35,14 @@ public class WinBollApplication extends cc.winboll.studio.libappbase.GlobalAppli
     // 应用类型标志
     volatile static WinBollUI_TYPE _mWinBollUI_TYPE = WinBollUI_TYPE.Service;
 
-    static volatile WinBollApplication _WinBollApplication = null;
+    //static volatile WinBollApplication _WinBollApplication = null;
     MyActivityLifecycleCallbacks mMyActivityLifecycleCallbacks;
 
     // 标记当前应用是否处于调试状态
     static volatile boolean isDebug = false;
 
     public static void setIsDebug(boolean isDebug) {
-        WinBollApplication.isDebug = isDebug;
+        WinBollUtils.isDebug = isDebug;
     }
 
     public static boolean isDebug() {
@@ -47,16 +67,19 @@ public class WinBollApplication extends cc.winboll.studio.libappbase.GlobalAppli
         return mMyActivityLifecycleCallbacks;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        _WinBollApplication = this;
+    public void init(Application application) {
         // 应用环境初始化, 基本调试环境
         //
-        CrashHandler.init(this);
-        LogUtils.init(this);
-
-        DebugBean debugBean = DebugBean.loadBean(this, DebugBean.class);
+        // 初始化日志模块
+        LogUtils.init(mContext);
+        // 初始化 Toast 框架
+        ToastUtils.init(application);
+        // 设置 Toast 布局样式
+        //ToastUtils.setView(R.layout.view_toast);
+        ToastUtils.setStyle(new WhiteToastStyle());
+        ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
+        // 设置应用调试标志
+        DebugBean debugBean = DebugBean.loadBean(mContext, DebugBean.class);
         if (debugBean == null) {
             //ToastUtils.show("debugBean == null");
             setIsDebug(false);
@@ -64,11 +87,10 @@ public class WinBollApplication extends cc.winboll.studio.libappbase.GlobalAppli
             //ToastUtils.show("saveDebugStatus(" + String.valueOf(debugBean.isDebuging()) + ")");
             setIsDebug(debugBean.isDebuging());
         }
-
-        // 应用运行状态环境设置
+        // 应用窗口管理模块参数设置
         //
-        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks(this);
-        registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
+        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks(application);
+        application.registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
         // 设置默认 WinBoll 应用 UI 类型
         setWinBollUI_TYPE(WinBollUI_TYPE.Service);
         //ToastUtils.show("WinBollUI_TYPE " + getWinBollUI_TYPE());

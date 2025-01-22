@@ -64,7 +64,7 @@ abstract public class WinBollActivity extends AppCompatActivity {
                 // 传入的Intent action在Activity清单的intent-filter的action节点里有定义
                 if (intent.getAction() != null) {
                     if (intent.getAction().equals(cc.winboll.studio.libapputils.intent.action.DEBUGVIEW)) {
-                        WinBollApplication.setIsDebug(true);
+                        WinBollUtils.setIsDebug(true);
                         //ToastUtils.show!("WinBollApplication.setIsDebug(true) by action : " + intent.getAction());
 
                     }
@@ -356,7 +356,7 @@ abstract public class WinBollActivity extends AppCompatActivity {
         if (isAddWinBollToolBar()) {
             getMenuInflater().inflate(R.menu.toolbar_winboll_shared_main, menu);
         }
-        if (WinBollApplication.isDebug()) {
+        if (WinBollUtils.isDebug()) {
             getMenuInflater().inflate(R.menu.toolbar_studio_debug, menu);
         }
         return super.onCreateOptionsMenu(menu);
@@ -378,8 +378,9 @@ abstract public class WinBollActivity extends AppCompatActivity {
             //ToastUtils.show("item_exit");
             WinBollActivityManager.getInstance(this).finishAll();
         } else if (item.getItemId() == R.id.item_info) {
-            WinBollApplication application = (WinBollApplication) getApplication();
-            application.getMyActivityLifecycleCallbacks().showActivityeInfo();
+            LogUtils.d(TAG, "item_info not yet.");
+            //WinBollApplication application = (WinBollApplication) getApplication();
+            //application.getMyActivityLifecycleCallbacks().showActivityeInfo();
         } else if (item.getItemId() == R.id.item_exitdebug) {
             AboutView.setApp2NormalMode(getApplicationContext());
         } else if (item.getItemId() == R.id.item_about) {
