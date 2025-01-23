@@ -7,6 +7,7 @@ import cc.winboll.studio.libapputils.bean.DebugBean;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import com.hjq.toast.ToastUtils;
 import com.hjq.toast.style.WhiteToastStyle;
+import android.content.Context;
 
 public class WinBollGlobalApplication extends GlobalApplication {
 
@@ -50,6 +51,11 @@ public class WinBollGlobalApplication extends GlobalApplication {
 
     MyActivityLifecycleCallbacks getMyActivityLifecycleCallbacks() {
         return mMyActivityLifecycleCallbacks;
+    }
+
+    @Override
+    public Context getApplicationContext() {
+        return super.getApplicationContext();
     }
 
     @Override
