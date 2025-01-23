@@ -55,6 +55,10 @@ public class GlobalApplication extends Application {
         return super.getApplicationContext();
     }
 
+    public Application getApplication() {
+        return this;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
