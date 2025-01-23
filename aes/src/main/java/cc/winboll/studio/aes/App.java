@@ -5,7 +5,7 @@ package cc.winboll.studio.aes;
  * @Date 2024/06/13 19:03:58
  * @Describe AES应用类
  */
-import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.GlobalApplication;
 
 public class App extends GlobalApplication {
     
