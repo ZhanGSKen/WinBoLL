@@ -1,13 +1,12 @@
 package cc.winboll.studio.libapputils.app;
 
-import android.app.Application;
-import android.content.Context;
 import android.view.Gravity;
+import android.widget.Toast;
+import cc.winboll.studio.GlobalApplication;
 import cc.winboll.studio.libapputils.bean.DebugBean;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import com.hjq.toast.ToastUtils;
 import com.hjq.toast.style.WhiteToastStyle;
-import cc.winboll.studio.GlobalApplication;
 
 public class WinBollGlobalApplication extends GlobalApplication {
 
@@ -60,28 +59,33 @@ public class WinBollGlobalApplication extends GlobalApplication {
         //
         // 初始化日志模块
         LogUtils.init(this);
-        
-        // 初始化 Toast 框架
-        ToastUtils.init(this);
-        // 设置 Toast 布局样式
-        //ToastUtils.setView(R.layout.view_toast);
-        ToastUtils.setStyle(new WhiteToastStyle());
-        ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
-        // 设置应用调试标志
-        DebugBean debugBean = DebugBean.loadBean(this, DebugBean.class);
-        if (debugBean == null) {
-            //ToastUtils.show("debugBean == null");
-            setIsDebug(false);
-        } else {
-            //ToastUtils.show("saveDebugStatus(" + String.valueOf(debugBean.isDebuging()) + ")");
-            setIsDebug(debugBean.isDebuging());
+
+        try {
+            // 初始化 Toast 框架
+            ToastUtils.init(this);
+            // 设置 Toast 布局样式
+            //ToastUtils.setView(R.layout.view_toast);
+            ToastUtils.setStyle(new WhiteToastStyle());
+            ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
+            // 设置应用调试标志
+            DebugBean debugBean = DebugBean.loadBean(this, DebugBean.class);
+            if (debugBean == null) {
+                //ToastUtils.show("debugBean == null");
+                setIsDebug(false);
+            } else {
+                //ToastUtils.show("saveDebugStatus(" + String.valueOf(debugBean.isDebuging()) + ")");
+                setIsDebug(debugBean.isDebuging());
+            }
+            // 应用窗口管理模块参数设置
+            //
+            mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
+            registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
+            // 设置默认 WinBoll 应用 UI 类型
+            setWinBollUI_TYPE(WinBollUI_TYPE.Service);
+            //ToastUtils.show("WinBollUI_TYPE " + getWinBollUI_TYPE());
+        } catch (Exception e) {
+            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        // 应用窗口管理模块参数设置
-        //
-        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
-        registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
-        // 设置默认 WinBoll 应用 UI 类型
-        setWinBollUI_TYPE(WinBollUI_TYPE.Service);
-        //ToastUtils.show("WinBollUI_TYPE " + getWinBollUI_TYPE());
     }
 }
