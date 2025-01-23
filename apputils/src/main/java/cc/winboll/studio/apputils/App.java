@@ -5,10 +5,8 @@ package cc.winboll.studio.apputils;
  * @Date 2024/12/08 15:10:51
  * @Describe 全局应用类
  */
-import android.view.Gravity;
+import android.widget.Toast;
 import cc.winboll.studio.libapputils.app.WinBollGlobalApplication;
-import com.hjq.toast.ToastUtils;
-import com.hjq.toast.style.WhiteToastStyle;
 
 public class App extends WinBollGlobalApplication {
 
@@ -19,6 +17,7 @@ public class App extends WinBollGlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Toast.makeText(getApplication(), "Toast Test", Toast.LENGTH_SHORT).show();
     }
 
 }

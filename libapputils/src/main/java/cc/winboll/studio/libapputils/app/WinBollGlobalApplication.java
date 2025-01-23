@@ -8,6 +8,7 @@ import cc.winboll.studio.libapputils.log.LogUtils;
 import com.hjq.toast.ToastUtils;
 import com.hjq.toast.style.WhiteToastStyle;
 import android.content.Context;
+import android.app.Application;
 
 public class WinBollGlobalApplication extends GlobalApplication {
 
@@ -58,6 +59,11 @@ public class WinBollGlobalApplication extends GlobalApplication {
         return super.getApplicationContext();
     }
 
+    @Override
+    public Application getApplication() {
+        return this;
+    }
+    
     @Override
     public void onCreate() {
         super.onCreate();
