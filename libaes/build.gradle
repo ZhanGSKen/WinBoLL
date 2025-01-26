@@ -41,8 +41,8 @@ dependencies {
     // https://github.com/baoyongzhang/android-PullRefreshLayout
     api 'com.baoyz.pullrefreshlayout:library:1.2.0'
     
-    api 'cc.winboll.studio:libapputils:9.2.1'
-    api 'cc.winboll.studio:libappbase:1.0.3'
+    api 'cc.winboll.studio:libapputils:9.2.17'
+    api 'cc.winboll.studio:libappbase:1.1.2'
     
     api fileTree(dir: 'libs', include: ['*.jar'])
 }
