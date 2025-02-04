@@ -1,14 +1,14 @@
 package cc.winboll.studio.libapputils.app;
 
+import android.app.Application;
+import android.content.Context;
 import android.view.Gravity;
 import android.widget.Toast;
-import cc.winboll.studio.GlobalApplication;
+import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libapputils.bean.DebugBean;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import com.hjq.toast.ToastUtils;
 import com.hjq.toast.style.WhiteToastStyle;
-import android.content.Context;
-import android.app.Application;
 
 public class WinBollGlobalApplication extends GlobalApplication {
 
