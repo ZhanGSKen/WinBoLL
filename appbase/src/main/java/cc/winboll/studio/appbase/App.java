@@ -5,7 +5,7 @@ package cc.winboll.studio.appbase;
  * @Date 2025/01/05 09:54:42
  * @Describe APPbase 应用类
  */
- import cc.winboll.studio.GlobalApplication;
+import cc.winboll.studio.libappbase.GlobalApplication;
 
 public class App extends GlobalApplication {
     

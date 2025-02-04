@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cc.winboll.studio" >
+    package="cc.winboll.studio.libappbase" >
 
     <application>
         <activity
             android:name=".CrashHandler$CrashActiviy"
             android:label="CrashActiviy"
             android:launchMode="standard"/>
-        
-        <activity
-            android:name=".libappbase.LibraryActivity"
-            android:label="@string/lib_name" >
-        </activity>
     </application>
 
 </manifest>

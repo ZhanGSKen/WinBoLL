@@ -4,7 +4,7 @@ apply from: '../.winboll/winboll_lib_build.gradle'
 apply from: '../.winboll/winboll_lint_build.gradle'
 
 android {
-    namespace 'cc.winboll.studio'
+    namespace 'cc.winboll.studio.libappbase'
     
     compileSdkVersion 32
     buildToolsVersion "33.0.3"
