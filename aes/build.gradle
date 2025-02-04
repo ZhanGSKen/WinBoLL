@@ -51,19 +51,5 @@ android {
 dependencies {
 	api project(':libaes')
     
-    //api 'cc.winboll.studio:winboll-shared:1.6.5'
-    api 'io.github.medyo:android-about-page:2.0.0'
-    api 'com.github.getActivity:ToastUtils:10.5'
-    api 'com.jcraft:jsch:0.1.55'
-    api 'org.jsoup:jsoup:1.13.1'
-    api 'com.squareup.okhttp3:okhttp:4.4.1'
-    
-    api 'androidx.appcompat:appcompat:1.0.0'
-    api 'androidx.fragment:fragment:1.0.0'
-    api 'com.google.android.material:material:1.0.0'
-    
-    api 'cc.winboll.studio:libapputils:9.2.17'
-    api 'cc.winboll.studio:libappbase:1.1.2'
-    
     api fileTree(dir: 'libs', include: ['*.jar'])
 }
