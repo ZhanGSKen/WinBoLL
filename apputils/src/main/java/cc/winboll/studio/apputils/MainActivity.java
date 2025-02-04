@@ -6,35 +6,66 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import cc.winboll.studio.libapputils.activities.AboutActivity;
 import cc.winboll.studio.libapputils.activities.AssetsHtmlActivity;
 import cc.winboll.studio.libapputils.activities.QRCodeDecodeActivity;
-import cc.winboll.studio.libapputils.app.WinBollActivity;
+import cc.winboll.studio.libapputils.app.IWinBoll;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
+import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.log.LogActivity;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import com.hjq.toast.ToastUtils;
-import cc.winboll.studio.libapputils.activities.AboutActivity;
-import cc.winboll.studio.libapputils.bean.APPInfo;
+import cc.winboll.studio.libapputils.app.WinBollFactory;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
 
-final public class MainActivity extends WinBollActivity {
+final public class MainActivity extends AppCompatActivity implements IWinBoll {
+
 
 	public static final String TAG = "MainActivity";
+    
+    IWinBollActivity mIWinBollActivity;
 
     public static final int REQUEST_QRCODEDECODE_ACTIVITY = 0;
 
     @Override
-    protected boolean isEnableDisplayHomeAsUp() {
+    public AppCompatActivity getCurrentAppCompatActivity() {
+        return this;
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
+    }
+
+    @Override
+    public boolean isAddWinBollToolBar() {
+        ToastUtils.show(String.format("%s isAddWinBollToolBar()", TAG));
+        return true;
+    }
+
+    @Override
+    public Toolbar initToolBar() {
+        return findViewById(R.id.activitymainToolbar1);
+    }
+    
+    @Override
+    public boolean isEnableDisplayHomeAsUp() {
         return false;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //ToastUtils.show("onCreate");
+        mIWinBollActivity = WinBollFactory.buildWinBollActivity(this);
+        mIWinBollActivity.onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Toolbar toolbar = findViewById(R.id.activitymainToolbar1);
-        //setActionBar(toolbar);
+        //ToastUtils.show("setContentView");
+        
+        Toolbar toolbar = findViewById(R.id.activitymainToolbar1);
+        setSupportActionBar(toolbar);
 
         // 接收并处理 Intent 数据，函数 Intent 处理接收就直接返回
         //if (prosessIntents(getIntent())) return;
@@ -130,24 +161,12 @@ final public class MainActivity extends WinBollActivity {
         return true;
     }
 
-    @Override
-    public String getTag() {
-        return TAG;
-    }
-
-    @Override
-    protected boolean isAddWinBollToolBar() {
-        return true;
-    }
-
-    @Override
-    protected Toolbar initToolBar() {
-        return findViewById(R.id.activitymainToolbar1);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //ToastUtils.show("onCreateOptionsMenu");
         getMenuInflater().inflate(R.menu.toolbar_main, menu);
+        mIWinBollActivity.inflateWinBollMenu(menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -162,6 +181,8 @@ final public class MainActivity extends WinBollActivity {
             startActivityForResult(intent, REQUEST_QRCODEDECODE_ACTIVITY);
         } else if(item.getItemId() == R.id.item_about) {
             openAboutActivity();
+            return true;
+        } else if(mIWinBollActivity.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);

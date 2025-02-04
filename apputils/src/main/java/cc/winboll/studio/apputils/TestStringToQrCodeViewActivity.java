@@ -1,19 +1,26 @@
 package cc.winboll.studio.apputils;
 
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.libapputils.app.WinBollActivity;
+import cc.winboll.studio.libapputils.app.IWinBoll;
 import cc.winboll.studio.libapputils.view.StringToQrCodeView;
 
 /**
  * @Author ZhanGSKen@QQ.COM
  * @Date 2025/01/17 19:50:46
  */
-public class TestStringToQrCodeViewActivity extends WinBollActivity {
+public class TestStringToQrCodeViewActivity extends AppCompatActivity implements IWinBoll {
+
     
     public static final String TAG = "TestStringToQrCodeViewActivity";
     
     StringToQrCodeView mStringToQrCodeView;
+
+    @Override
+    public AppCompatActivity getCurrentAppCompatActivity() {
+        return this;
+    }
     
     @Override
     public String getTag() {
@@ -21,17 +28,17 @@ public class TestStringToQrCodeViewActivity extends WinBollActivity {
     }
 
     @Override
-    protected Toolbar initToolBar() {
+    public Toolbar initToolBar() {
         return findViewById(R.id.activityteststringtoqrcodeviewToolbar1);
     }
 
     @Override
-    protected boolean isEnableDisplayHomeAsUp() {
+    public boolean isEnableDisplayHomeAsUp() {
         return true;
     }
 
     @Override
-    protected boolean isAddWinBollToolBar() {
+    public boolean isAddWinBollToolBar() {
         return true;
     }
 
@@ -45,6 +52,6 @@ public class TestStringToQrCodeViewActivity extends WinBollActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        setSubTitle(TAG);
+        //setSubTitle(TAG);
     }
 }

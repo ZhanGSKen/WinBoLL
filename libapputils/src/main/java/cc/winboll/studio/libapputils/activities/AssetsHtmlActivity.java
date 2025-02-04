@@ -13,15 +13,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.app.WinBollActivity;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import cc.winboll.studio.libapputils.view.SimpleWebView;
 import com.hjq.toast.ToastUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import android.os.PersistableBundle;
+import androidx.appcompat.app.AppCompatActivity;
+import cc.winboll.studio.libapputils.app.IWinBoll;
 
-public class AssetsHtmlActivity extends WinBollActivity {
+public class AssetsHtmlActivity extends AppCompatActivity implements IWinBoll {
 
     public static final String TAG = "AssetsHtmlActivity";
     
@@ -35,23 +37,28 @@ public class AssetsHtmlActivity extends WinBollActivity {
     String mszHtmlFileName;
 
     @Override
+    public AppCompatActivity getCurrentAppCompatActivity() {
+        return this;
+    }
+    
+    @Override
     public String getTag() {
         return TAG;
     }
 
     @Override
-    protected boolean isEnableDisplayHomeAsUp() {
+    public boolean isEnableDisplayHomeAsUp() {
         return true;
     }
 
 
     @Override
-    protected boolean isAddWinBollToolBar() {
+    public boolean isAddWinBollToolBar() {
         return false;
     }
 
     @Override
-    protected Toolbar initToolBar() {
+    public Toolbar initToolBar() {
         return findViewById(R.id.activityassetshtmlToolbar1);
     }
 
@@ -110,7 +117,7 @@ public class AssetsHtmlActivity extends WinBollActivity {
     @Override
     public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onPostCreate(savedInstanceState, persistentState);
-        setSubTitle(mszHtmlFileName);
+        //setSubTitle(mszHtmlFileName);
         //setSubTitle(TAG);
     }
 

@@ -6,34 +6,40 @@ package cc.winboll.studio.libapputils.log;
  * @Describe WinBoll 应用日志窗口
  */
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.app.WinBollActivity;
+import cc.winboll.studio.libapputils.app.IWinBoll;
 import cc.winboll.studio.libapputils.app.WinBollGlobalApplication;
 
-public class LogActivity extends WinBollActivity {
+public class LogActivity extends AppCompatActivity implements IWinBoll {
 
     public static final String TAG = "LogActivity";
 
     LogView mLogView;
-
+    
+    @Override
+    public AppCompatActivity getCurrentAppCompatActivity() {
+        return this;
+    }
+    
     @Override
     public String getTag() {
         return TAG;
     }
 
     @Override
-    protected Toolbar initToolBar() {
+    public Toolbar initToolBar() {
         return null;
     }
 
     @Override
-    protected boolean isEnableDisplayHomeAsUp() {
+    public boolean isEnableDisplayHomeAsUp() {
         return false;
     }
 
     @Override
-    protected boolean isAddWinBollToolBar() {
+    public boolean isAddWinBollToolBar() {
         return false;
     }
 

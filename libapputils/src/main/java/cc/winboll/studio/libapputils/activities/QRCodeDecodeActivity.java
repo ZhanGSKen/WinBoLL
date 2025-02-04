@@ -9,18 +9,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.app.WinBollActivity;
+import cc.winboll.studio.libapputils.app.IWinBoll;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import java.util.List;
 
-public class QRCodeDecodeActivity extends WinBollActivity {
+public class QRCodeDecodeActivity extends AppCompatActivity implements IWinBoll {
+
 
     public static final String TAG = "QRCodeDecodeActivity";
     public static final String EXTRA_RESULT = "EXTRA_RESULT";
@@ -28,6 +30,11 @@ public class QRCodeDecodeActivity extends WinBollActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     TextView resultTextView;
     DecoratedBarcodeView barcodeView;
+
+    @Override
+    public AppCompatActivity getCurrentAppCompatActivity() {
+        return this;
+    }
     
     @Override
     public String getTag() {
@@ -35,18 +42,18 @@ public class QRCodeDecodeActivity extends WinBollActivity {
     }
 
     @Override
-    protected boolean isEnableDisplayHomeAsUp() {
+    public boolean isEnableDisplayHomeAsUp() {
         return true;
     }
 
 
     @Override
-    protected boolean isAddWinBollToolBar() {
+    public boolean isAddWinBollToolBar() {
         return false;
     }
 
     @Override
-    protected Toolbar initToolBar() {
+    public Toolbar initToolBar() {
         return findViewById(R.id.activityqrcodedecodeToolbar1);
     }
 

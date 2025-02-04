@@ -17,7 +17,7 @@ public class App extends WinBollGlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(getApplication(), "Toast Test", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplication(), "Toast Test", Toast.LENGTH_SHORT).show();
     }
 
 }
