@@ -16,7 +16,7 @@ public class AESThemeBean extends BaseBean {
     public static final String TAG = "AESThemeBean";
 
     public enum ThemeType {
-        DEFAULT("默认主题"),
+        AES("默认主题"),
         DEPTH("深奥主题"),
         SKY("天空主题"),
         GOLDEN("辉煌主题"),
@@ -42,7 +42,7 @@ public class AESThemeBean extends BaseBean {
     }
     
     // 保存当前主题
-    int currentThemeStyleID = getThemeStyleID(ThemeType.DEFAULT);
+    int currentThemeStyleID = getThemeStyleID(ThemeType.AES);
     
     public AESThemeBean() {
     }
@@ -99,7 +99,7 @@ public class AESThemeBean extends BaseBean {
     }
 
     public static int getThemeStyleID(ThemeType themeType) {
-        int themeStyleID = R.style.DefaultAESTheme;
+        int themeStyleID = R.style.AESTheme;
         if (AESThemeBean.ThemeType.DEPTH == themeType) {
             themeStyleID = R.style.DepthAESTheme;
         } else if (AESThemeBean.ThemeType.SKY == themeType) {
@@ -110,15 +110,15 @@ public class AESThemeBean extends BaseBean {
             themeStyleID = R.style.MemorAESTheme;
         } else if (AESThemeBean.ThemeType.TAO == themeType) {
             themeStyleID = R.style.TaoAESTheme;
-        } else if (AESThemeBean.ThemeType.DEFAULT == themeType) {
-            themeStyleID = R.style.DefaultAESTheme;
+        } else if (AESThemeBean.ThemeType.AES == themeType) {
+            themeStyleID = R.style.AESTheme;
         }
         //LogUtils.d(TAG, "themeStyleID " + Integer.toString(themeStyleID));
         return themeStyleID;
     }
 
     public static AESThemeBean.ThemeType getThemeStyleType(int nThemeStyleID) {
-        AESThemeBean.ThemeType themeStyle = AESThemeBean.ThemeType.DEFAULT;
+        AESThemeBean.ThemeType themeStyle = AESThemeBean.ThemeType.AES;
         if (R.style.DepthAESTheme == nThemeStyleID) {
             themeStyle = AESThemeBean.ThemeType.DEPTH ;
         } else if (R.style.SkyAESTheme == nThemeStyleID) {
@@ -129,8 +129,8 @@ public class AESThemeBean extends BaseBean {
             themeStyle = AESThemeBean.ThemeType.MEMOR ;
         } else if (R.style.TaoAESTheme == nThemeStyleID) {
             themeStyle = AESThemeBean.ThemeType.TAO ;
-        } else if (R.style.DefaultAESTheme == nThemeStyleID) {
-            themeStyle = AESThemeBean.ThemeType.DEFAULT;
+        } else if (R.style.AESTheme == nThemeStyleID) {
+            themeStyle = AESThemeBean.ThemeType.AES;
         }
         //LogUtils.d(TAG, "themeStyle " + Integer.toString(themeStyle.ordinal()));
         return themeStyle;

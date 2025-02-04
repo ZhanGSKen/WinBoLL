@@ -25,7 +25,7 @@ public class AESThemeUtil {
 
     public static <T extends Context> int getThemeTypeID(T context) {
         AESThemeBean bean = AESThemeBean.loadBean(context, AESThemeBean.class);
-        return bean == null ? AESThemeBean.getThemeStyleID(AESThemeBean.ThemeType.DEFAULT): bean.getCurrentThemeTypeID();
+        return bean == null ? AESThemeBean.getThemeStyleID(AESThemeBean.ThemeType.AES): bean.getCurrentThemeTypeID();
     }
     
     public static <T extends Context> void saveThemeStyleID(T context, int nThemeTypeID) {
@@ -92,7 +92,7 @@ public class AESThemeUtil {
             saveThemeStyleID(activity, nThemeStyleID);
             return true;
         } else if (R.id.item_defaulttheme == item.getItemId()) {
-            nThemeStyleID = AESThemeBean.getThemeStyleID(AESThemeBean.ThemeType.DEFAULT);
+            nThemeStyleID = AESThemeBean.getThemeStyleID(AESThemeBean.ThemeType.AES);
             saveThemeStyleID(activity, nThemeStyleID);
             return true;
         }
@@ -123,7 +123,7 @@ public class AESThemeUtil {
             saveThemeStyleID(activity, nThemeStyleID);
             return true;
         } else if (R.id.item_defaulttheme == item.getItemId()) {
-            nThemeStyleID = AESThemeBean.getThemeStyleID(AESThemeBean.ThemeType.DEFAULT);
+            nThemeStyleID = AESThemeBean.getThemeStyleID(AESThemeBean.ThemeType.AES);
             saveThemeStyleID(activity, nThemeStyleID);
             return true;
         }
@@ -154,7 +154,7 @@ public class AESThemeUtil {
             saveThemeStyleID(activity.getApplicationContext(), nThemeStyleID);
             return true;
         } else if (R.id.item_defaulttheme == item.getItemId()) {
-            nThemeStyleID = AESThemeBean.getThemeStyleID(AESThemeBean.ThemeType.DEFAULT);
+            nThemeStyleID = AESThemeBean.getThemeStyleID(AESThemeBean.ThemeType.AES);
             saveThemeStyleID(activity.getApplicationContext(), nThemeStyleID);
             return true;
         }

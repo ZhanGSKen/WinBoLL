@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    <style name="AESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+    <style name="AESTheme" parent="WinBoll.SupportThemeNoActionBar">
         <item name="colorTextColor">#FF000000</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#FF03AB4E</item>
+        <item name="colorPrimaryDark">#FF027C39</item>
+        <item name="colorAccent">#FF3DDC84</item>
         <item name="android:textColor">#FF000000</item>
         <item name="aToolbar">@style/AESAToolbar</item>
         <item name="aSupportToolbar">@style/AESASupportToolbar</item>
@@ -24,158 +24,196 @@
         <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
         <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
     </style>
-    
 
-    <style name="DefaultAESTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorTextColor">#FF000000</item>
-        <item name="colorPrimary">#FF03AB4E</item>
-        <item name="colorPrimaryDark">#FF027C39</item>
-        <item name="colorAccent">#FF3DDC84</item>
-        <item name="android:textColor">#FF000000</item>
-        <item name="aToolbar">@style/DefaultAToolbar</item>
-        <item name="aSupportToolbar">@style/DefaultASupportToolbar</item>
-    </style>
-
-    <style name="DefaultAToolbar">
-        <item name="attrAToolbarTitleTextColor">?attr/colorTextColor</item>
-        <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
-        <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
-        <item name="attrAToolbarEndColor">?attr/colorAccent</item>
-    </style>
-
-    <style name="DefaultASupportToolbar">
-        <item name="attrASupportToolbarTitleTextColor">?attr/colorTextColor</item>
-        <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
-        <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
-        <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
-    </style>
-    
-
-    <style name="DepthAESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="DepthAESTheme" parent="AESTheme">
         <item name="colorTextColor">#FF000000</item>
         <item name="colorPrimary">#FF2566FE</item>
         <item name="colorPrimaryDark">#FF1359FF</item>
         <item name="colorAccent">#FF8BAEFF</item>
         <item name="android:textColor">#FF000000</item>
-        <item name="aToolbar">@style/DepthAToolbar</item>
-        <item name="aSupportToolbar">@style/DepthASupportToolbar</item>
     </style>
 
-    <style name="DepthAToolbar">
-        <item name="attrAToolbarTitleTextColor">?attr/colorTextColor</item>
-        <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
-        <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
-        <item name="attrAToolbarEndColor">?attr/colorAccent</item>
-    </style>
-
-    <style name="DepthASupportToolbar">
-        <item name="attrASupportToolbarTitleTextColor">?attr/colorTextColor</item>
-        <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
-        <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
-        <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
-    </style>
-    
-    <style name="SkyAESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="SkyAESTheme" parent="AESTheme">
         <item name="colorTextColor">#FF000000</item>
         <item name="colorPrimary">#FF1E98D4</item>
         <item name="colorPrimaryDark">#FF046A9C</item>
         <item name="colorAccent">#FF8CD9FF</item>
         <item name="android:textColor">#FF000000</item>
-        <item name="aToolbar">@style/SkyAToolbar</item>
-        <item name="aSupportToolbar">@style/SkyASupportToolbar</item>
     </style>
 
-    <style name="SkyAToolbar">
-        <item name="attrAToolbarTitleTextColor">?attr/colorTextColor</item>
-        <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
-        <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
-        <item name="attrAToolbarEndColor">?attr/colorAccent</item>
-    </style>
-
-    <style name="SkyASupportToolbar">
-        <item name="attrASupportToolbarTitleTextColor">?attr/colorTextColor</item>
-        <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
-        <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
-        <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
-    </style>
-    
-    <style name="GoldenAESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="GoldenAESTheme" parent="AESTheme">
         <item name="colorTextColor">#FF000000</item>
         <item name="colorPrimary">#FFFFE22A</item>
         <item name="colorPrimaryDark">#FFAE9600</item>
         <item name="colorAccent">#FFFFED78</item>
         <item name="android:textColor">#FF000000</item>
-        <item name="aToolbar">@style/GoldenAToolbar</item>
-        <item name="aSupportToolbar">@style/GoldenASupportToolbar</item>
     </style>
 
-    <style name="GoldenAToolbar">
-        <item name="attrAToolbarTitleTextColor">?attr/colorTextColor</item>
-        <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
-        <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
-        <item name="attrAToolbarEndColor">?attr/colorAccent</item>
-    </style>
-
-    <style name="GoldenASupportToolbar">
-        <item name="attrASupportToolbarTitleTextColor">?attr/colorTextColor</item>
-        <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
-        <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
-        <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
-    </style>
-    
-    <style name="MemorAESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="MemorAESTheme" parent="AESTheme">
         <item name="colorTextColor">#FF000000</item>
         <item name="colorPrimary">#FFCE1ED4</item>
         <item name="colorPrimaryDark">#FFB500BC</item>
         <item name="colorAccent">#FFE653EB</item>
         <item name="android:textColor">#FF000000</item>
-        <item name="aToolbar">@style/MemorAToolbar</item>
-        <item name="aSupportToolbar">@style/MemorASupportToolbar</item>
     </style>
 
-    <style name="MemorAToolbar">
-        <item name="attrAToolbarTitleTextColor">?attr/colorTextColor</item>
-        <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
-        <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
-        <item name="attrAToolbarEndColor">?attr/colorAccent</item>
-    </style>
-
-    <style name="MemorASupportToolbar">
-        <item name="attrASupportToolbarTitleTextColor">?attr/colorTextColor</item>
-        <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
-        <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
-        <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
-    </style>
-    
-    <style name="TaoAESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="TaoAESTheme" parent="AESTheme">
         <item name="colorTextColor">#FF000000</item>
         <item name="colorPrimary">#FF9F9F9F</item>
         <item name="colorPrimaryDark">#FF5E5E5E</item>
         <item name="colorAccent">#FFD9D9D9</item>
         <item name="android:textColor">#FF000000</item>
-        <item name="aToolbar">@style/TaoAToolbar</item>
-        <item name="aSupportToolbar">@style/TaoASupportToolbar</item>
+    </style>
+
+    <!--<style name="AESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorTextColor">#FF000000</item>
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:textColor">#FF000000</item>
+    <item name="aToolbar">@style/AESAToolbar</item>
+    <item name="aSupportToolbar">@style/AESASupportToolbar</item>
+    </style>
+
+    <style name="AESAToolbar">
+    <item name="attrAToolbarTitleTextColor">?attr/colorTextColor</item>
+    <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
+    <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
+    <item name="attrAToolbarEndColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="AESASupportToolbar">
+    <item name="attrASupportToolbarTitleTextColor">?attr/colorTextColor</item>
+    <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
+    <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
+    <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
+    </style>-->
+
+    <!--<style name="DepthAESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorTextColor">#FF000000</item>
+    <item name="colorPrimary">#FF2566FE</item>
+    <item name="colorPrimaryDark">#FF1359FF</item>
+    <item name="colorAccent">#FF8BAEFF</item>
+    <item name="android:textColor">#FF000000</item>
+    <item name="aToolbar">@style/DepthAToolbar</item>
+    <item name="aSupportToolbar">@style/DepthASupportToolbar</item>
+    </style>
+
+    <style name="DepthAToolbar">
+    <item name="attrAToolbarTitleTextColor">?attr/colorTextColor</item>
+    <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
+    <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
+    <item name="attrAToolbarEndColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="DepthASupportToolbar">
+    <item name="attrASupportToolbarTitleTextColor">?attr/colorTextColor</item>
+    <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
+    <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
+    <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="SkyAESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorTextColor">#FF000000</item>
+    <item name="colorPrimary">#FF1E98D4</item>
+    <item name="colorPrimaryDark">#FF046A9C</item>
+    <item name="colorAccent">#FF8CD9FF</item>
+    <item name="android:textColor">#FF000000</item>
+    <item name="aToolbar">@style/SkyAToolbar</item>
+    <item name="aSupportToolbar">@style/SkyASupportToolbar</item>
+    </style>
+
+    <style name="SkyAToolbar">
+    <item name="attrAToolbarTitleTextColor">?attr/colorTextColor</item>
+    <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
+    <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
+    <item name="attrAToolbarEndColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="SkyASupportToolbar">
+    <item name="attrASupportToolbarTitleTextColor">?attr/colorTextColor</item>
+    <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
+    <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
+    <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="GoldenAESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorTextColor">#FF000000</item>
+    <item name="colorPrimary">#FFFFE22A</item>
+    <item name="colorPrimaryDark">#FFAE9600</item>
+    <item name="colorAccent">#FFFFED78</item>
+    <item name="android:textColor">#FF000000</item>
+    <item name="aToolbar">@style/GoldenAToolbar</item>
+    <item name="aSupportToolbar">@style/GoldenASupportToolbar</item>
+    </style>
+
+    <style name="GoldenAToolbar">
+    <item name="attrAToolbarTitleTextColor">?attr/colorTextColor</item>
+    <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
+    <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
+    <item name="attrAToolbarEndColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="GoldenASupportToolbar">
+    <item name="attrASupportToolbarTitleTextColor">?attr/colorTextColor</item>
+    <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
+    <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
+    <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="MemorAESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorTextColor">#FF000000</item>
+    <item name="colorPrimary">#FFCE1ED4</item>
+    <item name="colorPrimaryDark">#FFB500BC</item>
+    <item name="colorAccent">#FFE653EB</item>
+    <item name="android:textColor">#FF000000</item>
+    <item name="aToolbar">@style/MemorAToolbar</item>
+    <item name="aSupportToolbar">@style/MemorASupportToolbar</item>
+    </style>
+
+    <style name="MemorAToolbar">
+    <item name="attrAToolbarTitleTextColor">?attr/colorTextColor</item>
+    <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
+    <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
+    <item name="attrAToolbarEndColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="MemorASupportToolbar">
+    <item name="attrASupportToolbarTitleTextColor">?attr/colorTextColor</item>
+    <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
+    <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
+    <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="TaoAESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorTextColor">#FF000000</item>
+    <item name="colorPrimary">#FF9F9F9F</item>
+    <item name="colorPrimaryDark">#FF5E5E5E</item>
+    <item name="colorAccent">#FFD9D9D9</item>
+    <item name="android:textColor">#FF000000</item>
+    <item name="aToolbar">@style/TaoAToolbar</item>
+    <item name="aSupportToolbar">@style/TaoASupportToolbar</item>
     </style>
 
     <style name="TaoAToolbar">
-        <item name="attrAToolbarTitleTextColor">?attr/colorTextColor</item>
-        <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
-        <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
-        <item name="attrAToolbarEndColor">?attr/colorAccent</item>
+    <item name="attrAToolbarTitleTextColor">?attr/colorTextColor</item>
+    <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
+    <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
+    <item name="attrAToolbarEndColor">?attr/colorAccent</item>
     </style>
 
     <style name="TaoASupportToolbar">
-        <item name="attrASupportToolbarTitleTextColor">?attr/colorTextColor</item>
-        <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
-        <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
-        <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
-    </style>
-    
+    <item name="attrASupportToolbarTitleTextColor">?attr/colorTextColor</item>
+    <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
+    <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
+    <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
+    </style>-->
+
     <!--<style name="AToolbar">
-        <item name="attrAToolbarTitleTextColor">#FF2DDA27</item>
-        <item name="attrAToolbarStartColor">#FF2DDA27</item>
-        <item name="attrAToolbarCenterColor">#FF2DDA27</item>
-		<item name="attrAToolbarEndColor">#FF2DDA27</item>
+    <item name="attrAToolbarTitleTextColor">#FF2DDA27</item>
+    <item name="attrAToolbarStartColor">#FF2DDA27</item>
+    <item name="attrAToolbarCenterColor">#FF2DDA27</item>
+    <item name="attrAToolbarEndColor">#FF2DDA27</item>
     </style>-->
 
     <!--对话框的样式-->
