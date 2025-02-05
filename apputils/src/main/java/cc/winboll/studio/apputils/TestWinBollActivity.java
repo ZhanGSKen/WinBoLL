@@ -1,23 +1,24 @@
 package cc.winboll.studio.apputils;
 
-import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.libapputils.app.IWinBoll;
-
 /**
  * @Author ZhanGSKen@QQ.COM
  * @Date 2025/01/13 15:09:46
  */
-public class TestWinBollActivity extends AppCompatActivity implements IWinBoll {
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import cc.winboll.studio.libapputils.app.BaseWinBollActivity;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
+
+public class TestWinBollActivity extends BaseWinBollActivity implements IWinBollActivity {
 
     public static final String TAG = "TestWinBollActivity";
 
     @Override
-    public AppCompatActivity getCurrentAppCompatActivity() {
+    public AppCompatActivity getActivity() {
         return this;
     }
-    
+
     @Override
     public String getTag() {
         return TAG;
@@ -43,12 +44,4 @@ public class TestWinBollActivity extends AppCompatActivity implements IWinBoll {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testwinboll);
     }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        //setSubTitle(TAG);
-    }
-    
-    
 }

@@ -13,25 +13,27 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.app.IWinBoll;
+import cc.winboll.studio.libapputils.app.BaseWinBollActivity;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.AboutView;
 import com.hjq.toast.ToastUtils;
 
-final public class AboutActivity extends AppCompatActivity implements IWinBoll {
+final public class AboutActivity extends BaseWinBollActivity implements IWinBollActivity {
 
     public static final String TAG = "AboutActivity";
+
     public static final String EXTRA_APPINFO = "EXTRA_APPINFO";
 
 
     APPInfo mAPPInfo;
 
     @Override
-    public AppCompatActivity getCurrentAppCompatActivity() {
+    public AppCompatActivity getActivity() {
         return this;
     }
-    
+
     @Override
     public String getTag() {
         return TAG;
@@ -51,7 +53,7 @@ final public class AboutActivity extends AppCompatActivity implements IWinBoll {
     public Toolbar initToolBar() {
         return findViewById(R.id.activityaboutToolbar1);
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,27 +65,19 @@ final public class AboutActivity extends AppCompatActivity implements IWinBoll {
         if (mAPPInfo == null) {
             mAPPInfo = new APPInfo();
         }
-        
+
         AboutView aboutView = new AboutView(this, mAPPInfo);
         LinearLayout llMain = findViewById(R.id.activityaboutLinearLayout1);
         llMain.addView(aboutView);
-        
+
         ToastUtils.show(TAG);
     }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        //setSubTitle(TAG);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_winboll_shared_about, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -92,6 +86,4 @@ final public class AboutActivity extends AppCompatActivity implements IWinBoll {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

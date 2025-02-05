@@ -11,24 +11,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
+import cc.winboll.studio.libapputils.app.BaseWinBollActivity;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import cc.winboll.studio.libapputils.view.SimpleWebView;
-import com.hjq.toast.ToastUtils;
 import java.io.IOException;
 import java.io.InputStream;
-import android.os.PersistableBundle;
-import androidx.appcompat.app.AppCompatActivity;
-import cc.winboll.studio.libapputils.app.IWinBoll;
 
-public class AssetsHtmlActivity extends AppCompatActivity implements IWinBoll {
+public class AssetsHtmlActivity extends BaseWinBollActivity implements IWinBollActivity {
 
     public static final String TAG = "AssetsHtmlActivity";
-    
+
     public static final String EXTRA_HTMLFILENAME = "EXTRA_HTMLFILENAME";
-    
+
     String mszHelpIndexFilePath = "";
     Uri mszHelpIndexFileUri;
     Context mContext;
@@ -37,10 +35,10 @@ public class AssetsHtmlActivity extends AppCompatActivity implements IWinBoll {
     String mszHtmlFileName;
 
     @Override
-    public AppCompatActivity getCurrentAppCompatActivity() {
+    public AppCompatActivity getActivity() {
         return this;
     }
-    
+
     @Override
     public String getTag() {
         return TAG;
@@ -112,13 +110,6 @@ public class AssetsHtmlActivity extends AppCompatActivity implements IWinBoll {
 //        //myWebView.loadUrl(url);
 //
 //        myWebView.loadUrl(mszHelpIndexFileUri.toString());
-    }
-
-    @Override
-    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onPostCreate(savedInstanceState, persistentState);
-        //setSubTitle(mszHtmlFileName);
-        //setSubTitle(TAG);
     }
 
     //

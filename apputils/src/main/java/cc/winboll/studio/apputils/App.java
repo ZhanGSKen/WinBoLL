@@ -19,5 +19,4 @@ public class App extends WinBollGlobalApplication {
         super.onCreate();
         //Toast.makeText(getApplication(), "Toast Test", Toast.LENGTH_SHORT).show();
     }
-
 }

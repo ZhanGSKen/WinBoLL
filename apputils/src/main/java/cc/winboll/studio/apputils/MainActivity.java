@@ -8,29 +8,28 @@ import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import cc.winboll.studio.apputils.R;
 import cc.winboll.studio.libapputils.activities.AboutActivity;
 import cc.winboll.studio.libapputils.activities.AssetsHtmlActivity;
 import cc.winboll.studio.libapputils.activities.QRCodeDecodeActivity;
-import cc.winboll.studio.libapputils.app.IWinBoll;
+import cc.winboll.studio.libapputils.app.BaseWinBollActivity;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
+import cc.winboll.studio.libapputils.app.WinBollFactory;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.log.LogActivity;
 import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
 import com.hjq.toast.ToastUtils;
-import cc.winboll.studio.libapputils.app.WinBollFactory;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
 
-final public class MainActivity extends AppCompatActivity implements IWinBoll {
-
+final public class MainActivity extends BaseWinBollActivity implements IWinBollActivity {
 
 	public static final String TAG = "MainActivity";
-    
-    IWinBollActivity mIWinBollActivity;
 
     public static final int REQUEST_QRCODEDECODE_ACTIVITY = 0;
 
     @Override
-    public AppCompatActivity getCurrentAppCompatActivity() {
+    public AppCompatActivity getActivity() {
         return this;
     }
 
@@ -41,7 +40,6 @@ final public class MainActivity extends AppCompatActivity implements IWinBoll {
 
     @Override
     public boolean isAddWinBollToolBar() {
-        ToastUtils.show(String.format("%s isAddWinBollToolBar()", TAG));
         return true;
     }
 
@@ -49,7 +47,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBoll {
     public Toolbar initToolBar() {
         return findViewById(R.id.activitymainToolbar1);
     }
-    
+
     @Override
     public boolean isEnableDisplayHomeAsUp() {
         return false;
@@ -57,13 +55,9 @@ final public class MainActivity extends AppCompatActivity implements IWinBoll {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //ToastUtils.show("onCreate");
-        mIWinBollActivity = WinBollFactory.buildWinBollActivity(this);
-        mIWinBollActivity.onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //ToastUtils.show("setContentView");
-        
+
         Toolbar toolbar = findViewById(R.id.activitymainToolbar1);
         setSupportActionBar(toolbar);
 
@@ -93,31 +87,10 @@ final public class MainActivity extends AppCompatActivity implements IWinBoll {
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-//        setSubTitle("");
+    protected String getAppName() {
+        return getString(R.string.app_name);
     }
-
-    @Override
-    public void onBackPressed() {
-//        exit();
-    }
-
-//    void exit() {
-//        YesNoAlertDialog.OnDialogResultListener listener = new YesNoAlertDialog.OnDialogResultListener(){
-//
-//            @Override
-//            public void onYes() {
-//                WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
-//            }
-//
-//            @Override
-//            public void onNo() {
-//            }
-//        };
-//        YesNoAlertDialog.show(this, "[ " + getString(R.string.app_name) + " ]", "Exit(Yes/No).\nIs close all activity?", listener);
-//    }
-
+    
     //
     // 处理传入的 Intent 数据
     //
@@ -161,12 +134,10 @@ final public class MainActivity extends AppCompatActivity implements IWinBoll {
         return true;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //ToastUtils.show("onCreateOptionsMenu");
         getMenuInflater().inflate(R.menu.toolbar_main, menu);
-        mIWinBollActivity.inflateWinBollMenu(menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -179,15 +150,13 @@ final public class MainActivity extends AppCompatActivity implements IWinBoll {
         } else if (item.getItemId() == R.id.item_testqrcodedecodeactivity) {
             Intent intent = new Intent(this, QRCodeDecodeActivity.class);
             startActivityForResult(intent, REQUEST_QRCODEDECODE_ACTIVITY);
-        } else if(item.getItemId() == R.id.item_about) {
+        } else if (item.getItemId() == R.id.item_about) {
             openAboutActivity();
-            return true;
-        } else if(mIWinBollActivity.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-    
+
     void openAboutActivity() {
         Intent intent = new Intent(this, AboutActivity.class);
         APPInfo appInfo = new APPInfo();
@@ -204,8 +173,8 @@ final public class MainActivity extends AppCompatActivity implements IWinBoll {
         intent.putExtra(AboutActivity.EXTRA_APPINFO, appInfo);
         WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, AboutActivity.class);
     }
-    
-    
+
+
     public void onTestAboutActivity(View view) {
         //ToastUtils.show("onTestAboutActivity");
         openAboutActivity();
@@ -216,19 +185,21 @@ final public class MainActivity extends AppCompatActivity implements IWinBoll {
         intent.putExtra(AssetsHtmlActivity.EXTRA_HTMLFILENAME, "javascript_test.html");
         WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, AssetsHtmlActivity.class);
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    
+    /*@Override
+    protected void onActivithyResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_QRCODEDECODE_ACTIVITY : {
-                    String text = data.getStringExtra(QRCodeDecodeActivity.EXTRA_RESULT);
-                    ToastUtils.show(text);
+                    if (data != null) {
+                        String text = data.getStringExtra(QRCodeDecodeActivity.EXTRA_RESULT);
+                        ToastUtils.show(text);
+                    }
                     break;
                 }
             default : {
-                    ToastUtils.show(String.format("%d, %d", requestCode, resultCode));
-                    super.onActivityResult(requestCode, resultCode, data);
+                    //ToastUtils.show(String.format("%d, %d", requestCode, resultCode));
+                    super.prosessActivityResult(requestCode, resultCode, data);
                 }
         }
-    }
+    }*/
 }

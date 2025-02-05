@@ -14,28 +14,29 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.app.IWinBoll;
+import cc.winboll.studio.libapputils.app.BaseWinBollActivity;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import java.util.List;
 
-public class QRCodeDecodeActivity extends AppCompatActivity implements IWinBoll {
-
+public class QRCodeDecodeActivity extends BaseWinBollActivity implements IWinBollActivity {
 
     public static final String TAG = "QRCodeDecodeActivity";
-    public static final String EXTRA_RESULT = "EXTRA_RESULT";
 
+    public static final String EXTRA_RESULT = "EXTRA_RESULT";
     private static final int REQUEST_CAMERA_PERMISSION = 1;
+
     TextView resultTextView;
     DecoratedBarcodeView barcodeView;
 
     @Override
-    public AppCompatActivity getCurrentAppCompatActivity() {
+    public AppCompatActivity getActivity() {
         return this;
     }
-    
+
     @Override
     public String getTag() {
         return TAG;
@@ -73,7 +74,7 @@ public class QRCodeDecodeActivity extends AppCompatActivity implements IWinBoll 
             startScanning();
         }
 
-        
+
     }
 
     private void startScanning() {

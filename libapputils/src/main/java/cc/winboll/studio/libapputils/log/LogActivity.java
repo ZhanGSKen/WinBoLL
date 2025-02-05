@@ -9,17 +9,18 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.app.IWinBoll;
+import cc.winboll.studio.libapputils.app.BaseWinBollActivity;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollGlobalApplication;
 
-public class LogActivity extends AppCompatActivity implements IWinBoll {
+public class LogActivity extends BaseWinBollActivity implements IWinBollActivity {
 
     public static final String TAG = "LogActivity";
 
     LogView mLogView;
     
     @Override
-    public AppCompatActivity getCurrentAppCompatActivity() {
+    public AppCompatActivity getActivity() {
         return this;
     }
     
