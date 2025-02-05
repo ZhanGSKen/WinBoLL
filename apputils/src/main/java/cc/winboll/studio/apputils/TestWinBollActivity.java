@@ -7,10 +7,9 @@ package cc.winboll.studio.apputils;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.libapputils.app.BaseWinBollActivity;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 
-public class TestWinBollActivity extends BaseWinBollActivity implements IWinBollActivity {
+public class TestWinBollActivity extends AppCompatActivity implements IWinBollActivity {
 
     public static final String TAG = "TestWinBollActivity";
 

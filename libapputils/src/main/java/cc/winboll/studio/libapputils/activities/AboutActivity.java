@@ -13,14 +13,13 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.app.BaseWinBollActivity;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.AboutView;
 import com.hjq.toast.ToastUtils;
 
-final public class AboutActivity extends BaseWinBollActivity implements IWinBollActivity {
+final public class AboutActivity extends AppCompatActivity implements IWinBollActivity {
 
     public static final String TAG = "AboutActivity";
 

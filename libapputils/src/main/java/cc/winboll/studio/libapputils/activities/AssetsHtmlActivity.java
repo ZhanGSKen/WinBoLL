@@ -14,14 +14,13 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.app.BaseWinBollActivity;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import cc.winboll.studio.libapputils.view.SimpleWebView;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class AssetsHtmlActivity extends BaseWinBollActivity implements IWinBollActivity {
+public class AssetsHtmlActivity extends AppCompatActivity implements IWinBollActivity {
 
     public static final String TAG = "AssetsHtmlActivity";
 

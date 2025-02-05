@@ -14,7 +14,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.app.BaseWinBollActivity;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
@@ -22,7 +21,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import java.util.List;
 
-public class QRCodeDecodeActivity extends BaseWinBollActivity implements IWinBollActivity {
+public class QRCodeDecodeActivity extends AppCompatActivity implements IWinBollActivity {
 
     public static final String TAG = "QRCodeDecodeActivity";
 

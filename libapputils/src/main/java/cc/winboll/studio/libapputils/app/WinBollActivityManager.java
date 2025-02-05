@@ -11,7 +11,6 @@ package cc.winboll.studio.libapputils.app;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.TaskStackBuilder;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import java.util.HashMap;
@@ -23,7 +22,16 @@ public class WinBollActivityManager {
     public static final String TAG = "WinBollActivityManager";
     public static final String EXTRA_TAG = "EXTRA_TAG";
 
+    public static enum WinBollUI_TYPE {
+        Aplication, // 退出应用后，保持最近任务栏任务记录主窗口
+        Service // 退出应用后，清理所有最近任务栏任务记录窗口
+        };
+
+    // 应用类型标志
+    volatile static WinBollUI_TYPE _mWinBollUI_TYPE = WinBollUI_TYPE.Service;
+
     Context mContext;
+    MyActivityLifecycleCallbacks mMyActivityLifecycleCallbacks;
     static WinBollActivityManager _mWinBollActivityManager;
     static Map<String, IWinBollActivity> _mapIWinBollList;
     IWinBollActivity firstIWinBollActivity;
@@ -41,6 +49,20 @@ public class WinBollActivityManager {
             _mWinBollActivityManager = new WinBollActivityManager(context);
         }
         return _mWinBollActivityManager;
+    }
+
+    //
+    // 设置 WinBoll 应用 UI 类型
+    //
+    public synchronized static void setWinBollUI_TYPE(WinBollUI_TYPE mWinBollUI_TYPE) {
+        _mWinBollUI_TYPE = mWinBollUI_TYPE;
+    }
+
+    //
+    // 获取 WinBoll 应用 UI 类型
+    //
+    public synchronized static WinBollUI_TYPE getWinBollUI_TYPE() {
+        return _mWinBollUI_TYPE;
     }
 
     //
@@ -82,6 +104,7 @@ public class WinBollActivityManager {
             //打开多任务窗口 flags
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(EXTRA_TAG, tag);
             mContext.startActivity(intent);
         } catch (InstantiationException | IllegalAccessException e) {
@@ -103,6 +126,7 @@ public class WinBollActivityManager {
             //打开多任务窗口 flags
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(EXTRA_TAG, tag);
             mContext.startActivity(intent);
         } catch (InstantiationException | IllegalAccessException e) {
@@ -183,11 +207,11 @@ public class WinBollActivityManager {
                 //ToastUtils.show("finishAll() activity");
                 if (iWinBoll != null && !iWinBoll.getActivity().isFinishing() && !iWinBoll.getActivity().isDestroyed()) {
                     //ToastUtils.show("activity != null ...");
-                    if (WinBollGlobalApplication.getWinBollUI_TYPE() == WinBollGlobalApplication.WinBollUI_TYPE.Service) {
+                    if (getWinBollUI_TYPE() == WinBollUI_TYPE.Service) {
                         // 结束窗口和最近任务栏, 建议前台服务类应用使用，可以方便用户再次调用 UI 操作。
                         iWinBoll.getActivity().finishAndRemoveTask();
                         //ToastUtils.show("finishAll() activity.finishAndRemoveTask();");
-                    } else if (WinBollGlobalApplication.getWinBollUI_TYPE() == WinBollGlobalApplication.WinBollUI_TYPE.Aplication) {
+                    } else if (getWinBollUI_TYPE() == WinBollUI_TYPE.Aplication) {
                         // 结束窗口保留最近任务栏，建议前台服务类应用使用，可以保持应用的系统自觉性。
                         iWinBoll.getActivity().finish();
                         //ToastUtils.show("finishAll() activity.finish();");

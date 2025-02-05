@@ -8,12 +8,11 @@ package cc.winboll.studio.libapputils.log;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.app.BaseWinBollActivity;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
-import cc.winboll.studio.libapputils.app.WinBollGlobalApplication;
 
-public class LogActivity extends BaseWinBollActivity implements IWinBollActivity {
+public class LogActivity extends AppCompatActivity implements IWinBollActivity {
 
     public static final String TAG = "LogActivity";
 
@@ -51,7 +50,7 @@ public class LogActivity extends BaseWinBollActivity implements IWinBollActivity
         setContentView(R.layout.activity_log);
         mLogView = findViewById(R.id.logview);
 
-        if (WinBollGlobalApplication.isDebug()) { mLogView.start(); }
+        if (GlobalApplication.isDebuging()) { mLogView.start(); }
     }
 
     @Override
