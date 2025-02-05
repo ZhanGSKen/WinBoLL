@@ -5,50 +5,45 @@ package cc.winboll.studio.libappbase;
  * @Date 2025/01/05 10:10:23
  * @Describe 全局应用类
  */
-import android.app.Activity;
 import android.app.Application;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.res.Resources;
-import android.graphics.Typeface;
-import android.os.Build;
-import android.os.Bundle;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
-import android.content.pm.ApplicationInfo;
-import android.content.res.AssetManager;
 
 public class GlobalApplication extends Application {
 
+    final static String PREFS = GlobalApplication.class.getName() + "PREFS";
+    final static String PREFS_ISDEBUGING = "PREFS_ISDEBUGING";
+
     private static Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
+
+    // 是否处于调试状态
+    volatile static boolean isDebuging = false;
+
+    public static void setIsDebuging(Context context, boolean isDebuging) {
+        GlobalApplication.isDebuging = isDebuging;
+        // 获取SharedPreferences实例
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        // 获取编辑器
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // 保存数据
+        editor.putBoolean(PREFS_ISDEBUGING, GlobalApplication.isDebuging);
+        // 提交更改
+        editor.apply();
+    }
+
+    public static boolean isDebuging() {
+        return isDebuging;
+    }
 
     @Override
     public Context getApplicationContext() {
@@ -62,7 +57,13 @@ public class GlobalApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // 设置应用异常处理窗口
         CrashHandler.init(this);
+
+        // 设置应用调试状态
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        GlobalApplication.isDebuging = sharedPreferences.getBoolean(PREFS_ISDEBUGING, GlobalApplication.isDebuging);
     }
 
     public static void write(InputStream input, OutputStream output) throws IOException {

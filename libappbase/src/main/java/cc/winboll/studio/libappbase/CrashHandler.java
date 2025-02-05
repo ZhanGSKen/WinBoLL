@@ -82,13 +82,14 @@ public final class CrashHandler {
 
                     StringBuilder sb = new StringBuilder();
                     sb.append("************* Crash Head ****************\n");
-                    sb.append("Time Of Crash      : ").append(time).append("\n");
-                    sb.append("Device Manufacturer: ").append(Build.MANUFACTURER).append("\n");
-                    sb.append("Device Model       : ").append(Build.MODEL).append("\n");
-                    sb.append("Android Version    : ").append(Build.VERSION.RELEASE).append("\n");
-                    sb.append("Android SDK        : ").append(Build.VERSION.SDK_INT).append("\n");
-                    sb.append("App VersionName    : ").append(versionName).append("\n");
-                    sb.append("App VersionCode    : ").append(versionCode).append("\n");
+                    sb.append("Time Of Crash                        : ").append(time).append("\n");
+                    sb.append("Device Manufacturer                  : ").append(Build.MANUFACTURER).append("\n");
+                    sb.append("Device Model                         : ").append(Build.MODEL).append("\n");
+                    sb.append("Android Version                      : ").append(Build.VERSION.RELEASE).append("\n");
+                    sb.append("Android SDK                          : ").append(Build.VERSION.SDK_INT).append("\n");
+                    sb.append("App VersionName                      : ").append(versionName).append("\n");
+                    sb.append("App VersionCode                      : ").append(versionCode).append("\n");
+                    sb.append("AppBase GlobalApplication Debug Mode : ").append(GlobalApplication.isDebuging).append("\n");
                     sb.append("************* Crash Head ****************\n");
                     sb.append("\n").append(fullStackTrace);
 
@@ -115,6 +116,7 @@ public final class CrashHandler {
                                 DEFAULT_UNCAUGHT_EXCEPTION_HANDLER.uncaughtException(thread, throwable);
                         }
                     }
+
                 }
 
                 private void writeFile(File file, String content) throws IOException {
