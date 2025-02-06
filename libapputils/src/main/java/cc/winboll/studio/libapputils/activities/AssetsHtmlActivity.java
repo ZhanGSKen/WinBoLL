@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
@@ -19,6 +20,7 @@ import cc.winboll.studio.libapputils.log.LogUtils;
 import cc.winboll.studio.libapputils.view.SimpleWebView;
 import java.io.IOException;
 import java.io.InputStream;
+import cc.winboll.studio.libapputils.bean.APPInfo;
 
 public class AssetsHtmlActivity extends AppCompatActivity implements IWinBollActivity {
 
@@ -38,6 +40,11 @@ public class AssetsHtmlActivity extends AppCompatActivity implements IWinBollAct
         return this;
     }
 
+    @Override
+    public APPInfo getAppInfo() {
+        return null;
+    }
+    
     @Override
     public String getTag() {
         return TAG;

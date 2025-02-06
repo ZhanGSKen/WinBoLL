@@ -60,12 +60,11 @@
             android:layout_height="wrap_content"
             android:gravity="right">
 
-            <Button
+            <cc.winboll.studio.libapputils.view.AboutBranchButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:text="Test AboutActivity"
-                android:onClick="onTestAboutActivity"/>
+                android:text="About"
+                android:textAllCaps="false"/>
 
         </LinearLayout>
         

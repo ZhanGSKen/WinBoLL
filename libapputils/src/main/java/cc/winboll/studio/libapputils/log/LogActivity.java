@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
+import cc.winboll.studio.libapputils.bean.APPInfo;
 
 public class LogActivity extends AppCompatActivity implements IWinBollActivity {
 
@@ -21,6 +22,11 @@ public class LogActivity extends AppCompatActivity implements IWinBollActivity {
     @Override
     public AppCompatActivity getActivity() {
         return this;
+    }
+
+    @Override
+    public APPInfo getAppInfo() {
+        return null;
     }
     
     @Override

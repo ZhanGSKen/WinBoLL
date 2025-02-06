@@ -27,8 +27,6 @@
 
         </activity>
 
-        <activity android:name=".TestWinBollActivity"/>
-
         <activity android:name=".TestStringToQrCodeViewActivity"/>
 
     </application>

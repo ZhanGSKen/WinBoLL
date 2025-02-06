@@ -115,7 +115,11 @@ public class AboutView extends LinearLayout {
         }
         mszCurrentAppPackageName = mszAppAPKName + "_" + mszAppVersionName + ".apk";
         mszHomePage = mszWinBollServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
+        if(mAPPInfo.getAppGitAPPBranch().equals("")) {
+            mszGitea = "https://gitea.winboll.cc/" + mAPPInfo.getAppGitOwner() + "/" + mszAppGitName;
+        } else {
         mszGitea = "https://gitea.winboll.cc/" + mAPPInfo.getAppGitOwner() + "/" + mszAppGitName + "/src/branch/" + mAPPInfo.getAppGitAPPBranch() + "/" + mAPPInfo.getAppGitAPPSubProjectFolder();
+}
 
         if (GlobalApplication.isDebuging()) {
             LayoutInflater inflater = LayoutInflater.from(mContext);

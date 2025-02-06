@@ -13,9 +13,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.apputils.R;
-import cc.winboll.studio.libapputils.activities.AboutActivity;
 import cc.winboll.studio.libapputils.activities.AssetsHtmlActivity;
 import cc.winboll.studio.libapputils.activities.QRCodeDecodeActivity;
+import cc.winboll.studio.libapputils.app.AboutActivityFactory;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
@@ -40,6 +40,25 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         return this;
     }
 
+    @Override
+    public APPInfo getAppInfo() {
+        String szBranchName = "apputils";
+
+        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
+        appInfo.setAppName("APPUtils");
+        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
+        appInfo.setAppDescription("APPUtils Description");
+        appInfo.setAppGitName("APP");
+        appInfo.setAppGitOwner("Studio");
+        appInfo.setAppGitAPPBranch(szBranchName);
+        appInfo.setAppGitAPPSubProjectFolder(szBranchName);
+        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=APP");
+        appInfo.setAppAPKName("APPUtils");
+        appInfo.setAppAPKFolderName("APPUtils");
+        return appInfo;
+        //return null;
+    }
+    
     @Override
     public String getTag() {
         return TAG;
@@ -73,7 +92,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         getSupportActionBar().setSubtitle(getTag());
-        
+
         checkResolveActivity();
         archiveInstance();
 
@@ -231,14 +250,18 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         if (App.isDebug()) {
             getMenuInflater().inflate(R.menu.toolbar_studio_debug, menu);
         }
-        
+
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.item_testwinboll) {
-            WinBollActivityManager.getInstance(this).startWinBollActivity(this, TestWinBollActivity.class);
+        if (item.getItemId() == R.id.item_exit) {
+            exit();
+            return true;
+        } else if (item.getItemId() == R.id.item_about) {
+            AboutActivityFactory.showAboutActivity(this, getAppInfo());
+            return true;
         } else if (item.getItemId() == R.id.item_teststringtoqrcodeview) {
             WinBollActivityManager.getInstance(this).startWinBollActivity(this, TestStringToQrCodeViewActivity.class);
         } else if (item.getItemId() == R.id.item_testqrcodedecodeactivity) {
@@ -252,44 +275,20 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         } else if (item.getItemId() == R.id.item_log) {
             WinBollActivityManager.getInstance(this).startWinBollActivity(this, LogActivity.class);
             return true;
-        } else if (item.getItemId() == R.id.item_exit) {
-            exit();
-            //ToastUtils.show("item_exit");
-            //WinBollActivityManager.getInstance(mCurrentAppCompatActivity).finishAll();
-            return true;
-        } else if (item.getItemId() == R.id.item_info) {
-            LogUtils.d(TAG, "item_info not yet.");
-            return true;
-            //WinBollApplication application = (WinBollApplication) getApplication();
-            //application.getMyActivityLifecycleCallbacks().showActivityeInfo();
         } else if (item.getItemId() == R.id.item_exitdebug) {
             AboutView.setApp2NormalMode(this);
             return true;
         } else if (item.getItemId() == android.R.id.home) {
             WinBollActivityManager.getInstance(this).finish(this);
             return true;
-        } else if (item.getItemId() == R.id.item_about) {
-            openAboutActivity();
-            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    void openAboutActivity() {
-        Intent intent = new Intent(this, AboutActivity.class);
-        APPInfo appInfo = new APPInfo();
-        appInfo.setAppName("APPUtils");
-        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
-        appInfo.setAppDescription("APPUtils Description");
-        appInfo.setAppGitName("APP");
-        appInfo.setAppGitOwner("Studio");
-        appInfo.setAppGitAPPBranch("apputils");
-        appInfo.setAppGitAPPSubProjectFolder("apputils");
-        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=APP");
-        appInfo.setAppAPKName("APPUtils");
-        appInfo.setAppAPKFolderName("APPUtils");
-        intent.putExtra(AboutActivity.EXTRA_APPINFO, appInfo);
-        WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, AboutActivity.class);
+    void about() {
+//        Intent intent = new Intent(this, AboutActivity.class);
+//        intent.putExtra(AboutActivity.EXTRA_APPINFO, AboutActivityFactory.buildAPPBranchInfo(this));
+//        WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, AboutActivity.class);
     }
 
     void exit() {
@@ -319,8 +318,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     }
 
     public void onTestAboutActivity(View view) {
-        //ToastUtils.show("onTestAboutActivity");
-        openAboutActivity();
+        about();
     }
 
     public void onTestJavascriptHtmlActivity(View view) {

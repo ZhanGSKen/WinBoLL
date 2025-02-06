@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
+import cc.winboll.studio.libapputils.bean.APPInfo;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -36,6 +37,11 @@ public class QRCodeDecodeActivity extends AppCompatActivity implements IWinBollA
         return this;
     }
 
+    @Override
+    public APPInfo getAppInfo() {
+        return null;
+    }
+    
     @Override
     public String getTag() {
         return TAG;
