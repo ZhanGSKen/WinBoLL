@@ -6,9 +6,8 @@ package cc.winboll.studio.aes;
  * @Describe AES应用类
  */
 import cc.winboll.studio.libappbase.GlobalApplication;
-import cc.winboll.studio.libapputils.app.WinBollGlobalApplication;
 
-public class App extends WinBollGlobalApplication {
+public class App extends GlobalApplication {
     
     public static final String TAG = "App";
 

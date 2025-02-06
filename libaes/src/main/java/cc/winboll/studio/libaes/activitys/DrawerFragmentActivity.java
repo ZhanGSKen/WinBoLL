@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -30,15 +29,17 @@ import cc.winboll.studio.libaes.views.ADrawerMenuListView;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import com.baoyz.widget.PullRefreshLayout;
 import java.util.ArrayList;
+import androidx.appcompat.app.AppCompatActivity;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
 
-public abstract class DrawerFragmentActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public abstract class DrawerFragmentActivity extends AppCompatActivity implements IWinBollActivity,AdapterView.OnItemClickListener {
 
     public static final String TAG = "DrawerFragmentActivity";
 
     static final String SHAREDPREFERENCES_NAME = "SHAREDPREFERENCES_NAME";
     static final String DRAWER_THEME_TYPE = "DRAWER_THEME_TYPE";
 
-    protected Context mContext;
+    //protected Context mContext;
     ActivityType mActivityType;
     ActionBarDrawerToggle mActionBarDrawerToggle;
     DrawerLayout mDrawerLayout;
@@ -58,7 +59,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mContext = this;
+        //mContext = this;
         mThemeType = getThemeType();
         setThemeStyle();
         super.onCreate(savedInstanceState);
@@ -72,7 +73,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         super.onDestroy();
     }
 
-    @Override
+    /*@Override
     public Intent getIntent() {
         // TODO: Implement this method
         return super.getIntent();
@@ -80,7 +81,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
 
     public Context getContext() {
         return this.mContext;
-    }
+    }*/
 
     @Override
     public MenuInflater getMenuInflater() {
@@ -88,20 +89,20 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         return super.getMenuInflater();
     }
 
-    public void setSubtitle(CharSequence context) {
+    /*public void setSubtitle(CharSequence context) {
         // TODO: Implement this method
         getSupportActionBar().setSubtitle(context);
-    }
+    }*/
 
     @Override
     public void recreate() {
         super.recreate();
     }
 
-    @Override
+    /*@Override
     public boolean moveTaskToBack(boolean nonRoot) {
         return super.moveTaskToBack(nonRoot);
-    }
+    }*/
 
     @Override
     public void startActivity(Intent intent) {
@@ -113,7 +114,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         super.startActivityForResult(intent, requestCode, options);
     }
 
-    @Override
+    /*@Override
     public FragmentManager getSupportFragmentManager() {
         return super.getSupportFragmentManager();
     }
@@ -131,7 +132,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public void setTitle(int resId) {
         // TODO: Implement this method
         getSupportActionBar().setTitle(resId);
-    }
+    }*/
 
     @Override
     public SharedPreferences getSharedPreferences(String name, int mode) {
@@ -151,7 +152,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
 
     void setThemeStyle() {
         //setTheme(AESThemeBean.getThemeStyle(getThemeType()));
-        setTheme(AESThemeUtil.getThemeTypeID(this));
+        setTheme(AESThemeUtil.getThemeTypeID(getApplicationContext()));
     }
 
     boolean checkThemeStyleChange() {
@@ -163,7 +164,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
          SHAREDPREFERENCES_NAME, MODE_PRIVATE);
          return AESThemeBean.ThemeType.values()[((sharedPreferences.getInt(DRAWER_THEME_TYPE, AESThemeBean.ThemeType.DEFAULT.ordinal())))];
          */
-        return AESThemeBean.getThemeStyleType(AESThemeUtil.getThemeTypeID(this));
+        return AESThemeBean.getThemeStyleType(AESThemeUtil.getThemeTypeID(getApplicationContext()));
     }
 
     @Override

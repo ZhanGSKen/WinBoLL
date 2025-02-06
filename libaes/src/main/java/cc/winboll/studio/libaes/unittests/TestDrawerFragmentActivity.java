@@ -16,13 +16,49 @@ import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
 import cc.winboll.studio.libaes.beans.DrawerMenuBean;
 import cc.winboll.studio.libapputils.log.LogUtils;
 import java.util.ArrayList;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
+import cc.winboll.studio.libapputils.bean.APPInfo;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
-public class TestDrawerFragmentActivity extends DrawerFragmentActivity {
+public class TestDrawerFragmentActivity extends DrawerFragmentActivity implements IWinBollActivity {
+
+    @Override
+    public AppCompatActivity getActivity() {
+        return this;
+    }
+
+    @Override
+    public APPInfo getAppInfo() {
+        return null;
+    }
+
+    @Override
+    public String getTag() {
+        return null;
+    }
+
+    @Override
+    public Toolbar initToolBar() {
+        return null;
+    }
+    
+    @Override
+    public boolean isAddWinBollToolBar() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnableDisplayHomeAsUp() {
+        return false;
+    }
+    
 
     public static final String TAG = "TestDrawerFragmentActivity";
 
     TestFragment1 mTestFragment1;
     TestFragment2 mTestFragment2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +102,7 @@ public class TestDrawerFragmentActivity extends DrawerFragmentActivity {
         super.onItemClick(parent, view, position, id);
         switch (position) {
             case 0 : {
-                    Toast.makeText(getContext(), "0", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "0", Toast.LENGTH_SHORT).show();
                     //LogUtils.d(TAG, "MenuItem 1");
                     showFragment(mTestFragment1);
                     break;
