@@ -20,9 +20,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class GlobalApplication extends Application {
-    
+
     public static final String TAG = "GlobalApplication";
-    
+
     final static String PREFS = GlobalApplication.class.getName() + "PREFS";
     final static String PREFS_ISDEBUGING = "PREFS_ISDEBUGING";
 
@@ -60,15 +60,21 @@ public class GlobalApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        GlobalApplication.isDebuging = true;
+        GlobalApplication.setIsDebuging(this, true);
+        LogUtils.init(this);
+        LogUtils.setLogLevel(LogUtils.LOG_LEVEL.Debug);
+        //LogUtils.setTAGListEnable(GlobalApplication.TAG, true);
+        LogUtils.setALlTAGListEnable(true);
+        LogUtils.d(TAG, "LogUtils init");
+        
         // 设置应用异常处理窗口
         CrashHandler.init(this);
-        
-        // 设置应用调试状态
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        GlobalApplication.isDebuging = sharedPreferences.getBoolean(PREFS_ISDEBUGING, GlobalApplication.isDebuging);
 
-        LogUtils.init(this);
-        LogUtils.d(TAG, "onCreate");
+        // 设置应用调试状态
+        //SharedPreferences sharedPreferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        //GlobalApplication.isDebuging = sharedPreferences.getBoolean(PREFS_ISDEBUGING, GlobalApplication.isDebuging);
+
     }
 
     public static void write(InputStream input, OutputStream output) throws IOException {
