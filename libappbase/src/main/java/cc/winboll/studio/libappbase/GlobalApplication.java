@@ -20,9 +20,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class GlobalApplication extends Application {
-
+    
+    public static final String TAG = "GlobalApplication";
+    
     final static String PREFS = GlobalApplication.class.getName() + "PREFS";
     final static String PREFS_ISDEBUGING = "PREFS_ISDEBUGING";
+
 
     private static Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
 
@@ -57,13 +60,15 @@ public class GlobalApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         // 设置应用异常处理窗口
         CrashHandler.init(this);
-
+        
         // 设置应用调试状态
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         GlobalApplication.isDebuging = sharedPreferences.getBoolean(PREFS_ISDEBUGING, GlobalApplication.isDebuging);
+
+        LogUtils.init(this);
+        LogUtils.d(TAG, "onCreate");
     }
 
     public static void write(InputStream input, OutputStream output) throws IOException {

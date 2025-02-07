@@ -7,6 +7,10 @@
             android:name=".CrashHandler$CrashActiviy"
             android:label="CrashActiviy"
             android:launchMode="standard"/>
+        <activity
+            android:name=".CrashHandler$GlobalCrashActiviy"
+            android:label="GlobalCrashActiviy"
+            android:launchMode="standard"/>
     </application>
 
 </manifest>
