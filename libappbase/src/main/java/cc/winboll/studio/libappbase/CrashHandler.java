@@ -29,7 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import cc.winboll.studio.libappbase.GlobalApplication;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -44,8 +43,9 @@ import java.util.Date;
 import java.util.Locale;
 
 public final class CrashHandler {
-    public static final String TAG = "CrashHandler";
     
+    public static final String TAG = "CrashHandler";
+
     final static String PREFS = CrashHandler.class.getName() + "PREFS";
     final static String PREFS_CRASHHANDLER_ISCRASHHAPPEN = "PREFS_CRASHHANDLER_ISCRASHHAPPEN";
 
@@ -53,13 +53,10 @@ public final class CrashHandler {
 
     public static final UncaughtExceptionHandler DEFAULT_UNCAUGHT_EXCEPTION_HANDLER = Thread.getDefaultUncaughtExceptionHandler();
 
-
-
-
     public static void init(Application app) {
         _CrashCountFilePath = app.getExternalFilesDir("CrashHandler") + "/IsCrashHandlerCrashHappen.dat";
+        LogUtils.d(TAG, String.format("_CrashCountFilePath %s", _CrashCountFilePath));
         init(app, null);
-        LogUtils.d(TAG, "init");
     }
 
     public static void init(final Application app, final String crashDir) {
@@ -77,6 +74,9 @@ public final class CrashHandler {
                 }
 
                 private void tryUncaughtException(Thread thread, Throwable throwable) {
+                    // 每到这里就燃烧一次保险丝
+                    AppCrashSafetyWire.getInstance().burnSafetyWire();
+                    
                     final String time = new SimpleDateFormat("yyyy_MM_dd-HH_mm_ss", Locale.getDefault()).format(new Date());
                     File crashFile = new File(TextUtils.isEmpty(crashDir) ? new File(app.getExternalFilesDir(null), "crash")
                                               : new File(crashDir), "crash_" + time + ".txt");
@@ -107,8 +107,6 @@ public final class CrashHandler {
                     sb.append("Android SDK                          : ").append(Build.VERSION.SDK_INT).append("\n");
                     sb.append("App VersionName                      : ").append(versionName).append("\n");
                     sb.append("App VersionCode                      : ").append(versionCode).append("\n");
-                    sb.append("AppBase GlobalApplication Debug Mode : ").append(GlobalApplication.isDebuging).append("\n");
-                    sb.append("CrashHandler CurrentSafeLevel        : ").append(String.format("%d", AppCrashSafetyWire.getInstance().getCurrentSafetyLevel())).append("\n");
                     sb.append("************* Crash Head ****************\n");
                     sb.append("\n").append(fullStackTrace);
 
@@ -120,16 +118,18 @@ public final class CrashHandler {
 
                     gotoCrashActiviy: {
                         Intent intent = new Intent();
-
-                        if (AppCrashSafetyWire.getInstance().isAppCrashSafetyWireOK() && AppCrashSafetyWire.getInstance().postCrashSafetyWire(app)) {
-                            AppCrashSafetyWire.getInstance().reset();
+                        LogUtils.d(TAG, "gotoCrashActiviy: ");
+                        if (AppCrashSafetyWire.getInstance().isAppCrashSafetyWireOK()) {
+                            LogUtils.d(TAG, "gotoCrashActiviy: isAppCrashSafetyWireOK");
+                            //AppCrashSafetyWire.getInstance().postCrashSafetyWire(app);
                             intent.setClass(app, GlobalCrashActiviy.class);
                             intent.putExtra(GlobalCrashActiviy.EXTRA_CRASH_INFO, errorLog);
                             // 如果发生了 CrashHandler 内部崩溃， 就调用基础的应用崩溃显示类
 //                            intent.setClass(app, GlobalCrashActiviy.class);
 //                            intent.putExtra(GlobalCrashActiviy.EXTRA_CRASH_INFO, errorLog);
                         } else {
-                            AppCrashSafetyWire.getInstance().reset();
+                            LogUtils.d(TAG, "gotoCrashActiviy: else");
+                            AppCrashSafetyWire.getInstance().resumeToMaximumImmediately();
                             // 正常状态调用进阶的应用崩溃显示页
                             intent.setClass(app, CrashActiviy.class);
                             intent.putExtra(CrashActiviy.EXTRA_CRASH_INFO, errorLog);
@@ -184,11 +184,12 @@ public final class CrashHandler {
 
         volatile static AppCrashSafetyWire _AppCrashSafetyWire;
 
-        volatile int currentSafetyLevel; // 熔断值，为 0 表示熔断了。
+        volatile Integer currentSafetyLevel; // 熔断值，为 0 表示熔断了。
         private static final int _MINI = 1;
-        private static final int _MAX = 5;
+        private static final int _MAX = 2;
 
         AppCrashSafetyWire() {
+            LogUtils.d(TAG, "AppCrashSafetyWire()");
             currentSafetyLevel = loadCurrentSafetyLevel();
         }
 
@@ -208,79 +209,136 @@ public final class CrashHandler {
         }
 
         public void saveCurrentSafetyLevel(int currentSafetyLevel) {
+            LogUtils.d(TAG, "saveCurrentSafetyLevel()");
             this.currentSafetyLevel = currentSafetyLevel;
             try {
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(_CrashCountFilePath));
                 oos.writeInt(currentSafetyLevel);
+                oos.flush();
+                oos.close();
+                LogUtils.d(TAG, String.format("saveCurrentSafetyLevel writeInt currentSafetyLevel %d", currentSafetyLevel));
             } catch (IOException e) {
-                e.printStackTrace();
+                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
             }
         }
 
         public int loadCurrentSafetyLevel() {
+            LogUtils.d(TAG, "loadCurrentSafetyLevel()");
             try {
                 File f = new File(_CrashCountFilePath);
                 if (f.exists()) {
                     ObjectInputStream ois = new ObjectInputStream(new FileInputStream(_CrashCountFilePath));
                     currentSafetyLevel = ois.readInt();
+                    LogUtils.d(TAG, String.format("loadCurrentSafetyLevel() readInt currentSafetyLevel %d", currentSafetyLevel));
                 } else {
                     currentSafetyLevel = _MAX;
+                    LogUtils.d(TAG, String.format("loadCurrentSafetyLevel() currentSafetyLevel init to _MAX->%d", _MAX));
                     saveCurrentSafetyLevel(currentSafetyLevel);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
             }
             return currentSafetyLevel;
         }
 
-        boolean putOnSafetyWire() {
+        boolean burnSafetyWire() {
+            LogUtils.d(TAG, "burnSafetyWire()");
             // 崩溃计数进入崩溃保险值
             int safeLevel = loadCurrentSafetyLevel();
-            if (isSafetyWireOK(safeLevel)) {
-                // 如果保险丝未熔断, 就减少一次熔断值
+            if (isSafetyWireWorking(safeLevel)) {
+                // 如果保险丝未熔断, 就增加一次熔断值
+                LogUtils.d(TAG, "burnSafetyWire() use");
                 saveCurrentSafetyLevel(safeLevel - 1);
-                return true;
+                return isSafetyWireWorking(safeLevel - 1);
             }
-
-
             return false;
         }
 
-        boolean isSafetyWireOK(int safetyLevel) {
+        boolean resumeSafetyLevel() {
+            LogUtils.d(TAG, "resumeSafetyLevel()");
+            // 崩溃计数进入崩溃保险值
+            int safeLevel = loadCurrentSafetyLevel();
+            if (isSafetyWireWorking(safeLevel)) {
+                // 如果保险丝未熔断, 就增加一次熔断值
+                LogUtils.d(TAG, "resumeSafetyLevel() resume 1");
+                saveCurrentSafetyLevel(safeLevel + 1);
+                return isSafetyWireWorking(safeLevel + 1);
+            } else {
+                LogUtils.d(TAG, "resumeSafetyLevel() resume immediately");
+                resumeToMaximumImmediately();
+            }
+            return false;
+        }
+
+        boolean isSafetyWireWorking(int safetyLevel) {
+            LogUtils.d(TAG, "isSafetyWireOK()");
+            //safetyLevel = _MINI;
+            //safetyLevel = _MINI - 1;
+            //safetyLevel = _MINI + 1;
+            //safetyLevel = _MAX;
+            //safetyLevel = _MAX + 1;
+            LogUtils.d(TAG, String.format("SafetyLevel %d", safetyLevel));
+
             if (safetyLevel >= _MINI && safetyLevel <= _MAX) {
                 // 如果在保险值之内
+                LogUtils.d(TAG, String.format("In Safety Level"));
                 return true;
             }
+            LogUtils.d(TAG, String.format("Out of Safety Level"));
             return false;
         }
 
-        void reset() {
-            saveCurrentSafetyLevel(_MAX);
+        void resumeToMaximumImmediately() {
+            LogUtils.d(TAG, "resumeToMaximumImmediately() call saveCurrentSafetyLevel(_MAX)");
+            AppCrashSafetyWire.getInstance().saveCurrentSafetyLevel(_MAX);
         }
 
+//        boolean resumeToMaximum(int safetyLevel) {
+//            if (safetyLevel + 1 < _MAX
+//                && safetyLevel >= _MINI
+//                && isSafetyWireWorking(safetyLevel + 1)) {
+//                AppCrashSafetyWire.getInstance().saveCurrentSafetyLevel(currentSafetyLevel + 1);
+//                return true;
+//            }
+//            return false;
+//        }
+
         void off() {
+            LogUtils.d(TAG, "off()");
             saveCurrentSafetyLevel(_MINI);
         }
 
         boolean isAppCrashSafetyWireOK() {
-            return false;
+            LogUtils.d(TAG, "isAppCrashSafetyWireOK()");
+            currentSafetyLevel = loadCurrentSafetyLevel();
+            return isSafetyWireWorking(currentSafetyLevel);
         }
 
         // 调用函数以启用持续崩溃保险，从而调用 CrashHandler 内部崩溃处理窗口
-        boolean postCrashSafetyWire(final Context context) {
-            if (AppCrashSafetyWire.getInstance().putOnSafetyWire()) {
-                // 设置内部崩溃处理模块失效
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable(){
-                        @Override
-                        public void run() {
-                            // 进程持续运行时重置保险丝
-                            //AppCrashSafetyWire.getInstance().reset();
-                        }
-                    }, 1000);
-                return true;
-            }
-            return false;
-        }
+//        boolean postCrashSafetyWire(final Context context) {
+//            LogUtils.d(TAG, "postCrashSafetyWire()");
+//            if (AppCrashSafetyWire.getInstance().isAppCrashSafetyWireOK()) {
+//                // 保险丝在工作连接状态
+//                // 设置内部崩溃处理模块失效
+//                new Handler(Looper.getMainLooper()).postDelayed(new Runnable(){
+//                        @Override
+//                        public void run() {
+//                            // 进程持续运行时，恢复保险丝熔断值
+//                            //Resume to maximum
+//                            LogUtils.d(TAG, "postCrashSafetyWire Resume to maximum");
+//                            while (resumeToMaximum(currentSafetyLevel + 1)) {
+//                                try {
+//                                    Thread.sleep(1000);
+//                                } catch (InterruptedException e) {
+//                                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+//                                }
+//                            }
+//                        }
+//                    }, 10000);
+//                return true;
+//            }
+//            return false;
+//        }
 
     }
 
