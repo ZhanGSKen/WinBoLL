@@ -18,17 +18,18 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
+import cc.winboll.studio.libappbase.R;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -43,7 +44,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public final class CrashHandler {
-    
+
     public static final String TAG = "CrashHandler";
 
     final static String PREFS = CrashHandler.class.getName() + "PREFS";
@@ -76,7 +77,7 @@ public final class CrashHandler {
                 private void tryUncaughtException(Thread thread, Throwable throwable) {
                     // 每到这里就燃烧一次保险丝
                     AppCrashSafetyWire.getInstance().burnSafetyWire();
-                    
+
                     final String time = new SimpleDateFormat("yyyy_MM_dd-HH_mm_ss", Locale.getDefault()).format(new Date());
                     File crashFile = new File(TextUtils.isEmpty(crashDir) ? new File(app.getExternalFilesDir(null), "crash")
                                               : new File(crashDir), "crash_" + time + ".txt");
@@ -410,6 +411,7 @@ public final class CrashHandler {
                     Toast.makeText(getApplication(), "The text is copied.", Toast.LENGTH_SHORT).show();
                     break;
                 case MENUITEM_RESTART: 
+                    AppCrashSafetyWire.getInstance().resumeToMaximumImmediately();
                     restart();
                     break;
             }
@@ -439,32 +441,54 @@ public final class CrashHandler {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             mLog = getIntent().getStringExtra(EXTRA_CRASH_INFO);
-            setTheme(android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
+            setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
             setContentView: {
-                ScrollView contentView = new ScrollView(this);
-                contentView.setFillViewport(true);
-
-                LinearLayout llTitle = new LinearLayout(this);
-                TextView title = new TextView(this); {
-                    int padding = dp2px(16);
-                    title.setPadding(padding, padding, padding, padding);
-                    title.setText("GlobalCrashActiviy");
-                }
-                llTitle.addView(title, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                contentView.addView(llTitle, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
-                HorizontalScrollView hw = new HorizontalScrollView(this);
-                hw.setBackgroundColor(Color.GRAY);
-                TextView message = new TextView(this); {
-                    int padding = dp2px(16);
-                    message.setPadding(padding, padding, padding, padding);
-                    message.setText(mLog);
-                    message.setTextIsSelectable(true);
-                }
-                hw.addView(message);
-
-                contentView.addView(hw, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
-                setContentView(contentView);
+//                LinearLayout contentView = new LinearLayout(this);
+//                contentView.setOrientation(LinearLayout.VERTICAL);
+//                contentView.setBackgroundColor(Color.BLUE);
+//                LinearLayout llTitle = new LinearLayout(this);
+//                TextView title = new TextView(this); {
+//                    int padding = dp2px(16);
+//                    title.setPadding(padding, padding, padding, padding);
+//                    title.setText("GlobalCrashActiviy");
+//                    title.setTextColor(Color.WHITE);
+//                }
+//                llTitle.addView(title, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                contentView.addView(llTitle, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//
+//                ScrollView svContent = new ScrollView(this);
+//                svContent.setFillViewport(true);
+//
+//                HorizontalScrollView hw = new HorizontalScrollView(this);
+//                hw.setBackgroundColor(Color.WHITE);
+//                TextView message = new TextView(this); {
+//                    int padding = dp2px(16);
+//                    message.setPadding(padding, padding, padding, padding);
+//                    message.setText(mLog);
+//                    message.setTextIsSelectable(true);
+//                }
+//                hw.addView(message);
+//                svContent.addView(hw, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+//                contentView.addView(svContent, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+//
+//                setContentView(contentView);
+                setContentView(R.layout.activity_globalcrash);
+                Toolbar toolbar = findViewById(R.id.activityglobalcrashToolbar1);
+                toolbar.setBackgroundColor(getColor(R.color.colorTittleBackgroung));
+                toolbar.setTitleTextColor(getColor(R.color.colorTittleText));
+                toolbar.setSubtitleTextColor(getColor(R.color.colorTittleText));
+                setActionBar(toolbar);
+                TextView tvLog = findViewById(R.id.activityglobalcrashTextView1);
+                tvLog.setText(mLog);
+//                // 内部崩溃测试
+//                tvLog.setOnClickListener(new View.OnClickListener(){
+//                        @Override
+//                        public void onClick(View view) {
+//                            for (int i = Integer.MIN_VALUE; i < Integer.MAX_VALUE; i++) {
+//                                getString(i);
+//                            }
+//                        }
+//                    });
             }
         }
 
@@ -502,6 +526,7 @@ public final class CrashHandler {
                     Toast.makeText(getApplication(), "The text is copied.", Toast.LENGTH_SHORT).show();
                     break;
                 case MENUITEM_RESTART: 
+                    AppCrashSafetyWire.getInstance().resumeToMaximumImmediately();
                     restart();
                     break;
             }
@@ -514,6 +539,14 @@ public final class CrashHandler {
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             menu.add(0, MENUITEM_RESTART, 0, "Restart").setOnMenuItemClickListener(this)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            // 设置菜单文本颜色
+            for (int i = 0; i < menu.size(); i++) {
+                MenuItem item = menu.getItem(i);
+                SpannableString spanString = new SpannableString(item.getTitle().toString());
+                spanString.setSpan(new ForegroundColorSpan(getColor(R.color.colorTittleText)), 0, spanString.length(), 0);
+                item.setTitle(spanString);
+            }
             return true;
         }
     }

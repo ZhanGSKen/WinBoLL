@@ -67,7 +67,7 @@ public class GlobalApplication extends Application {
         //LogUtils.setTAGListEnable(GlobalApplication.TAG, true);
         LogUtils.setALlTAGListEnable(true);
         LogUtils.d(TAG, "LogUtils init");
-        
+
         // 设置应用异常处理窗口
         CrashHandler.init(this);
 

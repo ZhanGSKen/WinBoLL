@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- WinBoll 默认方案 -->
+    <color name="colorPrimary">#FF196ABC</color>
+    <color name="colorPrimaryDark">#FF002B57</color>
+    <color name="colorAccent">#FF80BFFF</color>
+    <color name="colorTittleText">#FF80BFFF</color>
+    <color name="colorTittleBackgroung">#FF196ABC</color>
+    <color name="colorText">#FF002B57</color>
+    <color name="colorTextBackgroung">#FF80BFFF</color>
+    <color name="colorToastFrame">#FFA9A9A9</color>
+    <color name="colorToastShadow">#FF000000</color>
+    <color name="colorToastBackgroung">#FFE7E7E7</color>
+</resources>
