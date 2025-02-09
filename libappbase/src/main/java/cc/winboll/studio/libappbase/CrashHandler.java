@@ -44,12 +44,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import android.widget.LinearLayout;
+import android.content.pm.ApplicationInfo;
 
 public final class CrashHandler {
 
     public static final String TAG = "CrashHandler";
     
     public static final String TITTLE = "CrashReport";
+
+    private static final String EXTRA_CRASH_INFO = "crashInfo";
     
     final static String PREFS = CrashHandler.class.getName() + "PREFS";
     final static String PREFS_CRASHHANDLER_ISCRASHHAPPEN = "PREFS_CRASHHANDLER_ISCRASHHAPPEN";
@@ -128,7 +131,7 @@ public final class CrashHandler {
                             LogUtils.d(TAG, "gotoCrashActiviy: isAppCrashSafetyWireOK");
                             //AppCrashSafetyWire.getInstance().postResumeCrashSafetyWireHandler(app);
                             intent.setClass(app, GlobalCrashActiviy.class);
-                            intent.putExtra(GlobalCrashActiviy.EXTRA_CRASH_INFO, errorLog);
+                            intent.putExtra(EXTRA_CRASH_INFO, errorLog);
                             // 如果发生了 CrashHandler 内部崩溃， 就调用基础的应用崩溃显示类
 //                            intent.setClass(app, GlobalCrashActiviy.class);
 //                            intent.putExtra(GlobalCrashActiviy.EXTRA_CRASH_INFO, errorLog);
@@ -138,7 +141,7 @@ public final class CrashHandler {
                             AppCrashSafetyWire.getInstance().resumeToMaximumImmediately();
                             // 正常状态调用进阶的应用崩溃显示页
                             intent.setClass(app, CrashActiviy.class);
-                            intent.putExtra(CrashActiviy.EXTRA_CRASH_INFO, errorLog);
+                            intent.putExtra(EXTRA_CRASH_INFO, errorLog);
                         }
                         
 
@@ -349,11 +352,20 @@ public final class CrashHandler {
 //        }
 
     }
+    
+    public static String getAppName(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(
+                context.getPackageName(), 0);
+            return (String) packageManager.getApplicationLabel(applicationInfo);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static final class CrashActiviy extends Activity implements MenuItem.OnMenuItemClickListener {
-
-        private static final String EXTRA_CRASH_INFO = "crashInfo";
-
         private static final int MENUITEM_COPY = 0;
         private static final int MENUITEM_RESTART = 1;
 
@@ -381,7 +393,8 @@ public final class CrashHandler {
 
                 contentView.addView(hw, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 setContentView(contentView);
-                getActionBar().setTitle(TITTLE + "(inside)");
+                getActionBar().setTitle(TITTLE);
+                getActionBar().setSubtitle("GlobalCrashActiviy Error");
             }
         }
 
@@ -437,8 +450,6 @@ public final class CrashHandler {
     }
 
     public static final class GlobalCrashActiviy extends Activity implements MenuItem.OnMenuItemClickListener {
-
-        private static final String EXTRA_CRASH_INFO = "crashInfo";
 
         private static final int MENUITEM_COPY = 0;
         private static final int MENUITEM_RESTART = 1;
@@ -515,6 +526,7 @@ public final class CrashHandler {
 //                    });
                 
                 getActionBar().setTitle(TITTLE);
+                getActionBar().setSubtitle(getAppName(getApplicationContext()));
             }
         }
 
