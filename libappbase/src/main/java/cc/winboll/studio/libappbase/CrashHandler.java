@@ -50,11 +50,11 @@ import java.util.Locale;
 public final class CrashHandler {
 
     public static final String TAG = "CrashHandler";
-    
+
     public static final String TITTLE = "CrashReport";
 
     private static final String EXTRA_CRASH_INFO = "crashInfo";
-    
+
     final static String PREFS = CrashHandler.class.getName() + "PREFS";
     final static String PREFS_CRASHHANDLER_ISCRASHHAPPEN = "PREFS_CRASHHANDLER_ISCRASHHAPPEN";
 
@@ -130,7 +130,6 @@ public final class CrashHandler {
                         LogUtils.d(TAG, "gotoCrashActiviy: ");
                         if (AppCrashSafetyWire.getInstance().isAppCrashSafetyWireOK()) {
                             LogUtils.d(TAG, "gotoCrashActiviy: isAppCrashSafetyWireOK");
-                            AppCrashSafetyWire.getInstance().postResumeCrashSafetyWireHandler(app);
                             intent.setClass(app, GlobalCrashActiviy.class);
                             intent.putExtra(EXTRA_CRASH_INFO, errorLog);
                             // 如果发生了 CrashHandler 内部崩溃， 就调用基础的应用崩溃显示类
@@ -141,10 +140,9 @@ public final class CrashHandler {
                             // 正常状态调用进阶的应用崩溃显示页
                             intent.setClass(app, CrashActiviy.class);
                             intent.putExtra(EXTRA_CRASH_INFO, errorLog);
-                            AppCrashSafetyWire.getInstance().resumeToMaximumImmediately();
                         }
 
-                        
+
 
 //                        intent.setClass(app, CrashActiviy.class);
 //                        intent.putExtra(CrashActiviy.EXTRA_CRASH_INFO, errorLog);
@@ -330,23 +328,19 @@ public final class CrashHandler {
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable(){
                     @Override
                     public void run() {
-                        // 进程持续运行时，恢复保险丝熔断值
-                        //Resume to maximum
-                        resumeToMaximumImmediately();
-//                            LogUtils.d(TAG, "postCrashSafetyWire Resume to maximum");
-//                            while (resumeToMaximum(currentSafetyLevel + 1)) {
-//                                try {
-//                                    Thread.sleep(1000);
-//                                } catch (InterruptedException e) {
-//                                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-//                                }
-//                            }
+                        LogUtils.d(TAG, "Handler run()");
+                        if (!AppCrashSafetyWire.getInstance().isSafetyWireWorking(currentSafetyLevel - 1)) {
+                            // 如果下一次应用崩溃时，保险丝熔断，则先恢复保险丝满能状态
+                            // 进程持续运行时，恢复保险丝熔断值
+                            //Resume to maximum
+                            AppCrashSafetyWire.getInstance().resumeToMaximumImmediately();
+                            LogUtils.d(TAG, "postResumeCrashSafetyWireHandler");
+                        }         
                     }
-                }, 1000);
+                }, 500);
         }
-
     }
-    
+
     public static String getAppName(Context context) {
         PackageManager packageManager = context.getPackageManager();
         try {
@@ -368,7 +362,8 @@ public final class CrashHandler {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
+            AppCrashSafetyWire.getInstance().postResumeCrashSafetyWireHandler(getApplicationContext());
+            
             mLog = getIntent().getStringExtra(EXTRA_CRASH_INFO);
             setTheme(android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
             setContentView: {
@@ -388,7 +383,7 @@ public final class CrashHandler {
                 contentView.addView(hw, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 setContentView(contentView);
                 getActionBar().setTitle(TITTLE);
-                getActionBar().setSubtitle("GlobalCrashActiviy Error");
+                getActionBar().setSubtitle(GlobalApplication.class.getSimpleName() + " Error");
             }
         }
 
@@ -457,6 +452,8 @@ public final class CrashHandler {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            AppCrashSafetyWire.getInstance().postResumeCrashSafetyWireHandler(getApplicationContext());
+            
             mLog = getIntent().getStringExtra(EXTRA_CRASH_INFO);
             setTheme(android.R.style.Theme_DeviceDefault_NoActionBar);
 //            TypedArray a = obtainStyledAttributes(attrs, R.styleable.ASupportToolbar, R.attr.aSupportToolbar, 0);
@@ -466,7 +463,7 @@ public final class CrashHandler {
 //            mEndColor = a.getColor(R.styleable.ASupportToolbar_attrASupportToolbarEndColor, Color.YELLOW);
 //            // 返回一个绑定资源结束的信号给资源
 //            a.recycle();
-            
+
             setContentView: {
 //                LinearLayout contentView = new LinearLayout(this);
 //                contentView.setOrientation(LinearLayout.VERTICAL);
@@ -518,7 +515,7 @@ public final class CrashHandler {
 //                            }
 //                        }
 //                    });
-                
+
                 getActionBar().setTitle(TITTLE);
                 getActionBar().setSubtitle(getAppName(getApplicationContext()));
             }
