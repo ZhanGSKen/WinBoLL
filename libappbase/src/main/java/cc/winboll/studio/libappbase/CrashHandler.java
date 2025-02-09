@@ -263,21 +263,21 @@ public final class CrashHandler {
             return false;
         }
 
-        boolean resumeSafetyLevel() {
-            LogUtils.d(TAG, "resumeSafetyLevel()");
-            // 崩溃计数进入崩溃保险值
-            int safeLevel = loadCurrentSafetyLevel();
-            if (isSafetyWireWorking(safeLevel)) {
-                // 如果保险丝未熔断, 就增加一次熔断值
-                LogUtils.d(TAG, "resumeSafetyLevel() resume 1");
-                saveCurrentSafetyLevel(safeLevel + 1);
-                return isSafetyWireWorking(safeLevel + 1);
-            } else {
-                LogUtils.d(TAG, "resumeSafetyLevel() resume immediately");
-                resumeToMaximumImmediately();
-            }
-            return false;
-        }
+//        boolean resumeSafetyLevel() {
+//            LogUtils.d(TAG, "resumeSafetyLevel()");
+//            // 崩溃计数进入崩溃保险值
+//            int safeLevel = loadCurrentSafetyLevel();
+//            if (isSafetyWireWorking(safeLevel)) {
+//                // 如果保险丝未熔断, 就增加一次熔断值
+//                LogUtils.d(TAG, "resumeSafetyLevel() resume 1");
+//                saveCurrentSafetyLevel(safeLevel + 1);
+//                return isSafetyWireWorking(safeLevel + 1);
+//            } else {
+//                LogUtils.d(TAG, "resumeSafetyLevel() resume immediately");
+//                resumeToMaximumImmediately();
+//            }
+//            return false;
+//        }
 
         boolean isSafetyWireWorking(int safetyLevel) {
             LogUtils.d(TAG, "isSafetyWireOK()");
