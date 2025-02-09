@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="attrTextColor" format="color" />
+    <attr name="attrPrimaryColor" format="color" />
+    <attr name="attrPrimaryDarkColor" format="color" />
+    <attr name="attrAccentColor" format="color" />
+</resources>

@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,11 +43,14 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import android.widget.LinearLayout;
 
 public final class CrashHandler {
 
     public static final String TAG = "CrashHandler";
-
+    
+    public static final String TITTLE = "CrashReport";
+    
     final static String PREFS = CrashHandler.class.getName() + "PREFS";
     final static String PREFS_CRASHHANDLER_ISCRASHHAPPEN = "PREFS_CRASHHANDLER_ISCRASHHAPPEN";
 
@@ -122,7 +126,7 @@ public final class CrashHandler {
                         LogUtils.d(TAG, "gotoCrashActiviy: ");
                         if (AppCrashSafetyWire.getInstance().isAppCrashSafetyWireOK()) {
                             LogUtils.d(TAG, "gotoCrashActiviy: isAppCrashSafetyWireOK");
-                            //AppCrashSafetyWire.getInstance().postCrashSafetyWire(app);
+                            //AppCrashSafetyWire.getInstance().postResumeCrashSafetyWireHandler(app);
                             intent.setClass(app, GlobalCrashActiviy.class);
                             intent.putExtra(GlobalCrashActiviy.EXTRA_CRASH_INFO, errorLog);
                             // 如果发生了 CrashHandler 内部崩溃， 就调用基础的应用崩溃显示类
@@ -130,11 +134,13 @@ public final class CrashHandler {
 //                            intent.putExtra(GlobalCrashActiviy.EXTRA_CRASH_INFO, errorLog);
                         } else {
                             LogUtils.d(TAG, "gotoCrashActiviy: else");
+
                             AppCrashSafetyWire.getInstance().resumeToMaximumImmediately();
                             // 正常状态调用进阶的应用崩溃显示页
                             intent.setClass(app, CrashActiviy.class);
                             intent.putExtra(CrashActiviy.EXTRA_CRASH_INFO, errorLog);
-                        } 
+                        }
+                        
 
 //                        intent.setClass(app, CrashActiviy.class);
 //                        intent.putExtra(CrashActiviy.EXTRA_CRASH_INFO, errorLog);
@@ -316,7 +322,7 @@ public final class CrashHandler {
         }
 
         // 调用函数以启用持续崩溃保险，从而调用 CrashHandler 内部崩溃处理窗口
-//        boolean postCrashSafetyWire(final Context context) {
+//        boolean postResumeCrashSafetyWireHandler(final Context context) {
 //            LogUtils.d(TAG, "postCrashSafetyWire()");
 //            if (AppCrashSafetyWire.getInstance().isAppCrashSafetyWireOK()) {
 //                // 保险丝在工作连接状态
@@ -326,16 +332,17 @@ public final class CrashHandler {
 //                        public void run() {
 //                            // 进程持续运行时，恢复保险丝熔断值
 //                            //Resume to maximum
-//                            LogUtils.d(TAG, "postCrashSafetyWire Resume to maximum");
-//                            while (resumeToMaximum(currentSafetyLevel + 1)) {
-//                                try {
-//                                    Thread.sleep(1000);
-//                                } catch (InterruptedException e) {
-//                                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-//                                }
-//                            }
+//                            resumeToMaximumImmediately();
+////                            LogUtils.d(TAG, "postCrashSafetyWire Resume to maximum");
+////                            while (resumeToMaximum(currentSafetyLevel + 1)) {
+////                                try {
+////                                    Thread.sleep(1000);
+////                                } catch (InterruptedException e) {
+////                                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+////                                }
+////                            }
 //                        }
-//                    }, 10000);
+//                    }, 1000);
 //                return true;
 //            }
 //            return false;
@@ -374,6 +381,7 @@ public final class CrashHandler {
 
                 contentView.addView(hw, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 setContentView(contentView);
+                getActionBar().setTitle(TITTLE + "(inside)");
             }
         }
 
@@ -436,12 +444,24 @@ public final class CrashHandler {
         private static final int MENUITEM_RESTART = 1;
 
         private String mLog;
+        int mTitleTextColor;
+        int mStartColor;
+        int mCenterColor;
+        int mEndColor;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             mLog = getIntent().getStringExtra(EXTRA_CRASH_INFO);
-            setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+            setTheme(android.R.style.Theme_DeviceDefault_NoActionBar);
+//            TypedArray a = obtainStyledAttributes(attrs, R.styleable.ASupportToolbar, R.attr.aSupportToolbar, 0);
+//            mTitleTextColor = a.getColor(R.style.AppTheme.attrs.colo, Color.GREEN);
+//            mStartColor = a.getColor(R.styleable.ASupportToolbar_attrASupportToolbarStartColor, Color.BLUE);
+//            mCenterColor = a.getColor(R.styleable.ASupportToolbar_attrASupportToolbarCenterColor, Color.RED);
+//            mEndColor = a.getColor(R.styleable.ASupportToolbar_attrASupportToolbarEndColor, Color.YELLOW);
+//            // 返回一个绑定资源结束的信号给资源
+//            a.recycle();
+            
             setContentView: {
 //                LinearLayout contentView = new LinearLayout(this);
 //                contentView.setOrientation(LinearLayout.VERTICAL);
@@ -473,13 +493,17 @@ public final class CrashHandler {
 //
 //                setContentView(contentView);
                 setContentView(R.layout.activity_globalcrash);
+                LinearLayout llMain = findViewById(R.id.activityglobalcrashLinearLayout1);
+                llMain.setBackgroundColor(Color.GRAY);
                 Toolbar toolbar = findViewById(R.id.activityglobalcrashToolbar1);
-                toolbar.setBackgroundColor(getColor(R.color.colorTittleBackgroung));
-                toolbar.setTitleTextColor(getColor(R.color.colorTittleText));
-                toolbar.setSubtitleTextColor(getColor(R.color.colorTittleText));
+                toolbar.setBackgroundColor(Color.BLACK);
+                toolbar.setTitleTextColor(Color.WHITE);
+                toolbar.setSubtitleTextColor(Color.WHITE);
                 setActionBar(toolbar);
                 TextView tvLog = findViewById(R.id.activityglobalcrashTextView1);
                 tvLog.setText(mLog);
+                tvLog.setTextColor(Color.BLACK);
+                tvLog.setBackgroundColor(Color.GRAY);
 //                // 内部崩溃测试
 //                tvLog.setOnClickListener(new View.OnClickListener(){
 //                        @Override
@@ -489,6 +513,8 @@ public final class CrashHandler {
 //                            }
 //                        }
 //                    });
+                
+                getActionBar().setTitle(TITTLE);
             }
         }
 
@@ -544,7 +570,7 @@ public final class CrashHandler {
             for (int i = 0; i < menu.size(); i++) {
                 MenuItem item = menu.getItem(i);
                 SpannableString spanString = new SpannableString(item.getTitle().toString());
-                spanString.setSpan(new ForegroundColorSpan(getColor(R.color.colorTittleText)), 0, spanString.length(), 0);
+                spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0);
                 item.setTitle(spanString);
             }
             return true;

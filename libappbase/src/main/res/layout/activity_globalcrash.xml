@@ -5,8 +5,7 @@
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-    android:background="@color/colorTextBackgroung"
-    android:textColor="@color/colorText">
+	android:id="@+id/activityglobalcrashLinearLayout1">
 
 	<android.widget.Toolbar
 		android:layout_width="match_parent"
@@ -25,7 +24,8 @@
 			<TextView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:id="@+id/activityglobalcrashTextView1"/>
+				android:id="@+id/activityglobalcrashTextView1"
+				android:background="#FFFFFFFF"/>
 
 		</HorizontalScrollView>
 
