@@ -360,7 +360,7 @@ public class LogUtils {
     public static void cleanLog() {
         if (_mfLogCatchFile.exists()) {
             try {
-                FileUtils.writeStringToFile(_mfLogCatchFile.getPath(), "");
+                UTF8FileUtils.writeStringToFile(_mfLogCatchFile.getPath(), "");
                 //LogUtils.d(TAG, "cleanLog");
             } catch (IOException e) {
                 LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
