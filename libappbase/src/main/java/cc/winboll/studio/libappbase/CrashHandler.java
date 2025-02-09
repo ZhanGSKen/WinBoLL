@@ -12,13 +12,15 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -26,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +46,6 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import android.widget.LinearLayout;
-import android.content.pm.ApplicationInfo;
 
 public final class CrashHandler {
 
@@ -129,7 +130,7 @@ public final class CrashHandler {
                         LogUtils.d(TAG, "gotoCrashActiviy: ");
                         if (AppCrashSafetyWire.getInstance().isAppCrashSafetyWireOK()) {
                             LogUtils.d(TAG, "gotoCrashActiviy: isAppCrashSafetyWireOK");
-                            //AppCrashSafetyWire.getInstance().postResumeCrashSafetyWireHandler(app);
+                            AppCrashSafetyWire.getInstance().postResumeCrashSafetyWireHandler(app);
                             intent.setClass(app, GlobalCrashActiviy.class);
                             intent.putExtra(EXTRA_CRASH_INFO, errorLog);
                             // 如果发生了 CrashHandler 内部崩溃， 就调用基础的应用崩溃显示类
@@ -137,12 +138,12 @@ public final class CrashHandler {
 //                            intent.putExtra(GlobalCrashActiviy.EXTRA_CRASH_INFO, errorLog);
                         } else {
                             LogUtils.d(TAG, "gotoCrashActiviy: else");
-
-                            AppCrashSafetyWire.getInstance().resumeToMaximumImmediately();
                             // 正常状态调用进阶的应用崩溃显示页
                             intent.setClass(app, CrashActiviy.class);
                             intent.putExtra(EXTRA_CRASH_INFO, errorLog);
+                            AppCrashSafetyWire.getInstance().resumeToMaximumImmediately();
                         }
+
                         
 
 //                        intent.setClass(app, CrashActiviy.class);
@@ -325,31 +326,24 @@ public final class CrashHandler {
         }
 
         // 调用函数以启用持续崩溃保险，从而调用 CrashHandler 内部崩溃处理窗口
-//        boolean postResumeCrashSafetyWireHandler(final Context context) {
-//            LogUtils.d(TAG, "postCrashSafetyWire()");
-//            if (AppCrashSafetyWire.getInstance().isAppCrashSafetyWireOK()) {
-//                // 保险丝在工作连接状态
-//                // 设置内部崩溃处理模块失效
-//                new Handler(Looper.getMainLooper()).postDelayed(new Runnable(){
-//                        @Override
-//                        public void run() {
-//                            // 进程持续运行时，恢复保险丝熔断值
-//                            //Resume to maximum
-//                            resumeToMaximumImmediately();
-////                            LogUtils.d(TAG, "postCrashSafetyWire Resume to maximum");
-////                            while (resumeToMaximum(currentSafetyLevel + 1)) {
-////                                try {
-////                                    Thread.sleep(1000);
-////                                } catch (InterruptedException e) {
-////                                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-////                                }
-////                            }
-//                        }
-//                    }, 1000);
-//                return true;
-//            }
-//            return false;
-//        }
+        void postResumeCrashSafetyWireHandler(final Context context) {
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable(){
+                    @Override
+                    public void run() {
+                        // 进程持续运行时，恢复保险丝熔断值
+                        //Resume to maximum
+                        resumeToMaximumImmediately();
+//                            LogUtils.d(TAG, "postCrashSafetyWire Resume to maximum");
+//                            while (resumeToMaximum(currentSafetyLevel + 1)) {
+//                                try {
+//                                    Thread.sleep(1000);
+//                                } catch (InterruptedException e) {
+//                                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+//                                }
+//                            }
+                    }
+                }, 1000);
+        }
 
     }
     
