@@ -8,16 +8,10 @@ package cc.winboll.studio.libappbase;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 public class GlobalApplication extends Application {
 
@@ -60,13 +54,13 @@ public class GlobalApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        GlobalApplication.isDebuging = true;
-        GlobalApplication.setIsDebuging(this, true);
+        //GlobalApplication.isDebuging = true;
+        //GlobalApplication.setIsDebuging(this, true);
         LogUtils.init(this);
-        LogUtils.setLogLevel(LogUtils.LOG_LEVEL.Debug);
+        //LogUtils.setLogLevel(LogUtils.LOG_LEVEL.Debug);
         //LogUtils.setTAGListEnable(GlobalApplication.TAG, true);
-        LogUtils.setALlTAGListEnable(true);
-        LogUtils.d(TAG, "LogUtils init");
+        //LogUtils.setALlTAGListEnable(true);
+        //LogUtils.d(TAG, "LogUtils init");
 
         // 设置应用异常处理窗口
         CrashHandler.init(this);
@@ -76,43 +70,16 @@ public class GlobalApplication extends Application {
         //GlobalApplication.isDebuging = sharedPreferences.getBoolean(PREFS_ISDEBUGING, GlobalApplication.isDebuging);
 
     }
-
-    public static void write(InputStream input, OutputStream output) throws IOException {
-        byte[] buf = new byte[1024 * 8];
-        int len;
-        while ((len = input.read(buf)) != -1) {
-            output.write(buf, 0, len);
-        }
-    }
-
-    public static void write(File file, byte[] data) throws IOException {
-        File parent = file.getParentFile();
-        if (parent != null && !parent.exists()) parent.mkdirs();
-
-        ByteArrayInputStream input = new ByteArrayInputStream(data);
-        FileOutputStream output = new FileOutputStream(file);
+    
+    public static String getAppName(Context context) {
+        PackageManager packageManager = context.getPackageManager();
         try {
-            write(input, output);
-        } finally {
-            closeIO(input, output);
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(
+                context.getPackageName(), 0);
+            return (String) packageManager.getApplicationLabel(applicationInfo);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
-    }
-
-    public static String toString(InputStream input) throws IOException {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        write(input, output);
-        try {
-            return output.toString("UTF-8");
-        } finally {
-            closeIO(input, output);
-        }
-    }
-
-    public static void closeIO(Closeable... closeables) {
-        for (Closeable closeable : closeables) {
-            try {
-                if (closeable != null) closeable.close();
-            } catch (IOException ignored) {}
-        }
+        return null;
     }
 }

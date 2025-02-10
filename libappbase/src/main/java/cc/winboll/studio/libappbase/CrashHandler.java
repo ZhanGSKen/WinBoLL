@@ -17,6 +17,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,7 +54,7 @@ public final class CrashHandler {
 
     public static final String TITTLE = "CrashReport";
 
-    private static final String EXTRA_CRASH_INFO = "crashInfo";
+    public static final String EXTRA_CRASH_INFO = "crashInfo";
 
     final static String PREFS = CrashHandler.class.getName() + "PREFS";
     final static String PREFS_CRASHHANDLER_ISCRASHHAPPEN = "PREFS_CRASHHANDLER_ISCRASHHAPPEN";
@@ -130,7 +131,7 @@ public final class CrashHandler {
                         LogUtils.d(TAG, "gotoCrashActiviy: ");
                         if (AppCrashSafetyWire.getInstance().isAppCrashSafetyWireOK()) {
                             LogUtils.d(TAG, "gotoCrashActiviy: isAppCrashSafetyWireOK");
-                            intent.setClass(app, GlobalCrashActiviy.class);
+                            intent.setClass(app, GlobalCrashActivity.class);
                             intent.putExtra(EXTRA_CRASH_INFO, errorLog);
                             // 如果发生了 CrashHandler 内部崩溃， 就调用基础的应用崩溃显示类
 //                            intent.setClass(app, GlobalCrashActiviy.class);
@@ -138,7 +139,7 @@ public final class CrashHandler {
                         } else {
                             LogUtils.d(TAG, "gotoCrashActiviy: else");
                             // 正常状态调用进阶的应用崩溃显示页
-                            intent.setClass(app, CrashActiviy.class);
+                            intent.setClass(app, CrashActivity.class);
                             intent.putExtra(EXTRA_CRASH_INFO, errorLog);
                         }
 
@@ -263,22 +264,6 @@ public final class CrashHandler {
             return false;
         }
 
-//        boolean resumeSafetyLevel() {
-//            LogUtils.d(TAG, "resumeSafetyLevel()");
-//            // 崩溃计数进入崩溃保险值
-//            int safeLevel = loadCurrentSafetyLevel();
-//            if (isSafetyWireWorking(safeLevel)) {
-//                // 如果保险丝未熔断, 就增加一次熔断值
-//                LogUtils.d(TAG, "resumeSafetyLevel() resume 1");
-//                saveCurrentSafetyLevel(safeLevel + 1);
-//                return isSafetyWireWorking(safeLevel + 1);
-//            } else {
-//                LogUtils.d(TAG, "resumeSafetyLevel() resume immediately");
-//                resumeToMaximumImmediately();
-//            }
-//            return false;
-//        }
-
         boolean isSafetyWireWorking(int safetyLevel) {
             LogUtils.d(TAG, "isSafetyWireOK()");
             //safetyLevel = _MINI;
@@ -301,16 +286,6 @@ public final class CrashHandler {
             LogUtils.d(TAG, "resumeToMaximumImmediately() call saveCurrentSafetyLevel(_MAX)");
             AppCrashSafetyWire.getInstance().saveCurrentSafetyLevel(_MAX);
         }
-
-//        boolean resumeToMaximum(int safetyLevel) {
-//            if (safetyLevel + 1 < _MAX
-//                && safetyLevel >= _MINI
-//                && isSafetyWireWorking(safetyLevel + 1)) {
-//                AppCrashSafetyWire.getInstance().saveCurrentSafetyLevel(currentSafetyLevel + 1);
-//                return true;
-//            }
-//            return false;
-//        }
 
         void off() {
             LogUtils.d(TAG, "off()");
@@ -341,19 +316,7 @@ public final class CrashHandler {
         }
     }
 
-    public static String getAppName(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(
-                context.getPackageName(), 0);
-            return (String) packageManager.getApplicationLabel(applicationInfo);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static final class CrashActiviy extends Activity implements MenuItem.OnMenuItemClickListener {
+    public static final class CrashActivity extends Activity implements MenuItem.OnMenuItemClickListener {
         private static final int MENUITEM_COPY = 0;
         private static final int MENUITEM_RESTART = 1;
 
@@ -363,7 +326,7 @@ public final class CrashHandler {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             AppCrashSafetyWire.getInstance().postResumeCrashSafetyWireHandler(getApplicationContext());
-            
+
             mLog = getIntent().getStringExtra(EXTRA_CRASH_INFO);
             setTheme(android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
             setContentView: {
@@ -437,149 +400,5 @@ public final class CrashHandler {
             return true;
         }
     }
-
-    public static final class GlobalCrashActiviy extends Activity implements MenuItem.OnMenuItemClickListener {
-
-        private static final int MENUITEM_COPY = 0;
-        private static final int MENUITEM_RESTART = 1;
-
-        private String mLog;
-        int mTitleTextColor;
-        int mStartColor;
-        int mCenterColor;
-        int mEndColor;
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            AppCrashSafetyWire.getInstance().postResumeCrashSafetyWireHandler(getApplicationContext());
-            
-            mLog = getIntent().getStringExtra(EXTRA_CRASH_INFO);
-            setTheme(android.R.style.Theme_DeviceDefault_NoActionBar);
-//            TypedArray a = obtainStyledAttributes(attrs, R.styleable.ASupportToolbar, R.attr.aSupportToolbar, 0);
-//            mTitleTextColor = a.getColor(R.style.AppTheme.attrs.colo, Color.GREEN);
-//            mStartColor = a.getColor(R.styleable.ASupportToolbar_attrASupportToolbarStartColor, Color.BLUE);
-//            mCenterColor = a.getColor(R.styleable.ASupportToolbar_attrASupportToolbarCenterColor, Color.RED);
-//            mEndColor = a.getColor(R.styleable.ASupportToolbar_attrASupportToolbarEndColor, Color.YELLOW);
-//            // 返回一个绑定资源结束的信号给资源
-//            a.recycle();
-
-            setContentView: {
-//                LinearLayout contentView = new LinearLayout(this);
-//                contentView.setOrientation(LinearLayout.VERTICAL);
-//                contentView.setBackgroundColor(Color.BLUE);
-//                LinearLayout llTitle = new LinearLayout(this);
-//                TextView title = new TextView(this); {
-//                    int padding = dp2px(16);
-//                    title.setPadding(padding, padding, padding, padding);
-//                    title.setText("GlobalCrashActiviy");
-//                    title.setTextColor(Color.WHITE);
-//                }
-//                llTitle.addView(title, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                contentView.addView(llTitle, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//
-//                ScrollView svContent = new ScrollView(this);
-//                svContent.setFillViewport(true);
-//
-//                HorizontalScrollView hw = new HorizontalScrollView(this);
-//                hw.setBackgroundColor(Color.WHITE);
-//                TextView message = new TextView(this); {
-//                    int padding = dp2px(16);
-//                    message.setPadding(padding, padding, padding, padding);
-//                    message.setText(mLog);
-//                    message.setTextIsSelectable(true);
-//                }
-//                hw.addView(message);
-//                svContent.addView(hw, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
-//                contentView.addView(svContent, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
-//
-//                setContentView(contentView);
-                setContentView(R.layout.activity_globalcrash);
-                LinearLayout llMain = findViewById(R.id.activityglobalcrashLinearLayout1);
-                llMain.setBackgroundColor(Color.GRAY);
-                Toolbar toolbar = findViewById(R.id.activityglobalcrashToolbar1);
-                toolbar.setBackgroundColor(Color.BLACK);
-                toolbar.setTitleTextColor(Color.WHITE);
-                toolbar.setSubtitleTextColor(Color.WHITE);
-                setActionBar(toolbar);
-                TextView tvLog = findViewById(R.id.activityglobalcrashTextView1);
-                tvLog.setText(mLog);
-                tvLog.setTextColor(Color.BLACK);
-                tvLog.setBackgroundColor(Color.GRAY);
-//                // 内部崩溃测试
-//                tvLog.setOnClickListener(new View.OnClickListener(){
-//                        @Override
-//                        public void onClick(View view) {
-//                            for (int i = Integer.MIN_VALUE; i < Integer.MAX_VALUE; i++) {
-//                                getString(i);
-//                            }
-//                        }
-//                    });
-
-                getActionBar().setTitle(TITTLE);
-                getActionBar().setSubtitle(getAppName(getApplicationContext()));
-            }
-        }
-
-        @Override
-        public void onBackPressed() {
-            restart();
-        }
-
-        private void restart() {
-            PackageManager pm = getPackageManager();
-            Intent intent = pm.getLaunchIntentForPackage(getPackageName());
-            if (intent != null) {
-                intent.addFlags(
-                    Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                );
-                startActivity(intent);
-            }
-            finish();
-            android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(0);
-        }
-
-        private int dp2px(final float dpValue) {
-            final float scale = Resources.getSystem().getDisplayMetrics().density;
-            return (int) (dpValue * scale + 0.5f);
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case MENUITEM_COPY: 
-                    ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    cm.setPrimaryClip(ClipData.newPlainText(getPackageName(), mLog));
-                    Toast.makeText(getApplication(), "The text is copied.", Toast.LENGTH_SHORT).show();
-                    break;
-                case MENUITEM_RESTART: 
-                    AppCrashSafetyWire.getInstance().resumeToMaximumImmediately();
-                    restart();
-                    break;
-            }
-            return false;
-        }
-
-        @Override
-        public boolean onCreateOptionsMenu(Menu menu) {
-            menu.add(0, MENUITEM_COPY, 0, "Copy").setOnMenuItemClickListener(this)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            menu.add(0, MENUITEM_RESTART, 0, "Restart").setOnMenuItemClickListener(this)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            // 设置菜单文本颜色
-            for (int i = 0; i < menu.size(); i++) {
-                MenuItem item = menu.getItem(i);
-                SpannableString spanString = new SpannableString(item.getTitle().toString());
-                spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0);
-                item.setTitle(spanString);
-            }
-            return true;
-        }
-    }
-
-
 }
 

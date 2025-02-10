@@ -1,17 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cc.winboll.studio.libappbase" >
+<?xml version='1.0' encoding='utf-8'?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cc.winboll.studio.libappbase">
+
+    <!-- 拥有完全的网络访问权限 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application>
+
         <activity
-            android:name=".CrashHandler$CrashActiviy"
-            android:label="CrashActiviy"
+            android:name=".CrashHandler$CrashActivity"
+            android:label="CrashActivity"
             android:launchMode="standard"/>
+
         <activity
-            android:name=".CrashHandler$GlobalCrashActiviy"
-            android:label="GlobalCrashActiviy"
+            android:name=".GlobalCrashActivity"
+            android:label="GlobalCrashActivity"
             android:launchMode="standard"/>
+
     </application>
 
 </manifest>
-
