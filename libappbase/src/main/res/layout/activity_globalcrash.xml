@@ -5,7 +5,8 @@
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:id="@+id/activityglobalcrashLinearLayout1">
+	android:id="@+id/activityglobalcrashLinearLayout1"
+	style="@style/APPBaseTheme">
 
 	<android.widget.Toolbar
 		android:layout_width="match_parent"

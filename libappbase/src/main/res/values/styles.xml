@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
-        <item name="attrTextColor">#FF000000</item>
-        <item name="attrPrimaryColor">@color/colorPrimary</item>
-        <item name="attrPrimaryDarkColor">@color/colorPrimaryDark</item>
-        <item name="attrAccentColor">@color/colorAccent</item>
+    <style name="APPBaseTheme" parent="@android:style/Theme.Holo.Light.NoActionBar">
+        <item name="colorPrimary">#FF3C4CE3</item>
+        <item name="colorPrimaryDark">#FF3C4CE3</item>
+        <item name="colorAccent">#FF3C4CE3</item>
+        <item name="attrPrimary">#FF00B322</item>
+        <item name="attrPrimaryDark">#FF000000</item>
+        <item name="attrAccent">#FFFFF600</item>
+        <item name="attrText">#FF00FF31</item>
+        <item name="globalCrashActivity">@style/GlobalCrashActivity</item>
 	</style>
+    
+    <style name="GlobalCrashActivity">
+        <item name="attrPrimary">?attr/colorPrimary</item>
+        <item name="attrPrimaryDark">?attr/colorPrimaryDark</item>
+        <item name="attrAccent">?attr/colorAccent</item>
+        <item name="attrText">?attr/colorText</item>
+    </style>
 </resources>

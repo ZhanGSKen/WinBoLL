@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="attrTextColor" format="color" />
-    <attr name="attrPrimaryColor" format="color" />
-    <attr name="attrPrimaryDarkColor" format="color" />
-    <attr name="attrAccentColor" format="color" />
+
+    <attr name="colorPrimary" format="color" />
+    <attr name="colorPrimaryDark" format="color" />
+    <attr name="colorAccent" format="color" />
+    <attr name="colorText" format="color" />
+
+    <attr name="globalCrashActivity" format="reference"/>
+    <!--<attr name="attrPrimary" format="color" />
+    <attr name="attrPrimaryDark" format="color" />
+    <attr name="attrAccent" format="color" />-->
+
+    <declare-styleable name="GlobalCrashActivity">
+        <attr name="attrPrimary" format="color" />
+        <attr name="attrPrimaryDark" format="color" />
+        <attr name="attrAccent" format="color" />
+        <attr name="attrText" format="color" />
+    </declare-styleable>
 </resources>
