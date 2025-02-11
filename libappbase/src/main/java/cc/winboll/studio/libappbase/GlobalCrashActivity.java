@@ -30,10 +30,10 @@ public final class GlobalCrashActivity extends Activity implements MenuItem.OnMe
     private static final int MENUITEM_RESTART = 1;
 
     String mLog;
-    int colorPrimary;
-    int colorPrimaryDark;
-    int colorAccent;
+    int colorTittle;
+    int colorTittleBackground;
     int colorText;
+    int colorTextBackground;
 
     public static final String TAG = "GlobalCrashActivity";
 
@@ -42,37 +42,34 @@ public final class GlobalCrashActivity extends Activity implements MenuItem.OnMe
         super.onCreate(savedInstanceState);
         CrashHandler.AppCrashSafetyWire.getInstance().postResumeCrashSafetyWireHandler(getApplicationContext());
 
-
         mLog = getIntent().getStringExtra(CrashHandler.EXTRA_CRASH_INFO);
         //setTheme(android.R.style.Theme_Holo_Light_NoActionBar);
         setTheme(R.style.APPBaseTheme);
         setContentView(R.layout.activity_globalcrash);
 
-        TypedArray a = obtainStyledAttributes(R.attr.globalCrashActivity, R.styleable.GlobalCrashActivity);
-        colorPrimary = a.getColor(R.styleable.GlobalCrashActivity_attrPrimary, Color.WHITE);
-        colorPrimaryDark = a.getColor(R.styleable.GlobalCrashActivity_attrPrimaryDark, Color.BLACK);
-        colorAccent = a.getColor(R.styleable.GlobalCrashActivity_attrAccent, Color.RED);
-        colorText = a.getColor(R.styleable.GlobalCrashActivity_attrText, Color.RED);
+        TypedArray a = obtainStyledAttributes(R.styleable.GlobalCrashActivity);
+        colorTittle = a.getColor(R.styleable.GlobalCrashActivity_colorTittle, Color.WHITE);
+        colorTittleBackground = a.getColor(R.styleable.GlobalCrashActivity_colorTittleBackgound, Color.BLACK);
+        colorText = a.getColor(R.styleable.GlobalCrashActivity_colorText, Color.RED);
+        colorTextBackground = a.getColor(R.styleable.GlobalCrashActivity_colorTextBackgound, Color.RED);
         // 返回一个绑定资源结束的信号给资源
         a.recycle();
 
         LinearLayout llMain = findViewById(R.id.activityglobalcrashLinearLayout1);
-        llMain.setBackgroundColor(colorPrimaryDark);
+        llMain.setBackgroundColor(colorTextBackground);
         Toolbar toolbar = findViewById(R.id.activityglobalcrashToolbar1);
-        toolbar.setBackgroundColor(colorPrimary);
-        toolbar.setTitleTextColor(colorAccent);
-        toolbar.setSubtitleTextColor(colorAccent);
+        toolbar.setBackgroundColor(colorTittleBackground);
+        toolbar.setTitleTextColor(colorTittle);
+        toolbar.setSubtitleTextColor(colorTittle);
         setActionBar(toolbar);
         TextView tvLog = findViewById(R.id.activityglobalcrashTextView1);
         tvLog.setText(mLog);
-        tvLog.setTextColor(colorPrimary);
-        tvLog.setBackgroundColor(colorPrimaryDark);
+        tvLog.setTextColor(colorText);
+        tvLog.setBackgroundColor(colorTextBackground);
 
         getActionBar().setTitle(CrashHandler.TITTLE);
         getActionBar().setSubtitle(GlobalApplication.getAppName(getApplicationContext()));
     }
-
-
 
     @Override
     public void onBackPressed() {
@@ -122,7 +119,7 @@ public final class GlobalCrashActivity extends Activity implements MenuItem.OnMe
         for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.getItem(i);
             SpannableString spanString = new SpannableString(item.getTitle().toString());
-            spanString.setSpan(new ForegroundColorSpan(colorAccent), 0, spanString.length(), 0);
+            spanString.setSpan(new ForegroundColorSpan(colorTittle), 0, spanString.length(), 0);
             item.setTitle(spanString);
         }
         return true;
