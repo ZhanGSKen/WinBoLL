@@ -37,3 +37,7 @@
 //include ':aes'
 //include ':libaes'
 //rootProject.name = "aes"
+
+// Contacts 项目编译设置
+//include ':contacts'
+//rootProject.name = "contacts"

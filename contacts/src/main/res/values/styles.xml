@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyAppTheme" parent="APPBaseTheme">
+    </style>
+
+    <style name="GlobalCrashActivityTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+        <item name="colorTittle">@color/colorAccent</item>
+        <item name="colorTittleBackgound">@color/colorPrimary</item>
+        <item name="colorText">@color/colorAccent</item>
+        <item name="colorTextBackgound">@color/colorPrimaryDark</item>
+	</style>
+</resources>
