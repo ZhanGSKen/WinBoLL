@@ -29,7 +29,7 @@ android {
         // versionName 更新后需要手动设置 
         // .winboll/winbollBuildProps.properties 文件的 stageCount=0
         // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
-        versionName "1.3" 
+        versionName "1.4" 
         if(true) {
             versionName = genVersionName("${versionName}")
         }
