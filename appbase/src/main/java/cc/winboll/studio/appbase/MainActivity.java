@@ -6,12 +6,14 @@ import android.widget.CheckBox;
 import androidx.appcompat.app.AppCompatActivity;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import androidx.appcompat.widget.Toolbar;
+import com.hjq.toast.ToastUtils;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ToastUtils.show("onCreate");
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.activitymainToolbar1);
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         
         CheckBox cbIsDebugMode = findViewById(R.id.activitymainCheckBox1);
         cbIsDebugMode.setChecked(GlobalApplication.isDebuging());
+        
     }
 
 	public void onSwitchDebugMode(View view) {

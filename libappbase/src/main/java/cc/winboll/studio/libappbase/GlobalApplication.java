@@ -12,6 +12,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
+import com.hjq.toast.ToastUtils;
+import com.hjq.toast.style.WhiteToastStyle;
 
 public class GlobalApplication extends Application {
 
@@ -69,8 +72,14 @@ public class GlobalApplication extends Application {
         //SharedPreferences sharedPreferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         //GlobalApplication.isDebuging = sharedPreferences.getBoolean(PREFS_ISDEBUGING, GlobalApplication.isDebuging);
 
+        // 初始化 Toast 框架
+        ToastUtils.init(this);
+        // 设置 Toast 布局样式
+        //ToastUtils.setView(R.layout.toast_custom_view);
+        ToastUtils.setStyle(new WhiteToastStyle());
+        ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
     }
-    
+
     public static String getAppName(Context context) {
         PackageManager packageManager = context.getPackageManager();
         try {
