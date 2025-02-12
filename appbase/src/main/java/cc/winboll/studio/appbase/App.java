@@ -19,7 +19,7 @@ public class App extends GlobalApplication {
     public void onCreate() {
         super.onCreate();
         GlobalApplication.setIsDebuging(this, BuildConfig.DEBUG);
-        mSOSCSBroadcastReceiver = new SOSCSBroadcastReceiver();
+        mSOSCSBroadcastReceiver = new SOSCSBroadcastReceiver(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SOSCSBroadcastReceiver.ACTION_SOS);
         registerReceiver(mSOSCSBroadcastReceiver, intentFilter);

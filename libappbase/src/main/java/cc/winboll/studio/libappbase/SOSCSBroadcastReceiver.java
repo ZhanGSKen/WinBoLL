@@ -10,18 +10,23 @@ import android.content.Intent;
  * @Describe 简单信号通信中心接收器
  */
 public class SOSCSBroadcastReceiver extends BroadcastReceiver {
-    
+
     public static final String TAG = "SOSCSBroadcastReceiver";
     public static final String ACTION_SOS = SOSCSBroadcastReceiver.class.getName() + ".ACTION_SOS";
-    
-    
+
+    ISOSAPP mISOSAPP;
+
+    public SOSCSBroadcastReceiver(ISOSAPP iSOSAPP) {
+        mISOSAPP = iSOSAPP;
+    }
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        if(action.equals(context.getString(R.string.action_sos))) {
-            LogUtils.d(TAG, "action_sos");
+        if (action.equals(ACTION_SOS)) {
+            LogUtils.d(TAG, "ACTION_SOS");
+            mISOSAPP.helpISOSService(intent);
         } else {
-            LogUtils.d(TAG, String.format("action %s", action));
+            LogUtils.d(TAG, String.format("%s", action));
         }
     }
 }

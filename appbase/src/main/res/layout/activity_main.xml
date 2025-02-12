@@ -48,10 +48,38 @@
 		</LinearLayout>
 
 		<LinearLayout
-			android:orientation="horizontal"
+			android:orientation="vertical"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:gravity="right">
+
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="StartCenter"
+				android:textAllCaps="false"
+				android:onClick="onStartCenter"/>
+
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="StopCenter"
+				android:textAllCaps="false"
+				android:onClick="onStopCenter"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TestStopWithoutSettingEnable"
+				android:textAllCaps="false"
+                android:onClick="onTestStopWithoutSettingEnable"/>
+            
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="TestStartWithString"
+				android:textAllCaps="false"
+				android:onClick="onTestStartWithString"/>
 
 			<Button
 				android:layout_width="wrap_content"
