@@ -26,5 +26,7 @@ android {
 }
 
 dependencies {
+    api 'androidx.appcompat:appcompat:1.0.0'
+    
     api fileTree(dir: 'libs', include: ['*.jar'])
 }

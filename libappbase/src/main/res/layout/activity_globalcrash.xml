@@ -2,35 +2,14 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:orientation="vertical"
+    android:orientation="vertical"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:id="@+id/activityglobalcrashLinearLayout1"
-	style="@style/APPBaseTheme">
+	android:layout_height="match_parent">
 
-	<android.widget.Toolbar
+	<cc.winboll.studio.libappbase.GlobalCrashReportView
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/activityglobalcrashToolbar1"/>
-
-	<ScrollView
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_weight="1.0">
-
-		<HorizontalScrollView
-			android:layout_width="match_parent"
-			android:layout_height="match_parent">
-
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:id="@+id/activityglobalcrashTextView1"
-				android:background="#FFFFFFFF"/>
-
-		</HorizontalScrollView>
-
-	</ScrollView>
+		android:layout_height="match_parent"
+		android:id="@+id/activityglobalcrashGlobalCrashReportView1"/>
 
 </LinearLayout>
 

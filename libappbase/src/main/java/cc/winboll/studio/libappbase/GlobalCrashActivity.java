@@ -21,19 +21,18 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libappbase.R;
+import androidx.appcompat.app.AppCompatActivity;
 
-public final class GlobalCrashActivity extends Activity implements MenuItem.OnMenuItemClickListener {
+public final class GlobalCrashActivity extends AppCompatActivity implements MenuItem.OnMenuItemClickListener {
 
     private static final int MENUITEM_COPY = 0;
     private static final int MENUITEM_RESTART = 1;
 
+    GlobalCrashReportView mGlobalCrashReportView;
     String mLog;
-    int colorTittle;
-    int colorTittleBackground;
-    int colorText;
-    int colorTextBackground;
+    
 
     public static final String TAG = "GlobalCrashActivity";
 
@@ -44,31 +43,14 @@ public final class GlobalCrashActivity extends Activity implements MenuItem.OnMe
 
         mLog = getIntent().getStringExtra(CrashHandler.EXTRA_CRASH_INFO);
         //setTheme(android.R.style.Theme_Holo_Light_NoActionBar);
-        setTheme(R.style.APPBaseTheme);
+        //setTheme(R.style.APPBaseTheme);
         setContentView(R.layout.activity_globalcrash);
-
-        TypedArray a = obtainStyledAttributes(R.styleable.GlobalCrashActivity);
-        colorTittle = a.getColor(R.styleable.GlobalCrashActivity_colorTittle, Color.WHITE);
-        colorTittleBackground = a.getColor(R.styleable.GlobalCrashActivity_colorTittleBackgound, Color.BLACK);
-        colorText = a.getColor(R.styleable.GlobalCrashActivity_colorText, Color.RED);
-        colorTextBackground = a.getColor(R.styleable.GlobalCrashActivity_colorTextBackgound, Color.RED);
-        // 返回一个绑定资源结束的信号给资源
-        a.recycle();
-
-        LinearLayout llMain = findViewById(R.id.activityglobalcrashLinearLayout1);
-        llMain.setBackgroundColor(colorTextBackground);
-        Toolbar toolbar = findViewById(R.id.activityglobalcrashToolbar1);
-        toolbar.setBackgroundColor(colorTittleBackground);
-        toolbar.setTitleTextColor(colorTittle);
-        toolbar.setSubtitleTextColor(colorTittle);
-        setActionBar(toolbar);
-        TextView tvLog = findViewById(R.id.activityglobalcrashTextView1);
-        tvLog.setText(mLog);
-        tvLog.setTextColor(colorText);
-        tvLog.setBackgroundColor(colorTextBackground);
-
-        getActionBar().setTitle(CrashHandler.TITTLE);
-        getActionBar().setSubtitle(GlobalApplication.getAppName(getApplicationContext()));
+        mGlobalCrashReportView = findViewById(R.id.activityglobalcrashGlobalCrashReportView1);
+        mGlobalCrashReportView.setReport(mLog);
+        setSupportActionBar(mGlobalCrashReportView.getToolbar());
+        
+        getSupportActionBar().setTitle(CrashHandler.TITTLE);
+        getSupportActionBar().setSubtitle(GlobalApplication.getAppName(getApplicationContext()));
     }
 
     @Override
@@ -113,15 +95,9 @@ public final class GlobalCrashActivity extends Activity implements MenuItem.OnMe
             .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         menu.add(0, MENUITEM_RESTART, 0, "Restart").setOnMenuItemClickListener(this)
             .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-
-        // 设置菜单文本颜色
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem item = menu.getItem(i);
-            SpannableString spanString = new SpannableString(item.getTitle().toString());
-            spanString.setSpan(new ForegroundColorSpan(colorTittle), 0, spanString.length(), 0);
-            item.setTitle(spanString);
-        }
+        
+        // 更新菜单文字风格
+        mGlobalCrashReportView.updateMenuStyle();
         return true;
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    <attr name="globalCrashActivity" format="reference"/>
+
+    <attr name="themeGlobalCrashActivity" format="reference"/>
 
     <declare-styleable name="GlobalCrashActivity">
         <attr name="colorTittle" format="color" />
@@ -9,4 +9,5 @@
         <attr name="colorText" format="color" />
         <attr name="colorTextBackgound" format="color" />
     </declare-styleable>
+
 </resources>
