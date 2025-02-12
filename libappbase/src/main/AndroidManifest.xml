@@ -18,6 +18,8 @@
             android:label="GlobalCrashActivity"
             android:launchMode="standard"/>
 
+        <service android:name=".SimpleOperateSignalCenterService"/>
+
     </application>
 
 </manifest>
