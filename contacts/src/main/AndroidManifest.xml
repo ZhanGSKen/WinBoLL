@@ -42,6 +42,17 @@
 
         </provider>
 
+        <service android:name="cc.winboll.studio.contacts.services.MainService"/>
+
+        <receiver android:name="cc.winboll.studio.contacts.receivers.MainReceiver">
+
+            <intent-filter>
+
+                <action android:name="cc.winboll.studio.contacts.receivers.MainReceiver"/>
+
+            </intent-filter>
+
+        </receiver>
 
     </application>
 

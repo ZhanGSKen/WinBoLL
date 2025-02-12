@@ -1,28 +1,23 @@
 package cc.winboll.studio.contacts;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.contacts.BuildConfig;
 import cc.winboll.studio.contacts.R;
+import cc.winboll.studio.contacts.beans.MainServiceBean;
+import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libapputils.app.AboutActivityFactory;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
-import cc.winboll.studio.libapputils.util.UriUtils;
-import cc.winboll.studio.libapputils.view.StringToQrCodeView;
 import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.UUID;
-import cc.winboll.studio.libapputils.app.AboutActivityFactory;
 
 final public class MainActivity extends AppCompatActivity implements IWinBollActivity {
 
@@ -32,12 +27,14 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     public static final int REQUEST_ABOUT_ACTIVITY = 1;
 
     Toolbar mToolbar;
-    
+    CheckBox cbMainService;
+    MainServiceBean mMainServiceBean;
+
     @Override
     public AppCompatActivity getActivity() {
         return this;
     }
-    
+
     @Override
     public APPInfo getAppInfo() {
         String szBranchName = "contacts";
@@ -73,9 +70,27 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         getSupportActionBar().setSubtitle(getTag());
-        
+
         //ToastUtils.show("WinBollUI_TYPE " + WinBollApplication.getWinBollUI_TYPE());
         LogUtils.d(TAG, "BuildConfig.DEBUG : " + Boolean.toString(BuildConfig.DEBUG));
+
+        mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
+        if (mMainServiceBean == null) {
+            mMainServiceBean = new MainServiceBean();
+        }
+        cbMainService = findViewById(R.id.activitymainCheckBox1);
+        cbMainService.setChecked(mMainServiceBean.isEnable());
+        cbMainService.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    
+                    if (cbMainService.isChecked()) {
+                        MainService.startISOSService(MainActivity.this);
+                    } else {
+                        MainService.stopISOSService(MainActivity.this);
+                    }
+                }
+            });
     }
 
     @Override
@@ -146,7 +161,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     public boolean isEnableDisplayHomeAsUp() {
         return false;
     }
-    
+
     @Override
     public void onBackPressed() {
         exit();
