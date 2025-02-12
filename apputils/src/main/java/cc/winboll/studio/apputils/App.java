@@ -7,15 +7,12 @@ package cc.winboll.studio.apputils;
  */
 import android.app.Application;
 import android.content.Context;
-import android.view.Gravity;
 import android.widget.Toast;
 import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libapputils.app.MyActivityLifecycleCallbacks;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.DebugBean;
-import cc.winboll.studio.libapputils.log.LogUtils;
-import com.hjq.toast.ToastUtils;
-import com.hjq.toast.style.WhiteToastStyle;
 
 public class App extends GlobalApplication {
 
@@ -57,15 +54,15 @@ public class App extends GlobalApplication {
         // 应用环境初始化, 基本调试环境
         //
         // 初始化日志模块
-        LogUtils.init(this);
+        //LogUtils.init(this);
 
         try {
             // 初始化 Toast 框架
-            ToastUtils.init(this);
-            // 设置 Toast 布局样式
-            //ToastUtils.setView(R.layout.view_toast);
-            ToastUtils.setStyle(new WhiteToastStyle());
-            ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
+//            ToastUtils.init(this);
+//            // 设置 Toast 布局样式
+//            //ToastUtils.setView(R.layout.view_toast);
+//            ToastUtils.setStyle(new WhiteToastStyle());
+//            ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
             // 设置应用调试标志
             DebugBean debugBean = DebugBean.loadBean(this, DebugBean.class);
             if (debugBean == null) {

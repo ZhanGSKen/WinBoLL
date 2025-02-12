@@ -10,7 +10,7 @@ package cc.winboll.studio.libapputils.bean;
 import android.content.Context;
 import android.util.JsonReader;
 import android.util.JsonWriter;
-import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libapputils.util.FileUtils;
 import java.io.File;
 import java.io.IOException;

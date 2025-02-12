@@ -24,6 +24,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libapputils.R;
 import java.text.Collator;
 import java.util.ArrayList;

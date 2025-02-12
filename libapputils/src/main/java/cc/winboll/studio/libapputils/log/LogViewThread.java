@@ -6,6 +6,7 @@ package cc.winboll.studio.libapputils.log;
  * @Describe 日志视图线程类
  */
 import android.os.FileObserver;
+import cc.winboll.studio.libappbase.LogUtils;
 import java.lang.ref.WeakReference;
 
 public class LogViewThread extends Thread {

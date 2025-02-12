@@ -12,7 +12,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import androidx.core.app.TaskStackBuilder;
-import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;

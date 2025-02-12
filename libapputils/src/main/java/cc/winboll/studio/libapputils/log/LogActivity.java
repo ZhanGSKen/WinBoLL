@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;

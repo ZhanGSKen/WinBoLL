@@ -5,7 +5,7 @@ package cc.winboll.studio.libapputils.app;
  * @Date 2024/08/12 14:45:35
  * @Describe 应用版本工具集
  */
-import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
