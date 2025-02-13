@@ -18,16 +18,26 @@
             android:label="GlobalCrashActivity"
             android:launchMode="standard"/>
 
-        <service android:name=".SimpleOperateSignalCenterService"/>
+        <service android:name=".SimpleOperateSignalCenterService"
+            android:exported="true">
+        </service>
+        
+        <service android:name="cc.winboll.studio.libappbase.SOSService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="cc.winboll.studio.libappbase.SOSService" />
+            </intent-filter>
+        </service>
+        
 
         <activity android:name=".LogActivity"/>
-            
+
         <receiver android:name=".receiver.MyBroadcastReceiver">
             <intent-filter>
                 <action android:name="cc.winboll.studio.libappbase.action.SOS" />
             </intent-filter>
         </receiver>
-        
+
     </application>
 
 </manifest>

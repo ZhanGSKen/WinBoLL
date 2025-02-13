@@ -1,0 +1,5 @@
+// ISOSService.aidl
+package cc.winboll.studio.libappbase;
+interface ISOSService {
+    String getMessage();
+}

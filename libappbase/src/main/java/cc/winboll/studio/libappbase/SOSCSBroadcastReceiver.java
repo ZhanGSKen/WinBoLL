@@ -14,17 +14,17 @@ public class SOSCSBroadcastReceiver extends BroadcastReceiver {
     public static final String TAG = "SOSCSBroadcastReceiver";
     public static final String ACTION_SOS = SOSCSBroadcastReceiver.class.getName() + ".ACTION_SOS";
 
-    ISOSAPP mISOSAPP;
+    //ISOSAPP mISOSAPP;
 
-    public SOSCSBroadcastReceiver(ISOSAPP iSOSAPP) {
-        mISOSAPP = iSOSAPP;
+    public SOSCSBroadcastReceiver() {
+        //mISOSAPP = iSOSAPP;
     }
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (action.equals(ACTION_SOS)) {
             LogUtils.d(TAG, "ACTION_SOS");
-            mISOSAPP.helpISOSService(intent);
+            //mISOSAPP.helpISOSService(intent);
         } else {
             LogUtils.d(TAG, String.format("%s", action));
         }

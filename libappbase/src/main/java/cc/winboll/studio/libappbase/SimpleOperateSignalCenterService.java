@@ -12,7 +12,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import cc.winboll.studio.libappbase.bean.SimpleOperateSignalCenterServiceBean;
 
-public class SimpleOperateSignalCenterService extends Service implements ISOSService {
+public class SimpleOperateSignalCenterService extends Service {
 
     public static final String TAG = "SimpleOperateSignalCenterService";
     public static final String ACTION_ENABLE = SimpleOperateSignalCenterService.class.getName() + ".ACTION_ENABLE";
@@ -43,11 +43,11 @@ public class SimpleOperateSignalCenterService extends Service implements ISOSSer
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtils.d(TAG, "onStartCommand");
-        if (intent.getBooleanExtra(ISOSService.EXTRA_ENABLE, false)) {
-            LogUtils.d(TAG, "onStartCommand enable service");
-            mSimpleOperateSignalCenterServiceBean.setIsEnable(true);
-            SimpleOperateSignalCenterServiceBean.saveBean(this, mSimpleOperateSignalCenterServiceBean);
-        }
+//        if (intent.getBooleanExtra(ISOSService.EXTRA_ENABLE, false)) {
+//            LogUtils.d(TAG, "onStartCommand enable service");
+//            mSimpleOperateSignalCenterServiceBean.setIsEnable(true);
+//            SimpleOperateSignalCenterServiceBean.saveBean(this, mSimpleOperateSignalCenterServiceBean);
+//        }
 
         runMainThread();
 
@@ -64,28 +64,14 @@ public class SimpleOperateSignalCenterService extends Service implements ISOSSer
     }
 
     @Override
-    public Intent getISOSServiceIntentWhichAskForHelp() {
-        Intent intentService = new Intent();
-        intentService.putExtra(ISOSAPP.EXTRA_PACKAGE, this.getPackageName());
-        intentService.putExtra(ISOSAPP.EXTRA_SERVICE, this.getClass().getName());
-        return intentService;
-    }
-
-    @Override
-    public boolean isEnable() {
-        mSimpleOperateSignalCenterServiceBean = SimpleOperateSignalCenterServiceBean.loadBean(this, SimpleOperateSignalCenterServiceBean.class);
-        return mSimpleOperateSignalCenterServiceBean.isEnable();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         LogUtils.d(TAG, "onDestroy");
         mSimpleOperateSignalCenterServiceBean = SimpleOperateSignalCenterServiceBean.loadBean(this, SimpleOperateSignalCenterServiceBean.class);
         if (mSimpleOperateSignalCenterServiceBean.isEnable()) {
             LogUtils.d(TAG, "mSimpleOperateSignalCenterServiceBean.isEnable()");
-            ISOSAPP iSOSAPP = (ISOSAPP)getApplication();
-            iSOSAPP.helpISOSService(getISOSServiceIntentWhichAskForHelp());
+//            ISOSAPP iSOSAPP = (ISOSAPP)getApplication();
+//            iSOSAPP.helpISOSService(getISOSServiceIntentWhichAskForHelp());
         } 
         if (_MainThread != null) {
             _MainThread.isExist = true;

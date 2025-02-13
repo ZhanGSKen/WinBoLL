@@ -18,7 +18,7 @@ import android.view.Gravity;
 import com.hjq.toast.ToastUtils;
 import com.hjq.toast.style.WhiteToastStyle;
 
-public class GlobalApplication extends Application implements ISOSAPP {
+public class GlobalApplication extends Application {
 
     public static final String TAG = "GlobalApplication";
 
@@ -93,27 +93,27 @@ public class GlobalApplication extends Application implements ISOSAPP {
         }
         return null;
     }
-
-    @Override
-    public void helpISOSService(Intent intent) {
-        String szServiceName = intent.getStringExtra(EXTRA_SERVICE);
-        String szPackageName = intent.getStringExtra(EXTRA_PACKAGE);
-        if (szServiceName != null && !szServiceName.equals("")
-            && szPackageName != null && !szPackageName.equals("")) {
-            LogUtils.d(TAG, "szPackageName " + szPackageName);
-            LogUtils.d(TAG, "szServiceName " + szServiceName);
-
-            // 目标服务的包名和类名
-            //String packageName = this.getPackageName();
-            //String serviceClassName = SimpleOperateSignalCenterService.class.getName();
-
-            // 构建Intent
-            Intent intentService = new Intent();
-            intentService.setComponent(new ComponentName(szPackageName, szServiceName));
-            intentService.putExtra(ISOSService.EXTRA_ENABLE, true);
-            startService(intentService);
-            LogUtils.d(TAG, "startService(intentService)");
-        }
-        LogUtils.d(TAG, "helpISOSService");
-    }
+//
+//    @Override
+//    public void helpISOSService(Intent intent) {
+//        String szServiceName = intent.getStringExtra(EXTRA_SERVICE);
+//        String szPackageName = intent.getStringExtra(EXTRA_PACKAGE);
+//        if (szServiceName != null && !szServiceName.equals("")
+//            && szPackageName != null && !szPackageName.equals("")) {
+//            LogUtils.d(TAG, "szPackageName " + szPackageName);
+//            LogUtils.d(TAG, "szServiceName " + szServiceName);
+//
+//            // 目标服务的包名和类名
+//            //String packageName = this.getPackageName();
+//            //String serviceClassName = SimpleOperateSignalCenterService.class.getName();
+//
+//            // 构建Intent
+//            Intent intentService = new Intent();
+//            intentService.setComponent(new ComponentName(szPackageName, szServiceName));
+//            intentService.putExtra(ISOSService.EXTRA_ENABLE, true);
+//            startService(intentService);
+//            LogUtils.d(TAG, "startService(intentService)");
+//        }
+//        LogUtils.d(TAG, "helpISOSService");
+//    }
 }
