@@ -17,14 +17,16 @@ public class SOS {
         Intent intent = new Intent(context.getString(R.string.action_sos));
         intent.putExtra("sosPackage", context.getPackageName());
         intent.putExtra("message", "SOS");
+        String szToPackage = "";
         if (GlobalApplication.isDebuging()) {
-            intent.setPackage("cc.winboll.studio.appbase.beta");
+            szToPackage = "cc.winboll.studio.appbase.beta";
         } else {
-            intent.setPackage("cc.winboll.studio.appbase");
+            szToPackage = "cc.winboll.studio.appbase";
         }
+        intent.setPackage(szToPackage);
         context.sendBroadcast(intent);
         
-        LogUtils.d(TAG, "SOS Send To WinBoll");
+        LogUtils.d(TAG, String.format("SOS Send To WinBoll. (szToPackage : %s)", szToPackage));
         //ToastUtils.show("SOS Send To WinBoll");
     }
 
