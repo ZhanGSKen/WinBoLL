@@ -18,19 +18,30 @@
             <intent-filter>
 
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
 
-            </intent-filter>
+                // 磁贴响应设置
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+                <category android:name="android.intent.category.DEFAULT" />
 
+            </intent-filter>
         </activity>
+
+        <activity android:name=".GlobalApplication$CrashActivity"/>
+
+        <service
+            android:name=".MyTileService"
+            android:label="@string/tileservice_name"
+            android:icon="@drawable/ic_launcher"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="android.max_aspect"
             android:value="4.0"/>
-
-        <activity android:name=".GlobalApplication$CrashActivity"/>
-
     </application>
 
 </manifest>

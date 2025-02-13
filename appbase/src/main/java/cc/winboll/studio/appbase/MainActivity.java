@@ -9,12 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.libappbase.ISOSAPP;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.SOSCSBroadcastReceiver;
 import cc.winboll.studio.libappbase.SimpleOperateSignalCenterService;
 import com.hjq.toast.ToastUtils;
-import cc.winboll.studio.libappbase.ISOSAPP;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onTestStartWithString(View view) {
         LogUtils.d(TAG, "onTestStartWithString");
-        
+
         // 目标服务的包名和类名
         String packageName = this.getPackageName();
         String serviceClassName = SimpleOperateSignalCenterService.class.getName();
@@ -77,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSOS(View view) {
+        sos2();
+    }
+
+    public void sos() {
         // 创建Intent对象，指定广播的action
         Intent intent = new Intent(SOSCSBroadcastReceiver.ACTION_SOS);
         // 目标服务的包名和类名
@@ -87,5 +91,18 @@ public class MainActivity extends AppCompatActivity {
         // 发送广播
         sendBroadcast(intent);
         LogUtils.d(TAG, "onSOS");
+    }
+
+    public void sos2() {
+        // 创建Intent对象，指定广播的action
+        Intent intent = new Intent(SOSCSBroadcastReceiver.ACTION_SOS);
+        // 目标服务的包名和类名
+        String packageName = this.getPackageName();
+        String serviceClassName = SimpleOperateSignalCenterService.class.getName();
+        intent.putExtra(ISOSAPP.EXTRA_PACKAGE, packageName);
+        intent.putExtra(ISOSAPP.EXTRA_SERVICE, serviceClassName);
+        // 发送广播
+        sendBroadcast(intent);
+        LogUtils.d(TAG, "onSOS2");
     }
 }
