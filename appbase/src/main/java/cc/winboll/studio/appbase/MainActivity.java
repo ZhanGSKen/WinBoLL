@@ -12,6 +12,7 @@ import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.ISOSAPP;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
+import cc.winboll.studio.libappbase.SOS;
 import cc.winboll.studio.libappbase.SOSCSBroadcastReceiver;
 import cc.winboll.studio.libappbase.SimpleOperateSignalCenterService;
 import com.hjq.toast.ToastUtils;
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSOS(View view) {
-        sos2();
+        SOS.sendToWinBoll(this);
     }
 
     public void sos() {
@@ -105,4 +106,6 @@ public class MainActivity extends AppCompatActivity {
         sendBroadcast(intent);
         LogUtils.d(TAG, "onSOS2");
     }
+    
+    
 }

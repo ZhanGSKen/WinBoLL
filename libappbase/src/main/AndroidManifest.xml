@@ -21,7 +21,13 @@
         <service android:name=".SimpleOperateSignalCenterService"/>
 
         <activity android:name=".LogActivity"/>
-
+            
+        <receiver android:name=".receiver.MyBroadcastReceiver">
+            <intent-filter>
+                <action android:name="cc.winboll.studio.libappbase.action.SOS" />
+            </intent-filter>
+        </receiver>
+        
     </application>
 
 </manifest>

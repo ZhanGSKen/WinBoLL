@@ -3,5 +3,5 @@
 
     <string name="lib_name">libappbase</string>
     <string name="hello_world">Hello world!</string>
-    
+    <string name="action_sos">cc.winboll.studio.libappbase.action.SOS</string>
 </resources>
