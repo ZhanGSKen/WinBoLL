@@ -13,17 +13,10 @@ public class SOSService extends Service {
     
     public static final String TAG = "SOSService";
     
-    private final ISOSService.Stub binder = new ISOSService.Stub() {
-        @Override
-        public String getMessage() throws RemoteException {
-            return "Hello from Service";
-        }
-    };
-    
     @Override
     public IBinder onBind(Intent intent) {
         
-        return binder;
+        return null;
     }
     
 }
