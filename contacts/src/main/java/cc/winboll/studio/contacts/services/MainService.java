@@ -8,7 +8,10 @@ import cc.winboll.studio.contacts.beans.MainServiceBean;
 import cc.winboll.studio.libappbase.ISOSAPP;
 import cc.winboll.studio.libappbase.ISOSService;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.SOSCSBroadcastReceiver;
+import cc.winboll.studio.libappbase.SimpleOperateSignalCenterService;
 import com.hjq.toast.ToastUtils;
+import android.content.ComponentName;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
@@ -87,9 +90,10 @@ public class MainService extends Service implements ISOSService {
         LogUtils.d(TAG, "onDestroy");
         mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
         if (mMainServiceBean.isEnable()) {
-            LogUtils.d(TAG, "mSimpleOperateSignalCenterServiceBean.isEnable()");
-            ISOSAPP iSOSAPP = (ISOSAPP)getApplication();
-            iSOSAPP.helpISOSService(getISOSServiceIntentWhichAskForHelp());
+            LogUtils.d(TAG, "mMainServiceBean.isEnable()");
+//            ISOSAPP iSOSAPP = (ISOSAPP)getApplication();
+//            iSOSAPP.helpISOSService(getISOSServiceIntentWhichAskForHelp());
+            sos();
         } 
         if (_MainThread != null) {
             _MainThread.isExist = true;
@@ -111,6 +115,22 @@ public class MainService extends Service implements ISOSService {
         bean.setIsEnable(true);
         MainServiceBean.saveBean(context, bean);
         context.startService(new Intent(context, MainService.class));
+    }
+    
+    public void sos() {
+        // 创建Intent对象，指定广播的action
+        Intent intentService = new Intent(SOSCSBroadcastReceiver.ACTION_SOS);
+        String packageName = this.getPackageName();
+        String serviceClassName = SOSCSBroadcastReceiver.class.getName();
+        intentService.setComponent(new ComponentName(packageName, serviceClassName));
+        
+        // 目标服务的包名和类名
+        intentService.putExtra(ISOSAPP.EXTRA_PACKAGE, getPackageName());
+        intentService.putExtra(ISOSAPP.EXTRA_SERVICE, MainService.class.getName());
+        // 发送广播
+        sendBroadcast(intentService);
+        LogUtils.d(TAG, "sos");
+        ToastUtils.show("sos");
     }
 
     static class MainThread extends Thread {

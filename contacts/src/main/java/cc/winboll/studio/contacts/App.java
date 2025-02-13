@@ -17,7 +17,7 @@ public class App extends GlobalApplication {
     public void onCreate() {
         // 必须在调用基类前设置应用调试标志，
         // 这样可以预先设置日志与数据的存储根目录。
-        //setIsDebug(BuildConfig.DEBUG);
+        setIsDebuging(this, BuildConfig.DEBUG);
         super.onCreate();
         // 设置 WinBoll 应用 UI 类型
         WinBollActivityManager.getInstance(this).setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Aplication);

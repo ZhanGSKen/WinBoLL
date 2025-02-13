@@ -11,8 +11,10 @@ import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.contacts.BuildConfig;
 import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
-import cc.winboll.studio.contacts.services.MainService;
+import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.LogView;
+import cc.winboll.studio.libappbase.SOS;
 import cc.winboll.studio.libapputils.app.AboutActivityFactory;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
@@ -25,7 +27,8 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 
     public static final int REQUEST_HOME_ACTIVITY = 0;
     public static final int REQUEST_ABOUT_ACTIVITY = 1;
-
+    
+    LogView mLogView;
     Toolbar mToolbar;
     CheckBox cbMainService;
     MainServiceBean mMainServiceBean;
@@ -61,7 +64,11 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         // 以下正常创建主窗口
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        mLogView = findViewById(R.id.activitymainLogView1);
 
+        if (GlobalApplication.isDebuging()) { mLogView.start(); }
+        
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
         setSupportActionBar(mToolbar);
@@ -83,12 +90,12 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         cbMainService.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    
-                    if (cbMainService.isChecked()) {
-                        MainService.startISOSService(MainActivity.this);
-                    } else {
-                        MainService.stopISOSService(MainActivity.this);
-                    }
+                    SOS.sendToWinBoll(MainActivity.this);
+//                    if (cbMainService.isChecked()) {
+//                        MainService.startISOSService(MainActivity.this);
+//                    } else {
+//                        MainService.stopISOSService(MainActivity.this);
+//                    }
                 }
             });
     }
