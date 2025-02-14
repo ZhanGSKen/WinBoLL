@@ -8,11 +8,11 @@ import android.widget.CheckBox;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
+import cc.winboll.studio.appbase.services.MainService;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.SOS;
-import cc.winboll.studio.libappbase.SOSCSBroadcastReceiver;
 import cc.winboll.studio.libappbase.SimpleOperateSignalCenterService;
 import com.hjq.toast.ToastUtils;
 
@@ -50,11 +50,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onStartCenter(View view) {
-        SimpleOperateSignalCenterService.startISOSService(this);
+        MainService.startMainService(this);
     }
 
     public void onStopCenter(View view) {
-        SimpleOperateSignalCenterService.stopISOSService(this);
+        MainService.stopMainService(this);
     }
 
     public void onTestStopWithoutSettingEnable(View view) {

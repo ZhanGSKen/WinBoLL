@@ -10,14 +10,20 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.IInterface;
+import android.os.Parcel;
+import android.os.RemoteException;
 import cc.winboll.studio.libappbase.bean.SimpleOperateSignalCenterServiceBean;
+import java.io.FileDescriptor;
 
 public class SimpleOperateSignalCenterService extends Service {
 
     public static final String TAG = "SimpleOperateSignalCenterService";
     public static final String ACTION_ENABLE = SimpleOperateSignalCenterService.class.getName() + ".ACTION_ENABLE";
     public static final String ACTION_DISABLE = SimpleOperateSignalCenterService.class.getName() + ".ACTION_DISABLE";
-
+    
+    private final IBinder binder =(IBinder)new SOSBinder();
+    
     SimpleOperateSignalCenterServiceBean mSimpleOperateSignalCenterServiceBean;
     static MainThread _MainThread;
     public static synchronized MainThread getMainThreadInstance() {
@@ -29,9 +35,59 @@ public class SimpleOperateSignalCenterService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return binder;
     }
+    
+    public class SOSBinder implements IBinder {
 
+        @Override
+        public void dump(FileDescriptor fileDescriptor, String[] string) throws RemoteException {
+        }
+
+        @Override
+        public void dumpAsync(FileDescriptor fileDescriptor, String[] string) throws RemoteException {
+        }
+
+        @Override
+        public String getInterfaceDescriptor() throws RemoteException {
+            return null;
+        }
+
+        @Override
+        public boolean isBinderAlive() {
+            return false;
+        }
+
+        @Override
+        public void linkToDeath(IBinder.DeathRecipient deathRecipient, int p) throws RemoteException {
+        }
+
+        @Override
+        public boolean pingBinder() {
+            return false;
+        }
+
+        @Override
+        public IInterface queryLocalInterface(String string) {
+            return null;
+        }
+
+        @Override
+        public boolean transact(int p, Parcel parcel, Parcel parcel1, int p1) throws RemoteException {
+            return false;
+        }
+
+        @Override
+        public boolean unlinkToDeath(IBinder.DeathRecipient deathRecipient, int p) {
+            return false;
+        }
+        
+        public static final String TAG = "SOSBinder";
+        SimpleOperateSignalCenterService getService() {
+            return SimpleOperateSignalCenterService.this;
+        }
+    }
+    
     @Override
     public void onCreate() {
         super.onCreate();
@@ -93,6 +149,10 @@ public class SimpleOperateSignalCenterService extends Service {
         bean.setIsEnable(true);
         SimpleOperateSignalCenterServiceBean.saveBean(context, bean);
         context.startService(new Intent(context, SimpleOperateSignalCenterService.class));
+    }
+    
+    public String getMessage() {
+        return "Hello from SimpleOperateSignalCenterService";
     }
 
     static class MainThread extends Thread {

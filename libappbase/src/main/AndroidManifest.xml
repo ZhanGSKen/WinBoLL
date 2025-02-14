@@ -22,14 +22,6 @@
             android:exported="true">
         </service>
         
-        <service android:name="cc.winboll.studio.libappbase.SOSService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="cc.winboll.studio.libappbase.SOSService" />
-            </intent-filter>
-        </service>
-        
-
         <activity android:name=".LogActivity"/>
 
         <receiver android:name=".receiver.MyBroadcastReceiver">
