@@ -7,6 +7,7 @@ package cc.winboll.studio.appbase.threads;
 import android.content.Context;
 import cc.winboll.studio.appbase.handlers.MainServiceHandler;
 import cc.winboll.studio.libappbase.LogUtils;
+import com.hjq.toast.ToastUtils;
 import java.lang.ref.WeakReference;
 
 public class MainServiceThread extends Thread {
@@ -38,9 +39,10 @@ public class MainServiceThread extends Thread {
     public void run() {
         LogUtils.d(TAG, "run()");
         while (!isExist()) {
+            //ToastUtils.show("run()");
             //LogUtils.d(TAG, "run()");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
             }

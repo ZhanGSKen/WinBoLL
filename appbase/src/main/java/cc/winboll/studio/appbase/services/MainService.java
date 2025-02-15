@@ -15,6 +15,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Binder;
 import android.os.IBinder;
 import cc.winboll.studio.appbase.beans.MainServiceBean;
 import cc.winboll.studio.appbase.handlers.MainServiceHandler;
@@ -22,8 +23,7 @@ import cc.winboll.studio.appbase.receivers.MainReceiver;
 import cc.winboll.studio.appbase.services.AssistantService;
 import cc.winboll.studio.appbase.threads.MainServiceThread;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.SOS;
-import com.hjq.toast.ToastUtils;
+import cc.winboll.studio.appbase.MyTileService;
 
 public class MainService extends Service {
 
@@ -39,11 +39,13 @@ public class MainService extends Service {
     MainServiceThread mMainServiceThread;
     MainServiceHandler mMainServiceHandler;
     MyServiceConnection mMyServiceConnection;
+    AssistantService mAssistantService;
+    boolean isBound = false;
     MainReceiver mMainReceiver;
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return new MyBinder();
     }
 
     public MainServiceThread getRemindThread() {
@@ -92,6 +94,9 @@ public class MainService extends Service {
                 mMainReceiver.registerAction(this);
             }
             startMainServiceThread();
+
+            MyTileService.updateServiceIconStatus(this);
+            
             LogUtils.i(TAG, "Main Service Is Start.");
         }
     }
@@ -107,8 +112,14 @@ public class MainService extends Service {
 //        }
         Intent intent = new Intent(this, AssistantService.class);
         startService(intent);
-        LogUtils.d(TAG, "startService(intent)");
-        bindService(new Intent(this, AssistantService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
+        // 绑定服务的Intent
+        //Intent intent = new Intent(this, AssistantService.class);
+        bindService(intent, mMyServiceConnection, Context.BIND_IMPORTANT);
+
+//        Intent intent = new Intent(this, AssistantService.class);
+//        startService(intent);
+//        LogUtils.d(TAG, "startService(intent)");
+//        bindService(new Intent(this, AssistantService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
     }
 
     // 开启提醒铃声线程
@@ -144,7 +155,11 @@ public class MainService extends Service {
         mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
         if (mMainServiceBean.isEnable() == false) {
             // 设置运行状态
-            isServiceRunning = false;
+            isServiceRunning = false;// 解除绑定
+            if (isBound) {
+                unbindService(mMyServiceConnection);
+                isBound = false;
+            }
             // 停止守护进程
             Intent intent = new Intent(this, AssistantService.class);
             stopService(intent);
@@ -157,6 +172,9 @@ public class MainService extends Service {
             stopForeground(true);
             // 停止消息提醒进程
             stopRemindThread();
+
+            MyTileService.updateServiceIconStatus(this);
+            
             super.onDestroy();
             //LogUtils.d(TAG, "onDestroy done");
         }
@@ -168,15 +186,31 @@ public class MainService extends Service {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             LogUtils.d(TAG, "onServiceConnected(...)");
+            AssistantService.MyBinder binder = (AssistantService.MyBinder) service;
+            mAssistantService = binder.getService();
+            isBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             LogUtils.d(TAG, "onServiceDisconnected(...)");
+
             if (mMainServiceBean.isEnable()) {
                 // 唤醒守护进程
                 wakeupAndBindAssistant();
             }
+            isBound = false;
+            mAssistantService = null;
+        }
+
+    }
+
+
+    // 用于返回服务实例的Binder
+    public class MyBinder extends Binder {
+        MainService getService() {
+            LogUtils.d(TAG, "MainService MyBinder getService()");
+            return MainService.this;
         }
     }
 

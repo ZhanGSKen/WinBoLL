@@ -15,6 +15,7 @@ import cc.winboll.studio.appbase.beans.MainServiceBean;
 import cc.winboll.studio.appbase.services.AssistantService;
 import cc.winboll.studio.appbase.services.MainService;
 import cc.winboll.studio.libappbase.LogUtils;
+import android.os.Binder;
 
 public class AssistantService extends Service {
 
@@ -22,11 +23,23 @@ public class AssistantService extends Service {
 
     MainServiceBean mMainServiceBean;
     MyServiceConnection mMyServiceConnection;
-    volatile boolean mIsThreadAlive;
+    MainService mMainService;
+    boolean isBound = false;
+    volatile boolean isThreadAlive = false;
+
+    public synchronized void setIsThreadAlive(boolean isThreadAlive) {
+        LogUtils.d(TAG, "setIsThreadAlive(...)");
+        LogUtils.d(TAG, String.format("isThreadAlive %s", isThreadAlive));
+        this.isThreadAlive = isThreadAlive;
+    }
+
+    public boolean isThreadAlive() {
+        return isThreadAlive;
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return new MyBinder();
     }
 
     @Override
@@ -39,7 +52,7 @@ public class AssistantService extends Service {
             mMyServiceConnection = new MyServiceConnection();
         }
         // 设置运行参数
-        mIsThreadAlive = false;
+        setIsThreadAlive(false);
         assistantService();
     }
 
@@ -53,7 +66,12 @@ public class AssistantService extends Service {
     @Override
     public void onDestroy() {
         //LogUtils.d(TAG, "onDestroy");
-        mIsThreadAlive = false;
+        setIsThreadAlive(false);
+        // 解除绑定
+        if (isBound) {
+            unbindService(mMyServiceConnection);
+            isBound = false;
+        }
         super.onDestroy();
     }
 
@@ -62,10 +80,12 @@ public class AssistantService extends Service {
     void assistantService() {
         LogUtils.d(TAG, "assistantService()");
         mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
+        LogUtils.d(TAG, String.format("mMainServiceBean.isEnable() %s", mMainServiceBean.isEnable()));
         if (mMainServiceBean.isEnable()) {
-            if (mIsThreadAlive == false) {
+            LogUtils.d(TAG, String.format("mIsThreadAlive %s", isThreadAlive()));
+            if (isThreadAlive() == false) {
                 // 设置运行状态
-                mIsThreadAlive = true;
+                setIsThreadAlive(true);
                 // 唤醒和绑定主进程
                 wakeupAndBindMain();
             }
@@ -76,8 +96,13 @@ public class AssistantService extends Service {
     //
     void wakeupAndBindMain() {
         LogUtils.d(TAG, "wakeupAndBindMain()");
+        // 绑定服务的Intent
+        Intent intent = new Intent(this, MainService.class);
         startService(new Intent(this, MainService.class));
-        bindService(new Intent(AssistantService.this, MainService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
+        bindService(intent, mMyServiceConnection, Context.BIND_IMPORTANT);
+    
+//        startService(new Intent(this, MainService.class));
+//        bindService(new Intent(AssistantService.this, MainService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
     }
 
     // 主进程与守护进程连接时需要用到此类
@@ -86,6 +111,9 @@ public class AssistantService extends Service {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             LogUtils.d(TAG, "onServiceConnected(...)");
+            MainService.MyBinder binder = (MainService.MyBinder) service;
+            mMainService = binder.getService();
+            isBound = true;
         }
 
         @Override
@@ -95,6 +123,16 @@ public class AssistantService extends Service {
             if (mMainServiceBean.isEnable()) {
                 wakeupAndBindMain();
             }
+            isBound = false;
+            mMainService = null;
+        }
+    }
+    
+    // 用于返回服务实例的Binder
+    public class MyBinder extends Binder {
+        AssistantService getService() {
+            LogUtils.d(TAG, "AssistantService MyBinder getService()");
+            return AssistantService.this;
         }
     }
 }
