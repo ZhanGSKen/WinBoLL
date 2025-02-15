@@ -13,8 +13,8 @@ public class SOS {
 
     public static final String TAG = "SOS";
 
-    public static void sendToWinBoll(Context context) {
-        Intent intent = new Intent(context.getString(R.string.action_sos));
+    public static void sosToWinBoll(Context context) {
+        Intent intent = new Intent(WinBoll.ACTION_SOS);
         intent.putExtra("sosPackage", context.getPackageName());
         intent.putExtra("message", "SOS");
         String szToPackage = "";

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSOS(View view) {
-        SOS.sendToWinBoll(this);
+        SOS.sosToWinBoll(this);
     }
 
 //    public void sos() {
