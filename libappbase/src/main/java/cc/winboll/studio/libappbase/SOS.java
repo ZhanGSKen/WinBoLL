@@ -7,7 +7,6 @@ package cc.winboll.studio.libappbase;
  */
 import android.content.Context;
 import android.content.Intent;
-import com.hjq.toast.ToastUtils;
 
 public class SOS {
 
