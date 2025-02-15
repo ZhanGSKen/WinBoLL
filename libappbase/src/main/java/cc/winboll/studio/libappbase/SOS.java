@@ -11,11 +11,14 @@ import android.content.Intent;
 public class SOS {
 
     public static final String TAG = "SOS";
-
-    public static void sosToWinBoll(Context context) {
-        Intent intent = new Intent(WinBoll.ACTION_SOS);
+    public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
+    
+    public static void sosWinBollService(Context context, Class<?> clazz) {
+        Intent intent = new Intent(ACTION_SOS);
+        intent.putExtra("sos", "SOS");
         intent.putExtra("sosPackage", context.getPackageName());
-        intent.putExtra("message", "SOS");
+        intent.putExtra("sosCalssType", "Service");
+        intent.putExtra("sosClassName", clazz.getName());
         String szToPackage = "";
         if (GlobalApplication.isDebuging()) {
             szToPackage = "cc.winboll.studio.appbase.beta";
@@ -24,7 +27,7 @@ public class SOS {
         }
         intent.setPackage(szToPackage);
         context.sendBroadcast(intent);
-        
+
         LogUtils.d(TAG, String.format("SOS Send To WinBoll. (szToPackage : %s)", szToPackage));
         //ToastUtils.show("SOS Send To WinBoll");
     }

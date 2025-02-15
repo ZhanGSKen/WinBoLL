@@ -93,6 +93,10 @@ public class SimpleOperateSignalCenterService extends Service {
         super.onCreate();
         LogUtils.d(TAG, "onCreate");
         mSimpleOperateSignalCenterServiceBean = SimpleOperateSignalCenterServiceBean.loadBean(this, SimpleOperateSignalCenterServiceBean.class);
+        if(mSimpleOperateSignalCenterServiceBean == null) {
+            mSimpleOperateSignalCenterServiceBean = new SimpleOperateSignalCenterServiceBean();
+            SimpleOperateSignalCenterServiceBean.saveBean(this, mSimpleOperateSignalCenterServiceBean);
+        }
         runMainThread();
     }
 

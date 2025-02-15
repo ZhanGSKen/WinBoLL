@@ -1,4 +1,4 @@
-package cc.winboll.studio.appbase.widgets;
+package cc.winboll.studio.libappbase.widgets;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
@@ -12,10 +12,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.Toast;
-import cc.winboll.studio.appbase.R;
+import cc.winboll.studio.libappbase.R;
 
 public class WidgetButtonClickListener extends BroadcastReceiver {
-    
+
     public static final String TAG = "WidgetButtonClickListener";
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -31,4 +31,3 @@ public class WidgetButtonClickListener extends BroadcastReceiver {
         Toast.makeText(context, "按钮被点击", Toast.LENGTH_SHORT).show();
     }
 }
-

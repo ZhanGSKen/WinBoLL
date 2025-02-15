@@ -9,11 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.appbase.services.MainService;
+import cc.winboll.studio.appbase.services.TestService;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.SOS;
 import cc.winboll.studio.libappbase.SimpleOperateSignalCenterService;
+import cc.winboll.studio.libappbase.widgets.TimeWidget;
 import com.hjq.toast.ToastUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -77,7 +79,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSOS(View view) {
-        SOS.sosToWinBoll(this);
+        Intent intent = new Intent(this, TestService.class);
+        stopService(intent);
+        SOS.sosWinBollService(this, TestService.class);
+
+//        Intent intentTimeWidget = new Intent(this, TimeWidget.class);
+//        intentTimeWidget.setAction(TimeWidget.UPDATE_TIME_ACTION);
+//        intentTimeWidget.putExtra("appName", "TestName");
+//        sendBroadcast(intentTimeWidget);
+//        
     }
 
 //    public void sos() {
@@ -105,6 +115,6 @@ public class MainActivity extends AppCompatActivity {
 //        sendBroadcast(intent);
 //        LogUtils.d(TAG, "onSOS2");
 //    }
-    
-    
+
+
 }

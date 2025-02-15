@@ -60,30 +60,13 @@
             </intent-filter>
 
         </receiver>
-        <receiver android:name=".widgets.TimeWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.example.android.UPDATE_TIME" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_provider_info" />
-        </receiver>
-        
-        <receiver android:name=".TimeWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.example.android.UPDATE_TIME" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_provider_info" />
-        </receiver>
-        
+
         <meta-data
             android:name="android.max_aspect"
             android:value="4.0"/>
 
+        <service android:name="cc.winboll.studio.appbase.services.TestService"
+            android:exported="true"/>
 
     </application>
 

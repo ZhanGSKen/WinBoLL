@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.WinBoll;
+import cc.winboll.studio.libappbase.AppUtils;
+import cc.winboll.studio.libappbase.widgets.TimeWidget;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
@@ -39,6 +41,14 @@ public class WinBollReceiver extends BroadcastReceiver {
                     intentService.setComponent(new ComponentName(sosPackage, sosClassName));
                     context.startService(intentService);
                     LogUtils.d(TAG, String.format("context.startService(intentService);"));
+                    
+                    String appName = AppUtils.getAppNameByPackageName(context, sosPackage);
+                    LogUtils.d(TAG, String.format("appName %s", appName));
+                    Intent intentTimeWidget = new Intent(context, TimeWidget.class);
+                    intentTimeWidget.setAction(TimeWidget.UPDATE_TIME_ACTION);
+                    intentTimeWidget.putExtra("appName", appName);
+                    context.sendBroadcast(intentTimeWidget);
+                    
                 }  
             }
 
