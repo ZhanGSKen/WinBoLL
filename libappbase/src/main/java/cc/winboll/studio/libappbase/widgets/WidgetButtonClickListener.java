@@ -5,29 +5,32 @@ package cc.winboll.studio.libappbase.widgets;
  * @Date 2025/02/15 17:20:46
  * @Describe WidgetButtonClickListener
  */
-import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.RemoteViews;
-import android.widget.Toast;
-import cc.winboll.studio.libappbase.R;
+import cc.winboll.studio.libappbase.LogUtils;
 
 public class WidgetButtonClickListener extends BroadcastReceiver {
 
     public static final String TAG = "WidgetButtonClickListener";
+    public static final String ACTION_PRE = "cc.winboll.studio.libappbase.widgets.WidgetButtonClickListener.ACTION_PRE";
+    public static final String ACTION_NEXT = "cc.winboll.studio.libappbase.widgets.WidgetButtonClickListener.ACTION_NEXT";
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, TimeWidget.class));
-
-        for (int appWidgetId : appWidgetIds) {
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-            views.setTextViewText(R.id.timeTextView, "文本已更新");
-            appWidgetManager.updateAppWidget(appWidgetId, views);
+        String action = intent.getAction();
+        if (action == null) {
+            LogUtils.d(TAG, String.format("action %s", action));
+            return;
         }
-
-        Toast.makeText(context, "按钮被点击", Toast.LENGTH_SHORT).show();
+        if (action.equals(ACTION_PRE)) {
+            LogUtils.d(TAG, "ACTION_PRE");
+            APPSOSReportWidget.prePage(context);
+        } else if (action.equals(ACTION_NEXT)) {
+            LogUtils.d(TAG, "ACTION_NEXT");
+            APPSOSReportWidget.nextPage(context);
+        } else {
+            LogUtils.d(TAG, String.format("action %s", action));
+        }
     }
 }

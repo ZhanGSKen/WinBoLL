@@ -15,7 +15,7 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.SOS;
 import cc.winboll.studio.libappbase.SimpleOperateSignalCenterService;
-import cc.winboll.studio.libappbase.widgets.TimeWidget;
+import cc.winboll.studio.libappbase.widgets.APPSOSReportWidget;
 import com.hjq.toast.ToastUtils;
 
 public class MainActivity extends AppCompatActivity {

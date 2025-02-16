@@ -7,7 +7,7 @@ import android.content.Intent;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.WinBoll;
 import cc.winboll.studio.libappbase.AppUtils;
-import cc.winboll.studio.libappbase.widgets.TimeWidget;
+import cc.winboll.studio.libappbase.widgets.APPSOSReportWidget;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
@@ -44,10 +44,10 @@ public class WinBollReceiver extends BroadcastReceiver {
                     
                     String appName = AppUtils.getAppNameByPackageName(context, sosPackage);
                     LogUtils.d(TAG, String.format("appName %s", appName));
-                    Intent intentTimeWidget = new Intent(context, TimeWidget.class);
-                    intentTimeWidget.setAction(TimeWidget.UPDATE_TIME_ACTION);
-                    intentTimeWidget.putExtra("appName", appName);
-                    context.sendBroadcast(intentTimeWidget);
+                    Intent intentAPPSOSReportWidget = new Intent(context, APPSOSReportWidget.class);
+                    intentAPPSOSReportWidget.setAction(APPSOSReportWidget.ACTION_ADD_SOS_REPORT);
+                    intentAPPSOSReportWidget.putExtra("appName", appName);
+                    context.sendBroadcast(intentAPPSOSReportWidget);
                     
                 }  
             }

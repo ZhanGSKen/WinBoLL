@@ -41,17 +41,22 @@
 
         </receiver>
         
-        <receiver android:name=".widgets.TimeWidget"
+        <receiver android:name=".widgets.APPSOSReportWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.example.android.UPDATE_TIME" />
+                <action android:name="cc.winboll.studio.libappbase.widgets.APPSOSReportWidget.ACTION_ADD_SOS_REPORT" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget_provider_info" />
         </receiver>
-        
+        <receiver android:name=".widgets.WidgetButtonClickListener">
+            <intent-filter>
+                <action android:name="cc.winboll.studio.libappbase.widgets.WidgetButtonClickListener.ACTION_PRE" />
+                <action android:name="cc.winboll.studio.libappbase.widgets.WidgetButtonClickListener.ACTION_NEXT" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

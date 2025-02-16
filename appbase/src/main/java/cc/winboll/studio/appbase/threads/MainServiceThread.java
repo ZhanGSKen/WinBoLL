@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import cc.winboll.studio.appbase.handlers.MainServiceHandler;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.widgets.TimeWidget;
+import cc.winboll.studio.libappbase.widgets.APPSOSReportWidget;
 import java.lang.ref.WeakReference;
 
 public class MainServiceThread extends Thread {
@@ -43,8 +43,8 @@ public class MainServiceThread extends Thread {
         while (!isExist()) {
             //ToastUtils.show("run()");
             LogUtils.d(TAG, "run()");
-            Intent intentTimeWidget = new Intent(mContext, TimeWidget.class);
-            intentTimeWidget.setAction(TimeWidget.UPDATE_TIME_ACTION);
+            Intent intentTimeWidget = new Intent(mContext, APPSOSReportWidget.class);
+            intentTimeWidget.setAction(APPSOSReportWidget.ACTION_ADD_SOS_REPORT);
             intentTimeWidget.putExtra("appName", "TestName");
             mContext.sendBroadcast(intentTimeWidget);
 
