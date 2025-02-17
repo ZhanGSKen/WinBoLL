@@ -17,13 +17,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
+import cc.winboll.studio.appbase.MyTileService;
 import cc.winboll.studio.appbase.beans.MainServiceBean;
 import cc.winboll.studio.appbase.handlers.MainServiceHandler;
 import cc.winboll.studio.appbase.receivers.MainReceiver;
 import cc.winboll.studio.appbase.services.AssistantService;
 import cc.winboll.studio.appbase.threads.MainServiceThread;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.appbase.MyTileService;
+import cc.winboll.studio.libappbase.widgets.APPSOSReportWidget;
 
 public class MainService extends Service {
 
@@ -93,6 +94,12 @@ public class MainService extends Service {
                 mMainReceiver = new MainReceiver(this);
                 mMainReceiver.registerAction(this);
             }
+            
+            // 启动小部件
+            Intent intentTimeWidget = new Intent(this, APPSOSReportWidget.class);
+            intentTimeWidget.setAction(APPSOSReportWidget.ACTION_RELOAD_SOS_REPORT);
+            this.sendBroadcast(intentTimeWidget);
+            
             startMainServiceThread();
 
             MyTileService.updateServiceIconStatus(this);

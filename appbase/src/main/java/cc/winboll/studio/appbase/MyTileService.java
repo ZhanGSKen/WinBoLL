@@ -42,19 +42,22 @@ public class MyTileService extends TileService {
     @Override
     public void onClick() {
         super.onClick();
+        Tile tile = getQsTile();
         MainServiceBean bean = MainServiceBean.loadBean(this, MainServiceBean.class);
         if (bean == null) {
             bean = new MainServiceBean();
+        }
+
+        if (tile.getState() == Tile.STATE_ACTIVE) {
+            bean.setIsEnable(false);
+            MainServiceBean.saveBean(this, bean);
+            MainService.stopMainService(this);
+        } else if (tile.getState() == Tile.STATE_INACTIVE) {
             bean.setIsEnable(true);
             MainServiceBean.saveBean(this, bean);
             MainService.startMainService(this);
-        } else {
-            if (bean.isEnable()) {
-                MainService.stopMainService(this);
-            } else {
-                MainService.startMainService(this);
-            }
         }
+        updateServiceIconStatus(this);
     }
 
     public static void updateServiceIconStatus(Context context) {
