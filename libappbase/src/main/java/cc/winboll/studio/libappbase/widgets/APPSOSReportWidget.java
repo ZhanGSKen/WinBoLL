@@ -47,18 +47,20 @@ public class APPSOSReportWidget extends AppWidgetProvider {
             LogUtils.d(TAG, "ACTION_ADD_SOS_REPORT");
             String szAPPSOSReportBean = intent.getStringExtra("APPSOSReportBean");
             LogUtils.d(TAG, String.format("szAPPSOSBean %s", szAPPSOSReportBean));
-            try {
-                APPSOSReportBean bean = APPSOSReportBean.parseStringToBean(szAPPSOSReportBean, APPSOSReportBean.class);
-                if (bean != null) {
-                    addAPPSOSReportBean(context, bean);
-                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-                    int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, APPSOSReportWidget.class));
-                    for (int appWidgetId : appWidgetIds) {
-                        updateAppWidget(context, appWidgetManager, appWidgetId);
+            if (szAPPSOSReportBean != null && !szAPPSOSReportBean.equals("")) {
+                try {
+                    APPSOSReportBean bean = APPSOSReportBean.parseStringToBean(szAPPSOSReportBean, APPSOSReportBean.class);
+                    if (bean != null) {
+                        addAPPSOSReportBean(context, bean);
+                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, APPSOSReportWidget.class));
+                        for (int appWidgetId : appWidgetIds) {
+                            updateAppWidget(context, appWidgetManager, appWidgetId);
+                        }
                     }
+                } catch (IOException e) {
+                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
                 }
-            } catch (IOException e) {
-                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
             }
         } else if (intent.getAction().equals(ACTION_RELOAD_SOS_REPORT)) {
             LogUtils.d(TAG, "ACTION_RELOAD_SOS_REPORT");
@@ -83,7 +85,7 @@ public class APPSOSReportWidget extends AppWidgetProvider {
         }
         APPSOSReportBean.saveBeanList(context, _APPSOSReportBeanList, APPSOSReportBean.class);
     }
-    
+
     void initAPPSOSReportBeanList(Context context) {
         if (_APPSOSReportBeanList == null) {
             _APPSOSReportBeanList = new ArrayList<APPSOSReportBean>();
@@ -97,7 +99,7 @@ public class APPSOSReportWidget extends AppWidgetProvider {
 
     private void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         LogUtils.d(TAG, "updateAppWidget(...)");
-        
+
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         //设置按钮点击事件
         Intent intentPre = new Intent(context, WidgetButtonClickListener.class);

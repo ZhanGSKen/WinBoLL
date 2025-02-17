@@ -35,7 +35,7 @@ public class WinBollReceiver extends BroadcastReceiver {
             if (SOS != null && SOS.equals("Service")) {
                 String szAPPSOSBean = intent.getStringExtra("APPSOSBean");
                 LogUtils.d(TAG, String.format("szAPPSOSBean %s", szAPPSOSBean));
-                if (szAPPSOSBean != null) {
+                if (szAPPSOSBean != null && !szAPPSOSBean.equals("")) {
                     try {
                         APPSOSBean bean = APPSOSBean.parseStringToBean(szAPPSOSBean, APPSOSBean.class);
                         if (bean != null) {
