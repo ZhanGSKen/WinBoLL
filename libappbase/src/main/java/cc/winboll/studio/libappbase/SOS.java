@@ -7,18 +7,17 @@ package cc.winboll.studio.libappbase;
  */
 import android.content.Context;
 import android.content.Intent;
+import cc.winboll.studio.libappbase.bean.APPSOSBean;
 
 public class SOS {
 
     public static final String TAG = "SOS";
     public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
     
-    public static void sosWinBollService(Context context, Class<?> clazz) {
+    public static void sosWinBollService(Context context, APPSOSBean bean) {
         Intent intent = new Intent(ACTION_SOS);
-        intent.putExtra("sos", "SOS");
-        intent.putExtra("sosPackage", context.getPackageName());
-        intent.putExtra("sosCalssType", "Service");
-        intent.putExtra("sosClassName", clazz.getName());
+        intent.putExtra("SOS", "Service");
+        intent.putExtra("APPSOSBean", bean.toString());
         String szToPackage = "";
         if (GlobalApplication.isDebuging()) {
             szToPackage = "cc.winboll.studio.appbase.beta";

@@ -17,6 +17,7 @@ import cc.winboll.studio.libappbase.SOS;
 import cc.winboll.studio.libappbase.SimpleOperateSignalCenterService;
 import cc.winboll.studio.libappbase.widgets.APPSOSReportWidget;
 import com.hjq.toast.ToastUtils;
+import cc.winboll.studio.libappbase.bean.APPSOSBean;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSOS(View view) {
         Intent intent = new Intent(this, TestService.class);
         stopService(intent);
-        SOS.sosWinBollService(this, TestService.class);
+        SOS.sosWinBollService(this, new APPSOSBean(getPackageName(), TestService.class.getName()));
 
 //        Intent intentTimeWidget = new Intent(this, TimeWidget.class);
 //        intentTimeWidget.setAction(TimeWidget.UPDATE_TIME_ACTION);

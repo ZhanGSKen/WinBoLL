@@ -8,6 +8,11 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.WinBoll;
 import cc.winboll.studio.libappbase.AppUtils;
 import cc.winboll.studio.libappbase.widgets.APPSOSReportWidget;
+import cc.winboll.studio.libappbase.bean.APPSOSBean;
+import java.io.IOException;
+import cc.winboll.studio.libappbase.bean.APPSOSReportBean;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
@@ -25,31 +30,45 @@ public class WinBollReceiver extends BroadcastReceiver {
         if (action.equals(WinBoll.ACTION_SOS)) {
             LogUtils.d(TAG, String.format("context.getPackageName() %s", context.getPackageName()));
             LogUtils.d(TAG, String.format("action %s", action));
-            String sos = intent.getStringExtra("sos");
-            LogUtils.d(TAG, String.format("sos %s", sos));
-            if (sos != null && sos.equals("SOS")) {
-                String sosCalssType = intent.getStringExtra("sosCalssType");
-                LogUtils.d(TAG, String.format("sosCalssType %s", sosCalssType));
-                if (sosCalssType != null && sosCalssType.equals("Service")) {
-                    String sosPackage = intent.getStringExtra("sosPackage");
-                    LogUtils.d(TAG, String.format("sosPackage %s", sosPackage));
+            String SOS = intent.getStringExtra("SOS");
+            LogUtils.d(TAG, String.format("SOS %s", SOS));
+            if (SOS != null && SOS.equals("Service")) {
+                String szAPPSOSBean = intent.getStringExtra("APPSOSBean");
+                LogUtils.d(TAG, String.format("szAPPSOSBean %s", szAPPSOSBean));
+                if (szAPPSOSBean != null) {
+                    try {
+                        APPSOSBean bean = APPSOSBean.parseStringToBean(szAPPSOSBean, APPSOSBean.class);
+                        if (bean != null) {
+                            String sosPackage = bean.getSosPackage();
+                            LogUtils.d(TAG, String.format("sosPackage %s", sosPackage));
+                            String sosClassName = bean.getSosClassName();
+                            LogUtils.d(TAG, String.format("sosClassName %s", sosClassName));
 
-                    String sosClassName = intent.getStringExtra("sosClassName");
-                    LogUtils.d(TAG, String.format("sosClassName %s", sosClassName));
+                            Intent intentService = new Intent();
+                            intentService.setComponent(new ComponentName(sosPackage, sosClassName));
+                            context.startService(intentService);
 
-                    Intent intentService = new Intent();
-                    intentService.setComponent(new ComponentName(sosPackage, sosClassName));
-                    context.startService(intentService);
-                    LogUtils.d(TAG, String.format("context.startService(intentService);"));
-                    
-                    String appName = AppUtils.getAppNameByPackageName(context, sosPackage);
-                    LogUtils.d(TAG, String.format("appName %s", appName));
-                    Intent intentAPPSOSReportWidget = new Intent(context, APPSOSReportWidget.class);
-                    intentAPPSOSReportWidget.setAction(APPSOSReportWidget.ACTION_ADD_SOS_REPORT);
-                    intentAPPSOSReportWidget.putExtra("appName", appName);
-                    context.sendBroadcast(intentAPPSOSReportWidget);
-                    
-                }  
+                            String appName = AppUtils.getAppNameByPackageName(context, sosPackage);
+                            LogUtils.d(TAG, String.format("appName %s", appName));
+                            APPSOSReportBean appSOSReportBean = new APPSOSReportBean(appName);
+                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                            String currentTime = sdf.format(new Date());
+                            StringBuilder sbLine = new StringBuilder();
+                            sbLine.append("[");
+                            sbLine.append(currentTime);
+                            sbLine.append("] Power to ");
+                            sbLine.append(appName);
+                            appSOSReportBean.setSosReport(sbLine.toString());
+
+                            Intent intentAPPSOSReportWidget = new Intent(context, APPSOSReportWidget.class);
+                            intentAPPSOSReportWidget.setAction(APPSOSReportWidget.ACTION_ADD_SOS_REPORT);
+                            intentAPPSOSReportWidget.putExtra("APPSOSReportBean", appSOSReportBean.toString());
+                            context.sendBroadcast(intentAPPSOSReportWidget);
+                        }
+                    } catch (IOException e) {
+                        LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+                    }
+                }
             }
 
         } else {

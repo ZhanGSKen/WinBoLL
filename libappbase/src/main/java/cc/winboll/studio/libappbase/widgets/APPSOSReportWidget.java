@@ -16,6 +16,8 @@ import cc.winboll.studio.libappbase.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import cc.winboll.studio.libappbase.bean.APPSOSReportBean;
+import java.io.IOException;
 
 public class APPSOSReportWidget extends AppWidgetProvider {
 
@@ -24,45 +26,78 @@ public class APPSOSReportWidget extends AppWidgetProvider {
     public static final String ACTION_ADD_SOS_REPORT = "cc.winboll.studio.libappbase.widgets.APPSOSReportWidget.ACTION_ADD_SOS_REPORT";
     public static final String ACTION_RELOAD_SOS_REPORT = "cc.winboll.studio.libappbase.widgets.APPSOSReportWidget.ACTION_RELOAD_SOS_REPORT";
 
-    volatile static ArrayList<String> _Message;
+    volatile static ArrayList<APPSOSReportBean> _APPSOSReportBeanList;
     final static int _MAX_PAGES = 10;
     final static int _OnePageLinesCount = 5;
     volatile static int _CurrentPageIndex = 0;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        initAPPSOSReportBeanList(context);
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId, "");
+            updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+        initAPPSOSReportBeanList(context);
         if (intent.getAction().equals(ACTION_ADD_SOS_REPORT)) {
             LogUtils.d(TAG, "ACTION_ADD_SOS_REPORT");
-            String sosAppName = intent.getStringExtra("appName");
-            LogUtils.d(TAG, String.format("sosAppName %s", sosAppName));
-
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, APPSOSReportWidget.class));
-            for (int appWidgetId : appWidgetIds) {
-                updateAppWidget(context, appWidgetManager, appWidgetId, sosAppName);
+            String szAPPSOSReportBean = intent.getStringExtra("APPSOSReportBean");
+            LogUtils.d(TAG, String.format("szAPPSOSBean %s", szAPPSOSReportBean));
+            try {
+                APPSOSReportBean bean = APPSOSReportBean.parseStringToBean(szAPPSOSReportBean, APPSOSReportBean.class);
+                if (bean != null) {
+                    addAPPSOSReportBean(context, bean);
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                    int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, APPSOSReportWidget.class));
+                    for (int appWidgetId : appWidgetIds) {
+                        updateAppWidget(context, appWidgetManager, appWidgetId);
+                    }
+                }
+            } catch (IOException e) {
+                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
             }
         } else if (intent.getAction().equals(ACTION_RELOAD_SOS_REPORT)) {
             LogUtils.d(TAG, "ACTION_RELOAD_SOS_REPORT");
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, APPSOSReportWidget.class));
             for (int appWidgetId : appWidgetIds) {
-                updateAppWidget(context, appWidgetManager, appWidgetId, "");
+                updateAppWidget(context, appWidgetManager, appWidgetId);
             }
         }
 
     }
 
-    private void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId, String sosAppName) {
-        LogUtils.d(TAG, "updateAppWidget(...)");
+    //
+    // 加入新报告信息
+    //
+    void addAPPSOSReportBean(Context context, APPSOSReportBean bean) {
+        initAPPSOSReportBeanList(context);
+        _APPSOSReportBeanList.add(0, bean);
+        // 控制记录总数
+        while (_APPSOSReportBeanList.size() > _MAX_PAGES * _OnePageLinesCount) {
+            _APPSOSReportBeanList.remove(_APPSOSReportBeanList.size() - 1);
+        }
+        APPSOSReportBean.saveBeanList(context, _APPSOSReportBeanList, APPSOSReportBean.class);
+    }
+    
+    void initAPPSOSReportBeanList(Context context) {
+        if (_APPSOSReportBeanList == null) {
+            _APPSOSReportBeanList = new ArrayList<APPSOSReportBean>();
+            APPSOSReportBean.loadBeanList(context, _APPSOSReportBeanList, APPSOSReportBean.class);
+        }
+        if (_APPSOSReportBeanList == null) {
+            _APPSOSReportBeanList = new ArrayList<APPSOSReportBean>();
+            APPSOSReportBean.saveBeanList(context, _APPSOSReportBeanList, APPSOSReportBean.class);
+        }
+    }
 
+    private void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+        LogUtils.d(TAG, "updateAppWidget(...)");
+        
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         //设置按钮点击事件
         Intent intentPre = new Intent(context, WidgetButtonClickListener.class);
@@ -74,24 +109,6 @@ public class APPSOSReportWidget extends AppWidgetProvider {
         PendingIntent pendingIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_button_next, pendingIntentNext);
 
-        // 加入新消息
-        if (sosAppName != null && !sosAppName.equals("")) {
-            if (_Message == null) {
-                _Message = new ArrayList<String>();
-            }
-            // 获取当前时间并设置到TextView
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-            String currentTime = sdf.format(new Date());
-            StringBuilder sbLine = new StringBuilder();
-            sbLine.append("[");
-            sbLine.append(currentTime);
-            sbLine.append("] Power to ");
-            sbLine.append(sosAppName);
-            _Message.add(0, sbLine.toString());
-            while (_Message.size() > _MAX_PAGES * _OnePageLinesCount) { // 控制显示在6行
-                _Message.remove(_Message.size() - 1);
-            }
-        }
         views.setTextViewText(R.id.infoTextView, getPageInfo());
         views.setTextViewText(R.id.sosReportTextView, getMessage());
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -99,11 +116,11 @@ public class APPSOSReportWidget extends AppWidgetProvider {
 
     public static String getMessage() {
         ArrayList<String> msgTemp = new ArrayList<String>();
-        if (_Message != null) {
+        if (_APPSOSReportBeanList != null) {
             int start = _OnePageLinesCount * _CurrentPageIndex;
-            start = _Message.size() > start ? start : _Message.size() - 1;
-            for (int i = start, j = 0; i < _Message.size() && j < _OnePageLinesCount; i++, j++) {
-                msgTemp.add(_Message.get(i));
+            start = _APPSOSReportBeanList.size() > start ? start : _APPSOSReportBeanList.size() - 1;
+            for (int i = start, j = 0; i < _APPSOSReportBeanList.size() && j < _OnePageLinesCount; i++, j++) {
+                msgTemp.add(_APPSOSReportBeanList.get(i).getSosReport());
             }
             String message = String.join("\n", msgTemp);
             return message;
@@ -112,7 +129,7 @@ public class APPSOSReportWidget extends AppWidgetProvider {
     }
 
     public static void prePage(Context context) {
-        if (_Message != null) {
+        if (_APPSOSReportBeanList != null) {
             if (_CurrentPageIndex > 0) {
                 _CurrentPageIndex = _CurrentPageIndex - 1;
             }
@@ -123,8 +140,8 @@ public class APPSOSReportWidget extends AppWidgetProvider {
     }
 
     public static void nextPage(Context context) {
-        if (_Message != null) {
-            if ((_CurrentPageIndex + 1) * _OnePageLinesCount < _Message.size()) {
+        if (_APPSOSReportBeanList != null) {
+            if ((_CurrentPageIndex + 1) * _OnePageLinesCount < _APPSOSReportBeanList.size()) {
                 _CurrentPageIndex = _CurrentPageIndex + 1;
             }
             Intent intentAPPSOSReportWidget = new Intent(context, APPSOSReportWidget.class);
@@ -134,11 +151,11 @@ public class APPSOSReportWidget extends AppWidgetProvider {
     }
 
     String getPageInfo() {
-        if (_Message == null) {
+        if (_APPSOSReportBeanList == null) {
             return "0/0";
         }
-        int leftCount = _Message.size() % _OnePageLinesCount;
-        int currentPageCount = _Message.size() / _OnePageLinesCount + (leftCount == 0 ?0: 1);
+        int leftCount = _APPSOSReportBeanList.size() % _OnePageLinesCount;
+        int currentPageCount = _APPSOSReportBeanList.size() / _OnePageLinesCount + (leftCount == 0 ?0: 1);
         return String.format("%d/%d", _CurrentPageIndex + 1, currentPageCount);
     }
 }

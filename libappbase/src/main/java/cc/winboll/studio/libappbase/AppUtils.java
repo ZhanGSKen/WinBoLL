@@ -11,15 +11,17 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 
 public class AppUtils {
+    
     public static final String TAG = "AppUtils";
+    
     public static String getAppNameByPackageName(Context context, String packageName) {
         PackageManager packageManager = context.getPackageManager();
         try {
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
             return (String) packageManager.getApplicationLabel(applicationInfo);
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
-            return null;
+            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+            return "";
         }
     }
 }
