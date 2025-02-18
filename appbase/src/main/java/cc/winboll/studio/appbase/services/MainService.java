@@ -24,7 +24,7 @@ import cc.winboll.studio.appbase.receivers.MainReceiver;
 import cc.winboll.studio.appbase.services.AssistantService;
 import cc.winboll.studio.appbase.threads.MainServiceThread;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.widgets.APPSOSReportWidget;
+import cc.winboll.studio.appbase.widgets.SOSWidget;
 
 public class MainService extends Service {
 
@@ -96,8 +96,8 @@ public class MainService extends Service {
             }
             
             // 启动小部件
-            Intent intentTimeWidget = new Intent(this, APPSOSReportWidget.class);
-            intentTimeWidget.setAction(APPSOSReportWidget.ACTION_RELOAD_SOS_REPORT);
+            Intent intentTimeWidget = new Intent(this, SOSWidget.class);
+            intentTimeWidget.setAction(SOSWidget.ACTION_RELOAD_REPORT);
             this.sendBroadcast(intentTimeWidget);
             
             startMainServiceThread();

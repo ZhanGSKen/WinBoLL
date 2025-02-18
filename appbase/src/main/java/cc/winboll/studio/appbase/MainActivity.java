@@ -9,15 +9,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.appbase.services.MainService;
-import cc.winboll.studio.appbase.services.TestService;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.SOS;
 import cc.winboll.studio.libappbase.SimpleOperateSignalCenterService;
-import cc.winboll.studio.libappbase.widgets.APPSOSReportWidget;
-import com.hjq.toast.ToastUtils;
 import cc.winboll.studio.libappbase.bean.APPSOSBean;
+import cc.winboll.studio.libappbase.services.TestService;
+import cc.winboll.studio.libappbase.widgets.StatusWidget;
+import com.hjq.toast.ToastUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
         mLogView = findViewById(R.id.activitymainLogView1);
 
         if (GlobalApplication.isDebuging()) { mLogView.start(); }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent intentAPPWidget = new Intent(this, StatusWidget.class);
+        intentAPPWidget.setAction(StatusWidget.ACTION_STATUS_UPDATE);
+        sendBroadcast(intentAPPWidget);
     }
 
     @Override
@@ -83,39 +91,23 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, TestService.class);
         stopService(intent);
         SOS.sosWinBollService(this, new APPSOSBean(getPackageName(), TestService.class.getName()));
-
-//        Intent intentTimeWidget = new Intent(this, TimeWidget.class);
-//        intentTimeWidget.setAction(TimeWidget.UPDATE_TIME_ACTION);
-//        intentTimeWidget.putExtra("appName", "TestName");
-//        sendBroadcast(intentTimeWidget);
-//        
     }
 
-//    public void sos() {
-//        // 创建Intent对象，指定广播的action
-//        Intent intent = new Intent(SOSCSBroadcastReceiver.ACTION_SOS);
-//        // 目标服务的包名和类名
-//        String packageName = this.getPackageName();
-//        String serviceClassName = SimpleOperateSignalCenterService.class.getName();
-//        intent.putExtra(ISOSAPP.EXTRA_PACKAGE, packageName);
-//        intent.putExtra(ISOSAPP.EXTRA_SERVICE, serviceClassName);
-//        // 发送广播
-//        sendBroadcast(intent);
-//        LogUtils.d(TAG, "onSOS");
-//    }
-//
-//    public void sos2() {
-//        // 创建Intent对象，指定广播的action
-//        Intent intent = new Intent(SOSCSBroadcastReceiver.ACTION_SOS);
-//        // 目标服务的包名和类名
-//        String packageName = this.getPackageName();
-//        String serviceClassName = SimpleOperateSignalCenterService.class.getName();
-//        intent.putExtra(ISOSAPP.EXTRA_PACKAGE, packageName);
-//        intent.putExtra(ISOSAPP.EXTRA_SERVICE, serviceClassName);
-//        // 发送广播
-//        sendBroadcast(intent);
-//        LogUtils.d(TAG, "onSOS2");
-//    }
+    public void onStartTestService(View view) {
+        Intent intent = new Intent(this, TestService.class);
+        startService(intent);
 
+    }
 
+    public void onStopTestService(View view) {
+        Intent intent = new Intent(this, TestService.class);
+        stopService(intent);
+
+    }
+
+    public void onUpdateAPPWidget(View view) {
+        Intent intentAPPWidget = new Intent(this, StatusWidget.class);
+        intentAPPWidget.setAction(StatusWidget.ACTION_STATUS_UPDATE);
+        sendBroadcast(intentAPPWidget);
+    }
 }

@@ -47,47 +47,88 @@
 
 		</LinearLayout>
 
-		<LinearLayout
-			android:orientation="vertical"
+		<ScrollView
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:gravity="right">
+			android:layout_height="400dp">
 
-			<Button
-				android:layout_width="wrap_content"
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="StartCenter"
-				android:textAllCaps="false"
-				android:onClick="onStartCenter"/>
+				android:gravity="right">
 
-			<Button
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="StopCenter"
-				android:textAllCaps="false"
-				android:onClick="onStopCenter"/>
+				<HorizontalScrollView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TestStopWithoutSettingEnable"
-				android:textAllCaps="false"
-                android:onClick="onTestStopWithoutSettingEnable"/>
-            
-			<Button
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="TestStartWithString"
-				android:textAllCaps="false"
-				android:onClick="onTestStartWithString"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
-			<Button
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="SOS"
-				android:onClick="onSOS"/>
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="StartTestService"
+                            android:textAllCaps="false"
+                            android:onClick="onStartTestService"/>
 
-		</LinearLayout>
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="StopTestService"
+                            android:textAllCaps="false"
+                            android:onClick="onStopTestService"/>
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="UpdateAPPWidget"
+                            android:textAllCaps="false"
+                            android:onClick="onUpdateAPPWidget"/>
+
+                    </LinearLayout>
+
+				</HorizontalScrollView>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="StartCenter"
+					android:textAllCaps="false"
+					android:onClick="onStartCenter"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="StopCenter"
+					android:textAllCaps="false"
+					android:onClick="onStopCenter"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="TestStopWithoutSettingEnable"
+					android:textAllCaps="false"
+					android:onClick="onTestStopWithoutSettingEnable"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="TestStartWithString"
+					android:textAllCaps="false"
+					android:onClick="onTestStartWithString"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="SOS"
+					android:textAllCaps="false"
+					android:onClick="onSOS"/>
+
+			</LinearLayout>
+
+		</ScrollView>
 
 		<cc.winboll.studio.libappbase.LogView
 			android:layout_weight="1.0"

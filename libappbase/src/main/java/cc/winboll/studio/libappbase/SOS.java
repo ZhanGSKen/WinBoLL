@@ -12,7 +12,8 @@ import cc.winboll.studio.libappbase.bean.APPSOSBean;
 public class SOS {
 
     public static final String TAG = "SOS";
-    public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
+    
+    public static final String ACTION_SOS = "cc.winboll.studio.appbase.widgets.SOSWidget.ACTION_SOS";
     
     public static void sosWinBollService(Context context, APPSOSBean bean) {
         Intent intent = new Intent(ACTION_SOS);

@@ -1,4 +1,4 @@
-package cc.winboll.studio.libappbase.bean;
+package cc.winboll.studio.appbase.beans;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
@@ -10,17 +10,17 @@ import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
-public class APPSOSReportBean extends BaseBean {
+public class SOSReportBean extends BaseBean {
     
     public static final String TAG = "APPSOSReportBean";
     
     protected String sosReport;
     
-    public APPSOSReportBean() {
+    public SOSReportBean() {
         this.sosReport = "";
     }
 
-    public APPSOSReportBean(String sosReport) {
+    public SOSReportBean(String sosReport) {
         this.sosReport = sosReport;
     }
 
@@ -34,7 +34,7 @@ public class APPSOSReportBean extends BaseBean {
 
     @Override
     public String getName() {
-        return APPSOSReportBean.class.getName();
+        return SOSReportBean.class.getName();
     }
 
     @Override

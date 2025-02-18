@@ -6,6 +6,9 @@
     <!-- 拥有完全的网络访问权限 -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- 发送持久广播 -->
+    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
+
     <application>
 
         <activity
@@ -18,45 +21,58 @@
             android:label="GlobalCrashActivity"
             android:launchMode="standard"/>
 
-        <service android:name=".SimpleOperateSignalCenterService"
-            android:exported="true">
-        </service>
-
         <activity android:name=".LogActivity"/>
 
+        <service
+            android:name=".SimpleOperateSignalCenterService"
+            android:exported="true">
+
+        </service>
+
+        <service
+            android:name=".services.TestService"
+            android:exported="true"/>
+
         <receiver android:name=".receiver.MyBroadcastReceiver">
-            <intent-filter>
-                <action android:name="cc.winboll.studio.libappbase.action.SOS" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name="cc.winboll.studio.libappbase.receiver.WinBollReceiver"
-            android:exported="true">
 
             <intent-filter>
 
-                <action android:name="cc.winboll.studio.libappbase.WinBoll.ACTION_SOS"/>
+                <action android:name="cc.winboll.studio.libappbase.action.SOS"/>
 
             </intent-filter>
 
         </receiver>
-        
-        <receiver android:name=".widgets.APPSOSReportWidget"
+
+        <receiver
+            android:name=".widgets.StatusWidget"
             android:exported="true">
+
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="cc.winboll.studio.libappbase.widgets.APPSOSReportWidget.ACTION_ADD_SOS_REPORT" />
+
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+
+                <action android:name="cc.winboll.studio.libappbase.widgets.StatusWidget.ACTION_STATUS_UPDATE"/>
+
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_provider_info" />
+                android:resource="@xml/widget_provider_info_status"/>
+
         </receiver>
-        <receiver android:name=".widgets.WidgetButtonClickListener">
+
+        <receiver
+            android:name=".widgets.StatusWidgetClickListener"
+            android:exported="true">
+
             <intent-filter>
-                <action android:name="cc.winboll.studio.libappbase.widgets.WidgetButtonClickListener.ACTION_PRE" />
-                <action android:name="cc.winboll.studio.libappbase.widgets.WidgetButtonClickListener.ACTION_NEXT" />
+
+                <action android:name="cc.winboll.studio.libappbase.widgets.StatusWidgetClickListener.ACTION_IVAPP"/>
+
             </intent-filter>
+
         </receiver>
+
     </application>
 
 </manifest>
