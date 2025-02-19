@@ -83,9 +83,9 @@
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="UpdateAPPWidget"
+                            android:text="StopTestServiceNoSettings"
                             android:textAllCaps="false"
-                            android:onClick="onUpdateAPPWidget"/>
+                            android:onClick="onStopTestServiceNoSettings"/>
 
                     </LinearLayout>
 

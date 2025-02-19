@@ -95,19 +95,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void onStartTestService(View view) {
         Intent intent = new Intent(this, TestService.class);
+        intent.setAction(SOS.ACTION_SERVICE_ENABLE);
         startService(intent);
 
     }
 
     public void onStopTestService(View view) {
         Intent intent = new Intent(this, TestService.class);
-        stopService(intent);
-
+        intent.setAction(SOS.ACTION_SERVICE_DISABLE);
+        startService(intent);
+        
+        Intent intentStop = new Intent(this, TestService.class);
+        stopService(intentStop);
     }
 
-    public void onUpdateAPPWidget(View view) {
-        Intent intentAPPWidget = new Intent(this, StatusWidget.class);
-        intentAPPWidget.setAction(StatusWidget.ACTION_STATUS_UPDATE);
-        sendBroadcast(intentAPPWidget);
+    public void onStopTestServiceNoSettings(View view) {
+        Intent intent = new Intent(this, TestService.class);
+        stopService(intent);
     }
 }

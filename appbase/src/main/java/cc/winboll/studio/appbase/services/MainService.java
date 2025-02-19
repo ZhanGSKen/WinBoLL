@@ -23,8 +23,10 @@ import cc.winboll.studio.appbase.handlers.MainServiceHandler;
 import cc.winboll.studio.appbase.receivers.MainReceiver;
 import cc.winboll.studio.appbase.services.AssistantService;
 import cc.winboll.studio.appbase.threads.MainServiceThread;
-import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.appbase.widgets.SOSWidget;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.bean.APPSOSBean;
+import java.util.ArrayList;
 
 public class MainService extends Service {
 
@@ -43,6 +45,7 @@ public class MainService extends Service {
     AssistantService mAssistantService;
     boolean isBound = false;
     MainReceiver mMainReceiver;
+    ArrayList<SOSConnection> mSOSConnectionList;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -57,6 +60,8 @@ public class MainService extends Service {
     public void onCreate() {
         super.onCreate();
         LogUtils.d(TAG, "onCreate()");
+        mSOSConnectionList = new ArrayList<SOSConnection>();
+
         _mControlCenterService = MainService.this;
         isServiceRunning = false;
         mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
@@ -94,16 +99,16 @@ public class MainService extends Service {
                 mMainReceiver = new MainReceiver(this);
                 mMainReceiver.registerAction(this);
             }
-            
+
             // 启动小部件
             Intent intentTimeWidget = new Intent(this, SOSWidget.class);
             intentTimeWidget.setAction(SOSWidget.ACTION_RELOAD_REPORT);
             this.sendBroadcast(intentTimeWidget);
-            
+
             startMainServiceThread();
 
             MyTileService.updateServiceIconStatus(this);
-            
+
             LogUtils.i(TAG, "Main Service Is Start.");
         }
     }
@@ -181,10 +186,65 @@ public class MainService extends Service {
             stopRemindThread();
 
             MyTileService.updateServiceIconStatus(this);
-            
+
             super.onDestroy();
             //LogUtils.d(TAG, "onDestroy done");
         }
+    }
+
+    public void bindSOSConnection(APPSOSBean bean) {
+        LogUtils.d(TAG, "bindSOSConnection(...)");
+        // 清理旧的绑定链接
+        for (int i = mSOSConnectionList.size() - 1; i > -1; i--) {
+            SOSConnection item = mSOSConnectionList.get(i);
+            if (item.isBindToAPPSOSBean(bean)) {
+                LogUtils.d(TAG, "Bind Servive exist.");
+                unbindService(item);
+                mSOSConnectionList.remove(i);
+            }
+        }
+
+        // 绑定服务
+        SOSConnection sosConnection = new SOSConnection();
+        Intent intentService = new Intent();
+        intentService.setComponent(new ComponentName(bean.getSosPackage(), bean.getSosClassName()));
+        bindService(intentService, sosConnection, Context.BIND_IMPORTANT);
+        mSOSConnectionList.add(sosConnection);
+    }
+
+    public class SOSConnection implements ServiceConnection {
+
+        ComponentName mComponentName;
+
+        boolean isBindToAPPSOSBean(APPSOSBean bean) {
+            return mComponentName != null
+                && mComponentName.getClassName().equals(bean.getSosClassName())
+                && mComponentName.getPackageName().equals(bean.getSosPackage());
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            LogUtils.d(TAG, "onServiceConnected(...)");
+            mComponentName = name;
+            LogUtils.d(TAG, String.format("onServiceConnected : \ngetClassName %s\ngetPackageName %s", name.getClassName(), name.getPackageName()));
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            LogUtils.d(TAG, "onServiceDisconnected(...)");
+            LogUtils.d(TAG, String.format("onServiceDisconnected : \ngetClassName %s\ngetPackageName %s", name.getClassName(), name.getPackageName()));
+
+            // 尝试无参数启动一下服务
+            String sosPackage = mComponentName.getPackageName();
+            LogUtils.d(TAG, String.format("sosPackage %s", sosPackage));
+            String sosClassName = mComponentName.getClassName();
+            LogUtils.d(TAG, String.format("sosClassName %s", sosClassName));
+
+            Intent intentService = new Intent();
+            intentService.setComponent(new ComponentName(sosPackage, sosClassName));
+            startService(intentService);
+        }
+
     }
 
     // 主进程与守护进程连接时需要用到此类

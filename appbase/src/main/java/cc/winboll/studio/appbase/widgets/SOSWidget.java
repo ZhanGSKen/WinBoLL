@@ -46,53 +46,7 @@ public class SOSWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         initAPPSOSReportBeanList(context);
-        if (intent.getAction().equals(ACTION_SOS)) {
-            LogUtils.d(TAG, "ACTION_SOS");
-            LogUtils.d(TAG, String.format("context.getPackageName() %s", context.getPackageName()));
-            LogUtils.d(TAG, String.format("intent.getAction() %s", intent.getAction()));
-            String SOS = intent.getStringExtra("SOS");
-            LogUtils.d(TAG, String.format("SOS %s", SOS));
-            if (SOS != null && SOS.equals("Service")) {
-                String szAPPSOSBean = intent.getStringExtra("APPSOSBean");
-                LogUtils.d(TAG, String.format("szAPPSOSBean %s", szAPPSOSBean));
-                if (szAPPSOSBean != null && !szAPPSOSBean.equals("")) {
-                    try {
-                        APPSOSBean bean = APPSOSBean.parseStringToBean(szAPPSOSBean, APPSOSBean.class);
-                        if (bean != null) {
-                            String sosPackage = bean.getSosPackage();
-                            LogUtils.d(TAG, String.format("sosPackage %s", sosPackage));
-                            String sosClassName = bean.getSosClassName();
-                            LogUtils.d(TAG, String.format("sosClassName %s", sosClassName));
-
-                            Intent intentService = new Intent();
-                            intentService.setComponent(new ComponentName(sosPackage, sosClassName));
-                            context.startService(intentService);
-
-                            String appName = AppUtils.getAppNameByPackageName(context, sosPackage);
-                            LogUtils.d(TAG, String.format("appName %s", appName));
-                            SOSReportBean appSOSReportBean = new SOSReportBean(appName);
-                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                            String currentTime = sdf.format(new Date());
-                            StringBuilder sbLine = new StringBuilder();
-                            sbLine.append("[");
-                            sbLine.append(currentTime);
-                            sbLine.append("] Power to ");
-                            sbLine.append(appName);
-                            appSOSReportBean.setSosReport(sbLine.toString());
-                            addAPPSOSReportBean(context, appSOSReportBean);
-                            
-                            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-                            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, SOSWidget.class));
-                            for (int appWidgetId : appWidgetIds) {
-                                updateAppWidget(context, appWidgetManager, appWidgetId);
-                            }
-                        }
-                    } catch (IOException e) {
-                        LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-                    }
-                }
-            }
-        } else if (intent.getAction().equals(ACTION_RELOAD_REPORT)) {
+        if (intent.getAction().equals(ACTION_RELOAD_REPORT)) {
             LogUtils.d(TAG, "ACTION_RELOAD_REPORT");
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, SOSWidget.class));
@@ -105,7 +59,7 @@ public class SOSWidget extends AppWidgetProvider {
     //
     // 加入新报告信息
     //
-    void addAPPSOSReportBean(Context context, SOSReportBean bean) {
+    public synchronized static void addAPPSOSReportBean(Context context, SOSReportBean bean) {
         initAPPSOSReportBeanList(context);
         _SOSReportBeanList.add(0, bean);
         // 控制记录总数
@@ -115,7 +69,7 @@ public class SOSWidget extends AppWidgetProvider {
         SOSReportBean.saveBeanList(context, _SOSReportBeanList, SOSReportBean.class);
     }
 
-    void initAPPSOSReportBeanList(Context context) {
+    synchronized static void initAPPSOSReportBeanList(Context context) {
         if (_SOSReportBeanList == null) {
             _SOSReportBeanList = new ArrayList<SOSReportBean>();
             SOSReportBean.loadBeanList(context, _SOSReportBeanList, SOSReportBean.class);
@@ -150,7 +104,7 @@ public class SOSWidget extends AppWidgetProvider {
         if (_SOSReportBeanList != null) {
             int start = _OnePageLinesCount * _CurrentPageIndex;
             start = _SOSReportBeanList.size() > start ? start : _SOSReportBeanList.size() - 1;
-            for (int i = start, j = 0; i < _SOSReportBeanList.size() && j < _OnePageLinesCount; i++, j++) {
+            for (int i = start, j = 0; i < _SOSReportBeanList.size() && j < _OnePageLinesCount && start > -1; i++, j++) {
                 msgTemp.add(_SOSReportBeanList.get(i).getSosReport());
             }
             String message = String.join("\n", msgTemp);

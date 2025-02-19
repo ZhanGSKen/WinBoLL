@@ -54,9 +54,7 @@
         <receiver android:name="cc.winboll.studio.appbase.receivers.MainReceiver">
 
             <intent-filter>
-
                 <action android:name="cc.winboll.studio.appbase.receivers.MainReceiver"/>
-
             </intent-filter>
 
         </receiver>
@@ -66,8 +64,6 @@
             android:exported="true">
 
             <intent-filter>
-                <action android:name="cc.winboll.studio.appbase.widgets.SOSWidget.ACTION_SOS"/>
-                <action android:name="cc.winboll.studio.appbase.widgets.SOSWidget.ACTION_RELOAD_REPORT" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 

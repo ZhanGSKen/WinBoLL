@@ -1,20 +1,22 @@
 package cc.winboll.studio.libappbase.bean;
+
+/**
+ * @Author ZhanGSKen@AliYun.Com
+ * @Date 2025/02/19 13:34:52
+ * @Describe TestServiceBean
+ */
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
-/**
- * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/02/13 04:27:42
- */
-public class SimpleOperateSignalCenterServiceBean extends BaseBean {
+public class TestServiceBean extends BaseBean {
 
-    public static final String TAG = "SimpleOperateSignalCenterServiceBean";
+    public static final String TAG = "TestServiceBean";
 
     boolean isEnable;
-    
-    public SimpleOperateSignalCenterServiceBean() {
+
+    public TestServiceBean() {
         this.isEnable = false;
     }
 
@@ -28,14 +30,13 @@ public class SimpleOperateSignalCenterServiceBean extends BaseBean {
 
     @Override
     public String getName() {
-        return SimpleOperateSignalCenterServiceBean.class.getName();
+        return TestServiceBean.class.getName();
     }
 
     @Override
     public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
         super.writeThisToJsonWriter(jsonWriter);
         jsonWriter.name("isEnable").value(isEnable());
-
     }
 
     @Override
