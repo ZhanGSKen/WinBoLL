@@ -2,6 +2,7 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
@@ -11,34 +12,16 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/activitymainToolbar1"/>
 
-	<LinearLayout
-		android:orientation="vertical"
+	<androidx.viewpager.widget.ViewPager
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:gravity="center"
 		android:layout_weight="1.0"
-		android:background="#FFEEEEEE">
+		android:id="@+id/activitymainViewPager1"/>
 
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
-
-			<CheckBox
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="MainService"
-				android:id="@+id/activitymainCheckBox1"/>
-
-		</LinearLayout>
-
-        <cc.winboll.studio.libappbase.LogView
-            android:layout_weight="1.0"
-            android:layout_height="0dp"
-            android:layout_width="match_parent"
-			android:id="@+id/activitymainLogView1"/>
-
-	</LinearLayout>
+	<com.google.android.material.tabs.TabLayout
+		android:layout_width="match_parent"
+		android:layout_height="60dp"
+		android:id="@+id/activitymainTabLayout1"/>
 
 </LinearLayout>
 

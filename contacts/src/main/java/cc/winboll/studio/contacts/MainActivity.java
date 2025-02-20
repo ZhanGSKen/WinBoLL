@@ -6,26 +6,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CheckBox;
+import com.google.android.material.tabs.TabLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.contacts.BuildConfig;
-import cc.winboll.studio.contacts.MainActivity;
+import androidx.viewpager.widget.ViewPager;
 import cc.winboll.studio.contacts.R;
+import cc.winboll.studio.contacts.adapters.MyPagerAdapter;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
-import cc.winboll.studio.contacts.services.MainService;
-import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libappbase.SOS;
-import cc.winboll.studio.libappbase.bean.APPSOSBean;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
+import android.widget.ImageView;
+import android.view.View;
+import java.util.ArrayList;
+import android.view.LayoutInflater;
+import android.widget.LinearLayout;
+import java.util.List;
 
-final public class MainActivity extends AppCompatActivity implements IWinBollActivity {
+final public class MainActivity extends AppCompatActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
 	public static final String TAG = "MainActivity";
 
@@ -38,6 +40,14 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     Toolbar mToolbar;
     CheckBox cbMainService;
     MainServiceBean mMainServiceBean;
+    ViewPager viewPager;
+    private List<View> views; //用来存放放进ViewPager里面的布局
+    //实例化存储imageView（导航原点）的集合
+    ImageView[] imageViews;
+    //MyPagerAdapter adapter;//适配器
+    MyPagerAdapter pagerAdapter;
+    LinearLayout linearLayout;//下标所在在LinearLayout布局里
+    int currentPoint = 0;//当前被选中中页面的下标
 
     @Override
     public AppCompatActivity getActivity() {
@@ -70,11 +80,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         // 以下正常创建主窗口
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mLogView = findViewById(R.id.activitymainLogView1);
-
-        if (GlobalApplication.isDebuging()) { mLogView.start(); }
-
+        
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
         setSupportActionBar(mToolbar);
@@ -84,45 +90,117 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         }
         getSupportActionBar().setSubtitle(getTag());
 
-        //ToastUtils.show("WinBollUI_TYPE " + WinBollApplication.getWinBollUI_TYPE());
-        LogUtils.d(TAG, "BuildConfig.DEBUG : " + Boolean.toString(BuildConfig.DEBUG));
+        initData();
+        initView();//调用初始化视图方法
+        //initPoint();//调用初始化导航原点的方法
+        viewPager.addOnPageChangeListener(this);//滑动事件
+        
+        ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
+        MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+        TabLayout tabLayout = findViewById(R.id.activitymainTabLayout1);
+        tabLayout.setupWithViewPager(viewPager);
 
-        mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
-        if (mMainServiceBean == null) {
-            mMainServiceBean = new MainServiceBean();
-        }
-        cbMainService = findViewById(R.id.activitymainCheckBox1);
-        cbMainService.setChecked(mMainServiceBean.isEnable());
-        cbMainService.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view) {
-                    if (cbMainService.isChecked()) {
-                        MainService.startMainService(MainActivity.this);
-                    } else {
-                        MainService.stopMainService(MainActivity.this);
-                    }
-                }
-            });
+//        mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
+//        if (mMainServiceBean == null) {
+//            mMainServiceBean = new MainServiceBean();
+//        }
+//        cbMainService = findViewById(R.id.activitymainCheckBox1);
+//        cbMainService.setChecked(mMainServiceBean.isEnable());
+//        cbMainService.setOnClickListener(new View.OnClickListener(){
+//                @Override
+//                public void onClick(View view) {
+//                    if (cbMainService.isChecked()) {
+//                        MainService.startMainService(MainActivity.this);
+//                    } else {
+//                        MainService.stopMainService(MainActivity.this);
+//                    }
+//                }
+//            });
+    }
+    
+
+    //初始化view，即显示的图片
+    void initView() {
+        viewPager = findViewById(R.id.activitymainViewPager1);
+        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+        //adapter = new MyPagerAdapter(views);
+        //viewPager = findViewById(R.id.activitymainViewPager1);
+        //viewPager.setAdapter(adapter);
+        //linearLayout = findViewById(R.id.activitymainLinearLayout1);
+        //initPoint();//初始化页面下方的点
+        viewPager.setOnPageChangeListener(this);
+        
     }
 
-//    public static void sosToWinBoll(Context context) {
-//        Intent intent = new Intent(ACTION_SOS);
-//        intent.putExtra("sos", "SOS");
-//        intent.putExtra("sosPackage", context.getPackageName());
-//        intent.putExtra("sosCalssType", "Service");
-//        intent.putExtra("sosClassName", MainService.class.getName());
-//        String szToPackage = "";
-//        if (GlobalApplication.isDebuging()) {
-//            szToPackage = "cc.winboll.studio.appbase.beta";
-//        } else {
-//            szToPackage = "cc.winboll.studio.appbase";
+    //初始化所要显示的布局
+    void initData() {
+        ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View view1 = inflater.inflate(R.layout.fragment_call, viewPager, false);
+        View view2 = inflater.inflate(R.layout.fragment_contacts, viewPager, false);
+        View view3 = inflater.inflate(R.layout.fragment_log, viewPager, false);
+
+        views = new ArrayList<>();
+        views.add(view1);
+        views.add(view2);
+        views.add(view3);
+    }
+    
+//    void initPoint() {
+//        imageViews = new ImageView[5];//实例化5个图片
+//        for (int i = 0; i < linearLayout.getChildCount(); i++) {
+//            imageViews[i] = (ImageView) linearLayout.getChildAt(i);
+//            imageViews[i].setImageResource(R.drawable.ic_launcher);
+//            imageViews[i].setOnClickListener(this);//点击导航点，即可跳转
+//            imageViews[i].setTag(i);//重复利用实例化的对象
 //        }
-//        intent.setPackage(szToPackage);
-//        context.sendBroadcast(intent);
-//
-//        LogUtils.d(TAG, String.format("SOS Send To WinBoll. (szToPackage : %s)", szToPackage));
-//        //ToastUtils.show("SOS Send To WinBoll");
+//        currentPoint = 0;//默认第一个坐标
+//        imageViews[currentPoint].setImageResource(R.drawable.ic_launcher);
 //    }
+    
+    //OnPageChangeListener接口要实现的三个方法
+    /*    onPageScrollStateChanged(int state)
+     此方法是在状态改变的时候调用，其中state这个参数有三种状态：
+     SCROLL_STATE_DRAGGING（1）表示用户手指“按在屏幕上并且开始拖动”的状态
+     （手指按下但是还没有拖动的时候还不是这个状态，只有按下并且手指开始拖动后log才打出。）
+     SCROLL_STATE_IDLE（0）滑动动画做完的状态。
+     SCROLL_STATE_SETTLING（2）在“手指离开屏幕”的状态。*/
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+    /*    onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+     当页面在滑动的时候会调用此方法，在滑动被停止之前，此方法回一直得到调用。其中三个参数的含义分别为：
+
+     position :当前页面，即你点击滑动的页面（从A滑B，则是A页面的position。
+     positionOffset:当前页面偏移的百分比
+     positionOffsetPixels:当前页面偏移的像素位置*/
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+    /*    onPageSelected(int position)
+     此方法是页面滑动完后得到调用，position是你当前选中的页面的Position（位置编号）
+     (从A滑动到B，就是B的position)*/
+    public void onPageSelected(int position) {
+
+//        ImageView preView = imageViews[currentPoint];
+//        preView.setImageResource(R.drawable.ic_launcher);
+//        ImageView currView = imageViews[position];
+//        currView.setImageResource(R.drawable.ic_launcher);
+//        currentPoint = position;
+    }
+
+    //小圆点点击事件
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        //通过getTag(),可以判断是哪个控件
+//        int i = (Integer) v.getTag();
+//        viewPager.setCurrentItem(i);//直接跳转到某一个页面的情况
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
