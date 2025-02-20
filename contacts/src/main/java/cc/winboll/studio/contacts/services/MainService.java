@@ -11,6 +11,7 @@ package cc.winboll.studio.contacts.services;
  * https://blog.csdn.net/cyp331203/article/details/38920491
  */
 import android.app.Service;
+import cc.winboll.studio.contacts.listenphonecall.CallListenerService;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -97,7 +98,8 @@ public class MainService extends Service {
                 mMainReceiver = new MainReceiver(this);
                 mMainReceiver.registerAction(this);
             }
-
+            
+            startPhoneCallListener();
 
             MainServiceThread.getInstance(this, mMainServiceHandler).start();
 
@@ -124,6 +126,11 @@ public class MainService extends Service {
 //        startService(intent);
 //        LogUtils.d(TAG, "startService(intent)");
 //        bindService(new Intent(this, AssistantService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
+    }
+    
+    void startPhoneCallListener() {
+        Intent callListener = new Intent(this, CallListenerService.class);
+        startService(callListener);
     }
 
     @Override

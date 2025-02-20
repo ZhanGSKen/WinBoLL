@@ -1,30 +1,52 @@
 package cc.winboll.studio.contacts;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.role.RoleManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.telecom.TelecomManager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
-import com.google.android.material.tabs.TabLayout;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 import cc.winboll.studio.contacts.R;
+import cc.winboll.studio.contacts.activities.CallActivity;
 import cc.winboll.studio.contacts.adapters.MyPagerAdapter;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
+import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
-import android.widget.ImageView;
-import android.view.View;
+import cc.winboll.studio.contacts.listenphonecall.CallListenerService;
+import com.google.android.material.tabs.TabLayout;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
-import android.view.LayoutInflater;
-import android.widget.LinearLayout;
 import java.util.List;
-import cc.winboll.studio.contacts.activities.CallActivity;
+import android.content.DialogInterface;
+import cc.winboll.studio.contacts.activities.SettingsActivity;
 
 final public class MainActivity extends AppCompatActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
@@ -47,6 +69,8 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     MyPagerAdapter pagerAdapter;
     LinearLayout linearLayout;//下标所在在LinearLayout布局里
     int currentPoint = 0;//当前被选中中页面的下标
+
+    private static final int DIALER_REQUEST_CODE = 1;
 
     @Override
     public AppCompatActivity getActivity() {
@@ -90,7 +114,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         getSupportActionBar().setSubtitle(getTag());
 
         initData();
-        initView();//调用初始化视图方法
+        initView();
         //initPoint();//调用初始化导航原点的方法
         viewPager.addOnPageChangeListener(this);//滑动事件
 
@@ -116,8 +140,8 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //                    }
 //                }
 //            });
+        MainService.startMainService(MainActivity.this);
     }
-
 
     //初始化view，即显示的图片
     void initView() {
@@ -311,6 +335,10 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
             Intent intent = new Intent(this, CallActivity.class);
             startActivity(intent);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
+        } else if (item.getItemId() == R.id.item_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
         }
 //        } else 
 //        if (item.getItemId() == R.id.item_exit) {
@@ -320,20 +348,59 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    /**
+     * Android M 及以上检查是否是系统默认电话应用
+     */
+    public boolean isDefaultPhoneCallApp() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            TelecomManager manger = (TelecomManager) getSystemService(TELECOM_SERVICE);
+            if (manger != null && manger.getDefaultDialerPackage() != null) {
+                return manger.getDefaultDialerPackage().equals(getPackageName());
+            }
+        }
+        return false;
+    }
+
+    public boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager == null) return false;
+
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(
+            Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (resultCode) {
-            case REQUEST_HOME_ACTIVITY : {
-                    LogUtils.d(TAG, "REQUEST_HOME_ACTIVITY");
-                    break;
-                }
-            case REQUEST_ABOUT_ACTIVITY : {
-                    LogUtils.d(TAG, "REQUEST_ABOUT_ACTIVITY");
-                    break;
-                }
-            default : {
-                    super.onActivityResult(requestCode, resultCode, data);
-                }
+//        switch (resultCode) {
+//            case REQUEST_HOME_ACTIVITY : {
+//                    LogUtils.d(TAG, "REQUEST_HOME_ACTIVITY");
+//                    break;
+//                }
+//            case REQUEST_ABOUT_ACTIVITY : {
+//                    LogUtils.d(TAG, "REQUEST_ABOUT_ACTIVITY");
+//                    break;
+//                }
+//            default : {
+//                    super.onActivityResult(requestCode, resultCode, data);
+//                }
+//        }
+        if (requestCode == DIALER_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(MainActivity.this, getString(R.string.app_name) + " 已成为默认电话应用",
+                               Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

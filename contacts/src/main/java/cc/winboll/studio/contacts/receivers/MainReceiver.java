@@ -32,8 +32,9 @@ public class MainReceiver extends BroadcastReceiver {
         String szAction = intent.getAction();
         if (szAction.equals(ACTION_BOOT_COMPLETED)) {
             ToastUtils.show("ACTION_BOOT_COMPLETED");
+            MainService.startMainService(context);
         } else {
-            ToastUtils.show("szAction");
+            ToastUtils.show(szAction);
         }
     }
 
@@ -42,7 +43,7 @@ public class MainReceiver extends BroadcastReceiver {
     public void registerAction(Context context) {
         IntentFilter filter=new IntentFilter();
         filter.addAction(ACTION_BOOT_COMPLETED);
-        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        //filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         context.registerReceiver(this, filter);
     }
 }
