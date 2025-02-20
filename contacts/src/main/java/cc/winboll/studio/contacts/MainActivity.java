@@ -1,7 +1,5 @@
 package cc.winboll.studio.contacts;
 
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -26,6 +24,7 @@ import java.util.ArrayList;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import java.util.List;
+import cc.winboll.studio.contacts.activities.CallActivity;
 
 final public class MainActivity extends AppCompatActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
@@ -80,7 +79,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         // 以下正常创建主窗口
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
         setSupportActionBar(mToolbar);
@@ -94,7 +93,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         initView();//调用初始化视图方法
         //initPoint();//调用初始化导航原点的方法
         viewPager.addOnPageChangeListener(this);//滑动事件
-        
+
         ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
         MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
@@ -118,7 +117,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //                }
 //            });
     }
-    
+
 
     //初始化view，即显示的图片
     void initView() {
@@ -131,7 +130,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         //linearLayout = findViewById(R.id.activitymainLinearLayout1);
         //initPoint();//初始化页面下方的点
         viewPager.setOnPageChangeListener(this);
-        
+
     }
 
     //初始化所要显示的布局
@@ -147,7 +146,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         views.add(view2);
         views.add(view3);
     }
-    
+
 //    void initPoint() {
 //        imageViews = new ImageView[5];//实例化5个图片
 //        for (int i = 0; i < linearLayout.getChildCount(); i++) {
@@ -159,7 +158,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //        currentPoint = 0;//默认第一个坐标
 //        imageViews[currentPoint].setImageResource(R.drawable.ic_launcher);
 //    }
-    
+
     //OnPageChangeListener接口要实现的三个方法
     /*    onPageScrollStateChanged(int state)
      此方法是在状态改变的时候调用，其中state这个参数有三种状态：
@@ -308,8 +307,11 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == R.id.item_unittest) {
-//            WinBollActivityManager.getInstance(this).startWinBollActivity(this, UnitTestActivity.class);
+        if (item.getItemId() == R.id.item_call) {
+            Intent intent = new Intent(this, CallActivity.class);
+            startActivity(intent);
+            //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
+        }
 //        } else 
 //        if (item.getItemId() == R.id.item_exit) {
 //            exit();

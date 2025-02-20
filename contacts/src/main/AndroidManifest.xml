@@ -91,6 +91,8 @@
 
         </receiver>
 
+        <activity android:name="cc.winboll.studio.contacts.activities.CallActivity"/>
+
     </application>
 
 </manifest>
