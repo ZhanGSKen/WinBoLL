@@ -1,5 +1,7 @@
 package cc.winboll.studio.contacts;
 
+
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,13 +11,15 @@ import android.widget.CheckBox;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.contacts.BuildConfig;
+import cc.winboll.studio.contacts.MainActivity;
 import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
+import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.SOS;
-import cc.winboll.studio.libapputils.app.AboutActivityFactory;
+import cc.winboll.studio.libappbase.bean.APPSOSBean;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
@@ -27,7 +31,9 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 
     public static final int REQUEST_HOME_ACTIVITY = 0;
     public static final int REQUEST_ABOUT_ACTIVITY = 1;
-    
+
+    public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
+
     LogView mLogView;
     Toolbar mToolbar;
     CheckBox cbMainService;
@@ -40,21 +46,21 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 
     @Override
     public APPInfo getAppInfo() {
-        String szBranchName = "contacts";
-
-        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
-        appInfo.setAppName("Contacts");
-        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
-        appInfo.setAppDescription("Contacts Description");
-        appInfo.setAppGitName("APP");
-        appInfo.setAppGitOwner("Studio");
-        appInfo.setAppGitAPPBranch(szBranchName);
-        appInfo.setAppGitAPPSubProjectFolder(szBranchName);
-        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=Contacts");
-        appInfo.setAppAPKName("Contacts");
-        appInfo.setAppAPKFolderName("Contacts");
-        return appInfo;
-        //return null;
+//        String szBranchName = "contacts";
+//
+//        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
+//        appInfo.setAppName("Contacts");
+//        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
+//        appInfo.setAppDescription("Contacts Description");
+//        appInfo.setAppGitName("APP");
+//        appInfo.setAppGitOwner("Studio");
+//        appInfo.setAppGitAPPBranch(szBranchName);
+//        appInfo.setAppGitAPPSubProjectFolder(szBranchName);
+//        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=Contacts");
+//        appInfo.setAppAPKName("Contacts");
+//        appInfo.setAppAPKFolderName("Contacts");
+//        return appInfo;
+        return null;
     }
 
     @Override
@@ -64,11 +70,11 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         // 以下正常创建主窗口
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         mLogView = findViewById(R.id.activitymainLogView1);
 
         if (GlobalApplication.isDebuging()) { mLogView.start(); }
-        
+
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
         setSupportActionBar(mToolbar);
@@ -90,21 +96,47 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         cbMainService.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    SOS.sendToWinBoll(MainActivity.this);
-//                    if (cbMainService.isChecked()) {
-//                        MainService.startISOSService(MainActivity.this);
-//                    } else {
-//                        MainService.stopISOSService(MainActivity.this);
-//                    }
+                    if (cbMainService.isChecked()) {
+                        MainService.startMainService(MainActivity.this);
+                    } else {
+                        MainService.stopMainService(MainActivity.this);
+                    }
                 }
             });
     }
+
+//    public static void sosToWinBoll(Context context) {
+//        Intent intent = new Intent(ACTION_SOS);
+//        intent.putExtra("sos", "SOS");
+//        intent.putExtra("sosPackage", context.getPackageName());
+//        intent.putExtra("sosCalssType", "Service");
+//        intent.putExtra("sosClassName", MainService.class.getName());
+//        String szToPackage = "";
+//        if (GlobalApplication.isDebuging()) {
+//            szToPackage = "cc.winboll.studio.appbase.beta";
+//        } else {
+//            szToPackage = "cc.winboll.studio.appbase";
+//        }
+//        intent.setPackage(szToPackage);
+//        context.sendBroadcast(intent);
+//
+//        LogUtils.d(TAG, String.format("SOS Send To WinBoll. (szToPackage : %s)", szToPackage));
+//        //ToastUtils.show("SOS Send To WinBoll");
+//    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         //setSubTitle("");
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LogUtils.d(TAG, "onDestroy() SOS");
+    }
+
+
 
     //
     // 处理传入的 Intent 数据

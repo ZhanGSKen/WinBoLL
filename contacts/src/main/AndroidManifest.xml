@@ -42,7 +42,10 @@
 
         </provider>
 
-        <service android:name="cc.winboll.studio.contacts.services.MainService"/>
+        <service android:name="cc.winboll.studio.contacts.services.MainService"
+            android:exported="true"/>
+
+        <service android:name="cc.winboll.studio.contacts.services.AssistantService"/>
 
         <receiver android:name="cc.winboll.studio.contacts.receivers.MainReceiver">
 
@@ -53,6 +56,25 @@
             </intent-filter>
 
         </receiver>
+
+        <receiver android:name=".widgets.APPStatusWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="cc.winboll.studio.contacts.widgets.APPStatusWidget.ACTION_STATUS_ACTIVE" />
+                <action android:name="cc.winboll.studio.contacts.widgets.APPStatusWidget.ACTION_STATUS_NOACTIVE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_provider_info" />
+        </receiver>
+
+        <receiver android:name=".widgets.APPStatusWidgetClickListener">
+            <intent-filter>
+                <action android:name="cc.winboll.studio.contacts.widgets.APPStatusWidgetClickListener.ACTION_APPICON_CLICK" />
+            </intent-filter>
+        </receiver>
+
 
     </application>
 

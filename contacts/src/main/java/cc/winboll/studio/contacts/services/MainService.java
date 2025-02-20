@@ -1,162 +1,229 @@
 package cc.winboll.studio.contacts.services;
 
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.os.IBinder;
-import cc.winboll.studio.contacts.beans.MainServiceBean;
-import cc.winboll.studio.libappbase.ISOSAPP;
-import cc.winboll.studio.libappbase.ISOSService;
-import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.SOSCSBroadcastReceiver;
-import cc.winboll.studio.libappbase.SimpleOperateSignalCenterService;
-import com.hjq.toast.ToastUtils;
-import android.content.ComponentName;
-
 /**
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/02/13 06:56:41
  * @Describe 拨号主服务
+ * 参考:
+ * 进程保活-双进程守护的正确姿势
+ * https://blog.csdn.net/sinat_35159441/article/details/75267380
+ * Android Service之onStartCommand方法研究
+ * https://blog.csdn.net/cyp331203/article/details/38920491
  */
-public class MainService extends Service implements ISOSService {
-    
+import android.app.Service;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Binder;
+import android.os.IBinder;
+import cc.winboll.studio.contacts.beans.MainServiceBean;
+import cc.winboll.studio.contacts.handlers.MainServiceHandler;
+import cc.winboll.studio.contacts.receivers.MainReceiver;
+import cc.winboll.studio.contacts.services.MainService;
+import cc.winboll.studio.contacts.threads.MainServiceThread;
+import cc.winboll.studio.contacts.widgets.APPStatusWidget;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.SOS;
+import cc.winboll.studio.libappbase.bean.APPSOSBean;
+
+public class MainService extends Service {
+
     public static final String TAG = "MainService";
-    
-    public static final String ACTION_ENABLE = MainService.class.getName() + ".ACTION_ENABLE";
-    public static final String ACTION_DISABLE = MainService.class.getName() + ".ACTION_DISABLE";
+
+    public static final int MSG_UPDATE_STATUS = 0;
+
+    static MainService _mControlCenterService;
+
+    volatile boolean isServiceRunning;
 
     MainServiceBean mMainServiceBean;
-    static MainThread _MainThread;
-    public static synchronized MainThread getMainThreadInstance() {
-        if (_MainThread == null) {
-            _MainThread = new MainThread();
-        }
-        return _MainThread;
-    }
+    MainServiceThread mMainServiceThread;
+    MainServiceHandler mMainServiceHandler;
+    MyServiceConnection mMyServiceConnection;
+    AssistantService mAssistantService;
+    boolean isBound = false;
+    MainReceiver mMainReceiver;
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return new MyBinder();
+    }
+
+    public MainServiceThread getRemindThread() {
+        return mMainServiceThread;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        LogUtils.d(TAG, "onCreate");
+        LogUtils.d(TAG, "onCreate()");
+        _mControlCenterService = MainService.this;
+        isServiceRunning = false;
         mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
-        runMainThread();
+
+        if (mMyServiceConnection == null) {
+            mMyServiceConnection = new MyServiceConnection();
+        }
+        mMainServiceHandler = new MainServiceHandler(this);
+
+        // 运行服务内容
+        mainService();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        LogUtils.d(TAG, "onStartCommand");
-        if (intent.getBooleanExtra(ISOSService.EXTRA_ENABLE, false)) {
-            LogUtils.d(TAG, "onStartCommand enable service");
-            mMainServiceBean.setIsEnable(true);
-            MainServiceBean.saveBean(this, mMainServiceBean);
-        }
-
-        runMainThread();
-
-        //return super.onStartCommand(intent, flags, startId);
-        return mMainServiceBean.isEnable() ? Service.START_STICKY: super.onStartCommand(intent, flags, startId);
+        LogUtils.d(TAG, "onStartCommand(...)");
+        // 运行服务内容
+        mainService();
+        return (mMainServiceBean.isEnable()) ? START_STICKY : super.onStartCommand(intent, flags, startId);
     }
 
-    void runMainThread() {
+    // 运行服务内容
+    //
+    void mainService() {
+        LogUtils.d(TAG, "mainService()");
         mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
-        if (mMainServiceBean.isEnable()
-            && _MainThread == null) {
-            getMainThreadInstance().start();
+        if (mMainServiceBean.isEnable() && isServiceRunning == false) {
+            LogUtils.d(TAG, "mainService() start running");
+            isServiceRunning = true;
+            // 唤醒守护进程
+            wakeupAndBindAssistant();
+            // 召唤 WinBoll APP 绑定本服务
+            SOS.bindToAPPService(this, new APPSOSBean(getPackageName(), MainService.class.getName()));
+
+            if (mMainReceiver == null) {
+                // 注册广播接收器
+                mMainReceiver = new MainReceiver(this);
+                mMainReceiver.registerAction(this);
+            }
+
+
+            MainServiceThread.getInstance(this, mMainServiceHandler).start();
+
+            LogUtils.i(TAG, "Main Service Is Start.");
         }
     }
 
-    @Override
-    public Intent getISOSServiceIntentWhichAskForHelp() {
-        Intent intentService = new Intent();
-        intentService.putExtra(ISOSAPP.EXTRA_PACKAGE, this.getPackageName());
-        intentService.putExtra(ISOSAPP.EXTRA_SERVICE, this.getClass().getName());
-        return intentService;
-    }
+    // 唤醒和绑定守护进程
+    //
+    void wakeupAndBindAssistant() {
+        LogUtils.d(TAG, "wakeupAndBindAssistant()");
+//        if (ServiceUtils.isServiceAlive(getApplicationContext(), AssistantService.class.getName()) == false) {
+//            startService(new Intent(MainService.this, AssistantService.class));
+//            //LogUtils.d(TAG, "call wakeupAndBindAssistant() : Binding... AssistantService");
+//            bindService(new Intent(MainService.this, AssistantService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
+//        }
+        Intent intent = new Intent(this, AssistantService.class);
+        startService(intent);
+        // 绑定服务的Intent
+        //Intent intent = new Intent(this, AssistantService.class);
+        bindService(intent, mMyServiceConnection, Context.BIND_IMPORTANT);
 
-    @Override
-    public boolean isEnable() {
-        mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
-        return mMainServiceBean.isEnable();
+//        Intent intent = new Intent(this, AssistantService.class);
+//        startService(intent);
+//        LogUtils.d(TAG, "startService(intent)");
+//        bindService(new Intent(this, AssistantService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-        LogUtils.d(TAG, "onDestroy");
+        //LogUtils.d(TAG, "onDestroy");
         mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
-        if (mMainServiceBean.isEnable()) {
-            LogUtils.d(TAG, "mMainServiceBean.isEnable()");
-//            ISOSAPP iSOSAPP = (ISOSAPP)getApplication();
-//            iSOSAPP.helpISOSService(getISOSServiceIntentWhichAskForHelp());
-            sos();
-        } 
-        if (_MainThread != null) {
-            _MainThread.isExist = true;
-            _MainThread = null;
+        //LogUtils.d(TAG, "onDestroy done");
+        if (mMainServiceBean.isEnable() == false) {
+            // 设置运行状态
+            isServiceRunning = false;// 解除绑定
+            if (isBound) {
+                unbindService(mMyServiceConnection);
+                isBound = false;
+            }
+            // 停止守护进程
+            Intent intent = new Intent(this, AssistantService.class);
+            stopService(intent);
+            // 停止Receiver
+            if (mMainReceiver != null) {
+                unregisterReceiver(mMainReceiver);
+                mMainReceiver = null;
+            }
+            // 停止前台通知栏
+            stopForeground(true);
+
+            // 停止主要进程
+            MainServiceThread.getInstance(this, mMainServiceHandler).setIsExit(true);
+        }
+
+        super.onDestroy();
+    }
+
+    // 主进程与守护进程连接时需要用到此类
+    //
+    private class MyServiceConnection implements ServiceConnection {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            LogUtils.d(TAG, "onServiceConnected(...)");
+            AssistantService.MyBinder binder = (AssistantService.MyBinder) service;
+            mAssistantService = binder.getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            LogUtils.d(TAG, "onServiceDisconnected(...)");
+            if (mMainServiceBean.isEnable()) {
+                // 唤醒守护进程
+                wakeupAndBindAssistant();
+                SOS.sosWinBollService(getApplicationContext(), new APPSOSBean(getPackageName(), MainService.class.getName()));
+            }
+            isBound = false;
+            mAssistantService = null;
+        }
+
+    }
+
+
+    // 用于返回服务实例的Binder
+    public class MyBinder extends Binder {
+        MainService getService() {
+            LogUtils.d(TAG, "MainService MyBinder getService()");
+            return MainService.this;
         }
     }
 
-    public static void stopISOSService(Context context) {
-        LogUtils.d(TAG, "stopISOSService");
+//    //
+//    // 启动服务
+//    //
+//    public static void startControlCenterService(Context context) {
+//        Intent intent = new Intent(context, MainService.class);
+//        context.startForegroundService(intent);
+//    }
+//
+//    //
+//    // 停止服务
+//    //
+//    public static void stopControlCenterService(Context context) {
+//        Intent intent = new Intent(context, MainService.class);
+//        context.stopService(intent);
+//    }
+
+    public void appenMessage(String message) {
+        LogUtils.d(TAG, String.format("Message : %s", message));
+    }
+
+    public static void stopMainService(Context context) {
+        LogUtils.d(TAG, "stopMainService");
         MainServiceBean bean = new MainServiceBean();
         bean.setIsEnable(false);
         MainServiceBean.saveBean(context, bean);
         context.stopService(new Intent(context, MainService.class));
     }
 
-    public static void startISOSService(Context context) {
-        LogUtils.d(TAG, "startISOSService");
+    public static void startMainService(Context context) {
+        LogUtils.d(TAG, "startMainService");
         MainServiceBean bean = new MainServiceBean();
         bean.setIsEnable(true);
         MainServiceBean.saveBean(context, bean);
         context.startService(new Intent(context, MainService.class));
     }
-    
-    public void sos() {
-        // 创建Intent对象，指定广播的action
-        Intent intentService = new Intent(SOSCSBroadcastReceiver.ACTION_SOS);
-        String packageName = this.getPackageName();
-        String serviceClassName = SOSCSBroadcastReceiver.class.getName();
-        intentService.setComponent(new ComponentName(packageName, serviceClassName));
-        
-        // 目标服务的包名和类名
-        intentService.putExtra(ISOSAPP.EXTRA_PACKAGE, getPackageName());
-        intentService.putExtra(ISOSAPP.EXTRA_SERVICE, MainService.class.getName());
-        // 发送广播
-        sendBroadcast(intentService);
-        LogUtils.d(TAG, "sos");
-        ToastUtils.show("sos");
-    }
-
-    static class MainThread extends Thread {
-        volatile boolean isExist = false;
-
-        public void setIsExist(boolean isExist) {
-            this.isExist = isExist;
-        }
-
-        public boolean isExist() {
-            return isExist;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            while (!isExist) {
-                LogUtils.d(TAG, "run");
-                ToastUtils.show("run");
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-                }
-            }
-        }
-
-    }
 }
+
