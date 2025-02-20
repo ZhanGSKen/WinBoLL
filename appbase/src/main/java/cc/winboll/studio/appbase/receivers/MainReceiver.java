@@ -100,8 +100,9 @@ public class MainReceiver extends BroadcastReceiver {
                             sbLine.append("] Power to ");
                             sbLine.append(appName);
                             appSOSReportBean.setSosReport(sbLine.toString());
-                            
+
                             SOSWidget.addAPPSOSReportBean(context, appSOSReportBean);
+                            
                             Intent intentWidget = new Intent(context, SOSWidget.class);
                             intentWidget.setAction(SOSWidget.ACTION_RELOAD_REPORT);
                             context.sendBroadcast(intentWidget);

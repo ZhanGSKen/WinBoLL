@@ -24,8 +24,8 @@ import java.util.Date;
 public class SOSWidget extends AppWidgetProvider {
 
     public static final String TAG = "SOSWidget";
-
-    public static final String ACTION_SOS = "cc.winboll.studio.appbase.widgets.SOSWidget.ACTION_SOS";
+    
+    public static final String ACTION_WAKEUP_SERVICE = "cc.winboll.studio.appbase.widgets.SOSWidget.ACTION_WAKEUP_SERVICE";
     public static final String ACTION_RELOAD_REPORT = "cc.winboll.studio.appbase.widgets.SOSWidget.ACTION_RELOAD_REPORT";
 
 
@@ -52,6 +52,44 @@ public class SOSWidget extends AppWidgetProvider {
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, SOSWidget.class));
             for (int appWidgetId : appWidgetIds) {
                 updateAppWidget(context, appWidgetManager, appWidgetId);
+            }
+        }else if (intent.getAction().equals(ACTION_WAKEUP_SERVICE)) {
+            LogUtils.d(TAG, "ACTION_WAKEUP_SERVICE");
+            String szAPPSOSBean = intent.getStringExtra("APPSOSBean");
+            LogUtils.d(TAG, String.format("szAPPSOSBean %s", szAPPSOSBean));
+            if (szAPPSOSBean != null && !szAPPSOSBean.equals("")) {
+                try {
+                    APPSOSBean bean = APPSOSBean.parseStringToBean(szAPPSOSBean, APPSOSBean.class);
+                    if (bean != null) {
+                        String sosPackage = bean.getSosPackage();
+                        LogUtils.d(TAG, String.format("sosPackage %s", sosPackage));
+                        String sosClassName = bean.getSosClassName();
+                        LogUtils.d(TAG, String.format("sosClassName %s", sosClassName));
+
+                        
+                        String appName = AppUtils.getAppNameByPackageName(context, sosPackage);
+                        LogUtils.d(TAG, String.format("appName %s", appName));
+                        SOSReportBean appSOSReportBean = new SOSReportBean(appName);
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                        String currentTime = sdf.format(new Date());
+                        StringBuilder sbLine = new StringBuilder();
+                        sbLine.append("[");
+                        sbLine.append(currentTime);
+                        sbLine.append("] Wake up ");
+                        sbLine.append(appName);
+                        appSOSReportBean.setSosReport(sbLine.toString());
+                        
+                        addAPPSOSReportBean(context, appSOSReportBean);
+
+                        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, SOSWidget.class));
+                        for (int appWidgetId : appWidgetIds) {
+                            updateAppWidget(context, appWidgetManager, appWidgetId);
+                        }
+                    }
+                } catch (IOException e) {
+                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+                }
             }
         }
     }

@@ -64,6 +64,8 @@
             android:exported="true">
 
             <intent-filter>
+                <action android:name="cc.winboll.studio.appbase.widgets.SOSWidget.ACTION_WAKEUP_SERVICE"/>
+                <action android:name="cc.winboll.studio.appbase.widgets.SOSWidget.ACTION_RELOAD_REPORT"/>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 

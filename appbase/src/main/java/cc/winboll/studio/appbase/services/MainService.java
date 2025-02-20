@@ -210,6 +210,12 @@ public class MainService extends Service {
         intentService.setComponent(new ComponentName(bean.getSosPackage(), bean.getSosClassName()));
         bindService(intentService, sosConnection, Context.BIND_IMPORTANT);
         mSOSConnectionList.add(sosConnection);
+        
+        Intent intentWidget = new Intent(this, SOSWidget.class);
+        intentWidget.setAction(SOSWidget.ACTION_WAKEUP_SERVICE);
+        APPSOSBean appSOSBean = new APPSOSBean(bean.getSosPackage(), bean.getSosClassName());
+        intentWidget.putExtra("APPSOSBean", appSOSBean.toString());
+        sendBroadcast(intentWidget);
     }
 
     public class SOSConnection implements ServiceConnection {
