@@ -37,3 +37,8 @@
 //include ':aes'
 //include ':libaes'
 //rootProject.name = "aes"
+
+// Positions 项目编译设置
+//include ':positions'
+//rootProject.name = "positions"
+
