@@ -5,8 +5,8 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.telecom.Call;
 import android.telecom.VideoProfile;
-
 import androidx.annotation.RequiresApi;
+import cc.winboll.studio.contacts.dun.Rules;
 
 
 @RequiresApi(api = Build.VERSION_CODES.M)
@@ -19,7 +19,6 @@ public class PhoneCallManager {
 
     public PhoneCallManager(Context context) {
         this.context = context;
-
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     }
 
@@ -28,6 +27,8 @@ public class PhoneCallManager {
      */
     public void answer() {
         if (call != null) {
+            Call.Details details = call.getDetails();
+            String phoneNumber = details.getHandle().getSchemeSpecificPart();
             call.answer(VideoProfile.STATE_AUDIO_ONLY);
             openSpeaker();
         }
