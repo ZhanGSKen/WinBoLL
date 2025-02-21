@@ -118,7 +118,11 @@ public abstract class BaseBean<T extends BaseBean> {
 
     public static <T extends BaseBean> boolean parseStringToBeanList(String szBeanList, ArrayList<T> beanList, Class<T> clazz) {
         try {
-            beanList.clear();
+            if(beanList == null) {
+                beanList = new ArrayList<T>();
+            } else {
+                beanList.clear();
+            }
             StringReader stringReader = new StringReader(szBeanList);
             JsonReader jsonReader = new JsonReader(stringReader);
             jsonReader.beginArray();
