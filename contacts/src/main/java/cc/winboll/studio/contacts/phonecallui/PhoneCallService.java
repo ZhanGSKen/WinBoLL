@@ -13,13 +13,23 @@ import android.telecom.Call;
 import android.telecom.InCallService;
 import androidx.annotation.RequiresApi;
 import cc.winboll.studio.contacts.ActivityStack;
+import cc.winboll.studio.contacts.beans.PhoneBlackRuleBean;
 import cc.winboll.studio.contacts.dun.Rules;
+import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class PhoneCallService extends InCallService {
-    
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        
+    }
+
+
+
     private int originalRingVolume;
-    
+
     private final Call.Callback callback = new Call.Callback() {
         @Override
         public void onStateChanged(Call call, int state) {
@@ -41,7 +51,7 @@ public class PhoneCallService extends InCallService {
     @Override
     public void onCallAdded(Call call) {
         super.onCallAdded(call);
-        
+
         call.registerCallback(callback);
         PhoneCallManager.call = call;
         CallType callType = null;
@@ -59,13 +69,13 @@ public class PhoneCallService extends InCallService {
             // 记录原始铃声音量
             AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
             originalRingVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
-            if (!Rules.isAllowed(phoneNumber)) {
+            if (!Rules.getInstance(this).isAllowed(phoneNumber)) {
                 // 预先静音
                 audioManager.setStreamVolume(AudioManager.STREAM_RING, 0, 0);
                 call.disconnect();
                 return;
             }
-            
+
             PhoneCallActivity.actionStart(this, phoneNumber, callType);
         }
     }

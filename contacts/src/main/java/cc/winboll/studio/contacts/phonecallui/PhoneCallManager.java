@@ -27,8 +27,6 @@ public class PhoneCallManager {
      */
     public void answer() {
         if (call != null) {
-            Call.Details details = call.getDetails();
-            String phoneNumber = details.getHandle().getSchemeSpecificPart();
             call.answer(VideoProfile.STATE_AUDIO_ONLY);
             openSpeaker();
         }

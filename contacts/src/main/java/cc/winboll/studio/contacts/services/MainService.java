@@ -27,6 +27,7 @@ import cc.winboll.studio.contacts.widgets.APPStatusWidget;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.SOS;
 import cc.winboll.studio.libappbase.bean.APPSOSBean;
+import cc.winboll.studio.contacts.dun.Rules;
 
 public class MainService extends Service {
 
@@ -98,6 +99,10 @@ public class MainService extends Service {
                 mMainReceiver = new MainReceiver(this);
                 mMainReceiver.registerAction(this);
             }
+            
+            Rules.getInstance(this);
+            //Rules.getInstance(this).add("18888888888", true);
+            //Rules.getInstance(this).add("16769764848", true);
             
             startPhoneCallListener();
 
