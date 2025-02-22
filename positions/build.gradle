@@ -49,7 +49,11 @@ android {
 }
 
 dependencies {
-        // 二维码使用的类库
+    // 卫星定位类库
+    api 'com.google.android.gms:play-services-maps:18.1.0'
+    api 'com.google.android.gms:play-services-location:21.0.1'
+
+    // 二维码使用的类库
     api 'com.google.zxing:core:3.4.1'
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
     

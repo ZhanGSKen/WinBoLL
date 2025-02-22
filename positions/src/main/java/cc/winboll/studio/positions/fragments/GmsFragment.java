@@ -16,17 +16,17 @@ import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import android.widget.TextView;
 
-public class CallFragment extends Fragment {
+public class GmsFragment extends Fragment {
 
-    public static final String TAG = "CallFragment";
+    public static final String TAG = "GmsFragment";
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
 
-    public static CallFragment newInstance(int page) {
+    public static GmsFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        CallFragment fragment = new CallFragment();
+        GmsFragment fragment = new GmsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,7 +43,7 @@ public class CallFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_call, container, false);
+        View view = inflater.inflate(R.layout.fragment_gms, container, false);
         TextView textView = view.findViewById(R.id.page_text);
         textView.setText("这是第 " + mPage + " 页");
         return view;

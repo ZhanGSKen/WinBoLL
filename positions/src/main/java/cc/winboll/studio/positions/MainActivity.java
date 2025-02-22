@@ -146,7 +146,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     void initData() {
         ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
         LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view1 = inflater.inflate(R.layout.fragment_call, viewPager, false);
+        View view1 = inflater.inflate(R.layout.fragment_gms, viewPager, false);
         View view2 = inflater.inflate(R.layout.fragment_contacts, viewPager, false);
         View view3 = inflater.inflate(R.layout.fragment_log, viewPager, false);
 
