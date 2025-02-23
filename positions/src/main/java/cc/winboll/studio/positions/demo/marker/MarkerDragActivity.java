@@ -10,36 +10,49 @@ import cc.winboll.studio.positions.R;
 import com.tencent.tencentmap.mapsdk.maps.TencentMap;
 import com.tencent.tencentmap.mapsdk.maps.model.Marker;
 
-public class MarkerDragActivity extends MarkerActivity implements TencentMap.OnMarkerDragListener{
-    private TextView textView;
+public class MarkerDragActivity extends MarkerActivity implements TencentMap.OnMarkerDragListener {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        marker.setInfoWindowEnable(false);
-        aSwitch.setVisibility(View.GONE);
-
-        textView = findViewById(R.id.tv_info);
-        textView.setText("长按标记开始拖动");
-        textView.setVisibility(View.VISIBLE);
-
-        marker.setDraggable(true);
-        tencentMap.setOnMarkerDragListener(this);
+    public void onMarkerDragStart(Marker p1) {
     }
 
     @Override
-    public void onMarkerDragStart(Marker marker) {
-        Log.e("marker:","drag");
-        Toast.makeText(this, "拖拽开始", Toast.LENGTH_SHORT).show();
+    public void onMarkerDrag(Marker p1) {
     }
 
     @Override
-    public void onMarkerDrag(Marker marker) {
-
+    public void onMarkerDragEnd(Marker p1) {
     }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-        Toast.makeText(this, "拖拽结束", Toast.LENGTH_SHORT).show();
-    }
+    
+//    private TextView textView;
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        marker.setInfoWindowEnable(false);
+//        aSwitch.setVisibility(View.GONE);
+//
+//        textView = findViewById(R.id.tv_info);
+//        textView.setText("长按标记开始拖动");
+//        textView.setVisibility(View.VISIBLE);
+//
+//        marker.setDraggable(true);
+//        tencentMap.setOnMarkerDragListener(this);
+//    }
+//
+//    @Override
+//    public void onMarkerDragStart(Marker marker) {
+//        Log.e("marker:","drag");
+//        Toast.makeText(this, "拖拽开始", Toast.LENGTH_SHORT).show();
+//    }
+//
+//    @Override
+//    public void onMarkerDrag(Marker marker) {
+//
+//    }
+//
+//    @Override
+//    public void onMarkerDragEnd(Marker marker) {
+//        Toast.makeText(this, "拖拽结束", Toast.LENGTH_SHORT).show();
+//    }
 }

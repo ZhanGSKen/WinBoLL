@@ -1,5 +1,6 @@
 package cc.winboll.studio.positions.demo;
 
+import cc.winboll.studio.positions.R;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
