@@ -3,4 +3,42 @@
 
     <string name="app_name">Positions</string>
 
+    <string name="title_main_basic">基础地图</string>
+    <string name="title_main_interactive">地图交互</string>
+    <string name="title_main_transformation">地图变换</string>
+    <string name="title_main_marker">标注</string>
+    <string name="title_main_draw">图形绘制</string>
+    <string name="title_main_route_plan">路线规划</string>
+    <string name="title_main_search">检索</string>
+    <string name="title_main_special">特色</string>
+    <string name="title_main_tools">工具</string>
+    <string name="normal">普通地图</string>
+    <string name="dark">暗色模式</string>
+    <string name="satellite">卫星图</string>
+    <string name="menu_title_add">添加</string>
+    <string name="menu_title_default">默认</string>
+    <string name="menu_title_custom">自定义</string>
+    <string name="menu_title_delete">移除</string>
+    <string name="menu_title_animation">播放动画</string>
+    <string name="menu_title_hide">隐藏</string>
+    <string name="menu_title_show">显示</string>
+    <string name="menu_title_style1">样式1</string>
+    <string name="menu_title_style2">样式2</string>
+    <string name="menu_title_infowindow_bitmap">Bitmap</string>
+    <string name="menu_title_infowindow_view">View</string>
+    <string name="menu_title_enable">开启</string>
+    <string name="menu_title_close">关闭</string>
+    <string name="menu_title_line_text">路名</string>
+    <string name="menu_title_line_dash">虚线</string>
+    <string name="menu_title_line_segment">分段线</string>
+    <string name="menu_title_line_texture">纹理线</string>
+    <string name="menu_title_line_gradient">渐变色</string>
+    <string name="menu_title_marker_rotate">旋转</string>
+    <string name="menu_title_marker_scale">缩放</string>
+    <string name="menu_title_marker_alpha">渐变</string>
+    <string name="menu_title_marker_translate">平移</string>
+    <string name="menu_title_marker_set">组合动画</string>
+    <string name="menu_title_marker_general">普通点聚合</string>
+    <string name="menu_title_marker_massive">海量点聚合</string>
+    <string name="menu_title_marker_custom">自定义点聚合</string>
 </resources>

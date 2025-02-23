@@ -17,6 +17,15 @@ def genVersionName(def versionName){
     return "${versionName}." + winbollBuildProps['stageCount']
 }
 
+Properties properties = new Properties()
+File localFile = project.rootProject.file('local.properties')
+if (localFile.exists()) {
+    InputStream inputStream = localFile.newDataInputStream()
+    properties.load(inputStream)
+}
+
+def mapsdkkey = properties.getProperty('mapsdk.key', "")
+
 android {
     compileSdkVersion 32
     buildToolsVersion "33.0.3"
@@ -49,10 +58,18 @@ android {
 }
 
 dependencies {
-    // 卫星定位类库
-    api 'com.google.android.gms:play-services-maps:18.1.0'
-    api 'com.google.android.gms:play-services-location:21.0.1'
-
+    api 'androidx.recyclerview:recyclerview:1.1.0'
+    api 'androidx.appcompat:appcompat:1.1.0'
+    api 'androidx.constraintlayout:constraintlayout:1.1.3'
+    api 'pub.devrel:easypermissions:2.0.1'
+    // 地图
+    api 'com.tencent.map:tencent-map-vector-sdk:6.2.1.250120.3f971009.140342819'
+    // 基础库
+    api 'com.tencent.openmap:foundation:0.5.6.9be4e02'
+    api 'com.tencent.map:sdk-utilities:1.0.9'
+    api 'com.tencent.map.geolocation:TencentLocationSdk-openplatform:7.5.4.3'
+    api 'com.google.code.gson:gson:2.8.5'
+    
     // 二维码使用的类库
     api 'com.google.zxing:core:3.4.1'
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
@@ -63,9 +80,9 @@ dependencies {
     api 'org.jsoup:jsoup:1.13.1'
     api 'com.squareup.okhttp3:okhttp:4.4.1'
     
-    api 'androidx.appcompat:appcompat:1.1.0'
+    //api 'androidx.appcompat:appcompat:1.1.0'
     api 'androidx.viewpager:viewpager:1.0.0'
-    api 'androidx.fragment:fragment:1.1.0'
+    api 'androidx.fragment:fragment:1.0.0'
     api 'com.google.android.material:material:1.4.0'
     
     api 'cc.winboll.studio:libapputils:9.3.2'
