@@ -27,13 +27,11 @@ if (localFile.exists()) {
 def mapsdkkey = properties.getProperty('mapsdk.key', "")
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "33.0.3"
-
+    compileSdkVersion 29
     defaultConfig {
         applicationId "cc.winboll.studio.positions"
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion 22
+        targetSdkVersion 29
         versionCode 1
         // versionName 更新后需要手动设置 
         // 项目模块目录的 build.gradle 文件的 stageCount=0
@@ -42,51 +40,50 @@ android {
         if(true) {
             versionName = genVersionName("${versionName}")
         }
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = ["TencentMapSDK_KEY": mapsdkkey]
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    api 'androidx.recyclerview:recyclerview:1.1.0'
-    api 'androidx.appcompat:appcompat:1.1.0'
-    api 'androidx.constraintlayout:constraintlayout:1.1.3'
-    api 'pub.devrel:easypermissions:2.0.1'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'pub.devrel:easypermissions:2.0.1'
     // 地图
-    api 'com.tencent.map:tencent-map-vector-sdk:6.2.1.250120.3f971009.140342819'
+    implementation 'com.tencent.map:tencent-map-vector-sdk:6.2.1.250120.3f971009.140342819'
     // 基础库
-    api 'com.tencent.openmap:foundation:0.5.6.9be4e02'
-    api 'com.tencent.map:sdk-utilities:1.0.9'
-    api 'com.tencent.map.geolocation:TencentLocationSdk-openplatform:7.5.4.3'
-    api 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.tencent.openmap:foundation:0.5.6.9be4e02'
+    implementation 'com.tencent.map:sdk-utilities:1.0.9'
+    implementation 'com.tencent.map.geolocation:TencentLocationSdk-openplatform:7.5.4.3'
+    implementation 'com.google.code.gson:gson:2.8.5'
     
     // 二维码使用的类库
-    api 'com.google.zxing:core:3.4.1'
-    api 'com.journeyapps:zxing-android-embedded:3.6.0'
+    implementation 'com.google.zxing:core:3.4.1'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     
-    api 'io.github.medyo:android-about-page:2.0.0'
-    api 'com.github.getActivity:ToastUtils:10.5'
-    api 'com.jcraft:jsch:0.1.55'
-    api 'org.jsoup:jsoup:1.13.1'
-    api 'com.squareup.okhttp3:okhttp:4.4.1'
+    implementation 'io.github.medyo:android-about-page:2.0.0'
+    implementation 'com.github.getActivity:ToastUtils:10.5'
+    implementation 'com.jcraft:jsch:0.1.55'
+    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.4.1'
     
     //api 'androidx.appcompat:appcompat:1.1.0'
-    api 'androidx.viewpager:viewpager:1.0.0'
-    api 'androidx.fragment:fragment:1.0.0'
-    api 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'androidx.fragment:fragment:1.0.0'
+    implementation 'com.google.android.material:material:1.4.0'
     
-    api 'cc.winboll.studio:libapputils:9.3.2'
-    api 'cc.winboll.studio:libappbase:1.5.6'
-    
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'cc.winboll.studio:libapputils:9.3.2'
+    implementation 'cc.winboll.studio:libappbase:1.5.6'
 }

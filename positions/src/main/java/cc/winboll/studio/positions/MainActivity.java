@@ -25,7 +25,7 @@ import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
 import cc.winboll.studio.positions.R;
-import cc.winboll.studio.positions.activities.MapViewActivity;
+import com.tencent.map.vector.demo.DemoMainActivity;
 import cc.winboll.studio.positions.activities.SettingsActivity;
 import cc.winboll.studio.positions.adapters.MyPagerAdapter;
 import cc.winboll.studio.positions.beans.MainServiceBean;
@@ -321,8 +321,8 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
-        } else if (item.getItemId() == R.id.item_location) {
-            Intent intent = new Intent(this, MapViewActivity.class);
+        } else if (item.getItemId() == R.id.item_demomain) {
+            Intent intent = new Intent(this, com.tencent.map.vector.demo.DemoMainActivity.class);
             startActivity(intent);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
         }

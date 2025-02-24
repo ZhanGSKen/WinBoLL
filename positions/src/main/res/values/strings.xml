@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">Positions</string>
+    <string name="app_name">腾讯地图示例</string>
 
     <string name="title_main_basic">基础地图</string>
     <string name="title_main_interactive">地图交互</string>
@@ -41,4 +39,5 @@
     <string name="menu_title_marker_general">普通点聚合</string>
     <string name="menu_title_marker_massive">海量点聚合</string>
     <string name="menu_title_marker_custom">自定义点聚合</string>
+
 </resources>

@@ -2,8 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/item_location"
-        android:title="LocationActivity"/>
+        android:id="@+id/item_mapview"
+        android:title="MapViewActivity"/>
+    <item
+        android:id="@+id/item_demomain"
+        android:title="DemoMainActivity"/>
     <item
         android:id="@+id/item_settings"
         android:title="SettingsActivity"/>
