@@ -21,6 +21,7 @@ public class App extends GlobalApplication {
         super.onCreate();
         // 设置 WinBoll 应用 UI 类型
         WinBollActivityManager.getInstance(this).setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Aplication);
+
         
         LogUtils.d(TAG, "onCreate");
     }
