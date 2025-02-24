@@ -4,6 +4,7 @@
 位置应用,与卫星定位有关的应用。可以根据设定的位置与时间条件判断，来发送通知的应用。
 
 #### 软件架构
+以腾讯位置服务SDK源码为基础。源码地址：https://lbs.qq.com/mobile/androidMapSDK/developerGuide/configuration
 适配安卓应用 [AIDE Pro] 的 Gradle 编译结构。
 也适配安卓应用 [AndroidIDE] 的 Gradle 编译结构。
 
