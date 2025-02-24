@@ -28,6 +28,8 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.SOS;
 import cc.winboll.studio.libappbase.bean.APPSOSBean;
 import cc.winboll.studio.contacts.dun.Rules;
+import android.media.AudioManager;
+import com.hjq.toast.ToastUtils;
 
 public class MainService extends Service {
 
@@ -46,7 +48,8 @@ public class MainService extends Service {
     AssistantService mAssistantService;
     boolean isBound = false;
     MainReceiver mMainReceiver;
-
+    
+    
     @Override
     public IBinder onBind(Intent intent) {
         return new MyBinder();
@@ -68,7 +71,9 @@ public class MainService extends Service {
             mMyServiceConnection = new MyServiceConnection();
         }
         mMainServiceHandler = new MainServiceHandler(this);
-
+        
+        
+    
         // 运行服务内容
         mainService();
     }
@@ -163,6 +168,7 @@ public class MainService extends Service {
 
             // 停止主要进程
             MainServiceThread.getInstance(this, mMainServiceHandler).setIsExit(true);
+            
         }
 
         super.onDestroy();

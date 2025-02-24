@@ -4,30 +4,35 @@ package cc.winboll.studio.contacts.activities;
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/02/21 05:37:42
  */
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Switch;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import cc.winboll.studio.contacts.R;
-import com.hjq.toast.ToastUtils;
-import java.lang.reflect.Field;
 import androidx.appcompat.widget.Toolbar;
+import cc.winboll.studio.contacts.R;
+import cc.winboll.studio.contacts.beans.RingTongBean;
 import cc.winboll.studio.libappbase.IWinBollActivity;
 import cc.winboll.studio.libappbase.bean.APPInfo;
+import com.hjq.toast.ToastUtils;
+import java.lang.reflect.Field;
 
 public class SettingsActivity extends AppCompatActivity implements IWinBollActivity {
 
     public static final String TAG = "SettingsActivity";
 
     Toolbar mToolbar;
+    Switch swSilent;
 
     @Override
     public APPInfo getAppInfo() {
@@ -38,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
     public AppCompatActivity getActivity() {
         return this;
     }
-    
+
     @Override
     public String getTag() {
         return TAG;
@@ -58,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
     public boolean isEnableDisplayHomeAsUp() {
         return false;
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,13 +77,13 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         getSupportActionBar().setSubtitle(getTag());
-        
     }
 
     public void onDefaultPhone(View view) {
         Intent intent = new Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS);
         startActivity(intent);
     }
+
     public void onCanDrawOverlays(View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
             && !Settings.canDrawOverlays(this)) {

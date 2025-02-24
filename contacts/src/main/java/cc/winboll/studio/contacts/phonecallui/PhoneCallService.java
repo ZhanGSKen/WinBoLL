@@ -13,22 +13,16 @@ import android.telecom.Call;
 import android.telecom.InCallService;
 import androidx.annotation.RequiresApi;
 import cc.winboll.studio.contacts.ActivityStack;
-import cc.winboll.studio.contacts.beans.PhoneBlackRuleBean;
+import cc.winboll.studio.contacts.beans.RingTongBean;
 import cc.winboll.studio.contacts.dun.Rules;
-import java.util.ArrayList;
+import cc.winboll.studio.libappbase.LogUtils;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class PhoneCallService extends InCallService {
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        
-    }
-
-
-
-    private int originalRingVolume;
+    public static final String TAG = "PhoneCallService";
+    
+    private volatile int originalRingVolume;
 
     private final Call.Callback callback = new Call.Callback() {
         @Override
@@ -69,13 +63,24 @@ public class PhoneCallService extends InCallService {
             // 记录原始铃声音量
             AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
             originalRingVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
+            // 检查电话接收规则
             if (!Rules.getInstance(this).isAllowed(phoneNumber)) {
                 // 预先静音
                 audioManager.setStreamVolume(AudioManager.STREAM_RING, 0, 0);
+                // 断开电话
                 call.disconnect();
+                // 停顿1秒，预防第一声铃声响动
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    LogUtils.d(TAG, "");
+                }
+                // 恢复铃声音量
+                audioManager.setStreamVolume(AudioManager.STREAM_RING, originalRingVolume, 0);
+                // 屏蔽电话结束
                 return;
             }
-
+            // 正常接听电话
             PhoneCallActivity.actionStart(this, phoneNumber, callType);
         }
     }

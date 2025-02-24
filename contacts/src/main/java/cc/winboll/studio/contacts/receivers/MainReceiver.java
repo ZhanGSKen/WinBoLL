@@ -9,19 +9,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.util.Log;
 import cc.winboll.studio.contacts.services.MainService;
 import com.hjq.toast.ToastUtils;
 import java.lang.ref.WeakReference;
+import cc.winboll.studio.libappbase.LogUtils;
 
 public class MainReceiver extends BroadcastReceiver {
 
     public static final String TAG = "MainReceiver";
     public static final String ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED";
     WeakReference<MainService> mwrService;
-    // 存储电量指示值，
-    // 用于校验电量消息时的电量变化
-    static volatile int _mnTheQuantityOfElectricityOld = -1;
-    static volatile boolean _mIsCharging = false;
 
     public MainReceiver(MainService service) {
         mwrService = new WeakReference<MainService>(service);
