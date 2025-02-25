@@ -26,6 +26,8 @@ import cc.winboll.studio.libappbase.IWinBollActivity;
 import cc.winboll.studio.libappbase.bean.APPInfo;
 import com.hjq.toast.ToastUtils;
 import java.lang.reflect.Field;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class SettingsActivity extends AppCompatActivity implements IWinBollActivity {
 
@@ -33,6 +35,11 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
 
     Toolbar mToolbar;
     Switch swSilent;
+    SeekBar msbVolume;
+    TextView mtvVolume;
+    int mnStreamMaxVolume;
+    int mnStreamVolume;
+
 
     @Override
     public APPInfo getAppInfo() {
@@ -77,6 +84,52 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         getSupportActionBar().setSubtitle(getTag());
+
+        msbVolume = findViewById(R.id.bellvolume);
+        mtvVolume = findViewById(R.id.tv_volume);
+        final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+        // 设置SeekBar的最大值为系统铃声音量的最大刻度
+        mnStreamMaxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
+        msbVolume.setMax(mnStreamMaxVolume);
+        // 获取当前铃声音量并设置为SeekBar的初始进度
+        mnStreamVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
+        msbVolume.setProgress(mnStreamVolume);
+        
+        updateStreamVolumeTextView();
+
+        msbVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser) {
+                        // 设置铃声音量
+                        audioManager.setStreamVolume(AudioManager.STREAM_RING, progress, 0);
+                        RingTongBean bean = RingTongBean.loadBean(SettingsActivity.this, RingTongBean.class);
+                        if (bean == null) {
+                            bean = new RingTongBean();
+                        }
+                        bean.setStreamVolume(progress);
+                        RingTongBean.saveBean(SettingsActivity.this, bean);
+                        mnStreamVolume = progress;
+                        updateStreamVolumeTextView();
+                        //Toast.makeText(SettingsActivity.this, "音量设置为: " + progress, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    // 当开始拖动SeekBar时的操作
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    // 当停止拖动SeekBar时的操作
+                }
+            });
+    }
+    
+    void updateStreamVolumeTextView() {
+        mtvVolume.setText(String.format("%d/%d", mnStreamVolume, mnStreamMaxVolume));
     }
 
     public void onDefaultPhone(View view) {

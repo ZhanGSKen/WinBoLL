@@ -18,13 +18,13 @@ def genVersionName(def versionName){
 }
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "33.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "cc.winboll.studio.contacts"
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion 26
+        targetSdkVersion 29
         versionCode 1
         // versionName 更新后需要手动设置 
         // 项目模块目录的 build.gradle 文件的 stageCount=0

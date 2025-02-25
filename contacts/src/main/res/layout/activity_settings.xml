@@ -45,6 +45,32 @@
 
 		</LinearLayout>
 
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="音量设置："/>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
+				android:id="@+id/tv_volume"/>
+
+			<SeekBar
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_margin="10dp"
+				android:max="100"
+				android:id="@+id/bellvolume"/>
+
+		</LinearLayout>
+
 	</LinearLayout>
 
 </LinearLayout>
