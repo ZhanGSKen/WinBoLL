@@ -35,6 +35,14 @@ public class SMSRecevier_Test {
         szSmsAddress = "10000";
         test1(context, szSmsBody, szSmsAddress);
         
+        szSmsBody = "【UC】无影无迹";
+        szSmsAddress = "13172887736";
+        test1(context, szSmsBody, szSmsAddress);
+        
+        szSmsBody = "【UC】无影无迹";
+        szSmsAddress = "+8613172887736";
+        test1(context, szSmsBody, szSmsAddress);
+        
     }
     
     public static void test1(Context context, String szSmsBody, String szSmsAddress) {

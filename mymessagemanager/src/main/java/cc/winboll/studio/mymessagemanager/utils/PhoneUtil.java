@@ -78,7 +78,7 @@ public class PhoneUtil {
             return false;
         }
         //String text = "这里是一些任意的文本内容";
-        String regex = "\\d+";
+        String regex = "[+]?\\d+";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(szPhone);
         LogUtils.d(TAG, String.format("matcher.matches() : %s", matcher.matches()));
