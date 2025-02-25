@@ -69,6 +69,14 @@ allprojects {
             }
 	    }
     }
+    
+    subprojects {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-parameters"
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+    }
 }
 
 task clean(type: Delete) {
