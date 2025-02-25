@@ -36,7 +36,7 @@ import java.util.List;
 import com.tencent.map.vector.demo.AbsListActivity;
 import com.tencent.map.vector.demo.AbsActivity;
 
-final public class Main2Activity extends AbsActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
+final public class MainSimpleActivity extends AbsActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
 	public static final String TAG = "MainActivity";
 

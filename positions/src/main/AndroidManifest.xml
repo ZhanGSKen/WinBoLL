@@ -47,7 +47,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="q">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainSimpleActivity">
 
             <intent-filter>
 

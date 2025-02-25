@@ -54,9 +54,9 @@ import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
 import cc.winboll.studio.positions.beans.LocationJson;
 
-public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,LocationSource, TencentLocationListener {
+public class MainSimpleActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,LocationSource, TencentLocationListener {
 
-    public static final String TAG ="MainActivity";
+    public static final String TAG ="MainSimpleActivity";
 
     private static final int PERMISSION_REQUEST_CODE = 1;
 
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_simple);
         
         locationJsonList = new ArrayList<LocationJson>();
         
