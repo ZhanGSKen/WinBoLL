@@ -47,6 +47,8 @@ import java.util.ArrayList;
 import java.util.List;
 import android.content.DialogInterface;
 import cc.winboll.studio.contacts.activities.SettingsActivity;
+import cc.winboll.studio.contacts.beans.MainServiceBean; 
+import cc.winboll.studio.contacts.services.MainService;
 
 final public class MainActivity extends AppCompatActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
@@ -140,7 +142,15 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //                    }
 //                }
 //            });
-        MainService.startMainService(MainActivity.this);
+
+        MainServiceBean mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
+        if (mMainServiceBean == null) {
+            mMainServiceBean = new MainServiceBean();
+            MainServiceBean.saveBean(this, mMainServiceBean);
+        }
+        if (mMainServiceBean.isEnable()) {
+            MainService.startMainService(this);
+        }
     }
 
     //初始化view，即显示的图片

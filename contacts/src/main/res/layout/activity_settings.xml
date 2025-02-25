@@ -21,6 +21,25 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:text="服务设置："/>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<Switch
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="主要服务"
+				android:id="@+id/sw_mainservice"
+				android:layout_margin="10dp"/>
+
+		</LinearLayout>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:text="应用权限设置："/>
 
 		<LinearLayout

@@ -28,6 +28,8 @@ import com.hjq.toast.ToastUtils;
 import java.lang.reflect.Field;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import cc.winboll.studio.contacts.beans.MainServiceBean; 
+import cc.winboll.studio.contacts.services.MainService;
 
 public class SettingsActivity extends AppCompatActivity implements IWinBollActivity {
 
@@ -39,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
     TextView mtvVolume;
     int mnStreamMaxVolume;
     int mnStreamVolume;
+    Switch mswMainService;
 
 
     @Override
@@ -85,6 +88,23 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
         }
         getSupportActionBar().setSubtitle(getTag());
 
+        mswMainService = findViewById(R.id.sw_mainservice);
+        MainServiceBean mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
+        mswMainService.setChecked(mMainServiceBean.isEnable());
+        mswMainService.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View arg0) {
+                    // TODO: Implement this method
+                    if (mswMainService.isChecked()) {
+                        //ToastUtils.show("Is Checked");
+                        MainService.startMainService(SettingsActivity.this);
+                    } else {
+                        //ToastUtils.show("Not Checked");
+                        MainService.stopMainService(SettingsActivity.this);
+                    }
+                }
+            });
+
         msbVolume = findViewById(R.id.bellvolume);
         mtvVolume = findViewById(R.id.tv_volume);
         final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -95,7 +115,7 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
         // 获取当前铃声音量并设置为SeekBar的初始进度
         mnStreamVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
         msbVolume.setProgress(mnStreamVolume);
-        
+
         updateStreamVolumeTextView();
 
         msbVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -127,7 +147,7 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
                 }
             });
     }
-    
+
     void updateStreamVolumeTextView() {
         mtvVolume.setText(String.format("%d/%d", mnStreamVolume, mnStreamMaxVolume));
     }

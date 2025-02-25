@@ -30,6 +30,9 @@ import cc.winboll.studio.libappbase.bean.APPSOSBean;
 import cc.winboll.studio.contacts.dun.Rules;
 import android.media.AudioManager;
 import com.hjq.toast.ToastUtils;
+import java.util.Timer;
+import java.util.TimerTask;
+import cc.winboll.studio.contacts.beans.RingTongBean;
 
 public class MainService extends Service {
 
@@ -48,8 +51,8 @@ public class MainService extends Service {
     AssistantService mAssistantService;
     boolean isBound = false;
     MainReceiver mMainReceiver;
-    
-    
+    Timer mStreamVolumeCheckTimer;
+
     @Override
     public IBinder onBind(Intent intent) {
         return new MyBinder();
@@ -71,9 +74,35 @@ public class MainService extends Service {
             mMyServiceConnection = new MyServiceConnection();
         }
         mMainServiceHandler = new MainServiceHandler(this);
-        
-        
-    
+
+        // 铃声检查定时器
+        mStreamVolumeCheckTimer = new Timer();
+        mStreamVolumeCheckTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+
+                    // 恢复铃声音量，预防其他意外条件导致的音量变化问题
+                    //
+
+                    // 读取应用配置，未配置就初始化配置文件
+                    RingTongBean bean = RingTongBean.loadBean(MainService.this, RingTongBean.class);
+                    if (bean == null) {
+                        // 初始化配置
+                        bean = new RingTongBean();
+                        RingTongBean.saveBean(MainService.this, bean);
+                    }
+                    // 如果当前音量和应用保存的不一致就恢复为应用设定值
+                    // 恢复铃声音量
+                    try {
+                        audioManager.setStreamVolume(AudioManager.STREAM_RING, bean.getStreamVolume(), 0);
+                        //audioManager.setMode(AudioManager.RINGER_MODE_NORMAL);
+                    } catch (java.lang.SecurityException e) {
+                        LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+                    }
+                }
+            }, 1000, 60000);
+
         // 运行服务内容
         mainService();
     }
@@ -104,11 +133,11 @@ public class MainService extends Service {
                 mMainReceiver = new MainReceiver(this);
                 mMainReceiver.registerAction(this);
             }
-            
+
             Rules.getInstance(this);
             //Rules.getInstance(this).add("18888888888", true);
             //Rules.getInstance(this).add("16769764848", true);
-            
+
             startPhoneCallListener();
 
             MainServiceThread.getInstance(this, mMainServiceHandler).start();
@@ -137,7 +166,7 @@ public class MainService extends Service {
 //        LogUtils.d(TAG, "startService(intent)");
 //        bindService(new Intent(this, AssistantService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
     }
-    
+
     void startPhoneCallListener() {
         Intent callListener = new Intent(this, CallListenerService.class);
         startService(callListener);
@@ -168,7 +197,7 @@ public class MainService extends Service {
 
             // 停止主要进程
             MainServiceThread.getInstance(this, mMainServiceHandler).setIsExit(true);
-            
+
         }
 
         super.onDestroy();
