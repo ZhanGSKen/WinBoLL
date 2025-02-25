@@ -61,7 +61,7 @@ public class PhoneCallService extends InCallService {
             // 记录原始铃声音量
             //
             AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-
+            int ringerVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
             // 恢复铃声音量，预防其他意外条件导致的音量变化问题
             //
 
@@ -75,8 +75,10 @@ public class PhoneCallService extends InCallService {
             // 如果当前音量和应用保存的不一致就恢复为应用设定值
             // 恢复铃声音量
             try {
-                audioManager.setStreamVolume(AudioManager.STREAM_RING, bean.getStreamVolume(), 0);
-                //audioManager.setMode(AudioManager.RINGER_MODE_NORMAL);
+                if (ringerVolume != bean.getStreamVolume()) {
+                    audioManager.setStreamVolume(AudioManager.STREAM_RING, bean.getStreamVolume(), 0);
+                    //audioManager.setMode(AudioManager.RINGER_MODE_NORMAL);
+                }
             } catch (java.lang.SecurityException e) {
                 LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
             }
@@ -111,18 +113,6 @@ public class PhoneCallService extends InCallService {
 
             // 正常接听电话
             PhoneCallActivity.actionStart(this, phoneNumber, callType);
-        }
-    }
-
-    void resumeStreamVolume(AudioManager audioManager, int originalRingVolume) {
-        // 如果当前音量和应用保存的不一致就恢复为应用设定值
-        RingTongBean bean = RingTongBean.loadBean(this, RingTongBean.class);
-        if (bean == null) {
-            bean = new RingTongBean();
-        }
-        if (originalRingVolume != bean.getStreamVolume()) {
-            // 恢复铃声音量
-            audioManager.setStreamVolume(AudioManager.STREAM_RING, bean.getStreamVolume(), 0);
         }
     }
 

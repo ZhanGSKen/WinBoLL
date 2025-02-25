@@ -81,7 +81,7 @@ public class MainService extends Service {
                 @Override
                 public void run() {
                     AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-
+                    int ringerVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
                     // 恢复铃声音量，预防其他意外条件导致的音量变化问题
                     //
 
@@ -95,8 +95,10 @@ public class MainService extends Service {
                     // 如果当前音量和应用保存的不一致就恢复为应用设定值
                     // 恢复铃声音量
                     try {
-                        audioManager.setStreamVolume(AudioManager.STREAM_RING, bean.getStreamVolume(), 0);
-                        //audioManager.setMode(AudioManager.RINGER_MODE_NORMAL);
+                        if (ringerVolume != bean.getStreamVolume()) {
+                            audioManager.setStreamVolume(AudioManager.STREAM_RING, bean.getStreamVolume(), 0);
+                            //audioManager.setMode(AudioManager.RINGER_MODE_NORMAL);
+                        }
                     } catch (java.lang.SecurityException e) {
                         LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
                     }
