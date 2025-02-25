@@ -42,3 +42,7 @@
 //include ':positions'
 //rootProject.name = "positions"
 
+// MyMessageManager 项目编译设置
+//include ':mymessagemanager'
+//rootProject.name = "mymessagemanager"
+

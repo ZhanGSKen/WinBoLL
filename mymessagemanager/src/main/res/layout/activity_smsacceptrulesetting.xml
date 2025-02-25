@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<cc.winboll.studio.libaes.views.ASupportToolbar
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/toolbar_height"
+		android:id="@+id/activitysmsacceptrulesettingASupportToolbar1"/>
+
+	<com.baoyz.widget.PullRefreshLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1.0"
+		android:id="@+id/activitysmsacceptrulesettingPullRefreshLayout1">
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:isScrollContainer="true"
+			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+			app:reverseLayout="false"
+			android:id="@+id/activitysmsacceptrulesettingRecyclerView1"/>
+
+	</com.baoyz.widget.PullRefreshLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_vertical"
+		android:background="@drawable/bg_frame"
+		android:padding="10dp">
+
+		<EditText
+			android:layout_width="0dp"
+			android:ems="10"
+			android:layout_height="wrap_content"
+			android:layout_weight="1.0"
+			android:singleLine="true"
+			android:id="@+id/activitysmsacceptrulesettingEditText1"/>
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+			<RadioButton
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Accept"
+				android:id="@+id/activitysmsacceptrulesettingRadioButton1"
+				android:onClick="onAcceptRuleType"/>
+
+			<RadioButton
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Refuse"
+				android:id="@+id/activitysmsacceptrulesettingRadioButton2"
+				android:onClick="onRefuseRuleType"/>
+
+			<CheckBox
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Enable"
+				android:id="@+id/activitysmsacceptrulesettingCheckBox1"/>
+
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="+"
+				android:id="@+id/activitysmsacceptrulesettingButton1"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>
+
