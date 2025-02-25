@@ -9,6 +9,7 @@
     <string name="app_goldentheme">辉煌历程主题</string>
     <string name="app_developoptions">开发选项</string>
     <string name="app_default_app_settings">默认应用设置</string>
+    <string name="app_unittest">单元测试</string>
     <string name="app_crashtest">应用异常崩溃处理测试</string>
     <string name="app_about">关于应用</string>
     <string name="app_smsrecycle">短信回收站</string>

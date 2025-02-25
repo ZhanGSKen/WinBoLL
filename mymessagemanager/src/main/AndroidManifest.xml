@@ -226,6 +226,8 @@
 
         <activity android:name="cc.winboll.studio.mymessagemanager.activitys.SMSRecycleActivity"/>
 
+        <activity android:name="cc.winboll.studio.mymessagemanager.unittest.UnitTestActivity"/>
+
     </application>
 
 </manifest>

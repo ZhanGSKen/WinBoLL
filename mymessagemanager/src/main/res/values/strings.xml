@@ -9,6 +9,7 @@
     <string name="app_goldentheme">Golden Theme</string>
     <string name="app_developoptions">Develop Options</string>
     <string name="app_default_app_settings">Default App Settings</string>
+    <string name="app_unittest">Unit Test</string>
     <string name="app_crashtest">Crash Test</string>
     <string name="app_about">About APP</string>
     <string name="app_smsrecycle">SMS Recycle</string>

@@ -194,9 +194,9 @@ public class SMSReceiveRuleUtil {
     public ArrayList<SMSAcceptRuleBean> loadConfigData() {
         ArrayList<SMSAcceptRuleBean> list = new ArrayList<SMSAcceptRuleBean>();
         SMSAcceptRuleBean.loadBeanList(mContext, list, SMSAcceptRuleBean.class);
-        for (int i = 0; i < list.size(); i++) {
-            LogUtils.d(TAG, "loadConfigData isEnable : " + Boolean.toString(list.get(i).isEnable()));
-        }
+//        for (int i = 0; i < list.size(); i++) {
+//            LogUtils.d(TAG, "loadConfigData isEnable : " + Boolean.toString(list.get(i).isEnable()));
+//        }
         mDataList.clear();
         mDataList.addAll(list);
         return mDataList;

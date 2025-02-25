@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
 import cc.winboll.studio.libaes.views.ASupportToolbar;
 import androidx.appcompat.widget.Toolbar;
+import cc.winboll.studio.mymessagemanager.unittest.UnitTestActivity;
 
 public class MainActivity extends BaseActivity {
 
@@ -313,7 +314,11 @@ public class MainActivity extends BaseActivity {
             Intent i = new Intent(MainActivity.this, AppSettingsActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
-		} else if (nItemId ==  R.id.app_crashtest) {
+		} else if (nItemId ==  R.id.app_unittest) {
+            Intent i = new Intent(MainActivity.this, UnitTestActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(i);
+        } else if (nItemId ==  R.id.app_crashtest) {
             for (int i = Integer.MIN_VALUE; i < Integer.MAX_VALUE; i++) {
                 getString(i);
             }

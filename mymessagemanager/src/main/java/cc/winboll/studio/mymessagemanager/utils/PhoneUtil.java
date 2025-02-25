@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import cc.winboll.studio.shared.log.LogUtils;
 
 public class PhoneUtil {
 
@@ -67,4 +70,23 @@ public class PhoneUtil {
         return false;
     }
 
+    //
+    // 检验电话号码是否是数字
+    //
+    public static boolean isPhoneByDigit(String szPhone) {
+        if(!RegexPPiUtils.isPPiOK(szPhone)) {
+            return false;
+        }
+        //String text = "这里是一些任意的文本内容";
+        String regex = "\\d+";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(szPhone);
+        LogUtils.d(TAG, String.format("matcher.matches() : %s", matcher.matches()));
+        /*if (matcher.matches()) {
+         System.out.println("文本满足该正则表达式模式");
+         } else {
+         System.out.println("文本不满足该正则表达式模式");
+         }*/
+        return matcher.matches();
+    }
 }

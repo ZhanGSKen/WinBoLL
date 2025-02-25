@@ -15,6 +15,7 @@ import cc.winboll.studio.mymessagemanager.utils.SMSRecycleUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSUtil;
 import cc.winboll.studio.mymessagemanager.utils.TTSPlayRuleUtil;
 import cc.winboll.studio.mymessagemanager.utils.RegexPPiUtils;
+import cc.winboll.studio.shared.log.LogUtils;
 
 public class SMSRecevier extends BroadcastReceiver {
 
@@ -39,25 +40,11 @@ public class SMSRecevier extends BroadcastReceiver {
             //LogUtils.d(TAG, "ACTION_SMS_RECEIVED");
             String szSmsBody = SMSUtil.getSmsBody(intent);
             String szSmsAddress = SMSUtil.getSmsAddress(intent);
-            PhoneUtil phoneUtil = new PhoneUtil(context);
-            boolean isPhoneInContacts = phoneUtil.isPhoneInContacts(szSmsAddress);
             AppConfigUtil configUtil = AppConfigUtil.getInstance(context);
-            boolean isOnlyReceiveContacts = configUtil.mAppConfigBean.isEnableOnlyReceiveContacts();
             boolean isEnableTTS = configUtil.mAppConfigBean.isEnableTTS();
             boolean isEnableTTSAnalyzeMode = configUtil.mAppConfigBean.isEnableTTSRuleMode();
-            boolean isInSMSAcceptRule = SMSReceiveRuleUtil.getInstance(context, false).checkIsSMSAcceptInRule(context, szSmsBody);
-            //LogUtils.d(TAG, "isInSMSAcceptRule is : " + Boolean.toString(isInSMSAcceptRule));
 
-            if (!isPhoneInContacts) {
-                GlobalApplication.showApplicationMessage(" The phone number " + szSmsAddress + " is not in contacts.");
-                if (isOnlyReceiveContacts) {
-                    GlobalApplication.showApplicationMessage("Close the \"Only Receive Contacts\" switch will be receive The " + szSmsAddress + "'s message in future.");
-                }
-            }
-
-            if ((!isOnlyReceiveContacts)
-                || isPhoneInContacts
-                || isInSMSAcceptRule) {
+            if (checkIsSMSOK(context, szSmsBody, szSmsAddress)) {
                 int nResultId = SMSUtil.saveReceiveSms(context, szSmsAddress, szSmsBody, "0", System.currentTimeMillis(), "inbox");
                 if (nResultId >= 0) {
                     NotificationUtil nu = new NotificationUtil();
@@ -81,12 +68,32 @@ public class SMSRecevier extends BroadcastReceiver {
                 SMSRecycleUtil.addSMSRecycleItem(context, bean);
             }
         }
-
-
-
     }
 
-
+    //
+    // 检查短信是否在接收设定规则内
+    //
+    public static boolean checkIsSMSOK(Context context, String szSmsBody, String szSmsAddress) {
+        PhoneUtil phoneUtil = new PhoneUtil(context);
+        boolean isPhoneInContacts = phoneUtil.isPhoneInContacts(szSmsAddress);
+        LogUtils.d(TAG, String.format("isPhoneInContacts %s", isPhoneInContacts));
+        
+        boolean isPhoneByDigit = phoneUtil.isPhoneByDigit(szSmsAddress);
+        LogUtils.d(TAG, String.format("isPhoneByDigit %s", isPhoneByDigit));
+        
+        AppConfigUtil configUtil = AppConfigUtil.getInstance(context);
+        boolean isOnlyReceiveContacts = configUtil.mAppConfigBean.isEnableOnlyReceiveContacts();
+        LogUtils.d(TAG, String.format("isOnlyReceiveContacts %s", isOnlyReceiveContacts));
+        
+        boolean isInSMSAcceptRule = SMSReceiveRuleUtil.getInstance(context, false).checkIsSMSAcceptInRule(context, szSmsBody);
+        LogUtils.d(TAG, String.format("isInSMSAcceptRule %s", isInSMSAcceptRule));
+        
+        if (isPhoneByDigit 
+            && (!isOnlyReceiveContacts || isPhoneInContacts || isInSMSAcceptRule)) {
+            return true;
+        }
+        return false;
+    }
 }
     
     

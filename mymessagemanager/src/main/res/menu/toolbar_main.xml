@@ -20,6 +20,9 @@
     <item android:title="@string/app_developoptions">
         <menu>
             <item
+                android:id="@+id/app_unittest"
+                android:title="@string/app_unittest"/>
+            <item
                 android:id="@+id/app_crashtest"
                 android:title="@string/app_crashtest"/>
         </menu>
