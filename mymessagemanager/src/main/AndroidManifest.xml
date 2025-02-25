@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='utf-8'?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cc.winboll.studio.mymessagemanager">
+
+    <!-- 发送短信 -->
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+
+    <!-- 接收讯息（短信） -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+
+    <!-- 读取短信 -->
+    <uses-permission android:name="android.permission.READ_SMS"/>
+
+    <!-- WRITE_SMS -->
+    <uses-permission android:name="android.permission.WRITE_SMS"/>
+
+    <!-- 接收讯息（彩信） -->
+    <uses-permission android:name="android.permission.RECEIVE_MMS"/>
+
+    <!-- 开机启动 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <!-- 运行前台服务 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <!-- 读取联系人 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+
+    <!-- 读取您共享存储空间中的内容 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!-- 修改或删除您共享存储空间中的内容 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <!-- 接收讯息 (WAP) -->
+    <uses-permission android:name="android.permission.RECEIVE_WAP_PUSH"/>
+
+    <!-- MANAGE_EXTERNAL_STORAGE -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+
+    <!-- 此应用可显示在其他应用上方 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <queries>
+
+        <intent>
+
+            <action android:name="android.intent.action.TTS_SERVICE"/>
+
+        </intent>
+
+    </queries>
+
+    <application
+        android:name=".GlobalApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:roundIcon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/WinBoll.SupportThemeNoActionBar"
+        android:persistent="true"
+        android:resizeableActivity="true"
+        android:supportsRtl="true"
+        android:requestLegacyExternalStorage="true">
+
+        <activity
+            android:name=".activitys.SMSActivity"
+            android:process=":sms"/>
+
+        <activity
+            android:name=".activitys.SMSReceiveRuleActivity"
+            android:process=":smsars">
+
+        </activity>
+
+        <activity
+            android:name=".activitys.SharedJSONReceiveActivity"
+            android:process=":smssjr"
+            android:exported="true">
+
+            <intent-filter>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <action android:name="android.intent.action.SEND"/>
+
+                <action android:name="android.intent.action.VIEW"/>
+
+                <action android:name="android.intent.action.EDIT"/>
+
+                <data android:mimeType="application/json"/>
+
+                <data android:mimeType="text/x-json"/>
+
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name=".activitys.TTSPlayRuleActivity"
+            android:process=":ttsrule"/>
+
+        <activity
+            android:name=".activitys.AboutActivity"
+            android:process=":about"/>
+
+        <activity
+            android:name=".activitys.MainActivity"
+            android:exported="true"
+            android:process=":main">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name=".activitys.ComposeSMSActivity"
+            android:exported="true"
+            android:process=":csms">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.SEND"/>
+
+                <action android:name="android.intent.action.SENDTO"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="sms"/>
+
+                <data android:scheme="smsto"/>
+
+                <data android:scheme="mms"/>
+
+                <data android:scheme="mmsto"/>
+
+            </intent-filter>
+
+        </activity>
+
+        <activity android:name=".activitys.AppSettingsActivity"/>
+
+        <service android:name=".services.TTSPlayService"/>
+
+        <service android:name=".services.MainService"/>
+
+        <service android:name=".services.AssistantService"/>
+
+        <service
+            android:name=".services.DefaultSMSManagerService"
+            android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE"
+            android:exported="true">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.RESPOND_VIA_MESSAGE"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data android:scheme="sms"/>
+
+                <data android:scheme="smsto"/>
+
+                <data android:scheme="mms"/>
+
+                <data android:scheme="mmsto"/>
+
+            </intent-filter>
+
+        </service>
+
+        <receiver
+            android:name=".receivers.MainReceiver"
+            android:enabled="true"
+            android:exported="false"
+            android:directBootAware="true">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+
+            </intent-filter>
+
+        </receiver>
+
+        <receiver
+            android:name=".receivers.SMSRecevier"
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
+
+            <intent-filter android:priority="1">
+
+                <action android:name="android.provider.Telephony.SMS_DELIVER"/>
+
+            </intent-filter>
+
+        </receiver>
+
+        <receiver
+            android:name=".receivers.MmsReceiver"
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_WAP_PUSH">
+
+            <intent-filter>
+
+                <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER"/>
+
+                <data android:mimeType="application/vnd.wap.mms-message"/>
+
+            </intent-filter>
+
+        </receiver>
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="4.0"/>
+
+        <activity android:name="cc.winboll.studio.mymessagemanager.activitys.SMSRecycleActivity"/>
+
+    </application>
+
+</manifest>

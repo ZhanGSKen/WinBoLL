@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">My Message Manager</string>
+    <string name="app_projectname">MyMessageManager</string>
+	<string name="app_description">The SMS application of the custom SMS voice broadcast with the regular expression method.Play with regular expressions.</string>
+    <string name="app_log">Application Log</string>
+    <string name="app_theme">App Theme</string>
+    <string name="app_defaulttheme">Default Theme</string>
+    <string name="app_skytheme">Sky Theme</string>
+    <string name="app_goldentheme">Golden Theme</string>
+    <string name="app_developoptions">Develop Options</string>
+    <string name="app_default_app_settings">Default App Settings</string>
+    <string name="app_crashtest">Crash Test</string>
+    <string name="app_about">About APP</string>
+    <string name="app_smsrecycle">SMS Recycle</string>
+	<string name="app_permission_require_info">APP Permission Require Info</string>
+    <string name="app_website">https://winboll.cc/studio/details.php?app=MyMessageManager</string>
+    <string name="activity_name_main">SMS Management Center</string>
+    <string name="activity_name_sharedjsonreceive">Shared JSON Handling</string>
+    <string name="activity_name_composesms">Message Sender</string>
+    <string name="activity_name_smsinphone">Messages</string>
+	<string name="activity_name_log">Application Log</string>
+	<string name="activity_name_about">About APP</string>
+	<string name="activity_name_appsettings">Settings</string>
+    <string name="text_smsdeletetime">DeleteDate:</string>
+    <string name="text_restoresms">Restore SMS</string>
+    <string name="text_cleansmsrecycle">Clean SMS Recycle</string>
+    <string name="text_smsfrom">From:</string>
+    <string name="text_ttsrule">TTS Play Rule</string>
+    <string name="text_smsrule">SMS Receive Rule</string>
+    <string name="text_aboutservernotification">This is the prompt window when the SMS service runs, which you can set to hide this class notification in the notification message settings.</string>
+    <string name="text_item_rule_share">Share Setting</string>
+    <string name="text_item_rule_reset">Reset Setting</string>
+    <string name="text_item_rule_clean">Clean Setting</string>
+    <string name="text_sendsms">Send SMS</string>
+    <string name="text_mainservice">Main Service</string>
+    <string name="text_onlyreceivecontacts">Only Receive Contacts</string>
+    <string name="text_usingtts">Using TTS</string>
+    <string name="text_usingttsrule">Using TTS Rule</string>
+    <string name="text_iamhere">The main service is start.</string>
+    <string name="text_havearest">The main service is stoped.</string>
+    <string name="text_notincontacts">(Not In Contacts)</string>
+    <string name="text_appsettings">Settings</string>
+    <string name="text_ttsplaydelaytimes">TTS Play delay times(second) : </string>
+    <string name="msg_newsms">Received new message.</string>
+    <string name="msg_100sendmsg">&gt;&gt;&gt;Seek 100% To Send Message.&gt;&gt;&gt;</string>
+    <string name="msg_100applysettings">&gt;&gt;&gt;Seek 100% To Apply settings.&gt;&gt;&gt;</string>
+    <string-array name="strings_OnceAndroidStory">
+        <item>"I am here!"</item>
+        <item>"I think, I am here!"</item>
+    </string-array>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <attr name="attrColorPrimary" format="color" />
+
+    <attr name="themeGlobalCrashActivity" format="reference"/>
+
+    <declare-styleable name="GlobalCrashActivity">
+        <attr name="colorTittle" format="color" />
+        <attr name="colorTittleBackgound" format="color" />
+        <attr name="colorText" format="color" />
+        <attr name="colorTextBackgound" format="color" />
+    </declare-styleable>
+
+</resources>

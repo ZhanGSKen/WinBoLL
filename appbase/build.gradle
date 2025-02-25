@@ -18,18 +18,18 @@ def genVersionName(def versionName){
 }
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "33.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "cc.winboll.studio.appbase"
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion 26
+        targetSdkVersion 29
         versionCode 1
         // versionName 更新后需要手动设置 
         // .winboll/winbollBuildProps.properties 文件的 stageCount=0
         // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
-        versionName "1.0" 
+        versionName "2.0" 
         if(true) {
             versionName = genVersionName("${versionName}")
         }
@@ -40,11 +40,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
