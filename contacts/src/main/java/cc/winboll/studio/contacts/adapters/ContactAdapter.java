@@ -6,7 +6,6 @@ package cc.winboll.studio.contacts.adapters;
  * @Describe ContactAdapter
  */
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.beans.ContactModel;
+import com.hjq.toast.ToastUtils;
 import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
 
     public static final String TAG = "ContactAdapter";
 
+    private static final int REQUEST_CALL_PHONE = 1;
 
     private List<ContactModel> contactList;
 
@@ -45,8 +46,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         holder.dialButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String phoneNumber = contact.getNumber();
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber));
+                    String phoneNumber = contact.getNumber().replaceAll("\\s", "");
+                    ToastUtils.show(phoneNumber);
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(android.net.Uri.parse("tel:" + phoneNumber));
+                    // 添加 FLAG_ACTIVITY_NEW_TASK 标志
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     holder.itemView.getContext().startActivity(intent);
                 }
             });

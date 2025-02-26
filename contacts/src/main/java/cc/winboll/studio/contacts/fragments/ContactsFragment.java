@@ -6,6 +6,7 @@ package cc.winboll.studio.contacts.fragments;
  * @Describe 联系人
  */
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,8 +27,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.adapters.ContactAdapter;
 import cc.winboll.studio.contacts.beans.ContactModel;
+import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class ContactsFragment extends Fragment {
 
@@ -93,6 +97,21 @@ public class ContactsFragment extends Fragment {
         } else {
             readContacts();
         }
+
+        Button btnDial = view.findViewById(R.id.btn_dial);
+        btnDial.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View p1) {
+
+                    String phoneNumber = searchEditText.getText().toString().replaceAll("\\s", "");
+                    ToastUtils.show(phoneNumber);
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(android.net.Uri.parse("tel:" + phoneNumber));
+                    // 添加 FLAG_ACTIVITY_NEW_TASK 标志
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            });
     }
 
     @Override

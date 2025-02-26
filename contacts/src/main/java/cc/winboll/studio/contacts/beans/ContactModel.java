@@ -21,7 +21,7 @@ public class ContactModel {
 
     public ContactModel(String name, String number) {
         this.name = name;
-        this.number = number;
+        this.number = number.replaceAll("\\s", "");
         this.pinyin = convertToPinyin(name);
     }
 
@@ -33,7 +33,7 @@ public class ContactModel {
         StringBuilder pinyin = new StringBuilder();
         for (int i = 0; i < chinese.length(); i++) {
             char ch = chinese.charAt(i);
-            if (Character.toString(ch).matches("[\\u4e00 - \\u9fa5]")) {
+            if (Character.toString(ch).matches("[\\u4e00-\\u9fa5]")) {
                 try {
                     String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(ch, format);
                     if (pinyinArray != null) {

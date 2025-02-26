@@ -1,12 +1,16 @@
 package cc.winboll.studio.contacts;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.telecom.TelecomManager;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,9 +21,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.ViewPager;
 import cc.winboll.studio.contacts.R;
-import cc.winboll.studio.contacts.activities.CallActivity;
 import cc.winboll.studio.contacts.activities.SettingsActivity;
 import cc.winboll.studio.contacts.adapters.MyPagerAdapter;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
@@ -43,6 +47,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 
     public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
 
+    static MainActivity _MainActivity;
     LogView mLogView;
     Toolbar mToolbar;
     CheckBox cbMainService;
@@ -55,6 +60,9 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     MyPagerAdapter pagerAdapter;
     LinearLayout linearLayout;//下标所在在LinearLayout布局里
     int currentPoint = 0;//当前被选中中页面的下标
+
+    private TelephonyManager telephonyManager;
+    private MyPhoneStateListener phoneStateListener;
 
     private static final int DIALER_REQUEST_CODE = 1;
 
@@ -88,6 +96,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         //if (prosessIntents(getIntent())) return;
         // 以下正常创建主窗口
         super.onCreate(savedInstanceState);
+        _MainActivity = this;
         setContentView(R.layout.activity_main);
 
         // 初始化工具栏
@@ -135,6 +144,20 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         if (mMainServiceBean.isEnable()) {
             MainService.startMainService(this);
         }
+
+        // 初始化TelephonyManager和PhoneStateListener
+        telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        phoneStateListener = new MyPhoneStateListener();
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+    }
+
+    public static void dialPhoneNumber(String phoneNumber) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(android.net.Uri.parse("tel:" + phoneNumber));
+        if (ActivityCompat.checkSelfPermission(_MainActivity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        _MainActivity.startActivity(intent);
     }
 
     //初始化view，即显示的图片
@@ -223,6 +246,23 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         //setSubTitle("");
+    }
+
+    private class MyPhoneStateListener extends PhoneStateListener {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            switch (state) {
+                case TelephonyManager.CALL_STATE_IDLE:
+                    LogUtils.d(TAG, "电话已挂断");
+                    break;
+                case TelephonyManager.CALL_STATE_OFFHOOK:
+                    LogUtils.d(TAG, "正在通话中");
+                    break;
+                case TelephonyManager.CALL_STATE_RINGING:
+                    LogUtils.d(TAG, "来电: " + incomingNumber);
+                    break;
+            }
+        }
     }
 
     @Override
@@ -325,11 +365,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.item_call) {
-            Intent intent = new Intent(this, CallActivity.class);
-            startActivity(intent);
-            //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
-        } else if (item.getItemId() == R.id.item_settings) {
+        if (item.getItemId() == R.id.item_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);

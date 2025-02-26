@@ -16,7 +16,7 @@ public class CallLogModel {
     private Date callDate;
 
     public CallLogModel(String phoneNumber, String callStatus, Date callDate) {
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber.replaceAll("\\s", "");
         this.callStatus = callStatus;
         this.callDate = callDate;
     }
