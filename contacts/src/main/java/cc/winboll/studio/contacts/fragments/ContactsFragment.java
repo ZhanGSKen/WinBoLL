@@ -10,9 +10,12 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -36,7 +39,8 @@ public class ContactsFragment extends Fragment {
     private RecyclerView recyclerView;
     private ContactAdapter contactAdapter;
     private List<ContactModel> contactList = new ArrayList<>();
-
+    private List<ContactModel> originalContactList = new ArrayList<>();
+    private EditText searchEditText;
 
     public static ContactsFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -54,10 +58,6 @@ public class ContactsFragment extends Fragment {
         }
     }
 
-
-
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -71,6 +71,22 @@ public class ContactsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         contactAdapter = new ContactAdapter(contactList);
         recyclerView.setAdapter(contactAdapter);
+
+        searchEditText = view.findViewById(R.id.search_edit_text);
+        searchEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    filterContacts(s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
 
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_READ_CONTACTS);
@@ -91,6 +107,7 @@ public class ContactsFragment extends Fragment {
 
     private void readContacts() {
         contactList.clear();
+        originalContactList.clear();
         Cursor cursor = requireContext().getContentResolver().query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             null,
@@ -102,10 +119,29 @@ public class ContactsFragment extends Fragment {
             while (cursor.moveToNext()) {
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                contactList.add(new ContactModel(name, number));
+                ContactModel contact = new ContactModel(name, number);
+                contactList.add(contact);
+                originalContactList.add(contact);
             }
             cursor.close();
             contactAdapter.notifyDataSetChanged();
         }
     }
+
+    private void filterContacts(String query) {
+        contactList.clear();
+        if (query.isEmpty()) {
+            contactList.addAll(originalContactList);
+        } else {
+            for (ContactModel contact : originalContactList) {
+                if (contact.getName().toLowerCase().contains(query.toLowerCase()) ||
+                    contact.getPinyin().toLowerCase().contains(query.toLowerCase()) ||
+                    contact.getNumber().toLowerCase().contains(query.toLowerCase())) {
+                    contactList.add(contact);
+                }
+            }
+        }
+        contactAdapter.notifyDataSetChanged();
+    }
 }
+
