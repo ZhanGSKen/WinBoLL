@@ -29,9 +29,10 @@
 
     <!-- 更改您的音频设置 -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
-        
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-        
+
+    <!-- 读取通话记录 -->
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"

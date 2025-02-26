@@ -9,9 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.AudioManager;
 import cc.winboll.studio.contacts.services.MainService;
-import cc.winboll.studio.libappbase.LogUtils;
 import com.hjq.toast.ToastUtils;
 import java.lang.ref.WeakReference;
 

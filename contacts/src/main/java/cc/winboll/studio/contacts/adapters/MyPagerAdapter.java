@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import cc.winboll.studio.contacts.fragments.CallFragment;
+import cc.winboll.studio.contacts.fragments.CallLogFragment;
 import cc.winboll.studio.contacts.fragments.ContactsFragment;
 import cc.winboll.studio.contacts.fragments.LogFragment;
 
@@ -30,7 +30,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
         } else if(position == 2) {
             return LogFragment.newInstance(position);
         } else {
-            return CallFragment.newInstance(position);
+            return CallLogFragment.newInstance(position);
         }
     }
 

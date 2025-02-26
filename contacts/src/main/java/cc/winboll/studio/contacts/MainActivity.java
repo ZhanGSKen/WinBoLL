@@ -1,36 +1,26 @@
 package cc.winboll.studio.contacts;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.role.RoleManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.telecom.TelecomManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.activities.CallActivity;
+import cc.winboll.studio.contacts.activities.SettingsActivity;
 import cc.winboll.studio.contacts.adapters.MyPagerAdapter;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
 import cc.winboll.studio.contacts.services.MainService;
@@ -40,15 +30,9 @@ import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
-import cc.winboll.studio.contacts.listenphonecall.CallListenerService;
 import com.google.android.material.tabs.TabLayout;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import android.content.DialogInterface;
-import cc.winboll.studio.contacts.activities.SettingsActivity;
-import cc.winboll.studio.contacts.beans.MainServiceBean; 
-import cc.winboll.studio.contacts.services.MainService;
 
 final public class MainActivity extends AppCompatActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
@@ -171,7 +155,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     void initData() {
         ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
         LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view1 = inflater.inflate(R.layout.fragment_call, viewPager, false);
+        View view1 = inflater.inflate(R.layout.fragment_call_log, viewPager, false);
         View view2 = inflater.inflate(R.layout.fragment_contacts, viewPager, false);
         View view3 = inflater.inflate(R.layout.fragment_log, viewPager, false);
 

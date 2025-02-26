@@ -11,28 +11,26 @@ package cc.winboll.studio.contacts.services;
  * https://blog.csdn.net/cyp331203/article/details/38920491
  */
 import android.app.Service;
-import cc.winboll.studio.contacts.listenphonecall.CallListenerService;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.AudioManager;
 import android.os.Binder;
 import android.os.IBinder;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
+import cc.winboll.studio.contacts.beans.RingTongBean;
+import cc.winboll.studio.contacts.dun.Rules;
 import cc.winboll.studio.contacts.handlers.MainServiceHandler;
+import cc.winboll.studio.contacts.listenphonecall.CallListenerService;
 import cc.winboll.studio.contacts.receivers.MainReceiver;
 import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.contacts.threads.MainServiceThread;
-import cc.winboll.studio.contacts.widgets.APPStatusWidget;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.SOS;
 import cc.winboll.studio.libappbase.bean.APPSOSBean;
-import cc.winboll.studio.contacts.dun.Rules;
-import android.media.AudioManager;
-import com.hjq.toast.ToastUtils;
 import java.util.Timer;
 import java.util.TimerTask;
-import cc.winboll.studio.contacts.beans.RingTongBean;
 
 public class MainService extends Service {
 
