@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.telecom.TelecomManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,11 +21,16 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.activities.SettingsActivity;
-import cc.winboll.studio.contacts.adapters.MyPagerAdapter;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
+import cc.winboll.studio.contacts.fragments.CallLogFragment;
+import cc.winboll.studio.contacts.fragments.ContactsFragment;
+import cc.winboll.studio.contacts.fragments.LogFragment;
 import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
@@ -52,7 +56,8 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     Toolbar mToolbar;
     CheckBox cbMainService;
     MainServiceBean mMainServiceBean;
-    ViewPager viewPager;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     private List<View> views; //用来存放放进ViewPager里面的布局
     //实例化存储imageView（导航原点）的集合
     ImageView[] imageViews;
@@ -107,17 +112,39 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         getSupportActionBar().setSubtitle(getTag());
+        
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
 
-        initData();
-        initView();
-        //initPoint();//调用初始化导航原点的方法
-        viewPager.addOnPageChangeListener(this);//滑动事件
+        // 创建Fragment列表和标题列表
+        List<Fragment> fragmentList = new ArrayList<>();
+        List<String> tabTitleList = new ArrayList<>();
+        fragmentList.add(CallLogFragment.newInstance(0));
+        fragmentList.add(ContactsFragment.newInstance(1));
+        fragmentList.add(LogFragment.newInstance(2));
+        tabTitleList.add("通话记录");
+        tabTitleList.add("联系人");
+        tabTitleList.add("应用日志");
 
-        ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
-        MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        TabLayout tabLayout = findViewById(R.id.activitymainTabLayout1);
+        // 设置ViewPager的适配器
+        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager(), fragmentList, tabTitleList);
+        viewPager.setAdapter(adapter);
+
+        // 关联TabLayout和ViewPager
         tabLayout.setupWithViewPager(viewPager);
+    
+
+
+//        initData();
+//        initView();
+//        //initPoint();//调用初始化导航原点的方法
+//        viewPager.addOnPageChangeListener(this);//滑动事件
+
+        //ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
+        //MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        //viewPager.setAdapter(pagerAdapter);
+        //TabLayout tabLayout = findViewById(R.id.activitymainTabLayout1);
+        //tabLayout.setupWithViewPager(viewPager);
 
 //        mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
 //        if (mMainServiceBean == null) {
@@ -150,6 +177,35 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         phoneStateListener = new MyPhoneStateListener();
         telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
     }
+    
+
+    // ViewPager的适配器
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+
+        private List<Fragment> fragmentList;
+        private List<String> tabTitleList;
+
+        public MyPagerAdapter(FragmentManager fm, List<Fragment> fragmentList, List<String> tabTitleList) {
+            super(fm);
+            this.fragmentList = fragmentList;
+            this.tabTitleList = tabTitleList;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitleList.get(position);
+        }
+    }
 
     public static void dialPhoneNumber(String phoneNumber) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
@@ -161,32 +217,31 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     }
 
     //初始化view，即显示的图片
-    void initView() {
-        viewPager = findViewById(R.id.activitymainViewPager1);
-        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        //adapter = new MyPagerAdapter(views);
-        //viewPager = findViewById(R.id.activitymainViewPager1);
-        //viewPager.setAdapter(adapter);
-        //linearLayout = findViewById(R.id.activitymainLinearLayout1);
-        //initPoint();//初始化页面下方的点
-        viewPager.setOnPageChangeListener(this);
-
-    }
+//    void initView() {
+//        viewPager = findViewById(R.id.activitymainViewPager1);
+//        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+//        viewPager.setAdapter(pagerAdapter);
+//        //adapter = new MyPagerAdapter(views);
+//        //viewPager = findViewById(R.id.activitymainViewPager1);
+//        //viewPager.setAdapter(adapter);
+//        //linearLayout = findViewById(R.id.activitymainLinearLayout1);
+//        //initPoint();//初始化页面下方的点
+//        viewPager.setOnPageChangeListener(this);
+//
+//    }
 
     //初始化所要显示的布局
-    void initData() {
-        ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view1 = inflater.inflate(R.layout.fragment_call_log, viewPager, false);
-        View view2 = inflater.inflate(R.layout.fragment_contacts, viewPager, false);
-        View view3 = inflater.inflate(R.layout.fragment_log, viewPager, false);
-
-        views = new ArrayList<>();
-        views.add(view1);
-        views.add(view2);
-        views.add(view3);
-    }
+//    void initData() {
+//        LayoutInflater inflater = LayoutInflater.from(getActivity());
+//        View view1 = inflater.inflate(R.layout.fragment_call_log, viewPager, false);
+//        View view2 = inflater.inflate(R.layout.fragment_contacts, viewPager, false);
+//        View view3 = inflater.inflate(R.layout.fragment_log, viewPager, false);
+//
+//        views = new ArrayList<>();
+//        views.add(view1);
+//        views.add(view2);
+//        views.add(view3);
+//    }
 
 //    void initPoint() {
 //        imageViews = new ImageView[5];//实例化5个图片
@@ -336,25 +391,25 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         return false;
     }
 
-    @Override
-    public void onBackPressed() {
-        exit();
-    }
-
-    void exit() {
-        YesNoAlertDialog.OnDialogResultListener listener = new YesNoAlertDialog.OnDialogResultListener(){
-
-            @Override
-            public void onYes() {
-                WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
-            }
-
-            @Override
-            public void onNo() {
-            }
-        };
-        YesNoAlertDialog.show(this, "[ " + getString(R.string.app_name) + " ]", "Exit(Yes/No).\nIs close all activity?", listener);
-    }
+//    @Override
+//    public void onBackPressed() {
+//        exit();
+//    }
+//
+//    void exit() {
+//        YesNoAlertDialog.OnDialogResultListener listener = new YesNoAlertDialog.OnDialogResultListener(){
+//
+//            @Override
+//            public void onYes() {
+//                WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
+//            }
+//
+//            @Override
+//            public void onNo() {
+//            }
+//        };
+//        YesNoAlertDialog.show(this, "[ " + getString(R.string.app_name) + " ]", "Exit(Yes/No).\nIs close all activity?", listener);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

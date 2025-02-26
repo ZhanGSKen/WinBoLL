@@ -13,12 +13,12 @@ import cc.winboll.studio.contacts.fragments.CallLogFragment;
 import cc.winboll.studio.contacts.fragments.ContactsFragment;
 import cc.winboll.studio.contacts.fragments.LogFragment;
 
-public class MyPagerAdapter extends FragmentPagerAdapter {
+public class MyPagerAdapter2 extends FragmentPagerAdapter {
     public static final String TAG = "MyPagerAdapter";
 
     private static final int PAGE_COUNT = 3;
 
-    public MyPagerAdapter(@NonNull FragmentManager fm) {
+    public MyPagerAdapter2(@NonNull FragmentManager fm) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
 
