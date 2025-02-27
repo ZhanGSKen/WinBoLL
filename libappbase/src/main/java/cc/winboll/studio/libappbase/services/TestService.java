@@ -11,8 +11,8 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.SOS;
-import cc.winboll.studio.libappbase.bean.APPSOSBean;
+import cc.winboll.studio.libappbase.WinBoll;
+import cc.winboll.studio.libappbase.bean.APPNewsBean;
 import cc.winboll.studio.libappbase.bean.TestServiceBean;
 
 public class TestService extends Service {
@@ -58,11 +58,11 @@ public class TestService extends Service {
         if (bean == null) {
             bean = new TestServiceBean();
         }
-        if (intent.getAction() != null && intent.getAction().equals(SOS.ACTION_SERVICE_ENABLE)) {
+        if (intent.getAction() != null && intent.getAction().equals(WinBoll.ACTION_SERVICE_ENABLE)) {
             bean.setIsEnable(true);
             TestServiceBean.saveBean(this, bean);
             run();
-        } else if (intent.getAction() != null && intent.getAction().equals(SOS.ACTION_SERVICE_DISABLE)) {
+        } else if (intent.getAction() != null && intent.getAction().equals(WinBoll.ACTION_SERVICE_DISABLE)) {
             bean.setIsEnable(false);
             TestServiceBean.saveBean(this, bean);
         }
@@ -130,7 +130,7 @@ public class TestService extends Service {
                 isStarted = true;
                 super.run();
                 LogUtils.d(TAG, "run() start");
-                SOS.bindToAPPService(mContext, new APPSOSBean(mContext.getPackageName(), TestService.class.getName()));
+                WinBoll.bindToAPPBase(mContext, new APPNewsBean(mContext.getPackageName(), TestService.class.getName()));
 
                 while (!isExit()) {
                     LogUtils.d(TAG, "run()");

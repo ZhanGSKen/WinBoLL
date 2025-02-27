@@ -11,59 +11,59 @@ import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 import java.io.Serializable;
 
-public class APPSOSBean extends BaseBean {
+public class APPNewsBean extends BaseBean {
 
-    public static final String TAG = "APPSOSBean";
+    public static final String TAG = "APPNewsBean";
 
-    protected String sosPackage;
-    protected String sosClassName;
+    protected String newsPackageName;
+    protected String newsClassName;
 
-    public APPSOSBean() {
-        this.sosPackage = "";
-        this.sosClassName = "";
+    public APPNewsBean() {
+        this.newsPackageName = "";
+        this.newsClassName = "";
     }
 
-    public APPSOSBean(String sosPackage, String sosClassName) {
-        this.sosPackage = sosPackage;
-        this.sosClassName = sosClassName;
+    public APPNewsBean(String newsPackageName, String newsClassName) {
+        this.newsPackageName = newsPackageName;
+        this.newsClassName = newsClassName;
     }
 
-    public void setSosPackage(String sosPackage) {
-        this.sosPackage = sosPackage;
+    public void setNewsPackageName(String newsPackageName) {
+        this.newsPackageName = newsPackageName;
     }
 
-    public String getSosPackage() {
-        return sosPackage;
+    public String getNewsPackageName() {
+        return newsPackageName;
     }
 
-    public void setSosClassName(String sosClassName) {
-        this.sosClassName = sosClassName;
+    public void setNewsClassName(String sosClassName) {
+        this.newsClassName = sosClassName;
     }
 
-    public String getSosClassName() {
-        return sosClassName;
+    public String getNewsClassName() {
+        return newsClassName;
     }
 
     @Override
     public String getName() {
-        return APPSOSBean.class.getName();
+        return APPNewsBean.class.getName();
     }
 
     @Override
     public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
         super.writeThisToJsonWriter(jsonWriter);
-        jsonWriter.name("sosPackage").value(getSosPackage());
-        jsonWriter.name("sosClassName").value(getSosClassName());
+        jsonWriter.name("newsPackageName").value(getNewsPackageName());
+        jsonWriter.name("newsClassName").value(getNewsClassName());
 
     }
 
     @Override
     public boolean initObjectsFromJsonReader(JsonReader jsonReader, String name) throws IOException {
         if (super.initObjectsFromJsonReader(jsonReader, name)) { return true; } else {
-            if (name.equals("sosPackage")) {
-                setSosPackage(jsonReader.nextString());
-            } else if (name.equals("sosClassName")) {
-                setSosClassName(jsonReader.nextString());
+            if (name.equals("newsPackageName")) {
+                setNewsPackageName(jsonReader.nextString());
+            } else if (name.equals("newsClassName")) {
+                setNewsClassName(jsonReader.nextString());
             } else {
                 return false;
             }

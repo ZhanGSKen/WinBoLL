@@ -10,11 +10,11 @@ import android.content.Context;
 import android.content.Intent;
 import cc.winboll.studio.libappbase.LogUtils;
 
-public class SOSWidgetClickListener extends BroadcastReceiver {
+public class WinBollNewsWidgetClickListener extends BroadcastReceiver {
 
-    public static final String TAG = "SOSWidgetClickListener";
-    public static final String ACTION_PRE = "cc.winboll.studio.appbase.widgets.SOSWidgetClickListener.ACTION_PRE";
-    public static final String ACTION_NEXT = "cc.winboll.studio.appbase.widgets.SOSWidgetClickListener.ACTION_NEXT";
+    public static final String TAG = "WinBollNewsWidgetClickListener";
+    public static final String ACTION_PRE = "cc.winboll.studio.appbase.widgets.WinBollNewsWidgetClickListener.ACTION_PRE";
+    public static final String ACTION_NEXT = "cc.winboll.studio.appbase.widgets.WinBollNewsWidgetClickListener.ACTION_NEXT";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -25,10 +25,10 @@ public class SOSWidgetClickListener extends BroadcastReceiver {
         }
         if (action.equals(ACTION_PRE)) {
             LogUtils.d(TAG, "ACTION_PRE");
-            SOSWidget.prePage(context);
+            WinBollNewsWidget.prePage(context);
         } else if (action.equals(ACTION_NEXT)) {
             LogUtils.d(TAG, "ACTION_NEXT");
-            SOSWidget.nextPage(context);
+            WinBollNewsWidget.nextPage(context);
         } else {
             LogUtils.d(TAG, String.format("action %s", action));
         }

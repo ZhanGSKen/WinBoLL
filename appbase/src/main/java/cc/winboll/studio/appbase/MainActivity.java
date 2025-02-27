@@ -12,9 +12,9 @@ import cc.winboll.studio.appbase.services.MainService;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libappbase.SOS;
+import cc.winboll.studio.libappbase.WinBoll;
 import cc.winboll.studio.libappbase.SimpleOperateSignalCenterService;
-import cc.winboll.studio.libappbase.bean.APPSOSBean;
+import cc.winboll.studio.libappbase.bean.APPNewsBean;
 import cc.winboll.studio.libappbase.services.TestService;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
 import com.hjq.toast.ToastUtils;
@@ -90,19 +90,19 @@ public class MainActivity extends AppCompatActivity {
     public void onSOS(View view) {
         Intent intent = new Intent(this, TestService.class);
         stopService(intent);
-        SOS.sosWinBollService(this, new APPSOSBean(getPackageName(), TestService.class.getName()));
+        WinBoll.sosService(this, new APPNewsBean(getPackageName(), TestService.class.getName()));
     }
 
     public void onStartTestService(View view) {
         Intent intent = new Intent(this, TestService.class);
-        intent.setAction(SOS.ACTION_SERVICE_ENABLE);
+        intent.setAction(WinBoll.ACTION_SERVICE_ENABLE);
         startService(intent);
 
     }
 
     public void onStopTestService(View view) {
         Intent intent = new Intent(this, TestService.class);
-        intent.setAction(SOS.ACTION_SERVICE_DISABLE);
+        intent.setAction(WinBoll.ACTION_SERVICE_DISABLE);
         startService(intent);
         
         Intent intentStop = new Intent(this, TestService.class);

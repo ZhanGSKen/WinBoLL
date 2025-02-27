@@ -11,13 +11,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import cc.winboll.studio.appbase.beans.SOSReportBean;
+import cc.winboll.studio.appbase.beans.WinBollNewsBean;
 import cc.winboll.studio.appbase.services.MainService;
-import cc.winboll.studio.appbase.widgets.SOSWidget;
+import cc.winboll.studio.appbase.widgets.WinBollNewsWidget;
 import cc.winboll.studio.libappbase.AppUtils;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.SOS;
-import cc.winboll.studio.libappbase.bean.APPSOSBean;
+import cc.winboll.studio.libappbase.WinBoll;
+import cc.winboll.studio.libappbase.bean.APPNewsBean;
 import com.hjq.toast.ToastUtils;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -43,7 +43,7 @@ public class MainReceiver extends BroadcastReceiver {
         String szAction = intent.getAction();
         if (szAction.equals(ACTION_BOOT_COMPLETED)) {
             ToastUtils.show("ACTION_BOOT_COMPLETED");
-        } else if (szAction.equals(SOS.ACTION_BIND)) {
+        } else if (szAction.equals(WinBoll.ACTION_BIND)) {
             LogUtils.d(TAG, "ACTION_BIND");
             LogUtils.d(TAG, String.format("context.getPackageName() %s", context.getPackageName()));
             LogUtils.d(TAG, String.format("intent.getAction() %s", intent.getAction()));
@@ -54,12 +54,12 @@ public class MainReceiver extends BroadcastReceiver {
                 LogUtils.d(TAG, String.format("szAPPSOSBean %s", szAPPSOSBean));
                 if (szAPPSOSBean != null && !szAPPSOSBean.equals("")) {
                     try {
-                        APPSOSBean bean = APPSOSBean.parseStringToBean(szAPPSOSBean, APPSOSBean.class);
+                        APPNewsBean bean = APPNewsBean.parseStringToBean(szAPPSOSBean, APPNewsBean.class);
                         if (bean != null) {
-                            String sosPackage = bean.getSosPackage();
-                            LogUtils.d(TAG, String.format("sosPackage %s", sosPackage));
-                            String sosClassName = bean.getSosClassName();
-                            LogUtils.d(TAG, String.format("sosClassName %s", sosClassName));
+                            String szNewsPackageName = bean.getNewsPackageName();
+                            LogUtils.d(TAG, String.format("szNewsPackageName %s", szNewsPackageName));
+                            String szNewsClassName = bean.getNewsClassName();
+                            LogUtils.d(TAG, String.format("szNewsClassName %s", szNewsClassName));
                             mwrService.get().bindSOSConnection(bean);
                         }
                     } catch (IOException e) {
@@ -67,31 +67,31 @@ public class MainReceiver extends BroadcastReceiver {
                     }
                 }
             }
-        } else if (intent.getAction().equals(SOS.ACTION_SOS)) {
+        } else if (intent.getAction().equals(WinBoll.ACTION_SOS)) {
             LogUtils.d(TAG, "ACTION_SOS");
             LogUtils.d(TAG, String.format("context.getPackageName() %s", context.getPackageName()));
             LogUtils.d(TAG, String.format("intent.getAction() %s", intent.getAction()));
             String SOS = intent.getStringExtra("SOS");
             LogUtils.d(TAG, String.format("SOS %s", SOS));
             if (SOS != null && SOS.equals("Service")) {
-                String szAPPSOSBean = intent.getStringExtra("APPSOSBean");
-                LogUtils.d(TAG, String.format("szAPPSOSBean %s", szAPPSOSBean));
-                if (szAPPSOSBean != null && !szAPPSOSBean.equals("")) {
+                String szAPPNewsBean = intent.getStringExtra("APPSOSBean");
+                LogUtils.d(TAG, String.format("szAPPNewsBean %s", szAPPNewsBean));
+                if (szAPPNewsBean != null && !szAPPNewsBean.equals("")) {
                     try {
-                        APPSOSBean bean = APPSOSBean.parseStringToBean(szAPPSOSBean, APPSOSBean.class);
+                        APPNewsBean bean = APPNewsBean.parseStringToBean(szAPPNewsBean, APPNewsBean.class);
                         if (bean != null) {
-                            String sosPackage = bean.getSosPackage();
-                            LogUtils.d(TAG, String.format("sosPackage %s", sosPackage));
-                            String sosClassName = bean.getSosClassName();
-                            LogUtils.d(TAG, String.format("sosClassName %s", sosClassName));
+                            String szNewsPackageName = bean.getNewsPackageName();
+                            LogUtils.d(TAG, String.format("szNewsPackageName %s", szNewsPackageName));
+                            String szNewsClassName = bean.getNewsClassName();
+                            LogUtils.d(TAG, String.format("szNewsClassName %s", szNewsClassName));
 
                             Intent intentService = new Intent();
-                            intentService.setComponent(new ComponentName(sosPackage, sosClassName));
+                            intentService.setComponent(new ComponentName(szNewsPackageName, szNewsClassName));
                             context.startService(intentService);
 
-                            String appName = AppUtils.getAppNameByPackageName(context, sosPackage);
+                            String appName = AppUtils.getAppNameByPackageName(context, szNewsPackageName);
                             LogUtils.d(TAG, String.format("appName %s", appName));
-                            SOSReportBean appSOSReportBean = new SOSReportBean(appName);
+                            WinBollNewsBean appWinBollNewsBean = new WinBollNewsBean(appName);
                             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                             String currentTime = sdf.format(new Date());
                             StringBuilder sbLine = new StringBuilder();
@@ -99,12 +99,12 @@ public class MainReceiver extends BroadcastReceiver {
                             sbLine.append(currentTime);
                             sbLine.append("] Power to ");
                             sbLine.append(appName);
-                            appSOSReportBean.setSosReport(sbLine.toString());
+                            appWinBollNewsBean.setMessage(sbLine.toString());
 
-                            SOSWidget.addAPPSOSReportBean(context, appSOSReportBean);
+                            WinBollNewsWidget.addWinBollNewsBean(context, appWinBollNewsBean);
                             
-                            Intent intentWidget = new Intent(context, SOSWidget.class);
-                            intentWidget.setAction(SOSWidget.ACTION_RELOAD_REPORT);
+                            Intent intentWidget = new Intent(context, WinBollNewsWidget.class);
+                            intentWidget.setAction(WinBollNewsWidget.ACTION_RELOAD_REPORT);
                             context.sendBroadcast(intentWidget);
                         }
                     } catch (IOException e) {
@@ -122,10 +122,10 @@ public class MainReceiver extends BroadcastReceiver {
     public void registerAction(MainService service) {
         IntentFilter filter=new IntentFilter();
         filter.addAction(ACTION_BOOT_COMPLETED);
-        filter.addAction(SOS.ACTION_SOS);
-        filter.addAction(SOS.ACTION_BIND);
-        filter.addAction(SOS.ACTION_SERVICE_ENABLE);
-        filter.addAction(SOS.ACTION_SERVICE_DISABLE);
+        filter.addAction(WinBoll.ACTION_SOS);
+        filter.addAction(WinBoll.ACTION_BIND);
+        filter.addAction(WinBoll.ACTION_SERVICE_ENABLE);
+        filter.addAction(WinBoll.ACTION_SERVICE_DISABLE);
         //filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         service.registerReceiver(this, filter);
     }

@@ -10,45 +10,45 @@ import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
-public class SOSReportBean extends BaseBean {
+public class WinBollNewsBean extends BaseBean {
     
     public static final String TAG = "APPSOSReportBean";
     
-    protected String sosReport;
+    protected String message;
     
-    public SOSReportBean() {
-        this.sosReport = "";
+    public WinBollNewsBean() {
+        this.message = "";
     }
 
-    public SOSReportBean(String sosReport) {
-        this.sosReport = sosReport;
+    public WinBollNewsBean(String message) {
+        this.message = message;
     }
 
-    public void setSosReport(String sosReport) {
-        this.sosReport = sosReport;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public String getSosReport() {
-        return sosReport;
+    public String getMessage() {
+        return message;
     }
 
     @Override
     public String getName() {
-        return SOSReportBean.class.getName();
+        return WinBollNewsBean.class.getName();
     }
 
     @Override
     public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
         super.writeThisToJsonWriter(jsonWriter);
-        jsonWriter.name("sosReport").value(getSosReport());
+        jsonWriter.name("message").value(getMessage());
 
     }
 
     @Override
     public boolean initObjectsFromJsonReader(JsonReader jsonReader, String name) throws IOException {
         if (super.initObjectsFromJsonReader(jsonReader, name)) { return true; } else {
-            if (name.equals("sosReport")) {
-                setSosReport(jsonReader.nextString());
+            if (name.equals("message")) {
+                setMessage(jsonReader.nextString());
             } else {
                 return false;
             }

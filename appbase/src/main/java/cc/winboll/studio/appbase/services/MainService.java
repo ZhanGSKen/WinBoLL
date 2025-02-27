@@ -23,9 +23,9 @@ import cc.winboll.studio.appbase.handlers.MainServiceHandler;
 import cc.winboll.studio.appbase.receivers.MainReceiver;
 import cc.winboll.studio.appbase.services.AssistantService;
 import cc.winboll.studio.appbase.threads.MainServiceThread;
-import cc.winboll.studio.appbase.widgets.SOSWidget;
+import cc.winboll.studio.appbase.widgets.WinBollNewsWidget;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.bean.APPSOSBean;
+import cc.winboll.studio.libappbase.bean.APPNewsBean;
 import java.util.ArrayList;
 
 public class MainService extends Service {
@@ -101,8 +101,8 @@ public class MainService extends Service {
             }
 
             // 启动小部件
-            Intent intentTimeWidget = new Intent(this, SOSWidget.class);
-            intentTimeWidget.setAction(SOSWidget.ACTION_RELOAD_REPORT);
+            Intent intentTimeWidget = new Intent(this, WinBollNewsWidget.class);
+            intentTimeWidget.setAction(WinBollNewsWidget.ACTION_RELOAD_REPORT);
             this.sendBroadcast(intentTimeWidget);
 
             startMainServiceThread();
@@ -192,7 +192,7 @@ public class MainService extends Service {
         }
     }
 
-    public void bindSOSConnection(APPSOSBean bean) {
+    public void bindSOSConnection(APPNewsBean bean) {
         LogUtils.d(TAG, "bindSOSConnection(...)");
         // 清理旧的绑定链接
         for (int i = mSOSConnectionList.size() - 1; i > -1; i--) {
@@ -207,13 +207,13 @@ public class MainService extends Service {
         // 绑定服务
         SOSConnection sosConnection = new SOSConnection();
         Intent intentService = new Intent();
-        intentService.setComponent(new ComponentName(bean.getSosPackage(), bean.getSosClassName()));
+        intentService.setComponent(new ComponentName(bean.getNewsPackageName(), bean.getNewsClassName()));
         bindService(intentService, sosConnection, Context.BIND_IMPORTANT);
         mSOSConnectionList.add(sosConnection);
         
-        Intent intentWidget = new Intent(this, SOSWidget.class);
-        intentWidget.setAction(SOSWidget.ACTION_WAKEUP_SERVICE);
-        APPSOSBean appSOSBean = new APPSOSBean(bean.getSosPackage(), bean.getSosClassName());
+        Intent intentWidget = new Intent(this, WinBollNewsWidget.class);
+        intentWidget.setAction(WinBollNewsWidget.ACTION_WAKEUP_SERVICE);
+        APPNewsBean appSOSBean = new APPNewsBean(bean.getNewsPackageName(), bean.getNewsClassName());
         intentWidget.putExtra("APPSOSBean", appSOSBean.toString());
         sendBroadcast(intentWidget);
     }
@@ -222,10 +222,10 @@ public class MainService extends Service {
 
         ComponentName mComponentName;
 
-        boolean isBindToAPPSOSBean(APPSOSBean bean) {
+        boolean isBindToAPPSOSBean(APPNewsBean bean) {
             return mComponentName != null
-                && mComponentName.getClassName().equals(bean.getSosClassName())
-                && mComponentName.getPackageName().equals(bean.getSosPackage());
+                && mComponentName.getClassName().equals(bean.getNewsClassName())
+                && mComponentName.getPackageName().equals(bean.getNewsPackageName());
         }
 
         @Override
