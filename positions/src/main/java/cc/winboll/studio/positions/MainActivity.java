@@ -35,6 +35,7 @@ import cc.winboll.studio.positions.fragments.PositionsFragment;
 import cc.winboll.studio.positions.fragments.TXMSFragment;
 import cc.winboll.studio.positions.fragments.TasksFragment;
 import com.google.android.material.tabs.TabLayout;
+import com.hjq.toast.ToastUtils;
 import com.tencent.map.vector.demo.AbsActivity;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
     public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
 
     LogView mLogView;
-    //Toolbar mToolbar;
+    Toolbar mToolbar;
     CheckBox cbMainService;
     MainServiceBean mMainServiceBean;
     private TabLayout tabLayout;
@@ -96,14 +97,14 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        // 初始化工具栏
-//        mToolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(mToolbar);
+        // 初始化工具栏
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 //        if (isEnableDisplayHomeAsUp()) {
 //            // 显示后退按钮
 //            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        }
-//        getSupportActionBar().setSubtitle(getTag());
+        getSupportActionBar().setTitle("");
 
         // 初始化地图视图
         // 创建Fragment实例
@@ -134,7 +135,7 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
         // 关联TabLayout和ViewPager
         tabLayout.setupWithViewPager(viewPager);
     }
-    
+
 
     // ViewPager的适配器
     private class MyPagerAdapter extends FragmentPagerAdapter {

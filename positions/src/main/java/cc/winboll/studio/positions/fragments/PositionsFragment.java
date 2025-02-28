@@ -7,14 +7,16 @@ package cc.winboll.studio.positions.fragments;
  */
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import cc.winboll.studio.positions.R;
-import androidx.appcompat.widget.Toolbar;
+import com.hjq.toast.ToastUtils;
 
 public class PositionsFragment extends Fragment {
     
@@ -37,6 +39,7 @@ public class PositionsFragment extends Fragment {
         if (getArguments()!= null) {
             mPage = getArguments().getInt(ARG_PAGE);
         }
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -44,9 +47,29 @@ public class PositionsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View viewMain = inflater.inflate(R.layout.fragment_positions, container, false);
-        Toolbar toolbar = viewMain.findViewById(R.id.toolbar);
-        getActivity().getMenuInflater().inflate(R.menu.toolbar_positions,  toolbar.getMenu());
-        
+//        Toolbar toolbar = viewMain.findViewById(R.id.toolbar);
+//        getActivity().getMenuInflater().inflate(R.menu.toolbar_positions,  toolbar.getMenu());
+//        
         return viewMain;
+    }
+    
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.toolbar_positions, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+    
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.item_addposition) {
+            ToastUtils.show("item_addposition");
+        }
+//        } else 
+//        if (item.getItemId() == R.id.item_exit) {
+//            exit();
+//            return true;
+//        }
+        return super.onOptionsItemSelected(item);
     }
 }

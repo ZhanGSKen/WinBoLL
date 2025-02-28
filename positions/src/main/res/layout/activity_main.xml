@@ -12,6 +12,11 @@
 		android:layout_height="400dp"
 		android:id="@+id/frameLayout"/>
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:id="@+id/toolbar"/>
+    
 	<androidx.viewpager.widget.ViewPager
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
