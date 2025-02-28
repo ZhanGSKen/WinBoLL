@@ -11,18 +11,26 @@ import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 import android.location.Location;
+import java.util.UUID;
 
-public class LocationJson extends BaseBean {
+public class PostionModel extends BaseBean {
 
-    public static final String TAG = "LocationJson";
-
+    public static final String TAG = "PostionModel";
+    
+    // UUID 唯一位置标识
+    private String uuid;
+    // 纬度
     private double latitude;
+    // 经度
     private double longitude;
+    // 标记时间
     private long timestamp;
+    // 精确度
     private double accuracy;
     private String provider;
     
-    public LocationJson() {
+    public PostionModel() {
+        this.uuid = UUID.randomUUID().toString();
         this.latitude = 0.0f;
         this.longitude = 0.0f;
         this.timestamp = 0L;
@@ -30,12 +38,21 @@ public class LocationJson extends BaseBean {
         this.provider = "";
     }
 
-    public LocationJson(Location location) {
+    public PostionModel(Location location) {
+        this.uuid = UUID.randomUUID().toString();
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
         this.timestamp = location.getTime();
         this.accuracy = location.getAccuracy();
         this.provider = location.getProvider();
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+    
+    public String getUuid() {
+        return uuid;
     }
 
     public void setLatitude(double latitude) {
@@ -81,12 +98,13 @@ public class LocationJson extends BaseBean {
 
     @Override
     public String getName() {
-        return LocationJson.class.getName();
+        return PostionModel.class.getName();
     }
 
     @Override
     public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
         super.writeThisToJsonWriter(jsonWriter);
+        jsonWriter.name("uuid").value(getUuid());
         jsonWriter.name("latitude").value(getLatitude());
         jsonWriter.name("longitude").value(getLongitude());
         jsonWriter.name("timestamp").value(getTimestamp());
@@ -98,7 +116,9 @@ public class LocationJson extends BaseBean {
     @Override
     public boolean initObjectsFromJsonReader(JsonReader jsonReader, String name) throws IOException {
         if (super.initObjectsFromJsonReader(jsonReader, name)) { return true; } else {
-            if (name.equals("latitude")) {
+            if (name.equals("uuid")) {
+                setUuid(jsonReader.nextString());
+            } else if (name.equals("latitude")) {
                 setLatitude(jsonReader.nextDouble());
             } else if (name.equals("longitude")) {
                 setLongitude(jsonReader.nextDouble());

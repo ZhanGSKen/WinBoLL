@@ -6,33 +6,32 @@ package cc.winboll.studio.positions.fragments;
  * @Describe 腾讯地图服务视图
  */
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import cc.winboll.studio.libappbase.LogView;
+import androidx.fragment.app.Fragment;
 import cc.winboll.studio.positions.R;
-import cc.winboll.studio.positions.activities.SettingsActivity;
-import cc.winboll.studio.positions.activities.TestMapViewActivity;
+import cc.winboll.studio.positions.beans.PostionModel;
 import cc.winboll.studio.positions.utils.LocationFileStorage;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.hjq.toast.ToastUtils;
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;
 import com.tencent.map.geolocation.TencentLocationManager;
@@ -53,22 +52,6 @@ import com.tencent.tencentmap.mapsdk.maps.model.MyLocationStyle;
 import java.util.ArrayList;
 import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
-import cc.winboll.studio.positions.beans.LocationJson;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import androidx.fragment.app.Fragment;
-import cc.winboll.studio.positions.R;
-import cc.winboll.studio.libappbase.LogView;
-import androidx.annotation.Nullable;
-import androidx.annotation.NonNull;
-import android.graphics.Color;
-import android.widget.TextView;
-import cc.winboll.studio.positions.views.GridMapView;
-import com.tencent.tencentmap.mapsdk.maps.MapView;
-import com.tencent.tencentmap.mapsdk.maps.TencentMap;
-import com.tencent.tencentmap.mapsdk.maps.TextureMapView;
 
 public class TXMSFragment extends Fragment implements EasyPermissions.PermissionCallbacks,LocationSource, TencentLocationListener {
 
@@ -86,30 +69,31 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
     private TencentLocationManager locationManager;
     private TencentLocationRequest locationRequest;
     private MyLocationStyle locationStyle;
-    ArrayList<LocationJson> locationJsonList;
+    ArrayList<PostionModel> locationJsonList;
+    Location lastLocation;
 
-    public static TXMSFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        TXMSFragment fragment = new TXMSFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mPage = getArguments().getInt(ARG_PAGE);
-        }
-    }
+//    public static TXMSFragment newInstance(int page) {
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_PAGE, page);
+//        TXMSFragment fragment = new TXMSFragment();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
+//
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//            mPage = getArguments().getInt(ARG_PAGE);
+//        }
+//    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View viewRoot = inflater.inflate(R.layout.fragment_txms, container, false);
-        locationJsonList = new ArrayList<LocationJson>();
+        locationJsonList = new ArrayList<PostionModel>();
 
         TencentMapInitializer.setAgreePrivacy(getActivity(), true);
         TencentMapInitializer.start(getActivity());
@@ -134,18 +118,19 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         checkLocationPermission();
 
         //设置显示定位的图标
-        TencentLocationManager.setUserAgreePrivacy(true);
-        //建立定位
-        //initLocation();
-        //对地图操作类进行操作
-        CameraUpdate cameraSigma =
-            CameraUpdateFactory.newCameraPosition(new CameraPosition(
-                                                      new LatLng(22.984066, 116.307548),
-                                                      15,
-                                                      0f,
-                                                      0f));
-        //移动地图
-        tencentMap.moveCamera(cameraSigma);
+//        TencentLocationManager.setUserAgreePrivacy(true);
+//        // 启动实时定位
+//        doRealTimePosition();
+
+//        //对地图操作类进行操作
+//        CameraUpdate cameraSigma =
+//            CameraUpdateFactory.newCameraPosition(new CameraPosition(
+//                                                      new LatLng(22.984066, 116.307548),
+//                                                      15,
+//                                                      0f,
+//                                                      0f));
+//        //移动地图
+//        tencentMap.moveCamera(cameraSigma);
 
         // 设置地图点击监听
         tencentMap.setOnMapClickListener(new TencentMap.OnMapClickListener(){
@@ -156,7 +141,7 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
                     //LatLng position = new LatLng(40.011313,116.391907);
                     BitmapDescriptor custom = BitmapDescriptorFactory.fromResource(R.drawable.marker);
                     Location location = createLocationFromLatLng(latLng);
-                    addLocationJson(location);
+                    addLocationToMap(location);
                     Marker mCustomMarker = tencentMap.addMarker(new MarkerOptions(latLng));
 
                     //创建Marker对象之后，修改属性
@@ -168,7 +153,12 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
             });
 
         loadLocations();
-        
+
+        // 启动实时定位
+        //pickUpPosition();
+        //realTimePositioning();
+        sendRealTimePositioningMessage();
+
         return viewRoot;
     }
 
@@ -187,13 +177,13 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         // 读取数据
         locationJsonList = LocationFileStorage.loadFromFile(getActivity());
 
-        for (LocationJson lj : locationJsonList) {
-            tencentMap.addMarker(new MarkerOptions(toTencentLatLng(lj.toLocation())));
+        for (PostionModel lj : locationJsonList) {
+            tencentMap.addMarker(new MarkerOptions(convertToLatLng(lj.toLocation())));
             //LogUtils.d("Location", "Lat: " + loc.getLatitude() + ", Lng: " + loc.getLongitude());
         }
     }
 
-    void addLocationJson(Location location) {
+    void addLocationToMap(Location location) {
         // 存储位置数据
 //        Location location = new Location("gps");
 //        location.setLatitude(22.984066);
@@ -202,7 +192,7 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
 
         // 方式1：保存到文件
         //List<Location> locations = new ArrayList<>();
-        locationJsonList.add(new LocationJson(location));
+        locationJsonList.add(new PostionModel(location));
         LocationFileStorage.saveToFile(getActivity(), locationJsonList);
 
         // 读取数据
@@ -213,11 +203,31 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
 //        }
     }
 
+    public void addCurrentLocationToMap() {
+        ToastUtils.show("addCurrentLocationToMap");
+        locationJsonList.add(new PostionModel(createCurrentLocation()));
+        LocationFileStorage.saveToFile(getActivity(), locationJsonList);
+    }
 
 
-// 创建Location对象方法
+    // 创建Location对象方法
+    private Location createCurrentLocation() {
+        // 获取位置管理器
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+        // 获取最后已知位置
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            // 获取位置提供程序名称
+            String provider = location.getProvider();
+            System.out.println("定位来源：" + provider);
+        }
+
+        return location;
+    }
+
+    // 创建Location对象方法
     private Location createLocationFromLatLng(LatLng latLng) {
-        Location location = new Location("tencent_map_manual");
+        Location location = new Location("Tencent_Map_Manual");
 
         // 设置基础坐标
         location.setLatitude(latLng.getLatitude());
@@ -231,8 +241,16 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         return location;
     }
 
-
-    public LatLng toTencentLatLng(Location location) {
+    public static LatLng convertToLatLng(TencentLocation location) {
+        if (location != null) {
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            return new LatLng(latitude, longitude);
+        }
+        return null;
+    }
+    
+    public static LatLng convertToLatLng(Location location) {
         return new LatLng(
             location.getLatitude(),
             location.getLongitude()
@@ -248,6 +266,21 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
             .title("点击保存");
         tencentMap.addMarker(options);
     }
+
+    public static final int REALTIME_POSITIONING = 1;
+    private Handler handler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what) {
+                case REALTIME_POSITIONING:
+                    // 在这里处理接收到消息后的逻辑，比如更新 UI
+                    singleTimePositioning();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     /**
      * mapview的生命周期管理
@@ -314,20 +347,74 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         return bitmap;
     }
 
+    private void pickUpCurrentPosition() {
+        Location location = createCurrentLocation();
+        ToastUtils.show(String.format("%s", location.toString()));
 
+        //对地图操作类进行操作
+        CameraUpdate cameraSigma =
+            CameraUpdateFactory.newCameraPosition(new CameraPosition(
+                                                      convertToLatLng(location),
+                                                      15,
+                                                      0f,
+                                                      0f));
+        //移动地图
+        tencentMap.moveCamera(cameraSigma);
+        addLocationToMap(location);
+    }
+
+    public void sendRealTimePositioningMessage() {
+        Message message = Message.obtain();
+        message.what = TXMSFragment.REALTIME_POSITIONING;
+        handler.sendMessage(message);
+    }
 
     /**
      * 定位的一些初始化设置
      */
-    private void initLocation() {
-        //用于访问腾讯定位服务的类, 周期性向客户端提供位置更新
+    public void singleTimePositioning() {
+        TencentMapInitializer.setAgreePrivacy(getActivity(), true);
+        TencentMapInitializer.start(getActivity());
+        TencentLocationManager.setUserAgreePrivacy(true);
+        
+        //用于访问腾讯定位服务的类, 提供一次位置信息
         locationManager = TencentLocationManager.getInstance(getActivity());
         //设置坐标系
         locationManager.setCoordinateType(TencentLocationManager.COORDINATE_TYPE_GCJ02);
         //创建定位请求
         locationRequest = TencentLocationRequest.create();
-        //设置定位周期（位置监听器回调周期）为3s
-        locationRequest.setInterval(3000);
+        // 设置定位模式为单次定位
+        locationRequest.setInterval(0); // 设置为0表示只定位一次
+        //locationRequest.setFastestInterval(0);
+
+        // 实现 TencentLocationListener 接口来接收定位结果
+        locationManager.requestLocationUpdates(locationRequest, new TencentLocationListener() {
+                @Override
+                public void onLocationChanged(TencentLocation location, int errorCode, String errorInfo) {
+                    if (errorCode == TencentLocation.ERROR_OK) {
+                        // 定位成功，处理定位数据
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        // 在这里可以将定位数据传递给其他需要的地方
+                        //对地图操作类进行操作
+                        CameraUpdate cameraSigma =
+                            CameraUpdateFactory.newCameraPosition(new CameraPosition(
+                                                                      convertToLatLng(location),
+                                                                      15,
+                                                                      0f,
+                                                                      0f));
+                        //移动地图
+                        tencentMap.moveCamera(cameraSigma);
+                    } else {
+                        // 定位失败，处理错误信息
+                    }
+                }
+
+                @Override
+                public void onStatusUpdate(String name, int statusCode, String statusInfo) {
+                    // 位置状态更新，根据需要处理
+                }
+            }, Looper.getMainLooper());
 
         //地图上设置定位数据源
         tencentMap.setLocationSource(this);
@@ -335,9 +422,10 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         tencentMap.setMyLocationEnabled(true);
         //设置定位图标样式
         setLocMarkerStyle();
-//        locationStyle = locationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
         tencentMap.setMyLocationStyle(locationStyle);
     }
+    
+
     /**
      * 实现位置监听
      * @param tencentLocation
@@ -359,6 +447,16 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
             getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        //对地图操作类进行操作
+                        CameraUpdate cameraSigma =
+                            CameraUpdateFactory.newCameraPosition(new CameraPosition(
+                                                                      convertToLatLng(location),
+                                                                      15,
+                                                                      0f,
+                                                                      0f));
+                        //移动地图
+                        tencentMap.moveCamera(cameraSigma);
 //                        Rules.getEffectInfo(location);
 //                        double distance = DistanceUtils.getDistance(
 //                            locationA.getLatitude(), 
@@ -371,6 +469,22 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
 //                    Toast.makeText(getApplicationContext(), new Gson().toJson(location), Toast.LENGTH_LONG).show();
                     }
                 });
+
+            // 保存最后定位信息
+            lastLocation = new Location(tencentLocation.getProvider());;
+            lastLocation.setLatitude(tencentLocation.getLatitude());
+            lastLocation.setLongitude(tencentLocation.getLongitude());
+            lastLocation.setAccuracy(tencentLocation.getAccuracy());
+
+            // 当不再需要定位时
+            // 取消定位监听
+            if (locationManager != null) {
+                locationManager.removeUpdates(this);
+            }
+            // 关闭当前位置显示
+//            if (tencentMap != null) {
+//                tencentMap.setMyLocationEnabled(false);
+//            }
         }
     }
 

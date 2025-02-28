@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.telecom.TelecomManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,6 +50,7 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
 
     public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
 
+    TXMSFragment mTXMSFragment;
     LogView mLogView;
     Toolbar mToolbar;
     CheckBox cbMainService;
@@ -108,11 +110,11 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
 
         // 初始化地图视图
         // 创建Fragment实例
-        TXMSFragment myFragment = TXMSFragment.newInstance(0);
+        mTXMSFragment = new TXMSFragment();
         // 获取FragmentTransaction
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         // 将Fragment添加到FrameLayout容器中
-        transaction.add(R.id.frameLayout, myFragment);
+        transaction.add(R.id.frameLayout, mTXMSFragment);
         transaction.commit();
 
         tabLayout = findViewById(R.id.tabLayout);
@@ -121,9 +123,9 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
         // 创建Fragment列表和标题列表
         List<Fragment> fragmentList = new ArrayList<>();
         List<String> tabTitleList = new ArrayList<>();
-        fragmentList.add(PositionsFragment.newInstance(0));
-        fragmentList.add(TasksFragment.newInstance(1));
-        fragmentList.add(LogFragment.newInstance(2));
+        fragmentList.add(new PositionsFragment());
+        fragmentList.add(new TasksFragment());
+        fragmentList.add(new LogFragment());
         tabTitleList.add("位置");
         tabTitleList.add("任务");
         tabTitleList.add("日志");
@@ -312,6 +314,10 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
             Intent intent = new Intent(this, com.tencent.map.vector.demo.DemoMainActivity.class);
             startActivity(intent);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
+        } else if (item.getItemId() == R.id.item_positionnow) {
+            mTXMSFragment.sendRealTimePositioningMessage();
+        } else if (item.getItemId() == R.id.item_addnewposition) {
+            ToastUtils.show("item_addnewpositon");
         }
 //        } else 
 //        if (item.getItemId() == R.id.item_exit) {

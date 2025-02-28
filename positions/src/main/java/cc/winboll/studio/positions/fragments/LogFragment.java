@@ -22,21 +22,21 @@ public class LogFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
 
-    public static LogFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        LogFragment fragment = new LogFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mPage = getArguments().getInt(ARG_PAGE);
-        }
-    }
+//    public static LogFragment newInstance(int page) {
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_PAGE, page);
+//        LogFragment fragment = new LogFragment();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
+//
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//            mPage = getArguments().getInt(ARG_PAGE);
+//        }
+//    }
 
     @Nullable
     @Override

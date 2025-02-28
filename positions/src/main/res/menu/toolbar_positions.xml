@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/item_positionnow"
+        android:title="PositionNow"
+        app:showAsAction="ifRoom" />
     
     <item
-        android:id="@+id/item_addposition"
-        android:title="AddPositions"
+        android:id="@+id/item_addnewposition"
+        android:title="AddNewPositions"
         app:showAsAction="ifRoom" />
     
 </menu>

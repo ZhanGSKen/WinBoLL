@@ -52,7 +52,7 @@ import com.tencent.tencentmap.mapsdk.maps.model.MyLocationStyle;
 import java.util.ArrayList;
 import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
-import cc.winboll.studio.positions.beans.LocationJson;
+import cc.winboll.studio.positions.beans.PostionModel;
 
 public class MainSimpleActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,LocationSource, TencentLocationListener {
 
@@ -69,7 +69,7 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
     private TencentLocationManager locationManager;
     private TencentLocationRequest locationRequest;
     private MyLocationStyle locationStyle;
-    ArrayList<LocationJson> locationJsonList;
+    ArrayList<PostionModel> locationJsonList;
     LogView mLogView;
 
     @Override
@@ -77,7 +77,7 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_simple);
         
-        locationJsonList = new ArrayList<LocationJson>();
+        locationJsonList = new ArrayList<PostionModel>();
         
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
@@ -161,7 +161,7 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
         // 读取数据
         locationJsonList = LocationFileStorage.loadFromFile(this);
         
-        for (LocationJson lj : locationJsonList) {
+        for (PostionModel lj : locationJsonList) {
             tencentMap.addMarker(new MarkerOptions(toTencentLatLng(lj.toLocation())));
             //LogUtils.d("Location", "Lat: " + loc.getLatitude() + ", Lng: " + loc.getLongitude());
         }
@@ -176,7 +176,7 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
 
         // 方式1：保存到文件
         //List<Location> locations = new ArrayList<>();
-        locationJsonList.add(new LocationJson(location));
+        locationJsonList.add(new PostionModel(location));
         LocationFileStorage.saveToFile(this, locationJsonList);
 
         // 读取数据

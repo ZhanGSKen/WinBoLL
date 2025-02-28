@@ -25,20 +25,20 @@ public class PositionsFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
 
-    public static PositionsFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        PositionsFragment fragment = new PositionsFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static PositionsFragment newInstance(int page) {
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_PAGE, page);
+//        PositionsFragment fragment = new PositionsFragment();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments()!= null) {
-            mPage = getArguments().getInt(ARG_PAGE);
-        }
+//        if (getArguments()!= null) {
+//            mPage = getArguments().getInt(ARG_PAGE);
+//        }
         setHasOptionsMenu(true);
     }
 
@@ -62,9 +62,9 @@ public class PositionsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.item_addposition) {
-            ToastUtils.show("item_addposition");
-        }
+//        if (item.getItemId() == R.id.item_addposition) {
+//            ToastUtils.show("item_addposition");
+//        }
 //        } else 
 //        if (item.getItemId() == R.id.item_exit) {
 //            exit();

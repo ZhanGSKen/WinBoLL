@@ -25,20 +25,20 @@ public class TasksFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
     
-    public static TasksFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        TasksFragment fragment = new TasksFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static TasksFragment newInstance(int page) {
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_PAGE, page);
+//        TasksFragment fragment = new TasksFragment();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments()!= null) {
-            mPage = getArguments().getInt(ARG_PAGE);
-        }
+//        if (getArguments()!= null) {
+//            mPage = getArguments().getInt(ARG_PAGE);
+//        }
         setHasOptionsMenu(true);
     }
 
