@@ -14,18 +14,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import cc.winboll.studio.positions.R;
+import androidx.appcompat.widget.Toolbar;
 
-public class ContactsFragment extends Fragment {
+public class PositionsFragment extends Fragment {
     
     public static final String TAG = "ContactsFragment";
     
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
 
-    public static ContactsFragment newInstance(int page) {
+    public static PositionsFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        ContactsFragment fragment = new ContactsFragment();
+        PositionsFragment fragment = new PositionsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,9 +43,10 @@ public class ContactsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_contacts, container, false);
-        TextView textView = view.findViewById(R.id.page_text);
-        textView.setText("这是第 " + mPage + " 页");
-        return view;
+        View viewMain = inflater.inflate(R.layout.fragment_positions, container, false);
+        Toolbar toolbar = viewMain.findViewById(R.id.toolbar);
+        getActivity().getMenuInflater().inflate(R.menu.toolbar_positions,  toolbar.getMenu());
+        
+        return viewMain;
     }
 }

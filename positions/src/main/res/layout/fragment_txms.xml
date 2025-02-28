@@ -6,16 +6,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/activitymainToolbar1"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.0">
+        android:layout_height="match_parent">
 
         <com.tencent.tencentmap.mapsdk.maps.TextureMapView
             android:id="@+id/mapview"
@@ -35,17 +28,7 @@
 
         </TextView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_location_searching"
-            app:backgroundTint="@color/colorPrimary"
-            android:layout_alignParentTop="true"/>
-
     </RelativeLayout>
-
+    
 </LinearLayout>
 

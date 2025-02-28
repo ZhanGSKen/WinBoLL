@@ -6,10 +6,15 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-    <com.tencent.tencentmap.mapsdk.maps.TextureMapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+	<androidx.appcompat.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/toolbar"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="fragment_tasks"/>
 
 </LinearLayout>
 

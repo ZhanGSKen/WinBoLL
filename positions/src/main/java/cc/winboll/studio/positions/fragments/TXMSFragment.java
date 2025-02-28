@@ -71,10 +71,11 @@ import com.tencent.tencentmap.mapsdk.maps.TencentMap;
 import com.tencent.tencentmap.mapsdk.maps.TextureMapView;
 
 public class TXMSFragment extends Fragment implements EasyPermissions.PermissionCallbacks,LocationSource, TencentLocationListener {
-    
+
     public static final String TAG = "TXMSFragment";
-    
-    
+
+    private static final int PERMISSION_REQUEST_CODE = 1;
+
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
     private TextureMapView mapView;
@@ -90,7 +91,7 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
     public static TXMSFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        TXMSFragment fragment = new GmsFragment();
+        TXMSFragment fragment = new TXMSFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -98,7 +99,7 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments()!= null) {
+        if (getArguments() != null) {
             mPage = getArguments().getInt(ARG_PAGE);
         }
     }
@@ -107,14 +108,11 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View viewRoot = inflater.inflate(R.layout.fragment_gms, container, false);
+        View viewRoot = inflater.inflate(R.layout.fragment_txms, container, false);
         locationJsonList = new ArrayList<LocationJson>();
 
-        mLogView = viewRoot.findViewById(R.id.logview);
-        mLogView.start();
-
-        TencentMapInitializer.setAgreePrivacy(this, true);
-        TencentMapInitializer.start(this);
+        TencentMapInitializer.setAgreePrivacy(getActivity(), true);
+        TencentMapInitializer.start(getActivity());
         TencentLocationManager.setUserAgreePrivacy(true);
 
 
@@ -123,13 +121,13 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         //创建tencentMap地图对象，可以完成对地图的几乎所有操作
         tencentMap = mapView.getMap();
 
-        FloatingActionButton fab = viewRoot.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Snackbar.make(view, "点击了悬浮按钮", Snackbar.LENGTH_LONG).show();
-                }
-            });
+//        FloatingActionButton fab = viewRoot.findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Snackbar.make(view, "点击了悬浮按钮", Snackbar.LENGTH_LONG).show();
+//                }
+//            });
 
         mtvInfo = viewRoot.findViewById(R.id.tv_info);
 
@@ -169,10 +167,11 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
                 }
             });
 
+        loadLocations();
         
         return viewRoot;
     }
-    
+
     void loadLocations() {
         // 存储位置数据
 //        Location location = new Location("gps");
@@ -186,7 +185,7 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
 //        LocationFileStorage.saveToFile(this, locations);
 
         // 读取数据
-        locationJsonList = LocationFileStorage.loadFromFile(this);
+        locationJsonList = LocationFileStorage.loadFromFile(getActivity());
 
         for (LocationJson lj : locationJsonList) {
             tencentMap.addMarker(new MarkerOptions(toTencentLatLng(lj.toLocation())));
@@ -204,7 +203,7 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         // 方式1：保存到文件
         //List<Location> locations = new ArrayList<>();
         locationJsonList.add(new LocationJson(location));
-        LocationFileStorage.saveToFile(this, locationJsonList);
+        LocationFileStorage.saveToFile(getActivity(), locationJsonList);
 
         // 读取数据
 //        List<Location> loaded = LocationFileStorage.loadFromFile(this);
@@ -282,18 +281,6 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         super.onDestroy();
         mapView.onDestroy();
     }
-    
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-//        LatLng center = new LatLng(39.904556, 116.427242);
-//        tencentMap.moveCamera(
-//            CameraUpdateFactory.newLatLngZoom(center, 13f) // 注意 13 → 13f
-//        );
-        loadLocations();
-    }
-    
 
     /**
      * 设置定位图标样式
@@ -334,7 +321,7 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
      */
     private void initLocation() {
         //用于访问腾讯定位服务的类, 周期性向客户端提供位置更新
-        locationManager = TencentLocationManager.getInstance(this);
+        locationManager = TencentLocationManager.getInstance(getActivity());
         //设置坐标系
         locationManager.setCoordinateType(TencentLocationManager.COORDINATE_TYPE_GCJ02);
         //创建定位请求
@@ -369,7 +356,7 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
             locationChangedListener.onLocationChanged(location);
 
             //显示回调的实时位置信息
-            runOnUiThread(new Runnable() {
+            getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 //                        Rules.getEffectInfo(location);
@@ -401,13 +388,13 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         int err = locationManager.requestLocationUpdates(locationRequest, this, Looper.myLooper());
         switch (err) {
             case 1:
-                Toast.makeText(this, "设备缺少使用腾讯定位服务需要的基本条件", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "设备缺少使用腾讯定位服务需要的基本条件", Toast.LENGTH_SHORT).show();
                 break;
             case 2:
-                Toast.makeText(this, "manifest 中配置的 key 不正确", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "manifest 中配置的 key 不正确", Toast.LENGTH_SHORT).show();
                 break;
             case 3:
-                Toast.makeText(this, "自动加载libtencentloc.so失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "自动加载libtencentloc.so失败", Toast.LENGTH_SHORT).show();
                 break;
 
             default:
@@ -434,9 +421,9 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
     }
 
     private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            || ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
                                               new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                                               PERMISSION_REQUEST_CODE);
         } else {
@@ -452,10 +439,10 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
                 //startLocationUpdates();
             } else {
                 // 用户拒绝了权限请求
-                Toast.makeText(this, "请授予定位权限", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "请授予定位权限", Toast.LENGTH_SHORT).show();
             }
         }
     }
-    
-    
+
+
 }

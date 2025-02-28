@@ -58,10 +58,11 @@ android {
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     // 定位服务
     implementation 'com.google.android.gms:play-services-location:20.0.0'
 
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'

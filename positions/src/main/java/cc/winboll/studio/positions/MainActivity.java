@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.telecom.TelecomManager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
@@ -25,18 +28,18 @@ import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
 import cc.winboll.studio.positions.R;
-import com.tencent.map.vector.demo.DemoMainActivity;
 import cc.winboll.studio.positions.activities.SettingsActivity;
-import cc.winboll.studio.positions.adapters.MyPagerAdapter;
 import cc.winboll.studio.positions.beans.MainServiceBean;
-import cc.winboll.studio.positions.services.MainService;
+import cc.winboll.studio.positions.fragments.LogFragment;
+import cc.winboll.studio.positions.fragments.PositionsFragment;
+import cc.winboll.studio.positions.fragments.TXMSFragment;
+import cc.winboll.studio.positions.fragments.TasksFragment;
 import com.google.android.material.tabs.TabLayout;
+import com.tencent.map.vector.demo.AbsActivity;
 import java.util.ArrayList;
 import java.util.List;
-import com.tencent.map.vector.demo.AbsListActivity;
-import com.tencent.map.vector.demo.AbsActivity;
 
-final public class MainSimpleActivity extends AbsActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
+final public class MainActivity extends AbsActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
 	public static final String TAG = "MainActivity";
 
@@ -46,10 +49,11 @@ final public class MainSimpleActivity extends AbsActivity implements IWinBollAct
     public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
 
     LogView mLogView;
-    Toolbar mToolbar;
+    //Toolbar mToolbar;
     CheckBox cbMainService;
     MainServiceBean mMainServiceBean;
-    ViewPager viewPager;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     private List<View> views; //用来存放放进ViewPager里面的布局
     //实例化存储imageView（导航原点）的集合
     ImageView[] imageViews;
@@ -67,19 +71,19 @@ final public class MainSimpleActivity extends AbsActivity implements IWinBollAct
 
     @Override
     public APPInfo getAppInfo() {
-//        String szBranchName = "contacts";
+//        String szBranchName = "positions";
 //
 //        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
-//        appInfo.setAppName("Contacts");
+//        appInfo.setAppName("Positions");
 //        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
-//        appInfo.setAppDescription("Contacts Description");
+//        appInfo.setAppDescription("Positions Description");
 //        appInfo.setAppGitName("APP");
 //        appInfo.setAppGitOwner("Studio");
 //        appInfo.setAppGitAPPBranch(szBranchName);
 //        appInfo.setAppGitAPPSubProjectFolder(szBranchName);
-//        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=Contacts");
-//        appInfo.setAppAPKName("Contacts");
-//        appInfo.setAppAPKFolderName("Contacts");
+//        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=Positions");
+//        appInfo.setAppAPKName("Positions");
+//        appInfo.setAppAPKFolderName("Positions");
 //        return appInfo;
         return null;
     }
@@ -92,72 +96,97 @@ final public class MainSimpleActivity extends AbsActivity implements IWinBollAct
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 初始化工具栏
-        mToolbar = findViewById(R.id.activitymainToolbar1);
-        setSupportActionBar(mToolbar);
-        if (isEnableDisplayHomeAsUp()) {
-            // 显示后退按钮
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        getSupportActionBar().setSubtitle(getTag());
-
-        initData();
-        initView();
-        //initPoint();//调用初始化导航原点的方法
-        viewPager.addOnPageChangeListener(this);//滑动事件
-
-        ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
-        MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        TabLayout tabLayout = findViewById(R.id.activitymainTabLayout1);
-        tabLayout.setupWithViewPager(viewPager);
-
-//        mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
-//        if (mMainServiceBean == null) {
-//            mMainServiceBean = new MainServiceBean();
+//        // 初始化工具栏
+//        mToolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(mToolbar);
+//        if (isEnableDisplayHomeAsUp()) {
+//            // 显示后退按钮
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        }
-//        cbMainService = findViewById(R.id.activitymainCheckBox1);
-//        cbMainService.setChecked(mMainServiceBean.isEnable());
-//        cbMainService.setOnClickListener(new View.OnClickListener(){
-//                @Override
-//                public void onClick(View view) {
-//                    if (cbMainService.isChecked()) {
-//                        MainService.startMainService(MainActivity.this);
-//                    } else {
-//                        MainService.stopMainService(MainActivity.this);
-//                    }
-//                }
-//            });
-        MainService.startMainService(Main2Activity.this);
-    }
+//        getSupportActionBar().setSubtitle(getTag());
 
+        // 初始化地图视图
+        // 创建Fragment实例
+        TXMSFragment myFragment = TXMSFragment.newInstance(0);
+        // 获取FragmentTransaction
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        // 将Fragment添加到FrameLayout容器中
+        transaction.add(R.id.frameLayout, myFragment);
+        transaction.commit();
+
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
+
+        // 创建Fragment列表和标题列表
+        List<Fragment> fragmentList = new ArrayList<>();
+        List<String> tabTitleList = new ArrayList<>();
+        fragmentList.add(PositionsFragment.newInstance(0));
+        fragmentList.add(TasksFragment.newInstance(1));
+        fragmentList.add(LogFragment.newInstance(2));
+        tabTitleList.add("位置");
+        tabTitleList.add("任务");
+        tabTitleList.add("日志");
+
+        // 设置ViewPager的适配器
+        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager(), fragmentList, tabTitleList);
+        viewPager.setAdapter(adapter);
+
+        // 关联TabLayout和ViewPager
+        tabLayout.setupWithViewPager(viewPager);
+    }
+    
+
+    // ViewPager的适配器
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+
+        private List<Fragment> fragmentList;
+        private List<String> tabTitleList;
+
+        public MyPagerAdapter(FragmentManager fm, List<Fragment> fragmentList, List<String> tabTitleList) {
+            super(fm);
+            this.fragmentList = fragmentList;
+            this.tabTitleList = tabTitleList;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitleList.get(position);
+        }
+    }
     //初始化view，即显示的图片
-    void initView() {
-        viewPager = findViewById(R.id.activitymainViewPager1);
-        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        //adapter = new MyPagerAdapter(views);
-        //viewPager = findViewById(R.id.activitymainViewPager1);
-        //viewPager.setAdapter(adapter);
-        //linearLayout = findViewById(R.id.activitymainLinearLayout1);
-        //initPoint();//初始化页面下方的点
-        viewPager.setOnPageChangeListener(this);
-
-    }
+//    void initViewPager() {
+//        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+//        mViewPager.setAdapter(pagerAdapter);
+//        //adapter = new MyPagerAdapter(views);
+//        //viewPager = findViewById(R.id.activitymainViewPager1);
+//        //viewPager.setAdapter(adapter);
+//        //linearLayout = findViewById(R.id.activitymainLinearLayout1);
+//        //initPoint();//初始化页面下方的点
+//        mViewPager.setOnPageChangeListener(this);
+//    }
 
     //初始化所要显示的布局
-    void initData() {
-        ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view1 = inflater.inflate(R.layout.fragment_gms, viewPager, false);
-        View view2 = inflater.inflate(R.layout.fragment_contacts, viewPager, false);
-        View view3 = inflater.inflate(R.layout.fragment_log, viewPager, false);
-
-        views = new ArrayList<>();
-        views.add(view1);
-        views.add(view2);
-        views.add(view3);
-    }
+//    void initLayoutData() {
+//        LayoutInflater inflater = LayoutInflater.from(getActivity());
+//        View view1 = inflater.inflate(R.layout.fragment_gms, mViewPager, false);
+//        View view2 = inflater.inflate(R.layout.fragment_contacts, mViewPager, false);
+//        View view3 = inflater.inflate(R.layout.fragment_log, mViewPager, false);
+//
+//        views = new ArrayList<>();
+//        views.add(view1);
+//        views.add(view2);
+//        views.add(view3);
+//    }
 
 //    void initPoint() {
 //        imageViews = new ImageView[5];//实例化5个图片
@@ -225,51 +254,6 @@ final public class MainSimpleActivity extends AbsActivity implements IWinBollAct
         LogUtils.d(TAG, "onDestroy() SOS");
     }
 
-
-
-    //
-    // 处理传入的 Intent 数据
-    //
-//    boolean prosessIntents(Intent intent) {
-//        if (intent == null 
-//            || intent.getAction() == null
-//            || intent.getAction().equals(""))
-//            return false;
-//
-//        if (intent.getAction().equals(StringToQrCodeView.ACTION_UNITTEST_QRCODE)) {
-//            try {
-//                WinBollActivity clazzActivity = UnitTestActivity.class.newInstance();
-//                String tag = clazzActivity.getTag();
-//                LogUtils.d(TAG, "String tag = clazzActivity.getTag(); tag " + tag);
-//                Intent subIntent = new Intent(this, UnitTestActivity.class);
-//                subIntent.setAction(intent.getAction());
-//                File file = new File(getCacheDir(), UUID.randomUUID().toString());
-//                //取出文件uri
-//                Uri uri = intent.getData();
-//                if (uri == null) {
-//                    uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-//                }
-//                //获取文件真实地址
-//                String szSrcPath = UriUtils.getFileFromUri(getApplication(), uri);
-//                if (TextUtils.isEmpty(szSrcPath)) {
-//                    return false;
-//                }
-//
-//                Files.copy(Paths.get(szSrcPath), Paths.get(file.getPath()));
-//                //startWinBollActivity(subIntent, tag);
-//                WinBollActivityManager.getInstance(this).startWinBollActivity(this, subIntent, UnitTestActivity.class);
-//            } catch (IllegalAccessException | InstantiationException | IOException e) {
-//                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-//                // 函数处理异常返回失败
-//                return false;
-//            }
-//        } else {
-//            LogUtils.d(TAG, "prosessIntents|" + intent.getAction() + "|yet");
-//            return false;
-//        }
-//        return true;
-//    }
-
     @Override
     public String getTag() {
         return TAG;
@@ -277,7 +261,7 @@ final public class MainSimpleActivity extends AbsActivity implements IWinBollAct
 
     @Override
     public Toolbar initToolBar() {
-        return findViewById(R.id.activitymainToolbar1);
+        return findViewById(R.id.toolbar);
     }
 
     @Override
@@ -386,7 +370,7 @@ final public class MainSimpleActivity extends AbsActivity implements IWinBollAct
 //        }
         if (requestCode == DIALER_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                Toast.makeText(Main2Activity.this, getString(R.string.app_name) + " 已成为默认电话应用",
+                Toast.makeText(MainActivity.this, getString(R.string.app_name) + " 已成为默认电话应用",
                                Toast.LENGTH_SHORT).show();
             }
         }
