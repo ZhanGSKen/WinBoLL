@@ -20,6 +20,10 @@ public class SMSRecevier_Test {
         test1(context, szSmsBody, szSmsAddress);
         
         szSmsBody = "无影无迹";
+        szSmsAddress = "淘宝物流";
+        test1(context, szSmsBody, szSmsAddress);
+        
+        szSmsBody = "无影无迹";
         szSmsAddress = "1?0";
         test1(context, szSmsBody, szSmsAddress);
         

@@ -77,21 +77,30 @@ public class SMSRecevier extends BroadcastReceiver {
         PhoneUtil phoneUtil = new PhoneUtil(context);
         boolean isPhoneInContacts = phoneUtil.isPhoneInContacts(szSmsAddress);
         LogUtils.d(TAG, String.format("isPhoneInContacts %s", isPhoneInContacts));
-        
+
         boolean isPhoneByDigit = phoneUtil.isPhoneByDigit(szSmsAddress);
         LogUtils.d(TAG, String.format("isPhoneByDigit %s", isPhoneByDigit));
-        
+
         AppConfigUtil configUtil = AppConfigUtil.getInstance(context);
         boolean isOnlyReceiveContacts = configUtil.mAppConfigBean.isEnableOnlyReceiveContacts();
         LogUtils.d(TAG, String.format("isOnlyReceiveContacts %s", isOnlyReceiveContacts));
-        
+
         boolean isInSMSAcceptRule = SMSReceiveRuleUtil.getInstance(context, false).checkIsSMSAcceptInRule(context, szSmsBody);
         LogUtils.d(TAG, String.format("isInSMSAcceptRule %s", isInSMSAcceptRule));
-        
-        if (isPhoneByDigit 
-            && (!isOnlyReceiveContacts || isPhoneInContacts || isInSMSAcceptRule)) {
+
+        // 启用了只接受通讯录，通讯录里有记录
+        if (isOnlyReceiveContacts && isPhoneInContacts) {
             return true;
         }
+        // 如果不是数字通讯地址，但是在通讯录内
+        if (!isPhoneByDigit && isPhoneInContacts) {
+            return true;
+        }
+        // 通讯地址是数字，并且在短信接收规则内。
+        if (isPhoneByDigit && isInSMSAcceptRule) {
+            return true;
+        }
+        
         return false;
     }
 }
