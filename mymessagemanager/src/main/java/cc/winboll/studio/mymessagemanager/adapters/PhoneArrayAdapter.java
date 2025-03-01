@@ -13,6 +13,7 @@ import cc.winboll.studio.mymessagemanager.R;
 import cc.winboll.studio.mymessagemanager.activitys.SMSActivity;
 import cc.winboll.studio.mymessagemanager.beans.PhoneBean;
 import cc.winboll.studio.mymessagemanager.beans.SMSBean;
+import cc.winboll.studio.mymessagemanager.utils.AddressUtils;
 import cc.winboll.studio.mymessagemanager.utils.PhoneUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSUtil;
 import cc.winboll.studio.shared.log.LogUtils;
@@ -76,7 +77,7 @@ public class PhoneArrayAdapter extends BaseAdapter {
 
 		String szAddress = ((SMSBean)getItem(position)).getAddress();
 
-		viewHolder.tvAddress.setText(szAddress);
+		viewHolder.tvAddress.setText(AddressUtils.getFormattedAddress(szAddress));
 		viewHolder.tvName.setText(getName(szAddress));
 
         //Drawable drawableFrame = AppCompatResources.getDrawable(mContext, R.drawable.bg_frame);

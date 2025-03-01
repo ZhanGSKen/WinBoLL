@@ -34,6 +34,7 @@ import cc.winboll.studio.mymessagemanager.views.DateAgoTextView;
 import cc.winboll.studio.mymessagemanager.views.SMSView;
 import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
+import cc.winboll.studio.mymessagemanager.utils.AddressUtils;
 
 public class SMSRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -154,7 +155,7 @@ public class SMSRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         final SMSRecycleBean item = mDataList.get(position);
         if (holder.getItemViewType() == 0) {
             SimpleViewHolder viewHolder = (SimpleViewHolder) holder;
-            viewHolder.mtvAddress.setText(item.getAddress());
+            viewHolder.mtvAddress.setText(AddressUtils.getFormattedAddress(item.getAddress()));
             viewHolder.mbtnViewBody.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
@@ -179,7 +180,7 @@ public class SMSRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 viewHolder.mvRight.setVisibility(View.GONE);
                 viewHolder.mSMSView.setSMSType(SMSView.SMSType.SEND);
             }
-            viewHolder.mtvAddress.setText(item.getAddress());
+            viewHolder.mtvAddress.setText(AddressUtils.getFormattedAddress(item.getAddress()));
             viewHolder.mdatvDeleteDate.setDate(item.getDeleteDate());
             viewHolder.mdatvDate.setDate(item.getDate());
             if(mAppConfigUtil.mAppConfigBean.isSMSRecycleProtectMode()) {

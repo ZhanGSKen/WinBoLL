@@ -28,6 +28,7 @@ public class UnitTestActivity extends Activity {
     }
 
     public void onMain(View view) {
-        SMSRecevier_Test.main(this);
+        //SMSRecevier_Test.main(this);
+        AddressUtils_Test.main(this);
     }
 }
