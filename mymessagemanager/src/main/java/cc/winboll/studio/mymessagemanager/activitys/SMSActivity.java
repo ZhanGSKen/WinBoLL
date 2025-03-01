@@ -18,10 +18,10 @@ import cc.winboll.studio.libaes.views.AOHPCTCSeekBar;
 import cc.winboll.studio.mymessagemanager.R;
 import cc.winboll.studio.mymessagemanager.activitys.SMSActivity;
 import cc.winboll.studio.mymessagemanager.adapters.SMSArrayAdapter;
+import cc.winboll.studio.mymessagemanager.utils.AddressUtils;
 import cc.winboll.studio.mymessagemanager.utils.SMSUtil;
 import cc.winboll.studio.mymessagemanager.utils.ViewUtil;
 import cc.winboll.studio.mymessagemanager.views.SMSListViewForScrollView;
-import cc.winboll.studio.mymessagemanager.views.SMSView;
 import java.lang.ref.WeakReference;
 
 public class SMSActivity extends BaseActivity {
@@ -102,7 +102,7 @@ public class SMSActivity extends BaseActivity {
 
         // 初始化标题栏
         mToolbar = findViewById(R.id.activitysmsASupportToolbar1);
-        mToolbar.setSubtitle(getString(R.string.activity_name_smsinphone) + " < Phone : " + mszPhoneTo + " >");
+        mToolbar.setSubtitle(getString(R.string.activity_name_smsinphone) + " < Phone : " + AddressUtils.getFormattedAddress(mszPhoneTo) + " >");
         setActionBar(mToolbar);
 
         // 初始化滚动窗口

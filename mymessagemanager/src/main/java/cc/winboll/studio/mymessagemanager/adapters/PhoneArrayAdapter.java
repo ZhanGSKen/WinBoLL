@@ -75,7 +75,7 @@ public class PhoneArrayAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-		String szAddress = ((SMSBean)getItem(position)).getAddress();
+		final String szAddress = ((SMSBean)getItem(position)).getAddress();
 
 		viewHolder.tvAddress.setText(AddressUtils.getFormattedAddress(szAddress));
 		viewHolder.tvName.setText(getName(szAddress));
@@ -88,7 +88,7 @@ public class PhoneArrayAdapter extends BaseAdapter {
 
                     //Toast.makeText(mContext, tv.getText(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(mContext, SMSActivity.class);
-                    intent.putExtra(SMSActivity.EXTRA_PHONE, viewHolder.tvAddress.getText());
+                    intent.putExtra(SMSActivity.EXTRA_PHONE, szAddress);
                     mContext.startActivity(intent);
                 }
 
