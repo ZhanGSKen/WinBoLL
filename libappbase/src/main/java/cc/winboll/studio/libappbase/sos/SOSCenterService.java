@@ -1,10 +1,14 @@
-package cc.winboll.studio.libappbase;
+package cc.winboll.studio.libappbase.sos;
 
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/02/12 11:12:25
- * @Describe 简单信号服务中心
+ * @Date 2025/02/27 14:00:21
+ * @Describe Simple Operate Signal Service Center.
+ *           简单操作信号服务中心
  */
 import android.app.Service;
 import android.content.Context;
@@ -16,14 +20,12 @@ import android.os.RemoteException;
 import cc.winboll.studio.libappbase.bean.SimpleOperateSignalCenterServiceBean;
 import java.io.FileDescriptor;
 
-public class SimpleOperateSignalCenterService extends Service {
+public class SOSCenterService extends Service {
 
-    public static final String TAG = "SimpleOperateSignalCenterService";
-    public static final String ACTION_ENABLE = SimpleOperateSignalCenterService.class.getName() + ".ACTION_ENABLE";
-    public static final String ACTION_DISABLE = SimpleOperateSignalCenterService.class.getName() + ".ACTION_DISABLE";
+    public static final String TAG = "SOSCenterService";
     
     private final IBinder binder =(IBinder)new SOSBinder();
-    
+
     SimpleOperateSignalCenterServiceBean mSimpleOperateSignalCenterServiceBean;
     static MainThread _MainThread;
     public static synchronized MainThread getMainThreadInstance() {
@@ -37,7 +39,7 @@ public class SimpleOperateSignalCenterService extends Service {
     public IBinder onBind(Intent intent) {
         return binder;
     }
-    
+
     public class SOSBinder implements IBinder {
 
         @Override
@@ -81,13 +83,13 @@ public class SimpleOperateSignalCenterService extends Service {
         public boolean unlinkToDeath(IBinder.DeathRecipient deathRecipient, int p) {
             return false;
         }
-        
+
         public static final String TAG = "SOSBinder";
         SimpleOperateSignalCenterService getService() {
             return SimpleOperateSignalCenterService.this;
         }
     }
-    
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -103,15 +105,9 @@ public class SimpleOperateSignalCenterService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtils.d(TAG, "onStartCommand");
-//        if (intent.getBooleanExtra(ISOSService.EXTRA_ENABLE, false)) {
-//            LogUtils.d(TAG, "onStartCommand enable service");
-//            mSimpleOperateSignalCenterServiceBean.setIsEnable(true);
-//            SimpleOperateSignalCenterServiceBean.saveBean(this, mSimpleOperateSignalCenterServiceBean);
-//        }
 
         runMainThread();
 
-        //return super.onStartCommand(intent, flags, startId);
         return mSimpleOperateSignalCenterServiceBean.isEnable() ? Service.START_STICKY: super.onStartCommand(intent, flags, startId);
     }
 
@@ -154,7 +150,7 @@ public class SimpleOperateSignalCenterService extends Service {
         SimpleOperateSignalCenterServiceBean.saveBean(context, bean);
         context.startService(new Intent(context, SimpleOperateSignalCenterService.class));
     }
-    
+
     public String getMessage() {
         return "Hello from SimpleOperateSignalCenterService";
     }

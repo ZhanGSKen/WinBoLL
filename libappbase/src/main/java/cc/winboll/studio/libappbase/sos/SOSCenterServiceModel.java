@@ -1,20 +1,23 @@
-package cc.winboll.studio.libappbase.bean;
+package cc.winboll.studio.libappbase.sos;
+
+/**
+ * @Author ZhanGSKen@AliYun.Com
+ * @Date 2025/03/02 09:49:45
+ * @Describe SOSCenterServiceModel
+ *           Simple Operate Signal Service Model.
+ */
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
-/**
- * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/02/13 04:27:42
- */
-public class SimpleOperateSignalCenterServiceBean extends BaseBean {
+public class SOSCenterServiceModel extends BaseBean {
 
-    public static final String TAG = "SimpleOperateSignalCenterServiceBean";
+    public static final String TAG = "SOSCenterServiceModel";
 
     boolean isEnable;
-    
-    public SimpleOperateSignalCenterServiceBean() {
+
+    public SOSCenterServiceModel() {
         this.isEnable = false;
     }
 
@@ -28,7 +31,7 @@ public class SimpleOperateSignalCenterServiceBean extends BaseBean {
 
     @Override
     public String getName() {
-        return SimpleOperateSignalCenterServiceBean.class.getName();
+        return SOSCenterServiceModel.class.getName();
     }
 
     @Override

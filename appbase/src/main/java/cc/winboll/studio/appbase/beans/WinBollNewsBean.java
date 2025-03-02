@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class WinBollNewsBean extends BaseBean {
     
-    public static final String TAG = "APPSOSReportBean";
+    public static final String TAG = "WinBollNewsBean";
     
     protected String message;
     

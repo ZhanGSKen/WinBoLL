@@ -27,12 +27,10 @@ import java.util.Date;
 public class MainReceiver extends BroadcastReceiver {
 
     public static final String TAG = "MainReceiver";
+
     public static final String ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED";
+
     WeakReference<MainService> mwrService;
-    // 存储电量指示值，
-    // 用于校验电量消息时的电量变化
-    static volatile int _mnTheQuantityOfElectricityOld = -1;
-    static volatile boolean _mIsCharging = false;
 
     public MainReceiver(MainService service) {
         mwrService = new WeakReference<MainService>(service);
@@ -102,7 +100,7 @@ public class MainReceiver extends BroadcastReceiver {
                             appWinBollNewsBean.setMessage(sbLine.toString());
 
                             WinBollNewsWidget.addWinBollNewsBean(context, appWinBollNewsBean);
-                            
+
                             Intent intentWidget = new Intent(context, WinBollNewsWidget.class);
                             intentWidget.setAction(WinBollNewsWidget.ACTION_RELOAD_REPORT);
                             context.sendBroadcast(intentWidget);

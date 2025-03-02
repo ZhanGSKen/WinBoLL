@@ -73,6 +73,18 @@
 
         </receiver>
 
+        <service android:name="cc.winboll.studio.libappbase.sos.SOSCenter"/>
+
+        <receiver android:name="cc.winboll.studio.libappbase.sos.SOSCenterServiceReceiver">
+
+            <intent-filter>
+
+                <action android:name="cc.winboll.studio.libappbase.sos.SOSCenterServiceReceiver"/>
+
+            </intent-filter>
+
+        </receiver>
+
     </application>
 
 </manifest>
