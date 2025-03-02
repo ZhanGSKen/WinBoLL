@@ -4,7 +4,6 @@ package cc.winboll.studio.contacts.activities;
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/02/21 05:37:42
  */
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,21 +14,29 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import cc.winboll.studio.contacts.R;
+import cc.winboll.studio.contacts.adapters.PhoneConnectRuleAdapter;
+import cc.winboll.studio.contacts.beans.MainServiceBean;
+import cc.winboll.studio.contacts.beans.PhoneConnectRuleModel;
 import cc.winboll.studio.contacts.beans.RingTongBean;
+import cc.winboll.studio.contacts.bobulltoon.TomCat;
+import cc.winboll.studio.contacts.dun.Rules;
+import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.libappbase.IWinBollActivity;
 import cc.winboll.studio.libappbase.bean.APPInfo;
 import com.hjq.toast.ToastUtils;
 import java.lang.reflect.Field;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import cc.winboll.studio.contacts.beans.MainServiceBean; 
-import cc.winboll.studio.contacts.services.MainService;
+import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity implements IWinBollActivity {
 
@@ -43,7 +50,10 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
     int mnStreamVolume;
     Switch mswMainService;
 
-
+    private RecyclerView recyclerView;
+    private PhoneConnectRuleAdapter adapter;
+    private List<PhoneConnectRuleModel> ruleList;
+    
     @Override
     public APPInfo getAppInfo() {
         return null;
@@ -146,10 +156,24 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
                     // 当停止拖动SeekBar时的操作
                 }
             });
+            
+            
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        ruleList = Rules.getInstance(this).getPhoneBlacRuleBeanList();
+        
+        adapter = new PhoneConnectRuleAdapter(this, ruleList);
+        recyclerView.setAdapter(adapter);
     }
 
     void updateStreamVolumeTextView() {
         mtvVolume.setText(String.format("%d/%d", mnStreamVolume, mnStreamMaxVolume));
+    }
+
+    public void onUnitTest(View view) {
+        Intent intent = new Intent(this, UnitTestActivity.class);
+        startActivity(intent);
     }
 
     public void onDefaultPhone(View view) {
@@ -165,6 +189,34 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
         } else {
             ToastUtils.show("悬浮窗已开启");
         }
+    }
+
+    public void onDownloadBoBullToon(View view) {
+        final TomCat tomCat = TomCat.getInstance(this);
+        new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (tomCat.downloadBoBullToon()) {
+                        ToastUtils.show("BoBullToon downlaod OK!");
+                    }
+                }
+            }).start();
+    }
+
+    public void onSearchBoBullToonPhone(View view) {
+        TomCat tomCat = TomCat.getInstance(this);
+        EditText etPhone = findViewById(R.id.activitysettingsEditText1);
+        String phone = etPhone.getText().toString().trim();
+        if (tomCat.loadPhoneBoBullToon()) {
+            if (tomCat.isPhoneBoBullToon(phone)) {
+                ToastUtils.show("It is a BoBullToon Phone!");
+            } else {
+                ToastUtils.show("Not in BoBullToon.");
+            }
+        } else {
+            ToastUtils.show("没有下载 BoBullToon。");
+        }
+
     }
 
     private void askForDrawOverlay() {

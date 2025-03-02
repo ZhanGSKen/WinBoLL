@@ -104,6 +104,7 @@ public class ContactsFragment extends Fragment {
                 public void onClick(View p1) {
 
                     String phoneNumber = searchEditText.getText().toString().replaceAll("\\s", "");
+                    //phoneNumber = "+8616769764848";
                     ToastUtils.show(phoneNumber);
                     Intent intent = new Intent(Intent.ACTION_CALL);
                     intent.setData(android.net.Uri.parse("tel:" + phoneNumber));

@@ -183,6 +183,8 @@
 
         </provider>
 
+        <activity android:name="cc.winboll.studio.contacts.activities.UnitTestActivity"/>
+
     </application>
 
 </manifest>

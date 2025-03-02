@@ -90,6 +90,86 @@
 
 		</LinearLayout>
 
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="拨不通电话记录查询："/>
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="right"
+			android:layout_margin="10dp">
+
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="下载 BoBullToon"
+				android:onClick="onDownloadBoBullToon"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="right|center_vertical"
+			android:layout_margin="10dp">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="查询电话："/>
+
+			<EditText
+				android:layout_width="0dp"
+				android:inputType="phone"
+				android:layout_height="wrap_content"
+				android:ems="10"
+				android:layout_weight="1.0"
+				android:id="@+id/activitysettingsEditText1"/>
+
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="查询记录"
+				android:onClick="onSearchBoBullToonPhone"/>
+
+		</LinearLayout>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Phone Connect Rule :"/>
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/recycler_view"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1.0"
+			android:background="@drawable/recycler_view_border"
+			android:layout_margin="5dp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="单元测试："/>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="right">
+
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Unit Test"
+				android:onClick="onUnitTest"/>
+
+		</LinearLayout>
+
 	</LinearLayout>
 
 </LinearLayout>

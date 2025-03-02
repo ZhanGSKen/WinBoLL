@@ -8,6 +8,7 @@ package cc.winboll.studio.contacts;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
+import com.hjq.toast.ToastUtils;
 
 public class App extends GlobalApplication {
 
@@ -23,6 +24,8 @@ public class App extends GlobalApplication {
         WinBollActivityManager.getInstance(this).setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Aplication);
         
         LogUtils.d(TAG, "onCreate");
+        
+        ToastUtils.init(this);
     }
 
 }

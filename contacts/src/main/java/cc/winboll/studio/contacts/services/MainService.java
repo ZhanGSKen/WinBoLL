@@ -31,6 +31,7 @@ import cc.winboll.studio.libappbase.SOS;
 import cc.winboll.studio.libappbase.bean.APPSOSBean;
 import java.util.Timer;
 import java.util.TimerTask;
+import cc.winboll.studio.contacts.bobulltoon.TomCat;
 
 public class MainService extends Service {
 
@@ -50,6 +51,7 @@ public class MainService extends Service {
     boolean isBound = false;
     MainReceiver mMainReceiver;
     Timer mStreamVolumeCheckTimer;
+    static volatile TomCat _TomCat;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -128,6 +130,12 @@ public class MainService extends Service {
             // 召唤 WinBoll APP 绑定本服务
             SOS.bindToAPPService(this, new APPSOSBean(getPackageName(), MainService.class.getName()));
 
+            // 初始化服务运行参数
+            _TomCat = TomCat.getInstance(this);
+            if (!_TomCat.loadPhoneBoBullToon()) {
+                LogUtils.d(TAG, "没有下载 BoBullToon 数据。BoBullToon 参数无法加载。");
+            }
+
             if (mMainReceiver == null) {
                 // 注册广播接收器
                 mMainReceiver = new MainReceiver(this);
@@ -135,8 +143,6 @@ public class MainService extends Service {
             }
 
             Rules.getInstance(this);
-            //Rules.getInstance(this).add("18888888888", true);
-            //Rules.getInstance(this).add("16769764848", true);
 
             startPhoneCallListener();
 
@@ -145,6 +151,14 @@ public class MainService extends Service {
             LogUtils.i(TAG, "Main Service Is Start.");
         }
     }
+
+    public static boolean isPhoneInBoBullToon(String phone) {
+        if (_TomCat != null) {
+            return _TomCat.isPhoneBoBullToon(phone);
+        }
+        return false;
+    }
+
 
     // 唤醒和绑定守护进程
     //
