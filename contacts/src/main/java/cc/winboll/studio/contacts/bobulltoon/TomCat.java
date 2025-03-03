@@ -48,24 +48,29 @@ public class TomCat {
             .url(zipUrl)
             .build();
 
-        try (Response response = client.newCall(request).execute()) {
+        try {
+            Response response = client.newCall(request).execute();
             if (!response.isSuccessful()) {
                 throw new IOException("Unexpected code " + response);
             }
 
             // 下载 ZIP 文件到临时位置
             File tempZipFile = File.createTempFile("temp", ".zip");
-            try (InputStream inputStream = response.body().byteStream();
-            FileOutputStream outputStream = new FileOutputStream(tempZipFile)) {
+            try {
+                InputStream inputStream = response.body().byteStream();
+                FileOutputStream outputStream = new FileOutputStream(tempZipFile);
                 byte[] buffer = new byte[1024];
                 int length;
                 while ((length = inputStream.read(buffer)) > 0) {
                     outputStream.write(buffer, 0, length);
                 }
+            } catch (Exception e) {
+                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
             }
 
             // 解压 ZIP 文件到指定文件夹
-            try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(tempZipFile.toPath()))) {
+            try {
+                ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(tempZipFile.toPath()));
                 ZipEntry zipEntry;
                 while ((zipEntry = zipInputStream.getNextEntry()) != null) {
                     Path targetFilePath = Paths.get(destinationFolder, zipEntry.getName());
@@ -83,11 +88,15 @@ public class TomCat {
                     }
                     zipInputStream.closeEntry();
                 }
+            } catch (Exception e) {
+                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
             }
 
             // 删除临时 ZIP 文件
             tempZipFile.delete();
             LogUtils.d(TAG, "已更新 BoBullToon 数据");
+        } catch (Exception e) {
+            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }
     }
 
@@ -97,12 +106,12 @@ public class TomCat {
         try {
             // 删除旧文件
             File fOldFolder = new File(destinationFolder);
-            if(fOldFolder.exists()) {
+            if (fOldFolder.exists()) {
                 deleteFolderRecursive(fOldFolder);
                 fOldFolder.mkdirs();
                 LogUtils.d(TAG, "已清空 BoBullToon 数据");
             }
-            
+
             // 更新新文件
             downloadAndExtractZip(zipUrl, destinationFolder);
             LogUtils.d(TAG, "ZIP 文件下载并解压成功。");
@@ -112,14 +121,14 @@ public class TomCat {
         }
         return false;
     }
-    
+
     // 递归删除文件夹及其内容的方法
     public static void deleteFolderRecursive(File file) {
         // 判断是否为文件夹
         if (file.isDirectory()) {
             // 列出文件夹中的所有文件和子文件夹
             File[] files = file.listFiles();
-            if (files!= null) {
+            if (files != null) {
                 // 遍历并递归删除每个文件和子文件夹
                 for (File f : files) {
                     deleteFolderRecursive(f);
