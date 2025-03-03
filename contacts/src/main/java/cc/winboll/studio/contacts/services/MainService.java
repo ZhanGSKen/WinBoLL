@@ -142,7 +142,7 @@ public class MainService extends Service {
                 mMainReceiver.registerAction(this);
             }
 
-            Rules.getInstance(this);
+            Rules.getInstance(this).loadRules();
 
             startPhoneCallListener();
 
@@ -273,14 +273,40 @@ public class MainService extends Service {
 
     public static void stopMainService(Context context) {
         LogUtils.d(TAG, "stopMainService");
+        context.stopService(new Intent(context, MainService.class));
+    }
+
+    public static void startMainService(Context context) {
+        LogUtils.d(TAG, "startMainService");
+        context.startService(new Intent(context, MainService.class));
+    }
+
+    public static void restartMainService(Context context) {
+        LogUtils.d(TAG, "restartMainService");
+
+        MainServiceBean bean = MainServiceBean.loadBean(context, MainServiceBean.class);
+        if (bean != null && bean.isEnable()) {
+            context.stopService(new Intent(context, MainService.class));
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+//            }
+            context.startService(new Intent(context, MainService.class));
+            LogUtils.d(TAG, "已重启 MainService");
+        }
+    }
+    
+    public static void stopMainServiceAndSaveStatus(Context context) {
+        LogUtils.d(TAG, "stopMainServiceAndSaveStatus");
         MainServiceBean bean = new MainServiceBean();
         bean.setIsEnable(false);
         MainServiceBean.saveBean(context, bean);
         context.stopService(new Intent(context, MainService.class));
     }
 
-    public static void startMainService(Context context) {
-        LogUtils.d(TAG, "startMainService");
+    public static void startMainServiceAndSaveStatus(Context context) {
+        LogUtils.d(TAG, "startMainServiceAndSaveStatus");
         MainServiceBean bean = new MainServiceBean();
         bean.setIsEnable(true);
         MainServiceBean.saveBean(context, bean);

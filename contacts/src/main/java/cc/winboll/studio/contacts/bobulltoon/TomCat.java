@@ -87,6 +87,7 @@ public class TomCat {
 
             // 删除临时 ZIP 文件
             tempZipFile.delete();
+            LogUtils.d(TAG, "已更新 BoBullToon 数据");
         }
     }
 
@@ -94,6 +95,15 @@ public class TomCat {
         String zipUrl = "https://gitea.winboll.cc//Studio/BoBullToon/archive/main.zip"; // 替换为实际的 ZIP 文件 URL
         String destinationFolder = getWorkingFolder().getPath(); // 替换为实际的目标文件夹路径
         try {
+            // 删除旧文件
+            File fOldFolder = new File(destinationFolder);
+            if(fOldFolder.exists()) {
+                deleteFolderRecursive(fOldFolder);
+                fOldFolder.mkdirs();
+                LogUtils.d(TAG, "已清空 BoBullToon 数据");
+            }
+            
+            // 更新新文件
             downloadAndExtractZip(zipUrl, destinationFolder);
             LogUtils.d(TAG, "ZIP 文件下载并解压成功。");
             return true;
@@ -101,6 +111,23 @@ public class TomCat {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }
         return false;
+    }
+    
+    // 递归删除文件夹及其内容的方法
+    public static void deleteFolderRecursive(File file) {
+        // 判断是否为文件夹
+        if (file.isDirectory()) {
+            // 列出文件夹中的所有文件和子文件夹
+            File[] files = file.listFiles();
+            if (files!= null) {
+                // 遍历并递归删除每个文件和子文件夹
+                for (File f : files) {
+                    deleteFolderRecursive(f);
+                }
+            }
+        }
+        // 删除文件或空文件夹
+        file.delete();
     }
 
     File getWorkingFolder() {

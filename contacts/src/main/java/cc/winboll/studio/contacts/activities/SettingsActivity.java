@@ -37,6 +37,9 @@ import cc.winboll.studio.libappbase.bean.APPInfo;
 import com.hjq.toast.ToastUtils;
 import java.lang.reflect.Field;
 import java.util.List;
+import cc.winboll.studio.contacts.beans.SettingsModel;
+import cc.winboll.studio.contacts.views.DuInfoTextView;
+import cc.winboll.studio.libappbase.LogUtils;
 
 public class SettingsActivity extends AppCompatActivity implements IWinBollActivity {
 
@@ -49,11 +52,21 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
     int mnStreamMaxVolume;
     int mnStreamVolume;
     Switch mswMainService;
+    static DuInfoTextView _DuInfoTextView;
+
+    // 云盾防御层数量
+    EditText etDunTotalCount;
+    // 防御层恢复时间间隔(秒钟)
+    EditText etDunResumeSecondCount;
+    // 每次恢复防御层数
+    EditText etDunResumeCount;
+    // 是否启用云盾
+    Switch swIsEnableDun;
 
     private RecyclerView recyclerView;
     private PhoneConnectRuleAdapter adapter;
     private List<PhoneConnectRuleModel> ruleList;
-    
+
     @Override
     public APPInfo getAppInfo() {
         return null;
@@ -104,13 +117,14 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
         mswMainService.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View arg0) {
+                    LogUtils.d(TAG, "mswMainService onClick");
                     // TODO: Implement this method
                     if (mswMainService.isChecked()) {
                         //ToastUtils.show("Is Checked");
-                        MainService.startMainService(SettingsActivity.this);
+                        MainService.startMainServiceAndSaveStatus(SettingsActivity.this);
                     } else {
                         //ToastUtils.show("Not Checked");
-                        MainService.stopMainService(SettingsActivity.this);
+                        MainService.stopMainServiceAndSaveStatus(SettingsActivity.this);
                     }
                 }
             });
@@ -156,15 +170,58 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
                     // 当停止拖动SeekBar时的操作
                 }
             });
-            
-            
+
+
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ruleList = Rules.getInstance(this).getPhoneBlacRuleBeanList();
-        
+
         adapter = new PhoneConnectRuleAdapter(this, ruleList);
         recyclerView.setAdapter(adapter);
+
+        // 设置参数云盾
+        _DuInfoTextView = findViewById(R.id.tv_DunInfo);
+        etDunTotalCount = findViewById(R.id.et_DunTotalCount);
+        etDunResumeSecondCount = findViewById(R.id.et_DunResumeSecondCount);
+        etDunResumeCount = findViewById(R.id.et_DunResumeCount);
+        swIsEnableDun = findViewById(R.id.sw_IsEnableDun);
+        SettingsModel settingsModel = Rules.getInstance(this).getSettingsModel();
+
+        etDunTotalCount.setText(Integer.toString(settingsModel.getDunTotalCount()));
+        etDunResumeSecondCount.setText(Integer.toString(settingsModel.getDunResumeSecondCount()));
+        etDunResumeCount.setText(Integer.toString(settingsModel.getDunResumeCount()));
+        swIsEnableDun.setChecked(settingsModel.isEnableDun());
+
+        boolean isEnableDun = settingsModel.isEnableDun();
+        etDunTotalCount.setEnabled(!isEnableDun);
+        etDunResumeSecondCount.setEnabled(!isEnableDun);
+        etDunResumeCount.setEnabled(!isEnableDun);
+
+    }
+
+    public static void notifyDunInfoUpdate() {
+        if (_DuInfoTextView != null) {
+            _DuInfoTextView.notifyInfoUpdate();
+        }
+    }
+
+    public void onSW_IsEnableDun(View view) {
+        LogUtils.d(TAG, "onSW_IsEnableDun");
+        boolean isEnableDun = swIsEnableDun.isChecked();
+        etDunTotalCount.setEnabled(!isEnableDun);
+        etDunResumeSecondCount.setEnabled(!isEnableDun);
+        etDunResumeCount.setEnabled(!isEnableDun);
+
+        SettingsModel settingsModel = Rules.getInstance(this).getSettingsModel();
+        if (isEnableDun) {
+            settingsModel.setDunTotalCount(Integer.parseInt(etDunTotalCount.getText().toString()));
+            settingsModel.setDunResumeSecondCount(Integer.parseInt(etDunResumeSecondCount.getText().toString()));
+            settingsModel.setDunResumeCount(Integer.parseInt(etDunResumeCount.getText().toString()));
+        }
+        settingsModel.setIsEnableDun(isEnableDun);
+        Rules.getInstance(this).saveDun();
+        Rules.getInstance(this).reload();
     }
 
     void updateStreamVolumeTextView() {
@@ -198,10 +255,14 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
                 public void run() {
                     if (tomCat.downloadBoBullToon()) {
                         ToastUtils.show("BoBullToon downlaod OK!");
+                        MainService.restartMainService(SettingsActivity.this);
+                        Rules.getInstance(SettingsActivity.this).reload();
                     }
                 }
             }).start();
     }
+    
+    
 
     public void onSearchBoBullToonPhone(View view) {
         TomCat tomCat = TomCat.getInstance(this);
