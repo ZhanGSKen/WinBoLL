@@ -62,7 +62,7 @@
 			<Switch
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="是否启用云盾"
+				android:text="是否启用云盾防御"
 				android:layout_margin="5dp"
 				android:id="@+id/sw_IsEnableDun"
 				android:onClick="onSW_IsEnableDun"/>
@@ -78,7 +78,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="初始防御层数量："/>
+				android:text="初始防御层的叠加数量："/>
 
 			<EditText
 				android:layout_width="0dp"
@@ -99,7 +99,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="恢复防御时间间隔(秒钟)："/>
+				android:text="防御层每次恢复的时间间隔(秒钟)："/>
 
 			<EditText
 				android:layout_width="0dp"
@@ -120,7 +120,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="每小时回复防御数量："/>
+				android:text="防御层每次恢复的叠加数量："/>
 
 			<EditText
 				android:layout_width="0dp"
