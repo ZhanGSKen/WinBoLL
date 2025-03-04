@@ -19,7 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.beans.PhoneConnectRuleModel;
 import cc.winboll.studio.contacts.dun.Rules;
+import java.util.ArrayList;
 import java.util.List;
+import android.widget.LinearLayout;
+import android.view.MotionEvent;
+import android.widget.HorizontalScrollView;
+import cc.winboll.studio.contacts.views.LeftScrollView;
 
 public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -53,15 +58,75 @@ public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final PhoneConnectRuleModel model = ruleList.get(position);
         if (holder instanceof SimpleViewHolder) {
-            SimpleViewHolder simpleViewHolder = (SimpleViewHolder) holder;
-            simpleViewHolder.textView.setText(model.getRuleText());
-            simpleViewHolder.button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        model.setIsSimpleView(false);
-                        notifyItemChanged(position);
-                    }
-                });
+            final SimpleViewHolder simpleViewHolder = (SimpleViewHolder) holder;
+            simpleViewHolder.tvRuleText.setText(model.getRuleText());
+//            simpleViewHolder.setOnActionListener(new SimpleViewHolder.OnActionListener(){
+//
+//                    @Override
+//                    public void onEdit(int position) {
+//                        model.setIsSimpleView(false);
+//                        notifyItemChanged(position);
+//                    }
+//                    @Override
+//                    public void onDelete(int position) {
+//                        model.setIsSimpleView(false);
+//                        ArrayList<PhoneConnectRuleModel> list = Rules.getInstance(context).getPhoneBlacRuleBeanList();
+//                        list.remove(position);
+//                        Rules.getInstance(context).saveRules();
+//                        notifyItemChanged(position);
+//                    }
+//                });
+//            simpleViewHolder.editButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        model.setIsSimpleView(false);
+//                        notifyItemChanged(position);
+//                    }
+//                });
+//            simpleViewHolder.deleteButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        model.setIsSimpleView(false);
+//                        ArrayList<PhoneConnectRuleModel> list = Rules.getInstance(context).getPhoneBlacRuleBeanList();
+//                        list.remove(position);
+//                        Rules.getInstance(context).saveRules();
+//                        notifyItemChanged(position);
+//                    }
+//                });
+//            // 触摸事件处理
+//            simpleViewHolder.contentLayout.setOnTouchListener(new View.OnTouchListener() {
+//                    @Override
+//                    public boolean onTouch(View v, MotionEvent event) {
+//                        switch (event.getAction()) {
+//                            case MotionEvent.ACTION_DOWN:
+//                                simpleViewHolder.startX = event.getX();
+//                                simpleViewHolder.isSwiping = true;
+//                                break;
+//                            case MotionEvent.ACTION_MOVE:
+//                                if (simpleViewHolder.isSwiping) {
+//                                    float deltaX = simpleViewHolder.startX - event.getX();
+//                                    if (deltaX > 0) { // 左滑
+//                                        float translationX = Math.max(-simpleViewHolder.actionLayout.getWidth(), -deltaX);
+//                                        simpleViewHolder.contentLayout.setTranslationX(translationX);
+//                                        simpleViewHolder.actionLayout.setVisibility(View.VISIBLE);
+//                                    }
+//                                }
+//                                break;
+//                            case MotionEvent.ACTION_UP:
+//                                simpleViewHolder.isSwiping = false;
+//                                if (simpleViewHolder.contentLayout.getTranslationX() < -simpleViewHolder.actionLayout.getWidth() / 2) {
+//                                    // 保持按钮显示
+//                                    simpleViewHolder.contentLayout.setTranslationX(-actionLayout.getWidth());
+//                                } else {
+//                                    // 恢复原状
+//                                    simpleViewHolder.contentLayout.animate().translationX(0).setDuration(200).start();
+//                                    simpleViewHolder.actionLayout.setVisibility(View.INVISIBLE);
+//                                }
+//                                break;
+//                        }
+//                        return true;
+//                    }
+//                });
         } else if (holder instanceof EditViewHolder) {
             final EditViewHolder editViewHolder = (EditViewHolder) holder;
             editViewHolder.editText.setText(model.getRuleText());
@@ -95,13 +160,17 @@ public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     static class SimpleViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
-        Button button;
+
+        private final LeftScrollView scrollView;
+        private final TextView tvRuleText;
+
 
         public SimpleViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.text_view);
-            button = itemView.findViewById(R.id.button);
+            scrollView = itemView.findViewById(R.id.scrollView);
+            //tvRuleText = itemView.findViewById(R.id.ruletext_tv);
+            tvRuleText = new TextView(itemView.getContext());
+            scrollView.addContentLayout(tvRuleText);
         }
     }
 

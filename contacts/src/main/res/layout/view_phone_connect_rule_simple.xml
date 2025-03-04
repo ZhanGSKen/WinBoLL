@@ -2,24 +2,14 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:orientation="horizontal"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:padding="16dp"
-	android:gravity="center_vertical">
+	android:orientation="horizontal">
 
-	<TextView
-		android:id="@+id/text_view"
-		android:layout_width="0dp"
+	<cc.winboll.studio.contacts.views.LeftScrollView
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_weight="1"
-		android:textSize="16sp"/>
-
-	<Button
-		android:id="@+id/button"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="编辑"/>
+		android:id="@+id/scrollView"/>
 
 </LinearLayout>
 
