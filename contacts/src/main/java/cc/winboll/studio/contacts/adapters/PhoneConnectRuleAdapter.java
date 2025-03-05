@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.view.MotionEvent;
 import android.widget.HorizontalScrollView;
 import cc.winboll.studio.contacts.views.LeftScrollView;
+import com.hjq.toast.ToastUtils;
 
 public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -62,6 +63,43 @@ public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.V
             String szView = model.getRuleText().trim().equals("")?"[NULL]":model.getRuleText();
             simpleViewHolder.tvRuleText.setText(szView);
             simpleViewHolder.scrollView.setOnActionListener(new LeftScrollView.OnActionListener(){
+
+                    @Override
+                    public void onUp() {
+                        ArrayList<PhoneConnectRuleModel> list = Rules.getInstance(context).getPhoneBlacRuleBeanList();
+                        if(position > 0) {
+                            ToastUtils.show("onUp");
+                            simpleViewHolder.scrollView.smoothScrollTo(0, 0);
+//                            PhoneConnectRuleModel newBean = new PhoneConnectRuleModel();
+//                            newBean.setRuleText(list.get(position).getRuleText());
+//                            newBean.setIsAllowConnection(list.get(position).isAllowConnection());
+//                            newBean.setIsEnable(list.get(position).isEnable());
+//                            newBean.setIsSimpleView(list.get(position).isSimpleView());
+                            list.add(position - 1, list.get(position));
+                            list.remove(position + 1);
+                            Rules.getInstance(context).saveRules();
+                            notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onDown() {
+                        ArrayList<PhoneConnectRuleModel> list = Rules.getInstance(context).getPhoneBlacRuleBeanList();
+                        if(position < list.size() - 1) {
+                            ToastUtils.show("onDown");
+                            simpleViewHolder.scrollView.smoothScrollTo(0, 0);
+//                            PhoneConnectRuleModel newBean = new PhoneConnectRuleModel();
+//                            newBean.setRuleText(list.get(position).getRuleText());
+//                            newBean.setIsAllowConnection(list.get(position).isAllowConnection());
+//                            newBean.setIsEnable(list.get(position).isEnable());
+//                            newBean.setIsSimpleView(list.get(position).isSimpleView());
+                            list.add(position + 2, list.get(position));
+                            list.remove(position);
+                            Rules.getInstance(context).saveRules();
+                            notifyDataSetChanged();
+                        }
+                    }
+
                     @Override
                     public void onEdit() {
                         simpleViewHolder.scrollView.smoothScrollTo(0, 0);

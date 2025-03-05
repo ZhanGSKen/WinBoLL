@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.libappbase.LogUtils;
-import android.util.TypedValue;
 
 public class LeftScrollView extends HorizontalScrollView {
 
@@ -26,8 +25,12 @@ public class LeftScrollView extends HorizontalScrollView {
     private TextView textView;
     private Button editButton;
     private Button deleteButton;
-    private float mLastX;
+    private Button upButton;
+    private Button downButton;
+    private float mStartX;
+    private float mEndX;
     private boolean isScrolling = false;
+    private int nScrollAcceptSize;
 
     public LeftScrollView(Context context) {
         super(context);
@@ -52,6 +55,7 @@ public class LeftScrollView extends HorizontalScrollView {
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) contentLayout.getLayoutParams();
         layoutParams.width = contentWidth;
         contentLayout.setLayoutParams(layoutParams);
+
     }
 
     private void init() {
@@ -69,6 +73,10 @@ public class LeftScrollView extends HorizontalScrollView {
         editButton = viewMain.findViewById(R.id.edit_btn);
         // 创建删除按钮
         deleteButton = viewMain.findViewById(R.id.delete_btn);
+        // 向上按钮
+        upButton = viewMain.findViewById(R.id.up_btn);
+        // 向下按钮
+        downButton = viewMain.findViewById(R.id.down_btn);
 
         // 编辑按钮点击事件
         editButton.setOnClickListener(new OnClickListener() {
@@ -89,6 +97,25 @@ public class LeftScrollView extends HorizontalScrollView {
                     }
                 }
             });
+        // 编辑按钮点击事件
+        upButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onActionListener != null) {
+                        onActionListener.onUp();
+                    }
+                }
+            });
+
+        // 删除按钮点击事件
+        downButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onActionListener != null) {
+                        onActionListener.onDown();
+                    }
+                }
+            });
     }
 
     @Override
@@ -96,58 +123,79 @@ public class LeftScrollView extends HorizontalScrollView {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 LogUtils.d(TAG, "ACTION_DOWN");
-                mLastX = event.getX();
-                isScrolling = false;
+                mStartX = event.getX();
+//                isScrolling = false;
                 break;
             case MotionEvent.ACTION_MOVE:
                 //LogUtils.d(TAG, "ACTION_MOVE");
-                float currentX = event.getX();
-                float deltaX = mLastX - currentX;
-                mLastX = currentX;
-                if (Math.abs(deltaX) > 0) {
-                    isScrolling = true;
-                }
+//                float currentX = event.getX();
+//                float deltaX = mStartX - currentX;
+//                //mLastX = currentX;
+//                if (Math.abs(deltaX) > 0) {
+//                    isScrolling = true;
+//                }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                LogUtils.d(TAG, "ACTION_UP");
-                if (isScrolling) {
-                    LogUtils.d(TAG, String.format("isScrolling \ngetScrollX() %d\neditButton.getWidth() %d", getScrollX(), editButton.getWidth()));
-                    int scrollX = getScrollX();
-                    if (scrollX > editButton.getWidth()) {
-                        // 获取HorizontalScrollView的子视图
-                        View childView = getChildAt(0);
-                        if (childView != null) {
-                            // 计算需要滑动到最右边的距离
-                            int scrollToX = childView.getWidth() - getWidth();
-                            // 确保滑动距离不小于0
-                            final int scrollToX2 = Math.max(0, scrollToX);
-                            // 平滑滑动到最右边
-                            post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        smoothScrollTo(scrollToX2, 0);
-                                        LogUtils.d(TAG, "smoothScrollTo(0, 0);");
-                                    }
-                                });
-                            LogUtils.d(TAG, "smoothScrollTo(scrollToX, 0);");
+                if (getScrollX() > 0) {
+                    LogUtils.d(TAG, "ACTION_UP");
+                    mEndX = event.getX();
+                    LogUtils.d(TAG, String.format("mStartX %f, mEndX %f", mStartX, mEndX));
+                    if (mEndX < mStartX) {
+                        LogUtils.d(TAG, String.format("mEndX >= mStartX \ngetScrollX() %d", getScrollX()));
+                        //if (getScrollX() > editButton.getWidth()) {
+                        if (Math.abs(mStartX - mEndX) > editButton.getWidth()) {
+                            smoothScrollToRight();
+                        } else {
+                            smoothScrollToLeft();
                         }
                     } else {
-                        // 恢复原状
-                        // 在手指抬起时，使用 post 方法调用 smoothScrollTo(0, 0)
-                        post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    smoothScrollTo(0, 0);
-                                    LogUtils.d(TAG, "smoothScrollTo(0, 0);");
-                                }
-                            });
-                        //toolLayout.setTranslationX(0);
+                        LogUtils.d(TAG, String.format("mEndX >= mStartX \ngetScrollX() %d", getScrollX()));
+                        //if (getScrollX() > deleteButton.getWidth()) {
+                        if (Math.abs(mEndX - mStartX) > deleteButton.getWidth()) {
+                            smoothScrollToLeft();
+                        } else {
+                            smoothScrollToRight();
+                        }
                     }
                 }
                 break;
         }
         return super.onTouchEvent(event);
+    }
+
+    void smoothScrollToRight() {
+        mEndX = 0;
+        mStartX = 0;
+        View childView = getChildAt(0);
+        if (childView != null) {
+            // 计算需要滑动到最右边的距离
+            int scrollToX = childView.getWidth() - getWidth();
+            // 确保滑动距离不小于0
+            final int scrollToX2 = Math.max(0, scrollToX);
+            // 平滑滑动到最右边
+            post(new Runnable() {
+                    @Override
+                    public void run() {
+                        smoothScrollTo(scrollToX2, 0);
+                        LogUtils.d(TAG, "smoothScrollTo(0, 0);");
+                    }
+                });
+            LogUtils.d(TAG, "smoothScrollTo(scrollToX, 0);");
+        }
+    }
+
+    void smoothScrollToLeft() {
+        mEndX = 0;
+        mStartX = 0;
+        // 在手指抬起时，使用 post 方法调用 smoothScrollTo(0, 0)
+        post(new Runnable() {
+                @Override
+                public void run() {
+                    smoothScrollTo(0, 0);
+                    LogUtils.d(TAG, "smoothScrollTo(0, 0);");
+                }
+            });
     }
 
     // 设置文本内容
@@ -159,6 +207,8 @@ public class LeftScrollView extends HorizontalScrollView {
     public interface OnActionListener {
         void onEdit();
         void onDelete();
+        void onUp();
+        void onDown();
     }
 
     private OnActionListener onActionListener;
