@@ -47,10 +47,10 @@ public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.V
         LayoutInflater inflater = LayoutInflater.from(context);
         if (viewType == VIEW_TYPE_SIMPLE) {
             View view = inflater.inflate(R.layout.view_phone_connect_rule_simple, parent, false);
-            return new SimpleViewHolder(view);
+            return new SimpleViewHolder(parent, view);
         } else {
             View view = inflater.inflate(R.layout.view_phone_connect_rule, parent, false);
-            return new EditViewHolder(view);
+            return new EditViewHolder(parent, view);
         }
     }
 
@@ -165,13 +165,16 @@ public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.V
         private final TextView tvRuleText;
 
 
-        public SimpleViewHolder(@NonNull View itemView) {
+        public SimpleViewHolder(@NonNull ViewGroup parent, @NonNull View itemView) {
             super(itemView);
             scrollView = itemView.findViewById(R.id.scrollView);
             //tvRuleText = itemView.findViewById(R.id.ruletext_tv);
             tvRuleText = new TextView(itemView.getContext());
+            scrollView.setContentWidth(parent.getWidth());
+            //scrollView.setContentWidth(600);
             scrollView.addContentLayout(tvRuleText);
         }
+        
     }
 
     static class EditViewHolder extends RecyclerView.ViewHolder {
@@ -180,7 +183,7 @@ public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.V
         CheckBox checkBoxEnable;
         Button buttonConfirm;
 
-        public EditViewHolder(@NonNull View itemView) {
+        public EditViewHolder(@NonNull ViewGroup parent, @NonNull View itemView) {
             super(itemView);
             editText = itemView.findViewById(R.id.edit_text);
             checkBoxAllow = itemView.findViewById(R.id.checkbox_allow);
