@@ -26,6 +26,7 @@ import android.view.MotionEvent;
 import android.widget.HorizontalScrollView;
 import cc.winboll.studio.contacts.views.LeftScrollView;
 import com.hjq.toast.ToastUtils;
+import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
 
 public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -60,14 +61,14 @@ public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.V
         final PhoneConnectRuleModel model = ruleList.get(position);
         if (holder instanceof SimpleViewHolder) {
             final SimpleViewHolder simpleViewHolder = (SimpleViewHolder) holder;
-            String szView = model.getRuleText().trim().equals("")?"[NULL]":model.getRuleText();
+            String szView = model.getRuleText().trim().equals("") ?"[NULL]": model.getRuleText();
             simpleViewHolder.tvRuleText.setText(szView);
             simpleViewHolder.scrollView.setOnActionListener(new LeftScrollView.OnActionListener(){
 
                     @Override
                     public void onUp() {
                         ArrayList<PhoneConnectRuleModel> list = Rules.getInstance(context).getPhoneBlacRuleBeanList();
-                        if(position > 0) {
+                        if (position > 0) {
                             ToastUtils.show("onUp");
                             simpleViewHolder.scrollView.smoothScrollTo(0, 0);
 //                            PhoneConnectRuleModel newBean = new PhoneConnectRuleModel();
@@ -85,7 +86,7 @@ public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.V
                     @Override
                     public void onDown() {
                         ArrayList<PhoneConnectRuleModel> list = Rules.getInstance(context).getPhoneBlacRuleBeanList();
-                        if(position < list.size() - 1) {
+                        if (position < list.size() - 1) {
                             ToastUtils.show("onDown");
                             simpleViewHolder.scrollView.smoothScrollTo(0, 0);
 //                            PhoneConnectRuleModel newBean = new PhoneConnectRuleModel();
@@ -110,13 +111,24 @@ public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                     @Override
                     public void onDelete() {
-                        simpleViewHolder.scrollView.smoothScrollTo(0, 0);
-                        model.setIsSimpleView(true);
-                        ArrayList<PhoneConnectRuleModel> list = Rules.getInstance(context).getPhoneBlacRuleBeanList();
-                        list.remove(position);
-                        Rules.getInstance(context).saveRules();
-                        notifyDataSetChanged();
-                        //notifyItemChanged(position);
+                        YesNoAlertDialog.show(simpleViewHolder.scrollView.getContext(), "删除确认", "是否删除该通话规则？", new YesNoAlertDialog.OnDialogResultListener(){
+
+                                @Override
+                                public void onYes() {
+                                    simpleViewHolder.scrollView.smoothScrollTo(0, 0);
+                                    model.setIsSimpleView(true);
+                                    ArrayList<PhoneConnectRuleModel> list = Rules.getInstance(context).getPhoneBlacRuleBeanList();
+                                    list.remove(position);
+                                    Rules.getInstance(context).saveRules();
+                                    notifyDataSetChanged();
+                                    //notifyItemChanged(position);
+                                }
+
+                                @Override
+                                public void onNo() {
+                                }
+                            });
+
                     }
                 });
 //            simpleViewHolder.editButton.setOnClickListener(new View.OnClickListener() {
