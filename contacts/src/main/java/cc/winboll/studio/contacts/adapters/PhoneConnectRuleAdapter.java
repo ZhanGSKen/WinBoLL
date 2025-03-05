@@ -59,23 +59,28 @@ public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.V
         final PhoneConnectRuleModel model = ruleList.get(position);
         if (holder instanceof SimpleViewHolder) {
             final SimpleViewHolder simpleViewHolder = (SimpleViewHolder) holder;
-            simpleViewHolder.tvRuleText.setText(model.getRuleText());
-//            simpleViewHolder.setOnActionListener(new SimpleViewHolder.OnActionListener(){
-//
-//                    @Override
-//                    public void onEdit(int position) {
-//                        model.setIsSimpleView(false);
-//                        notifyItemChanged(position);
-//                    }
-//                    @Override
-//                    public void onDelete(int position) {
-//                        model.setIsSimpleView(false);
-//                        ArrayList<PhoneConnectRuleModel> list = Rules.getInstance(context).getPhoneBlacRuleBeanList();
-//                        list.remove(position);
-//                        Rules.getInstance(context).saveRules();
-//                        notifyItemChanged(position);
-//                    }
-//                });
+            String szView = model.getRuleText().trim().equals("")?"[NULL]":model.getRuleText();
+            simpleViewHolder.tvRuleText.setText(szView);
+            simpleViewHolder.scrollView.setOnActionListener(new LeftScrollView.OnActionListener(){
+                    @Override
+                    public void onEdit() {
+                        simpleViewHolder.scrollView.smoothScrollTo(0, 0);
+                        model.setIsSimpleView(false);
+                        notifyDataSetChanged();
+                        //notifyItemChanged(position);
+                    }
+
+                    @Override
+                    public void onDelete() {
+                        simpleViewHolder.scrollView.smoothScrollTo(0, 0);
+                        model.setIsSimpleView(true);
+                        ArrayList<PhoneConnectRuleModel> list = Rules.getInstance(context).getPhoneBlacRuleBeanList();
+                        list.remove(position);
+                        Rules.getInstance(context).saveRules();
+                        notifyDataSetChanged();
+                        //notifyItemChanged(position);
+                    }
+                });
 //            simpleViewHolder.editButton.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
@@ -174,7 +179,7 @@ public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.V
             //scrollView.setContentWidth(600);
             scrollView.addContentLayout(tvRuleText);
         }
-        
+
     }
 
     static class EditViewHolder extends RecyclerView.ViewHolder {

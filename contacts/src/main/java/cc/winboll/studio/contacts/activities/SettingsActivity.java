@@ -232,6 +232,12 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
         Intent intent = new Intent(this, UnitTestActivity.class);
         startActivity(intent);
     }
+    
+    public void onAddNewConnectionRule(View view) {
+        Rules.getInstance(this).getPhoneBlacRuleBeanList().add(new PhoneConnectRuleModel());
+        Rules.getInstance(this).saveRules();
+        adapter.notifyDataSetChanged();
+    }
 
     public void onDefaultPhone(View view) {
         Intent intent = new Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS);

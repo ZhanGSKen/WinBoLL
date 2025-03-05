@@ -109,16 +109,40 @@ public class LeftScrollView extends HorizontalScrollView {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
                 LogUtils.d(TAG, "ACTION_UP");
                 if (isScrolling) {
                     LogUtils.d(TAG, String.format("isScrolling \ngetScrollX() %d\neditButton.getWidth() %d", getScrollX(), editButton.getWidth()));
                     int scrollX = getScrollX();
                     if (scrollX > editButton.getWidth()) {
-                        smoothScrollTo(getChildAt(0).getWidth(), 0);
-                        LogUtils.d(TAG, ">>>>>");
+                        // 获取HorizontalScrollView的子视图
+                        View childView = getChildAt(0);
+                        if (childView != null) {
+                            // 计算需要滑动到最右边的距离
+                            int scrollToX = childView.getWidth() - getWidth();
+                            // 确保滑动距离不小于0
+                            final int scrollToX2 = Math.max(0, scrollToX);
+                            // 平滑滑动到最右边
+                            post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        smoothScrollTo(scrollToX2, 0);
+                                        LogUtils.d(TAG, "smoothScrollTo(0, 0);");
+                                    }
+                                });
+                            LogUtils.d(TAG, "smoothScrollTo(scrollToX, 0);");
+                        }
                     } else {
-                        smoothScrollTo(0, 0);
-                        LogUtils.d(TAG, "<<<<<");
+                        // 恢复原状
+                        // 在手指抬起时，使用 post 方法调用 smoothScrollTo(0, 0)
+                        post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    smoothScrollTo(0, 0);
+                                    LogUtils.d(TAG, "smoothScrollTo(0, 0);");
+                                }
+                            });
+                        //toolLayout.setTranslationX(0);
                     }
                 }
                 break;
