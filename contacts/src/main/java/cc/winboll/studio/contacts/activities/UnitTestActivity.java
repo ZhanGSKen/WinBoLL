@@ -7,6 +7,7 @@ import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.dun.Rules;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
+import android.widget.EditText;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
@@ -24,6 +25,15 @@ public class UnitTestActivity extends Activity {
         setContentView(R.layout.activity_unittest);
         logView = findViewById(R.id.logview);
         logView.start();
+    }
+
+    public void onTestPhone(View view) {
+        // 开始测试数据
+        EditText etPhone = findViewById(R.id.phone_et);
+        Rules rules = Rules.getInstance(this);
+        String phone = etPhone.getText().toString().trim();
+        LogUtils.d(TAG, String.format("Test phone : %s\n%s", phone, rules.isAllowed(phone)));
+
     }
 
     public void onTestMain(View view) {
