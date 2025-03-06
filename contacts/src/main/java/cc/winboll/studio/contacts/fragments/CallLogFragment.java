@@ -65,7 +65,7 @@ public class CallLogFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        callLogAdapter = new CallLogAdapter(callLogList);
+        callLogAdapter = new CallLogAdapter(getContext(), callLogList);
         recyclerView.setAdapter(callLogAdapter);
 
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CALL_LOG)!= PackageManager.PERMISSION_GRANTED) {
