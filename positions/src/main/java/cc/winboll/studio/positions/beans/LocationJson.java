@@ -1,0 +1,141 @@
+package cc.winboll.studio.positions.beans;
+
+/**
+ * @Author ZhanGSKen@AliYun.Com
+ * @Date 2025/02/25 02:58:33
+ * @Describe LocationJson
+ */
+
+import android.util.JsonReader;
+import android.util.JsonWriter;
+import cc.winboll.studio.libappbase.BaseBean;
+import java.io.IOException;
+import android.location.Location;
+
+public class LocationJson extends BaseBean {
+
+    public static final String TAG = "LocationJson";
+
+    private double latitude;
+    private double longitude;
+    private long timestamp;
+    private double accuracy;
+    private String provider;
+    
+    public LocationJson() {
+        this.latitude = 0.0f;
+        this.longitude = 0.0f;
+        this.timestamp = 0L;
+        this.accuracy = 0.0f;
+        this.provider = "";
+    }
+
+    public LocationJson(Location location) {
+        this.latitude = location.getLatitude();
+        this.longitude = location.getLongitude();
+        this.timestamp = location.getTime();
+        this.accuracy = location.getAccuracy();
+        this.provider = location.getProvider();
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setAccuracy(double accuracy) {
+        this.accuracy = accuracy;
+    }
+
+    public double getAccuracy() {
+        return accuracy;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+
+    @Override
+    public String getName() {
+        return LocationJson.class.getName();
+    }
+
+    @Override
+    public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
+        super.writeThisToJsonWriter(jsonWriter);
+        jsonWriter.name("latitude").value(getLatitude());
+        jsonWriter.name("longitude").value(getLongitude());
+        jsonWriter.name("timestamp").value(getTimestamp());
+        jsonWriter.name("accuracy").value(getAccuracy());
+        jsonWriter.name("provider").value(getProvider());
+
+    }
+
+    @Override
+    public boolean initObjectsFromJsonReader(JsonReader jsonReader, String name) throws IOException {
+        if (super.initObjectsFromJsonReader(jsonReader, name)) { return true; } else {
+            if (name.equals("latitude")) {
+                setLatitude(jsonReader.nextDouble());
+            } else if (name.equals("longitude")) {
+                setLongitude(jsonReader.nextDouble());
+            } else if (name.equals("timestamp")) {
+                setTimestamp(jsonReader.nextLong());
+            } else if (name.equals("accuracy")) {
+                setAccuracy(jsonReader.nextDouble());
+            } else if (name.equals("provider")) {
+                setProvider(jsonReader.nextString());
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public BaseBean readBeanFromJsonReader(JsonReader jsonReader) throws IOException {
+        jsonReader.beginObject();
+        while (jsonReader.hasNext()) {
+            String name = jsonReader.nextName();
+            if (!initObjectsFromJsonReader(jsonReader, name)) {
+                jsonReader.skipValue();
+            }
+        }
+        // 结束 JSON 对象
+        jsonReader.endObject();
+        return this;
+    }
+
+    public Location toLocation() {
+        Location location = new Location(getProvider());
+        location.setLatitude(getLatitude());
+        location.setLongitude(getLongitude());
+        location.setTime(getTimestamp());
+        location.setAccuracy((float)getAccuracy());
+        return location;
+    }
+
+}

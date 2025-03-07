@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='utf-8'?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cc.winboll.studio.contacts">
+
+    <!-- BIND_AUTOFILL_SERVICE -->
+    <uses-permission android:name="android.permission.BIND_AUTOFILL_SERVICE"/>
+
+    <!-- 拨打电话 -->
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <!-- 读取手机状态和身份 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <!-- 修改系统设置 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+
+    <!-- 重新设置外拨电话的路径 -->
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+
+    <!-- 读取联系人 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+
+    <!-- 修改您的通讯录 -->
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+
+    <!-- 此应用可显示在其他应用上方 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <!-- 更改您的音频设置 -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+        
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+        
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_winboll"
+        android:label="@string/app_name"
+        android:theme="@style/MyAppTheme"
+        android:supportsRtl="true">
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:exported="true">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name=".activities.CallActivity"
+            android:label="CallActivity"
+            android:launchMode="singleTask"
+            android:exported="true">
+
+        </activity>
+
+        <activity
+            android:name=".phonecallui.PhoneCallActivity"
+            android:launchMode="singleInstance"
+            android:exported="true">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.DIAL"/>
+
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="tel"/>
+
+            </intent-filter>
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.DIAL"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+            </intent-filter>
+
+        </activity>
+
+        <activity android:name="cc.winboll.studio.contacts.activities.SettingsActivity"/>
+
+        <service
+            android:name="cc.winboll.studio.contacts.services.MainService"
+            android:exported="true"/>
+
+        <service android:name="cc.winboll.studio.contacts.services.AssistantService"/>
+
+        <service
+            android:name=".phonecallui.PhoneCallService"
+            android:permission="android.permission.BIND_INCALL_SERVICE"
+            android:exported="false">
+
+            <meta-data
+                android:name="android.telecom.IN_CALL_SERVICE_UI"
+                android:value="true"/>
+
+            <intent-filter>
+
+                <action android:name="android.telecom.InCallService"/>
+
+            </intent-filter>
+
+        </service>
+
+        <service
+            android:name=".listenphonecall.CallListenerService"
+            android:enabled="true"
+            android:exported="false">
+
+            <intent-filter android:priority="1000">
+
+                <action android:name=".service.CallShowService"/>
+
+            </intent-filter>
+
+        </service>
+
+        <receiver android:name=".receivers.MainReceiver">
+
+            <intent-filter>
+
+                <action android:name="cc.winboll.studio.contacts.receivers.MainReceiver"/>
+
+            </intent-filter>
+
+        </receiver>
+
+        <receiver
+            android:name=".widgets.APPStatusWidget"
+            android:exported="true">
+
+            <intent-filter>
+
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+
+                <action android:name="cc.winboll.studio.contacts.widgets.APPStatusWidget.ACTION_STATUS_ACTIVE"/>
+
+                <action android:name="cc.winboll.studio.contacts.widgets.APPStatusWidget.ACTION_STATUS_NOACTIVE"/>
+
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_provider_info"/>
+
+        </receiver>
+
+        <receiver android:name=".widgets.APPStatusWidgetClickListener">
+
+            <intent-filter>
+
+                <action android:name="cc.winboll.studio.contacts.widgets.APPStatusWidgetClickListener.ACTION_APPICON_CLICK"/>
+
+            </intent-filter>
+
+        </receiver>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/studio_provider"/>
+
+        </provider>
+
+    </application>
+
+</manifest>

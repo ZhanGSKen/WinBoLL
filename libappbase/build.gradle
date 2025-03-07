@@ -4,14 +4,12 @@ apply from: '../.winboll/winboll_lib_build.gradle'
 apply from: '../.winboll/winboll_lint_build.gradle'
 
 android {
-    namespace 'cc.winboll.studio'
-    
-    compileSdkVersion 32
-    buildToolsVersion "33.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion 26
+        targetSdkVersion 29
     }
     buildTypes {
         release {
@@ -19,12 +17,26 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
 }
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    
+    // 二维码类库
+    implementation 'com.google.zxing:core:3.4.1'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+    // 应用介绍页类库
+    implementation 'io.github.medyo:android-about-page:2.0.0'
+    // 吐司类库
+    implementation 'com.github.getActivity:ToastUtils:10.5'
+    // 网络连接类库
+    implementation 'com.squareup.okhttp3:okhttp:4.4.1'
+    
+    // Android 类库
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
+    implementation 'androidx.fragment:fragment:1.1.0'
+    implementation 'com.google.android.material:material:1.4.0'
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorSMSSendColor">#FFDCDA3D</color>
+    <color name="colorSMSInboxColor">#FF3DDC84</color>
+    <color name="colorTTSRuleViewBackgroundColor">#FFDCDA3D</color>
+
+    <color name="colorSMSSendColorDepth">#FFA28BFF</color>
+    <color name="colorSMSInboxColorDepth">#FF8BAEFF</color>
+    <color name="colorTTSRuleViewBackgroundColorDepth">#FFA28BFF</color>
+    
+    <color name="colorSMSSendColorSky">#FFFFEB8C</color>
+    <color name="colorSMSInboxColorSky">#FF8CD9FF</color>
+    <color name="colorTTSRuleViewBackgroundColorSky">#FFFFEB8C</color>
+    
+    <color name="colorSMSSendColorGolden">#FF78BDFF</color>
+    <color name="colorSMSInboxColorGolden">#FFFFED78</color>
+    <color name="colorTTSRuleViewBackgroundColorGolden">#FF78BDFF</color>
+
+    <color name="colorSMSSendColorMemor">#FF5AEB53</color>
+    <color name="colorSMSInboxColorMemor">#FFE653EB</color>
+    <color name="colorTTSRuleViewBackgroundColorMemor">#FF5AEB53</color>
+    
+    <color name="colorSMSSendColorTao">#FFB4B4B4</color>
+    <color name="colorSMSInboxColorTao">#FFD9D9D9</color>
+    <color name="colorTTSRuleViewBackgroundColorTao">#FFB4B4B4</color>
+    
+</resources>
