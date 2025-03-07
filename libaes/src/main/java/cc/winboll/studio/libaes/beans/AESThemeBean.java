@@ -8,7 +8,7 @@ package cc.winboll.studio.libaes.beans;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import cc.winboll.studio.libaes.R;
-import cc.winboll.studio.libapputils.bean.BaseBean;
+import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
 public class AESThemeBean extends BaseBean {
