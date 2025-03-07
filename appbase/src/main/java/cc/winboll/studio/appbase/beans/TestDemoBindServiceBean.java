@@ -1,8 +1,8 @@
-package cc.winboll.studio.libappbase.bean;
+package cc.winboll.studio.appbase.beans;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/02/19 13:34:52
+ * @Date 2025/03/07 12:47:22
  * @Describe TestServiceBean
  */
 import android.util.JsonReader;
@@ -10,13 +10,13 @@ import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
-public class TestServiceBean extends BaseBean {
+public class TestDemoBindServiceBean extends BaseBean {
 
     public static final String TAG = "TestServiceBean";
 
     boolean isEnable;
 
-    public TestServiceBean() {
+    public TestDemoBindServiceBean() {
         this.isEnable = false;
     }
 
@@ -30,7 +30,7 @@ public class TestServiceBean extends BaseBean {
 
     @Override
     public String getName() {
-        return TestServiceBean.class.getName();
+        return TestDemoBindServiceBean.class.getName();
     }
 
     @Override

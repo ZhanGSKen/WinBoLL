@@ -1,22 +1,25 @@
-package cc.winboll.studio.libappbase.services;
+package cc.winboll.studio.appbase.services;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/02/15 20:48:36
- * @Describe TestService
+ * @Date 2025/03/07 12:39:24
+ * @Describe 普通服务示例
  */
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import cc.winboll.studio.appbase.beans.TestDemoServiceBean;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.bean.TestServiceBean;
 import cc.winboll.studio.libappbase.sos.WinBoll;
 
-public class TestService extends Service {
+public class TestDemoService extends Service {
 
-    public static final String TAG = "TestService";
+    public static final String TAG = "TestDemoService";
+
+    public static final String ACTION_ENABLE = TestDemoService.class.getName() + ".ACTION_ENABLE";
+    public static final String ACTION_DISABLE = TestDemoService.class.getName() + ".ACTION_DISABLE";
 
     volatile static TestThread _TestThread;
 
@@ -36,8 +39,8 @@ public class TestService extends Service {
     }
 
     public class MyBinder extends Binder {
-        public TestService getService() {
-            return TestService.this;
+        public TestDemoService getService() {
+            return TestDemoService.this;
         }
     }
 
@@ -53,29 +56,35 @@ public class TestService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtils.d(TAG, "onStartCommand(...)");
-        TestServiceBean bean = TestServiceBean.loadBean(this, TestServiceBean.class);
+        TestDemoServiceBean bean = TestDemoServiceBean.loadBean(this, TestDemoServiceBean.class);
         if (bean == null) {
-            bean = new TestServiceBean();
+            bean = new TestDemoServiceBean();
         }
-//        if (intent.getAction() != null && intent.getAction().equals(WinBoll.ACTION_SERVICE_ENABLE)) {
-//            bean.setIsEnable(true);
-//            TestServiceBean.saveBean(this, bean);
-//            run();
-//        } else if (intent.getAction() != null && intent.getAction().equals(WinBoll.ACTION_SERVICE_DISABLE)) {
-//            bean.setIsEnable(false);
-//            TestServiceBean.saveBean(this, bean);
-//        }
-        LogUtils.d(TAG, String.format("TestServiceBean.saveBean setIsEnable %s", bean.isEnable()));
+
+        if (intent.getAction() != null) {
+            if (intent.getAction().equals(ACTION_ENABLE)) {
+                bean.setIsEnable(true);
+                LogUtils.d(TAG, "setIsEnable(true);");
+                TestDemoServiceBean.saveBean(this, bean);
+            } else if (intent.getAction().equals(ACTION_DISABLE)) {
+                bean.setIsEnable(false);
+                LogUtils.d(TAG, "setIsEnable(false);");
+                TestDemoServiceBean.saveBean(this, bean);
+            }
+        }
+
+        run();
+
         return (bean.isEnable()) ? START_STICKY : super.onStartCommand(intent, flags, startId);
         //return super.onStartCommand(intent, flags, startId);
     }
 
     void run() {
         LogUtils.d(TAG, "run()");
-        TestServiceBean bean = TestServiceBean.loadBean(this, TestServiceBean.class);
+        TestDemoServiceBean bean = TestDemoServiceBean.loadBean(this, TestDemoServiceBean.class);
         if (bean == null) {
-            bean = new TestServiceBean();
-            TestServiceBean.saveBean(this, bean);
+            bean = new TestDemoServiceBean();
+            TestDemoServiceBean.saveBean(this, bean);
         }
         if (bean.isEnable()) {
             LogUtils.d(TAG, "run() bean.isEnable()");
@@ -90,7 +99,7 @@ public class TestService extends Service {
         super.onDestroy();
         LogUtils.d(TAG, "onDestroy()");
         TestThread.getInstance(this).setIsExit(true);
-        
+
         _IsRunning = false;
     }
 
@@ -129,7 +138,6 @@ public class TestService extends Service {
                 isStarted = true;
                 super.run();
                 LogUtils.d(TAG, "run() start");
-                WinBoll.bindToAPPBase(mContext, new APPNewsBean(mContext.getPackageName(), TestService.class.getName()));
 
                 while (!isExit()) {
                     LogUtils.d(TAG, "run()");

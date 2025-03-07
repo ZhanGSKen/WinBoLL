@@ -1,6 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
+        // Nexus Maven 库地址
+        // "WinBoll Release"
+        maven { url "https://nexus.winboll.cc/repository/maven-public/" }
+        // "WinBoll Snapshot"
+        maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
+        
         maven { url 'https://maven.aliyun.com/repository/public/' } 
         maven { url 'https://maven.aliyun.com/repository/google/' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
@@ -10,12 +16,6 @@ buildscript {
         mavenCentral()
         google()
         mavenLocal()
-        // Nexus Maven 库地址
-        // "WinBoll Release"
-        maven { url "https://nexus.winboll.cc/repository/maven-public/" }
-        // "WinBoll Snapshot"
-        maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
-        
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.2.1'
@@ -26,6 +26,12 @@ buildscript {
 
 allprojects {
     repositories {
+        // Nexus Maven 库地址
+        // "WinBoll Release"
+        maven { url "https://nexus.winboll.cc/repository/maven-public/" }
+        // "WinBoll Snapshot"
+        maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
+        
         maven {
             url "https://mirrors.tencent.com/repository/maven/tencent_public/"
         }
@@ -42,12 +48,6 @@ allprojects {
         mavenCentral()
         google()
         mavenLocal()
-        // Nexus Maven 库地址
-        // "WinBoll Release"
-        maven { url "https://nexus.winboll.cc/repository/maven-public/" }
-        // "WinBoll Snapshot"
-        maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
-        
     }
     ext {
         // 定义全局变量，常用于版本管理

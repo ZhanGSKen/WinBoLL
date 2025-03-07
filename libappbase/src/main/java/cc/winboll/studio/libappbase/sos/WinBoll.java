@@ -14,14 +14,16 @@ public class WinBoll {
     public static final String TAG = "WinBoll";
 
     public static final String ACTION_BIND = WinBoll.class.getName() + ".ACTION_BIND";
-    public static final String EXTRA_APPMODEL = "EXTRA_APP";
+    public static final String EXTRA_APPMODEL = "EXTRA_APPMODEL";
 
     public static void bindToAPPBase(Context context, String appMainService) {
+        LogUtils.d(TAG, "bindToAPPBase(...)");
         String toPackage = "cc.winboll.studio.appbase";
         startBind(context, toPackage, appMainService);
     }
 
     public static void bindToAPPBaseBeta(Context context, String appMainService) {
+        LogUtils.d(TAG, "bindToAPPBaseBeta(...)");
         String toPackage = "cc.winboll.studio.appbase.beta";
         startBind(context, toPackage, appMainService);
     }

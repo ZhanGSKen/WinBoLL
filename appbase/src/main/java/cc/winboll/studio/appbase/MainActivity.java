@@ -1,6 +1,5 @@
 package cc.winboll.studio.appbase;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,15 +8,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.appbase.services.MainService;
+import cc.winboll.studio.appbase.services.TestDemoBindService;
+import cc.winboll.studio.appbase.services.TestDemoService;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libappbase.WinBoll;
-import cc.winboll.studio.libappbase.SimpleOperateSignalCenterService;
-import cc.winboll.studio.libappbase.bean.APPNewsBean;
-import cc.winboll.studio.libappbase.services.TestService;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
 import com.hjq.toast.ToastUtils;
+import android.content.ComponentName;
+import cc.winboll.studio.libappbase.sos.SOS;
+import cc.winboll.studio.libappbase.sos.SOSObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,17 +68,17 @@ public class MainActivity extends AppCompatActivity {
         MainService.stopMainService(this);
     }
 
-    public void onTestStopWithoutSettingEnable(View view) {
-        LogUtils.d(TAG, "onTestStopWithoutSettingEnable");
-        stopService(new Intent(this, SimpleOperateSignalCenterService.class));
+    public void onTestStopMainServiceWithoutSettingEnable(View view) {
+        LogUtils.d(TAG, "onTestStopMainServiceWithoutSettingEnable");
+        stopService(new Intent(this, MainService.class));
     }
 
-    public void onTestStartWithString(View view) {
-        LogUtils.d(TAG, "onTestStartWithString");
+    public void onTestUseComponentStartService(View view) {
+        LogUtils.d(TAG, "onTestUseComponentStartService");
 
         // 目标服务的包名和类名
         String packageName = this.getPackageName();
-        String serviceClassName = SimpleOperateSignalCenterService.class.getName();
+        String serviceClassName = TestDemoService.class.getName();
 
         // 构建Intent
         Intent intentService = new Intent();
@@ -87,30 +87,55 @@ public class MainActivity extends AppCompatActivity {
         startService(intentService);
     }
 
-    public void onSOS(View view) {
-        Intent intent = new Intent(this, TestService.class);
+    public void onTestSOS(View view) {
+        Intent intent = new Intent(this, TestDemoService.class);
         stopService(intent);
-        WinBoll.sosService(this, new APPNewsBean(getPackageName(), TestService.class.getName()));
+        if(App.isDebuging()) {
+            SOS.sosToAppBaseBeta(this, TestDemoService.class.getName());
+        } else {
+            SOS.sosToAppBase(this, TestDemoService.class.getName());
+        }
     }
 
-    public void onStartTestService(View view) {
-        Intent intent = new Intent(this, TestService.class);
-        intent.setAction(WinBoll.ACTION_SERVICE_ENABLE);
+    public void onSartTestDemoService(View view) {
+        Intent intent = new Intent(this, TestDemoService.class);
+        intent.setAction(TestDemoService.ACTION_ENABLE);
         startService(intent);
 
     }
 
-    public void onStopTestService(View view) {
-        Intent intent = new Intent(this, TestService.class);
-        intent.setAction(WinBoll.ACTION_SERVICE_DISABLE);
+    public void onStopTestDemoService(View view) {
+        Intent intent = new Intent(this, TestDemoService.class);
+        intent.setAction(TestDemoService.ACTION_DISABLE);
         startService(intent);
         
-        Intent intentStop = new Intent(this, TestService.class);
+        Intent intentStop = new Intent(this, TestDemoService.class);
         stopService(intentStop);
     }
 
-    public void onStopTestServiceNoSettings(View view) {
-        Intent intent = new Intent(this, TestService.class);
+    public void onStopTestDemoServiceNoSettings(View view) {
+        Intent intent = new Intent(this, TestDemoService.class);
+        stopService(intent);
+    }
+    
+    public void onSartTestDemoBindService(View view) {
+        Intent intent = new Intent(this, TestDemoBindService.class);
+        intent.setAction(TestDemoBindService.ACTION_ENABLE);
+        startService(intent);
+
+    }
+
+    public void onStopTestDemoBindService(View view) {
+        Intent intent = new Intent(this, TestDemoBindService.class);
+        intent.setAction(TestDemoBindService.ACTION_DISABLE);
+        startService(intent);
+
+        Intent intentStop = new Intent(this, TestDemoBindService.class);
+        stopService(intentStop);
+    }
+
+    public void onStopTestDemoBindServiceNoSettings(View view) {
+        Intent intent = new Intent(this, TestDemoBindService.class);
         stopService(intent);
     }
 }

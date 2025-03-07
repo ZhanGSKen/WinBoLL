@@ -54,19 +54,25 @@
         <receiver android:name="cc.winboll.studio.appbase.receivers.MainReceiver">
 
             <intent-filter>
+
                 <action android:name="cc.winboll.studio.appbase.receivers.MainReceiver"/>
+
             </intent-filter>
 
         </receiver>
 
         <receiver
-            android:name=".widgets.WinBollNewsWidget"
+            android:name=".widgets.APPNewsWidget"
             android:exported="true">
 
             <intent-filter>
-                <action android:name="cc.winboll.studio.appbase.widgets.WinBollNewsWidget.ACTION_WAKEUP_SERVICE"/>
-                <action android:name="cc.winboll.studio.appbase.widgets.WinBollNewsWidget.ACTION_RELOAD_REPORT"/>
+
+                <action android:name="cc.winboll.studio.appbase.widgets.APPNewsWidget.ACTION_WAKEUP_SERVICE"/>
+
+                <action android:name="cc.winboll.studio.appbase.widgets.APPNewsWidget.ACTION_RELOAD_REPORT"/>
+
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+
             </intent-filter>
 
             <meta-data
@@ -75,13 +81,13 @@
 
         </receiver>
 
-        <receiver android:name=".widgets.WinBollNewsWidgetClickListener">
+        <receiver android:name=".widgets.APPNewsWidgetClickListener">
 
             <intent-filter>
 
-                <action android:name="cc.winboll.studio.appbase.widgets.WinBollNewsWidgetClickListener.ACTION_PRE"/>
+                <action android:name="cc.winboll.studio.appbase.widgets.APPNewsWidgetClickListener.ACTION_PRE"/>
 
-                <action android:name="cc.winboll.studio.appbase.widgets.WinBollNewsWidgetClickListener.ACTION_NEXT"/>
+                <action android:name="cc.winboll.studio.appbase.widgets.APPNewsWidgetClickListener.ACTION_NEXT"/>
 
             </intent-filter>
 
@@ -91,6 +97,11 @@
             android:name="android.max_aspect"
             android:value="4.0"/>
 
+        <service android:name="cc.winboll.studio.appbase.services.TestDemoBindService"
+            android:exported="true"/>
+            
+        <service android:name="cc.winboll.studio.appbase.services.TestDemoService"
+            android:exported="true"/>
 
     </application>
 

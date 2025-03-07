@@ -15,18 +15,19 @@ import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.appbase.beans.WinBollNewsBean;
 import cc.winboll.studio.libappbase.AppUtils;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.bean.APPNewsBean;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import cc.winboll.studio.libappbase.sos.APPModel;
+import cc.winboll.studio.libappbase.sos.WinBoll;
 
-public class WinBollNewsWidget extends AppWidgetProvider {
+public class APPNewsWidget extends AppWidgetProvider {
 
-    public static final String TAG = "WinBollNewsWidget";
+    public static final String TAG = "APPNewsWidget";
     
-    public static final String ACTION_WAKEUP_SERVICE = "cc.winboll.studio.appbase.widgets.WinBollNewsWidget.ACTION_WAKEUP_SERVICE";
-    public static final String ACTION_RELOAD_REPORT = "cc.winboll.studio.appbase.widgets.WinBollNewsWidget.ACTION_RELOAD_REPORT";
+    public static final String ACTION_WAKEUP_SERVICE = APPNewsWidget.class.getName() + ".ACTION_WAKEUP_SERVICE";
+    public static final String ACTION_RELOAD_REPORT = APPNewsWidget.class.getName() + ".ACTION_RELOAD_REPORT";
 
 
     volatile static ArrayList<WinBollNewsBean> _WinBollNewsBeanList;
@@ -49,25 +50,25 @@ public class WinBollNewsWidget extends AppWidgetProvider {
         if (intent.getAction().equals(ACTION_RELOAD_REPORT)) {
             LogUtils.d(TAG, "ACTION_RELOAD_REPORT");
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, WinBollNewsWidget.class));
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, APPNewsWidget.class));
             for (int appWidgetId : appWidgetIds) {
                 updateAppWidget(context, appWidgetManager, appWidgetId);
             }
         }else if (intent.getAction().equals(ACTION_WAKEUP_SERVICE)) {
             LogUtils.d(TAG, "ACTION_WAKEUP_SERVICE");
-            String szWinBollNewsBean = intent.getStringExtra("WinBollNewsBean");
-            LogUtils.d(TAG, String.format("szWinBollNewsBean %s", szWinBollNewsBean));
-            if (szWinBollNewsBean != null && !szWinBollNewsBean.equals("")) {
+            String szAPPModel = intent.getStringExtra(WinBoll.EXTRA_APPMODEL);
+            LogUtils.d(TAG, String.format("szAPPModel %s", szAPPModel));
+            if (szAPPModel != null && !szAPPModel.equals("")) {
                 try {
-                    APPNewsBean bean = APPNewsBean.parseStringToBean(szWinBollNewsBean, APPNewsBean.class);
+                    APPModel bean = APPModel.parseStringToBean(szAPPModel, APPModel.class);
                     if (bean != null) {
-                        String szNewsPackageName = bean.getNewsPackageName();
-                        LogUtils.d(TAG, String.format("szNewsPackageName %s", szNewsPackageName));
-                        String szNewsClassName = bean.getNewsClassName();
-                        LogUtils.d(TAG, String.format("szNewsClassName %s", szNewsClassName));
+                        String szAppPackageName = bean.getAppPackageName();
+                        LogUtils.d(TAG, String.format("szAppPackageName %s", szAppPackageName));
+                        String szAppMainServiveName = bean.getAppMainServiveName();
+                        LogUtils.d(TAG, String.format("szAppMainServiveName %s", szAppMainServiveName));
 
                         
-                        String appName = AppUtils.getAppNameByPackageName(context, szNewsPackageName);
+                        String appName = AppUtils.getAppNameByPackageName(context, szAppPackageName);
                         LogUtils.d(TAG, String.format("appName %s", appName));
                         WinBollNewsBean winBollNewsBean = new WinBollNewsBean(appName);
                         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -82,7 +83,7 @@ public class WinBollNewsWidget extends AppWidgetProvider {
                         addWinBollNewsBean(context, winBollNewsBean);
 
                         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-                        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, WinBollNewsWidget.class));
+                        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, APPNewsWidget.class));
                         for (int appWidgetId : appWidgetIds) {
                             updateAppWidget(context, appWidgetManager, appWidgetId);
                         }
@@ -123,12 +124,12 @@ public class WinBollNewsWidget extends AppWidgetProvider {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_news);
         //设置按钮点击事件
-        Intent intentPre = new Intent(context, WinBollNewsWidgetClickListener.class);
-        intentPre.setAction(WinBollNewsWidgetClickListener.ACTION_PRE);
+        Intent intentPre = new Intent(context, APPNewsWidgetClickListener.class);
+        intentPre.setAction(APPNewsWidgetClickListener.ACTION_PRE);
         PendingIntent pendingIntentPre = PendingIntent.getBroadcast(context, 0, intentPre, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_button_pre, pendingIntentPre);
-        Intent intentNext = new Intent(context, WinBollNewsWidgetClickListener.class);
-        intentNext.setAction(WinBollNewsWidgetClickListener.ACTION_NEXT);
+        Intent intentNext = new Intent(context, APPNewsWidgetClickListener.class);
+        intentNext.setAction(APPNewsWidgetClickListener.ACTION_NEXT);
         PendingIntent pendingIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_button_next, pendingIntentNext);
 
@@ -156,8 +157,8 @@ public class WinBollNewsWidget extends AppWidgetProvider {
             if (_CurrentPageIndex > 0) {
                 _CurrentPageIndex = _CurrentPageIndex - 1;
             }
-            Intent intentWidget = new Intent(context, WinBollNewsWidget.class);
-            intentWidget.setAction(WinBollNewsWidget.ACTION_RELOAD_REPORT);
+            Intent intentWidget = new Intent(context, APPNewsWidget.class);
+            intentWidget.setAction(APPNewsWidget.ACTION_RELOAD_REPORT);
             context.sendBroadcast(intentWidget);
         }
     }
@@ -167,8 +168,8 @@ public class WinBollNewsWidget extends AppWidgetProvider {
             if ((_CurrentPageIndex + 1) * _OnePageLinesCount < _WinBollNewsBeanList.size()) {
                 _CurrentPageIndex = _CurrentPageIndex + 1;
             }
-            Intent intentWidget = new Intent(context, WinBollNewsWidget.class);
-            intentWidget.setAction(WinBollNewsWidget.ACTION_RELOAD_REPORT);
+            Intent intentWidget = new Intent(context, APPNewsWidget.class);
+            intentWidget.setAction(APPNewsWidget.ACTION_RELOAD_REPORT);
             context.sendBroadcast(intentWidget);
         }
     }
