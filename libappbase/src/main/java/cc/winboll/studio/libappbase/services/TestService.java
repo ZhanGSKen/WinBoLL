@@ -13,6 +13,7 @@ import android.os.IBinder;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.bean.TestServiceBean;
 import cc.winboll.studio.libappbase.sos.WinBoll;
+import cc.winboll.studio.libappbase.sos.APPModel;
 
 public class TestService extends Service {
 
@@ -129,7 +130,7 @@ public class TestService extends Service {
                 isStarted = true;
                 super.run();
                 LogUtils.d(TAG, "run() start");
-                WinBoll.bindToAPPBase(mContext, new APPNewsBean(mContext.getPackageName(), TestService.class.getName()));
+                WinBoll.bindToAPPBase(mContext, TestService.class.getName());
 
                 while (!isExit()) {
                     LogUtils.d(TAG, "run()");

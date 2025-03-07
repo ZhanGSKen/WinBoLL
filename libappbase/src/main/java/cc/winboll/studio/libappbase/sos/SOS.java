@@ -34,13 +34,13 @@ public class SOS {
     static void sos(Context context, String szToPackage, String sosService) {
         LogUtils.d(TAG, "sos(...)");
         Intent intent = new Intent(ACTION_SOS);
-        intent.putExtra(EXTRA_OBJECT, genSOSObjectString(context.getPackageName(), sosService));
+        intent.putExtra(EXTRA_OBJECT, genSOSObject(context.getPackageName(), sosService));
         intent.setPackage(szToPackage);
         LogUtils.d(TAG, String.format("ACTION_SOS :\nTo Package : %sSOS Service : %s\n", szToPackage, sosService));
         context.sendBroadcast(intent);
     }
 
-    static SOSObject stringToSOSObject(String szSOSObject) {
+    public static SOSObject parseSOSObject(String szSOSObject) {
         try {
             return SOSObject.parseStringToBean(szSOSObject, SOSObject.class);
         } catch (IOException e) {
@@ -49,11 +49,11 @@ public class SOS {
         return null;
     }
 
-    static String sosObjectToString(SOSObject object) {
+    public static String sosObjectToString(SOSObject object) {
         return object.toString();
     }
 
-    static String genSOSObjectString(String objectPackageName, String objectServiveName) {
+    public static String genSOSObject(String objectPackageName, String objectServiveName) {
         return (new SOSObject(objectPackageName, objectServiveName)).toString();
     }
 }

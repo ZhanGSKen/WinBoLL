@@ -15,11 +15,11 @@ import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.appbase.beans.WinBollNewsBean;
 import cc.winboll.studio.libappbase.AppUtils;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.bean.APPNewsBean;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import cc.winboll.studio.libappbase.sos.APPModel;
 
 public class WinBollNewsWidget extends AppWidgetProvider {
 
@@ -59,11 +59,11 @@ public class WinBollNewsWidget extends AppWidgetProvider {
             LogUtils.d(TAG, String.format("szWinBollNewsBean %s", szWinBollNewsBean));
             if (szWinBollNewsBean != null && !szWinBollNewsBean.equals("")) {
                 try {
-                    APPNewsBean bean = APPNewsBean.parseStringToBean(szWinBollNewsBean, APPNewsBean.class);
+                    APPModel bean = APPModel.parseStringToBean(szWinBollNewsBean, APPModel.class);
                     if (bean != null) {
-                        String szNewsPackageName = bean.getNewsPackageName();
+                        String szNewsPackageName = bean.getAppPackageName();
                         LogUtils.d(TAG, String.format("szNewsPackageName %s", szNewsPackageName));
-                        String szNewsClassName = bean.getNewsClassName();
+                        String szNewsClassName = bean.getAppMainServiveName();
                         LogUtils.d(TAG, String.format("szNewsClassName %s", szNewsClassName));
 
                         

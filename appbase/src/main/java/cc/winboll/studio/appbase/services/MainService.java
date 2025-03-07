@@ -25,8 +25,8 @@ import cc.winboll.studio.appbase.services.AssistantService;
 import cc.winboll.studio.appbase.threads.MainServiceThread;
 import cc.winboll.studio.appbase.widgets.WinBollNewsWidget;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.bean.APPNewsBean;
 import java.util.ArrayList;
+import cc.winboll.studio.libappbase.sos.APPModel;
 
 public class MainService extends Service {
 
@@ -192,7 +192,7 @@ public class MainService extends Service {
         }
     }
 
-    public void bindSOSConnection(APPNewsBean bean) {
+    public void bindSOSConnection(APPModel bean) {
         LogUtils.d(TAG, "bindSOSConnection(...)");
         // 清理旧的绑定链接
         for (int i = mSOSConnectionList.size() - 1; i > -1; i--) {
@@ -207,13 +207,13 @@ public class MainService extends Service {
         // 绑定服务
         SOSConnection sosConnection = new SOSConnection();
         Intent intentService = new Intent();
-        intentService.setComponent(new ComponentName(bean.getNewsPackageName(), bean.getNewsClassName()));
+        intentService.setComponent(new ComponentName(bean.getAppPackageName(), bean.getAppMainServiveName()));
         bindService(intentService, sosConnection, Context.BIND_IMPORTANT);
         mSOSConnectionList.add(sosConnection);
         
         Intent intentWidget = new Intent(this, WinBollNewsWidget.class);
         intentWidget.setAction(WinBollNewsWidget.ACTION_WAKEUP_SERVICE);
-        APPNewsBean appSOSBean = new APPNewsBean(bean.getNewsPackageName(), bean.getNewsClassName());
+        APPModel appSOSBean = new APPModel(bean.getAppPackageName(), bean.getAppMainServiveName());
         intentWidget.putExtra("APPSOSBean", appSOSBean.toString());
         sendBroadcast(intentWidget);
     }
@@ -222,10 +222,10 @@ public class MainService extends Service {
 
         ComponentName mComponentName;
 
-        boolean isBindToAPPSOSBean(APPNewsBean bean) {
+        boolean isBindToAPPSOSBean(APPModel bean) {
             return mComponentName != null
-                && mComponentName.getClassName().equals(bean.getNewsClassName())
-                && mComponentName.getPackageName().equals(bean.getNewsPackageName());
+                && mComponentName.getClassName().equals(bean.getAppMainServiveName())
+                && mComponentName.getPackageName().equals(bean.getAppPackageName());
         }
 
         @Override

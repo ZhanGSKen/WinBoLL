@@ -1,9 +1,5 @@
 package cc.winboll.studio.libappbase.sos;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-
 /**
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/02/27 14:00:21
@@ -17,8 +13,11 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-import cc.winboll.studio.libappbase.bean.SimpleOperateSignalCenterServiceBean;
 import java.io.FileDescriptor;
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import cc.winboll.studio.libappbase.LogUtils;
 
 public class SOSCenterService extends Service {
 
@@ -26,7 +25,7 @@ public class SOSCenterService extends Service {
     
     private final IBinder binder =(IBinder)new SOSBinder();
 
-    SimpleOperateSignalCenterServiceBean mSimpleOperateSignalCenterServiceBean;
+    SOSCenterServiceModel mSOSCenterServiceModel;
     static MainThread _MainThread;
     public static synchronized MainThread getMainThreadInstance() {
         if (_MainThread == null) {
@@ -85,8 +84,8 @@ public class SOSCenterService extends Service {
         }
 
         public static final String TAG = "SOSBinder";
-        SimpleOperateSignalCenterService getService() {
-            return SimpleOperateSignalCenterService.this;
+        SOSCenterService getService() {
+            return SOSCenterService.this;
         }
     }
 
@@ -94,10 +93,10 @@ public class SOSCenterService extends Service {
     public void onCreate() {
         super.onCreate();
         LogUtils.d(TAG, "onCreate");
-        mSimpleOperateSignalCenterServiceBean = SimpleOperateSignalCenterServiceBean.loadBean(this, SimpleOperateSignalCenterServiceBean.class);
-        if(mSimpleOperateSignalCenterServiceBean == null) {
-            mSimpleOperateSignalCenterServiceBean = new SimpleOperateSignalCenterServiceBean();
-            SimpleOperateSignalCenterServiceBean.saveBean(this, mSimpleOperateSignalCenterServiceBean);
+        mSOSCenterServiceModel = SOSCenterServiceModel.loadBean(this, SOSCenterServiceModel.class);
+        if(mSOSCenterServiceModel == null) {
+            mSOSCenterServiceModel = new SOSCenterServiceModel();
+            SOSCenterServiceModel.saveBean(this, mSOSCenterServiceModel);
         }
         runMainThread();
     }
@@ -108,12 +107,12 @@ public class SOSCenterService extends Service {
 
         runMainThread();
 
-        return mSimpleOperateSignalCenterServiceBean.isEnable() ? Service.START_STICKY: super.onStartCommand(intent, flags, startId);
+        return mSOSCenterServiceModel.isEnable() ? Service.START_STICKY: super.onStartCommand(intent, flags, startId);
     }
 
     void runMainThread() {
-        mSimpleOperateSignalCenterServiceBean = SimpleOperateSignalCenterServiceBean.loadBean(this, SimpleOperateSignalCenterServiceBean.class);
-        if (mSimpleOperateSignalCenterServiceBean.isEnable()
+        mSOSCenterServiceModel = mSOSCenterServiceModel.loadBean(this, SOSCenterServiceModel.class);
+        if (mSOSCenterServiceModel.isEnable()
             && _MainThread == null) {
             getMainThreadInstance().start();
         }
@@ -123,9 +122,9 @@ public class SOSCenterService extends Service {
     public void onDestroy() {
         super.onDestroy();
         LogUtils.d(TAG, "onDestroy");
-        mSimpleOperateSignalCenterServiceBean = SimpleOperateSignalCenterServiceBean.loadBean(this, SimpleOperateSignalCenterServiceBean.class);
-        if (mSimpleOperateSignalCenterServiceBean.isEnable()) {
-            LogUtils.d(TAG, "mSimpleOperateSignalCenterServiceBean.isEnable()");
+        mSOSCenterServiceModel = SOSCenterServiceModel.loadBean(this, SOSCenterServiceModel.class);
+        if (mSOSCenterServiceModel.isEnable()) {
+            LogUtils.d(TAG, "mSOSCenterServiceModel.isEnable()");
 //            ISOSAPP iSOSAPP = (ISOSAPP)getApplication();
 //            iSOSAPP.helpISOSService(getISOSServiceIntentWhichAskForHelp());
         } 
@@ -137,22 +136,22 @@ public class SOSCenterService extends Service {
 
     public static void stopISOSService(Context context) {
         LogUtils.d(TAG, "stopISOSService");
-        SimpleOperateSignalCenterServiceBean bean = new SimpleOperateSignalCenterServiceBean();
+        SOSCenterServiceModel bean = new SOSCenterServiceModel();
         bean.setIsEnable(false);
-        SimpleOperateSignalCenterServiceBean.saveBean(context, bean);
-        context.stopService(new Intent(context, SimpleOperateSignalCenterService.class));
+        SOSCenterServiceModel.saveBean(context, bean);
+        context.stopService(new Intent(context, SOSCenterServiceModel.class));
     }
 
     public static void startISOSService(Context context) {
         LogUtils.d(TAG, "startISOSService");
-        SimpleOperateSignalCenterServiceBean bean = new SimpleOperateSignalCenterServiceBean();
+        SOSCenterServiceModel bean = new SOSCenterServiceModel();
         bean.setIsEnable(true);
-        SimpleOperateSignalCenterServiceBean.saveBean(context, bean);
-        context.startService(new Intent(context, SimpleOperateSignalCenterService.class));
+        SOSCenterServiceModel.saveBean(context, bean);
+        context.startService(new Intent(context, SOSCenterServiceModel.class));
     }
 
     public String getMessage() {
-        return "Hello from SimpleOperateSignalCenterService";
+        return "Hello from SOSCenterServiceModel";
     }
 
     static class MainThread extends Thread {

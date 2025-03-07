@@ -12,12 +12,10 @@ import cc.winboll.studio.appbase.services.MainService;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libappbase.WinBoll;
-import cc.winboll.studio.libappbase.SimpleOperateSignalCenterService;
-import cc.winboll.studio.libappbase.bean.APPNewsBean;
 import cc.winboll.studio.libappbase.services.TestService;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
 import com.hjq.toast.ToastUtils;
+import cc.winboll.studio.libappbase.sos.SOS;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,44 +67,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onTestStopWithoutSettingEnable(View view) {
-        LogUtils.d(TAG, "onTestStopWithoutSettingEnable");
-        stopService(new Intent(this, SimpleOperateSignalCenterService.class));
+//        LogUtils.d(TAG, "onTestStopWithoutSettingEnable");
+//        stopService(new Intent(this, SimpleOperateSignalCenterService.class));
     }
 
     public void onTestStartWithString(View view) {
         LogUtils.d(TAG, "onTestStartWithString");
 
         // 目标服务的包名和类名
-        String packageName = this.getPackageName();
-        String serviceClassName = SimpleOperateSignalCenterService.class.getName();
-
-        // 构建Intent
-        Intent intentService = new Intent();
-        intentService.setComponent(new ComponentName(packageName, serviceClassName));
-
-        startService(intentService);
+//        String packageName = this.getPackageName();
+//        String serviceClassName = SimpleOperateSignalCenterService.class.getName();
+//
+//        // 构建Intent
+//        Intent intentService = new Intent();
+//        intentService.setComponent(new ComponentName(packageName, serviceClassName));
+//
+//        startService(intentService);
     }
 
     public void onSOS(View view) {
-        Intent intent = new Intent(this, TestService.class);
-        stopService(intent);
-        WinBoll.sosService(this, new APPNewsBean(getPackageName(), TestService.class.getName()));
+//        Intent intent = new Intent(this, TestService.class);
+//        stopService(intent);
+//        SOS.se(this, new APPNewsBean(getPackageName(), TestService.class.getName()));
     }
 
     public void onStartTestService(View view) {
-        Intent intent = new Intent(this, TestService.class);
-        intent.setAction(WinBoll.ACTION_SERVICE_ENABLE);
-        startService(intent);
+//        Intent intent = new Intent(this, TestService.class);
+//        intent.setAction(WinBoll.ACTION_SERVICE_ENABLE);
+//        startService(intent);
 
     }
 
     public void onStopTestService(View view) {
-        Intent intent = new Intent(this, TestService.class);
-        intent.setAction(WinBoll.ACTION_SERVICE_DISABLE);
-        startService(intent);
-        
-        Intent intentStop = new Intent(this, TestService.class);
-        stopService(intentStop);
+//        Intent intent = new Intent(this, TestService.class);
+//        intent.setAction(WinBoll.ACTION_SERVICE_DISABLE);
+//        startService(intent);
+//        
+//        Intent intentStop = new Intent(this, TestService.class);
+//        stopService(intentStop);
     }
 
     public void onStopTestServiceNoSettings(View view) {
