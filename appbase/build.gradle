@@ -47,6 +47,10 @@ dependencies {
     implementation project(':libappbase')
 	implementation fileTree(dir: 'libs', include: ['*.jar'])
     
+    // SSH
+    implementation 'com.jcraft:jsch:0.1.55'
+    // Html 解析
+    implementation 'org.jsoup:jsoup:1.13.1'
     // 二维码类库
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
