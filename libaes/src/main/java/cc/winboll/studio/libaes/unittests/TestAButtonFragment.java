@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.views.AButton;
-import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 
 public class TestAButtonFragment extends Fragment {
 

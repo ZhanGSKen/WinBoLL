@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
-import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.text.Collator;

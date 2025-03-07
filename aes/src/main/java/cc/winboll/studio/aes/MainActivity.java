@@ -26,11 +26,11 @@ import cc.winboll.studio.libaes.unittests.TestDrawerFragmentActivity;
 import cc.winboll.studio.libaes.unittests.TestViewPageFragment;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
-import cc.winboll.studio.libapputils.log.LogUtils;
 import com.a4455jkjh.colorpicker.ColorPickerDialog;
 import java.util.ArrayList;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.app.AboutActivityFactory;
+import cc.winboll.studio.libappbase.LogUtils;
 
 public class MainActivity extends DrawerFragmentActivity implements IWinBollActivity {
 
@@ -65,12 +65,12 @@ public class MainActivity extends DrawerFragmentActivity implements IWinBollActi
 
     @Override
     public String getTag() {
-        return null;
+        return TAG;
     }
 
     @Override
     public Toolbar initToolBar() {
-        return null;
+        return mToolbar;
     }
 
     @Override
@@ -124,6 +124,9 @@ public class MainActivity extends DrawerFragmentActivity implements IWinBollActi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_library, menu);
+        if(App.isDebuging()) {
+            getMenuInflater().inflate(cc.winboll.studio.libapputils.R.menu.toolbar_studio_debug, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

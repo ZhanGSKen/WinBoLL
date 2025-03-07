@@ -4,14 +4,12 @@ apply from: '../.winboll/winboll_lib_build.gradle'
 apply from: '../.winboll/winboll_lint_build.gradle'
 
 android {
-    namespace 'cc.winboll.studio.libaes'
-    
-    compileSdkVersion 32
-    buildToolsVersion "33.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdkVersion 24
-        targetSdkVersion 30
+        minSdkVersion 26
+        targetSdkVersion 29
     }
     buildTypes {
         release {
@@ -19,28 +17,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
 }
 
 dependencies {
-    api 'io.github.medyo:android-about-page:2.0.0'
-    api 'com.github.getActivity:ToastUtils:10.5'
-    api 'com.jcraft:jsch:0.1.55'
-    api 'org.jsoup:jsoup:1.13.1'
-    api 'com.squareup.okhttp3:okhttp:4.4.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     
-    api 'androidx.appcompat:appcompat:1.0.0'
-    api 'androidx.fragment:fragment:1.0.0'
-    api 'com.google.android.material:material:1.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.4.1'
     
+    // https://mvnrepository.com/artifact/com.github.open-android/pinyin4j
+    implementation 'com.github.open-android:pinyin4j:2.5.0'
+
     // https://github.com/baoyongzhang/android-PullRefreshLayout
-    api 'com.baoyz.pullrefreshlayout:library:1.2.0'
+    implementation 'com.baoyz.pullrefreshlayout:library:1.2.0'
     
-    api 'cc.winboll.studio:libapputils:9.3.1'
-    api 'cc.winboll.studio:libappbase:1.2.0'
+    implementation 'io.github.medyo:android-about-page:2.0.0'
+    implementation 'com.github.getActivity:ToastUtils:10.5'
     
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.jcraft:jsch:0.1.55'
+    implementation 'org.jsoup:jsoup:1.13.1'
+    
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'androidx.fragment:fragment:1.1.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    
+    implementation 'cc.winboll.studio:libapputils:9.3.2'
+    implementation 'cc.winboll.studio:libappbase:1.5.6'
 }
