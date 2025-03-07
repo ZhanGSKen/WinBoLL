@@ -23,7 +23,7 @@ import cc.winboll.studio.appbase.handlers.MainServiceHandler;
 import cc.winboll.studio.appbase.receivers.MainReceiver;
 import cc.winboll.studio.appbase.services.AssistantService;
 import cc.winboll.studio.appbase.threads.MainServiceThread;
-import cc.winboll.studio.appbase.widgets.WinBollNewsWidget;
+import cc.winboll.studio.appbase.widgets.APPNewsWidget;
 import cc.winboll.studio.libappbase.LogUtils;
 import java.util.ArrayList;
 import cc.winboll.studio.libappbase.sos.APPModel;
@@ -101,8 +101,8 @@ public class MainService extends Service {
             }
 
             // 启动小部件
-            Intent intentTimeWidget = new Intent(this, WinBollNewsWidget.class);
-            intentTimeWidget.setAction(WinBollNewsWidget.ACTION_RELOAD_REPORT);
+            Intent intentTimeWidget = new Intent(this, APPNewsWidget.class);
+            intentTimeWidget.setAction(APPNewsWidget.ACTION_RELOAD_REPORT);
             this.sendBroadcast(intentTimeWidget);
 
             startMainServiceThread();
@@ -211,8 +211,8 @@ public class MainService extends Service {
         bindService(intentService, sosConnection, Context.BIND_IMPORTANT);
         mSOSConnectionList.add(sosConnection);
         
-        Intent intentWidget = new Intent(this, WinBollNewsWidget.class);
-        intentWidget.setAction(WinBollNewsWidget.ACTION_WAKEUP_SERVICE);
+        Intent intentWidget = new Intent(this, APPNewsWidget.class);
+        intentWidget.setAction(APPNewsWidget.ACTION_WAKEUP_SERVICE);
         APPModel appSOSBean = new APPModel(bean.getAppPackageName(), bean.getAppMainServiveName());
         intentWidget.putExtra("APPSOSBean", appSOSBean.toString());
         sendBroadcast(intentWidget);

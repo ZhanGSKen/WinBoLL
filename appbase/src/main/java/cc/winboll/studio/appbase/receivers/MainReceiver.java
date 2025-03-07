@@ -13,7 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import cc.winboll.studio.appbase.beans.WinBollNewsBean;
 import cc.winboll.studio.appbase.services.MainService;
-import cc.winboll.studio.appbase.widgets.WinBollNewsWidget;
+import cc.winboll.studio.appbase.widgets.APPNewsWidget;
 import cc.winboll.studio.libappbase.AppUtils;
 import cc.winboll.studio.libappbase.LogUtils;
 import com.hjq.toast.ToastUtils;
@@ -95,10 +95,10 @@ public class MainReceiver extends BroadcastReceiver {
                     sbLine.append(appName);
                     appWinBollNewsBean.setMessage(sbLine.toString());
 
-                    WinBollNewsWidget.addWinBollNewsBean(context, appWinBollNewsBean);
+                    APPNewsWidget.addWinBollNewsBean(context, appWinBollNewsBean);
 
-                    Intent intentWidget = new Intent(context, WinBollNewsWidget.class);
-                    intentWidget.setAction(WinBollNewsWidget.ACTION_RELOAD_REPORT);
+                    Intent intentWidget = new Intent(context, APPNewsWidget.class);
+                    intentWidget.setAction(APPNewsWidget.ACTION_RELOAD_REPORT);
                     context.sendBroadcast(intentWidget);
                 }
 

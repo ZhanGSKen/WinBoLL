@@ -25,10 +25,10 @@ public class WinBollNewsWidgetClickListener extends BroadcastReceiver {
         }
         if (action.equals(ACTION_PRE)) {
             LogUtils.d(TAG, "ACTION_PRE");
-            WinBollNewsWidget.prePage(context);
+            APPNewsWidget.prePage(context);
         } else if (action.equals(ACTION_NEXT)) {
             LogUtils.d(TAG, "ACTION_NEXT");
-            WinBollNewsWidget.nextPage(context);
+            APPNewsWidget.nextPage(context);
         } else {
             LogUtils.d(TAG, String.format("action %s", action));
         }

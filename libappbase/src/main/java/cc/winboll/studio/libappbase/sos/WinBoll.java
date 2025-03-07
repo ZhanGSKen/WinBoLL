@@ -14,7 +14,7 @@ public class WinBoll {
     public static final String TAG = "WinBoll";
 
     public static final String ACTION_BIND = WinBoll.class.getName() + ".ACTION_BIND";
-    public static final String EXTRA_APPMODEL = "EXTRA_APP";
+    public static final String EXTRA_APPMODEL = "EXTRA_APPMODEL";
 
     public static void bindToAPPBase(Context context, String appMainService) {
         String toPackage = "cc.winboll.studio.appbase";

@@ -1,149 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
 	android:orientation="vertical"
-	android:gravity="center">
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
 	<androidx.appcompat.widget.Toolbar
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:id="@+id/activitymainToolbar1"/>
 
-	<LinearLayout
-		android:orientation="vertical"
+	<ScrollView
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="1.0"
-		android:gravity="center_horizontal">
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Hello, WinBoll!"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Android版本10的代号是“Q”，API级别是29。   Android 10开始谷歌不再公开使用甜品作为版本代号，但内部仍保留了大量与“Q”相关的元素。Android 10本身并没有严格对应某个特定的Java版本，但在开发Android 10应用时，通常可以使用Java 8或更高版本。
- 
-Java 8为Android开发带来了诸如Lambda表达式、方法引用等新特性，能提高开发效率和代码可读性，与Android 10开发适配良好。Java 9及更高版本也可用于Android 10开发，能使用一些新的语言特性和API，但可能需要注意兼容性和配置问题。"/>
+		android:layout_weight="1.0">
 
 		<LinearLayout
-			android:orientation="horizontal"
+			xmlns:app="http://schemas.android.com/apk/res-auto"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:gravity="right|center_vertical">
-
-			<CheckBox
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Debug Mode"
-				android:layout_weight="1.0"
-				android:onClick="onSwitchDebugMode"
-				android:id="@+id/activitymainCheckBox1"/>
-
-			<Button
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Test Application CrashReport"
-				android:textAllCaps="false"
-				android:onClick="onTestApplicationCrashReport"/>
-
-		</LinearLayout>
-
-		<ScrollView
-			android:layout_width="match_parent"
-			android:layout_height="400dp">
+			android:orientation="vertical"
+			android:gravity="center">
 
 			<LinearLayout
 				android:orientation="vertical"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:gravity="right">
+				android:layout_height="0dp"
+				android:layout_weight="1.0"
+				android:gravity="center_horizontal">
 
-				<HorizontalScrollView
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Hello, WinBoll!"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Android版本10的代号是“Q”，API级别是29。   Android 10开始谷歌不再公开使用甜品作为版本代号，但内部仍保留了大量与“Q”相关的元素。Android 10本身并没有严格对应某个特定的Java版本，但在开发Android 10应用时，通常可以使用Java 8或更高版本。   Java 8为Android开发带来了诸如Lambda表达式、方法引用等新特性，能提高开发效率和代码可读性，与Android 10开发适配良好。Java 9及更高版本也可用于Android 10开发，能使用一些新的语言特性和API，但可能需要注意兼容性和配置问题。"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
 					android:layout_width="match_parent"
-					android:layout_height="wrap_content">
+					android:layout_height="wrap_content"
+					android:gravity="right|center_vertical">
+
+					<CheckBox
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Debug Mode"
+						android:layout_weight="1.0"
+						android:onClick="onSwitchDebugMode"
+						android:id="@+id/activitymainCheckBox1"/>
+
+					<Button
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Test Application CrashReport"
+						android:textAllCaps="false"
+						android:onClick="onTestApplicationCrashReport"/>
+
+				</LinearLayout>
+
+				<ScrollView
+					android:layout_width="match_parent"
+					android:layout_height="400dp">
 
 					<LinearLayout
-						android:orientation="horizontal"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content">
+						android:orientation="vertical"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:gravity="right">
+
+						<HorizontalScrollView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content">
+
+							<LinearLayout
+								android:orientation="horizontal"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content">
+
+								<Button
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="StartTestService"
+									android:textAllCaps="false"
+									android:onClick="onStartTestService"/>
+
+								<Button
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="StopTestService"
+									android:textAllCaps="false"
+									android:onClick="onStopTestService"/>
+
+								<Button
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="StopTestServiceNoSettings"
+									android:textAllCaps="false"
+									android:onClick="onStopTestServiceNoSettings"/>
+
+							</LinearLayout>
+
+						</HorizontalScrollView>
 
 						<Button
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							android:text="StartTestService"
+							android:text="StartCenter"
 							android:textAllCaps="false"
-							android:onClick="onStartTestService"/>
+							android:onClick="onStartCenter"/>
 
 						<Button
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							android:text="StopTestService"
+							android:text="StopCenter"
 							android:textAllCaps="false"
-							android:onClick="onStopTestService"/>
+							android:onClick="onStopCenter"/>
 
 						<Button
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							android:text="StopTestServiceNoSettings"
+							android:text="TestStopWithoutSettingEnable"
 							android:textAllCaps="false"
-							android:onClick="onStopTestServiceNoSettings"/>
+							android:onClick="onTestStopWithoutSettingEnable"/>
+
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="TestStartWithString"
+							android:textAllCaps="false"
+							android:onClick="onTestStartWithString"/>
+
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="SOS"
+							android:textAllCaps="false"
+							android:onClick="onSOS"/>
 
 					</LinearLayout>
 
-				</HorizontalScrollView>
+				</ScrollView>
 
-				<Button
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="StartCenter"
-					android:textAllCaps="false"
-					android:onClick="onStartCenter"/>
-
-				<Button
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="StopCenter"
-					android:textAllCaps="false"
-					android:onClick="onStopCenter"/>
-
-				<Button
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="TestStopWithoutSettingEnable"
-					android:textAllCaps="false"
-					android:onClick="onTestStopWithoutSettingEnable"/>
-
-				<Button
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="TestStartWithString"
-					android:textAllCaps="false"
-					android:onClick="onTestStartWithString"/>
-
-				<Button
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="SOS"
-					android:textAllCaps="false"
-					android:onClick="onSOS"/>
+				<cc.winboll.studio.libappbase.LogView
+					android:layout_height="500dp"
+					android:layout_width="match_parent"
+					android:id="@+id/activitymainLogView1"/>
 
 			</LinearLayout>
 
-		</ScrollView>
+		</LinearLayout>
 
-		<cc.winboll.studio.libappbase.LogView
-			android:layout_weight="1.0"
-			android:layout_height="0dp"
-			android:layout_width="match_parent"
-			android:id="@+id/activitymainLogView1"/>
-
-	</LinearLayout>
+	</ScrollView>
 
 </LinearLayout>
 
