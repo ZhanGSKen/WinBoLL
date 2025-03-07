@@ -17,6 +17,7 @@ import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.beans.ContactModel;
 import com.hjq.toast.ToastUtils;
 import java.util.List;
+import cc.winboll.studio.libaes.views.AOHPCTCSeekBar;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
 
@@ -43,9 +44,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         holder.contactName.setText(contact.getName());
         holder.contactNumber.setText(contact.getNumber());
 
-        holder.dialButton.setOnClickListener(new View.OnClickListener() {
+        // 初始化拉动后拨号控件 
+        holder.dialAOHPCTCSeekBar.setThumb(holder.itemView.getContext().getDrawable(R.drawable.ic_call));
+        holder.dialAOHPCTCSeekBar.setThumbOffset(20);
+        holder.dialAOHPCTCSeekBar.setOnOHPCListener(
+            new AOHPCTCSeekBar.OnOHPCListener(){
                 @Override
-                public void onClick(View v) {
+                public void onOHPCommit() {
                     String phoneNumber = contact.getNumber().replaceAll("\\s", "");
                     ToastUtils.show(phoneNumber);
                     Intent intent = new Intent(Intent.ACTION_CALL);
@@ -65,13 +70,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     public class ContactViewHolder extends RecyclerView.ViewHolder {
         TextView contactName;
         TextView contactNumber;
-        Button dialButton;
-
+        AOHPCTCSeekBar dialAOHPCTCSeekBar;
+        
         public ContactViewHolder(@NonNull View itemView) {
             super(itemView);
             contactName = itemView.findViewById(R.id.contact_name);
             contactNumber = itemView.findViewById(R.id.contact_number);
-            dialButton = itemView.findViewById(R.id.dial_button);
+            dialAOHPCTCSeekBar = itemView.findViewById(R.id.aohpctcseekbar_dial);
         }
     }
 }

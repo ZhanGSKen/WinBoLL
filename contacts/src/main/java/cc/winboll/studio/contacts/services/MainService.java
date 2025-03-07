@@ -20,6 +20,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
 import cc.winboll.studio.contacts.beans.RingTongBean;
+import cc.winboll.studio.contacts.bobulltoon.TomCat;
 import cc.winboll.studio.contacts.dun.Rules;
 import cc.winboll.studio.contacts.handlers.MainServiceHandler;
 import cc.winboll.studio.contacts.listenphonecall.CallListenerService;
@@ -27,11 +28,12 @@ import cc.winboll.studio.contacts.receivers.MainReceiver;
 import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.contacts.threads.MainServiceThread;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.SOS;
-import cc.winboll.studio.libappbase.bean.APPSOSBean;
+import cc.winboll.studio.libappbase.sos.SOS;
 import java.util.Timer;
 import java.util.TimerTask;
-import cc.winboll.studio.contacts.bobulltoon.TomCat;
+import cc.winboll.studio.libappbase.sos.WinBoll;
+import cc.winboll.studio.contacts.App;
+import cc.winboll.studio.libappbase.sos.APPModel;
 
 public class MainService extends Service {
 
@@ -128,7 +130,11 @@ public class MainService extends Service {
             // 唤醒守护进程
             wakeupAndBindAssistant();
             // 召唤 WinBoll APP 绑定本服务
-            SOS.bindToAPPService(this, new APPSOSBean(getPackageName(), MainService.class.getName()));
+            if (App.isDebuging()) {
+                WinBoll.bindToAPPBaseBeta(this, MainService.class.getName());
+            } else {
+                WinBoll.bindToAPPBase(this, MainService.class.getName());
+            }
 
             // 初始化服务运行参数
             _TomCat = TomCat.getInstance(this);
@@ -234,7 +240,11 @@ public class MainService extends Service {
             if (mMainServiceBean.isEnable()) {
                 // 唤醒守护进程
                 wakeupAndBindAssistant();
-                SOS.sosWinBollService(getApplicationContext(), new APPSOSBean(getPackageName(), MainService.class.getName()));
+                if (App.isDebuging()) {
+                    SOS.sosToAppBase(getApplicationContext(), MainService.class.getName());
+                } else {
+                    SOS.sosToAppBaseBeta(getApplicationContext(), MainService.class.getName());
+                }
             }
             isBound = false;
             mAssistantService = null;
@@ -296,7 +306,7 @@ public class MainService extends Service {
             LogUtils.d(TAG, "已重启 MainService");
         }
     }
-    
+
     public static void stopMainServiceAndSaveStatus(Context context) {
         LogUtils.d(TAG, "stopMainServiceAndSaveStatus");
         MainServiceBean bean = new MainServiceBean();

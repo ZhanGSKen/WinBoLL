@@ -29,17 +29,17 @@ import cc.winboll.studio.contacts.adapters.PhoneConnectRuleAdapter;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
 import cc.winboll.studio.contacts.beans.PhoneConnectRuleModel;
 import cc.winboll.studio.contacts.beans.RingTongBean;
+import cc.winboll.studio.contacts.beans.SettingsModel;
 import cc.winboll.studio.contacts.bobulltoon.TomCat;
 import cc.winboll.studio.contacts.dun.Rules;
 import cc.winboll.studio.contacts.services.MainService;
-import cc.winboll.studio.libappbase.IWinBollActivity;
-import cc.winboll.studio.libappbase.bean.APPInfo;
+import cc.winboll.studio.contacts.views.DuInfoTextView;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
+import cc.winboll.studio.libapputils.bean.APPInfo;
 import com.hjq.toast.ToastUtils;
 import java.lang.reflect.Field;
 import java.util.List;
-import cc.winboll.studio.contacts.beans.SettingsModel;
-import cc.winboll.studio.contacts.views.DuInfoTextView;
-import cc.winboll.studio.libappbase.LogUtils;
 
 public class SettingsActivity extends AppCompatActivity implements IWinBollActivity {
 
