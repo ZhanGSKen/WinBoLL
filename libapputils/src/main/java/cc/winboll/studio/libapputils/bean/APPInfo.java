@@ -1,5 +1,4 @@
 package cc.winboll.studio.libapputils.bean;
-
 /**
  * @Author ZhanGSKen@QQ.COM
  * @Date 2025/01/20 14:19:02

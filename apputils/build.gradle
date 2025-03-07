@@ -18,18 +18,18 @@ def genVersionName(def versionName){
 }
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "33.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "cc.winboll.studio.apputils"
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion 26
+        targetSdkVersion 29
         versionCode 1
         // versionName 更新后需要手动设置 
         // 项目模块目录的 build.gradle 文件的 stageCount=0
         // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
-        versionName "9.3" 
+        versionName "9.4" 
         if(true) {
             versionName = genVersionName("${versionName}")
         }
@@ -49,7 +49,31 @@ android {
 }
 
 dependencies {
-	api project(':libapputils')
+	implementation project(':libapputils')
     
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    
+    // SSH
+    implementation 'com.jcraft:jsch:0.1.55'
+    // Html 解析
+    implementation 'org.jsoup:jsoup:1.13.1'
+    // 二维码类库
+    implementation 'com.google.zxing:core:3.4.1'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+    // 应用介绍页类库
+    implementation 'io.github.medyo:android-about-page:2.0.0'
+    // 吐司类库
+    implementation 'com.github.getActivity:ToastUtils:10.5'
+    // 网络连接类库
+    implementation 'com.squareup.okhttp3:okhttp:4.4.1'
+    
+    // Android 类库
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
+    implementation 'androidx.fragment:fragment:1.1.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    
+    implementation 'cc.winboll.studio:libappbase:2.1.1'
 }

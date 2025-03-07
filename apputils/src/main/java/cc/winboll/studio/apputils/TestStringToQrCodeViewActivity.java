@@ -26,7 +26,7 @@ public class TestStringToQrCodeViewActivity extends AppCompatActivity implements
     public APPInfo getAppInfo() {
         return null;
     }
-    
+
     @Override
     public String getTag() {
         return TAG;

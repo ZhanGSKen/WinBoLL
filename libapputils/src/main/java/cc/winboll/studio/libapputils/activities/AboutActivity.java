@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,7 +17,6 @@ import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.AboutView;
-import com.hjq.toast.ToastUtils;
 
 final public class AboutActivity extends AppCompatActivity implements IWinBollActivity {
 

@@ -27,7 +27,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="TestLog"
-                android:textAllCaps="false"
+				android:textAllCaps="false"
 				android:onClick="onTestLogClick"/>
 
 			<Button
@@ -39,35 +39,28 @@
 
 		</LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right">
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="right">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:text="Test Javascript Html Activity"
-                android:onClick="onTestJavascriptHtmlActivity"/>
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAllCaps="false"
+				android:text="Test Javascript Html Activity"
+				android:onClick="onTestJavascriptHtmlActivity"/>
 
-        </LinearLayout>
+		</LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right">
+		<cc.winboll.studio.libappbase.LogView
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:text="Button"
+			android:id="@+id/logview"
+			android:layout_weight="1.0"/>
 
-            <cc.winboll.studio.libapputils.view.AboutBranchButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="About"
-                android:textAllCaps="false"/>
-
-        </LinearLayout>
-        
 	</LinearLayout>
 
 </LinearLayout>

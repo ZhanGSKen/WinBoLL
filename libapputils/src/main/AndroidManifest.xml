@@ -29,7 +29,7 @@
             android:launchMode="standard"/>
 
         <activity
-            android:name=".log.LogActivity"
+            android:name=".activities.LogActivity"
             android:label="LogActivity"
             android:launchMode="standard"/>
 

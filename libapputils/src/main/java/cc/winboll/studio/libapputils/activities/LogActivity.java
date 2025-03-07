@@ -1,15 +1,16 @@
-package cc.winboll.studio.libapputils.log;
+package cc.winboll.studio.libapputils.activities;
 
 /**
- * @Author ZhanGSKen@QQ.COM
- * @Date 2024/08/12 15:07:58
- * @Describe WinBoll 应用日志窗口
+ * @Author ZhanGSKen@AliYun.Com
+ * @Date 2025/03/08 00:19:39
+ * @Describe LogActivity
  */
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
@@ -19,7 +20,7 @@ public class LogActivity extends AppCompatActivity implements IWinBollActivity {
     public static final String TAG = "LogActivity";
 
     LogView mLogView;
-    
+
     @Override
     public AppCompatActivity getActivity() {
         return this;
@@ -29,7 +30,7 @@ public class LogActivity extends AppCompatActivity implements IWinBollActivity {
     public APPInfo getAppInfo() {
         return null;
     }
-    
+
     @Override
     public String getTag() {
         return TAG;
@@ -56,14 +57,13 @@ public class LogActivity extends AppCompatActivity implements IWinBollActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log);
         mLogView = findViewById(R.id.logview);
-
-        if (GlobalApplication.isDebuging()) { mLogView.start(); }
+        mLogView.start();
+        
     }
 
     @Override
     protected void onResume() {
         LogUtils.d(TAG, "onResume");
         super.onResume();
-        mLogView.start();
     }
 }

@@ -14,13 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.apputils.R;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libapputils.activities.AssetsHtmlActivity;
+import cc.winboll.studio.libapputils.activities.LogActivity;
 import cc.winboll.studio.libapputils.activities.QRCodeDecodeActivity;
 import cc.winboll.studio.libapputils.app.AboutActivityFactory;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
-import cc.winboll.studio.libapputils.log.LogActivity;
 import cc.winboll.studio.libapputils.view.AboutView;
 import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
 import com.hjq.toast.ToastUtils;
@@ -34,6 +35,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     public static final int REQUEST_QRCODEDECODE_ACTIVITY = 0;
 
     Toolbar mToolbar;
+    LogView mLogView;
 
     @Override
     public AppCompatActivity getActivity() {
@@ -58,7 +60,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         return appInfo;
         //return null;
     }
-    
+
     @Override
     public String getTag() {
         return TAG;
@@ -83,6 +85,9 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mLogView = findViewById(R.id.logview);
+        mLogView.start();
 
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);

@@ -1,18 +1,16 @@
 package cc.winboll.studio.libapputils.app;
-import android.content.Context;
-import android.content.Intent;
-import cc.winboll.studio.libapputils.activities.AboutActivity;
-import cc.winboll.studio.libapputils.app.AboutActivityFactory;
-import cc.winboll.studio.libapputils.bean.APPInfo;
-import com.hjq.toast.ToastUtils;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @Author ZhanGSKen@QQ.COM
  * @Date 2025/02/06 08:45:23
  * @Describe 关于活动窗口的介绍窗口工厂
  */
+import android.content.Context;
+import android.content.Intent;
+import cc.winboll.studio.libapputils.activities.AboutActivity;
+import cc.winboll.studio.libapputils.app.AboutActivityFactory;
+import cc.winboll.studio.libapputils.bean.APPInfo;
+
 public class AboutActivityFactory {
 
     public static final String TAG = "AboutActivityFactory";
