@@ -26,8 +26,8 @@ public class APPNewsWidget extends AppWidgetProvider {
 
     public static final String TAG = "APPNewsWidget";
     
-    public static final String ACTION_WAKEUP_SERVICE = "cc.winboll.studio.appbase.widgets.WinBollNewsWidget.ACTION_WAKEUP_SERVICE";
-    public static final String ACTION_RELOAD_REPORT = "cc.winboll.studio.appbase.widgets.WinBollNewsWidget.ACTION_RELOAD_REPORT";
+    public static final String ACTION_WAKEUP_SERVICE = APPNewsWidget.class.getName() + ".ACTION_WAKEUP_SERVICE";
+    public static final String ACTION_RELOAD_REPORT = APPNewsWidget.class.getName() + ".ACTION_RELOAD_REPORT";
 
 
     volatile static ArrayList<WinBollNewsBean> _WinBollNewsBeanList;
@@ -124,12 +124,12 @@ public class APPNewsWidget extends AppWidgetProvider {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_news);
         //设置按钮点击事件
-        Intent intentPre = new Intent(context, WinBollNewsWidgetClickListener.class);
-        intentPre.setAction(WinBollNewsWidgetClickListener.ACTION_PRE);
+        Intent intentPre = new Intent(context, APPNewsWidgetClickListener.class);
+        intentPre.setAction(APPNewsWidgetClickListener.ACTION_PRE);
         PendingIntent pendingIntentPre = PendingIntent.getBroadcast(context, 0, intentPre, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_button_pre, pendingIntentPre);
-        Intent intentNext = new Intent(context, WinBollNewsWidgetClickListener.class);
-        intentNext.setAction(WinBollNewsWidgetClickListener.ACTION_NEXT);
+        Intent intentNext = new Intent(context, APPNewsWidgetClickListener.class);
+        intentNext.setAction(APPNewsWidgetClickListener.ACTION_NEXT);
         PendingIntent pendingIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_button_next, pendingIntentNext);
 

@@ -47,31 +47,27 @@ public class MainReceiver extends BroadcastReceiver {
             LogUtils.d(TAG, "ACTION_BIND");
             LogUtils.d(TAG, String.format("context.getPackageName() %s", context.getPackageName()));
             LogUtils.d(TAG, String.format("intent.getAction() %s", intent.getAction()));
-            String SOS = intent.getStringExtra("SOS");
-            LogUtils.d(TAG, String.format("SOS %s", SOS));
-            if (SOS != null && SOS.equals("Service")) {
-                String szAPPSOSBean = intent.getStringExtra("APPSOSBean");
-                LogUtils.d(TAG, String.format("szAPPSOSBean %s", szAPPSOSBean));
-                if (szAPPSOSBean != null && !szAPPSOSBean.equals("")) {
-                    try {
-                        APPModel bean = APPModel.parseStringToBean(szAPPSOSBean, APPModel.class);
-                        if (bean != null) {
-                            String szAppPackageName = bean.getAppPackageName();
-                            LogUtils.d(TAG, String.format("szAppPackageName %s", szAppPackageName));
-                            String szAppMainServiveName = bean.getAppMainServiveName();
-                            LogUtils.d(TAG, String.format("szNewsClassName %s", szAppMainServiveName));
-                            mwrService.get().bindSOSConnection(bean);
-                        }
-                    } catch (IOException e) {
-                        LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+            String szAPPModel = intent.getStringExtra(WinBoll.EXTRA_APPMODEL);
+            LogUtils.d(TAG, String.format("szAPPModel %s", szAPPModel));
+            if (szAPPModel != null && !szAPPModel.equals("")) {
+                try {
+                    APPModel bean = APPModel.parseStringToBean(szAPPModel, APPModel.class);
+                    if (bean != null) {
+                        String szAppPackageName = bean.getAppPackageName();
+                        LogUtils.d(TAG, String.format("szAppPackageName %s", szAppPackageName));
+                        String szAppMainServiveName = bean.getAppMainServiveName();
+                        LogUtils.d(TAG, String.format("szAppMainServiveName %s", szAppMainServiveName));
+                        mwrService.get().bindAPPModelConnection(bean);
                     }
+                } catch (IOException e) {
+                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
                 }
             }
         } else if (intent.getAction().equals(SOS.ACTION_SOS)) {
             LogUtils.d(TAG, "ACTION_SOS");
             String sos = intent.getStringExtra(SOS.EXTRA_OBJECT);
             LogUtils.d(TAG, String.format("SOS %s", sos));
-            if (sos != null && sos.equals("")) {
+            if (sos != null && !sos.equals("")) {
                 SOSObject bean = SOS.parseSOSObject(sos);
                 if (bean != null) {
                     String szObjectPackageName = bean.getObjectPackageName();
