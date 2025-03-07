@@ -46,7 +46,7 @@ android {
 dependencies {
 	implementation project(':libaes')
     
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(dir: 'libs', include: ['*.jar'])
     
     // 权限请求框架：https://github.com/getActivity/XXPermissions
     implementation 'com.github.getActivity:XXPermissions:18.63'

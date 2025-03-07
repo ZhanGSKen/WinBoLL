@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.aes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
 import cc.winboll.studio.libaes.beans.DrawerMenuBean;
@@ -24,13 +25,12 @@ import cc.winboll.studio.libaes.unittests.TestASupportToolbarActivity;
 import cc.winboll.studio.libaes.unittests.TestAToolbarActivity;
 import cc.winboll.studio.libaes.unittests.TestDrawerFragmentActivity;
 import cc.winboll.studio.libaes.unittests.TestViewPageFragment;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libapputils.app.AboutActivityFactory;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import com.a4455jkjh.colorpicker.ColorPickerDialog;
 import java.util.ArrayList;
-import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.libapputils.app.AboutActivityFactory;
-import cc.winboll.studio.libappbase.LogUtils;
 
 public class MainActivity extends DrawerFragmentActivity implements IWinBollActivity {
 
