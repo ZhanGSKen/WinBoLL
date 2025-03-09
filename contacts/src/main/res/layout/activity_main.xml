@@ -12,16 +12,26 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/activitymainToolbar1"/>
 
-	<androidx.viewpager.widget.ViewPager
+	<LinearLayout
+		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="1.0"
-		android:id="@+id/viewPager"/>
+		android:padding="10dp"
+		android:layout_weight="1.0">
 
-	<com.google.android.material.tabs.TabLayout
-		android:layout_width="match_parent"
-		android:layout_height="60dp"
-		android:id="@+id/tabLayout"/>
+		<androidx.viewpager.widget.ViewPager
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+            android:layout_weight="1.0"
+			android:id="@+id/viewPager"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/tabLayout"/>
+        
+	</LinearLayout>
+
 
 </LinearLayout>
 
