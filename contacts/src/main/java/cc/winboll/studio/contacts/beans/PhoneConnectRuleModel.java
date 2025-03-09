@@ -10,21 +10,35 @@ import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
-public class PhoneBlackRuleBean extends BaseBean {
-    
-    public static final String TAG = "PhoneBlackRuleBean";
-    
+public class PhoneConnectRuleModel extends BaseBean {
+
+    public static final String TAG = "PhoneConnectRuleModel";
+
     String ruleText;
+    boolean isAllowConnection;
     boolean isEnable;
-    
-    public PhoneBlackRuleBean() {
+    boolean isSimpleView;
+
+    public PhoneConnectRuleModel() {
         this.ruleText = "";
+        this.isAllowConnection = false;
         this.isEnable = false;
+        this.isSimpleView = true;
     }
 
-    public PhoneBlackRuleBean(String ruleText, boolean isEnable) {
+    public PhoneConnectRuleModel(String ruleText, boolean isAllowConnection, boolean isEnable) {
         this.ruleText = ruleText;
+        this.isAllowConnection = isAllowConnection;
         this.isEnable = isEnable;
+        this.isSimpleView = true;
+    }
+
+    public void setIsSimpleView(boolean isSimpleView) {
+        this.isSimpleView = isSimpleView;
+    }
+
+    public boolean isSimpleView() {
+        return isSimpleView;
     }
 
     public void setRuleText(String ruleText) {
@@ -35,6 +49,14 @@ public class PhoneBlackRuleBean extends BaseBean {
         return ruleText;
     }
 
+    public void setIsAllowConnection(boolean isAllowConnection) {
+        this.isAllowConnection = isAllowConnection;
+    }
+
+    public boolean isAllowConnection() {
+        return isAllowConnection;
+    }
+
     public void setIsEnable(boolean isEnable) {
         this.isEnable = isEnable;
     }
@@ -43,17 +65,19 @@ public class PhoneBlackRuleBean extends BaseBean {
         return isEnable;
     }
 
+
+
     @Override
     public String getName() {
-        return PhoneBlackRuleBean.class.getName();
+        return PhoneConnectRuleModel.class.getName();
     }
 
     @Override
     public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
         super.writeThisToJsonWriter(jsonWriter);
         jsonWriter.name("ruleText").value(getRuleText());
+        jsonWriter.name("isAllowConnection").value(isAllowConnection());
         jsonWriter.name("isEnable").value(isEnable());
-
     }
 
     @Override
@@ -61,6 +85,8 @@ public class PhoneBlackRuleBean extends BaseBean {
         if (super.initObjectsFromJsonReader(jsonReader, name)) { return true; } else {
             if (name.equals("ruleText")) {
                 setRuleText(jsonReader.nextString());
+            } else if (name.equals("isAllowConnection")) {
+                setIsAllowConnection(jsonReader.nextBoolean());
             } else if (name.equals("isEnable")) {
                 setIsEnable(jsonReader.nextBoolean());
             } else {
@@ -83,6 +109,6 @@ public class PhoneBlackRuleBean extends BaseBean {
         jsonReader.endObject();
         return this;
     }
-    
-    
+
+
 }

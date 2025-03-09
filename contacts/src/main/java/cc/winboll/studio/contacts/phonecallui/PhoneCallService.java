@@ -21,8 +21,6 @@ import cc.winboll.studio.libappbase.LogUtils;
 public class PhoneCallService extends InCallService {
 
     public static final String TAG = "PhoneCallService";
-    
-    private volatile int originalRingVolume;
 
     private final Call.Callback callback = new Call.Callback() {
         @Override
@@ -61,25 +59,58 @@ public class PhoneCallService extends InCallService {
             String phoneNumber = details.getHandle().getSchemeSpecificPart();
 
             // 记录原始铃声音量
+            //
             AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-            originalRingVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
+            int ringerVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
+            // 恢复铃声音量，预防其他意外条件导致的音量变化问题
+            //
+
+            // 读取应用配置，未配置就初始化配置文件
+            RingTongBean bean = RingTongBean.loadBean(this, RingTongBean.class);
+            if (bean == null) {
+                // 初始化配置
+                bean = new RingTongBean();
+                RingTongBean.saveBean(this, bean);
+            }
+            // 如果当前音量和应用保存的不一致就恢复为应用设定值
+            // 恢复铃声音量
+            try {
+                if (ringerVolume != bean.getStreamVolume()) {
+                    audioManager.setStreamVolume(AudioManager.STREAM_RING, bean.getStreamVolume(), 0);
+                    //audioManager.setMode(AudioManager.RINGER_MODE_NORMAL);
+                }
+            } catch (java.lang.SecurityException e) {
+                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+            }
+
             // 检查电话接收规则
             if (!Rules.getInstance(this).isAllowed(phoneNumber)) {
-                // 预先静音
-                audioManager.setStreamVolume(AudioManager.STREAM_RING, 0, 0);
+                // 调低音量
+                try {
+                    audioManager.setStreamVolume(AudioManager.STREAM_RING, 0, 0);
+                    //audioManager.setMode(AudioManager.RINGER_MODE_SILENT);
+                } catch (java.lang.SecurityException e) {
+                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+                }
                 // 断开电话
                 call.disconnect();
                 // 停顿1秒，预防第一声铃声响动
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     LogUtils.d(TAG, "");
                 }
                 // 恢复铃声音量
-                audioManager.setStreamVolume(AudioManager.STREAM_RING, originalRingVolume, 0);
+                try {
+                    audioManager.setStreamVolume(AudioManager.STREAM_RING, bean.getStreamVolume(), 0);
+                    //audioManager.setMode(AudioManager.RINGER_MODE_NORMAL);
+                } catch (java.lang.SecurityException e) {
+                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+                }
                 // 屏蔽电话结束
                 return;
             }
+
             // 正常接听电话
             PhoneCallActivity.actionStart(this, phoneNumber, callType);
         }
@@ -88,12 +119,8 @@ public class PhoneCallService extends InCallService {
     @Override
     public void onCallRemoved(Call call) {
         super.onCallRemoved(call);
-
         call.unregisterCallback(callback);
         PhoneCallManager.call = null;
-        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        // 恢复铃声音量
-        audioManager.setStreamVolume(AudioManager.STREAM_RING, originalRingVolume, 0);
     }
 
     public enum CallType {
