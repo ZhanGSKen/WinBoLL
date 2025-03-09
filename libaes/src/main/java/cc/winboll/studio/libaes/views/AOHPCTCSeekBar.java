@@ -61,8 +61,8 @@ public class AOHPCTCSeekBar extends SeekBar {
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            getParent().requestDisallowInterceptTouchEvent(true);
             if (thumbWidth + blurRightDP > event.getX() && event.getX() > 0) {
+                getParent().requestDisallowInterceptTouchEvent(true);
                 isStartSeek = true;
             }
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
