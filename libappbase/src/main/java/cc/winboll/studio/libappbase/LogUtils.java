@@ -38,7 +38,7 @@ public class LogUtils {
     static volatile boolean _IsInited = false;
     static Context _mContext;
     // 日志显示时间格式
-    static SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("[yyyyMMdd_HHmmSS]", Locale.getDefault());
+    static SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("[yyyyMMdd_HHmmss_SSS]", Locale.getDefault());
     // 应用日志文件夹
     static File _mfLogCacheDir;
     static File _mfLogDataDir;
