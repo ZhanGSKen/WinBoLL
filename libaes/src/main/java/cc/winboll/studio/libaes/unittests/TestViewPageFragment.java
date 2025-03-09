@@ -192,7 +192,7 @@ public class TestViewPageFragment extends Fragment implements ViewPager.OnPageCh
     }
 
     void initAOHPCTCSeekBar() {
-        AOHPCTCSeekBar seekbar = mView.findViewById(R.id.fragmentviewpageAOHPCTCSeekBar1);
+        AOHPCTCSeekBar seekbar = views.get(3).findViewById(R.id.fragmentviewpageAOHPCTCSeekBar1);
         seekbar.setThumb(getActivity().getDrawable(R.drawable.ic_launcher));
         //seekbar.setThumbOffset(200);
         //seekbar.setThumbOffset(1);
@@ -207,7 +207,7 @@ public class TestViewPageFragment extends Fragment implements ViewPager.OnPageCh
     }
     
     void initAOHPCTCSeekBar2() {
-        AOHPCTCSeekBar seekbar = mView.findViewById(R.id.fragmentviewpageAOHPCTCSeekBar2);
+        AOHPCTCSeekBar seekbar = views.get(3).findViewById(R.id.fragmentviewpageAOHPCTCSeekBar2);
         seekbar.setThumb(getActivity().getDrawable(R.drawable.ic_call));
         //seekbar.setThumbOffset(200);
         //seekbar.setThumbOffset(1);

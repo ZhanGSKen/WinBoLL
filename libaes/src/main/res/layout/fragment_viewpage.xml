@@ -12,26 +12,6 @@
 		android:layout_height="wrap_content"
 		android:text="AOHPCTCSeekBar"/>
 
-	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center">
-
-		<cc.winboll.studio.libaes.views.AOHPCTCSeekBar
-			android:layout_width="300dp"
-			android:layout_height="wrap_content"
-			android:id="@+id/fragmentviewpageAOHPCTCSeekBar1"
-			android:padding="10dp"/>
-
-		<cc.winboll.studio.libaes.views.AOHPCTCSeekBar
-			android:layout_width="300dp"
-			android:layout_height="wrap_content"
-			android:id="@+id/fragmentviewpageAOHPCTCSeekBar2"
-			android:padding="10dp"/>
-
-	</LinearLayout>
-
 	<androidx.viewpager.widget.ViewPager
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
