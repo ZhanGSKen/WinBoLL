@@ -55,7 +55,8 @@ public class AOHPCTCSeekBar extends SeekBar {
     }
 
     void initView(Context context) {
-
+        // 初始化图标位置
+        setThumbOffset(0);
     }
 
     @Override
