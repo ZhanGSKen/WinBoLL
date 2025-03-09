@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<cc.winboll.studio.libaes.views.ASupportToolbar
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/toolbar_height"
+		android:layout_gravity="center"
+		android:id="@+id/activitymainASupportToolbar1"/>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<cc.winboll.studio.mymessagemanager.views.ConfirmSwitchView
+			android:layout_width="match_parent"
+			android:layout_height="60dp"
+			android:padding="10dp"
+			android:text="@string/text_mainservice"
+			android:id="@+id/activitymainSwitchView1"/>
+
+		<cc.winboll.studio.mymessagemanager.views.ConfirmSwitchView
+			android:layout_width="match_parent"
+			android:layout_height="60dp"
+			android:padding="10dp"
+			android:text="@string/text_onlyreceivecontacts"
+			android:id="@+id/activitymainSwitchView2"/>
+
+		<cc.winboll.studio.mymessagemanager.views.ConfirmSwitchView
+			android:layout_width="match_parent"
+			android:layout_height="60dp"
+			android:padding="10dp"
+			android:text="@string/text_usingtts"
+			android:id="@+id/activitymainSwitchView3"/>
+
+		<cc.winboll.studio.mymessagemanager.views.ConfirmSwitchView
+			android:layout_width="match_parent"
+			android:layout_height="60dp"
+			android:padding="10dp"
+			android:text="@string/text_usingttsrule"
+			android:id="@+id/activitymainSwitchView4"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/activitymainButton1"
+			android:text="@string/text_sendsms"/>
+
+	</LinearLayout>
+
+	<com.baoyz.widget.PullRefreshLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1.0"
+		android:id="@+id/activitymainPullRefreshLayout1">
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:id="@+id/activitymainScrollView1">
+
+			<cc.winboll.studio.mymessagemanager.views.PhoneListViewForScrollView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/activitymainListView1"/>
+
+		</ScrollView>
+
+	</com.baoyz.widget.PullRefreshLayout>
+
+	<cc.winboll.studio.shared.log.LogView
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="120dp"
+		android:id="@+id/logview"/>
+
+</LinearLayout>
+

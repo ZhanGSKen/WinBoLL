@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@drawable/bg_frame"
+	android:padding="10dp">
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_centerVertical="true">
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Text"
+			android:id="@+id/listviewsmsrecycleTextView1"
+			android:padding="10dp"/>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/text_smsdeletetime"/>
+
+			<cc.winboll.studio.mymessagemanager.views.DateAgoTextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Text"
+				android:paddingLeft="10dp"
+				android:paddingRight="10dp"
+				android:id="@+id/listviewsmsrecycleDateAgoTextView1"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<View
+				android:layout_width="32dp"
+				android:layout_height="wrap_content"
+				android:id="@+id/listviewsmsrecycleView1"/>
+
+			<cc.winboll.studio.mymessagemanager.views.SMSView
+				xmlns:app="http://schemas.android.com/apk/res-auto"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				app:cardCornerRadius="12dp"
+				app:cardElevation="5dp"
+				app:cardUseCompatPadding="true"
+				android:elevation="5dp"
+				android:translationZ="5dp"
+				android:clickable="true"
+				android:foreground="?android:attr/selectableItemBackground"
+				app:cardBackgroundColor="@color/colorAccent"
+				android:layout_weight="1.0"
+				android:id="@+id/listviewsmsrecycleSMSView1">
+
+				<include
+					layout="@layout/listview_sms_part1"/>
+
+			</cc.winboll.studio.mymessagemanager.views.SMSView>
+
+			<View
+				android:layout_width="32dp"
+				android:layout_height="wrap_content"
+				android:id="@+id/listviewsmsrecycleView2"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</RelativeLayout>
+

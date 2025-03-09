@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<item android:title="@string/app_theme">
+        <menu>-->
+            <!-- 定义一组单选按钮 -->
+            <!-- checkableBehavior的可选值由三个：single设置为单选，all为多选，none为普通选项 -->
+    <!--        <group android:checkableBehavior="single">
+                <item android:id="@+id/app_defaulttheme" android:title="@string/app_defaulttheme"/>
+                <item android:id="@+id/app_skytheme" android:title="@string/app_skytheme"/>
+                <item android:id="@+id/app_goldentheme" android:title="@string/app_goldentheme"/>
+            </group>
+        </menu>
+    </item>-->
+    <item
+        android:id="@+id/app_ttsrule"
+        android:title="@string/text_ttsrule"/>
+    <item
+        android:id="@+id/app_smsrule"
+        android:title="@string/text_smsrule"/>
+    <item android:title="@string/app_developoptions">
+        <menu>
+            <item
+                android:id="@+id/app_crashtest"
+                android:title="@string/app_crashtest"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/app_appsettings"
+        android:title="@string/text_appsettings"/>
+    <item
+        android:id="@+id/app_about"
+        android:title="@string/app_about"/>
+    <item
+        android:id="@+id/app_smsrecycle"
+        android:title="@string/app_smsrecycle"/>
+</menu>
