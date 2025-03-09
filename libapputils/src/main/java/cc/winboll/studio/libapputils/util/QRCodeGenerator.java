@@ -6,18 +6,12 @@ package cc.winboll.studio.libapputils.util;
  * @Describe 二维码工具
  */
 import android.graphics.Bitmap;
-import android.widget.TextView;
-import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class QRCodeGenerator {
 

@@ -1,6 +1,6 @@
 package cc.winboll.studio.libapputils.git;
 import android.content.Context;
-import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;

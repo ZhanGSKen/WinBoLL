@@ -11,22 +11,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.app.WinBollActivity;
-import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
+import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.SimpleWebView;
-import com.hjq.toast.ToastUtils;
 import java.io.IOException;
 import java.io.InputStream;
-import android.os.PersistableBundle;
 
-public class AssetsHtmlActivity extends WinBollActivity {
+public class AssetsHtmlActivity extends AppCompatActivity implements IWinBollActivity {
 
     public static final String TAG = "AssetsHtmlActivity";
-    
+
     public static final String EXTRA_HTMLFILENAME = "EXTRA_HTMLFILENAME";
-    
+
     String mszHelpIndexFilePath = "";
     Uri mszHelpIndexFileUri;
     Context mContext;
@@ -35,23 +35,33 @@ public class AssetsHtmlActivity extends WinBollActivity {
     String mszHtmlFileName;
 
     @Override
+    public AppCompatActivity getActivity() {
+        return this;
+    }
+
+    @Override
+    public APPInfo getAppInfo() {
+        return null;
+    }
+    
+    @Override
     public String getTag() {
         return TAG;
     }
 
     @Override
-    protected boolean isEnableDisplayHomeAsUp() {
+    public boolean isEnableDisplayHomeAsUp() {
         return true;
     }
 
 
     @Override
-    protected boolean isAddWinBollToolBar() {
+    public boolean isAddWinBollToolBar() {
         return false;
     }
 
     @Override
-    protected Toolbar initToolBar() {
+    public Toolbar initToolBar() {
         return findViewById(R.id.activityassetshtmlToolbar1);
     }
 
@@ -81,7 +91,7 @@ public class AssetsHtmlActivity extends WinBollActivity {
             if (szTemp != null && !szTemp.trim().equals("")) {
                 mszHtmlFileName = szTemp.trim();
             }
-            ToastUtils.show(mszHtmlFileName);
+            //ToastUtils.show(mszHtmlFileName);
         }
 
         // 与其他应用分享 html 帮助
@@ -105,13 +115,6 @@ public class AssetsHtmlActivity extends WinBollActivity {
 //        //myWebView.loadUrl(url);
 //
 //        myWebView.loadUrl(mszHelpIndexFileUri.toString());
-    }
-
-    @Override
-    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onPostCreate(savedInstanceState, persistentState);
-        setSubTitle(mszHtmlFileName);
-        //setSubTitle(TAG);
     }
 
     //

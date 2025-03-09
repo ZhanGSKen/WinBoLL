@@ -5,7 +5,7 @@ package cc.winboll.studio.libapputils.app;
  * @Date 2024/08/12 14:45:35
  * @Describe 应用版本工具集
  */
-import com.hjq.toast.ToastUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +23,7 @@ public class AppVersionUtils {
     //       true 新版本 == 当前版本
     //
     public static boolean isHasNewVersion2(String szCurrentName, String szNextName) {
+        LogUtils.d(TAG, String.format("isHasNewVersion2\nszCurrentName : %s\nszNextName : %s", szCurrentName, szNextName));
         //szCurrentName = "AES_6.2.0-beta0_3234.apk";
         //szNextName = "AES_6.1.12.apk";
         //szCurrentName = "AES_6.2.0-beta0_3234.apk";
@@ -77,8 +78,9 @@ public class AppVersionUtils {
         //LogUtils.d(TAG, "App version is the newest. ");
         return false;
     }
-    
+
     public static boolean isHasNewStageReleaseVersion(String szCurrentName, String szNextName) {
+        LogUtils.d(TAG, String.format("isHasNewStageReleaseVersion\nszCurrentName : %s\nszNextName : %s", szCurrentName, szNextName));
         //szCurrentName = "AES_6.2.12.apk";
         //szNextName = "AES_6.3.12.apk";
         if (checkNewVersion(getCodeInPackageName(szCurrentName), getCodeInPackageName(szNextName))) {
@@ -96,6 +98,10 @@ public class AppVersionUtils {
     // 返回 ：true 新版本 > 当前版本
     //
     public static Boolean checkNewVersion(String szCurrentCode, String szNextCode) {
+        if (szCurrentCode == null || szCurrentCode.equals("") || szNextCode == null || szNextCode.equals("")) {
+            LogUtils.d(TAG, String.format("checkNewVersion unexpected parameters:\nszCurrentCode : %s\nszNextCode : %s", szCurrentCode, szNextCode));
+            return false;
+        }
         boolean isNew = false;
         String[] appVersionCurrent = szCurrentCode.split("\\.");
         String[] appVersionNext = szNextCode.split("\\.");
@@ -106,7 +112,7 @@ public class AppVersionUtils {
             if (Integer.parseInt(appVersionNext[i]) > Integer.parseInt(appVersionCurrent[i])) {
                 isNew = true;
                 return isNew;
-            } else if(Integer.parseInt(appVersionNext[i]) == Integer.parseInt(appVersionCurrent[i])) {
+            } else if (Integer.parseInt(appVersionNext[i]) == Integer.parseInt(appVersionCurrent[i])) {
                 continue ;
             } else {
                 isNew = false;
@@ -122,14 +128,17 @@ public class AppVersionUtils {
     // 如 ：AppUtils_7.0.4.apk 版本号为 7.0.4
     //
     public static String getCodeInPackageName(String apkName) {
+        LogUtils.d(TAG, String.format("getCodeInPackageName apkName : %s", apkName));
         //String apkName = "AppUtils_7.0.0.apk";
         Pattern pattern = Pattern.compile("\\d+\\.\\d+\\.\\d+");
         Matcher matcher = pattern.matcher(apkName);
         if (matcher.find()) {
             String version = matcher.group();
+            LogUtils.d(TAG, String.format("version is %s", version));
             return version;
             //System.out.println("Version number: " + version); // 输出：7.0.0
         }
+        LogUtils.d(TAG, String.format("No result."));
         return "";
     }
 
@@ -149,5 +158,4 @@ public class AppVersionUtils {
         }
         return "";
     }
-
 }

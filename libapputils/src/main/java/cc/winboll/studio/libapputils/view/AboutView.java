@@ -16,12 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.AppVersionUtils;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
-import cc.winboll.studio.libapputils.app.WinBollApplication;
+import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.bean.DebugBean;
-import cc.winboll.studio.libapputils.log.LogUtils;
 import cc.winboll.studio.libapputils.util.PrefUtils;
 import com.hjq.toast.ToastUtils;
 import java.io.IOException;
@@ -41,6 +42,8 @@ public class AboutView extends LinearLayout {
     public static final int MSG_APPUPDATE_CHECKED = 0;
 
     Context mContext;
+    APPInfo mAPPInfo;
+
     WinBollServiceStatusView mWinBollServiceStatusView;
     OnRequestDevUserInfoAutofillListener mOnRequestDevUserInfoAutofillListener;
     String mszAppName = "";
@@ -55,38 +58,70 @@ public class AboutView extends LinearLayout {
     String mszGitea = "";
     int mnAppIcon = 0;
     String mszWinBollServerHost;
-    String mszReleaseAPKName;
+    //String mszReleaseAPKName;
     EditText metDevUserName;
     EditText metDevUserPassword;
 
+    public AboutView(Context context, APPInfo appInfo) {
+        super(context);
+        mContext = context;
+        
+        setAPPInfo(appInfo);
+        initView(context);
+    }
+
     public AboutView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
+        
         initView(context, attrs);
     }
 
-    void initView(Context context, AttributeSet attrs) {
-        mContext = context;
-        mszWinBollServerHost = WinBollApplication.isDebug() ?  "http://10.8.0.13": "https://www.winboll.cc";
+    public void setAPPInfo(APPInfo appInfo) {
+        mAPPInfo = appInfo;
+    }
+
+    APPInfo createAppInfo(Context context, AttributeSet attrs) {
+        APPInfo appInfo = new APPInfo();
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.AboutView);
-        mszAppName = typedArray.getString(R.styleable.AboutView_app_name);
-        mszAppAPKFolderName = typedArray.getString(R.styleable.AboutView_app_apkfoldername);
-        mszAppAPKName = typedArray.getString(R.styleable.AboutView_app_apkname);
-        mszAppGitName = typedArray.getString(R.styleable.AboutView_app_gitname);
-        mszAppDescription = typedArray.getString(R.styleable.AboutView_appdescription);
-        mnAppIcon = typedArray.getResourceId(R.styleable.AboutView_appicon, R.drawable.ic_winboll);
+        appInfo.setAppName(typedArray.getString(R.styleable.AboutView_app_name));
+        appInfo.setAppAPKFolderName(typedArray.getString(R.styleable.AboutView_app_apkfoldername));
+        appInfo.setAppAPKName(typedArray.getString(R.styleable.AboutView_app_apkname));
+        appInfo.setAppGitName(typedArray.getString(R.styleable.AboutView_app_gitname));
+        appInfo.setAppGitOwner(typedArray.getString(R.styleable.AboutView_app_gitowner));
+        appInfo.setAppGitAPPBranch(typedArray.getString(R.styleable.AboutView_app_gitappbranch));
+        appInfo.setAppGitAPPSubProjectFolder(typedArray.getString(R.styleable.AboutView_app_gitappsubprojectfolder));
+        appInfo.setAppDescription(typedArray.getString(R.styleable.AboutView_appdescription));
+        appInfo.setAppIcon(typedArray.getResourceId(R.styleable.AboutView_appicon, R.drawable.ic_winboll));
         // 返回一个绑定资源结束的信号给资源
         typedArray.recycle();
+        return appInfo;
+    }
+
+    void initView(Context context) {
+        mszAppName = mAPPInfo.getAppName();
+        mszAppAPKFolderName = mAPPInfo.getAppAPKFolderName();
+        mszAppAPKName = mAPPInfo.getAppAPKName();
+        mszAppGitName = mAPPInfo.getAppGitName();
+        mszAppDescription = mAPPInfo.getAppDescription();
+        mnAppIcon = mAPPInfo.getAppIcon();
+
+        mszWinBollServerHost = GlobalApplication.isDebuging() ?  "https://dev.winboll.cc": "https://www.winboll.cc";
 
         try {
             mszAppVersionName = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }
-        mszCurrentAppPackageName = mszAppName + "_" + mszAppVersionName + ".apk";
+        mszCurrentAppPackageName = mszAppAPKName + "_" + mszAppVersionName + ".apk";
         mszHomePage = mszWinBollServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
-        mszGitea = "https://gitea.winboll.cc/Studio/" + mszAppGitName + ".git";
+        if(mAPPInfo.getAppGitAPPBranch().equals("")) {
+            mszGitea = "https://gitea.winboll.cc/" + mAPPInfo.getAppGitOwner() + "/" + mszAppGitName;
+        } else {
+        mszGitea = "https://gitea.winboll.cc/" + mAPPInfo.getAppGitOwner() + "/" + mszAppGitName + "/src/branch/" + mAPPInfo.getAppGitAPPBranch() + "/" + mAPPInfo.getAppGitAPPSubProjectFolder();
+}
 
-        if (WinBollApplication.isDebug()) {
+        if (GlobalApplication.isDebuging()) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View addedView = inflater.inflate(R.layout.view_about_dev, this, false);
             LinearLayout llMain = addedView.findViewById(R.id.viewaboutdevLinearLayout1);
@@ -120,15 +155,21 @@ public class AboutView extends LinearLayout {
         //llMain.addView(createAboutPage());
 
         // 就读取正式版应用包版本号，设置 Release 应用包文件名
-        String szReleaseAppVersionName = "";
-        try {
-            szReleaseAppVersionName = mContext.getPackageManager().getPackageInfo(subBetaSuffix(mContext.getPackageName()), 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-        }
-        mszReleaseAPKName = mszAppAPKName + "_" + szReleaseAppVersionName + ".apk";
+//        String szReleaseAppVersionName = "";
+//        try {
+//            //LogUtils.d(TAG, String.format("mContext.getPackageName() %s", mContext.getPackageName()));
+//            String szSubBetaSuffix = subBetaSuffix(mContext.getPackageName());
+//            //LogUtils.d(TAG, String.format("szSubBetaSuffix : %s", szSubBetaSuffix));
+//            szReleaseAppVersionName = mContext.getPackageManager().getPackageInfo(szSubBetaSuffix, 0).versionName;
+//        } catch (PackageManager.NameNotFoundException e) {
+//            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+//        }
+//        mszReleaseAPKName = mszAppAPKName + "_" + szReleaseAppVersionName + ".apk";
+    }
 
-
+    void initView(Context context, AttributeSet attrs) {
+        mAPPInfo = createAppInfo(context, attrs);
+        initView(context);
     }
 
     public static String subBetaSuffix(String input) {
@@ -150,10 +191,13 @@ public class AboutView extends LinearLayout {
                          return;
                          }*/
 
-                        if (!AppVersionUtils.isHasNewStageReleaseVersion(mszReleaseAPKName, mszNewestAppPackageName)) {
+//                        if (!AppVersionUtils.isHasNewStageReleaseVersion(mszReleaseAPKName, mszNewestAppPackageName)) {
+//                            ToastUtils.delayedShow("Current app is the newest.", 5000);
+//                        } 
+                        if (!AppVersionUtils.isHasNewVersion2(mszCurrentAppPackageName, mszNewestAppPackageName)) {
                             ToastUtils.delayedShow("Current app is the newest.", 5000);
                         } else {
-                            String szMsg = "Current app is :\n[ " + mszReleaseAPKName
+                            String szMsg = "Current app is :\n[ " + mszCurrentAppPackageName
                                 + " ]\nThe last app is :\n[ " + mszNewestAppPackageName
                                 + " ]\nIs download the last app?";
                             YesNoAlertDialog.show(mContext, "Application Update Prompt", szMsg, mIsDownlaodUpdateListener);
@@ -168,7 +212,7 @@ public class AboutView extends LinearLayout {
         // 定义应用调试按钮
         //
         Element elementAppMode;
-        if (WinBollApplication.isDebug()) {
+        if (GlobalApplication.isDebuging()) {
             elementAppMode = new Element(mContext.getString(R.string.app_normal), R.drawable.ic_winboll);
             elementAppMode.setOnClickListener(mAppNormalOnClickListener);
         } else {
@@ -200,7 +244,7 @@ public class AboutView extends LinearLayout {
             //.addItem(versionElement)
             //.addItem(adsElement)
             //.addGroup("Connect with us")
-            .addEmail("ZhanGSKen@QQ.COM")
+            .addEmail("ZhanGSKen@AliYun.Com")
             .addWebsite(mszHomePage)
             .addItem(elementAppMode)
             .addItem(elementGitWeb)
@@ -234,7 +278,7 @@ public class AboutView extends LinearLayout {
         if (intent != null) {
             intent.setAction(cc.winboll.studio.libapputils.intent.action.DEBUGVIEW);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            WinBollApplication.setIsDebug(true);
+            GlobalApplication.setIsDebuging(context, true);
             DebugBean.saveBean(context, new DebugBean(true));
 
             WinBollActivityManager.getInstance(context).finishAll();
@@ -246,7 +290,7 @@ public class AboutView extends LinearLayout {
         Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
         if (intent != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            WinBollApplication.setIsDebug(false);
+            GlobalApplication.setIsDebuging(context, false);
             DebugBean.saveBean(context, new DebugBean(false));
 
             WinBollActivityManager.getInstance(context).finishAll();
@@ -272,7 +316,7 @@ public class AboutView extends LinearLayout {
                         String szUrl = mszWinBollServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
                         // 构建包含认证信息的请求
                         String credential = "";
-                        if (WinBollApplication.isDebug()) {
+                        if (GlobalApplication.isDebuging()) {
                             credential = Credentials.basic(metDevUserName.getText().toString(), metDevUserPassword.getText().toString());
                             PrefUtils.saveString(mContext, "metDevUserName", metDevUserName.getText().toString());
                             PrefUtils.saveString(mContext, "metDevUserPassword", metDevUserPassword.getText().toString());

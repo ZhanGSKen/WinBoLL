@@ -5,15 +5,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.drawable.Drawable;
 import android.os.IBinder;
-import android.os.IInterface;
-import android.os.Parcel;
-import android.os.RemoteException;
-import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libapputils.util.ServiceUtils;
 import com.hjq.toast.ToastUtils;
-import java.io.FileDescriptor;
-import android.graphics.drawable.Drawable;
 
 /**
  * @Author ZhanGSKen@QQ.COM
