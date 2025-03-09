@@ -53,7 +53,8 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogAdapter.CallLogV
 
         // 初始化拉动后拨号控件 
         holder.dialAOHPCTCSeekBar.setThumb(holder.itemView.getContext().getDrawable(R.drawable.ic_call));
-        holder.dialAOHPCTCSeekBar.setThumbOffset(20);
+        holder.dialAOHPCTCSeekBar.setBlurRightDP(80);
+        //holder.dialAOHPCTCSeekBar.setThumbOffset(10);
         holder.dialAOHPCTCSeekBar.setOnOHPCListener(
             new AOHPCTCSeekBar.OnOHPCListener(){
                 @Override
