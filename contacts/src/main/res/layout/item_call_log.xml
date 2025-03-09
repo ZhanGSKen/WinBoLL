@@ -6,32 +6,73 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content">
 
-	<TextView
-		android:id="@+id/phone_number"
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:id="@+id/phone_number"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textSize="18sp"
+			android:textStyle="bold"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:id="@+id/call_status"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="14sp"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:id="@+id/call_date"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="14sp"/>
+
+	</LinearLayout>
+
+	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textSize="16sp"
-		android:textStyle="bold"/>
+		android:padding="10dp">
 
-	<TextView
-		android:id="@+id/call_status"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textSize="14sp"
-		android:layout_marginTop="4dp"/>
+		<View
+			android:layout_width="20dp"
+			android:layout_height="20dp"
+			android:background="#FFE7E7E7"
+			android:id="@+id/itemcalllogView1"
+			android:layout_alignParentLeft="true"/>
 
-	<TextView
-		android:id="@+id/call_date"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textSize="14sp"
-		android:layout_marginTop="4dp"/>
+		<cc.winboll.studio.libaes.views.AOHPCTCSeekBar
+			android:layout_toRightOf="@id/itemcalllogView1"
+			android:layout_toLeftOf="@id/itemcalllogView2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/aohpctcseekbar_dial"/>
 
-	<cc.winboll.studio.libaes.views.AOHPCTCSeekBar
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/aohpctcseekbar_dial"
-		android:padding="10dp"/>
+		<View
+			android:layout_width="20dp"
+			android:layout_height="20dp"
+			android:background="#FFE7E7E7"
+			android:id="@+id/itemcalllogView2"
+			android:layout_alignParentRight="true"/>
+
+	</RelativeLayout>
 
 </LinearLayout>
 

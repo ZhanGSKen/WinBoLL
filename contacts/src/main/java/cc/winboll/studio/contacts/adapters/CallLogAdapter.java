@@ -46,7 +46,7 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogAdapter.CallLogV
     @Override
     public void onBindViewHolder(@NonNull CallLogViewHolder holder, int position) {
         final CallLogModel callLog = callLogList.get(position);
-        holder.phoneNumber.setText(callLog.getPhoneNumber() + " ☎ " + mContactUtils.getContactsName(callLog.getPhoneNumber()));
+        holder.phoneNumber.setText(callLog.getPhoneNumber() + "☎" + mContactUtils.getContactsName(callLog.getPhoneNumber()));
         holder.callStatus.setText(callLog.getCallStatus());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         holder.callDate.setText(dateFormat.format(callLog.getCallDate()));
@@ -54,7 +54,7 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogAdapter.CallLogV
         // 初始化拉动后拨号控件 
         holder.dialAOHPCTCSeekBar.setThumb(holder.itemView.getContext().getDrawable(R.drawable.ic_call));
         holder.dialAOHPCTCSeekBar.setBlurRightDP(80);
-        //holder.dialAOHPCTCSeekBar.setThumbOffset(10);
+        holder.dialAOHPCTCSeekBar.setThumbOffset(0);
         holder.dialAOHPCTCSeekBar.setOnOHPCListener(
             new AOHPCTCSeekBar.OnOHPCListener(){
                 @Override
