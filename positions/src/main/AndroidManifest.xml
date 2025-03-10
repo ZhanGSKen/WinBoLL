@@ -60,6 +60,7 @@
         </activity>
 
         <activity android:name=".MainSimpleActivity">
+
         </activity>
 
         <activity android:name="com.tencent.map.vector.demo.DemoMainActivity">
@@ -734,6 +735,8 @@
             android:value="SCYBZ-EC5Y4-XMHUI-FX2PU-ZYMMS-IBB7P"/>
 
         <activity android:name="cc.winboll.studio.positions.activities.TestMapViewActivity"/>
+
+        <activity android:name="cc.winboll.studio.positions.activities.JointPositioningActivity"/>
 
     </application>
 

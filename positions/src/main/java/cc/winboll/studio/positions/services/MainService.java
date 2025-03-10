@@ -18,8 +18,9 @@ import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.SOS;
-import cc.winboll.studio.libappbase.bean.APPSOSBean;
+import cc.winboll.studio.libappbase.sos.SOS;
+import cc.winboll.studio.libappbase.sos.WinBoll;
+import cc.winboll.studio.positions.App;
 import cc.winboll.studio.positions.beans.MainServiceBean;
 import cc.winboll.studio.positions.handlers.MainServiceHandler;
 import cc.winboll.studio.positions.receivers.MainReceiver;
@@ -89,14 +90,18 @@ public class MainService extends Service {
             // 唤醒守护进程
             wakeupAndBindAssistant();
             // 召唤 WinBoll APP 绑定本服务
-            SOS.bindToAPPService(this, new APPSOSBean(getPackageName(), MainService.class.getName()));
+            if (App.isDebuging()) {
+                WinBoll.bindToAPPBaseBeta(this, MainService.class.getName());
+            } else {
+                WinBoll.bindToAPPBase(this, MainService.class.getName());
+            }
 
             if (mMainReceiver == null) {
                 // 注册广播接收器
                 mMainReceiver = new MainReceiver(this);
                 mMainReceiver.registerAction(this);
             }
-            
+
 
             MainServiceThread.getInstance(this, mMainServiceHandler).start();
 
@@ -172,7 +177,11 @@ public class MainService extends Service {
             if (mMainServiceBean.isEnable()) {
                 // 唤醒守护进程
                 wakeupAndBindAssistant();
-                SOS.sosWinBollService(getApplicationContext(), new APPSOSBean(getPackageName(), MainService.class.getName()));
+                if (App.isDebuging()) {
+                    SOS.sosToAppBaseBeta(MainService.this, MainService.class.getName());
+                } else {
+                    SOS.sosToAppBase(MainService.this, MainService.class.getName());
+                }
             }
             isBound = false;
             mAssistantService = null;

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.telecom.TelecomManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +28,7 @@ import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
 import cc.winboll.studio.positions.R;
+import cc.winboll.studio.positions.activities.JointPositioningActivity;
 import cc.winboll.studio.positions.activities.SettingsActivity;
 import cc.winboll.studio.positions.beans.MainServiceBean;
 import cc.winboll.studio.positions.fragments.LogFragment;
@@ -308,6 +308,10 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.item_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
+        } else if (item.getItemId() == R.id.item_joint_positioning) {
+            Intent intent = new Intent(this, JointPositioningActivity.class);
             startActivity(intent);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
         } else if (item.getItemId() == R.id.item_demomain) {

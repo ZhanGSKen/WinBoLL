@@ -6,13 +6,9 @@ package cc.winboll.studio.positions.activities;
  */
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import cc.winboll.studio.positions.R;
 import cc.winboll.studio.positions.views.GridMapView;
-import android.view.View.OnClickListener;
-import android.view.View;
 
 public class GridMapActivity extends AppCompatActivity {
 

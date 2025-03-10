@@ -77,11 +77,13 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
     private MyLocationStyle mMyLocationStyle;
     ArrayList<PostionModel> locationPostionModelList;
     Location lastLocation;
+    static TXMSFragment _TXMSFragment;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        _TXMSFragment = TXMSFragment.this;
         View viewRoot = inflater.inflate(R.layout.fragment_txms, container, false);
         locationPostionModelList = new ArrayList<PostionModel>();
 
@@ -121,31 +123,31 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         loadLocations();
 
         /*UiSettings uiSettings = tencentMap.getUiSettings();
-        uiSettings.setAllGesturesEnabled(true);
-        mTencentLocationManager = TencentLocationManager.getInstance(getActivity());
-        //创建定位请求
-        mTencentLocationRequest = TencentLocationRequest.create();
-        mTencentLocationManager.requestLocationUpdates(mTencentLocationRequest, this);
+         uiSettings.setAllGesturesEnabled(true);
+         mTencentLocationManager = TencentLocationManager.getInstance(getActivity());
+         //创建定位请求
+         mTencentLocationRequest = TencentLocationRequest.create();
+         mTencentLocationManager.requestLocationUpdates(mTencentLocationRequest, this);
 
-        //地图上设置定位数据源
-        tencentMap.setLocationSource(this);
-        //设置当前位置可见
-        tencentMap.setMyLocationEnabled(true);
-        //设置定位图标样式
-        MyLocationStyle myLocationStyle = new MyLocationStyle();
-        tencentMap.setMyLocationEnabled(true);
-        tencentMap.setMyLocationStyle(myLocationStyle);
-        //startLocation();
-        */
+         //地图上设置定位数据源
+         tencentMap.setLocationSource(this);
+         //设置当前位置可见
+         tencentMap.setMyLocationEnabled(true);
+         //设置定位图标样式
+         MyLocationStyle myLocationStyle = new MyLocationStyle();
+         tencentMap.setMyLocationEnabled(true);
+         tencentMap.setMyLocationStyle(myLocationStyle);
+         //startLocation();
+         */
 
         //
         // 本机 GPS 定位服务调用服务
         //
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
-        String provider = LocationManager.GPS_PROVIDER;
-        Location location = locationManager.getLastKnownLocation(provider);
-        locationManager.requestLocationUpdates(provider, 2000, 10, locationListener);
-        moveToLocation(location);
+//        LocationManager locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+//        String provider = LocationManager.GPS_PROVIDER;
+//        Location location = locationManager.getLastKnownLocation(provider);
+//        locationManager.requestLocationUpdates(provider, 2000, 10, locationListener);
+//        moveToLocation(location);
 
         return viewRoot;
     }
@@ -193,7 +195,7 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
 //            double longitude = location.getLongitude();
             String szTemp = String.format("Latitude %f, Longitude %f, Accuracy %f", location.getLatitude(), location.getLongitude(), location.getAccuracy());
             LogUtils.d(TAG, szTemp);
-            
+
             moveToLocation(location);
         }
 
@@ -208,6 +210,21 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
     };
 
 
+    // 创建Location对象方法
+    private Location createLocationFromLatLng(double latitudeLock, double longitudeLock) {
+        Location location = new Location("Tencent_Map_Manual");
+
+        // 设置基础坐标
+        location.setLatitude(latitudeLock);
+        location.setLongitude(longitudeLock);
+
+        // 设置必要元数据
+        location.setTime(System.currentTimeMillis());
+        location.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+        location.setAccuracy(5.0f); // 手动点击精度设为5米
+
+        return location;
+    }
 
     // 创建Location对象方法
     private Location createLocationFromLatLng(LatLng latLng) {
@@ -257,7 +274,7 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
             switch (msg.what) {
                 case REALTIME_POSITIONING:
                     // 在这里处理接收到消息后的逻辑，比如更新 UI
-                    
+
                     break;
                 default:
                     break;
@@ -328,6 +345,13 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         return bitmap;
     }
 
+    public static void moveToLocation(double latitudeLock, double longitudeLock) {
+        if (_TXMSFragment != null) {
+            Location location = _TXMSFragment.createLocationFromLatLng(latitudeLock, longitudeLock);
+            _TXMSFragment.moveToLocation(location);
+        }
+    }
+
     private void moveToLocation(Location location) {
         ToastUtils.show(String.format("%s", location.toString()));
 
@@ -349,7 +373,7 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         handler.sendMessage(message);
     }
 
-    
+
 
 
     /**

@@ -12,11 +12,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.positions.beans.MainServiceBean;
 import cc.winboll.studio.positions.services.MainService;
-import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.SOS;
-import cc.winboll.studio.libappbase.bean.APPSOSBean;
 
 public class AssistantService extends Service {
 

@@ -16,12 +16,12 @@ import android.view.WindowManager;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
+import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.positions.R;
 import com.hjq.toast.ToastUtils;
 import java.lang.reflect.Field;
-import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.libappbase.IWinBollActivity;
-import cc.winboll.studio.libappbase.bean.APPInfo;
 
 public class SettingsActivity extends AppCompatActivity implements IWinBollActivity {
 
