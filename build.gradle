@@ -9,13 +9,14 @@ buildscript {
         maven { url "https://jitpack.io" }
         mavenCentral()
         google()
-        mavenLocal()
+        
         // Nexus Maven 库地址
         // "WinBoll Release"
         maven { url "https://nexus.winboll.cc/repository/maven-public/" }
         // "WinBoll Snapshot"
         maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
         
+        mavenLocal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.2.1'
@@ -26,13 +27,6 @@ buildscript {
 
 allprojects {
     repositories {
-        maven {
-            url "https://mirrors.tencent.com/repository/maven/tencent_public/"
-        }
-        maven {
-            url "https://mirrors.tencent.com/repository/maven/tencent_public_snapshots"
-        }
-        
         maven { url 'https://maven.aliyun.com/repository/public/' } 
         maven { url 'https://maven.aliyun.com/repository/google/' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
@@ -41,13 +35,14 @@ allprojects {
         maven { url "https://jitpack.io" }
         mavenCentral()
         google()
-        mavenLocal()
+        
         // Nexus Maven 库地址
         // "WinBoll Release"
         maven { url "https://nexus.winboll.cc/repository/maven-public/" }
         // "WinBoll Snapshot"
         maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
         
+        mavenLocal()
     }
     ext {
         // 定义全局变量，常用于版本管理

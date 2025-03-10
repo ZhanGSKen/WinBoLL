@@ -35,8 +35,7 @@ public class MainServiceBean extends BaseBean {
     @Override
     public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
         super.writeThisToJsonWriter(jsonWriter);
-        MainServiceBean bean = this;
-        jsonWriter.name("isEnable").value(bean.isEnable());
+        jsonWriter.name("isEnable").value(isEnable());
 
     }
 

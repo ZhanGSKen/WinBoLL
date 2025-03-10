@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<cc.winboll.studio.libaes.views.ASupportToolbar
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/toolbar_height"
+		android:id="@+id/activityttsplayruleASupportToolbar1"/>
+
+	<RelativeLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1.0">
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:layout_above="@+id/activityttsplayruleLinearLayout2"
+			android:layout_alignParentTop="true"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:isScrollContainer="false"
+			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+			app:reverseLayout="false"
+			android:id="@+id/activityttsplayruleRecyclerView1"/>
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="234dp"
+			android:id="@+id/activityttsplayruleLinearLayout1"/>
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/activityttsplayruleLinearLayout1"
+			android:background="@drawable/bg_frame"
+			android:id="@+id/activityttsplayruleLinearLayout2"
+			android:layout_alignParentBottom="true"
+			android:padding="10dp">
+
+			<ScrollView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<LinearLayout
+					android:orientation="vertical"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content">
+
+					<LinearLayout
+						android:orientation="vertical"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center_horizontal">
+
+						<RelativeLayout
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content">
+
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="测试文本："
+								android:id="@+id/activityttsplayruleTextView1"
+								android:layout_centerVertical="true"/>
+
+							<Button
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="✈"
+								android:layout_toRightOf="@id/activityttsplayruleTextView1"
+								android:layout_centerVertical="true"
+								android:onClick="onScrollToDemoSMSTextMatchingRule"/>
+
+						</RelativeLayout>
+
+						<EditText
+							android:layout_width="match_parent"
+							android:inputType="textMultiLine"
+							android:layout_height="wrap_content"
+							android:ems="10"
+							android:id="@+id/activityttsplayruleEditText1"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center_horizontal">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="搜索字串："/>
+
+						<EditText
+							android:layout_width="0dp"
+							android:inputType="textMultiLine"
+							android:layout_height="wrap_content"
+							android:ems="10"
+							android:id="@+id/activityttsplayruleEditText2"
+							android:layout_weight="1.0"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center_horizontal">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="语音字串："/>
+
+						<EditText
+							android:layout_width="0dp"
+							android:inputType="textMultiLine"
+							android:layout_height="wrap_content"
+							android:ems="10"
+							android:id="@+id/activityttsplayruleEditText3"
+							android:layout_weight="1.0"/>
+
+					</LinearLayout>
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center">
+
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							style="?android:attr/buttonStyle"
+							android:text="♬"
+							android:id="@+id/activityttsplayruleButton1"/>
+
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							style="?android:attr/buttonStyle"
+							android:text="√"
+							android:id="@+id/activityttsplayruleButton2"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+			</ScrollView>
+
+		</LinearLayout>
+
+	</RelativeLayout>
+
+</LinearLayout>
+

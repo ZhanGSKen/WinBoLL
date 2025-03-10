@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<cc.winboll.studio.libaes.views.AToolbar
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/toolbar_height"
+		android:id="@+id/activitycomposesmsASupportToolbar1"/>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/bg_frame">
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/activitycomposesmsRelativeLayout1">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="SMS TO : "
+				android:id="@+id/activitycomposesmsTextView1"
+				android:layout_alignParentLeft="true"
+				android:layout_marginLeft="10dp"
+				android:layout_centerVertical="true"/>
+
+			<EditText
+				android:layout_toRightOf="@id/activitycomposesmsTextView1"
+				android:layout_width="wrap_content"
+				android:inputType="phone"
+				android:layout_height="wrap_content"
+				android:ems="10"
+				android:id="@+id/activitycomposesmsEditText1"
+				android:layout_alignParentRight="true"
+				android:layout_marginRight="10dp"
+				android:layout_centerVertical="true"/>
+
+		</RelativeLayout>
+
+	</LinearLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:padding="10dp"
+		android:layout_weight="1.0">
+
+		<ListView
+			android:layout_alignParentTop="true"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_above="@+id/activitycomposesmsinclude1"
+			android:id="@+id/activitycomposesmsListView1"/>
+
+		<include
+			layout="@layout/view_smssend"
+			android:layout_alignParentBottom="true"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/activitycomposesmsinclude1"/>
+
+	</RelativeLayout>
+
+</LinearLayout>
+

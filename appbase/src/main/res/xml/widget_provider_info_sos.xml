@@ -3,5 +3,5 @@
     android:minWidth="200dp"
     android:minHeight="100dp"
     android:updatePeriodMillis="1000"
-    android:initialLayout="@layout/widget_sos">
+    android:initialLayout="@layout/widget_news">
 </appwidget-provider>
