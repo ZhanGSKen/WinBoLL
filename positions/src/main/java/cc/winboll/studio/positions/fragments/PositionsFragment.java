@@ -17,27 +17,36 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import cc.winboll.studio.positions.R;
-import android.widget.Button;
+import cc.winboll.studio.positions.utils.LocationFusion;
 
 public class PositionsFragment extends Fragment {
-    
+
     public static final String TAG = "ContactsFragment";
-    
+
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
 
     private LocationManager locationManager;
-    private TextView locationTextView;
-    double latitudeLock;
-    double longitudeLock;
-    
-    
+
+    private TextView tvWifiLocation;
+    private TextView tvGPSLocation;
+    private TextView tvFuseLocation;
+
+    double latitudeWifiLock;
+    double longitudeWifiLock;
+    double latitudeGPSLock;
+    double longitudeGPSLock;
+    double latitudeFuseLock;
+    double longitudeFuseLock;
+
+
 //    public static PositionsFragment newInstance(int page) {
 //        Bundle args = new Bundle();
 //        args.putInt(ARG_PAGE, page);
@@ -63,14 +72,16 @@ public class PositionsFragment extends Fragment {
 //        Toolbar toolbar = viewMain.findViewById(R.id.toolbar);
 //        getActivity().getMenuInflater().inflate(R.menu.toolbar_positions,  toolbar.getMenu());
 //        
-        locationTextView = viewMain.findViewById(R.id.current_position_tv);
+        tvWifiLocation = viewMain.findViewById(R.id.wifi_position_tv);
+        tvGPSLocation = viewMain.findViewById(R.id.gps_position_tv);
+        tvFuseLocation = viewMain.findViewById(R.id.fuse_position_tv);
         locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
-        
+
         Button btnLockingPosition = viewMain.findViewById(R.id.locking_position_btn);
         btnLockingPosition.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View p1) {
-                    TXMSFragment.moveToLocation(latitudeLock, longitudeLock);
+                    TXMSFragment.moveToLocation(latitudeFuseLock, longitudeFuseLock);
                 }
             });
 
@@ -79,10 +90,10 @@ public class PositionsFragment extends Fragment {
 
         // 请求基站（网络）定位
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, networkLocationListener);
-        
+
         return viewMain;
     }
-    
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.toolbar_positions, menu);
@@ -101,8 +112,8 @@ public class PositionsFragment extends Fragment {
             locationManager.removeUpdates(networkLocationListener);
         }
     }
-    
-    
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -116,12 +127,12 @@ public class PositionsFragment extends Fragment {
 //        }
         return super.onOptionsItemSelected(item);
     }
-    
+
     private LocationListener gpsLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             // 处理GPS定位结果
-            updateLocation(location);
+            updateGPSLocation(location);
         }
 
         @Override
@@ -138,7 +149,7 @@ public class PositionsFragment extends Fragment {
         @Override
         public void onLocationChanged(Location location) {
             // 处理基站（网络）定位结果
-            updateLocation(location);
+            updateWifiLocation(location);
         }
 
         @Override
@@ -151,16 +162,49 @@ public class PositionsFragment extends Fragment {
         public void onProviderDisabled(String provider) {}
     };
 
-    private void updateLocation(Location location) {
+    void updateWifiLocation(Location location) {
         if (location != null) {
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
-            
-            latitudeLock = latitude;
-            longitudeLock = longitude;
+
+            latitudeWifiLock = latitude;
+            longitudeWifiLock = longitude;
 
             // 简单的融合示例：这里只是显示最后获取到的位置，实际应用中需要更复杂的融合算法
-            locationTextView.setText("Latitude: " + latitude + "\nLongitude: " + longitude);
+            tvWifiLocation.setText(String.format("Wifi [ Latitude: %f \nLongitude: %f ]", latitudeWifiLock, longitudeWifiLock));
+            fuseLocationData();
         }
+    }
+
+    void updateGPSLocation(Location location) {
+        if (location != null) {
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+
+            latitudeGPSLock = latitude;
+            longitudeGPSLock = longitude;
+
+            // 简单的融合示例：这里只是显示最后获取到的位置，实际应用中需要更复杂的融合算法
+            tvGPSLocation.setText(String.format("GPS [ Latitude: %f \nLongitude: %f ]", latitudeGPSLock, longitudeGPSLock));
+            fuseLocationData();
+        }
+    }
+
+    void fuseLocationData() {
+        // 融合数据不充分退出
+        if (latitudeWifiLock == 0 ||
+            longitudeWifiLock == 0 ||
+            latitudeGPSLock == 0 ||
+            longitudeGPSLock == 0) {
+            return;
+        }
+
+        double[] result = LocationFusion.fuseLocationData(latitudeGPSLock, longitudeGPSLock,
+                                                          latitudeWifiLock, longitudeWifiLock,
+                                                          0.6, 0.4);
+        latitudeFuseLock = result[0];
+        longitudeFuseLock = result[1];
+
+        tvFuseLocation.setText(String.format("Fuse [ Latitude: %f \nLongitude: %f ]", latitudeFuseLock, longitudeFuseLock));
     }
 }

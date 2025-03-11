@@ -10,14 +10,31 @@
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:gravity="center_vertical">
+		android:gravity="center_vertical"
+		android:layout_weight="1.0">
 
-		<TextView
+		<LinearLayout
+			android:orientation="vertical"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:text="fragment_positions"
-			android:layout_weight="1.0"
-			android:id="@+id/current_position_tv"/>
+			android:layout_weight="1.0">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/wifi_position_tv"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/gps_position_tv"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/fuse_position_tv"/>
+
+		</LinearLayout>
 
 		<Button
 			android:layout_width="wrap_content"
