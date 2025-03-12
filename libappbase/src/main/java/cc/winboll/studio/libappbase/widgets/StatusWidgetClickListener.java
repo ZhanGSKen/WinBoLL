@@ -9,7 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import cc.winboll.studio.libappbase.LogUtils;
-import com.hjq.toast.ToastUtils;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 
 public class StatusWidgetClickListener extends BroadcastReceiver {
     
