@@ -96,6 +96,7 @@ local.properties
 
 ## 忽略模块应用编译配置
 /settings.gradle
+/gradle.properties
 
 ## 忽略 srv 纠结问题
 /srv/
