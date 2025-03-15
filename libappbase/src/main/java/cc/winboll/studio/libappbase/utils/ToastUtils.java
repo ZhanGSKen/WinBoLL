@@ -28,6 +28,6 @@ public class ToastUtils {
     }
 
     public static void show(String message) {
-        Toast.makeText(getInstance().mContext, "", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getInstance().mContext, message, Toast.LENGTH_SHORT).show();
     }
 }

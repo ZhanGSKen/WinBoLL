@@ -37,7 +37,10 @@ public class MainActivity extends Activity {
         cbIsDebugMode.setChecked(GlobalApplication.isDebuging());
         mLogView = findViewById(R.id.activitymainLogView1);
 
-        if (GlobalApplication.isDebuging()) { mLogView.start(); }
+        if (GlobalApplication.isDebuging()) {
+            mLogView.start(); 
+            ToastUtils.show("LogView start.");
+        }
     }
 
     @Override
@@ -89,7 +92,7 @@ public class MainActivity extends Activity {
     public void onTestSOS(View view) {
         Intent intent = new Intent(this, TestDemoService.class);
         stopService(intent);
-        if(App.isDebuging()) {
+        if (App.isDebuging()) {
             SOS.sosToAppBaseBeta(this, TestDemoService.class.getName());
         } else {
             SOS.sosToAppBase(this, TestDemoService.class.getName());
@@ -107,7 +110,7 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, TestDemoService.class);
         intent.setAction(TestDemoService.ACTION_DISABLE);
         startService(intent);
-        
+
         Intent intentStop = new Intent(this, TestDemoService.class);
         stopService(intentStop);
     }
@@ -116,7 +119,7 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, TestDemoService.class);
         stopService(intent);
     }
-    
+
     public void onSartTestDemoBindService(View view) {
         Intent intent = new Intent(this, TestDemoBindService.class);
         intent.setAction(TestDemoBindService.ACTION_ENABLE);
