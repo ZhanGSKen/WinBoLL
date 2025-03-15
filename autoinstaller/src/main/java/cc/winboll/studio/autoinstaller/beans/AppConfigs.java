@@ -10,11 +10,11 @@ import android.util.JsonReader;
 import android.util.JsonWriter;
 import cc.winboll.studio.autoinstaller.beans.AppConfigs;
 import cc.winboll.studio.autoinstaller.utils.FileUtil;
+import cc.winboll.studio.libappbase.LogUtils;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.io.StringWriter;
-import cc.winboll.studio.shared.log.LogUtils;
 
 public class AppConfigs implements Serializable {
 

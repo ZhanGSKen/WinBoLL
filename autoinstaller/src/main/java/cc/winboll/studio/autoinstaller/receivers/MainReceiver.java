@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import cc.winboll.studio.autoinstaller.beans.AppConfigs;
 import cc.winboll.studio.autoinstaller.services.MainService;
-import cc.winboll.studio.shared.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 
 /**
  * @Author ZhanGSKen@QQ.COM

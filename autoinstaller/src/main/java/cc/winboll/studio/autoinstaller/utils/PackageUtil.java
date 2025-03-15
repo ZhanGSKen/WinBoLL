@@ -8,7 +8,7 @@ package cc.winboll.studio.autoinstaller.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import cc.winboll.studio.shared.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 
 public class PackageUtil {
 

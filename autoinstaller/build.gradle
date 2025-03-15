@@ -18,18 +18,18 @@ def genVersionName(def versionName){
 }
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "33.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "cc.winboll.studio.autoinstaller"
-        minSdkVersion 24
-        targetSdkVersion 30
+        minSdkVersion 26
+        targetSdkVersion 29
         versionCode 2
         // versionName 更新后需要手动设置 
         // .winboll/winbollBuildProps.properties 文件的 stageCount=0
         // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
-        versionName "5.0" 
+        versionName "15.0" 
         if(true) {
             versionName = genVersionName("${versionName}")
         }
@@ -41,30 +41,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
 }
 
 dependencies {
-	api 'cc.winboll.studio:winboll-shared:1.1.0'
-    api 'io.github.medyo:android-about-page:2.0.0'
-    api 'com.github.getActivity:ToastUtils:10.5'
-    api 'com.jcraft:jsch:0.1.55'
-    api 'org.jsoup:jsoup:1.13.1'
-    api 'com.squareup.okhttp3:okhttp:4.4.1'
-    
-    api 'androidx.appcompat:appcompat:1.0.0'
-    api 'androidx.fragment:fragment:1.0.0'
-    api 'com.google.android.material:material:1.0.0'
-    
-    api 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
-    api 'androidx.lifecycle:lifecycle-livedata:1.0.0'
-    
-    //api 'cc.winboll.studio:libaes:6.3.2'
-    //api 'cc.winboll.studio:libapputils:8.3.8'
-    
     api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'cc.winboll.studio:libappbase:15.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 }

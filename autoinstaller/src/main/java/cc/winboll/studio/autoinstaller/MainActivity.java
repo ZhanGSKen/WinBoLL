@@ -2,6 +2,7 @@ package cc.winboll.studio.autoinstaller;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -14,14 +15,14 @@ import android.widget.Switch;
 import android.widget.TextClock;
 import android.widget.Toast;
 import androidx.core.content.FileProvider;
-import cc.winboll.studio.shared.log.LogUtils;
-import cc.winboll.studio.shared.log.LogView;
 import cc.winboll.studio.autoinstaller.MainActivity;
 import cc.winboll.studio.autoinstaller.beans.AppConfigs;
 import cc.winboll.studio.autoinstaller.services.MainService;
 import cc.winboll.studio.autoinstaller.utils.NotificationUtil;
 import cc.winboll.studio.autoinstaller.views.ListViewForScrollView;
-import com.hjq.toast.ToastUtils;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.LogView;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -136,9 +137,10 @@ public class MainActivity extends Activity {
             ToastUtils.show("Installed APP package name is null.");
             return;
         }
-
+        
         Intent intent = getPackageManager().getLaunchIntentForPackage(mszInstalledPackageName);
         if (intent != null) {
+            ToastUtils.show("startActivity");
             startActivity(intent);
         } else {
             // 若没能获取到启动意图，可进行相应提示等操作，比如跳转到应用商店让用户下载该应用（示例）
