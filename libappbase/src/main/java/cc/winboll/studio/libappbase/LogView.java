@@ -190,6 +190,7 @@ public class LogView extends RelativeLayout {
 
         // 加载标签表
         mListViewTags = findViewById(cc.winboll.studio.libappbase.R.id.tags_listview);
+        mListViewTags.setVerticalOffset(10);
         mTAGListAdapter = new TAGListAdapter(mContext, mapTAGList);
         mListViewTags.setAdapter(mTAGListAdapter);
 
