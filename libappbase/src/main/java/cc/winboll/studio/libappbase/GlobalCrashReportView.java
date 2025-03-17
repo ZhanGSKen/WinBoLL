@@ -15,8 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libappbase.R;
+import android.widget.Toolbar;
 
 public class GlobalCrashReportView extends LinearLayout {
 

@@ -16,16 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.R;
+import cc.winboll.studio.libappbase.views.HorizontalListView;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,7 +50,7 @@ public class LogView extends RelativeLayout {
     Spinner mLogLevelSpinner;
     ArrayAdapter<CharSequence> mLogLevelSpinnerAdapter;
     // 标签列表
-    RecyclerView recyclerView;
+    HorizontalListView mListViewTags;
 
     public LogView(Context context) {
         super(context);
@@ -190,11 +189,10 @@ public class LogView extends RelativeLayout {
         cbALLTAG.setChecked(isAllSelect);
 
         // 加载标签表
-        recyclerView = findViewById(cc.winboll.studio.libappbase.R.id.viewlogRecyclerView1);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        mTAGListAdapter = new TAGListAdapter(mapTAGList);
-        recyclerView.setAdapter(mTAGListAdapter);
+        mListViewTags = findViewById(cc.winboll.studio.libappbase.R.id.tags_listview);
+        mListViewTags.setVerticalOffset(10);
+        mTAGListAdapter = new TAGListAdapter(mContext, mapTAGList);
+        mListViewTags.setAdapter(mTAGListAdapter);
 
         // 可以添加点击监听器来处理勾选框状态变化后的逻辑，比如获取当前勾选情况等
         mTAGListAdapter.notifyDataSetChanged();
@@ -305,14 +303,31 @@ public class LogView extends RelativeLayout {
     }
 
 
-    public class TAGListAdapter extends RecyclerView.Adapter<TAGListAdapter.ViewHolder> {
+    public class TAGListAdapter extends BaseAdapter {
 
+        private Context context;
         private Map<String, Boolean> mapOrigin;
         private List<TAGItemModel> itemList;
 
-        public TAGListAdapter(Map<String, Boolean> map) {
+        public TAGListAdapter(Context context, Map<String, Boolean> map) {
+            this.context = context;
             mapOrigin = map;
             loadMap(mapOrigin);
+        }
+        
+        @Override
+        public int getCount() {
+            return itemList.size();
+        }
+
+        @Override
+        public Object getItem(int p) {
+            return itemList.get(p);
+        }
+
+        @Override
+        public long getItemId(int p) {
+            return p;
         }
 
         void loadMap(Map<String, Boolean> map) {
@@ -329,16 +344,20 @@ public class LogView extends RelativeLayout {
             loadMap(mapOrigin);
             super.notifyDataSetChanged();
         }
-
-        @NonNull
+        
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_logtag, parent, false);
-            return new ViewHolder(view);
-        }
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_logtag, parent, false);
+                holder = new ViewHolder();
+                holder.tvText = convertView.findViewById(R.id.viewlogtagTextView1);
+                holder.cbChecked = convertView.findViewById(R.id.viewlogtagCheckBox1);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
 
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             final TAGItemModel item = itemList.get(position);
             holder.tvText.setText(item.getTag());
             holder.cbChecked.setChecked(item.isChecked());
@@ -349,22 +368,13 @@ public class LogView extends RelativeLayout {
                         LogUtils.setTAGListEnable(item.getTag(), ((CheckBox)v).isChecked());
                     }
                 });
+
+            return convertView;
         }
 
-        @Override
-        public int getItemCount() {
-            return itemList.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder {
             TextView tvText;
             CheckBox cbChecked;
-
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                tvText = itemView.findViewById(R.id.viewlogtagTextView1);
-                cbChecked = itemView.findViewById(R.id.viewlogtagCheckBox1);
-            }
         }
     }
 

@@ -6,17 +6,13 @@ package cc.winboll.studio.libappbase;
  * @Describe 全局应用类
  */
 import android.app.Application;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.Gravity;
-import com.hjq.toast.ToastUtils;
-import com.hjq.toast.style.WhiteToastStyle;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 
 public class GlobalApplication extends Application {
 
@@ -78,8 +74,8 @@ public class GlobalApplication extends Application {
         ToastUtils.init(this);
         // 设置 Toast 布局样式
         //ToastUtils.setView(R.layout.toast_custom_view);
-        ToastUtils.setStyle(new WhiteToastStyle());
-        ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
+        //ToastUtils.setStyle(new WhiteToastStyle());
+        //ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
     }
 
     public static String getAppName(Context context) {

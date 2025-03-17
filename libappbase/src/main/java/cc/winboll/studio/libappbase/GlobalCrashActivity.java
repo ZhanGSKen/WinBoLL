@@ -21,11 +21,9 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libappbase.R;
-import androidx.appcompat.app.AppCompatActivity;
 
-public final class GlobalCrashActivity extends AppCompatActivity implements MenuItem.OnMenuItemClickListener {
+public final class GlobalCrashActivity extends Activity implements MenuItem.OnMenuItemClickListener {
 
     private static final int MENUITEM_COPY = 0;
     private static final int MENUITEM_RESTART = 1;
@@ -47,10 +45,10 @@ public final class GlobalCrashActivity extends AppCompatActivity implements Menu
         setContentView(R.layout.activity_globalcrash);
         mGlobalCrashReportView = findViewById(R.id.activityglobalcrashGlobalCrashReportView1);
         mGlobalCrashReportView.setReport(mLog);
-        setSupportActionBar(mGlobalCrashReportView.getToolbar());
+        setActionBar(mGlobalCrashReportView.getToolbar());
         
-        getSupportActionBar().setTitle(CrashHandler.TITTLE);
-        getSupportActionBar().setSubtitle(GlobalApplication.getAppName(getApplicationContext()));
+        getActionBar().setTitle(CrashHandler.TITTLE);
+        getActionBar().setSubtitle(GlobalApplication.getAppName(getApplicationContext()));
     }
 
     @Override

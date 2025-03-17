@@ -5,7 +5,6 @@ package cc.winboll.studio.appbase.receivers;
  * @Date 2025/02/13 06:58:04
  * @Describe 主要广播接收器
  */
-import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,15 +15,15 @@ import cc.winboll.studio.appbase.services.MainService;
 import cc.winboll.studio.appbase.widgets.APPNewsWidget;
 import cc.winboll.studio.libappbase.AppUtils;
 import cc.winboll.studio.libappbase.LogUtils;
-import com.hjq.toast.ToastUtils;
+import cc.winboll.studio.libappbase.sos.APPModel;
+import cc.winboll.studio.libappbase.sos.SOS;
+import cc.winboll.studio.libappbase.sos.SOSObject;
+import cc.winboll.studio.libappbase.sos.WinBoll;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import cc.winboll.studio.libappbase.sos.WinBoll;
-import cc.winboll.studio.libappbase.sos.APPModel;
-import cc.winboll.studio.libappbase.sos.SOS;
-import cc.winboll.studio.libappbase.sos.SOSObject;
 
 public class MainReceiver extends BroadcastReceiver {
 
