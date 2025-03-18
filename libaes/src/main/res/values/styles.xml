@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="AESTheme" parent="WinBoll.SupportThemeNoActionBar">
+    <style name="AESTheme" parent="APPBaseTheme">
         <item name="colorTextColor">#FF000000</item>
         <item name="colorPrimary">#FF03AB4E</item>
         <item name="colorPrimaryDark">#FF027C39</item>

@@ -4,14 +4,14 @@ package cc.winboll.studio.libaes.unittests;
  * @Author ZhanGSKen@QQ.COM
  * @Date 2024/06/30 15:00:51
  */
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import android.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
@@ -24,8 +24,8 @@ import java.util.ArrayList;
 public class TestDrawerFragmentActivity extends DrawerFragmentActivity implements IWinBollActivity {
 
     @Override
-    public AppCompatActivity getActivity() {
-        return this;
+    public Activity getActivity() {
+        return g;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class TestDrawerFragmentActivity extends DrawerFragmentActivity implement
     public Toolbar initToolBar() {
         return null;
     }
-    
+
     @Override
     public boolean isAddWinBollToolBar() {
         return false;
@@ -52,7 +52,7 @@ public class TestDrawerFragmentActivity extends DrawerFragmentActivity implement
     public boolean isEnableDisplayHomeAsUp() {
         return false;
     }
-    
+
 
     public static final String TAG = "TestDrawerFragmentActivity";
 

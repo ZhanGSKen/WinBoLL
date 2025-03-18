@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -195,7 +194,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         setContentView(R.layout.activity_drawerfragment);
 
         mToolbar = findViewById(R.id.activitydrawerfragmentASupportToolbar1);
-        setSupportActionBar(mToolbar);
+        setActionBar(mToolbar);
 
         if (mActivityType == ActivityType.Main) {
             initMainRootView();
