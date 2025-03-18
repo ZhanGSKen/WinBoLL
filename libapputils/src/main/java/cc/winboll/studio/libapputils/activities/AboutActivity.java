@@ -5,14 +5,15 @@ package cc.winboll.studio.libapputils.activities;
  * @Date 2024/07/14 13:20:33
  * @Describe 应用介绍页
  */
-import cc.winboll.studio.libapputils.R;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toolbar;
+import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
@@ -28,7 +29,7 @@ final public class AboutActivity extends Activity implements IWinBollActivity {
     APPInfo mAPPInfo;
 
     @Override
-    public Activity getActivity() {
+    public Context getApplicationContext() {
         return this;
     }
 
