@@ -23,8 +23,7 @@
                 android:title="UnitTest"/>
             <item
                 android:id="@+id/item_log"
-                android:title="APPLOG"
-                app:showAsAction="always"/>
+                android:title="APPLOG"/>
             <item
                 android:id="@+id/item_info"
                 android:title="Info"/>

@@ -1,24 +1,25 @@
 package cc.winboll.studio.apputils;
 
-import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
-import cc.winboll.studio.libapputils.bean.APPInfo;
-import cc.winboll.studio.libapputils.view.StringToQrCodeView;
-
 /**
  * @Author ZhanGSKen@QQ.COM
  * @Date 2025/01/17 19:50:46
  */
-public class TestStringToQrCodeViewActivity extends AppCompatActivity implements IWinBollActivity {
+import cc.winboll.studio.apputils.R;
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.Toolbar;
+import cc.winboll.studio.libapputils.app.IWinBollActivity;
+import cc.winboll.studio.libapputils.bean.APPInfo;
+import cc.winboll.studio.libapputils.view.StringToQrCodeView;
+
+public class TestStringToQrCodeViewActivity extends Activity implements IWinBollActivity {
 
     public static final String TAG = "TestStringToQrCodeViewActivity";
 
     StringToQrCodeView mStringToQrCodeView;
 
     @Override
-    public AppCompatActivity getActivity() {
+    public Activity getActivity() {
         return this;
     }
 

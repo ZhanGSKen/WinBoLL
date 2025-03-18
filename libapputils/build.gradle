@@ -21,28 +21,18 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'cc.winboll.studio:libappbase:15.0.3'
     
-    // SSH
-    implementation 'com.jcraft:jsch:0.1.55'
-    // Html 解析
-    implementation 'org.jsoup:jsoup:1.13.1'
     // 二维码类库
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
-    // 应用介绍页类库
-    implementation 'io.github.medyo:android-about-page:2.0.0'
-    // 吐司类库
-    implementation 'com.github.getActivity:ToastUtils:10.5'
+    
     // 网络连接类库
-    implementation 'com.squareup.okhttp3:okhttp:4.4.1'
+    //implementation 'com.squareup.okhttp3:okhttp:4.4.1'
     
-    // Android 类库
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.viewpager:viewpager:1.0.0'
-    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
-    implementation 'androidx.fragment:fragment:1.1.0'
-    implementation 'com.google.android.material:material:1.4.0'
+    // Html 解析
+    //implementation 'org.jsoup:jsoup:1.13.1'
     
-    implementation 'cc.winboll.studio:libappbase:2.1.5'
+    // SSH
+    //implementation 'com.jcraft:jsch:0.1.55'
 }

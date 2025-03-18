@@ -9,9 +9,9 @@ package cc.winboll.studio.libapputils.app;
  * https://blog.csdn.net/qq_29364417/article/details/109379915?app_version=6.4.2&code=app_1562916241&csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22109379915%22%2C%22source%22%3A%22weixin_38986226%22%7D&uLinkId=usr1mkqgl919blen&utm_source=app
  */
 import android.app.ActivityManager;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import androidx.core.app.TaskStackBuilder;
 import cc.winboll.studio.libappbase.LogUtils;
 import java.util.HashMap;
 import java.util.Iterator;

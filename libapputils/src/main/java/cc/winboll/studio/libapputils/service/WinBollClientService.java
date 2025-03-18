@@ -8,8 +8,8 @@ import android.content.ServiceConnection;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libapputils.util.ServiceUtils;
-import com.hjq.toast.ToastUtils;
 
 /**
  * @Author ZhanGSKen@QQ.COM

@@ -3,14 +3,11 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/item_testwinboll"
-        android:title="TestWinBollActivity"
-        app:showAsAction="ifRoom"/>
+        android:title="TestWinBollActivity"/>
     <item
         android:id="@+id/item_teststringtoqrcodeview"
-        android:title="TestStringToQrCodeViewActivity"
-        app:showAsAction="ifRoom"/>
+        android:title="TestStringToQrCodeViewActivity"/>
     <item
         android:id="@+id/item_testqrcodedecodeactivity"
-        android:title="TestQRCodeDecodeActivity"
-        app:showAsAction="ifRoom"/>
+        android:title="TestQRCodeDecodeActivity"/>
 </menu>

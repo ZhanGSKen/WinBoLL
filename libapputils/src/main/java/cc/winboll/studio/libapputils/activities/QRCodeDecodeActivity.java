@@ -5,15 +5,13 @@ package cc.winboll.studio.libapputils.activities;
  * @Date 2025/01/18 10:32:21
  * @Describe 二维码扫码解码窗口
  */
+import cc.winboll.studio.libapputils.R;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import cc.winboll.studio.libapputils.R;
+import android.widget.Toolbar;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import com.google.zxing.ResultPoint;
@@ -22,7 +20,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import java.util.List;
 
-public class QRCodeDecodeActivity extends AppCompatActivity implements IWinBollActivity {
+public class QRCodeDecodeActivity extends Activity implements IWinBollActivity {
 
     public static final String TAG = "QRCodeDecodeActivity";
 
@@ -33,7 +31,7 @@ public class QRCodeDecodeActivity extends AppCompatActivity implements IWinBollA
     DecoratedBarcodeView barcodeView;
 
     @Override
-    public AppCompatActivity getActivity() {
+    public Activity getActivity() {
         return this;
     }
 
@@ -70,14 +68,15 @@ public class QRCodeDecodeActivity extends AppCompatActivity implements IWinBollA
         resultTextView = findViewById(R.id.activityqrcodedecodeTextView1);
         barcodeView = findViewById(R.id.activityqrcodedecodeDecoratedBarcodeView1);
         // 请求相机权限
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                                              new String[]{android.Manifest.permission.CAMERA},
-                                              REQUEST_CAMERA_PERMISSION);
-        } else {
-            startScanning();
-        }
+//        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+//            != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this,
+//                                              new String[]{android.Manifest.permission.CAMERA},
+//                                              REQUEST_CAMERA_PERMISSION);
+//        } else {
+//            startScanning();
+//        }
+        startScanning();
 
 
     }

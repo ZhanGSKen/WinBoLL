@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
-import androidx.core.content.FileProvider;
 import cc.winboll.studio.libappbase.LogUtils;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import android.support.v4.content.FileProvider;
 
 public class FileUtils {
 

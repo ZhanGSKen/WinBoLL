@@ -5,6 +5,7 @@ package cc.winboll.studio.libapputils.view;
  * @Date 2024/12/07 20:15:47
  * @Describe WinBoll 服务主机连接状态视图
  */
+import cc.winboll.studio.libapputils.R;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -18,22 +19,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.core.content.ContextCompat;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.R;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libapputils.service.IWinBollClientServiceBinder;
 import cc.winboll.studio.libapputils.service.WinBollClientService;
 import cc.winboll.studio.libapputils.service.WinBollClientServiceBean;
-import com.hjq.toast.ToastUtils;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import okhttp3.Authenticator;
-import okhttp3.Credentials;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.Route;
+//import okhttp3.Authenticator;
+//import okhttp3.Credentials;
+//import okhttp3.OkHttpClient;
+//import okhttp3.Request;
+//import okhttp3.Response;
+//import okhttp3.Route;
 
 public class WinBollServiceStatusView extends LinearLayout {
 
@@ -211,7 +210,7 @@ public class WinBollServiceStatusView extends LinearLayout {
     void setImageViewByConnection(ImageView imageView, boolean isConnected) {
         //mIsConnected = isConnected;
         // 获取vector drawable
-        Drawable drawable = ContextCompat.getDrawable(mContext, isConnected ? R.drawable.ic_dev_connected : R.drawable.ic_dev_disconnected);
+        Drawable drawable = mContext.getDrawable(isConnected ? R.drawable.ic_dev_connected : R.drawable.ic_dev_disconnected);
         if (drawable != null) {
             imageView.setImageDrawable(drawable);
         }
@@ -222,49 +221,49 @@ public class WinBollServiceStatusView extends LinearLayout {
         //String username = "your_username";
         //String password = "your_password";
 
-        OkHttpClient client = new OkHttpClient.Builder()
-            .authenticator(new Authenticator() {
-                @Override
-                public Request authenticate(Route route, Response response) throws IOException {
-                    String credential = Credentials.basic(username, password);
-                    return response.request().newBuilder()
-                        .header("Authorization", credential)
-                        .build();
-                }
-            })
-            .build();
-
-        Request request = new Request.Builder()
-            .url(targetUrl) // 替换为实际要请求的网页地址
-            .build();
-
-        try {
-            Response response = client.newCall(request).execute();
-            if (response.isSuccessful()) {
-                //System.out.println(response.body().string());
-                //ToastUtils.show("Develop Host Connection IP is : " + response.body().string());
-                // 获取当前时间
-                LocalDateTime now = LocalDateTime.now();
-
-                // 定义时间格式
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-                // 按照指定格式格式化时间并输出
-                String formattedDateTime = now.format(formatter);
-                //System.out.println(formattedDateTime);
-                textViewHandler.postMessageText("ClientIP<" + formattedDateTime + ">: " + response.body().string());
-                textViewHandler.postMessageConnectionStatus(true);
-            } else {
-                String sz = "请求失败，状态码: " + response.code();
-                setImageViewByConnection(mImageView, false);
-                textViewHandler.postMessageText(sz);
-                textViewHandler.postMessageConnectionStatus(false);
-                LogUtils.d(TAG, sz);
-            }
-        } catch (IOException e) {
-            textViewHandler.postMessageText(e.getMessage());
-            textViewHandler.postMessageConnectionStatus(false);
-            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-        }
+//        OkHttpClient client = new OkHttpClient.Builder()
+//            .authenticator(new Authenticator() {
+//                @Override
+//                public Request authenticate(Route route, Response response) throws IOException {
+//                    String credential = Credentials.basic(username, password);
+//                    return response.request().newBuilder()
+//                        .header("Authorization", credential)
+//                        .build();
+//                }
+//            })
+//            .build();
+//
+//        Request request = new Request.Builder()
+//            .url(targetUrl) // 替换为实际要请求的网页地址
+//            .build();
+//
+//        try {
+//            Response response = client.newCall(request).execute();
+//            if (response.isSuccessful()) {
+//                //System.out.println(response.body().string());
+//                //ToastUtils.show("Develop Host Connection IP is : " + response.body().string());
+//                // 获取当前时间
+//                LocalDateTime now = LocalDateTime.now();
+//
+//                // 定义时间格式
+//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+//                // 按照指定格式格式化时间并输出
+//                String formattedDateTime = now.format(formatter);
+//                //System.out.println(formattedDateTime);
+//                textViewHandler.postMessageText("ClientIP<" + formattedDateTime + ">: " + response.body().string());
+//                textViewHandler.postMessageConnectionStatus(true);
+//            } else {
+//                String sz = "请求失败，状态码: " + response.code();
+//                setImageViewByConnection(mImageView, false);
+//                textViewHandler.postMessageText(sz);
+//                textViewHandler.postMessageConnectionStatus(false);
+//                LogUtils.d(TAG, sz);
+//            }
+//        } catch (IOException e) {
+//            textViewHandler.postMessageText(e.getMessage());
+//            textViewHandler.postMessageConnectionStatus(false);
+//            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+//        }
     }
 
     class WinBollServiceViewHandler extends Handler {

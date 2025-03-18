@@ -5,6 +5,7 @@ package cc.winboll.studio.libapputils.view;
  * @Date 2024/12/19 13:49:14
  * @Describe 把字符串转化为二维码的视图
  */
+import cc.winboll.studio.libapputils.R;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,12 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.util.QRCodeGenerator;
-import com.google.zxing.Result;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 public class StringToQrCodeView extends LinearLayout {

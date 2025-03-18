@@ -5,23 +5,23 @@ package cc.winboll.studio.libapputils.activities;
  * @Date 2025/01/03 11:02:49
  * @Describe 一个可以浏览随 APP 附带的 Html 文档的窗口
  */
+import cc.winboll.studio.libapputils.R;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import android.widget.Toolbar;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.SimpleWebView;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class AssetsHtmlActivity extends AppCompatActivity implements IWinBollActivity {
+public class AssetsHtmlActivity extends Activity implements IWinBollActivity {
 
     public static final String TAG = "AssetsHtmlActivity";
 
@@ -35,7 +35,7 @@ public class AssetsHtmlActivity extends AppCompatActivity implements IWinBollAct
     String mszHtmlFileName;
 
     @Override
-    public AppCompatActivity getActivity() {
+    public Activity getActivity() {
         return this;
     }
 

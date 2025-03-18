@@ -4,6 +4,5 @@
     <item
         android:id="@+id/item_help"
         android:title="HELP"
-        android:icon="@drawable/winboll_help"
-        app:showAsAction="always"/>
+        android:icon="@drawable/winboll_help"/>
 </menu>

@@ -1,5 +1,7 @@
 package cc.winboll.studio.apputils;
 
+import cc.winboll.studio.apputils.R;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,11 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.apputils.R;
+import android.widget.Toolbar;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libapputils.activities.AssetsHtmlActivity;
 import cc.winboll.studio.libapputils.activities.LogActivity;
 import cc.winboll.studio.libapputils.activities.QRCodeDecodeActivity;
@@ -24,11 +25,10 @@ import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.AboutView;
 import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
-import com.hjq.toast.ToastUtils;
 import java.util.List;
 import java.util.Set;
 
-final public class MainActivity extends AppCompatActivity implements IWinBollActivity {
+final public class MainActivity extends Activity implements IWinBollActivity {
 
 	public static final String TAG = "MainActivity";
 
@@ -38,7 +38,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     LogView mLogView;
 
     @Override
-    public AppCompatActivity getActivity() {
+    public Activity getActivity() {
         return this;
     }
 
@@ -91,12 +91,12 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
-        setSupportActionBar(mToolbar);
+        setActionBar(mToolbar);
         if (isEnableDisplayHomeAsUp()) {
             // 显示后退按钮
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        getSupportActionBar().setSubtitle(getTag());
+        getActionBar().setSubtitle(getTag());
 
         checkResolveActivity();
         archiveInstance();
@@ -281,7 +281,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
             WinBollActivityManager.getInstance(this).startWinBollActivity(this, LogActivity.class);
             return true;
         } else if (item.getItemId() == R.id.item_exitdebug) {
-            AboutView.setApp2NormalMode(this);
+            //AboutView.setApp2NormalMode(this);
             return true;
         } else if (item.getItemId() == android.R.id.home) {
             WinBollActivityManager.getInstance(this).finish(this);

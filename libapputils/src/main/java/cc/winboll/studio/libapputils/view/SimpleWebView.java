@@ -9,7 +9,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import com.hjq.toast.ToastUtils;
 
 public class SimpleWebView extends WebView {
 

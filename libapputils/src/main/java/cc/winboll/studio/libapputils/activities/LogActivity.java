@@ -5,24 +5,23 @@ package cc.winboll.studio.libapputils.activities;
  * @Date 2025/03/08 00:19:39
  * @Describe LogActivity
  */
+import cc.winboll.studio.libapputils.R;
+import android.app.Activity;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.libappbase.GlobalApplication;
+import android.widget.Toolbar;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 
-public class LogActivity extends AppCompatActivity implements IWinBollActivity {
+public class LogActivity extends Activity implements IWinBollActivity {
 
     public static final String TAG = "LogActivity";
 
     LogView mLogView;
 
     @Override
-    public AppCompatActivity getActivity() {
+    public Activity getActivity() {
         return this;
     }
 

@@ -9,7 +9,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import cc.winboll.studio.libappbase.LogUtils;
-import com.hjq.toast.ToastUtils; 
+import cc.winboll.studio.libappbase.utils.ToastUtils; 
 
 public class MyActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks { 
 
