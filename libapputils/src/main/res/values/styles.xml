@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MyAppTheme" parent="APPBaseTheme">
+    <style name="UtilsTheme" parent="APPBaseTheme">
         <item name="attrColorPrimary">@color/colorPrimary</item>
-        <item name="themeGlobalCrashActivity">@style/MyGlobalCrashActivityTheme</item>
+        <item name="themeGlobalCrashActivity">@style/UtilsGlobalCrashActivityTheme</item>
     </style>
 
-    <style name="MyGlobalCrashActivityTheme" parent="GlobalCrashActivityTheme">
+    <style name="UtilsGlobalCrashActivityTheme" parent="GlobalCrashActivityTheme">
         <item name="colorTittle">#FFFFFFFF</item>
         <item name="colorTittleBackgound">#FF00A4B3</item>
         <item name="colorText">#FFFFFFFF</item>
