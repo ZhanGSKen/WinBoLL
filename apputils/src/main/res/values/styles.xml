@@ -2,6 +2,13 @@
 <resources>
     <style name="MyUtilsTheme" parent="UtilsTheme">
         <item name="attrColorPrimary">@color/colorPrimary</item>
-        <item name="themeGlobalCrashActivity">@style/GlobalCrashActivityTheme</item>
+        <item name="themeGlobalCrashActivity">@style/MyUtilsGlobalCrashActivityTheme</item>
     </style>
+
+    <style name="MyUtilsGlobalCrashActivityTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+        <item name="colorTittle">#FFF2F2F2</item>
+        <item name="colorTittleBackgound">#FF55ABF8</item>
+        <item name="colorText">#FF55ABF8</item>
+        <item name="colorTextBackgound">#FFF2F2F2</item>
+	</style>
 </resources>
