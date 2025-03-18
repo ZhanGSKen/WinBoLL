@@ -10,4 +10,7 @@
     <item
         android:id="@+id/item_testqrcodedecodeactivity"
         android:title="TestQRCodeDecodeActivity"/>
+    <item
+        android:id="@+id/item_testcrashreport"
+        android:title="TestCrashReportActivity"/>
 </menu>
