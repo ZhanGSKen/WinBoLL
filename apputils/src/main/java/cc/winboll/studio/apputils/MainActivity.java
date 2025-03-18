@@ -332,6 +332,12 @@ final public class MainActivity extends Activity implements IWinBollActivity {
         WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, AssetsHtmlActivity.class);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mLogView.start();
+    }
+
     /*@Override
      protected void onActivithyResult(int requestCode, int resultCode, Intent data) {
      switch (requestCode) {
