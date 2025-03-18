@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="UtilsTheme" parent="APPBaseTheme">
+    <style name="UtilsTheme" parent="@style/APPBaseTheme">
     </style>
 </resources>

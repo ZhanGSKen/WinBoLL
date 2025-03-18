@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MyUtilsTheme" parent="APPBaseTheme">
+    <style name="MyUtilsTheme" parent="UtilsTheme">
         <item name="attrColorPrimary">@color/colorPrimary</item>
         <item name="themeGlobalCrashActivity">@style/GlobalCrashActivityTheme</item>
     </style>
