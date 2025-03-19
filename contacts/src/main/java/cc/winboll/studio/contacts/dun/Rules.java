@@ -6,12 +6,11 @@ package cc.winboll.studio.contacts.dun;
  * @Describe 云盾防御规则
  */
 import android.content.Context;
-import android.media.AudioManager;
 import cc.winboll.studio.contacts.activities.SettingsActivity;
 import cc.winboll.studio.contacts.beans.PhoneConnectRuleModel;
-import cc.winboll.studio.contacts.beans.RingTongBean;
 import cc.winboll.studio.contacts.beans.SettingsModel;
 import cc.winboll.studio.contacts.services.MainService;
+import cc.winboll.studio.contacts.utils.ContactUtils;
 import cc.winboll.studio.contacts.utils.RegexPPiUtils;
 import cc.winboll.studio.libappbase.LogUtils;
 import java.util.ArrayList;
@@ -123,6 +122,19 @@ public class Rules {
             isDefend = true;
             isConnect = false;
             LogUtils.d(TAG, String.format("isDefend == %s\nisConnect == %s", isDefend, isConnect));
+        }
+
+        // 查询通讯录是否有该联系人
+        boolean isPhoneInContacts = ContactUtils.getInstance(mContext).isPhoneInContacts(mContext, phoneNumber);
+        if (!isDefend) {
+            if (isPhoneInContacts) {
+                LogUtils.d(TAG, String.format("Phone %s is in contacts.", phoneNumber));
+                isDefend = true;
+                isConnect = true;
+                LogUtils.d(TAG, String.format("isDefend == %s\nisConnect == %s", isDefend, isConnect));
+            } else {
+                LogUtils.d(TAG, String.format("Phone %s is not in contacts.", phoneNumber));
+            }
         }
 
         // 检验拨不通号码群
