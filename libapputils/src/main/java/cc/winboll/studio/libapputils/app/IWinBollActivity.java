@@ -14,7 +14,7 @@ public interface IWinBollActivity {
     public static final String TAG = "IWinBollActivity";
 
     // 获取应用资源上下文
-    abstract public Context getApplicationContext();
+    //abstract public Context getApplicationContext();
     abstract public APPInfo getAppInfo();
     abstract public String getTag();
     abstract public Toolbar initToolBar();

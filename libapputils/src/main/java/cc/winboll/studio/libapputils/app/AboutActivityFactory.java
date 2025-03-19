@@ -49,6 +49,6 @@ public class AboutActivityFactory {
         
         Intent intent = new Intent(context, AboutActivity.class);
         intent.putExtra(AboutActivity.EXTRA_APPINFO, (appInfo == null) ? AboutActivityFactory.buildDefaultAPPInfo():appInfo);
-        WinBollActivityManager.getInstance(context).startWinBollActivity(context, intent, AboutActivity.class);
+        //WinBollActivityManager.getInstance(context).startWinBollActivity(context, intent, AboutActivity.class);
     }
 }

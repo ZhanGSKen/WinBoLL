@@ -85,9 +85,9 @@ final public class AboutActivity extends Activity implements IWinBollActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.item_help) {
-            WinBollActivityManager.getInstance(this).startWinBollActivity(this, AssetsHtmlActivity.class);
-        }
+//        if (item.getItemId() == R.id.item_help) {
+//            WinBollActivityManager.getInstance(this).startWinBollActivity(this, AssetsHtmlActivity.class);
+//        }
         return super.onOptionsItemSelected(item);
     }
 }

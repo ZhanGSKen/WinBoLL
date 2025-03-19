@@ -17,11 +17,11 @@ public class TestStringToQrCodeViewActivity extends Activity implements IWinBoll
     public static final String TAG = "TestStringToQrCodeViewActivity";
 
     StringToQrCodeView mStringToQrCodeView;
-
-    @Override
-    public Activity getActivity() {
-        return this;
-    }
+//
+//    @Override
+//    public Activity getActivity() {
+//        return this;
+//    }
 
     @Override
     public APPInfo getAppInfo() {

@@ -30,10 +30,10 @@ public class QRCodeDecodeActivity extends Activity implements IWinBollActivity {
     TextView resultTextView;
     DecoratedBarcodeView barcodeView;
 
-    @Override
-    public Activity getActivity() {
-        return this;
-    }
+//    @Override
+//    public Activity getActivity() {
+//        return this;
+//    }
 
     @Override
     public APPInfo getAppInfo() {

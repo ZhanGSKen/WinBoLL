@@ -19,11 +19,11 @@ public class LogActivity extends Activity implements IWinBollActivity {
     public static final String TAG = "LogActivity";
 
     LogView mLogView;
-
-    @Override
-    public Activity getActivity() {
-        return this;
-    }
+//
+//    @Override
+//    public Activity getActivity() {
+//        return this;
+//    }
 
     @Override
     public APPInfo getAppInfo() {

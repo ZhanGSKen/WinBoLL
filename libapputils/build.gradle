@@ -21,7 +21,6 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'cc.winboll.studio:libappbase:15.0.5'
     
     // 二维码类库
     implementation 'com.google.zxing:core:3.4.1'
@@ -35,4 +34,9 @@ dependencies {
     
     // SSH
     //implementation 'com.jcraft:jsch:0.1.55'
+    
+    // 应用介绍页类库
+    //implementation 'io.github.medyo:android-about-page:2.0.0'
+    
+    implementation 'cc.winboll.studio:libappbase:15.0.5'
 }

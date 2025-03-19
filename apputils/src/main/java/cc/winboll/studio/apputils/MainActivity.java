@@ -36,11 +36,11 @@ final public class MainActivity extends Activity implements IWinBollActivity {
 
     Toolbar mToolbar;
     LogView mLogView;
-
-    @Override
-    public Activity getActivity() {
-        return this;
-    }
+//
+//    @Override
+//    public Activity getActivity() {
+//        return this;
+//    }
 
     @Override
     public APPInfo getAppInfo() {
@@ -177,12 +177,12 @@ final public class MainActivity extends Activity implements IWinBollActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // 缓存当前 activity
-        WinBollActivityManager.getInstance(this).add(this);
+        //WinBollActivityManager.getInstance(this).add(this);
     }
 
     @Override
     public void onDestroy() {
-        WinBollActivityManager.getInstance(this).registeRemove(this);
+        //WinBollActivityManager.getInstance(this).registeRemove(this);
         super.onDestroy();
     }
 
@@ -198,7 +198,7 @@ final public class MainActivity extends Activity implements IWinBollActivity {
 //        startActivity(intent);
 
         //WinBollActivityManager.getInstance().printAvtivityListInfo();
-        WinBollActivityManager.getInstance(this).startWinBollActivity(this, LogActivity.class);
+        //WinBollActivityManager.getInstance(this).startWinBollActivity(this, LogActivity.class);
     }
 
     //
@@ -268,7 +268,7 @@ final public class MainActivity extends Activity implements IWinBollActivity {
             AboutActivityFactory.showAboutActivity(this, getAppInfo());
             return true;
         } else if (item.getItemId() == R.id.item_teststringtoqrcodeview) {
-            WinBollActivityManager.getInstance(this).startWinBollActivity(this, TestStringToQrCodeViewActivity.class);
+            //WinBollActivityManager.getInstance(this).startWinBollActivity(this, TestStringToQrCodeViewActivity.class);
         } else if (item.getItemId() == R.id.item_testqrcodedecodeactivity) {
             Intent intent = new Intent(this, QRCodeDecodeActivity.class);
             startActivityForResult(intent, REQUEST_QRCODEDECODE_ACTIVITY);
@@ -278,13 +278,13 @@ final public class MainActivity extends Activity implements IWinBollActivity {
             }
             return true;
         } else if (item.getItemId() == R.id.item_log) {
-            WinBollActivityManager.getInstance(this).startWinBollActivity(this, LogActivity.class);
+            //WinBollActivityManager.getInstance(this).startWinBollActivity(this, LogActivity.class);
             return true;
         } else if (item.getItemId() == R.id.item_exitdebug) {
             //AboutView.setApp2NormalMode(this);
             return true;
         } else if (item.getItemId() == android.R.id.home) {
-            WinBollActivityManager.getInstance(this).finish(this);
+            //WinBollActivityManager.getInstance(this).finish(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -301,7 +301,7 @@ final public class MainActivity extends Activity implements IWinBollActivity {
 
             @Override
             public void onYes() {
-                WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
+                //WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
             }
 
             @Override
@@ -314,12 +314,12 @@ final public class MainActivity extends Activity implements IWinBollActivity {
 
     @Override
     public void onBackPressed() {
-        if (WinBollActivityManager.getInstance(getApplicationContext()).isFirstIWinBollActivity(this)) {
-            exit();
-        } else {
-            WinBollActivityManager.getInstance(this).finish(this);
-            super.onBackPressed();
-        }
+//        if (WinBollActivityManager.getInstance(getApplicationContext()).isFirstIWinBollActivity(this)) {
+//            exit();
+//        } else {
+//            WinBollActivityManager.getInstance(this).finish(this);
+//            super.onBackPressed();
+//        }
     }
 
     public void onTestAboutActivity(View view) {
@@ -329,7 +329,7 @@ final public class MainActivity extends Activity implements IWinBollActivity {
     public void onTestJavascriptHtmlActivity(View view) {
         Intent intent = new Intent(this, AssetsHtmlActivity.class);
         intent.putExtra(AssetsHtmlActivity.EXTRA_HTMLFILENAME, "javascript_test.html");
-        WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, AssetsHtmlActivity.class);
+        //WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, AssetsHtmlActivity.class);
     }
 
     @Override

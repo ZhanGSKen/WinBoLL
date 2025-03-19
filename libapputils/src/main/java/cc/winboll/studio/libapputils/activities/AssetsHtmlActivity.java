@@ -33,11 +33,11 @@ public class AssetsHtmlActivity extends Activity implements IWinBollActivity {
 
     // Assets 文件夹里的 Html 文件的名称
     String mszHtmlFileName;
-
-    @Override
-    public Activity getActivity() {
-        return this;
-    }
+//
+//    @Override
+//    public Activity getActivity() {
+//        return this;
+//    }
 
     @Override
     public APPInfo getAppInfo() {

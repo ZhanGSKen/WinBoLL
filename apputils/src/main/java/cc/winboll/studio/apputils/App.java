@@ -77,7 +77,7 @@ public class App extends GlobalApplication {
             mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
             registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
             // 设置默认 WinBoll 应用 UI 类型
-            WinBollActivityManager.getInstance(this).setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
+            //WinBollActivityManager.getInstance(this).setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
             //ToastUtils.show("WinBollUI_TYPE " + getWinBollUI_TYPE());
         } catch (Exception e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
