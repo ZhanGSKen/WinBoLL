@@ -354,15 +354,15 @@ public class TXMSFragment extends Fragment implements /*EasyPermissions.Permissi
     private void moveToLocation(Location location) {
         ToastUtils.show(String.format("%s", location.toString()));
 
-//        //对地图操作类进行操作
-//        CameraUpdate cameraSigma =
-//            CameraUpdateFactory.newCameraPosition(new CameraPosition(
-//                                                      convertToLatLng(location),
-//                                                      15,
-//                                                      0f,
-//                                                      0f));
-//        //移动地图
-//        tencentMap.moveCamera(cameraSigma);
+        //对地图操作类进行操作
+        CameraUpdate cameraSigma =
+            CameraUpdateFactory.newCameraPosition(new CameraPosition(
+                                                      convertToLatLng(location),
+                                                      15,
+                                                      0f,
+                                                      0f));
+        //移动地图
+        tencentMap.moveCamera(cameraSigma);
         //addLocationToMap(location);
     }
 
