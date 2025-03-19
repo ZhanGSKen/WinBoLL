@@ -16,12 +16,12 @@ import android.view.WindowManager;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.positions.R;
-import com.hjq.toast.ToastUtils;
 import java.lang.reflect.Field;
+import android.widget.Toolbar;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 
 public class SettingsActivity extends AppCompatActivity implements IWinBollActivity {
 
@@ -34,10 +34,6 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
         return null;
     }
 
-    @Override
-    public AppCompatActivity getActivity() {
-        return this;
-    }
     
     @Override
     public String getTag() {
@@ -66,12 +62,12 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
 
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
-        setSupportActionBar(mToolbar);
+        setActionBar(mToolbar);
         if (isEnableDisplayHomeAsUp()) {
             // 显示后退按钮
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        getSupportActionBar().setSubtitle(getTag());
+        getActionBar().setSubtitle(getTag());
         
     }
 

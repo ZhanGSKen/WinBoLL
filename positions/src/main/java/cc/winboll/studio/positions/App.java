@@ -7,7 +7,6 @@ package cc.winboll.studio.positions;
  */
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 
 public class App extends GlobalApplication {
 
@@ -20,7 +19,7 @@ public class App extends GlobalApplication {
         setIsDebuging(this, BuildConfig.DEBUG);
         super.onCreate();
         // 设置 WinBoll 应用 UI 类型
-        WinBollActivityManager.getInstance(this).setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Aplication);
+        //WinBollActivityManager.getInstance(this).setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Aplication);
 
         
         LogUtils.d(TAG, "onCreate");

@@ -33,7 +33,6 @@ import androidx.fragment.app.Fragment;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.positions.beans.PostionModel;
 import cc.winboll.studio.positions.utils.LocationFileStorage;
-import com.hjq.toast.ToastUtils;
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;
 import com.tencent.map.geolocation.TencentLocationManager;
@@ -54,9 +53,9 @@ import com.tencent.tencentmap.mapsdk.maps.model.MarkerOptions;
 import com.tencent.tencentmap.mapsdk.maps.model.MyLocationStyle;
 import java.util.ArrayList;
 import java.util.List;
-import pub.devrel.easypermissions.EasyPermissions;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 
-public class TXMSFragment extends Fragment implements EasyPermissions.PermissionCallbacks,LocationSource, TencentLocationListener {
+public class TXMSFragment extends Fragment implements /*EasyPermissions.PermissionCallbacks,*/LocationSource, TencentLocationListener {
 
     public static final String TAG = "TXMSFragment";
 
@@ -355,15 +354,15 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
     private void moveToLocation(Location location) {
         ToastUtils.show(String.format("%s", location.toString()));
 
-        //对地图操作类进行操作
-        CameraUpdate cameraSigma =
-            CameraUpdateFactory.newCameraPosition(new CameraPosition(
-                                                      convertToLatLng(location),
-                                                      15,
-                                                      0f,
-                                                      0f));
-        //移动地图
-        tencentMap.moveCamera(cameraSigma);
+//        //对地图操作类进行操作
+//        CameraUpdate cameraSigma =
+//            CameraUpdateFactory.newCameraPosition(new CameraPosition(
+//                                                      convertToLatLng(location),
+//                                                      15,
+//                                                      0f,
+//                                                      0f));
+//        //移动地图
+//        tencentMap.moveCamera(cameraSigma);
         //addLocationToMap(location);
     }
 
@@ -400,14 +399,14 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
                     public void run() {
 
                         //对地图操作类进行操作
-                        CameraUpdate cameraSigma =
-                            CameraUpdateFactory.newCameraPosition(new CameraPosition(
-                                                                      convertToLatLng(location),
-                                                                      15,
-                                                                      0f,
-                                                                      0f));
-                        //移动地图
-                        tencentMap.moveCamera(cameraSigma);
+//                        CameraUpdate cameraSigma =
+//                            CameraUpdateFactory.newCameraPosition(new CameraPosition(
+//                                                                      convertToLatLng(location),
+//                                                                      15,
+//                                                                      0f,
+//                                                                      0f));
+//                        //移动地图
+//                        tencentMap.moveCamera(cameraSigma);
 //                        Rules.getEffectInfo(location);
 //                        double distance = DistanceUtils.getDistance(
 //                            locationA.getLatitude(), 
@@ -477,15 +476,6 @@ public class TXMSFragment extends Fragment implements EasyPermissions.Permission
         locationChangedListener = null;
     }
 
-    @Override
-    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-        Log.e("location quest: ", "success");
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        Log.e("location quest: ", "failed");
-    }
 
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED

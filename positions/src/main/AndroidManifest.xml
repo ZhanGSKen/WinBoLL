@@ -35,6 +35,8 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
 
     <application
+        tools:replace="android:appComponentFactory"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -44,8 +46,7 @@
         android:theme="@style/MyAppTheme"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
-        tools:targetApi="q">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
         <activity android:name=".MainActivity">
 

@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -36,10 +35,12 @@ import cc.winboll.studio.positions.fragments.PositionsFragment;
 import cc.winboll.studio.positions.fragments.TXMSFragment;
 import cc.winboll.studio.positions.fragments.TasksFragment;
 import com.google.android.material.tabs.TabLayout;
-import com.hjq.toast.ToastUtils;
-import com.tencent.map.vector.demo.AbsActivity;
+//import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
+import cc.winboll.studio.positions.activities.AbsActivity;
+import android.widget.Toolbar;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 
 final public class MainActivity extends AbsActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
@@ -67,10 +68,6 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
 
     private static final int DIALER_REQUEST_CODE = 1;
 
-    @Override
-    public AppCompatActivity getActivity() {
-        return this;
-    }
 
     @Override
     public APPInfo getAppInfo() {
@@ -101,12 +98,12 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
 
         // 初始化工具栏
         mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        setActionBar(mToolbar);
 //        if (isEnableDisplayHomeAsUp()) {
 //            // 显示后退按钮
 //            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        }
-        getSupportActionBar().setTitle("");
+        getActionBar().setTitle("");
 
         // 初始化地图视图
         // 创建Fragment实例
@@ -279,23 +276,23 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
 
     @Override
     public void onBackPressed() {
-        exit();
+        //exit();
     }
 
-    void exit() {
-        YesNoAlertDialog.OnDialogResultListener listener = new YesNoAlertDialog.OnDialogResultListener(){
-
-            @Override
-            public void onYes() {
-                WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
-            }
-
-            @Override
-            public void onNo() {
-            }
-        };
-        YesNoAlertDialog.show(this, "[ " + getString(R.string.app_name) + " ]", "Exit(Yes/No).\nIs close all activity?", listener);
-    }
+//    void exit() {
+//        YesNoAlertDialog.OnDialogResultListener listener = new YesNoAlertDialog.OnDialogResultListener(){
+//
+//            @Override
+//            public void onYes() {
+//                WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
+//            }
+//
+//            @Override
+//            public void onNo() {
+//            }
+//        };
+//        YesNoAlertDialog.show(this, "[ " + getString(R.string.app_name) + " ]", "Exit(Yes/No).\nIs close all activity?", listener);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -315,8 +312,8 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
             startActivity(intent);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
         } else if (item.getItemId() == R.id.item_demomain) {
-            Intent intent = new Intent(this, com.tencent.map.vector.demo.DemoMainActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(this, com.tencent.map.vector.demo.DemoMainActivity.class);
+//            startActivity(intent);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
         } else if (item.getItemId() == R.id.item_positionnow) {
             mTXMSFragment.sendRealTimePositioningMessage();

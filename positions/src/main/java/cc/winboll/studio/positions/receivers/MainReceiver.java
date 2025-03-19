@@ -10,8 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import cc.winboll.studio.positions.services.MainService;
-import com.hjq.toast.ToastUtils;
+//import com.hjq.toast.ToastUtils;
 import java.lang.ref.WeakReference;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 
 public class MainReceiver extends BroadcastReceiver {
 

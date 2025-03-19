@@ -1,4 +1,4 @@
-package com.tencent.map.vector.demo;
+package cc.winboll.studio.positions.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Build;
