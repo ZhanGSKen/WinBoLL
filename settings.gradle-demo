@@ -49,3 +49,11 @@
 // MyMessageManager 项目编译设置
 //include ':mymessagemanager'
 //rootProject.name = "mymessagemanager"
+
+// AndroidDemo 项目编译设置
+//include ':androiddemo'
+//rootProject.name = "androiddemo"
+
+// AndroidXDemo 项目编译设置
+//include ':androidxdemo'
+//rootProject.name = "androidxdemo"
