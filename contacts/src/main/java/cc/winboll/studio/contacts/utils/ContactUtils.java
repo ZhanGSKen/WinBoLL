@@ -55,7 +55,7 @@ public class ContactUtils {
 
     public String getContactsName(String phone) {
         String result = contactMap.get(formatToSimplePhoneNumber(phone));
-        return result == null ? "[NoInContacts]" : result;
+        return result == null ? "[NotInContacts]" : result;
     }
 
 //    static String getSimplePhone(String phone) {
