@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 定义一个名为text_size_normal的尺寸，值为16sp -->
+    <dimen name="text_size_normal">16sp</dimen>
+    <!-- 定义一个名为margin_small的尺寸，值为8dp -->
+    <dimen name="margin_small">8dp</dimen>
+    <!-- 定义一个名为image_width的尺寸，值为200dp -->
+    <dimen name="button_height">24dp</dimen>
+</resources>

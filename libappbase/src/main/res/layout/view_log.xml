@@ -72,27 +72,29 @@
 		android:layout_below="@+id/viewlogRelativeLayoutToolbar"
 		android:id="@+id/viewlogLinearLayout1"
 		android:gravity="center_vertical"
-		android:background="#FFC0F4C2">
+		android:background="@drawable/bg_shadow">
 
 		<CheckBox
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			android:layout_height="@dimen/button_height"
 			android:text="ALL"
-			android:id="@+id/viewlogCheckBox1"/>
+			android:id="@+id/viewlogCheckBox1"
+			android:background="@drawable/bg_border_round"
+			android:layout_marginLeft="5dp"
+			android:layout_marginRight="5dp"/>
 
 		<HorizontalScrollView
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
+			android:background="@drawable/bg_border"
 			android:scrollbars="none"
-			android:layout_weight="1.0"
-			android:background="#FF97F2E3">
+			android:padding="5dp"
+			android:layout_weight="1.0">
 
 			<cc.winboll.studio.libappbase.views.HorizontalListView
 				android:layout_width="wrap_content"
 				android:layout_height="match_parent"
-				android:background="@drawable/view_border"
-				android:id="@+id/tags_listview"
-				android:paddingLeft="10dp"/>
+				android:id="@+id/tags_listview"/>
 
 		</HorizontalScrollView>
 
