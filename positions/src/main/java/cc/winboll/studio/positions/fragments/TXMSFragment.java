@@ -31,7 +31,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.positions.beans.PostionModel;
+import cc.winboll.studio.positions.models.PostionModel;
 import cc.winboll.studio.positions.utils.LocationFileStorage;
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;

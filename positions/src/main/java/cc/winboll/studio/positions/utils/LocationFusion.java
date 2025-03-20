@@ -5,9 +5,14 @@ package cc.winboll.studio.positions.utils;
  * @Date 2025/03/11 09:36:52
  * @Describe 定位数据融合类
  */
+import cc.winboll.studio.positions.App;
+import java.io.File;
+
 public class LocationFusion {
 
     public static final String TAG = "LocationFusion";
+    
+    static final String FILE_NAME = "LocationFusionModel.json";
 
     // 融合定位数据的方法
     public static double[] fuseLocationData(double latitudeGPSLock, double longitudeGPSLock,
@@ -28,4 +33,8 @@ public class LocationFusion {
 //        double[] fusedLocation = fuseLocationData(gpsLocation, wifiLocation, gpsWeight, wifiWeight);
 //        System.out.println("融合后的纬度: " + fusedLocation[0] + ", 经度: " + fusedLocation[1]);
 //    }
+    
+    static String getDataPath() {
+        return App.szDataFolder + File.separator + FILE_NAME;
+    }
 }

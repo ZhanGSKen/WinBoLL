@@ -15,16 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.positions.beans.PostionModel;
+import cc.winboll.studio.positions.models.PostionModel;
+import cc.winboll.studio.positions.App;
+import java.io.File;
 
 public class LocationFileStorage {
     public static final String TAG = "LocationFileStorage";
 
-    private static final String FILE_NAME = "locations.json";
+    static final String FILE_NAME = "locations.json";
 
     public static void saveToFile(Context context, ArrayList<PostionModel> locations) {
         try {
-            PostionModel.saveBeanList(context, locations, PostionModel.class);
+            PostionModel.saveBeanListToFile(getDataPath(), locations);
         } catch (Exception e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }
@@ -33,10 +35,14 @@ public class LocationFileStorage {
     public static ArrayList<PostionModel> loadFromFile(Context context) {
         ArrayList<PostionModel> result = new ArrayList<PostionModel>();
         try {
-            PostionModel.loadBeanList(context, result, PostionModel.class);
+            PostionModel.loadBeanListFromFile(getDataPath(), result, PostionModel.class);
         } catch (Exception e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }
         return result;
+    }
+    
+    static String getDataPath() {
+        return App.szDataFolder + File.separator + FILE_NAME;
     }
 }

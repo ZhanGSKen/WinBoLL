@@ -21,7 +21,7 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.sos.WinBoll;
 import cc.winboll.studio.positions.App;
-import cc.winboll.studio.positions.beans.MainServiceBean;
+import cc.winboll.studio.positions.models.MainServiceBean;
 import cc.winboll.studio.positions.handlers.MainServiceHandler;
 import cc.winboll.studio.positions.receivers.MainReceiver;
 import cc.winboll.studio.positions.services.MainService;

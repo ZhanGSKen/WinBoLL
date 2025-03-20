@@ -29,7 +29,7 @@ import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.positions.R;
 import cc.winboll.studio.positions.activities.SettingsActivity;
 import cc.winboll.studio.positions.activities.TestMapViewActivity;
-import cc.winboll.studio.positions.beans.PostionModel;
+import cc.winboll.studio.positions.models.PostionModel;
 import cc.winboll.studio.positions.utils.LocationFileStorage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;

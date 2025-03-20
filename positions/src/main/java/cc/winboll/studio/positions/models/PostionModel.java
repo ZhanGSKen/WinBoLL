@@ -1,4 +1,4 @@
-package cc.winboll.studio.positions.beans;
+package cc.winboll.studio.positions.models;
 
 /**
  * @Author ZhanGSKen@AliYun.Com

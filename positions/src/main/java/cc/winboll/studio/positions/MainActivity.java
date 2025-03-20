@@ -29,7 +29,7 @@ import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
 import cc.winboll.studio.positions.R;
 import cc.winboll.studio.positions.activities.JointPositioningActivity;
 import cc.winboll.studio.positions.activities.SettingsActivity;
-import cc.winboll.studio.positions.beans.MainServiceBean;
+import cc.winboll.studio.positions.models.MainServiceBean;
 import cc.winboll.studio.positions.fragments.LogFragment;
 import cc.winboll.studio.positions.fragments.PositionsFragment;
 import cc.winboll.studio.positions.fragments.TXMSFragment;
