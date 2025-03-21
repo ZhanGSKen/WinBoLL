@@ -5,6 +5,7 @@ package cc.winboll.studio.positions.fragments;
  * @Date 2025/02/25 12:44:39
  * @Describe 腾讯地图服务视图
  */
+import com.tencent.tencentmap.mapsdk.maps.model.LatLng;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -55,7 +56,7 @@ import com.tencent.tencentmap.mapsdk.maps.model.MarkerOptions;
 import com.tencent.tencentmap.mapsdk.maps.model.MyLocationStyle;
 import java.util.ArrayList;
 
-public class TXMSFragment extends Fragment implements /*EasyPermissions.PermissionCallbacks,*/LocationSource, TencentLocationListener {
+public class TXMSFragment extends Fragment implements /*EasyPermissions.PermissionCallbacks,*/LocationSource, TencentLocationListener,TencentMap.OnMapClickListener {
 
     public static final String TAG = "TXMSFragment";
 
@@ -100,24 +101,7 @@ public class TXMSFragment extends Fragment implements /*EasyPermissions.Permissi
         checkLocationPermission();
 
         // 设置地图点击监听
-        tencentMap.setOnMapClickListener(new TencentMap.OnMapClickListener(){
-
-                @Override
-                public void onMapClick(com.tencent.tencentmap.mapsdk.maps.model.LatLng latLng) {
-                    //创建Marker对象之前，设置属性
-                    //LatLng position = new LatLng(40.011313,116.391907);
-                    BitmapDescriptor custom = BitmapDescriptorFactory.fromResource(R.drawable.marker);
-                    Location location = createTXLocationFromLatLng(latLng);
-                    addLocationToMap(location);
-                    Marker mCustomMarker = tencentMap.addMarker(new MarkerOptions(latLng));
-
-                    //创建Marker对象之后，修改属性
-//                    Animation animation = new AlphaAnimation(0.7f, 0f);
-//                    animation.setDuration(2000);
-//                    mCustomMarker.setAnimation(animation);
-//                    mCustomMarker.startAnimation();
-                }
-            });
+        tencentMap.setOnMapClickListener(this);
 
         loadLocations();
 
@@ -139,6 +123,22 @@ public class TXMSFragment extends Fragment implements /*EasyPermissions.Permissi
         startLocation();
 
         return viewRoot;
+    }
+    
+    @Override
+    public void onMapClick(LatLng latLng) {
+        //创建Marker对象之前，设置属性
+        //LatLng position = new LatLng(40.011313,116.391907);
+        BitmapDescriptor custom = BitmapDescriptorFactory.fromResource(R.drawable.marker);
+        Location location = createTXLocationFromLatLng(latLng);
+        addLocationToMap(location);
+        Marker mCustomMarker = tencentMap.addMarker(new MarkerOptions(latLng));
+
+        //创建Marker对象之后，修改属性
+//                    Animation animation = new AlphaAnimation(0.7f, 0f);
+//                    animation.setDuration(2000);
+//                    mCustomMarker.setAnimation(animation);
+//                    mCustomMarker.startAnimation();
     }
 
     void genLocationFixModel() {
@@ -356,7 +356,7 @@ public class TXMSFragment extends Fragment implements /*EasyPermissions.Permissi
         CameraUpdate cameraSigma =
             CameraUpdateFactory.newCameraPosition(new CameraPosition(
                                                       convertLocationToLatLng(location),
-                                                      19f,
+                                                      20f,
                                                       0f,
                                                       0f));
         //移动地图

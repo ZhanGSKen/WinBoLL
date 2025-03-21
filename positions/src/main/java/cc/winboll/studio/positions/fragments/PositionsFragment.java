@@ -66,8 +66,9 @@ public class PositionsFragment extends Fragment {
     static Location _LocationPhoneGPSLock;
 
     LocationManager locationManagerPhoneGPS;
-    volatile static int nFixActivationCountValue = 20;
+    volatile static int nFixActivationCountValue = 70;
     volatile static int nCurrentFixActivationCountValue = 0;
+    volatile static int nGPSUpdateCount = 0;
 
 //    public static PositionsFragment newInstance(int page) {
 //        Bundle args = new Bundle();
@@ -93,6 +94,7 @@ public class PositionsFragment extends Fragment {
         View viewMain = inflater.inflate(R.layout.fragment_positions, container, false);
 
         nCurrentFixActivationCountValue = 0;
+        nGPSUpdateCount = 0;
 
 //        Toolbar toolbar = viewMain.findViewById(R.id.toolbar);
 //        getActivity().getMenuInflater().inflate(R.menu.toolbar_positions,  toolbar.getMenu());
@@ -121,8 +123,6 @@ public class PositionsFragment extends Fragment {
                         _LocationPhoneGPSLock.setLongitude(Double.parseDouble(metLockLongitude.getText().toString()));
                         ToastUtils.show("定位手动设定位置");
                     } else {
-                        // 用腾讯定位数据与GPS定位数据的数据差修复模型，来修复一下GPS定位数据。
-                        mPostionFixModel = PostionFixModel.loadPostionFixModel();
                         Location locationFix = fixGPSLocationFromPostionFixModel(_LocationPhoneGPS);
                         //_LocationPhoneGPSLock = _LocationTX;
                         _LocationPhoneGPSLock = locationFix;
@@ -154,7 +154,7 @@ public class PositionsFragment extends Fragment {
 
     void showLocationPhoneGPS() {
         if (_LocationPhoneGPS != null) {
-            String szTemp = String.format("\nPhoneGPS MyLocation Info\nLatitude %f\nLongitude %f\nAccuracy %f\n", _LocationPhoneGPS.getLatitude(), _LocationPhoneGPS.getLongitude(), _LocationPhoneGPS.getAccuracy());
+            String szTemp = String.format("\n(%d)PhoneGPS MyLocation Info\nLatitude %f\nLongitude %f\nAccuracy %f\n", nGPSUpdateCount, _LocationPhoneGPS.getLatitude(), _LocationPhoneGPS.getLongitude(), _LocationPhoneGPS.getAccuracy());
             mtvPhoneMyLocationInfo.append(szTemp);
             LogUtils.d(TAG, szTemp);
         }
@@ -162,7 +162,8 @@ public class PositionsFragment extends Fragment {
 
     void showPostionFixModelInfo() {
         if (mPostionFixModel != null && _LocationTX != null && _LocationPhoneGPS != null) {
-            String szTemp = String.format("\nFixModel Info\nLatitude TX %f\nLatitude GPS %f\nLatitude Fix %f\nLongitude TX %f\nLongitude GPS %f\nLongitude Fix %f\n\n",
+            String szTemp = String.format("\n(%d)FixModel Info\nLatitude TX %f\nLatitude GPS %f\nLatitude Fix %f\nLongitude TX %f\nLongitude GPS %f\nLongitude Fix %f\n\n",
+                                          nCurrentFixActivationCountValue,
                                           _LocationTX.getLatitude(),
                                           _LocationPhoneGPS.getLatitude(),
                                           mPostionFixModel.getLatitudeFixModel(),
@@ -176,14 +177,16 @@ public class PositionsFragment extends Fragment {
 
     void showLockPostionInfo() {
         if (mPostionFixModel != null && _LocationTX != null && _LocationPhoneGPSLock != null) {
-            String szTemp = String.format("\n%s\nFixModel Info\nLatitude TX %f\nLatitude GPS %f\nLatitude Fix %f\nLongitude TX %f\nLongitude GPS %f\nLongitude Fix %f\n\n",
+            String szTemp = String.format("\n%s\nFixModel Info\nLatitude TX %f\nLatitude GPS %f\nLatitude Fix %f\nLatitude GPSLock %f\nLongitude TX %f\nLongitude GPS %f\nLongitude Fix %f\nLongitude GPSLock %f\n\n",
                                           TimeUtils.getCurrentTimeString(),
                                           _LocationTX.getLatitude(),
                                           _LocationPhoneGPS.getLatitude(),
                                           mPostionFixModel.getLatitudeFixModel(),
+                                          _LocationPhoneGPSLock.getLatitude(),
                                           _LocationTX.getLongitude(),
                                           _LocationPhoneGPS.getLongitude(),
-                                          mPostionFixModel.getLongitudeFixModel());
+                                          mPostionFixModel.getLongitudeFixModel(),
+                                          _LocationPhoneGPSLock.getLongitude());
             mtvLockPostionInfo.append(szTemp);
             LogUtils.d(TAG, szTemp);
         }
@@ -265,6 +268,9 @@ public class PositionsFragment extends Fragment {
     }
 
     private Location fixGPSLocationFromPostionFixModel(Location location) {
+        // 用腾讯定位数据与GPS定位数据的数据差修复模型，来修复一下GPS定位数据。
+        mPostionFixModel = PostionFixModel.loadPostionFixModel();
+        
         //Location location = locationTX;
         Location locationFix = new Location("GPS_Fix_Map_Manual");
 
@@ -273,17 +279,18 @@ public class PositionsFragment extends Fragment {
         locationFix.setLongitude(location.getLongitude() - mPostionFixModel.getLongitudeFixModel());
 
         // 设置必要元数据
-        location.setTime(System.currentTimeMillis());
-        location.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
-        location.setAccuracy(5.0f); // 手动点击精度设为5米
+        locationFix.setTime(System.currentTimeMillis());
+        locationFix.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+        locationFix.setAccuracy(5.0f); // 手动点击精度设为5米
 
-        return location;
+        return locationFix;
     }
 
     private LocationListener phoneGPSLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             // 处理GPS定位结果
+            nGPSUpdateCount++;
             updateGPSLocation(location);
         }
 
