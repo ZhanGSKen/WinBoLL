@@ -18,14 +18,15 @@ import android.media.RingtoneManager;
 import android.os.Build;
 import android.view.View;
 import android.widget.RemoteViews;
+import androidx.annotation.RequiresApi;
 import cc.winboll.studio.powerbell.MainActivity;
 import cc.winboll.studio.powerbell.R;
 import cc.winboll.studio.powerbell.beans.NotificationMessage;
 import cc.winboll.studio.powerbell.services.ControlCenterService;
 
-public class NotificationUtils {
+public class NotificationUtils2 {
 
-    public static final String TAG = NotificationUtils.class.getSimpleName();
+    public static final String TAG = NotificationHelper.class.getSimpleName();
 
     Context mContext;
     NotificationManager mNotificationManager;
@@ -45,19 +46,53 @@ public class NotificationUtils {
     private static String _mszChannelIDRemind = "2";
     private static String _mszChannelNameRemind = "Remind";
 
-    public NotificationUtils(Context context) {
+//    public NotificationUtils(Context context) {
+//        mContext = context;
+//        mNotificationManager = (NotificationManager) context.getSystemService(
+//            Context.NOTIFICATION_SERVICE);
+//    }
+
+    public NotificationUtils2(Context context) {
         mContext = context;
-        mNotificationManager = (NotificationManager) context.getSystemService(
-            Context.NOTIFICATION_SERVICE);
+        mNotificationManager = context.getSystemService(NotificationManager.class);
+        //createNotificationChannels();
     }
 
-    public void createNotificationChannel() {
-        NotificationChannel channel1 = new NotificationChannel(_mszChannelIDService, _mszChannelNameService, NotificationManager.IMPORTANCE_DEFAULT);
-        channel1.setSound(null, null);
-        mNotificationManager.createNotificationChannel(channel1);
-        NotificationChannel channel2 = new NotificationChannel(_mszChannelIDRemind, _mszChannelNameRemind, NotificationManager.IMPORTANCE_HIGH);
-        channel2.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE), Notification.AUDIO_ATTRIBUTES_DEFAULT);
-        mNotificationManager.createNotificationChannel(channel2);
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void createNotificationChannels() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createServiceChannel();
+            createRemindChannel();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createServiceChannel() {
+        NotificationChannel channel = new NotificationChannel(
+            _mszChannelIDService,
+            _mszChannelNameService,
+            NotificationManager.IMPORTANCE_LOW
+        );
+        channel.setDescription("Background service updates");
+        channel.setSound(null, null);
+        channel.enableVibration(false);
+        mNotificationManager.createNotificationChannel(channel);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createRemindChannel() {
+        NotificationChannel channel = new NotificationChannel(
+            _mszChannelIDRemind,
+            _mszChannelNameRemind,
+            NotificationManager.IMPORTANCE_HIGH
+        );
+        channel.setDescription("Critical reminders");
+        channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM), null);
+        channel.enableVibration(true);
+        channel.setVibrationPattern(new long[]{100, 200, 300, 400});
+        channel.setBypassDnd(true);
+        channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+        mNotificationManager.createNotificationChannel(channel);
     }
 
     // 创建并发送服务通知

@@ -193,7 +193,7 @@ public class AppConfigUtils {
     //
     void saveConfigData() {
         // 更新配置先取消一下旧的的提醒消息
-        NotificationUtils.cancelRemindNotification(mContext);
+        //NotificationHelper.cancelRemindNotification(mContext);
         
         AppConfigBean.saveBean(mContext, mAppConfigBean);
         // 通知活动窗口和服务配置已更新

@@ -8,7 +8,7 @@ import cc.winboll.studio.powerbell.GlobalApplication;
 import cc.winboll.studio.powerbell.fragments.MainViewFragment;
 import cc.winboll.studio.powerbell.utils.AppConfigUtils;
 import cc.winboll.studio.powerbell.utils.BatteryUtils;
-import cc.winboll.studio.powerbell.utils.NotificationUtils;
+import cc.winboll.studio.powerbell.utils.NotificationHelper;
 
 public class GlobalApplicationReceiver extends BroadcastReceiver {
 
@@ -45,7 +45,7 @@ public class GlobalApplicationReceiver extends BroadcastReceiver {
             // 新电池状态标志某一个有变化就更新显示信息
             if (_mIsCharging != isCharging || _mnTheQuantityOfElectricityOld != nTheQuantityOfElectricity) {
                 // 电池状态改变先取消旧的提醒消息
-                NotificationUtils.cancelRemindNotification(context);
+                //NotificationHelper.cancelRemindNotification(context);
                 
                 GlobalApplication.getAppCacheUtils(context).addChangingTime(nTheQuantityOfElectricity);
                 MainViewFragment.sendMsgCurrentValueBattery(nTheQuantityOfElectricity);

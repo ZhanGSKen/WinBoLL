@@ -8,14 +8,17 @@ package cc.winboll.studio.powerbell.services;
  * Android Service之onStartCommand方法研究
  * https://blog.csdn.net/cyp331203/article/details/38920491
  */
-import cc.winboll.studio.powerbell.R;
+import android.app.Notification;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.widget.RemoteViews;
 import cc.winboll.studio.powerbell.GlobalApplication;
+import cc.winboll.studio.powerbell.MainActivity;
+import cc.winboll.studio.powerbell.R;
 import cc.winboll.studio.powerbell.beans.AppConfigBean;
 import cc.winboll.studio.powerbell.beans.NotificationMessage;
 import cc.winboll.studio.powerbell.handlers.ControlCenterServiceHandler;
@@ -24,11 +27,12 @@ import cc.winboll.studio.powerbell.services.AssistantService;
 import cc.winboll.studio.powerbell.threads.RemindThread;
 import cc.winboll.studio.powerbell.utils.AppCacheUtils;
 import cc.winboll.studio.powerbell.utils.AppConfigUtils;
-import cc.winboll.studio.powerbell.utils.NotificationUtils;
+import cc.winboll.studio.powerbell.utils.NotificationHelper;
 import cc.winboll.studio.powerbell.utils.ServiceUtils;
 import cc.winboll.studio.powerbell.utils.StringUtils;
 import cc.winboll.studio.shared.log.LogUtils;
 import com.hjq.toast.ToastUtils;
+import android.graphics.Color;
 
 public class ControlCenterService extends Service {
 
@@ -43,7 +47,8 @@ public class ControlCenterService extends Service {
     AppConfigUtils mAppConfigUtils;
     AppCacheUtils mAppCacheUtils;
     // 前台服务通知工具
-    NotificationUtils mNotificationUtils;
+    NotificationHelper mNotificationHelper;
+    Notification notification;
     RemindThread mRemindThread;
     ControlCenterServiceHandler mControlCenterServiceHandler;
     MyServiceConnection mMyServiceConnection;
@@ -66,7 +71,9 @@ public class ControlCenterService extends Service {
         isServiceRunning = false;
         mAppConfigUtils = GlobalApplication.getAppConfigUtils(this);
         mAppCacheUtils = GlobalApplication.getAppCacheUtils(this);
-        mNotificationUtils = new NotificationUtils(ControlCenterService.this);
+        mNotificationHelper = new NotificationHelper(ControlCenterService.this);
+        
+        
         if (mMyServiceConnection == null) {
             mMyServiceConnection = new MyServiceConnection();
         }
@@ -92,10 +99,16 @@ public class ControlCenterService extends Service {
             // 唤醒守护进程
             wakeupAndBindAssistant();
             // 显示前台通知栏
-            NotificationMessage notificationMessage=createNotificationMessage();
-            //Toast.makeText(getApplication(), "", Toast.LENGTH_SHORT).show();
-            mNotificationUtils.createForegroundNotification(this, notificationMessage);
-            mNotificationUtils.createRemindNotification(this, notificationMessage);
+            // 在Service中
+            NotificationHelper helper = new NotificationHelper(this);
+            Intent intent = new Intent(this, MainActivity.class);
+            notification = helper.showForegroundNotification(intent, getString(R.string.app_name), "Service Running, Click to open app");
+            startForeground(NotificationHelper.FOREGROUND_NOTIFICATION_ID, notification);
+            
+//            NotificationMessage notificationMessage=createNotificationMessage();
+//            //Toast.makeText(getApplication(), "", Toast.LENGTH_SHORT).show();
+//            mNotificationUtils.createForegroundNotification(this, notificationMessage);
+//            mNotificationUtils.createRemindNotification(this, notificationMessage);
 
             if (mControlCenterServiceReceiver == null) {
                 // 注册广播接收器
@@ -126,19 +139,19 @@ public class ControlCenterService extends Service {
     // 更新前台通知
     //
     public void updateServiceNotification() {
-        mNotificationUtils.updateForegroundNotification(ControlCenterService.this, createNotificationMessage());
+        //mNotificationUtils.updateForegroundNotification(ControlCenterService.this, createNotificationMessage());
     }
 
     // 更新前台通知
     //
     public void updateServiceNotification(NotificationMessage notificationMessage) {
-        mNotificationUtils.updateForegroundNotification(ControlCenterService.this, notificationMessage);
+        //mNotificationUtils.updateForegroundNotification(ControlCenterService.this, notificationMessage);
     }
 
     // 更新前台通知
     //
     public void updateRemindNotification(NotificationMessage notificationMessage) {
-        mNotificationUtils.updateRemindNotification(ControlCenterService.this, notificationMessage);
+        //mNotificationUtils.updateRemindNotification(ControlCenterService.this, notificationMessage);
     }
 
     // 唤醒和绑定守护进程
@@ -234,10 +247,32 @@ public class ControlCenterService extends Service {
     }
 
     public void appenRemindMSG(String szRemindMSG) {
-        NotificationMessage notificationMessage = createNotificationMessage();
-        notificationMessage.setRemindMSG(szRemindMSG);
-        //LogUtils.d(TAG, "notificationMessage : " + notificationMessage.getRemindMSG());
-        updateRemindNotification(notificationMessage);
+        String msg = "";
+        for (int i = 0; i < 20; i++) {
+            msg += szRemindMSG;
+        }
+        NotificationHelper helper = new NotificationHelper(ControlCenterService.this);
+        Intent intent = new Intent(ControlCenterService.this, MainActivity.class);
+        helper.showTemporaryNotification(intent, getString(R.string.app_name), msg);
+        
+        
+        
+//        NotificationMessage notificationMessage = createNotificationMessage();
+//        notificationMessage.setRemindMSG(szRemindMSG);
+//        //LogUtils.d(TAG, "notificationMessage : " + notificationMessage.getRemindMSG());
+//        updateRemindNotification(notificationMessage);
+    }
+    
+    // 设置颜色背景
+    public static RemoteViews setLinearLayoutColor(RemoteViews remoteViews, int viewId, int color) {
+        remoteViews.setInt(viewId, "setBackgroundColor", color);
+        return remoteViews;
+    }
+
+    // 设置Drawable背景
+    public static RemoteViews setLinearLayoutDrawable(RemoteViews remoteViews, int viewId, int drawableRes) {
+        remoteViews.setInt(viewId, "setBackgroundResource", drawableRes);
+        return remoteViews;
     }
 
     //

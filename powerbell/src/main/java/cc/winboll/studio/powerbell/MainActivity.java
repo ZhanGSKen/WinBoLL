@@ -17,7 +17,7 @@ import cc.winboll.studio.powerbell.activities.AboutActivity;
 import cc.winboll.studio.powerbell.activities.BackgroundPictureActivity;
 import cc.winboll.studio.powerbell.activities.ClearRecordActivity;
 import cc.winboll.studio.powerbell.fragments.MainViewFragment;
-import cc.winboll.studio.powerbell.utils.NotificationUtils;
+import cc.winboll.studio.powerbell.utils.NotificationHelper;
 import cc.winboll.studio.shared.log.LogUtils;
 import cc.winboll.studio.shared.log.LogView;
 
@@ -64,8 +64,10 @@ public class MainActivity extends Activity {
         }
         showFragment(mMainViewFragment);
 
-        NotificationUtils notificationUtils = new NotificationUtils(this);
-        notificationUtils.createNotificationChannel();
+//        NotificationHelper notificationUtils = new NotificationHelper(this);
+//        notificationUtils.createNotificationChannels();
+        
+        
     }
 
     void showFragment(Fragment fragment) {
@@ -113,7 +115,7 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         // 回到窗口自动取消提醒消息
-        NotificationUtils.cancelRemindNotification(this);
+        //NotificationHelper.cancelRemindNotification(this);
 
         reloadBackground();
     }
