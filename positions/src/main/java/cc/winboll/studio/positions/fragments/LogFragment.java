@@ -43,8 +43,8 @@ public class LogFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_log, container, false);
-        LogView logView = view.findViewById(R.id.logview);
-        logView.start();
+//        LogView logView = view.findViewById(R.id.logview);
+//        logView.start();
         return view;
     }
 }

@@ -41,6 +41,7 @@ import java.util.List;
 import cc.winboll.studio.positions.activities.AbsActivity;
 import android.widget.Toolbar;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 final public class MainActivity extends AbsActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
@@ -50,8 +51,15 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
     public static final int REQUEST_ABOUT_ACTIVITY = 1;
 
     public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
-
+    
+    // 创建Fragment列表和标题列表
+    List<Fragment> fragmentList = new ArrayList<>();
+    List<String> tabTitleList = new ArrayList<>();
+    
     TXMSFragment mTXMSFragment;
+    PositionsFragment mPositionsFragment;
+    TasksFragment mTasksFragment;
+    LogFragment mLogFragment;
     LogView mLogView;
     Toolbar mToolbar;
     CheckBox cbMainService;
@@ -97,13 +105,13 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
         setContentView(R.layout.activity_main);
 
         // 初始化工具栏
-        mToolbar = findViewById(R.id.toolbar);
-        setActionBar(mToolbar);
-//        if (isEnableDisplayHomeAsUp()) {
-//            // 显示后退按钮
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        }
-        getActionBar().setTitle("");
+//        mToolbar = findViewById(R.id.toolbar);
+//        setActionBar(mToolbar);
+////        if (isEnableDisplayHomeAsUp()) {
+////            // 显示后退按钮
+////            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+////        }
+//        getActionBar().setTitle("");
 
         // 初始化地图视图
         // 创建Fragment实例
@@ -117,18 +125,23 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
 
-        // 创建Fragment列表和标题列表
-        List<Fragment> fragmentList = new ArrayList<>();
-        List<String> tabTitleList = new ArrayList<>();
-        fragmentList.add(new PositionsFragment());
-        fragmentList.add(new TasksFragment());
-        fragmentList.add(new LogFragment());
+        mPositionsFragment = new PositionsFragment();
+        fragmentList.add(mPositionsFragment);
         tabTitleList.add("位置");
+        
+        mTasksFragment = new TasksFragment();
+        fragmentList.add(mTasksFragment);
         tabTitleList.add("任务");
+        
+        
+        mLogFragment = new LogFragment();
+        fragmentList.add(mLogFragment);
         tabTitleList.add("日志");
+        
+        
 
         // 设置ViewPager的适配器
-        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager(), fragmentList, tabTitleList);
+        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
         // 关联TabLayout和ViewPager
@@ -137,25 +150,23 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
 
 
     // ViewPager的适配器
-    private class MyPagerAdapter extends FragmentPagerAdapter {
+    public class MyPagerAdapter extends FragmentStatePagerAdapter {
+        private static final int PAGE_COUNT = 3;
 
-        private List<Fragment> fragmentList;
-        private List<String> tabTitleList;
-
-        public MyPagerAdapter(FragmentManager fm, List<Fragment> fragmentList, List<String> tabTitleList) {
-            super(fm);
-            this.fragmentList = fragmentList;
-            this.tabTitleList = tabTitleList;
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @Override
         public Fragment getItem(int position) {
+            // 根据position返回不同的Fragment
             return fragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            return fragmentList.size();
+            // 返回页面总数
+            return PAGE_COUNT;
         }
 
         @Override
@@ -163,6 +174,7 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
             return tabTitleList.get(position);
         }
     }
+    
     //初始化view，即显示的图片
 //    void initViewPager() {
 //        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
@@ -261,7 +273,8 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
 
     @Override
     public Toolbar initToolBar() {
-        return findViewById(R.id.toolbar);
+        return null;
+        //return findViewById(R.id.toolbar);
     }
 
     @Override

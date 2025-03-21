@@ -21,7 +21,7 @@ import cc.winboll.studio.libappbase.utils.ToastUtils;
 
 public class TasksFragment extends Fragment {
 
-    public static final String TAG = "GmsFragment";
+    public static final String TAG = "TasksFragment";
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
