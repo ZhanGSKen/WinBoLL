@@ -1,34 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
-        <com.tencent.tencentmap.mapsdk.maps.TextureMapView
-            android:id="@+id/mapview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:background="#CAFFFFFF"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true">
+		<com.tencent.tencentmap.mapsdk.maps.TextureMapView
+			android:id="@+id/mapview"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"/>
 
-        </TextView>
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
 
-    </RelativeLayout>
-    
+			<TextView
+				android:id="@+id/txmylocationinfo_tv"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textColor="@color/colorPrimary"
+				android:textStyle="bold"
+				android:textSize="10sp"
+				android:background="#C0FFFFFF">
+
+			</TextView>
+
+			<TextView
+				android:id="@+id/phonemylocationinfo_tv"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textColor="@color/colorPrimary"
+				android:textStyle="bold"
+				android:textSize="10sp"
+				android:background="#C0FFFFFF"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true">
+
+			</TextView>
+
+			<TextView
+				android:id="@+id/postionfixmodelinfo_tv"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textColor="@color/colorPrimary"
+				android:textStyle="bold"
+				android:textSize="10sp"
+				android:background="#C0FFFFFF"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true">
+
+			</TextView>
+
+		</LinearLayout>
+
+	</RelativeLayout>
+
 </LinearLayout>
 

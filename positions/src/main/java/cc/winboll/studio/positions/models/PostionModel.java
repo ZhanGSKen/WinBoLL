@@ -5,7 +5,6 @@ package cc.winboll.studio.positions.models;
  * @Date 2025/02/25 02:58:33
  * @Describe LocationJson
  */
-
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
