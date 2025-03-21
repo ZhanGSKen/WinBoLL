@@ -152,11 +152,11 @@
 
 			</LinearLayout>
 
-			<Button
-				android:layout_width="wrap_content"
+			<Switch
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="定位"
-				android:id="@+id/locking_position_btn"/>
+				android:text="启用提醒服务"
+				android:id="@+id/taskservice_sw"/>
 
 		</LinearLayout>
 

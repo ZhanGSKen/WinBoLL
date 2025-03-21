@@ -33,6 +33,7 @@ import cc.winboll.studio.positions.models.PostionFixModel;
 import cc.winboll.studio.positions.utils.LocationFusion;
 import cc.winboll.studio.positions.utils.TimeUtils;
 import android.widget.EditText;
+import android.widget.Switch;
 
 public class PositionsFragment extends Fragment {
 
@@ -52,6 +53,8 @@ public class PositionsFragment extends Fragment {
 
     EditText metLockLatitude;
     EditText metLockLongitude;
+    
+    Switch mswTaskService;
 
     double latitudeWifiLock;
     double longitudeWifiLock;
@@ -106,34 +109,21 @@ public class PositionsFragment extends Fragment {
 
         metLockLatitude = viewMain.findViewById(R.id.locklatitude_et);
         metLockLongitude = viewMain.findViewById(R.id.locklongitude_et);
+        metLockLatitude.setEnabled(false);
+        metLockLongitude.setEnabled(false);
 
 //        tvWifiLocation = viewMain.findViewById(R.id.wifi_position_tv);
 //        tvGPSLocation = viewMain.findViewById(R.id.gps_position_tv);
 //        tvFuseLocation = viewMain.findViewById(R.id.fuse_position_tv);
         locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
 
-        Button btnLockingPosition = viewMain.findViewById(R.id.locking_position_btn);
-        btnLockingPosition.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View p1) {
-                    if (!metLockLatitude.getText().toString().trim().equals("")
-                        && !metLockLongitude.getText().toString().trim().equals("")) {
-                        _LocationPhoneGPSLock = new Location("User_Defined_GPS");
-                        _LocationPhoneGPSLock.setLatitude(Double.parseDouble(metLockLatitude.getText().toString()));
-                        _LocationPhoneGPSLock.setLongitude(Double.parseDouble(metLockLongitude.getText().toString()));
-                        ToastUtils.show("定位手动设定位置");
-                    } else {
-                        Location locationFix = fixGPSLocationFromPostionFixModel(_LocationPhoneGPS);
-                        //_LocationPhoneGPSLock = _LocationTX;
-                        _LocationPhoneGPSLock = locationFix;
-                        ToastUtils.show("定位GPS设定位置");
-                    }
-                    showLockPostionInfo();
-                    //ToastUtils.show(String.format("%s", locationFix.toString()));
-
-                    TXMSFragment.moveToLocation(_LocationPhoneGPSLock.getLatitude(), _LocationPhoneGPSLock.getLongitude());
-                }
-            });
+        mswTaskService = viewMain.findViewById(R.id.taskservice_sw);
+//        mswTaskService.setOnClickListener(new View.OnClickListener(){
+//                @Override
+//                public void onClick(View p1) {
+//                    
+//                }
+//            });
 
         // 请求GPS定位
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, phoneGPSLocationListener);
@@ -150,6 +140,25 @@ public class PositionsFragment extends Fragment {
         showPostionFixModelInfo();
 
         return viewMain;
+    }
+    
+    void moveToCurrentLocation() {
+        if (!metLockLatitude.getText().toString().trim().equals("")
+            && !metLockLongitude.getText().toString().trim().equals("")) {
+            _LocationPhoneGPSLock = new Location("User_Defined_GPS");
+            _LocationPhoneGPSLock.setLatitude(Double.parseDouble(metLockLatitude.getText().toString()));
+            _LocationPhoneGPSLock.setLongitude(Double.parseDouble(metLockLongitude.getText().toString()));
+            ToastUtils.show("定位手动设定位置");
+        } else {
+            Location locationFix = fixGPSLocationFromPostionFixModel(_LocationPhoneGPS);
+            //_LocationPhoneGPSLock = _LocationTX;
+            _LocationPhoneGPSLock = locationFix;
+            ToastUtils.show("定位GPS设定位置");
+        }
+        showLockPostionInfo();
+        //ToastUtils.show(String.format("%s", locationFix.toString()));
+
+        TXMSFragment.moveToLocation(_LocationPhoneGPSLock.getLatitude(), _LocationPhoneGPSLock.getLongitude());
     }
 
     void showLocationPhoneGPS() {
@@ -356,6 +365,9 @@ public class PositionsFragment extends Fragment {
 //            LogUtils.d(TAG, szTemp);
             showLocationPhoneGPS();
             updatePostionFixModel();
+            if(mswTaskService.isChecked()) {
+                moveToCurrentLocation();
+            }
         }
     }
 
