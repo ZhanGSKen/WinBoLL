@@ -15,9 +15,9 @@ import cc.winboll.studio.libaes.views.AToolbar;
 import cc.winboll.studio.powerbell.MainActivity;
 import cc.winboll.studio.powerbell.activities.AboutActivity;
 import cc.winboll.studio.powerbell.activities.BackgroundPictureActivity;
+import cc.winboll.studio.powerbell.activities.BatteryReporterActivity;
 import cc.winboll.studio.powerbell.activities.ClearRecordActivity;
 import cc.winboll.studio.powerbell.fragments.MainViewFragment;
-import cc.winboll.studio.powerbell.utils.NotificationHelper;
 import cc.winboll.studio.shared.log.LogUtils;
 import cc.winboll.studio.shared.log.LogView;
 
@@ -66,8 +66,8 @@ public class MainActivity extends Activity {
 
 //        NotificationHelper notificationUtils = new NotificationHelper(this);
 //        notificationUtils.createNotificationChannels();
-        
-        
+
+
     }
 
     void showFragment(Fragment fragment) {
@@ -144,6 +144,10 @@ public class MainActivity extends Activity {
         if (menuItemId == R.id.action_about) {
             Intent intent = new Intent();
             intent.setClass(this, AboutActivity.class);
+            startActivity(intent);
+        } else if (menuItemId == R.id.action_battery_reporter) {
+            Intent intent = new Intent();
+            intent.setClass(this, BatteryReporterActivity.class);
             startActivity(intent);
         } else if (menuItemId == R.id.action_clearrecord) {
             Intent intent = new Intent();

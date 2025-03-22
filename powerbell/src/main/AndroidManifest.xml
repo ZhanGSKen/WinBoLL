@@ -129,6 +129,8 @@
 
         <activity android:name="cc.winboll.studio.powerbell.activities.AboutActivity"/>
 
+        <activity android:name="cc.winboll.studio.powerbell.activities.BatteryReporterActivity"/>
+
     </application>
 
 </manifest>
