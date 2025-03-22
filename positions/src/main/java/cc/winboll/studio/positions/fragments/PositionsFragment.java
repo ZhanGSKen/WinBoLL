@@ -148,12 +148,12 @@ public class PositionsFragment extends Fragment {
             _LocationPhoneGPSLock = new Location("User_Defined_GPS");
             _LocationPhoneGPSLock.setLatitude(Double.parseDouble(metLockLatitude.getText().toString()));
             _LocationPhoneGPSLock.setLongitude(Double.parseDouble(metLockLongitude.getText().toString()));
-            ToastUtils.show("定位手动设定位置");
+            //ToastUtils.show("定位手动设定位置");
         } else {
             Location locationFix = fixGPSLocationFromPostionFixModel(_LocationPhoneGPS);
             //_LocationPhoneGPSLock = _LocationTX;
             _LocationPhoneGPSLock = locationFix;
-            ToastUtils.show("定位GPS设定位置");
+           //ToastUtils.show("定位GPS设定位置");
         }
         showLockPostionInfo();
         //ToastUtils.show(String.format("%s", locationFix.toString()));
