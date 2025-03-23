@@ -12,15 +12,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 import cc.winboll.studio.appbase.R;
-import cc.winboll.studio.appbase.beans.WinBollNewsBean;
+import cc.winboll.studio.appbase.models.WinBollNewsBean;
+import cc.winboll.studio.appbase.receivers.APPNewsWidgetClickListener;
 import cc.winboll.studio.libappbase.AppUtils;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.sos.APPModel;
+import cc.winboll.studio.libappbase.sos.WinBoll;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import cc.winboll.studio.libappbase.sos.APPModel;
-import cc.winboll.studio.libappbase.sos.WinBoll;
 
 public class APPNewsWidget extends AppWidgetProvider {
 

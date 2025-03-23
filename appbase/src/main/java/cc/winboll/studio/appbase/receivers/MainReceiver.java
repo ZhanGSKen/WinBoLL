@@ -10,7 +10,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import cc.winboll.studio.appbase.beans.WinBollNewsBean;
+import cc.winboll.studio.appbase.models.WinBollNewsBean;
 import cc.winboll.studio.appbase.services.MainService;
 import cc.winboll.studio.appbase.widgets.APPNewsWidget;
 import cc.winboll.studio.libappbase.AppUtils;
