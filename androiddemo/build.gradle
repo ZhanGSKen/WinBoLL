@@ -18,15 +18,8 @@ def genVersionName(def versionName){
 }
 
 android {
-	productFlavors {
-		beta {
-		}
-		stage {
-		}
-	}
-
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 32
+    buildToolsVersion "32.0.0"
 
     defaultConfig {
         applicationId "cc.winboll.studio.androiddemo"
@@ -54,21 +47,21 @@ dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     
     // 吐司类库
-    implementation 'com.github.getActivity:ToastUtils:10.5'
+    api 'com.github.getActivity:ToastUtils:10.5'
 
     // Android 类库
     // https://mvnrepository.com/artifact/com.android.support/support-v4
-    implementation 'com.android.support:support-v4:28.0.0'
+    api 'com.android.support:support-v4:28.0.0'
     // https://mvnrepository.com/artifact/com.android.support/support-compat
-    implementation 'com.android.support:support-compat:28.0.0'
+    api 'com.android.support:support-compat:28.0.0'
     // https://mvnrepository.com/artifact/com.android.support/support-media-compat
-    implementation 'com.android.support:support-media-compat:28.0.0'
+    api 'com.android.support:support-media-compat:28.0.0'
     // https://mvnrepository.com/artifact/com.android.support/support-core-utils
-    implementation 'com.android.support:support-core-utils:28.0.0'
+    api 'com.android.support:support-core-utils:28.0.0'
     // https://mvnrepository.com/artifact/com.android.support/support-core-ui
-    implementation 'com.android.support:support-core-ui:28.0.0'
+    api 'com.android.support:support-core-ui:28.0.0'
     // https://mvnrepository.com/artifact/com.android.support/support-fragment
-    implementation 'com.android.support:support-fragment:28.0.0'
+    api 'com.android.support:support-fragment:28.0.0'
     // https://mvnrepository.com/artifact/com.android.support/recyclerview-v7
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    api 'com.android.support:recyclerview-v7:28.0.0'
 }
