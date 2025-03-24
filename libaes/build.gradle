@@ -48,6 +48,6 @@ dependencies {
     //api 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
     //api 'androidx.fragment:fragment:1.1.0'
     
-    api 'cc.winboll.studio:libappbase:15.0.9'
-    api 'cc.winboll.studio:libapputils:15.0.15'
+    api 'cc.winboll.studio:libappbase:15.0.10'
+    api 'cc.winboll.studio:libapputils:15.0.17'
 }

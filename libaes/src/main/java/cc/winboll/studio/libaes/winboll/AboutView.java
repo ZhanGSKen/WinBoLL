@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import cc.winboll.studio.libaes.R;
-import cc.winboll.studio.libaes.beans.AESModel;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
@@ -265,6 +264,7 @@ public class AboutView extends LinearLayout {
     View.OnClickListener mAppDebugOnClickListener = new View.OnClickListener(){
         @Override
         public void onClick(View view) {
+            //ToastUtils.show("mAppDebugOnClickListener");
             setApp2DebugMode(mContext);
         }
     };
@@ -272,6 +272,7 @@ public class AboutView extends LinearLayout {
     View.OnClickListener mAppNormalOnClickListener = new View.OnClickListener(){
         @Override
         public void onClick(View view) {
+            //ToastUtils.show("mAppNormalOnClickListener");
             setApp2NormalMode(mContext);
         }
     };
@@ -279,10 +280,9 @@ public class AboutView extends LinearLayout {
     public static void setApp2DebugMode(Context context) {
         Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
         if (intent != null) {
-            intent.setAction(cc.winboll.studio.libapputils.intent.action.DEBUGVIEW);
+            //intent.setAction(cc.winboll.studio.libapputils.intent.action.DEBUGVIEW);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            GlobalApplication.setIsDebuging(context, true);
-            AESModel.saveBean(context, new AESModel(true));
+            GlobalApplication.setIsDebuging(true);
 
             WinBollActivityManager.getInstance(context).finishAll();
             context.startActivity(intent);
@@ -293,8 +293,7 @@ public class AboutView extends LinearLayout {
         Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
         if (intent != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            GlobalApplication.setIsDebuging(context, false);
-            AESModel.saveBean(context, new AESModel(false));
+            GlobalApplication.setIsDebuging(false);
 
             WinBollActivityManager.getInstance(context).finishAll();
             context.startActivity(intent);
