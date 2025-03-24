@@ -19,7 +19,7 @@ def genVersionName(def versionName){
 
 android {
     compileSdkVersion 32
-    buildToolsVersion "35.0.0"
+    buildToolsVersion "32.0.0"
 
     defaultConfig {
         applicationId "cc.winboll.studio.apputils"
