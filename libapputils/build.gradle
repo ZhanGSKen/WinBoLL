@@ -35,5 +35,5 @@ dependencies {
     // SSH
     //api 'com.jcraft:jsch:0.1.55'
     
-    api 'cc.winboll.studio:libappbase:15.0.5'
+    api 'cc.winboll.studio:libappbase:15.0.10'
 }
