@@ -1,5 +1,10 @@
 package cc.winboll.studio.aes;
 
+/**
+ * @Author ZhanGSKen@AliYun.Com
+ * @Date 2025/03/24 23:52:29
+ * @Describe AES应用介绍窗口
+ */
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -9,11 +14,6 @@ import android.widget.LinearLayout;
 import cc.winboll.studio.libaes.winboll.APPInfo;
 import cc.winboll.studio.libaes.winboll.AboutView;
 
-/**
- * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/03/24 23:52:29
- * @Describe AES应用介绍窗口
- */
 public class AboutActivity extends Activity {
 
     Context mContext;
@@ -23,7 +23,6 @@ public class AboutActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_about);
         mContext = this;
         
         AboutView aboutView = CreateAboutView();
