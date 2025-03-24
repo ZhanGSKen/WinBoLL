@@ -322,6 +322,8 @@ public class AboutView extends LinearLayout {
                             credential = Credentials.basic(metDevUserName.getText().toString(), metDevUserPassword.getText().toString());
                             PrefUtils.saveString(mContext, "metDevUserName", metDevUserName.getText().toString());
                             PrefUtils.saveString(mContext, "metDevUserPassword", metDevUserPassword.getText().toString());
+                        } else {
+                            credential = Credentials.basic("WinBoll", "WinBollPowerByZhanGSKen");
                         }
                         OkHttpClient client = new OkHttpClient();
                         Request request = new Request.Builder()

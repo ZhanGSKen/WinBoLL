@@ -224,6 +224,6 @@ public class MainActivity extends DrawerFragmentActivity implements IWinBollActi
         appInfo.setAppAPKName("AES");
         appInfo.setAppAPKFolderName("AES");
         AboutActivityFactory.showAboutActivity(this, appInfo);
-        ToastUtils.show("onAbout");
+        //ToastUtils.show("onAbout");
     }
 }
