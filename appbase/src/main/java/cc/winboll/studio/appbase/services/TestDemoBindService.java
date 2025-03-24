@@ -10,7 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import cc.winboll.studio.appbase.beans.TestDemoBindServiceBean;
+import cc.winboll.studio.appbase.models.TestDemoBindServiceBean;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.sos.WinBoll;
 import cc.winboll.studio.appbase.App;

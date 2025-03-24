@@ -12,7 +12,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="40dp"
 		android:layout_alignParentTop="true"
-		android:background="@drawable/bg_shadow"
+		android:background="@drawable/bg_toolbar_log"
 		android:id="@+id/viewlogRelativeLayoutToolbar">
 
 		<Button
@@ -72,7 +72,7 @@
 		android:layout_below="@+id/viewlogRelativeLayoutToolbar"
 		android:id="@+id/viewlogLinearLayout1"
 		android:gravity="center_vertical"
-		android:background="@drawable/bg_shadow">
+		android:background="@drawable/bg_toolbar_log">
 
 		<CheckBox
 			android:layout_width="wrap_content"

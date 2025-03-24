@@ -72,6 +72,26 @@
 						android:layout_height="wrap_content"
 						android:gravity="right">
 
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="StartCenter"
+                                android:textAllCaps="false"
+                                android:onClick="onStartCenter"/>
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="StopCenter"
+                                android:textAllCaps="false"
+                                android:onClick="onStopCenter"/>
+                        </LinearLayout>
+                        
 						<HorizontalScrollView
 							android:layout_width="match_parent"
 							android:layout_height="wrap_content">
@@ -105,54 +125,41 @@
 							</LinearLayout>
 
 						</HorizontalScrollView>
-                        
-                        <HorizontalScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
 
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+						<HorizontalScrollView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content">
 
-                                <Button
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="SartTestDemoBindService"
-                                    android:textAllCaps="false"
-                                    android:onClick="onSartTestDemoBindService"/>
+							<LinearLayout
+								android:orientation="horizontal"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content">
 
-                                <Button
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="StopTestDemoBindService"
-                                    android:textAllCaps="false"
-                                    android:onClick="onStopTestDemoBindService"/>
+								<Button
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="SartTestDemoBindService"
+									android:textAllCaps="false"
+									android:onClick="onSartTestDemoBindService"/>
 
-                                <Button
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="StopTestDemoBindServiceNoSettings"
-                                    android:textAllCaps="false"
-                                    android:onClick="onStopTestDemoBindServiceNoSettings"/>
+								<Button
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="StopTestDemoBindService"
+									android:textAllCaps="false"
+									android:onClick="onStopTestDemoBindService"/>
 
-                            </LinearLayout>
+								<Button
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="StopTestDemoBindServiceNoSettings"
+									android:textAllCaps="false"
+									android:onClick="onStopTestDemoBindServiceNoSettings"/>
+
+							</LinearLayout>
 
 						</HorizontalScrollView>
-                        
-						<Button
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="StartCenter"
-							android:textAllCaps="false"
-							android:onClick="onStartCenter"/>
 
-						<Button
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="StopCenter"
-							android:textAllCaps="false"
-							android:onClick="onStopCenter"/>
 
 						<Button
 							android:layout_width="wrap_content"
@@ -171,9 +178,9 @@
 						<Button
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							android:text="TestSOS"
+							android:text="TestDemoServiceSOS"
 							android:textAllCaps="false"
-							android:onClick="onTestSOS"/>
+							android:onClick="onTestDemoServiceSOS"/>
 
 					</LinearLayout>
 
@@ -185,10 +192,10 @@
 
 	</ScrollView>
 
-    <cc.winboll.studio.libappbase.LogView
-        android:layout_height="300dp"
-        android:layout_width="match_parent"
-        android:id="@+id/activitymainLogView1"/>
-    
+	<cc.winboll.studio.libappbase.LogView
+		android:layout_height="300dp"
+		android:layout_width="match_parent"
+		android:id="@+id/activitymainLogView1"/>
+
 </LinearLayout>
 

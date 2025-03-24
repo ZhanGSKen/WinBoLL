@@ -1,4 +1,4 @@
-package cc.winboll.studio.appbase.beans;
+package cc.winboll.studio.appbase.models;
 
 /**
  * @Author ZhanGSKen@AliYun.Com

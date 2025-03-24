@@ -18,7 +18,7 @@ import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import cc.winboll.studio.appbase.MyTileService;
-import cc.winboll.studio.appbase.beans.MainServiceBean;
+import cc.winboll.studio.appbase.models.MainServiceBean;
 import cc.winboll.studio.appbase.handlers.MainServiceHandler;
 import cc.winboll.studio.appbase.receivers.MainReceiver;
 import cc.winboll.studio.appbase.services.AssistantService;
