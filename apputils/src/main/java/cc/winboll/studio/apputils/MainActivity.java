@@ -304,9 +304,12 @@ final public class MainActivity extends Activity {
         about();
     }
 
-    public void onTestJavascriptHtmlActivity(View view) {
+    public void onTestHtmlActivity(View view) {
         Intent intent = new Intent(this, AssetsHtmlActivity.class);
         intent.putExtra(AssetsHtmlActivity.EXTRA_HTMLFILENAME, "javascript_test.html");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        startActivity(intent);
         //WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, AssetsHtmlActivity.class);
     }
 
