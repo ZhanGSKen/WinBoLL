@@ -36,12 +36,20 @@ dependencies {
     // 二维码类库
     api 'com.google.zxing:core:3.4.1'
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
+    // 应用介绍页类库
+    api 'io.github.medyo:android-about-page:2.0.0'
+    // 吐司类库
+    api 'com.github.getActivity:ToastUtils:10.5'
     // 网络连接类库
     api 'com.squareup.okhttp3:okhttp:4.4.1'
-    
     // AndroidX 类库
     api 'androidx.appcompat:appcompat:1.0.0'
+    api 'com.google.android.material:material:1.4.0'
+    //api 'androidx.viewpager:viewpager:1.0.0'
+    //api 'androidx.vectordrawable:vectordrawable:1.1.0'
+    //api 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
+    //api 'androidx.fragment:fragment:1.1.0'
     
-    api 'cc.winboll.studio:libappbase:15.0.8'
+    api 'cc.winboll.studio:libappbase:15.0.9'
     api 'cc.winboll.studio:libapputils:15.0.11'
 }
