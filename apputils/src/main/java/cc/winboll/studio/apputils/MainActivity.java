@@ -246,6 +246,8 @@ final public class MainActivity extends Activity {
 //            AboutActivityFactory.showAboutActivity(this, getAppInfo());
 //            return true;
         } else if (item.getItemId() == R.id.item_teststringtoqrcodeview) {
+            Intent intent = new Intent(this, TestStringToQrCodeViewActivity.class);
+            startActivityForResult(intent, REQUEST_QRCODEDECODE_ACTIVITY);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, TestStringToQrCodeViewActivity.class);
         } else if (item.getItemId() == R.id.item_testqrcodedecodeactivity) {
             Intent intent = new Intent(this, QRCodeDecodeActivity.class);

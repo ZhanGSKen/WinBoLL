@@ -2,9 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/item_testwinboll"
-        android:title="TestWinBollActivity"/>
-    <item
         android:id="@+id/item_teststringtoqrcodeview"
         android:title="TestStringToQrCodeViewActivity"/>
     <item
