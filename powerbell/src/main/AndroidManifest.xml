@@ -28,16 +28,6 @@
 
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -128,6 +118,8 @@
             android:value="4.0"/>
 
         <activity android:name="cc.winboll.studio.powerbell.activities.BatteryReporterActivity"/>
+
+        <activity android:name="cc.winboll.studio.powerbell.activities.AboutActivity"/>
 
     </application>
 

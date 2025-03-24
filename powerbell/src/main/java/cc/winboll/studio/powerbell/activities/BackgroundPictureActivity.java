@@ -84,8 +84,8 @@ implements BackgroundPicturePreviewDialog.IOnRecivedPictureListener {
         setActionBar(mAToolbar);
         //mAToolbar.setTitle(getTitle() + "-" + getString(R.string.subtitle_activity_backgroundpicture));
         mAToolbar.setSubtitle(R.string.subtitle_activity_backgroundpicture);
-        mAToolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
-        mAToolbar.setSubtitleTextAppearance(this, R.style.Toolbar_SubTitleText);
+        //mAToolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
+        //mAToolbar.setSubtitleTextAppearance(this, R.style.Toolbar_SubTitleText);
         //mAToolbar.setBackgroundColor(getColor(R.color.colorPrimary));
         setActionBar(mAToolbar);
         getActionBar().setDisplayHomeAsUpEnabled(true);

@@ -6,20 +6,18 @@
         tools:replace="android:icon"
         android:icon="@drawable/ic_launcher_beta">
 
-        <!-- Put flavor specific code here -->
         <provider
-            tools:replace="android:authorities"
             android:name="androidx.core.content.FileProvider"
             android:authorities="cc.winboll.studio.powerbell.beta.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
 
             <meta-data
-                tools:replace="android:resource"
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider"/>
 
         </provider>
+
     </application>
 
 </manifest>

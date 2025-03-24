@@ -6,6 +6,7 @@ import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.powerbell.receivers.GlobalApplicationReceiver;
 import cc.winboll.studio.powerbell.utils.AppCacheUtils;
 import cc.winboll.studio.powerbell.utils.AppConfigUtils;
+import cc.winboll.studio.libapputils.bean.DebugBean;
 
 public class App extends GlobalApplication {
 
@@ -19,6 +20,15 @@ public class App extends GlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        // 设置应用调试标志
+        DebugBean debugBean = DebugBean.loadBean(this, DebugBean.class);
+        if (debugBean == null) {
+            //ToastUtils.show("debugBean == null");
+            setIsDebuging(this, false);
+        } else {
+            //ToastUtils.show("saveDebugStatus(" + String.valueOf(debugBean.isDebuging()) + ")");
+            setIsDebuging(this, debugBean.isDebuging());
+        }
         
         // 初始化 Toast 框架
         //ToastUtils.init(this);

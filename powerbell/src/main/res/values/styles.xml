@@ -12,6 +12,7 @@
     </style>
 
     <style name="DefaultAToolbar">
+        <item name="attrAToolbarTitleTextColor">#FF000000</item>
         <item name="attrAToolbarStartColor">@color/colorShuiDark</item>
         <item name="attrAToolbarCenterColor">@color/colorShui</item>
         <item name="attrAToolbarEndColor">@color/colorShuiAccent</item>
