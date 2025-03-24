@@ -169,11 +169,11 @@ final public class MainActivity extends Activity {
         Toast.makeText(getApplication(), "onTestLogClick", Toast.LENGTH_SHORT).show();
     }
 
-    public void onLogUtilsClick(View view) {
-//        Intent intent = new Intent(this, LogActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-//        startActivity(intent);
+    public void onTestLogActivity(View view) {
+        Intent intent = new Intent(this, LogActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        startActivity(intent);
 
         //WinBollActivityManager.getInstance().printAvtivityListInfo();
         //WinBollActivityManager.getInstance(this).startWinBollActivity(this, LogActivity.class);

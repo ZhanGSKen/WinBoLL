@@ -33,9 +33,9 @@
 			<Button
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="LogUtils"
+				android:text="TestLogActivity"
 				android:textAllCaps="false"
-				android:onClick="onLogUtilsClick"/>
+				android:onClick="onTestLogActivity"/>
 
 		</LinearLayout>
 
