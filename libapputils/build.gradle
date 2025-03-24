@@ -27,16 +27,13 @@ dependencies {
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
     
     // 网络连接类库
-    //api 'com.squareup.okhttp3:okhttp:4.4.1'
+    api 'com.squareup.okhttp3:okhttp:4.4.1'
     
     // Html 解析
-    //api 'org.jsoup:jsoup:1.13.1'
+    api 'org.jsoup:jsoup:1.13.1'
     
     // SSH
     //api 'com.jcraft:jsch:0.1.55'
-    
-    // 应用介绍页类库
-    //api 'io.github.medyo:android-about-page:2.0.0'
     
     api 'cc.winboll.studio:libappbase:15.0.5'
 }

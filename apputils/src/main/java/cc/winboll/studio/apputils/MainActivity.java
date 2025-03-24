@@ -1,6 +1,5 @@
 package cc.winboll.studio.apputils;
 
-import cc.winboll.studio.apputils.R;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -13,15 +12,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import android.widget.Toolbar;
+import cc.winboll.studio.apputils.R;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libapputils.activities.AssetsHtmlActivity;
 import cc.winboll.studio.libapputils.activities.LogActivity;
 import cc.winboll.studio.libapputils.activities.QRCodeDecodeActivity;
-import cc.winboll.studio.libapputils.app.AboutActivityFactory;
-import cc.winboll.studio.libapputils.bean.APPInfo;
-import cc.winboll.studio.libapputils.view.AboutView;
 import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
 import java.util.List;
 import java.util.Set;
@@ -40,25 +37,7 @@ final public class MainActivity extends Activity {
 //        return this;
 //    }
 
-//    @Override
-//    public APPInfo getAppInfo() {
-//        String szBranchName = "apputils";
-//
-//        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
-//        appInfo.setAppName("APPUtils");
-//        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
-//        appInfo.setAppDescription("APPUtils Description");
-//        appInfo.setAppGitName("APP");
-//        appInfo.setAppGitOwner("Studio");
-//        appInfo.setAppGitAPPBranch(szBranchName);
-//        appInfo.setAppGitAPPSubProjectFolder(szBranchName);
-//        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=APP");
-//        appInfo.setAppAPKName("APPUtils");
-//        appInfo.setAppAPKFolderName("APPUtils");
-//        return appInfo;
-//        //return null;
-//    }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -242,9 +221,6 @@ final public class MainActivity extends Activity {
         if (item.getItemId() == R.id.item_exit) {
             exit();
             return true;
-//        } else if (item.getItemId() == R.id.item_about) {
-//            AboutActivityFactory.showAboutActivity(this, getAppInfo());
-//            return true;
         } else if (item.getItemId() == R.id.item_teststringtoqrcodeview) {
             Intent intent = new Intent(this, TestStringToQRCodeViewActivity.class);
             startActivityForResult(intent, REQUEST_QRCODEDECODE_ACTIVITY);
@@ -268,12 +244,6 @@ final public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    void about() {
-//        Intent intent = new Intent(this, AboutActivity.class);
-//        intent.putExtra(AboutActivity.EXTRA_APPINFO, AboutActivityFactory.buildAPPBranchInfo(this));
-//        WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, AboutActivity.class);
     }
 
     void exit() {
@@ -302,10 +272,7 @@ final public class MainActivity extends Activity {
 //        }
     }
 
-    public void onTestAboutActivity(View view) {
-        about();
-    }
-
+    
     public void onTestAssetsHtmlActivity(View view) {
         Intent intent = new Intent(this, AssetsHtmlActivity.class);
         intent.putExtra(AssetsHtmlActivity.EXTRA_HTMLFILENAME, "javascript_test.html");
