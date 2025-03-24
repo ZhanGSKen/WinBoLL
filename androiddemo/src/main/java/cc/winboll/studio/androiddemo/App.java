@@ -1,7 +1,6 @@
 package cc.winboll.studio.androiddemo;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -22,6 +21,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import cc.winboll.studio.libappbase.GlobalApplication;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -39,15 +39,15 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GlobalApplication extends Application {
+public class App extends GlobalApplication {
 
     private static Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
 
     @Override
     public void onCreate() {
         super.onCreate();
-        CrashHandler.getInstance().registerGlobal(this);
-        CrashHandler.getInstance().registerPart(this);
+        //CrashHandler.getInstance().registerGlobal(this);
+        //CrashHandler.getInstance().registerPart(this);
     }
 
     public static void write(InputStream input, OutputStream output) throws IOException {
@@ -252,7 +252,7 @@ public class GlobalApplication extends Application {
 
             private static String getKernel() {
                 try {
-                    return GlobalApplication.toString(new FileInputStream("/proc/version")).trim();
+                    return App.toString(new FileInputStream("/proc/version")).trim();
                 } catch (Throwable e) {
                     return e.getMessage();
                 }
