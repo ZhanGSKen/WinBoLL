@@ -17,6 +17,7 @@ import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
+import cc.winboll.studio.libappbase.APPBaseModel;
 
 public class MainActivity extends Activity {
 
@@ -59,7 +60,8 @@ public class MainActivity extends Activity {
     }
 
 	public void onSwitchDebugMode(View view) {
-        GlobalApplication.setIsDebuging(this, ((CheckBox)view).isChecked());
+        boolean isDebuging = ((CheckBox)view).isChecked();
+        GlobalApplication.setIsDebuging(isDebuging);
     }
 
     public void onStartCenter(View view) {

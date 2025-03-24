@@ -7,7 +7,6 @@ package cc.winboll.studio.libappbase;
  */
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
@@ -21,22 +20,29 @@ public class GlobalApplication extends Application {
     final static String PREFS = GlobalApplication.class.getName() + "PREFS";
     final static String PREFS_ISDEBUGING = "PREFS_ISDEBUGING";
 
-
     private static Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
 
+    volatile static GlobalApplication _GlobalApplication;
     // 是否处于调试状态
     volatile static boolean isDebuging = false;
 
-    public static void setIsDebuging(Context context, boolean isDebuging) {
-        GlobalApplication.isDebuging = isDebuging;
-        // 获取SharedPreferences实例
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        // 获取编辑器
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        // 保存数据
-        editor.putBoolean(PREFS_ISDEBUGING, GlobalApplication.isDebuging);
-        // 提交更改
-        editor.apply();
+    public static void setIsDebuging(boolean isDebuging) {
+        if (_GlobalApplication != null) {
+            GlobalApplication.isDebuging = isDebuging;
+            APPBaseModel.saveBeanToFile(getAPPBaseModelFilePath(), new APPBaseModel(isDebuging));
+            // 获取SharedPreferences实例
+//        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+//        // 获取编辑器
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        // 保存数据
+//        editor.putBoolean(PREFS_ISDEBUGING, GlobalApplication.isDebuging);
+//        // 提交更改
+//        editor.apply();
+        }
+    }
+
+    static String getAPPBaseModelFilePath() {
+        return _GlobalApplication.getDataDir().getPath() + "/APPBaseModel.json";
     }
 
     public static boolean isDebuging() {
@@ -55,8 +61,16 @@ public class GlobalApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //GlobalApplication.isDebuging = true;
-        //GlobalApplication.setIsDebuging(this, true);
+        _GlobalApplication = this;
+
+        // 设置应用调试标志
+        APPBaseModel appBaseModel = APPBaseModel.loadBeanFromFile(getAPPBaseModelFilePath(), APPBaseModel.class);
+        if (appBaseModel == null) {
+            setIsDebuging(false);
+        } else {
+            setIsDebuging(appBaseModel.isDebuging());
+        }
+
         LogUtils.init(this);
         //LogUtils.setLogLevel(LogUtils.LOG_LEVEL.Debug);
         //LogUtils.setTAGListEnable(GlobalApplication.TAG, true);
@@ -66,16 +80,8 @@ public class GlobalApplication extends Application {
         // 设置应用异常处理窗口
         CrashHandler.init(this);
 
-        // 设置应用调试状态
-        //SharedPreferences sharedPreferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        //GlobalApplication.isDebuging = sharedPreferences.getBoolean(PREFS_ISDEBUGING, GlobalApplication.isDebuging);
-
         // 初始化 Toast 框架
         ToastUtils.init(this);
-        // 设置 Toast 布局样式
-        //ToastUtils.setView(R.layout.toast_custom_view);
-        //ToastUtils.setStyle(new WhiteToastStyle());
-        //ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
     }
 
     public static String getAppName(Context context) {
