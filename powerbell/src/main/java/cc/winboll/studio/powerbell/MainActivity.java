@@ -12,14 +12,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import cc.winboll.studio.libaes.views.AToolbar;
+import cc.winboll.studio.libaes.winboll.APPInfo;
+import cc.winboll.studio.libaes.winboll.AboutActivityFactory;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.powerbell.MainActivity;
-import cc.winboll.studio.powerbell.activities.AboutActivity;
 import cc.winboll.studio.powerbell.activities.BackgroundPictureActivity;
 import cc.winboll.studio.powerbell.activities.BatteryReporterActivity;
 import cc.winboll.studio.powerbell.activities.ClearRecordActivity;
 import cc.winboll.studio.powerbell.fragments.MainViewFragment;
-import cc.winboll.studio.shared.log.LogUtils;
-import cc.winboll.studio.shared.log.LogView;
 
 public class MainActivity extends Activity {
     public static final String TAG = "MainActivity";
@@ -28,7 +29,7 @@ public class MainActivity extends Activity {
     public static MainActivity _mMainActivity;
     LogView mLogView;
     //ArrayList<Fragment> mlistFragment;
-    GlobalApplication mApplication;
+    App mApplication;
     //AppConfigUtils mAppConfigUtils;
     Menu mMenu;
     Fragment mCurrentShowFragment;
@@ -48,7 +49,7 @@ public class MainActivity extends Activity {
         mLogView.updateLogView();
 
         _mMainActivity = MainActivity.this;
-        mApplication = (GlobalApplication) getApplication();
+        mApplication = (App) getApplication();
         //mAppConfigUtils = AppConfigUtils.getInstance(mApplication);
 
         // 初始化工具栏
@@ -142,9 +143,10 @@ public class MainActivity extends Activity {
         super.onOptionsItemSelected(item); 
         int menuItemId = item.getItemId();
         if (menuItemId == R.id.action_about) {
-            Intent intent = new Intent();
-            intent.setClass(this, AboutActivity.class);
-            startActivity(intent);
+            onAbout();
+//            Intent intent = new Intent();
+//            intent.setClass(this, AboutActivity.class);
+//            startActivity(intent);
         } else if (menuItemId == R.id.action_battery_reporter) {
             Intent intent = new Intent();
             intent.setClass(this, BatteryReporterActivity.class);
@@ -192,5 +194,23 @@ public class MainActivity extends Activity {
         } else {
             moveTaskToBack(true);
         }
+    }
+    
+    public void onAbout() {
+        String szBranchName = "powerbell";
+
+        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
+        appInfo.setAppName("PowerBell");
+        appInfo.setAppIcon(R.drawable.ic_launcher);
+        appInfo.setAppDescription("PowerBell Description");
+        appInfo.setAppGitName("APP");
+        appInfo.setAppGitOwner("Studio");
+        appInfo.setAppGitAPPBranch(szBranchName);
+        appInfo.setAppGitAPPSubProjectFolder(szBranchName);
+        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=PowerBell");
+        appInfo.setAppAPKName("PowerBell");
+        appInfo.setAppAPKFolderName("PowerBell");
+        AboutActivityFactory.showAboutActivity(this, appInfo);
+        //ToastUtils.show("onAbout");
     }
 } 

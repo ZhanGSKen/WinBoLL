@@ -1,5 +1,4 @@
 package cc.winboll.studio.powerbell.dialogs;
-import cc.winboll.studio.powerbell.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.powerbell.MainActivity;
+import cc.winboll.studio.powerbell.R;
 import cc.winboll.studio.powerbell.activities.BackgroundPictureActivity;
 import cc.winboll.studio.powerbell.utils.BackgroundPictureUtils;
 import cc.winboll.studio.powerbell.utils.FileUtils;
 import cc.winboll.studio.powerbell.utils.UriUtil;
-import cc.winboll.studio.shared.log.LogUtils;
 import java.io.File;
 import java.io.IOException;
 

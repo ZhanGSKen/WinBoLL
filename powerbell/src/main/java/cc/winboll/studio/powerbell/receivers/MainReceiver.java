@@ -9,10 +9,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import cc.winboll.studio.powerbell.GlobalApplication;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.powerbell.App;
 import cc.winboll.studio.powerbell.services.ControlCenterService;
 import cc.winboll.studio.powerbell.utils.ServiceUtils;
-import cc.winboll.studio.shared.log.LogUtils;
 
 public class MainReceiver extends BroadcastReceiver {
 
@@ -27,7 +27,7 @@ public class MainReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String szAction = intent.getAction();
         if (szAction.equals(ACTION_BOOT_COMPLETED)) {
-            boolean isEnableService = GlobalApplication.getAppConfigUtils(context).getIsEnableService();
+            boolean isEnableService = App.getAppConfigUtils(context).getIsEnableService();
             if (isEnableService) {
                 if (ServiceUtils.isServiceAlive(context.getApplicationContext(), ControlCenterService.class.getName()) == false) {
                     LogUtils.d(TAG, "wakeupAndBindMain() Wakeup... ControlCenterService");

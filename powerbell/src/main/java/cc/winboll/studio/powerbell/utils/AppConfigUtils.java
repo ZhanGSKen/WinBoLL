@@ -2,14 +2,14 @@ package cc.winboll.studio.powerbell.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import cc.winboll.studio.powerbell.GlobalApplication;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.powerbell.App;
 import cc.winboll.studio.powerbell.MainActivity;
 import cc.winboll.studio.powerbell.beans.AppConfigBean;
 import cc.winboll.studio.powerbell.beans.ControlCenterServiceBean;
 import cc.winboll.studio.powerbell.dialogs.YesNoAlertDialog;
 import cc.winboll.studio.powerbell.fragments.MainViewFragment;
 import cc.winboll.studio.powerbell.services.ControlCenterService;
-import cc.winboll.studio.shared.log.LogUtils;
 import java.io.File;
 
 // 应用配置工具类
@@ -42,7 +42,7 @@ public class AppConfigUtils {
     volatile String mszBackgroundFileName = "";
 
     // 保存应用实例
-    GlobalApplication mApplication;
+    App mApplication;
 
     AppConfigUtils(Context context) {
         mContext = context;

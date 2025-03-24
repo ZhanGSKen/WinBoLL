@@ -4,15 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.powerbell.beans.AppConfigBean;
-import cc.winboll.studio.powerbell.beans.BatteryData;
 import cc.winboll.studio.powerbell.services.ControlCenterService;
 import cc.winboll.studio.powerbell.utils.AppConfigUtils;
 import cc.winboll.studio.powerbell.utils.BatteryUtils;
-import cc.winboll.studio.shared.log.LogUtils;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ControlCenterServiceReceiver extends BroadcastReceiver {
     public static final String TAG = ControlCenterServiceReceiver.class.getSimpleName();

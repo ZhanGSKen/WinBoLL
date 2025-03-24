@@ -16,7 +16,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.widget.RemoteViews;
-import cc.winboll.studio.powerbell.GlobalApplication;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
+import cc.winboll.studio.powerbell.App;
 import cc.winboll.studio.powerbell.MainActivity;
 import cc.winboll.studio.powerbell.R;
 import cc.winboll.studio.powerbell.beans.AppConfigBean;
@@ -30,9 +32,6 @@ import cc.winboll.studio.powerbell.utils.AppConfigUtils;
 import cc.winboll.studio.powerbell.utils.NotificationHelper;
 import cc.winboll.studio.powerbell.utils.ServiceUtils;
 import cc.winboll.studio.powerbell.utils.StringUtils;
-import cc.winboll.studio.shared.log.LogUtils;
-import com.hjq.toast.ToastUtils;
-import android.graphics.Color;
 
 public class ControlCenterService extends Service {
 
@@ -69,8 +68,8 @@ public class ControlCenterService extends Service {
         super.onCreate();
         _mControlCenterService = ControlCenterService.this;
         isServiceRunning = false;
-        mAppConfigUtils = GlobalApplication.getAppConfigUtils(this);
-        mAppCacheUtils = GlobalApplication.getAppCacheUtils(this);
+        mAppConfigUtils = App.getAppConfigUtils(this);
+        mAppCacheUtils = App.getAppCacheUtils(this);
         mNotificationHelper = new NotificationHelper(ControlCenterService.this);
         
         
@@ -131,7 +130,7 @@ public class ControlCenterService extends Service {
     }
 
     NotificationMessage createNotificationMessage() {
-        String szTitle = ((GlobalApplication)getApplication()).getString(R.string.app_name);
+        String szTitle = ((App)getApplication()).getString(R.string.app_name);
         String szContent = getValuesString() + " {?} " + StringUtils.formatPCMListString(mAppCacheUtils.getArrayListBatteryInfo());
         return new NotificationMessage(szTitle, szContent);
     }
