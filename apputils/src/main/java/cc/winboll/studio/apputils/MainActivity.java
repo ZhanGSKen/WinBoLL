@@ -79,11 +79,11 @@ final public class MainActivity extends Activity {
             if (resolveInfoList.size() > 0) {
                 // 传入的Intent action在Activity清单的intent-filter的action节点里有定义
                 if (intent.getAction() != null) {
-                    if (intent.getAction().equals(cc.winboll.studio.libapputils.intent.action.DEBUGVIEW)) {
-                        App.setIsDebug(true);
-                        //ToastUtils.show!("WinBollApplication.setIsDebug(true) by action : " + intent.getAction());
-
-                    }
+//                    if (intent.getAction().equals(cc.winboll.studio.libapputils.intent.action.DEBUGVIEW)) {
+//                        App.setIsDebug(true);
+//                        //ToastUtils.show!("WinBollApplication.setIsDebug(true) by action : " + intent.getAction());
+//
+//                    }
                 }
                 return true;
             } else {
