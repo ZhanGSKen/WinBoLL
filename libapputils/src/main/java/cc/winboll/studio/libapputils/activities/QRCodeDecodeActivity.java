@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
@@ -36,7 +37,12 @@ public class QRCodeDecodeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcodedecode);
-        resultTextView = findViewById(R.id.activityqrcodedecodeTextView1);
+
+        // 初始化工具栏
+//        Toolbar mToolbar = findViewById(R.id.toolbar);
+//        setActionBar(mToolbar);
+        
+        //resultTextView = findViewById(R.id.activityqrcodedecodeTextView1);
         barcodeView = findViewById(R.id.activityqrcodedecodeDecoratedBarcodeView1);
         // 请求相机权限
 //        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)

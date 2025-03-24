@@ -68,7 +68,7 @@ final public class MainActivity extends Activity {
         mLogView.start();
 
         // 初始化工具栏
-        mToolbar = findViewById(R.id.activitymainToolbar1);
+        mToolbar = findViewById(R.id.toolbar);
         setActionBar(mToolbar);
 //        if (isEnableDisplayHomeAsUp()) {
 //            // 显示后退按钮
@@ -246,7 +246,7 @@ final public class MainActivity extends Activity {
 //            AboutActivityFactory.showAboutActivity(this, getAppInfo());
 //            return true;
         } else if (item.getItemId() == R.id.item_teststringtoqrcodeview) {
-            Intent intent = new Intent(this, TestStringToQrCodeViewActivity.class);
+            Intent intent = new Intent(this, TestStringToQRCodeViewActivity.class);
             startActivityForResult(intent, REQUEST_QRCODEDECODE_ACTIVITY);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, TestStringToQrCodeViewActivity.class);
         } else if (item.getItemId() == R.id.item_testqrcodedecodeactivity) {
@@ -306,7 +306,7 @@ final public class MainActivity extends Activity {
         about();
     }
 
-    public void onTestHtmlActivity(View view) {
+    public void onTestAssetsHtmlActivity(View view) {
         Intent intent = new Intent(this, AssetsHtmlActivity.class);
         intent.putExtra(AssetsHtmlActivity.EXTRA_HTMLFILENAME, "javascript_test.html");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);

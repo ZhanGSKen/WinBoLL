@@ -6,16 +6,10 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<android.widget.Toolbar
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/activityqrcodedecodeToolbar1"/>
-
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="扫描结果将显示在此处"
-		android:id="@+id/activityqrcodedecodeTextView1"/>
+		android:text="QRCodeDecodeActivity"/>
 
 	<com.journeyapps.barcodescanner.DecoratedBarcodeView
 		android:layout_width="wrap_content"

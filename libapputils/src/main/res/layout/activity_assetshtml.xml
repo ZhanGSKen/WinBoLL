@@ -9,7 +9,7 @@
 	<android.widget.Toolbar
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:id="@+id/activityassetshtmlToolbar1"/>
+		android:id="@+id/toolbar"/>
 
 	<cc.winboll.studio.libapputils.view.SimpleWebView
 		android:layout_width="match_parent"

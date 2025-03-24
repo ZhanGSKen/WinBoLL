@@ -27,7 +27,7 @@
 
         </activity>
 
-        <activity android:name=".TestStringToQrCodeViewActivity"/>
+        <activity android:name=".TestStringToQRCodeViewActivity"/>
 
         <activity android:name=".TestBBMorseCodeActivity"/>
 

@@ -55,6 +55,10 @@ public class AssetsHtmlActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assetshtml);
+        
+        // 初始化工具栏
+        Toolbar mToolbar = findViewById(R.id.toolbar);
+        setActionBar(mToolbar);
 
         mszHtmlFileName = "index.html";
 

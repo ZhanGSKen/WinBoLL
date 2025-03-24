@@ -3,7 +3,7 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/item_teststringtoqrcodeview"
-        android:title="TestStringToQrCodeViewActivity"/>
+        android:title="TestStringToQRCodeViewActivity"/>
     <item
         android:id="@+id/item_testqrcodedecodeactivity"
         android:title="TestQRCodeDecodeActivity"/>
