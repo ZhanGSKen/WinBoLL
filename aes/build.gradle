@@ -29,7 +29,7 @@ android {
         // versionName 更新后需要手动设置 
         // 项目模块目录的 build.gradle 文件的 stageCount=0
         // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
-        versionName "7.6" 
+        versionName "15.0" 
         if(true) {
             versionName = genVersionName("${versionName}")
         }
