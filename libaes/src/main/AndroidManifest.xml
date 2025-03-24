@@ -13,8 +13,6 @@
 
         <activity android:name="cc.winboll.studio.libaes.unittests.TestASupportToolbarActivity"/>
 
-        <activity android:name="cc.winboll.studio.libaes.winboll.AboutActivity"/>
-
     </application>
 
 </manifest>

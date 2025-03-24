@@ -25,11 +25,8 @@ import cc.winboll.studio.libaes.unittests.TestASupportToolbarActivity;
 import cc.winboll.studio.libaes.unittests.TestAToolbarActivity;
 import cc.winboll.studio.libaes.unittests.TestDrawerFragmentActivity;
 import cc.winboll.studio.libaes.unittests.TestViewPageFragment;
-import cc.winboll.studio.libaes.winboll.APPInfo;
-import cc.winboll.studio.libaes.winboll.AboutActivityFactory;
 import cc.winboll.studio.libaes.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.utils.ToastUtils;
 import com.a4455jkjh.colorpicker.ColorPickerDialog;
 import java.util.ArrayList;
 
@@ -202,7 +199,8 @@ public class MainActivity extends DrawerFragmentActivity implements IWinBollActi
             startActivity(intent);
         } 
         else if (nItemId ==  R.id.item_about) {
-            onAbout();
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
             return true;
         }
 

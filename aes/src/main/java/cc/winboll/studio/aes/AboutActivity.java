@@ -23,7 +23,7 @@ public class AboutActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+        //setContentView(R.layout.activity_about);
         mContext = this;
         
         AboutView aboutView = CreateAboutView();
@@ -35,13 +35,6 @@ public class AboutActivity extends Activity {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         );
-
-//        Button button = new Button(this);
-//        button.setText("动态添加的按钮");
-//        button.setLayoutParams(params);
-        // 将按钮添加到 Activity 的根布局中
-        //addContentView(button, params);
-        
         addContentView(aboutView, params);
         
     }
@@ -50,7 +43,7 @@ public class AboutActivity extends Activity {
         String szBranchName = "aes";
         APPInfo appInfo = new APPInfo();
         appInfo.setAppName("AES");
-        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
+        appInfo.setAppIcon(cc.winboll.studio.libaes.R.drawable.ic_winboll);
         appInfo.setAppDescription("AES Description");
         appInfo.setAppGitName("APP");
         appInfo.setAppGitOwner("Studio");
