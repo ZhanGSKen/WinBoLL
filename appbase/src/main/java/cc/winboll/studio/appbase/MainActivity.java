@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
         startService(intentService);
     }
 
-    public void onTestSOS(View view) {
+    public void onTestDemoServiceSOS(View view) {
         Intent intent = new Intent(this, TestDemoService.class);
         stopService(intent);
         if (App.isDebuging()) {

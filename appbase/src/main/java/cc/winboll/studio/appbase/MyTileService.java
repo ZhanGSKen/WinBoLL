@@ -7,7 +7,7 @@ package cc.winboll.studio.appbase;
 import android.content.Context;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
-import cc.winboll.studio.appbase.beans.MainServiceBean;
+import cc.winboll.studio.appbase.models.MainServiceBean;
 import cc.winboll.studio.appbase.services.MainService;
 
 public class MyTileService extends TileService {

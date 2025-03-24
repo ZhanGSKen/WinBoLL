@@ -11,7 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import cc.winboll.studio.appbase.beans.MainServiceBean;
+import cc.winboll.studio.appbase.models.MainServiceBean;
 import cc.winboll.studio.appbase.services.AssistantService;
 import cc.winboll.studio.appbase.services.MainService;
 import cc.winboll.studio.libappbase.LogUtils;

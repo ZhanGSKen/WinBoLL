@@ -4,8 +4,8 @@ apply from: '../.winboll/winboll_lib_build.gradle'
 apply from: '../.winboll/winboll_lint_build.gradle'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 32
+    buildToolsVersion "32.0.0"
 
     defaultConfig {
         minSdkVersion 26
