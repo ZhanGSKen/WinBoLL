@@ -9,23 +9,19 @@ import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Toolbar;
+import cc.winboll.studio.libaes.winboll.IWinBollActivity;
 
 /**
  * @Author ZhanGSKen@QQ.COM
  * @Date 2024/06/15 00:58:10
  * @Describe 第二级窗口
  */
-public class SecondaryLibraryActivity extends DrawerFragmentActivity {
+public class SecondaryLibraryActivity extends DrawerFragmentActivity implements IWinBollActivity {
 
     public static final String TAG = "SecondaryLibraryActivity";
 
     SecondaryLibraryFragment mSecondaryLibraryFragment;
 
-    @Override
-    public AppCompatActivity getActivity() {
-        return this;
-    }
-    
     @Override
     public APPInfo getAppInfo() {
         return null;

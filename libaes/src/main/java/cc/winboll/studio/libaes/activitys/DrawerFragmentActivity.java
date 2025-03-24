@@ -27,9 +27,10 @@ import cc.winboll.studio.libaes.beans.DrawerMenuBean;
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
 import cc.winboll.studio.libaes.views.ADrawerMenuListView;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import com.baoyz.widget.PullRefreshLayout;
 import java.util.ArrayList;
+import cc.winboll.studio.libaes.winboll.IWinBollActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public abstract class DrawerFragmentActivity extends AppCompatActivity implements IWinBollActivity,AdapterView.OnItemClickListener {
 
@@ -194,7 +195,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         setContentView(R.layout.activity_drawerfragment);
 
         mToolbar = findViewById(R.id.activitydrawerfragmentASupportToolbar1);
-        setActionBar(mToolbar);
+        setSupportActionBar(mToolbar);
 
         if (mActivityType == ActivityType.Main) {
             initMainRootView();

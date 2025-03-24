@@ -16,17 +16,12 @@ import androidx.fragment.app.Fragment;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
 import cc.winboll.studio.libaes.beans.DrawerMenuBean;
+import cc.winboll.studio.libaes.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import java.util.ArrayList;
 
 public class TestDrawerFragmentActivity extends DrawerFragmentActivity implements IWinBollActivity {
-
-    @Override
-    public Activity getActivity() {
-        return g;
-    }
 
     @Override
     public APPInfo getAppInfo() {

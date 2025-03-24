@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import cc.winboll.studio.aes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
@@ -24,13 +25,12 @@ import cc.winboll.studio.libaes.unittests.TestASupportToolbarActivity;
 import cc.winboll.studio.libaes.unittests.TestAToolbarActivity;
 import cc.winboll.studio.libaes.unittests.TestDrawerFragmentActivity;
 import cc.winboll.studio.libaes.unittests.TestViewPageFragment;
+import cc.winboll.studio.libaes.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libapputils.app.AboutActivityFactory;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import com.a4455jkjh.colorpicker.ColorPickerDialog;
 import java.util.ArrayList;
-import android.widget.Toolbar;
 
 public class MainActivity extends DrawerFragmentActivity implements IWinBollActivity {
 
@@ -38,11 +38,6 @@ public class MainActivity extends DrawerFragmentActivity implements IWinBollActi
 
     TestAButtonFragment mTestAButtonFragment;
     TestViewPageFragment mTestViewPageFragment;
-
-    @Override
-    public AppCompatActivity getActivity() {
-        return this;
-    }
 
     @Override
     public APPInfo getAppInfo() {
@@ -70,7 +65,7 @@ public class MainActivity extends DrawerFragmentActivity implements IWinBollActi
 
     @Override
     public Toolbar initToolBar() {
-        return mToolbar;
+        return null;
     }
 
     @Override

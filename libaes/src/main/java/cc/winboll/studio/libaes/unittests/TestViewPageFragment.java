@@ -42,7 +42,7 @@ public class TestViewPageFragment extends Fragment implements ViewPager.OnPageCh
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_viewpage, container, false);
-        mContext = getActivity().getContext();
+        mContext = getActivity();
         
         mLogView = mView.findViewById(R.id.logview);
         mLogView.start();
