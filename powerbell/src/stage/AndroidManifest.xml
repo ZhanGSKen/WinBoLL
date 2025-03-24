@@ -6,7 +6,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="cc.winboll.studio.powerbell.beta.fileprovider"
+            android:authorities="cc.winboll.studio.powerbell.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
 
