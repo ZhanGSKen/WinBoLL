@@ -29,8 +29,8 @@ import cc.winboll.studio.libaes.winboll.APPInfo;
 import cc.winboll.studio.libaes.winboll.AboutActivityFactory;
 import cc.winboll.studio.libaes.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 import com.a4455jkjh.colorpicker.ColorPickerDialog;
-import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
 
 public class MainActivity extends DrawerFragmentActivity implements IWinBollActivity {

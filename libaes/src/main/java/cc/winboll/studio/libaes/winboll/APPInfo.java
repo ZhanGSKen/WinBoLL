@@ -5,7 +5,7 @@ package cc.winboll.studio.libaes.winboll;
  * @Date 2025/01/20 14:19:02
  * @Describe 应用信息类
  */
-import cc.winboll.studio.libapputils.R;
+import cc.winboll.studio.libaes.R;
 import java.io.Serializable;
 
 public class APPInfo implements Serializable {

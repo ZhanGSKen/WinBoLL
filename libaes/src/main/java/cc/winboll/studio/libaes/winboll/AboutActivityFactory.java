@@ -8,6 +8,7 @@ package cc.winboll.studio.libaes.winboll;
 
 import android.content.Context;
 import android.content.Intent;
+import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.winboll.AboutActivityFactory;
 
 public class AboutActivityFactory {
@@ -19,7 +20,7 @@ public class AboutActivityFactory {
 
         APPInfo appInfo = new APPInfo();
         appInfo.setAppName("APP");
-        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
+        appInfo.setAppIcon(R.drawable.ic_winboll);
         appInfo.setAppDescription("APP Description");
         appInfo.setAppGitName("APP");
         appInfo.setAppGitOwner("Studio");
