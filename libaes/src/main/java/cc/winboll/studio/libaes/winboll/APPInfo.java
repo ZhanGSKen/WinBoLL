@@ -47,13 +47,14 @@ public class APPInfo implements Serializable {
     }
 
     public APPInfo() {
-        this.appName = "WinBoll-APP";
+        String szBranchName = "app";
+        this.appName = "APP";
         this.appIcon = R.drawable.ic_launcher;
-        this.appDescription = "WinBoll APP";
+        this.appDescription = "APP Description";
         this.appGitName = "APP";
         this.appGitOwner = "Studio";
-        this.appGitAPPBranch = "app";
-        this.appGitAPPSubProjectFolder = "app";
+        this.appGitAPPBranch = szBranchName;
+        this.appGitAPPSubProjectFolder = szBranchName;
         this.appHomePage = "https://www.winboll.cc/studio/details.php?app=APP";
         this.appAPKName = "APP";
         this.appAPKFolderName = "APP";

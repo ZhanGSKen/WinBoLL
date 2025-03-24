@@ -209,21 +209,5 @@ public class MainActivity extends DrawerFragmentActivity implements IWinBollActi
         return super.onOptionsItemSelected(item);
     }
     
-    public void onAbout() {
-        String szBranchName = "aes";
-
-        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
-        appInfo.setAppName("AES");
-        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
-        appInfo.setAppDescription("AES Description");
-        appInfo.setAppGitName("APP");
-        appInfo.setAppGitOwner("Studio");
-        appInfo.setAppGitAPPBranch(szBranchName);
-        appInfo.setAppGitAPPSubProjectFolder(szBranchName);
-        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=AES");
-        appInfo.setAppAPKName("AES");
-        appInfo.setAppAPKFolderName("AES");
-        AboutActivityFactory.showAboutActivity(this, appInfo);
-        //ToastUtils.show("onAbout");
-    }
+    
 }
