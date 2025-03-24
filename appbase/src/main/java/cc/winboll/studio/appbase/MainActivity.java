@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
+import cc.winboll.studio.appbase.activities.NewActivity;
 import cc.winboll.studio.appbase.services.MainService;
 import cc.winboll.studio.appbase.services.TestDemoBindService;
 import cc.winboll.studio.appbase.services.TestDemoService;
@@ -17,12 +18,24 @@ import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
-import cc.winboll.studio.libappbase.APPBaseModel;
+import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements IWinBollActivity {
 
     public static final String TAG = "MainActivity";
+    
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
 
+    @Override
+    public String getTag() {
+        return TAG;
+    }
+
+    Toolbar mToolbar;
     LogView mLogView;
 
     @Override
@@ -31,8 +44,8 @@ public class MainActivity extends Activity {
         ToastUtils.show("onCreate");
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.activitymainToolbar1);
-        setActionBar(toolbar);
+        mToolbar = findViewById(R.id.toolbar);
+        setActionBar(mToolbar);
 
         CheckBox cbIsDebugMode = findViewById(R.id.activitymainCheckBox1);
         cbIsDebugMode.setChecked(GlobalApplication.isDebuging());
@@ -141,5 +154,9 @@ public class MainActivity extends Activity {
     public void onStopTestDemoBindServiceNoSettings(View view) {
         Intent intent = new Intent(this, TestDemoBindService.class);
         stopService(intent);
+    }
+    
+    public void onTestOpenNewActivity(View view) {
+        WinBollActivityManager.getInstance(this).startWinBollActivity(this, NewActivity.class);
     }
 }

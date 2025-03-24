@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
+import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
+import cc.winboll.studio.libappbase.winboll.MyActivityLifecycleCallbacks;
 
 public class GlobalApplication extends Application {
 
@@ -25,6 +27,8 @@ public class GlobalApplication extends Application {
     volatile static GlobalApplication _GlobalApplication;
     // 是否处于调试状态
     volatile static boolean isDebuging = false;
+    WinBollActivityManager mWinBollActivityManager;
+    MyActivityLifecycleCallbacks mMyActivityLifecycleCallbacks;
 
     public static void setIsDebuging(boolean isDebuging) {
         if (_GlobalApplication != null) {
@@ -82,6 +86,20 @@ public class GlobalApplication extends Application {
 
         // 初始化 Toast 框架
         ToastUtils.init(this);
+
+        mWinBollActivityManager = WinBollActivityManager.getInstance(this);
+        mWinBollActivityManager.setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
+        // 注册回调
+        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks(mWinBollActivityManager);
+        registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
+    }
+
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        // 注销回调（非必须，但建议释放资源）
+        unregisterActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
     }
 
     public static String getAppName(Context context) {
