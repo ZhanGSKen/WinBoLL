@@ -7,6 +7,7 @@ package cc.winboll.studio.libapputils.bean;
  */
 import android.util.JsonReader;
 import android.util.JsonWriter;
+import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
 public class DebugBean extends BaseBean {
