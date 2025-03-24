@@ -21,7 +21,6 @@ import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libapputils.app.AppVersionUtils;
-import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.bean.DebugBean;
 import cc.winboll.studio.libapputils.util.PrefUtils;

@@ -20,15 +20,13 @@ import cc.winboll.studio.libapputils.activities.AssetsHtmlActivity;
 import cc.winboll.studio.libapputils.activities.LogActivity;
 import cc.winboll.studio.libapputils.activities.QRCodeDecodeActivity;
 import cc.winboll.studio.libapputils.app.AboutActivityFactory;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
-import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.AboutView;
 import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
 import java.util.List;
 import java.util.Set;
 
-final public class MainActivity extends Activity implements IWinBollActivity {
+final public class MainActivity extends Activity {
 
 	public static final String TAG = "MainActivity";
 
@@ -42,44 +40,24 @@ final public class MainActivity extends Activity implements IWinBollActivity {
 //        return this;
 //    }
 
-    @Override
-    public APPInfo getAppInfo() {
-        String szBranchName = "apputils";
-
-        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
-        appInfo.setAppName("APPUtils");
-        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
-        appInfo.setAppDescription("APPUtils Description");
-        appInfo.setAppGitName("APP");
-        appInfo.setAppGitOwner("Studio");
-        appInfo.setAppGitAPPBranch(szBranchName);
-        appInfo.setAppGitAPPSubProjectFolder(szBranchName);
-        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=APP");
-        appInfo.setAppAPKName("APPUtils");
-        appInfo.setAppAPKFolderName("APPUtils");
-        return appInfo;
-        //return null;
-    }
-
-    @Override
-    public String getTag() {
-        return TAG;
-    }
-
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return true;
-    }
-
-    @Override
-    public Toolbar initToolBar() {
-        return findViewById(R.id.activitymainToolbar1);
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return false;
-    }
+//    @Override
+//    public APPInfo getAppInfo() {
+//        String szBranchName = "apputils";
+//
+//        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
+//        appInfo.setAppName("APPUtils");
+//        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
+//        appInfo.setAppDescription("APPUtils Description");
+//        appInfo.setAppGitName("APP");
+//        appInfo.setAppGitOwner("Studio");
+//        appInfo.setAppGitAPPBranch(szBranchName);
+//        appInfo.setAppGitAPPSubProjectFolder(szBranchName);
+//        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=APP");
+//        appInfo.setAppAPKName("APPUtils");
+//        appInfo.setAppAPKFolderName("APPUtils");
+//        return appInfo;
+//        //return null;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +70,11 @@ final public class MainActivity extends Activity implements IWinBollActivity {
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
         setActionBar(mToolbar);
-        if (isEnableDisplayHomeAsUp()) {
-            // 显示后退按钮
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        getActionBar().setSubtitle(getTag());
+//        if (isEnableDisplayHomeAsUp()) {
+//            // 显示后退按钮
+//            getActionBar().setDisplayHomeAsUpEnabled(true);
+//        }
+//        getActionBar().setSubtitle(getTag());
 
         checkResolveActivity();
         archiveInstance();
@@ -248,10 +226,10 @@ final public class MainActivity extends Activity implements IWinBollActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //ToastUtils.show("onCreateOptionsMenu");
         getMenuInflater().inflate(R.menu.toolbar_main, menu);
-        if (isAddWinBollToolBar()) {
-            //ToastUtils.show("mIWinBoll.isAddWinBollToolBar()");
-            getMenuInflater().inflate(R.menu.toolbar_winboll_shared_main, menu);
-        }
+//        if (isAddWinBollToolBar()) {
+//            //ToastUtils.show("mIWinBoll.isAddWinBollToolBar()");
+//            getMenuInflater().inflate(R.menu.toolbar_winboll_shared_main, menu);
+//        }
         if (App.isDebug()) {
             getMenuInflater().inflate(R.menu.toolbar_studio_debug, menu);
         }
@@ -264,9 +242,9 @@ final public class MainActivity extends Activity implements IWinBollActivity {
         if (item.getItemId() == R.id.item_exit) {
             exit();
             return true;
-        } else if (item.getItemId() == R.id.item_about) {
-            AboutActivityFactory.showAboutActivity(this, getAppInfo());
-            return true;
+//        } else if (item.getItemId() == R.id.item_about) {
+//            AboutActivityFactory.showAboutActivity(this, getAppInfo());
+//            return true;
         } else if (item.getItemId() == R.id.item_teststringtoqrcodeview) {
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, TestStringToQrCodeViewActivity.class);
         } else if (item.getItemId() == R.id.item_testqrcodedecodeactivity) {

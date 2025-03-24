@@ -15,13 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toolbar;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.SimpleWebView;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class AssetsHtmlActivity extends Activity implements IWinBollActivity {
+public class AssetsHtmlActivity extends Activity {
 
     public static final String TAG = "AssetsHtmlActivity";
 
@@ -38,32 +37,6 @@ public class AssetsHtmlActivity extends Activity implements IWinBollActivity {
 //    public Activity getActivity() {
 //        return this;
 //    }
-
-    @Override
-    public APPInfo getAppInfo() {
-        return null;
-    }
-    
-    @Override
-    public String getTag() {
-        return TAG;
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return true;
-    }
-
-
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return false;
-    }
-
-    @Override
-    public Toolbar initToolBar() {
-        return findViewById(R.id.activityassetshtmlToolbar1);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

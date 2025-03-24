@@ -11,10 +11,9 @@ import android.os.Bundle;
 import android.widget.Toolbar;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 
-public class LogActivity extends Activity implements IWinBollActivity {
+public class LogActivity extends Activity {
 
     public static final String TAG = "LogActivity";
 
@@ -24,31 +23,6 @@ public class LogActivity extends Activity implements IWinBollActivity {
 //    public Activity getActivity() {
 //        return this;
 //    }
-
-    @Override
-    public APPInfo getAppInfo() {
-        return null;
-    }
-
-    @Override
-    public String getTag() {
-        return TAG;
-    }
-
-    @Override
-    public Toolbar initToolBar() {
-        return null;
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return false;
-    }
-
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return false;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

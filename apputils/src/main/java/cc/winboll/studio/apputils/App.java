@@ -10,8 +10,6 @@ import android.content.Context;
 import android.widget.Toast;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.app.MyActivityLifecycleCallbacks;
-import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.DebugBean;
 
 public class App extends GlobalApplication {
@@ -21,7 +19,7 @@ public class App extends GlobalApplication {
     public static final String _ACTION_DEBUGVIEW = App.class.getName() + "_ACTION_DEBUGVIEW";
 
     //static volatile WinBollApplication _WinBollApplication = null;
-    MyActivityLifecycleCallbacks mMyActivityLifecycleCallbacks;
+    //MyActivityLifecycleCallbacks mMyActivityLifecycleCallbacks;
 
     // 标记当前应用是否处于调试状态
     static volatile boolean isDebug = false;
@@ -34,9 +32,9 @@ public class App extends GlobalApplication {
         return isDebug;
     }
 
-    MyActivityLifecycleCallbacks getMyActivityLifecycleCallbacks() {
-        return mMyActivityLifecycleCallbacks;
-    }
+//    MyActivityLifecycleCallbacks getMyActivityLifecycleCallbacks() {
+//        return mMyActivityLifecycleCallbacks;
+//    }
 
     @Override
     public Context getApplicationContext() {
@@ -74,8 +72,8 @@ public class App extends GlobalApplication {
             }
             // 应用窗口管理模块参数设置
             //
-            mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
-            registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
+            //mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
+            //registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
             // 设置默认 WinBoll 应用 UI 类型
             //WinBollActivityManager.getInstance(this).setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
             //ToastUtils.show("WinBollUI_TYPE " + getWinBollUI_TYPE());

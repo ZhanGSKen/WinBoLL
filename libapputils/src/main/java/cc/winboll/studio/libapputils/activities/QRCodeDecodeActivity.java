@@ -5,22 +5,19 @@ package cc.winboll.studio.libapputils.activities;
  * @Date 2025/01/18 10:32:21
  * @Describe 二维码扫码解码窗口
  */
-import cc.winboll.studio.libapputils.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toolbar;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
-import cc.winboll.studio.libapputils.bean.APPInfo;
+import cc.winboll.studio.libapputils.R;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import java.util.List;
 
-public class QRCodeDecodeActivity extends Activity implements IWinBollActivity {
+public class QRCodeDecodeActivity extends Activity {
 
     public static final String TAG = "QRCodeDecodeActivity";
 
@@ -34,32 +31,6 @@ public class QRCodeDecodeActivity extends Activity implements IWinBollActivity {
 //    public Activity getActivity() {
 //        return this;
 //    }
-
-    @Override
-    public APPInfo getAppInfo() {
-        return null;
-    }
-    
-    @Override
-    public String getTag() {
-        return TAG;
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return true;
-    }
-
-
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return false;
-    }
-
-    @Override
-    public Toolbar initToolBar() {
-        return findViewById(R.id.activityqrcodedecodeToolbar1);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +48,6 @@ public class QRCodeDecodeActivity extends Activity implements IWinBollActivity {
 //            startScanning();
 //        }
         startScanning();
-
-
     }
 
     private void startScanning() {

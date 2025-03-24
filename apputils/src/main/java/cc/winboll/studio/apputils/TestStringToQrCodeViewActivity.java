@@ -8,11 +8,10 @@ import cc.winboll.studio.apputils.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toolbar;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.StringToQrCodeView;
 
-public class TestStringToQrCodeViewActivity extends Activity implements IWinBollActivity {
+public class TestStringToQrCodeViewActivity extends Activity {
 
     public static final String TAG = "TestStringToQrCodeViewActivity";
 
@@ -22,31 +21,6 @@ public class TestStringToQrCodeViewActivity extends Activity implements IWinBoll
 //    public Activity getActivity() {
 //        return this;
 //    }
-
-    @Override
-    public APPInfo getAppInfo() {
-        return null;
-    }
-
-    @Override
-    public String getTag() {
-        return TAG;
-    }
-
-    @Override
-    public Toolbar initToolBar() {
-        return findViewById(R.id.activityteststringtoqrcodeviewToolbar1);
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return true;
-    }
-
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

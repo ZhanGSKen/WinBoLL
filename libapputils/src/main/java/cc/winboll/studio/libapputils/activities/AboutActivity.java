@@ -12,50 +12,21 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.Toolbar;
 import cc.winboll.studio.libapputils.R;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
-import cc.winboll.studio.libapputils.app.WinBollActivityManager;
 import cc.winboll.studio.libapputils.bean.APPInfo;
 import cc.winboll.studio.libapputils.view.AboutView;
 
-final public class AboutActivity extends Activity implements IWinBollActivity {
+final public class AboutActivity extends Activity {
 
     public static final String TAG = "AboutActivity";
 
     public static final String EXTRA_APPINFO = "EXTRA_APPINFO";
-
 
     APPInfo mAPPInfo;
 
     @Override
     public Context getApplicationContext() {
         return this;
-    }
-
-    @Override
-    public APPInfo getAppInfo() {
-        return null;
-    }
-    
-    @Override
-    public String getTag() {
-        return TAG;
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return true;
-    }
-
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return false;
-    }
-
-    @Override
-    public Toolbar initToolBar() {
-        return findViewById(R.id.activityaboutToolbar1);
     }
 
     @Override
