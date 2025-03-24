@@ -5,7 +5,6 @@ package cc.winboll.studio.libapputils.activities;
  * @Date 2025/01/03 11:02:49
  * @Describe 一个可以浏览随 APP 附带的 Html 文档的窗口
  */
-import cc.winboll.studio.libapputils.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toolbar;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.bean.APPInfo;
+import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.view.SimpleWebView;
 import java.io.IOException;
 import java.io.InputStream;

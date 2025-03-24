@@ -5,13 +5,11 @@ package cc.winboll.studio.libapputils.activities;
  * @Date 2025/03/08 00:19:39
  * @Describe LogActivity
  */
-import cc.winboll.studio.libapputils.R;
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.Toolbar;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libapputils.bean.APPInfo;
+import cc.winboll.studio.libapputils.R;
 
 public class LogActivity extends Activity {
 
