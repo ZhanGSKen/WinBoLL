@@ -25,37 +25,25 @@ import cc.winboll.studio.libaes.unittests.TestASupportToolbarActivity;
 import cc.winboll.studio.libaes.unittests.TestAToolbarActivity;
 import cc.winboll.studio.libaes.unittests.TestDrawerFragmentActivity;
 import cc.winboll.studio.libaes.unittests.TestViewPageFragment;
+import cc.winboll.studio.libaes.winboll.APPInfo;
+import cc.winboll.studio.libaes.winboll.AboutActivityFactory;
 import cc.winboll.studio.libaes.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.app.AboutActivityFactory;
-import cc.winboll.studio.libapputils.bean.APPInfo;
 import com.a4455jkjh.colorpicker.ColorPickerDialog;
+import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
 
 public class MainActivity extends DrawerFragmentActivity implements IWinBollActivity {
+
 
     public static final String TAG = "MainActivity";
 
     TestAButtonFragment mTestAButtonFragment;
     TestViewPageFragment mTestViewPageFragment;
-
+    
     @Override
-    public APPInfo getAppInfo() {
-        String szBranchName = "aes";
-
-        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
-        appInfo.setAppName("AES");
-        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
-        appInfo.setAppDescription("AES Description");
-        appInfo.setAppGitName("APP");
-        appInfo.setAppGitOwner("Studio");
-        appInfo.setAppGitAPPBranch(szBranchName);
-        appInfo.setAppGitAPPSubProjectFolder(szBranchName);
-        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=AES");
-        appInfo.setAppAPKName("AES");
-        appInfo.setAppAPKFolderName("AES");
-        return appInfo;
-        //return null;
+    public AppCompatActivity getActivity() {
+        return this;
     }
 
     @Override
@@ -214,10 +202,28 @@ public class MainActivity extends DrawerFragmentActivity implements IWinBollActi
             startActivity(intent);
         } 
         else if (nItemId ==  R.id.item_about) {
-            AboutActivityFactory.showAboutActivity(this, getAppInfo());
+            onAbout();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    
+    public void onAbout() {
+        String szBranchName = "aes";
+
+        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
+        appInfo.setAppName("AES");
+        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
+        appInfo.setAppDescription("AES Description");
+        appInfo.setAppGitName("APP");
+        appInfo.setAppGitOwner("Studio");
+        appInfo.setAppGitAPPBranch(szBranchName);
+        appInfo.setAppGitAPPSubProjectFolder(szBranchName);
+        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=AES");
+        appInfo.setAppAPKName("AES");
+        appInfo.setAppAPKFolderName("AES");
+        AboutActivityFactory.showAboutActivity(this, appInfo);
+        ToastUtils.show("onAbout");
     }
 }

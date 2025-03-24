@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
-import cc.winboll.studio.libapputils.bean.APPInfo;
-import androidx.appcompat.app.AppCompatActivity;
-import android.widget.Toolbar;
+import cc.winboll.studio.libaes.winboll.APPInfo;
 import cc.winboll.studio.libaes.winboll.IWinBollActivity;
 
 /**
@@ -23,8 +23,8 @@ public class SecondaryLibraryActivity extends DrawerFragmentActivity implements 
     SecondaryLibraryFragment mSecondaryLibraryFragment;
 
     @Override
-    public APPInfo getAppInfo() {
-        return null;
+    public AppCompatActivity getActivity() {
+        return this;
     }
 
     @Override

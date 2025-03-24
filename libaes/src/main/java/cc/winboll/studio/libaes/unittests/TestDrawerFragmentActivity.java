@@ -4,7 +4,6 @@ package cc.winboll.studio.libaes.unittests;
  * @Author ZhanGSKen@QQ.COM
  * @Date 2024/06/30 15:00:51
  */
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,20 +11,20 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 import android.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
 import cc.winboll.studio.libaes.beans.DrawerMenuBean;
 import cc.winboll.studio.libaes.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.bean.APPInfo;
 import java.util.ArrayList;
 
 public class TestDrawerFragmentActivity extends DrawerFragmentActivity implements IWinBollActivity {
 
     @Override
-    public APPInfo getAppInfo() {
-        return null;
+    public AppCompatActivity getActivity() {
+        return this;
     }
 
     @Override

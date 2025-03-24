@@ -14,7 +14,7 @@ public class App extends GlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        //setIsDebug(BuildConfig.DEBUG);
+        setIsDebuging(BuildConfig.DEBUG);
     }
     
 }
