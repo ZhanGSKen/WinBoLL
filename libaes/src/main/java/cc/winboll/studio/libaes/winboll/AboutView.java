@@ -120,6 +120,7 @@ public class AboutView extends LinearLayout {
         } else {
             mszGitea = "https://gitea.winboll.cc/" + mAPPInfo.getAppGitOwner() + "/" + mszAppGitName + "/src/branch/" + mAPPInfo.getAppGitAPPBranch() + "/" + mAPPInfo.getAppGitAPPSubProjectFolder();
         }
+        
 
         if (GlobalApplication.isDebuging()) {
             LayoutInflater inflater = LayoutInflater.from(mContext);

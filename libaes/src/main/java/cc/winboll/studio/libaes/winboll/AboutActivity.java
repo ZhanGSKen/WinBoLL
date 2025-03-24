@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import cc.winboll.studio.libaes.R;
 
 final public class AboutActivity extends Activity {
 
@@ -23,14 +22,9 @@ final public class AboutActivity extends Activity {
     APPInfo mAPPInfo;
 
     @Override
-    public Context getApplicationContext() {
-        return this;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+        setContentView(cc.winboll.studio.libaes.R.layout.activity_about);
         Intent intent = getIntent();
         if (intent != null) {
             mAPPInfo = (APPInfo)intent.getSerializableExtra(EXTRA_APPINFO);
@@ -39,8 +33,8 @@ final public class AboutActivity extends Activity {
             mAPPInfo = new APPInfo();
         }
 
-        AboutView aboutView = new AboutView(this, mAPPInfo);
-        LinearLayout llMain = findViewById(R.id.aboutroot_ll);
+        AboutView aboutView = new AboutView(AboutActivity.this, mAPPInfo);
+        LinearLayout llMain = findViewById(cc.winboll.studio.libaes.R.id.aboutroot_ll);
         llMain.addView(aboutView);
 
         //ToastUtils.show(TAG);
@@ -48,7 +42,7 @@ final public class AboutActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_winboll_shared_about, menu);
+        getMenuInflater().inflate(cc.winboll.studio.libaes.R.menu.toolbar_winboll_shared_about, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
