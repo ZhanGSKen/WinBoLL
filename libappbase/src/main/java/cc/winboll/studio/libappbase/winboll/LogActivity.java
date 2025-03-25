@@ -6,9 +6,12 @@ package cc.winboll.studio.libappbase.winboll;
  * @Describe 应用日志窗口
  */
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.WindowManager;
 import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.R;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 
 public class LogActivity extends Activity implements IWinBollActivity {
 
@@ -41,4 +44,5 @@ public class LogActivity extends Activity implements IWinBollActivity {
         super.onResume();
         mLogView.start();
     }
+
 }

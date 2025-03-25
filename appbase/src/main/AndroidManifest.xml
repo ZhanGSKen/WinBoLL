@@ -13,8 +13,13 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:resizeableActivity="true"
+            android:launchMode="singleInstance"
+            android:taskAffinity="cc.winboll.studio.appbase.task.main"
+            android:configChanges="screenSize|screenLayout|orientation"
             android:exported="true">
 
+            
             <intent-filter>
 
                 <action android:name="android.intent.action.MAIN"/>
