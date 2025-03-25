@@ -19,12 +19,15 @@ import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.LogActivity;
 import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends Activity implements IWinBollActivity {
 
     public static final String TAG = "MainActivity";
-    
+
     @Override
     public Activity getActivity() {
         return this;
@@ -36,7 +39,7 @@ public class MainActivity extends Activity implements IWinBollActivity {
     }
 
     Toolbar mToolbar;
-    LogView mLogView;
+    //LogView mLogView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +52,31 @@ public class MainActivity extends Activity implements IWinBollActivity {
 
         CheckBox cbIsDebugMode = findViewById(R.id.activitymainCheckBox1);
         cbIsDebugMode.setChecked(GlobalApplication.isDebuging());
-        mLogView = findViewById(R.id.activitymainLogView1);
+        //mLogView = findViewById(R.id.activitymainLogView1);
 
-        if (GlobalApplication.isDebuging()) {
-            mLogView.start(); 
-            ToastUtils.show("LogView start.");
-        }
+//        if (GlobalApplication.isDebuging()) {
+//            mLogView.start(); 
+//            ToastUtils.show("LogView start.");
+//        }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == cc.winboll.studio.appbase.R.id.item_log) {
+            onLogActivity();
+            return true;
+        }
+        // 在switch语句中处理每个ID，并在处理完后返回true，未处理的情况返回false。
+        return super.onOptionsItemSelected(item);
+    }
+    
+    
 
     @Override
     protected void onDestroy() {
@@ -67,9 +88,9 @@ public class MainActivity extends Activity implements IWinBollActivity {
 
     @Override
     protected void onResume() {
-        LogUtils.d(TAG, "onResume");
+        //LogUtils.d(TAG, "onResume");
         super.onResume();
-        mLogView.start();
+        //mLogView.start();
     }
 
 	public void onSwitchDebugMode(View view) {
@@ -155,8 +176,20 @@ public class MainActivity extends Activity implements IWinBollActivity {
         Intent intent = new Intent(this, TestDemoBindService.class);
         stopService(intent);
     }
-    
+
     public void onTestOpenNewActivity(View view) {
         WinBollActivityManager.getInstance(this).startWinBollActivity(this, NewActivity.class);
+    }
+
+    public void onLogActivity() {
+        Intent intent = new Intent(MainActivity.this, LogActivity.class);
+        //打开多任务窗口 flags
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+//        startActivity(intent);
+        WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, LogActivity.class);
+
     }
 }

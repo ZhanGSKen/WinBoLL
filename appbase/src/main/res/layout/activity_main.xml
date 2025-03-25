@@ -198,11 +198,6 @@
 		</LinearLayout>
 
 	</ScrollView>
-
-	<cc.winboll.studio.libappbase.LogView
-		android:layout_height="300dp"
-		android:layout_width="match_parent"
-		android:id="@+id/activitymainLogView1"/>
-
+    
 </LinearLayout>
 

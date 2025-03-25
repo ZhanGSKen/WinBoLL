@@ -21,8 +21,11 @@
             android:label="GlobalCrashActivity"
             android:launchMode="standard"/>
 
-        <activity android:name=".LogActivity"/>
-
+        <activity
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:name="cc.winboll.studio.libappbase.winboll.LogActivity"
+            android:exported="true"/>
+            
         <service
             android:name=".SimpleOperateSignalCenterService"
             android:exported="true">
