@@ -18,15 +18,15 @@ import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import cc.winboll.studio.appbase.MyTileService;
-import cc.winboll.studio.appbase.beans.MainServiceBean;
+import cc.winboll.studio.appbase.models.MainServiceBean;
 import cc.winboll.studio.appbase.handlers.MainServiceHandler;
 import cc.winboll.studio.appbase.receivers.MainReceiver;
 import cc.winboll.studio.appbase.services.AssistantService;
 import cc.winboll.studio.appbase.threads.MainServiceThread;
-import cc.winboll.studio.appbase.widgets.SOSWidget;
+import cc.winboll.studio.appbase.widgets.APPNewsWidget;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.bean.APPSOSBean;
 import java.util.ArrayList;
+import cc.winboll.studio.libappbase.sos.APPModel;
 
 public class MainService extends Service {
 
@@ -45,7 +45,7 @@ public class MainService extends Service {
     AssistantService mAssistantService;
     boolean isBound = false;
     MainReceiver mMainReceiver;
-    ArrayList<SOSConnection> mSOSConnectionList;
+    ArrayList<APPConnection> mAPPModelConnectionList;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -60,7 +60,7 @@ public class MainService extends Service {
     public void onCreate() {
         super.onCreate();
         LogUtils.d(TAG, "onCreate()");
-        mSOSConnectionList = new ArrayList<SOSConnection>();
+        mAPPModelConnectionList = new ArrayList<APPConnection>();
 
         _mControlCenterService = MainService.this;
         isServiceRunning = false;
@@ -101,8 +101,8 @@ public class MainService extends Service {
             }
 
             // 启动小部件
-            Intent intentTimeWidget = new Intent(this, SOSWidget.class);
-            intentTimeWidget.setAction(SOSWidget.ACTION_RELOAD_REPORT);
+            Intent intentTimeWidget = new Intent(this, APPNewsWidget.class);
+            intentTimeWidget.setAction(APPNewsWidget.ACTION_RELOAD_REPORT);
             this.sendBroadcast(intentTimeWidget);
 
             startMainServiceThread();
@@ -117,21 +117,11 @@ public class MainService extends Service {
     //
     void wakeupAndBindAssistant() {
         LogUtils.d(TAG, "wakeupAndBindAssistant()");
-//        if (ServiceUtils.isServiceAlive(getApplicationContext(), AssistantService.class.getName()) == false) {
-//            startService(new Intent(MainService.this, AssistantService.class));
-//            //LogUtils.d(TAG, "call wakeupAndBindAssistant() : Binding... AssistantService");
-//            bindService(new Intent(MainService.this, AssistantService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
-//        }
+
         Intent intent = new Intent(this, AssistantService.class);
         startService(intent);
         // 绑定服务的Intent
-        //Intent intent = new Intent(this, AssistantService.class);
         bindService(intent, mMyServiceConnection, Context.BIND_IMPORTANT);
-
-//        Intent intent = new Intent(this, AssistantService.class);
-//        startService(intent);
-//        LogUtils.d(TAG, "startService(intent)");
-//        bindService(new Intent(this, AssistantService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
     }
 
     // 开启提醒铃声线程
@@ -192,40 +182,40 @@ public class MainService extends Service {
         }
     }
 
-    public void bindSOSConnection(APPSOSBean bean) {
-        LogUtils.d(TAG, "bindSOSConnection(...)");
+    public void bindAPPModelConnection(APPModel bean) {
+        LogUtils.d(TAG, "bindAPPModelConnection(...)");
         // 清理旧的绑定链接
-        for (int i = mSOSConnectionList.size() - 1; i > -1; i--) {
-            SOSConnection item = mSOSConnectionList.get(i);
-            if (item.isBindToAPPSOSBean(bean)) {
+        for (int i = mAPPModelConnectionList.size() - 1; i > -1; i--) {
+            APPConnection item = mAPPModelConnectionList.get(i);
+            if (item.isBindToAPP(bean)) {
                 LogUtils.d(TAG, "Bind Servive exist.");
                 unbindService(item);
-                mSOSConnectionList.remove(i);
+                mAPPModelConnectionList.remove(i);
             }
         }
 
         // 绑定服务
-        SOSConnection sosConnection = new SOSConnection();
+        APPConnection appConnection = new APPConnection();
         Intent intentService = new Intent();
-        intentService.setComponent(new ComponentName(bean.getSosPackage(), bean.getSosClassName()));
-        bindService(intentService, sosConnection, Context.BIND_IMPORTANT);
-        mSOSConnectionList.add(sosConnection);
+        intentService.setComponent(new ComponentName(bean.getAppPackageName(), bean.getAppMainServiveName()));
+        bindService(intentService, appConnection, Context.BIND_IMPORTANT);
+        mAPPModelConnectionList.add(appConnection);
         
-        Intent intentWidget = new Intent(this, SOSWidget.class);
-        intentWidget.setAction(SOSWidget.ACTION_WAKEUP_SERVICE);
-        APPSOSBean appSOSBean = new APPSOSBean(bean.getSosPackage(), bean.getSosClassName());
+        Intent intentWidget = new Intent(this, APPNewsWidget.class);
+        intentWidget.setAction(APPNewsWidget.ACTION_WAKEUP_SERVICE);
+        APPModel appSOSBean = new APPModel(bean.getAppPackageName(), bean.getAppMainServiveName());
         intentWidget.putExtra("APPSOSBean", appSOSBean.toString());
         sendBroadcast(intentWidget);
     }
 
-    public class SOSConnection implements ServiceConnection {
+    public class APPConnection implements ServiceConnection {
 
         ComponentName mComponentName;
 
-        boolean isBindToAPPSOSBean(APPSOSBean bean) {
+        boolean isBindToAPP(APPModel bean) {
             return mComponentName != null
-                && mComponentName.getClassName().equals(bean.getSosClassName())
-                && mComponentName.getPackageName().equals(bean.getSosPackage());
+                && mComponentName.getClassName().equals(bean.getAppMainServiveName())
+                && mComponentName.getPackageName().equals(bean.getAppPackageName());
         }
 
         @Override
@@ -241,13 +231,13 @@ public class MainService extends Service {
             LogUtils.d(TAG, String.format("onServiceDisconnected : \ngetClassName %s\ngetPackageName %s", name.getClassName(), name.getPackageName()));
 
             // 尝试无参数启动一下服务
-            String sosPackage = mComponentName.getPackageName();
-            LogUtils.d(TAG, String.format("sosPackage %s", sosPackage));
-            String sosClassName = mComponentName.getClassName();
-            LogUtils.d(TAG, String.format("sosClassName %s", sosClassName));
+            String appPackage = mComponentName.getPackageName();
+            LogUtils.d(TAG, String.format("appPackage %s", appPackage));
+            String appMainServiceClassName = mComponentName.getClassName();
+            LogUtils.d(TAG, String.format("appMainServiceClassName %s", appMainServiceClassName));
 
             Intent intentService = new Intent();
-            intentService.setComponent(new ComponentName(sosPackage, sosClassName));
+            intentService.setComponent(new ComponentName(appPackage, appMainServiceClassName));
             startService(intentService);
         }
 

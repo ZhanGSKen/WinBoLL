@@ -14,10 +14,9 @@ import android.widget.RemoteViews;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.R;
 import cc.winboll.studio.libappbase.utils.ServiceUtils;
-import com.hjq.toast.ToastUtils;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import cc.winboll.studio.libappbase.services.TestService;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 
 public class StatusWidget extends AppWidgetProvider {
 
@@ -36,6 +35,7 @@ public class StatusWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         if (intent.getAction().equals(ACTION_STATUS_UPDATE)) {
+            ToastUtils.show("Test");
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, StatusWidget.class));
             for (int appWidgetId : appWidgetIds) {
@@ -52,12 +52,12 @@ public class StatusWidget extends AppWidgetProvider {
         PendingIntent pendingIntentAppButton = PendingIntent.getBroadcast(context, 0, intentAppButton, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.ivapp, pendingIntentAppButton);
 
-        boolean isActive = ServiceUtils.isServiceRunning(context, TestService.class.getName());
-        if (isActive) {
-            views.setImageViewResource(R.id.ivapp, cc.winboll.studio.libappbase.R.drawable.ic_launcher);
-        } else {
-            views.setImageViewResource(R.id.ivapp, cc.winboll.studio.libappbase.R.drawable.ic_launcher_disable);
-        }
+//        boolean isActive = ServiceUtils.isServiceRunning(context, TestService.class.getName());
+//        if (isActive) {
+//            views.setImageViewResource(R.id.ivapp, cc.winboll.studio.libappbase.R.drawable.ic_launcher);
+//        } else {
+//            views.setImageViewResource(R.id.ivapp, cc.winboll.studio.libappbase.R.drawable.ic_launcher_disable);
+//        }
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 }

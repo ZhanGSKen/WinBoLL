@@ -6,22 +6,22 @@ package cc.winboll.studio.appbase;
  * @Describe APPbase 应用类
  */
 import cc.winboll.studio.libappbase.GlobalApplication;
-import cc.winboll.studio.libappbase.SOSCSBroadcastReceiver;
 import android.content.IntentFilter;
+import cc.winboll.studio.libappbase.sos.SOSCenterServiceReceiver;
+import cc.winboll.studio.libappbase.sos.SOS;
 
 public class App extends GlobalApplication {
 
     public static final String TAG = "App";
     
-    SOSCSBroadcastReceiver mSOSCSBroadcastReceiver;
+    SOSCenterServiceReceiver mSOSCenterServiceReceiver;
     
     @Override
     public void onCreate() {
         super.onCreate();
-        GlobalApplication.setIsDebuging(this, BuildConfig.DEBUG);
-        mSOSCSBroadcastReceiver = new SOSCSBroadcastReceiver();
+        mSOSCenterServiceReceiver = new SOSCenterServiceReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(SOSCSBroadcastReceiver.ACTION_SOS);
-        registerReceiver(mSOSCSBroadcastReceiver, intentFilter);
+        intentFilter.addAction(SOS.ACTION_SOS);
+        registerReceiver(mSOSCenterServiceReceiver, intentFilter);
     }
 }
