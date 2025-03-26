@@ -6,11 +6,11 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.appbase.activities.NewActivity;
 import cc.winboll.studio.appbase.services.MainService;
@@ -24,8 +24,9 @@ import cc.winboll.studio.libappbase.widgets.StatusWidget;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.winboll.LogActivity;
 import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
+import android.support.v7.widget.Toolbar;
 
-public class MainActivity extends Activity implements IWinBollActivity {
+public class MainActivity extends AppCompatActivity implements IWinBollActivity {
 
     public static final String TAG = "MainActivity";
 
@@ -49,7 +50,7 @@ public class MainActivity extends Activity implements IWinBollActivity {
         setContentView(R.layout.activity_main);
 
         mToolbar = findViewById(R.id.toolbar);
-        setActionBar(mToolbar);
+        setSupportActionBar(mToolbar);
 
         CheckBox cbIsDebugMode = findViewById(R.id.activitymainCheckBox1);
         cbIsDebugMode.setChecked(GlobalApplication.isDebuging());
@@ -176,6 +177,8 @@ public class MainActivity extends Activity implements IWinBollActivity {
     }
 
     public void onLogActivity() {
+        
+        
         Intent intent = new Intent(MainActivity.this, LogActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
         // Define the bounds.
