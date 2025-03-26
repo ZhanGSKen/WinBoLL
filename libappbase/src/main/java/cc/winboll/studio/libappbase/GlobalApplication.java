@@ -87,11 +87,11 @@ public class GlobalApplication extends Application {
         // 初始化 Toast 框架
         ToastUtils.init(this);
 
-        mWinBollActivityManager = WinBollActivityManager.getInstance(this);
-        mWinBollActivityManager.setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
-        // 注册回调
-        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks(mWinBollActivityManager);
-        registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
+//        mWinBollActivityManager = WinBollActivityManager.getInstance(this);
+//        mWinBollActivityManager.setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
+//        // 注册回调
+//        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks(mWinBollActivityManager);
+//        registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
     }
 
 

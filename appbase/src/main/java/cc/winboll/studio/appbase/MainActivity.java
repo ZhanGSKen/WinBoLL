@@ -1,12 +1,16 @@
 package cc.winboll.studio.appbase;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.appbase.activities.NewActivity;
 import cc.winboll.studio.appbase.services.MainService;
@@ -14,17 +18,18 @@ import cc.winboll.studio.appbase.services.TestDemoBindService;
 import cc.winboll.studio.appbase.services.TestDemoService;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.LogActivity;
 import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
+import android.support.v7.widget.Toolbar;
 
-public class MainActivity extends Activity implements IWinBollActivity {
+public class MainActivity extends AppCompatActivity implements IWinBollActivity {
 
     public static final String TAG = "MainActivity";
-    
+
     @Override
     public Activity getActivity() {
         return this;
@@ -36,7 +41,7 @@ public class MainActivity extends Activity implements IWinBollActivity {
     }
 
     Toolbar mToolbar;
-    LogView mLogView;
+    //LogView mLogView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +50,35 @@ public class MainActivity extends Activity implements IWinBollActivity {
         setContentView(R.layout.activity_main);
 
         mToolbar = findViewById(R.id.toolbar);
-        setActionBar(mToolbar);
+        setSupportActionBar(mToolbar);
 
         CheckBox cbIsDebugMode = findViewById(R.id.activitymainCheckBox1);
         cbIsDebugMode.setChecked(GlobalApplication.isDebuging());
-        mLogView = findViewById(R.id.activitymainLogView1);
+        //mLogView = findViewById(R.id.activitymainLogView1);
 
-        if (GlobalApplication.isDebuging()) {
-            mLogView.start(); 
-            ToastUtils.show("LogView start.");
-        }
+//        if (GlobalApplication.isDebuging()) {
+//            mLogView.start(); 
+//            ToastUtils.show("LogView start.");
+//        }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == cc.winboll.studio.appbase.R.id.item_log) {
+            onLogActivity();
+            return true;
+        }
+        // 在switch语句中处理每个ID，并在处理完后返回true，未处理的情况返回false。
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
     @Override
     protected void onDestroy() {
@@ -63,13 +86,6 @@ public class MainActivity extends Activity implements IWinBollActivity {
         Intent intentAPPWidget = new Intent(this, StatusWidget.class);
         intentAPPWidget.setAction(StatusWidget.ACTION_STATUS_UPDATE);
         sendBroadcast(intentAPPWidget);
-    }
-
-    @Override
-    protected void onResume() {
-        LogUtils.d(TAG, "onResume");
-        super.onResume();
-        mLogView.start();
     }
 
 	public void onSwitchDebugMode(View view) {
@@ -155,8 +171,28 @@ public class MainActivity extends Activity implements IWinBollActivity {
         Intent intent = new Intent(this, TestDemoBindService.class);
         stopService(intent);
     }
-    
+
     public void onTestOpenNewActivity(View view) {
         WinBollActivityManager.getInstance(this).startWinBollActivity(this, NewActivity.class);
+    }
+
+    public void onLogActivity() {
+        
+        
+        Intent intent = new Intent(MainActivity.this, LogActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+        // Define the bounds.
+        Rect bounds = new Rect(500, 300, 100, 0);
+
+// Set the bounds as an activity option.
+
+        ActivityOptions options = ActivityOptions.makeBasic();
+
+        options.setLaunchBounds(bounds);
+
+        //Intent intent = new Intent(this, LpgActivity.class);
+
+        startActivity(intent, options.toBundle());
+        //WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, LogActivity.class);
     }
 }

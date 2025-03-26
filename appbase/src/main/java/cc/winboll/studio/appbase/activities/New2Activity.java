@@ -2,7 +2,8 @@ package cc.winboll.studio.appbase.activities;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/03/25 05:04:22
+ * @Date 2025/03/25 11:46:40
+ * @Describe 测试窗口2
  */
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,9 +13,9 @@ import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
 
-public class NewActivity extends Activity implements IWinBollActivity {
+public class New2Activity extends Activity implements IWinBollActivity {
 
-    public static final String TAG = "NewActivity";
+    public static final String TAG = "New2Activity";
 
     //LogView mLogView;
 
@@ -31,7 +32,8 @@ public class NewActivity extends Activity implements IWinBollActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new);
+        setContentView(R.layout.activity_new2);
+
 //        mLogView = findViewById(R.id.logview);
 //        mLogView.start();
     }
@@ -50,7 +52,7 @@ public class NewActivity extends Activity implements IWinBollActivity {
         WinBollActivityManager.getInstance(this).finishAll();
     }
 
-    public void onNew2Activity(View view) {
-        WinBollActivityManager.getInstance(this).startWinBollActivity(this, New2Activity.class);
+    public void onNewActivity(View view) {
+        WinBollActivityManager.getInstance(this).startWinBollActivity(this, NewActivity.class);
     }
 }
