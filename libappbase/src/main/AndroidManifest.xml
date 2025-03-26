@@ -22,15 +22,13 @@
             android:launchMode="standard"/>
 
         <activity
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
             android:name="cc.winboll.studio.libappbase.winboll.LogActivity"
             android:resizeableActivity="true"
-            android:launchMode="singleInstance"
-            android:taskAffinity="cc.winboll.studio.libappbase.task.log"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true">
-            
-            </activity>
-            
+
+        </activity>
+
         <service
             android:name=".SimpleOperateSignalCenterService"
             android:exported="true">

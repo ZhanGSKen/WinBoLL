@@ -9,12 +9,11 @@ package cc.winboll.studio.libappbase.winboll;
  * https://blog.csdn.net/qq_29364417/article/details/109379915?app_version=6.4.2&code=app_1562916241&csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22109379915%22%2C%22source%22%3A%22weixin_38986226%22%7D&uLinkId=usr1mkqgl919blen&utm_source=app
  */
 import android.app.ActivityManager;
-import android.app.ActivityOptions;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -100,6 +99,7 @@ public class WinBollActivityManager {
                 resumeActivity(context, tag);
                 return;
             }
+            ToastUtils.show("startWinBollActivity(Context context, Class<T> clazz)");
 
             // 新建一个任务窗口
             Intent intent = new Intent(context, clazz);
@@ -108,7 +108,7 @@ public class WinBollActivityManager {
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(EXTRA_TAG, tag);
-            mContext.startActivity(intent);
+            context.startActivity(intent);
         } catch (InstantiationException | IllegalAccessException e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }
@@ -130,7 +130,7 @@ public class WinBollActivityManager {
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(EXTRA_TAG, tag);
-            mContext.startActivity(intent);
+            context.startActivity(intent);
         } catch (InstantiationException | IllegalAccessException e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }
@@ -153,12 +153,12 @@ public class WinBollActivityManager {
 //        ActivityOptions options = ActivityOptions.makeBasic();
 //        options.setLaunchBounds(bounds);
         intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        /*intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        
+
         intent.putExtra(EXTRA_TAG, tag);
-        */
+
         //context.startActivity(intent, options.toBundle());
         context.startActivity(intent);
     }

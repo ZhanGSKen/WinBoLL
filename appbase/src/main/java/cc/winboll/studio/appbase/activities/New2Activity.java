@@ -7,13 +7,13 @@ package cc.winboll.studio.appbase.activities;
  */
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import cc.winboll.studio.appbase.R;
-import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
 
-public class New2Activity extends Activity implements IWinBollActivity {
+public class New2Activity extends AppCompatActivity implements IWinBollActivity {
 
     public static final String TAG = "New2Activity";
 
