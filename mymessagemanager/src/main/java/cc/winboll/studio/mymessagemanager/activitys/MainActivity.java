@@ -304,19 +304,19 @@ public class MainActivity extends BaseActivity {
 		int nItemId = item.getItemId();
         if (nItemId == R.id.app_ttsrule) {
 			Intent i = new Intent(MainActivity.this, TTSPlayRuleActivity.class);
-			i.setFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(i);
 		} else if (nItemId == R.id.app_smsrule) {
 			Intent i = new Intent(MainActivity.this, SMSReceiveRuleActivity.class);
-			i.setFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(i);
 		} else if (nItemId == R.id.app_appsettings) {
             Intent i = new Intent(MainActivity.this, AppSettingsActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
 		} else if (nItemId ==  R.id.app_unittest) {
             Intent i = new Intent(MainActivity.this, UnitTestActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(i);
         } else if (nItemId ==  R.id.app_crashtest) {
             for (int i = Integer.MIN_VALUE; i < Integer.MAX_VALUE; i++) {
@@ -324,11 +324,11 @@ public class MainActivity extends BaseActivity {
             }
         } else if (nItemId ==  R.id.app_about) {
             Intent i = new Intent(MainActivity.this, AboutActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
         } else if (nItemId ==  R.id.app_smsrecycle) {
             Intent i = new Intent(MainActivity.this, SMSRecycleActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
         }
         
