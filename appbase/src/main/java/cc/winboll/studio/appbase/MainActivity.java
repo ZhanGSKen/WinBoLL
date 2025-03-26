@@ -1,8 +1,10 @@
 package cc.winboll.studio.appbase;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -176,6 +178,18 @@ public class MainActivity extends Activity implements IWinBollActivity {
     public void onLogActivity() {
         Intent intent = new Intent(MainActivity.this, LogActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-        WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, LogActivity.class);
+        // Define the bounds.
+        Rect bounds = new Rect(500, 300, 100, 0);
+
+// Set the bounds as an activity option.
+
+        ActivityOptions options = ActivityOptions.makeBasic();
+
+        options.setLaunchBounds(bounds);
+
+        //Intent intent = new Intent(this, LpgActivity.class);
+
+        startActivity(intent, options.toBundle());
+        //WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, LogActivity.class);
     }
 }

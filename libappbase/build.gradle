@@ -4,6 +4,7 @@ apply from: '../.winboll/winboll_lib_build.gradle'
 apply from: '../.winboll/winboll_lint_build.gradle'
 
 android {
+    
     compileSdkVersion 32
     buildToolsVersion "32.0.0"
 
@@ -21,4 +22,11 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
+    // AndroidX 类库
+    api 'androidx.appcompat:appcompat:1.0.0'
+    api 'com.google.android.material:material:1.4.0'
+    //api 'androidx.viewpager:viewpager:1.0.0'
+    //api 'androidx.vectordrawable:vectordrawable:1.1.0'
+    //api 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
+    //api 'androidx.fragment:fragment:1.1.0'
 }

@@ -27,7 +27,6 @@
             android:resizeableActivity="true"
             android:launchMode="singleInstance"
             android:taskAffinity="cc.winboll.studio.libappbase.task.log"
-            android:configChanges="screenSize|screenLayout|orientation"
             android:exported="true">
             
             </activity>
@@ -42,7 +41,8 @@
             android:name=".services.TestService"
             android:exported="true"/>
 
-        <receiver android:name=".receiver.MyBroadcastReceiver">
+        <receiver android:name=".receiver.MyBroadcastReceiver"
+            android:exported="true">
 
             <intent-filter>
 
@@ -84,7 +84,8 @@
 
         <service android:name="cc.winboll.studio.libappbase.sos.SOSCenter"/>
 
-        <receiver android:name="cc.winboll.studio.libappbase.sos.SOSCenterServiceReceiver">
+        <receiver android:name="cc.winboll.studio.libappbase.sos.SOSCenterServiceReceiver"
+            android:exported="true">
 
             <intent-filter>
 

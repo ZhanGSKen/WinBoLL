@@ -16,10 +16,8 @@
             android:resizeableActivity="true"
             android:launchMode="singleInstance"
             android:taskAffinity="cc.winboll.studio.appbase.task.main"
-            android:configChanges="screenSize|screenLayout|orientation"
             android:exported="true">
 
-            
             <intent-filter>
 
                 <action android:name="android.intent.action.MAIN"/>
@@ -38,6 +36,7 @@
 
         <service
             android:name=".MyTileService"
+            android:exported="true"
             android:label="@string/tileservice_name"
             android:icon="@drawable/ic_launcher"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -64,7 +63,8 @@
 
         <service android:name=".services.AssistantService"/>
 
-        <receiver android:name="cc.winboll.studio.appbase.receivers.MainReceiver">
+        <receiver android:name="cc.winboll.studio.appbase.receivers.MainReceiver"
+            android:exported="true">
 
             <intent-filter>
 
@@ -94,7 +94,8 @@
 
         </receiver>
 
-        <receiver android:name=".receivers.APPNewsWidgetClickListener">
+        <receiver android:name=".receivers.APPNewsWidgetClickListener"
+            android:exported="true">
 
             <intent-filter>
 
