@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements IWinBollActivity 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == cc.winboll.studio.appbase.R.id.item_log) {
-            onLogActivity();
+            WinBollActivityManager.getInstance(this).startLogActivity(this);
             return true;
         }
         // 在switch语句中处理每个ID，并在处理完后返回true，未处理的情况返回false。
@@ -176,23 +176,5 @@ public class MainActivity extends AppCompatActivity implements IWinBollActivity 
         WinBollActivityManager.getInstance(this).startWinBollActivity(this, NewActivity.class);
     }
 
-    public void onLogActivity() {
-        
-        
-        Intent intent = new Intent(MainActivity.this, LogActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-        // Define the bounds.
-        Rect bounds = new Rect(500, 300, 100, 0);
-
-// Set the bounds as an activity option.
-
-        ActivityOptions options = ActivityOptions.makeBasic();
-
-        options.setLaunchBounds(bounds);
-
-        //Intent intent = new Intent(this, LpgActivity.class);
-
-        startActivity(intent, options.toBundle());
-        //WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, LogActivity.class);
-    }
+    
 }

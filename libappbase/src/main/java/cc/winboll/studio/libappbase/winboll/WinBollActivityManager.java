@@ -9,9 +9,11 @@ package cc.winboll.studio.libappbase.winboll;
  * https://blog.csdn.net/qq_29364417/article/details/109379915?app_version=6.4.2&code=app_1562916241&csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22109379915%22%2C%22source%22%3A%22weixin_38986226%22%7D&uLinkId=usr1mkqgl919blen&utm_source=app
  */
 import android.app.ActivityManager;
+import android.app.ActivityOptions;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import cc.winboll.studio.libappbase.LogUtils;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -134,6 +136,33 @@ public class WinBollActivityManager {
         }
     }
 
+    public <T extends IWinBollActivity> void startLogActivity(Context context) {
+        // 如果窗口已存在就重启窗口
+        String tag = LogActivity.TAG;
+        if (isActive(tag)) {
+            resumeActivity(context, tag);
+            return;
+        }
+
+        // 新建一个任务窗口
+        Intent intent = new Intent(context, LogActivity.class);
+        //打开多任务窗口 flags
+        // Define the bounds.
+//        Rect bounds = new Rect(0, 0, 800, 200);
+//        // Set the bounds as an activity option.
+//        ActivityOptions options = ActivityOptions.makeBasic();
+//        options.setLaunchBounds(bounds);
+        intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        /*intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        
+        intent.putExtra(EXTRA_TAG, tag);
+        */
+        //context.startActivity(intent, options.toBundle());
+        context.startActivity(intent);
+    }
+
     public boolean isFirstIWinBollActivity(IWinBollActivity iWinBollActivity) {
         return firstIWinBollActivity != null && firstIWinBollActivity == iWinBollActivity;
     }
@@ -142,7 +171,7 @@ public class WinBollActivityManager {
     // 判断 tag绑定的 MyActivity是否存在
     //
     public boolean isActive(String tag) {
-        //printAvtivityListInfo();
+        printIWinBollListInfo();
         IWinBollActivity iWinBoll = getIWinBoll(tag);
         if (iWinBoll != null) {
             LogUtils.d(TAG, "isActive(...) activity != null tag " + tag);

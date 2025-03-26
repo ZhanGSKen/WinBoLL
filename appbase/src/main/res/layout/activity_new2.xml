@@ -33,13 +33,6 @@
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="CloseAllActivity"
-		android:textAllCaps="false"
-		android:onClick="onCloseAllActivity"/>
-
-	<Button
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
 		android:text="NewActivity"
 		android:textAllCaps="false"
 		android:onClick="onNewActivity"/>
