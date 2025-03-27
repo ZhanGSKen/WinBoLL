@@ -46,6 +46,8 @@ android {
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     
+    api 'com.squareup.okhttp3:okhttp:4.4.1'
+    
     // 吐司类库
     api 'com.github.getActivity:ToastUtils:10.5'
 

@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="cc.winboll.studio.ollama">
 
+    <!-- 拥有完全的网络访问权限 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         tools:replace="android:appComponentFactory"
         android:appComponentFactory="android.support.v4.app.CoreComponentFactory"
