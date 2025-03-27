@@ -274,7 +274,7 @@ public class WinBollActivityManager {
                 // ★：0 1 2 [3] 4 >> 2
                 // ★：0 1 2 3 [4] >> 3
                 // ★：[0] >> 直接关闭当前窗口
-                LogUtils.d(TAG, "finish no yet.");
+                //LogUtils.d(TAG, "finish no yet.");
                 IWinBollActivity preIWinBoll = getPreIWinBoll(iWinBoll);
                 iWinBoll.getActivity().finish();
                 if (preIWinBoll != null) {
@@ -297,7 +297,7 @@ public class WinBollActivityManager {
             for (Map.Entry<String, IWinBollActivity> entity : _mapIWinBollList.entrySet()) {
                 if (entity.getKey().equals(iWinBoll.getTag())) {
                     bingo = true;
-                    LogUtils.d(TAG, "bingo");
+                    //LogUtils.d(TAG, "bingo");
                     break;
                 }
                 preIWinBoll = entity.getValue();
