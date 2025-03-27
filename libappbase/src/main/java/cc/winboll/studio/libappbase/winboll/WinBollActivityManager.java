@@ -70,7 +70,9 @@ public class WinBollActivityManager {
     // 把Activity添加到管理中
     //
     public <T extends IWinBollActivity> void add(T iWinBoll) {
-        if (isActive(iWinBoll.getTag())) {
+        String tag = ((IWinBollActivity)iWinBoll).getTag();
+        LogUtils.d(TAG, String.format("add(T iWinBoll) tag is %s", tag));
+        if (isActive(tag)) {
             LogUtils.d(TAG, String.format("add(...) %s is active.", iWinBoll.getTag()));
         } else {
             // 设置起始活动窗口，以便最后退出时提问
@@ -94,7 +96,8 @@ public class WinBollActivityManager {
     public <T extends IWinBollActivity> void startWinBollActivity(Context context, Class<T> clazz) {
         try {
             // 如果窗口已存在就重启窗口
-            String tag = clazz.newInstance().getTag();
+            String tag = ((IWinBollActivity)clazz.newInstance()).getTag();
+            LogUtils.d(TAG, String.format("startWinBollActivity(Context context, Class<T> clazz) tag is %s", tag));
             if (isActive(tag)) {
                 resumeActivity(context, tag);
                 return;
@@ -117,7 +120,8 @@ public class WinBollActivityManager {
     public <T extends IWinBollActivity> void startWinBollActivity(Context context, Intent intent, Class<T> clazz) {
         try {
             // 如果窗口已存在就重启窗口
-            String tag = clazz.newInstance().getTag();
+            String tag = ((IWinBollActivity)clazz.newInstance()).getTag();
+            LogUtils.d(TAG, String.format("startWinBollActivity(Context context, Intent intent, Class<T> clazz) tag is %s", tag));
             if (isActive(tag)) {
                 resumeActivity(context, tag);
                 return;
@@ -171,10 +175,11 @@ public class WinBollActivityManager {
     // 判断 tag绑定的 MyActivity是否存在
     //
     public boolean isActive(String tag) {
-        printIWinBollListInfo();
+        LogUtils.d(TAG, String.format("isActive(String tag) tag is %s", tag));
+        //printIWinBollListInfo();
         IWinBollActivity iWinBoll = getIWinBoll(tag);
         if (iWinBoll != null) {
-            LogUtils.d(TAG, "isActive(...) activity != null tag " + tag);
+            //LogUtils.d(TAG, "isActive(...) activity != null tag " + tag);
             //ToastUtils.show("activity != null tag " + tag);
             //判断是否为 BaseActivity,如果已经销毁，则移除
             if (iWinBoll.getActivity().isFinishing() || iWinBoll.getActivity().isDestroyed()) {
@@ -187,12 +192,13 @@ public class WinBollActivityManager {
                 return true;
             }
         } else {
-            LogUtils.d(TAG, String.format("isActive(...) activity == null\ntag : %s", tag));
+            LogUtils.d(TAG, String.format("isActive(...) iWinBoll is null tag by %s", tag));
             return false;
         }
     }
 
     static IWinBollActivity getIWinBoll(String tag) {
+        LogUtils.d(TAG, String.format("getIWinBoll(String tag) %s", tag));
         return _mapIWinBollList.get(tag);
     }
 
@@ -200,7 +206,7 @@ public class WinBollActivityManager {
     // 找到tag 绑定的 BaseActivity ，通过 getTaskId() 移动到前台
     //
     public <T extends IWinBollActivity> void resumeActivity(Context context, String tag) {
-        LogUtils.d(TAG, "resumeActivty");
+        LogUtils.d(TAG, "resumeActivity(Context context, String tag)");
         T iWinBoll = (T)getIWinBoll(tag);
         //LogUtils.d(TAG, "activity " + activity.getTag());
         if (iWinBoll != null && !iWinBoll.getActivity().isFinishing() && !iWinBoll.getActivity().isDestroyed()) {
@@ -212,6 +218,7 @@ public class WinBollActivityManager {
     // 找到tag 绑定的 BaseActivity ，通过 getTaskId() 移动到前台
     //
     public <T extends IWinBollActivity> void resumeActivity(Context context, T iWinBoll) {
+        LogUtils.d(TAG, "resumeActivity(Context context, T iWinBoll)");
         ActivityManager am = (ActivityManager) iWinBoll.getActivity().getSystemService(Context.ACTIVITY_SERVICE);
         //返回启动它的根任务（home 或者 MainActivity）
         Intent intent = new Intent(context, iWinBoll.getClass());
@@ -219,7 +226,6 @@ public class WinBollActivityManager {
         stackBuilder.addNextIntentWithParentStack(intent);
         stackBuilder.startActivities();
         //moveTaskToFront(YourTaskId, 0);
-        LogUtils.d(TAG, "am.moveTaskToFront");
         //ToastUtils.show("resumeActivity am.moveTaskToFront");
         am.moveTaskToFront(iWinBoll.getActivity().getTaskId(), ActivityManager.MOVE_TASK_NO_USER_ACTION);
     }

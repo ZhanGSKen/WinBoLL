@@ -27,8 +27,8 @@ public class GlobalApplication extends Application {
     volatile static GlobalApplication _GlobalApplication;
     // 是否处于调试状态
     volatile static boolean isDebuging = false;
-    WinBollActivityManager mWinBollActivityManager;
-    MyActivityLifecycleCallbacks mMyActivityLifecycleCallbacks;
+    volatile static WinBollActivityManager _WinBollActivityManager;
+    volatile static MyActivityLifecycleCallbacks _MyActivityLifecycleCallbacks;
 
     public static void setIsDebuging(boolean isDebuging) {
         if (_GlobalApplication != null) {
@@ -43,6 +43,14 @@ public class GlobalApplication extends Application {
 //        // 提交更改
 //        editor.apply();
         }
+    }
+    
+    public static WinBollActivityManager getWinBollActivityManager() {
+        return _WinBollActivityManager;
+    }
+    
+    public static MyActivityLifecycleCallbacks getMyActivityLifecycleCallbacks() {
+        return _MyActivityLifecycleCallbacks;
     }
 
     static String getAPPBaseModelFilePath() {
@@ -87,11 +95,12 @@ public class GlobalApplication extends Application {
         // 初始化 Toast 框架
         ToastUtils.init(this);
 
-        mWinBollActivityManager = WinBollActivityManager.getInstance(this);
-        mWinBollActivityManager.setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
+        _WinBollActivityManager = WinBollActivityManager.getInstance(this);
+        
+        getWinBollActivityManager().setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
         // 注册回调
-        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks(mWinBollActivityManager);
-        registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
+        _MyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks(getWinBollActivityManager());
+        registerActivityLifecycleCallbacks(getMyActivityLifecycleCallbacks());
     }
 
 
@@ -99,7 +108,7 @@ public class GlobalApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         // 注销回调（非必须，但建议释放资源）
-        unregisterActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
+        unregisterActivityLifecycleCallbacks(getMyActivityLifecycleCallbacks());
     }
 
     public static String getAppName(Context context) {
