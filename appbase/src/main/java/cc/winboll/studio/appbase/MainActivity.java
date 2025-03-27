@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements IWinBollActivity 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_main, menu);
+        getMenuInflater().inflate(R.menu.toolbar_appbase, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
