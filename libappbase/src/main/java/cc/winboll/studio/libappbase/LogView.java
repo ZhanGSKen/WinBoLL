@@ -10,6 +10,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -33,9 +35,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import android.text.Editable;
-import android.widget.HorizontalScrollView;
 
 public class LogView extends RelativeLayout {
 
@@ -278,18 +277,18 @@ public class LogView extends RelativeLayout {
         }
 
         final List<TAGItemModel> itemList = mTAGListAdapter.getItemList();
-        
+
         mListViewTags.post(new Runnable() {
                 @Override
                 public void run() {
                     // 查找匹配的标签位置
                     int targetPosition = -1;
-                    
+
                     for (int i = 0; i < itemList.size(); i++) {
                         String tag = itemList.get(i).getTag();
                         if (tag != null && tag.toLowerCase().startsWith(prefix.toLowerCase())) {
                             targetPosition = i;
-                            
+
                             break;
                         }
                     }
@@ -305,7 +304,7 @@ public class LogView extends RelativeLayout {
 //                            targetView.requestLayout();
 //                            targetView.requestFocus();
 //                        }
-                        
+
                         final int scrollPosition = targetPosition;
 
                         // 延迟滚动确保布局完成
@@ -322,7 +321,7 @@ public class LogView extends RelativeLayout {
                 }
             });
     }
-    
+
 
 
     class LogViewHandler extends Handler {
@@ -430,7 +429,7 @@ public class LogView extends RelativeLayout {
             mapOrigin = map;
             loadMap(mapOrigin);
         }
-        
+
         public List<TAGItemModel> getItemList() {
             return itemList;
         }
