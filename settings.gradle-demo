@@ -57,3 +57,7 @@
 // AndroidXDemo 项目编译设置
 //include ':androidxdemo'
 //rootProject.name = "androidxdemo"
+
+// Ollama 项目编译设置
+//include ':ollama'
+//rootProject.name = "ollama"
