@@ -19,13 +19,16 @@
         <activity
             android:name=".GlobalCrashActivity"
             android:label="GlobalCrashActivity"
-            android:launchMode="standard"/>
+            android:launchMode="singleInstance"
+            android:process=":GlobalCrashActivity"/>
 
         <activity
             android:name="cc.winboll.studio.libappbase.winboll.LogActivity"
             android:resizeableActivity="true"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:process=":LogActivity">
 
         </activity>
 

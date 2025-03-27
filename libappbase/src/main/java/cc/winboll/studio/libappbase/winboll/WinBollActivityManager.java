@@ -33,9 +33,9 @@ public class WinBollActivityManager {
 
     Context mContext;
     MyActivityLifecycleCallbacks mMyActivityLifecycleCallbacks;
-    static WinBollActivityManager _mWinBollActivityManager;
-    static Map<String, IWinBollActivity> _mapIWinBollList;
-    IWinBollActivity firstIWinBollActivity;
+    static volatile WinBollActivityManager _mWinBollActivityManager;
+    static volatile Map<String, IWinBollActivity> _mapIWinBollList;
+    static volatile IWinBollActivity firstIWinBollActivity;
 
     public WinBollActivityManager(Context context) {
         mContext = context;
@@ -208,6 +208,7 @@ public class WinBollActivityManager {
     public <T extends IWinBollActivity> void resumeActivity(Context context, String tag) {
         LogUtils.d(TAG, "resumeActivity(Context context, String tag)");
         T iWinBoll = (T)getIWinBoll(tag);
+        LogUtils.d(TAG, String.format("iWinBoll.getTag() %s", iWinBoll.getTag()));
         //LogUtils.d(TAG, "activity " + activity.getTag());
         if (iWinBoll != null && !iWinBoll.getActivity().isFinishing() && !iWinBoll.getActivity().isDestroyed()) {
             resumeActivity(context, iWinBoll);
@@ -219,15 +220,17 @@ public class WinBollActivityManager {
     //
     public <T extends IWinBollActivity> void resumeActivity(Context context, T iWinBoll) {
         LogUtils.d(TAG, "resumeActivity(Context context, T iWinBoll)");
-        ActivityManager am = (ActivityManager) iWinBoll.getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
         //返回启动它的根任务（home 或者 MainActivity）
-        Intent intent = new Intent(context, iWinBoll.getClass());
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        Intent intent = new Intent(mContext, iWinBoll.getClass());
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
         stackBuilder.addNextIntentWithParentStack(intent);
         stackBuilder.startActivities();
         //moveTaskToFront(YourTaskId, 0);
         //ToastUtils.show("resumeActivity am.moveTaskToFront");
+        LogUtils.d(TAG, String.format("iWinBoll.getActivity().getTaskId() %d", iWinBoll.getActivity().getTaskId()));
         am.moveTaskToFront(iWinBoll.getActivity().getTaskId(), ActivityManager.MOVE_TASK_NO_USER_ACTION);
+        LogUtils.d(TAG, "am.moveTaskToFront");
     }
 
 

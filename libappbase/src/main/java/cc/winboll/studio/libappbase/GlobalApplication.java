@@ -27,8 +27,7 @@ public class GlobalApplication extends Application {
     volatile static GlobalApplication _GlobalApplication;
     // 是否处于调试状态
     volatile static boolean isDebuging = false;
-    volatile static WinBollActivityManager _WinBollActivityManager;
-    volatile static MyActivityLifecycleCallbacks _MyActivityLifecycleCallbacks;
+    MyActivityLifecycleCallbacks mMyActivityLifecycleCallbacks;
 
     public static void setIsDebuging(boolean isDebuging) {
         if (_GlobalApplication != null) {
@@ -44,13 +43,9 @@ public class GlobalApplication extends Application {
 //        editor.apply();
         }
     }
-    
-    public static WinBollActivityManager getWinBollActivityManager() {
-        return _WinBollActivityManager;
-    }
-    
-    public static MyActivityLifecycleCallbacks getMyActivityLifecycleCallbacks() {
-        return _MyActivityLifecycleCallbacks;
+
+    public static GlobalApplication getInstance() {
+        return _GlobalApplication;
     }
 
     static String getAPPBaseModelFilePath() {
@@ -73,7 +68,17 @@ public class GlobalApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        _GlobalApplication = this;
+
+        // _GlobalApplication 取值调试部分
+        //
+        boolean is_GlobalApplicationNull = false;
+        if (_GlobalApplication == null) {
+            is_GlobalApplicationNull = true;
+            _GlobalApplication = this;
+        } else {
+            is_GlobalApplicationNull = false;
+            _GlobalApplication = this;
+        }
 
         // 设置应用调试标志
         APPBaseModel appBaseModel = APPBaseModel.loadBeanFromFile(getAPPBaseModelFilePath(), APPBaseModel.class);
@@ -95,20 +100,24 @@ public class GlobalApplication extends Application {
         // 初始化 Toast 框架
         ToastUtils.init(this);
 
-        _WinBollActivityManager = WinBollActivityManager.getInstance(this);
-        
-        getWinBollActivityManager().setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
+        // _GlobalApplication 取值调试部分
+        //
+        LogUtils.d(TAG, String.format("is_GlobalApplicationNull is %s", is_GlobalApplicationNull));
+
+        WinBollActivityManager.getInstance(_GlobalApplication);
+        WinBollActivityManager.getInstance(_GlobalApplication).setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
         // 注册回调
-        _MyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks(getWinBollActivityManager());
-        registerActivityLifecycleCallbacks(getMyActivityLifecycleCallbacks());
+        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
+        registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
     }
 
 
     @Override
     public void onTerminate() {
         super.onTerminate();
+        _GlobalApplication = null;
         // 注销回调（非必须，但建议释放资源）
-        unregisterActivityLifecycleCallbacks(getMyActivityLifecycleCallbacks());
+        unregisterActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
     }
 
     public static String getAppName(Context context) {
