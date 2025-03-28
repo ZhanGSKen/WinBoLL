@@ -1,18 +1,17 @@
-package cc.winboll.studio.libappbase.winboll;
+package cc.winboll.studio.appbase;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/03/28 13:35:28
- * @Describe WinBoll应用窗口基类
+ * @Date 2025/03/28 15:34:16
+ * @Describe 应用活动窗口基类
  */
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import cc.winboll.studio.libappbase.GlobalApplication;
-import cc.winboll.studio.libappbase.R;
+import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
 
 public class WinBollActivityBase extends AppCompatActivity implements IWinBollActivity {
 

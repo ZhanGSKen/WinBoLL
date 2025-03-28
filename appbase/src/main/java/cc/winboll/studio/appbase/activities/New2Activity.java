@@ -12,9 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import cc.winboll.studio.appbase.R;
+import cc.winboll.studio.appbase.WinBollActivityBase;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
-import cc.winboll.studio.libappbase.winboll.WinBollActivityBase;
 
 public class New2Activity extends WinBollActivityBase implements IWinBollActivity {
 
