@@ -22,6 +22,7 @@ import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.dialogs.YesNoAlertDialog;
 
 public class MainActivity extends WinBollActivityBase implements IWinBollActivity {
 
@@ -68,12 +69,6 @@ public class MainActivity extends WinBollActivityBase implements IWinBollActivit
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == cc.winboll.studio.appbase.R.id.item_log) {
-            GlobalApplication.getWinBollActivityManager().startLogActivity(this);
-            return true;
-        } else if(item.getItemId() == cc.winboll.studio.appbase.R.id.item_minimal) {
-            moveTaskToBack(true);
-        }
         // 在switch语句中处理每个ID，并在处理完后返回true，未处理的情况返回false。
         return super.onOptionsItemSelected(item);
     }
@@ -142,6 +137,8 @@ public class MainActivity extends WinBollActivityBase implements IWinBollActivit
         startService(intent);
 
     }
+    
+    
 
     public void onStopTestDemoService(View view) {
         Intent intent = new Intent(this, TestDemoService.class);
