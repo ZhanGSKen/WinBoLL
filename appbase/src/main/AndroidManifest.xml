@@ -32,12 +32,15 @@
 
         </activity>
 
-        <activity android:name=".activities.NewActivity"
+        <activity
+            android:name=".activities.NewActivity"
+            android:label="NewActivity"
             android:exported="true"
             android:resizeableActivity="true"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"/>
 
         <activity android:name=".activities.New2Activity"
+            android:label="New2Activity"
             android:exported="true"
             android:resizeableActivity="true"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"/>

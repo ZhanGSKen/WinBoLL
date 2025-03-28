@@ -27,7 +27,8 @@
             android:process=":GlobalCrashActivity"/>
 
         <activity
-            android:name="cc.winboll.studio.libappbase.winboll.LogActivity"
+            android:name=".winboll.LogActivity"
+            android:label="LogActivity"
             android:resizeableActivity="true"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true"
