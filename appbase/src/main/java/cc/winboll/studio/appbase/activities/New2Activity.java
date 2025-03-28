@@ -7,7 +7,6 @@ package cc.winboll.studio.appbase.activities;
  */
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,9 +14,9 @@ import android.view.View;
 import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
-import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
+import cc.winboll.studio.libappbase.winboll.WinBollActivityBase;
 
-public class New2Activity extends AppCompatActivity implements IWinBollActivity {
+public class New2Activity extends WinBollActivityBase implements IWinBollActivity {
 
     public static final String TAG = "New2Activity";
 

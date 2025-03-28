@@ -73,11 +73,10 @@ public class GlobalApplication extends Application {
             setIsDebuging(appBaseModel.isDebuging());
         }
         
-//        WinBollActivityManager.getInstance(_GlobalApplication);
-//        WinBollActivityManager.getInstance(_GlobalApplication).setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
-//        // 注册回调
-//        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
-//        registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
+        getWinBollActivityManager().setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
+        // 注册窗口回调监听
+        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
+        registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
     }
 
 

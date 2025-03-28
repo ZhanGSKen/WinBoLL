@@ -8,24 +8,17 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
-import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.utils.ToastUtils;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity; 
+import cc.winboll.studio.libappbase.utils.ToastUtils; 
 
 public class MyActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks { 
 
     public static final String TAG = "MyActivityLifecycleCallbacks";
-    
-    
+
     public String mInfo = "";
 
     public MyActivityLifecycleCallbacks() {
-        
-    }
-    
-    WinBollActivityManager getWinBollActivityManager() {
-        return WinBollActivityManager.getInstance(GlobalApplication.getInstance());
+
     }
 
     void createActivityeInfo(Activity activity) {
@@ -64,7 +57,6 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
         //System.out.println(activity.getLocalClassName() + " was created"); 
         LogUtils.d(TAG, activity.getLocalClassName() + " was created");
         createActivityeInfo(activity);
-        getWinBollActivityManager().add((IWinBollActivity)activity);
     } 
 
     @Override 
@@ -102,6 +94,5 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
     public void onActivityDestroyed(Activity activity) { 
         //System.out.println(activity.getLocalClassName() + " was destroyed");
         LogUtils.d(TAG, activity.getLocalClassName() + " was destroyed");
-        getWinBollActivityManager().registeRemove((IWinBollActivity)activity);
     } 
 }

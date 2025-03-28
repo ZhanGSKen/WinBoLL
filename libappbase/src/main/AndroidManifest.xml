@@ -9,6 +9,9 @@
     <!-- 发送持久广播 -->
     <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
 
+    <!-- 对正在运行的应用重新排序 -->
+    <uses-permission android:name="android.permission.REORDER_TASKS"/>
+
     <application>
 
         <activity
@@ -43,7 +46,8 @@
             android:name=".services.TestService"
             android:exported="true"/>
 
-        <receiver android:name=".receiver.MyBroadcastReceiver"
+        <receiver
+            android:name=".receiver.MyBroadcastReceiver"
             android:exported="true">
 
             <intent-filter>
@@ -86,7 +90,8 @@
 
         <service android:name="cc.winboll.studio.libappbase.sos.SOSCenter"/>
 
-        <receiver android:name="cc.winboll.studio.libappbase.sos.SOSCenterServiceReceiver"
+        <receiver
+            android:name="cc.winboll.studio.libappbase.sos.SOSCenterServiceReceiver"
             android:exported="true">
 
             <intent-filter>
