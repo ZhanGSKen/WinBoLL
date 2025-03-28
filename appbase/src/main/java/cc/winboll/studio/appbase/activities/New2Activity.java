@@ -76,8 +76,6 @@ public class New2Activity extends WinBollActivityBase implements IWinBollActivit
         if (item.getItemId() == cc.winboll.studio.appbase.R.id.item_log) {
             GlobalApplication.getWinBollActivityManager().startLogActivity(this);
             return true;
-        } else if(item.getItemId() == cc.winboll.studio.appbase.R.id.item_minimal) {
-            moveTaskToBack(true);
         }
         // 在switch语句中处理每个ID，并在处理完后返回true，未处理的情况返回false。
         return super.onOptionsItemSelected(item);
