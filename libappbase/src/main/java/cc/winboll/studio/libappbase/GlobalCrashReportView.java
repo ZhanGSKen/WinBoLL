@@ -8,6 +8,7 @@ package cc.winboll.studio.libappbase;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -16,7 +17,6 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import cc.winboll.studio.libappbase.R;
-import android.widget.Toolbar;
 
 public class GlobalCrashReportView extends LinearLayout {
 

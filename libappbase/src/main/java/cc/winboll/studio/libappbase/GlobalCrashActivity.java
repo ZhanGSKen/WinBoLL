@@ -39,7 +39,7 @@ public final class GlobalCrashActivity extends AppCompatActivity implements Menu
         setContentView(R.layout.activity_globalcrash);
         mGlobalCrashReportView = findViewById(R.id.activityglobalcrashGlobalCrashReportView1);
         mGlobalCrashReportView.setReport(mLog);
-        setActionBar(mGlobalCrashReportView.getToolbar());
+        setSupportActionBar(mGlobalCrashReportView.getToolbar());
         
         getSupportActionBar().setTitle(CrashHandler.TITTLE);
         getSupportActionBar().setSubtitle(GlobalApplication.getAppName(getApplicationContext()));
