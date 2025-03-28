@@ -1,4 +1,4 @@
-package cc.winboll.studio.libapputils.view;
+package cc.winboll.studio.libapputils.views;
 
 /**
  * @Author ZhanGSKen@QQ.COM
@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import cc.winboll.studio.libapputils.util.QRCodeGenerator;
+import cc.winboll.studio.libapputils.utils.QRCodeGenerator;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 public class StringToQrCodeView extends LinearLayout {

@@ -8,7 +8,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toolbar;
 import cc.winboll.studio.apputils.R;
-import cc.winboll.studio.libapputils.view.StringToQrCodeView;
+import cc.winboll.studio.libapputils.views.StringToQrCodeView;
 
 public class TestStringToQRCodeViewActivity extends Activity {
 

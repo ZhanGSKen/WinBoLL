@@ -13,10 +13,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toolbar;
+import cc.winboll.studio.apputils.R;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
-import cc.winboll.studio.apputils.R;
-import cc.winboll.studio.libapputils.view.SimpleWebView;
+import cc.winboll.studio.libapputils.views.SimpleWebView;
 import java.io.IOException;
 import java.io.InputStream;
 

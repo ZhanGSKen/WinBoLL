@@ -1,4 +1,4 @@
-package cc.winboll.studio.libapputils.view;
+package cc.winboll.studio.libapputils.views;
 
 /**
  * @Author ZhanGSKen@QQ.COM
