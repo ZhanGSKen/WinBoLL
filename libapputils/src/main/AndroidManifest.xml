@@ -25,27 +25,9 @@
         android:networkSecurityConfig="@xml/network_security_config">
 
         <activity
-            android:name=".app.CrashHandler$CrashActiviy"
-            android:label="CrashActiviy"
-            android:launchMode="standard"/>
-
-        <activity
-            android:name=".activities.LogActivity"
-            android:label="LogActivity"
-            android:launchMode="standard"/>
-
-        <activity
             android:name=".activities.AboutActivity"
             android:label="AboutActivity"
             android:launchMode="standard"/>
-
-        <activity
-            android:name=".activities.AssetsHtmlActivity"
-            android:label="AssetsHtmlActivity"/>
-
-        <activity
-            android:name=".activities.QRCodeDecodeActivity"
-            android:label="QRCodeDecodeActivity"/>
 
     </application>
 

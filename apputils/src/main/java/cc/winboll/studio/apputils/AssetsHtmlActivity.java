@@ -1,4 +1,4 @@
-package cc.winboll.studio.libapputils.activities;
+package cc.winboll.studio.apputils;
 
 /**
  * @Author ZhanGSKen@QQ.COM
@@ -14,12 +14,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toolbar;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.R;
+import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.apputils.R;
 import cc.winboll.studio.libapputils.view.SimpleWebView;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class AssetsHtmlActivity extends Activity {
+public class AssetsHtmlActivity extends WinBollActivityBase implements IWinBollActivity {
+
+    @Override
+    public Activity getActivity() {
+        return super.getActivity();
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
+    }
+
 
     public static final String TAG = "AssetsHtmlActivity";
 
@@ -54,7 +66,7 @@ public class AssetsHtmlActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assetshtml);
-        
+
         // 初始化工具栏
         Toolbar mToolbar = findViewById(R.id.toolbar);
         setActionBar(mToolbar);

@@ -16,10 +16,6 @@ import cc.winboll.studio.apputils.R;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
-import cc.winboll.studio.libapputils.activities.AssetsHtmlActivity;
-import cc.winboll.studio.libapputils.activities.LogActivity;
-import cc.winboll.studio.libapputils.activities.QRCodeDecodeActivity;
-import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
 import java.util.List;
 import java.util.Set;
 
@@ -149,10 +145,10 @@ final public class MainActivity extends Activity {
     }
 
     public void onTestLogActivity(View view) {
-        Intent intent = new Intent(this, LogActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        startActivity(intent);
+//        Intent intent = new Intent(this, LogActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+//        startActivity(intent);
 
         //WinBollActivityManager.getInstance().printAvtivityListInfo();
         //WinBollActivityManager.getInstance(this).startWinBollActivity(this, LogActivity.class);
@@ -209,7 +205,7 @@ final public class MainActivity extends Activity {
 //            //ToastUtils.show("mIWinBoll.isAddWinBollToolBar()");
 //            getMenuInflater().inflate(R.menu.toolbar_winboll_shared_main, menu);
 //        }
-        if (App.isDebug()) {
+        if (App.isDebuging()) {
             getMenuInflater().inflate(R.menu.toolbar_studio_debug, menu);
         }
 
@@ -219,7 +215,7 @@ final public class MainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.item_exit) {
-            exit();
+            //exit();
             return true;
         } else if (item.getItemId() == R.id.item_teststringtoqrcodeview) {
             Intent intent = new Intent(this, TestStringToQRCodeViewActivity.class);
@@ -246,21 +242,21 @@ final public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    void exit() {
-        YesNoAlertDialog.OnDialogResultListener listener = new YesNoAlertDialog.OnDialogResultListener(){
-
-            @Override
-            public void onYes() {
-                //WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
-            }
-
-            @Override
-            public void onNo() {
-            }
-        };
-        YesNoAlertDialog.show(this, "[ " + getString(R.string.app_name) + " ]", "Exit(Yes/No).\nIs close all activity?", listener);
-
-    }
+//    void exit() {
+//        YesNoAlertDialog.OnDialogResultListener listener = new YesNoAlertDialog.OnDialogResultListener(){
+//
+//            @Override
+//            public void onYes() {
+//                //WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
+//            }
+//
+//            @Override
+//            public void onNo() {
+//            }
+//        };
+//        YesNoAlertDialog.show(this, "[ " + getString(R.string.app_name) + " ]", "Exit(Yes/No).\nIs close all activity?", listener);
+//
+//    }
 
     @Override
     public void onBackPressed() {

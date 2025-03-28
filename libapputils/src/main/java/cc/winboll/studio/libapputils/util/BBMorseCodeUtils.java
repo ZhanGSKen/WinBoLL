@@ -10,7 +10,6 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.os.VibratorManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

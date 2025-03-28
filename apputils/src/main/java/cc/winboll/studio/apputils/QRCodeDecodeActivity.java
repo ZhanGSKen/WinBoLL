@@ -1,4 +1,4 @@
-package cc.winboll.studio.libapputils.activities;
+package cc.winboll.studio.apputils;
 
 /**
  * @Author ZhanGSKen@QQ.COM
@@ -11,7 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toolbar;
-import cc.winboll.studio.libapputils.R;
+import cc.winboll.studio.apputils.R;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -41,7 +41,7 @@ public class QRCodeDecodeActivity extends Activity {
         // 初始化工具栏
 //        Toolbar mToolbar = findViewById(R.id.toolbar);
 //        setActionBar(mToolbar);
-        
+
         //resultTextView = findViewById(R.id.activityqrcodedecodeTextView1);
         barcodeView = findViewById(R.id.activityqrcodedecodeDecoratedBarcodeView1);
         // 请求相机权限
