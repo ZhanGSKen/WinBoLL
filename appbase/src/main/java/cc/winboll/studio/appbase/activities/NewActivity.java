@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import cc.winboll.studio.appbase.R;
+import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
 
@@ -50,15 +51,15 @@ public class NewActivity extends AppCompatActivity implements IWinBollActivity {
     }
 
     public void onCloseThisActivity(View view) {
-        WinBollActivityManager.getInstance(this).finish(this);
+        GlobalApplication.getWinBollActivityManager().finish(this);
     }
 
     public void onCloseAllActivity(View view) {
-        WinBollActivityManager.getInstance(this).finishAll();
+        GlobalApplication.getWinBollActivityManager().finishAll();
     }
 
     public void onNew2Activity(View view) {
-        WinBollActivityManager.getInstance(this).startWinBollActivity(this, New2Activity.class);
+        GlobalApplication.getWinBollActivityManager().startWinBollActivity(this, New2Activity.class);
     }
     
 
@@ -72,7 +73,7 @@ public class NewActivity extends AppCompatActivity implements IWinBollActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == cc.winboll.studio.appbase.R.id.item_log) {
-            WinBollActivityManager.getInstance(this).startLogActivity(this);
+            GlobalApplication.getWinBollActivityManager().startLogActivity(this);
             return true;
         } else if(item.getItemId() == cc.winboll.studio.appbase.R.id.item_minimal) {
             moveTaskToBack(true);

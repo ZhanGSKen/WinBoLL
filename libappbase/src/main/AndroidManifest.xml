@@ -14,7 +14,8 @@
         <activity
             android:name=".CrashHandler$CrashActivity"
             android:label="CrashActivity"
-            android:launchMode="standard"/>
+            android:launchMode="singleInstance"
+            android:process=":CrashActivity"/>
 
         <activity
             android:name=".GlobalCrashActivity"

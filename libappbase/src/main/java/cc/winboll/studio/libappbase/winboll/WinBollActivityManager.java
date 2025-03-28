@@ -12,6 +12,7 @@ import android.app.ActivityManager;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import java.util.HashMap;
@@ -29,27 +30,25 @@ public class WinBollActivityManager {
         };
 
     // 应用类型标志
-    volatile static WinBollUI_TYPE _mWinBollUI_TYPE = WinBollUI_TYPE.Service;
+    static volatile WinBollUI_TYPE _mWinBollUI_TYPE = WinBollUI_TYPE.Service;
 
-    Context mContext;
-    MyActivityLifecycleCallbacks mMyActivityLifecycleCallbacks;
-    static volatile WinBollActivityManager _mWinBollActivityManager;
+    GlobalApplication mGlobalApplication;
+    static volatile WinBollActivityManager _Instance;
     static volatile Map<String, IWinBollActivity> _mapIWinBollList;
-    static volatile IWinBollActivity firstIWinBollActivity;
+    volatile IWinBollActivity mFirstIWinBollActivity;
 
-    public WinBollActivityManager(Context context) {
-        mContext = context;
-        LogUtils.d(TAG, "WinBollActivityManager()");
+    WinBollActivityManager(GlobalApplication application) {
+        mGlobalApplication = application;
         _mapIWinBollList = new HashMap<String, IWinBollActivity>();
     }
 
-    public static synchronized WinBollActivityManager getInstance(Context context) {
+    public static synchronized WinBollActivityManager getInstance(GlobalApplication application) {
         LogUtils.d(TAG, "getInstance");
-        if (_mWinBollActivityManager == null) {
-            LogUtils.d(TAG, "_mWinBollActivityManager == null");
-            _mWinBollActivityManager = new WinBollActivityManager(context);
+        if (_Instance == null) {
+            LogUtils.d(TAG, "_Instance == null");
+            _Instance = new WinBollActivityManager(application);
         }
-        return _mWinBollActivityManager;
+        return _Instance;
     }
 
     //
@@ -73,11 +72,12 @@ public class WinBollActivityManager {
         String tag = ((IWinBollActivity)iWinBoll).getTag();
         LogUtils.d(TAG, String.format("add(T iWinBoll) tag is %s", tag));
         if (isActive(tag)) {
-            LogUtils.d(TAG, String.format("add(...) %s is active.", iWinBoll.getTag()));
+            LogUtils.d(TAG, String.format("isActive(tag) is true, tag : %s.", tag));
         } else {
             // 设置起始活动窗口，以便最后退出时提问
-            if (firstIWinBollActivity == null && _mapIWinBollList.size() == 0) {
-                firstIWinBollActivity = iWinBoll;
+            if (mFirstIWinBollActivity == null && _mapIWinBollList.size() == 0) {
+                LogUtils.d(TAG, "Set firstIWinBollActivity, iWinBoll.getTag() is %s" + iWinBoll.getTag());
+                mFirstIWinBollActivity = iWinBoll;
             }
 
             // 添加到活动窗口列表
@@ -168,7 +168,7 @@ public class WinBollActivityManager {
     }
 
     public boolean isFirstIWinBollActivity(IWinBollActivity iWinBollActivity) {
-        return firstIWinBollActivity != null && firstIWinBollActivity == iWinBollActivity;
+        return mFirstIWinBollActivity != null && mFirstIWinBollActivity == iWinBollActivity;
     }
 
     //
@@ -220,10 +220,10 @@ public class WinBollActivityManager {
     //
     public <T extends IWinBollActivity> void resumeActivity(Context context, T iWinBoll) {
         LogUtils.d(TAG, "resumeActivity(Context context, T iWinBoll)");
-        ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) mGlobalApplication.getSystemService(Context.ACTIVITY_SERVICE);
         //返回启动它的根任务（home 或者 MainActivity）
-        Intent intent = new Intent(mContext, iWinBoll.getClass());
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
+        Intent intent = new Intent(mGlobalApplication, iWinBoll.getClass());
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(mGlobalApplication);
         stackBuilder.addNextIntentWithParentStack(intent);
         stackBuilder.startActivities();
         //moveTaskToFront(YourTaskId, 0);
@@ -287,7 +287,7 @@ public class WinBollActivityManager {
                 IWinBollActivity preIWinBoll = getPreIWinBoll(iWinBoll);
                 iWinBoll.getActivity().finish();
                 if (preIWinBoll != null) {
-                    resumeActivity(mContext, preIWinBoll);
+                    resumeActivity(mGlobalApplication, preIWinBoll);
                 }
             }
 
