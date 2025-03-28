@@ -22,7 +22,6 @@ import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
-import cc.winboll.studio.libappbase.winboll.WinBollActivityBase;
 
 public class MainActivity extends WinBollActivityBase implements IWinBollActivity {
 
