@@ -102,7 +102,7 @@ public class WinBollActivityManager {
                 resumeActivity(context, tag);
                 return;
             }
-            ToastUtils.show("startWinBollActivity(Context context, Class<T> clazz)");
+            //ToastUtils.show("startWinBollActivity(Context context, Class<T> clazz)");
 
             // 新建一个任务窗口
             Intent intent = new Intent(context, clazz);
