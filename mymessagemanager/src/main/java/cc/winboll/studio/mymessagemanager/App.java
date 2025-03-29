@@ -7,7 +7,6 @@ package cc.winboll.studio.mymessagemanager;
  */
 import android.view.Gravity;
 import cc.winboll.studio.libappbase.GlobalApplication;
-import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.mymessagemanager.R;
 import com.hjq.toast.ToastUtils;
 import java.io.File;
@@ -30,7 +29,7 @@ public class App extends GlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        //setIsDebug(cc.winboll.studio.mymessagemanager.BuildConfig.DEBUG);
+        //setIsDebuging(BuildConfig.DEBUG);
 
         // 初始化 Toast 框架
         ToastUtils.init(this);
@@ -44,9 +43,5 @@ public class App extends GlobalApplication {
         _mszAppExternalFilesDir = getExternalFilesDir(TAG).toString();
         _mszConfigUtilPath = _mszAppExternalFilesDir + File.separator + _mszConfigUtilFileName;
         _mszSMSReceiveRuleUtilPath = _mszAppExternalFilesDir + File.separator + _mszSMSReceiveRuleUtilFileName;
-    }
-
-    public static void showApplicationMessage(String szMessage) {
-        LogUtils.i(TAG, szMessage);
     }
 }

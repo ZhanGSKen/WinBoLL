@@ -49,7 +49,7 @@ public class SMSRecevier extends BroadcastReceiver {
                     NotificationUtil nu = new NotificationUtil();
                     nu.sendSMSReceivedMessage(context, nResultId, szSmsAddress, szSmsBody);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(SMSActivity.ACTION_NOTIFY_SMS_CHANGED));
-                    App.showApplicationMessage("<" + szSmsAddress + "> : ( " + szSmsBody + " ) [SAVED]");
+                    LogUtils.d(TAG, "<" + szSmsAddress + "> : ( " + szSmsBody + " ) [SAVED]");
                     if (isEnableTTS) {
                         if (isEnableTTSAnalyzeMode) {
                             TTSPlayRuleUtil ttsPlayRuleUtil = TTSPlayRuleUtil.getInstance(context);

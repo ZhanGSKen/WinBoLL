@@ -39,22 +39,18 @@ public class AboutActivity extends BaseActivity implements IWinBollActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(AESThemeUtil.getThemeTypeID(getApplicationContext()));
-        //setContentView(R.layout.activity_about);
         mContext = this;
-        
-        LinearLayout layout = findViewById(R.id.aboutmain_ll);
 
         AboutView aboutView = CreateAboutView();
-        layout.addView(aboutView);
         // 在 Activity 的 onCreate 或其他生命周期方法中调用
-//        LinearLayout layout = new LinearLayout(this);
-//        layout.setOrientation(LinearLayout.VERTICAL);
-//        // 创建布局参数（宽度和高度）
-//        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-//            ViewGroup.LayoutParams.MATCH_PARENT,
-//            ViewGroup.LayoutParams.MATCH_PARENT
-//        );
-//        addContentView(aboutView, params);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        // 创建布局参数（宽度和高度）
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        );
+        addContentView(aboutView, params);
 
         GlobalApplication.getWinBollActivityManager().add(this);
     }
