@@ -1,54 +1,55 @@
-package cc.winboll.studio.appbase.beans;
+package cc.winboll.studio.libappbase;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/02/17 10:05:09
- * @Describe APPSOSReportBean
+ * @Date 2025/03/25 02:52:46
+ * @Describe 基础应用数据模型
  */
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
-public class WinBollNewsBean extends BaseBean {
-    
-    public static final String TAG = "WinBollNewsBean";
-    
-    protected String message;
-    
-    public WinBollNewsBean() {
-        this.message = "";
+public class APPBaseModel extends BaseBean {
+
+    public static final String TAG = "APPBaseModel";
+
+    // 应用是否处于正在调试状态
+    //
+    boolean isDebuging = false;
+
+    public APPBaseModel() {
+        this.isDebuging = false;
     }
 
-    public WinBollNewsBean(String message) {
-        this.message = message;
+    public APPBaseModel(boolean isDebuging) {
+        this.isDebuging = isDebuging;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setIsDebuging(boolean isDebuging) {
+        this.isDebuging = isDebuging;
     }
 
-    public String getMessage() {
-        return message;
+    public boolean isDebuging() {
+        return isDebuging;
     }
 
     @Override
     public String getName() {
-        return WinBollNewsBean.class.getName();
+        return APPBaseModel.class.getName();
     }
 
     @Override
     public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
         super.writeThisToJsonWriter(jsonWriter);
-        jsonWriter.name("message").value(getMessage());
-
+        jsonWriter.name("isDebuging").value(isDebuging());
     }
 
     @Override
     public boolean initObjectsFromJsonReader(JsonReader jsonReader, String name) throws IOException {
         if (super.initObjectsFromJsonReader(jsonReader, name)) { return true; } else {
-            if (name.equals("message")) {
-                setMessage(jsonReader.nextString());
+            if (name.equals("isDebuging")) {
+                setIsDebuging(jsonReader.nextBoolean());
             } else {
                 return false;
             }
