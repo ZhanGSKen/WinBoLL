@@ -11,9 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import cc.winboll.studio.appbase.R;
+import cc.winboll.studio.appbase.WinBollActivityBase;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
-import cc.winboll.studio.libappbase.winboll.WinBollActivityBase;
 
 public class NewActivity extends WinBollActivityBase implements IWinBollActivity {
 
@@ -74,8 +74,6 @@ public class NewActivity extends WinBollActivityBase implements IWinBollActivity
         if (item.getItemId() == cc.winboll.studio.appbase.R.id.item_log) {
             GlobalApplication.getWinBollActivityManager().startLogActivity(this);
             return true;
-        } else if(item.getItemId() == cc.winboll.studio.appbase.R.id.item_minimal) {
-            moveTaskToBack(true);
         }
         // 在switch语句中处理每个ID，并在处理完后返回true，未处理的情况返回false。
         return super.onOptionsItemSelected(item);

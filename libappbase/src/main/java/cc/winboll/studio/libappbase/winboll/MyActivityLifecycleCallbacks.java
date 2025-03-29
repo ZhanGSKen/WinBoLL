@@ -47,7 +47,7 @@ public class MyActivityLifecycleCallbacks implements Application.ActivityLifecyc
     }
 
     public void showActivityeInfo() {
-        ToastUtils.show("ActivityeInfo : " + mInfo);
+        //ToastUtils.show("ActivityeInfo : " + mInfo);
         LogUtils.d(TAG, "ActivityeInfo : " + mInfo);
     }
 
