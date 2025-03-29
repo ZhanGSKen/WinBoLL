@@ -8,6 +8,8 @@ package cc.winboll.studio.libaes.winboll;
 import cc.winboll.studio.libappbase.LogUtils;
 import java.io.IOException;
 import okhttp3.Authenticator;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -42,6 +44,7 @@ public class WinBollServerConnectionTestThread extends Thread {
 
     @Override
     public void run() {
+        LogUtils.d(TAG, String.format("run() url %s\nusername %s\npassword %s", url, username, password));
         OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(connectTimeout, java.util.concurrent.TimeUnit.MILLISECONDS)
             .readTimeout(readTimeout, java.util.concurrent.TimeUnit.MILLISECONDS)
@@ -58,44 +61,80 @@ public class WinBollServerConnectionTestThread extends Thread {
         Request request = new Request.Builder()
             .url(url)
             .build();
-
-        int retryCount = 0;
-        while (!testComplete && retryCount <= maxRetries) {
-            try {
-                Response response = client.newCall(request).execute();
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-                    if ("OK".equalsIgnoreCase(responseBody.trim())) {
-                        LogUtils.d(TAG, "[" + new java.util.Date() + "] 测试成功，服务器返回OK");
-                        testComplete = true;
-                    } else {
-                        LogUtils.d(TAG, "[" + new java.util.Date() + "] 响应内容不符合预期：" + responseBody);
-                    }
-                } else {
-                    LogUtils.d(TAG, "[" + new java.util.Date() + "] 请求失败，状态码：" + response.code());
-                }
-            } catch (IOException e) {
-                LogUtils.d(TAG, "[" + new java.util.Date() + "] 连接异常：" + e.getMessage());
-            }
-
-            if (!testComplete) {
-                try {
-                    Thread.sleep(2000); // 等待2秒后重试
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    LogUtils.d(TAG, "测试线程被中断");
-                    return;
-                }
-                retryCount++;
-                LogUtils.d(TAG, "[" + new java.util.Date() + "] 第" + retryCount + "次重试...");
-            }
-        }
-
-        if (testComplete) {
             
-        } else {
-            LogUtils.d(TAG, "[" + new java.util.Date() + "] 达到最大重试次数，测试失败");
-        }
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    // 处理网络请求失败
+                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (!response.isSuccessful()) {
+                        LogUtils.d(TAG, "Unexpected code " + response, Thread.currentThread().getStackTrace());
+                        return;
+                    }
+
+                    try {
+                        // 读取响应体作为字符串，注意这里可能需要解码
+                        String text = response.body().string();
+                        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(text);
+                        LogUtils.d(TAG, doc.text());
+
+                        // 使用id选择器找到具有特定id的元素
+                        org.jsoup.nodes.Element elementWithId = doc.select("#LastRelease").first(); // 获取第一个匹配的元素
+
+                        // 提取并打印元素的文本内容
+                        //mszNewestAppPackageName = elementWithId.text();
+                        //ToastUtils.delayedShow(text + "\n" + mszNewestAppPackageName, 5000);
+
+                        //mHandler.sendMessage(mHandler.obtainMessage(MSG_APPUPDATE_CHECKED));
+                    } catch (Exception e) {
+                        LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+                    }
+                }
+            });
+
+//        int retryCount = 0;
+//        while (!testComplete && retryCount <= maxRetries) {
+//            LogUtils.d(TAG, "while (!testComplete && retryCount <= maxRetries) {");
+//            try {
+//                Response response = client.newCall(request).execute();
+//                if (response.isSuccessful()) {
+//                    String responseBody = response.body().string();
+//                    if ("OK".equalsIgnoreCase(responseBody.trim())) {
+//                        LogUtils.d(TAG, "[" + new java.util.Date() + "] 测试成功，服务器返回OK");
+//                        testComplete = true;
+//                    } else {
+//                        LogUtils.d(TAG, "[" + new java.util.Date() + "] 响应内容不符合预期：" + responseBody);
+//                    }
+//                } else {
+//                    LogUtils.d(TAG, "[" + new java.util.Date() + "] 请求失败，状态码：" + response.code());
+//                }
+//            } catch (IOException e) {
+//                LogUtils.d(TAG, "[" + new java.util.Date() + "] 连接异常：" + e.getMessage());
+//            }
+//
+//            if (!testComplete) {
+//                try {
+//                    Thread.sleep(2000); // 等待2秒后重试
+//                } catch (InterruptedException e) {
+//                    Thread.currentThread().interrupt();
+//                    LogUtils.d(TAG, "测试线程被中断");
+//                    return;
+//                }
+//                retryCount++;
+//                LogUtils.d(TAG, "[" + new java.util.Date() + "] 第" + retryCount + "次重试...");
+//            }
+//        }
+//
+//        if (testComplete) {
+//            
+//        } else {
+//            LogUtils.d(TAG, "[" + new java.util.Date() + "] 达到最大重试次数，测试失败");
+//        }
     }
 
 //    public static void main(String[] args) {
