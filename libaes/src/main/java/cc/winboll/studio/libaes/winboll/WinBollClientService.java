@@ -52,7 +52,7 @@ public class WinBollClientService extends Service implements IWinBollClientServi
 
     @Override
     public void onCreate() {
-        ToastUtils.show("onCreate");
+        //ToastUtils.show("onCreate");
         super.onCreate();
         mWinBollClientThread = null;
         mWinBollClientServiceBean = WinBollClientServiceBean.loadWinBollClientServiceBean(this);
@@ -126,7 +126,7 @@ public class WinBollClientService extends Service implements IWinBollClientServi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ToastUtils.show("onDestroy");
+        //ToastUtils.show("onDestroy");
     }
 
     @Override
@@ -156,7 +156,7 @@ public class WinBollClientService extends Service implements IWinBollClientServi
     class WinBollClientThread extends Thread {
         @Override
         public void run() {
-            ToastUtils.show("WinBollClientThread");
+            //ToastUtils.show("WinBollClientThread");
             super.run();
             syncWinBollClientThreadStatus();
             if (mIsEnableService) {

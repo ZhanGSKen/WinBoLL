@@ -122,7 +122,7 @@ public class WinBollServiceStatusView extends LinearLayout {
         mConnectionStatus = getConnectionStatus();
         //mIsConnected = false;
         //mWinBollServerHostConnectionStatus = WinBollServerHostConnectionStatus.DISCONNECTED;
-        ToastUtils.show("initView()");
+        //ToastUtils.show("initView()");
 
         mViewOnClickListener = new View.OnClickListener(){
             @Override

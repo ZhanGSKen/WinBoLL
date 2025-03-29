@@ -57,7 +57,7 @@ public class MainActivity extends DrawerFragmentActivity implements IWinBollActi
         }
         showFragment(mTestAButtonFragment);
         //setSubtitle(TAG);
-        ToastUtils.show("onCreate");
+        //ToastUtils.show("onCreate");
     }
 
     @Override

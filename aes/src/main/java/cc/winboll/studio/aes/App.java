@@ -17,7 +17,7 @@ public class App extends GlobalApplication {
     public void onCreate() {
         super.onCreate();
         ToastUtils.init(this);
-        ToastUtils.show("App onCreate");
+        //ToastUtils.show("App onCreate");
     }
     
 }
