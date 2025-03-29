@@ -68,7 +68,7 @@ public class WinBollClientService extends Service implements IWinBollClientServi
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        ToastUtils.show("onStartCommand");
+        //ToastUtils.show("onStartCommand");
         // 由应用 Intent 启动时，应用可以通过下面函数实例化实际服务进程。
         runMainThread();
 
@@ -82,7 +82,7 @@ public class WinBollClientService extends Service implements IWinBollClientServi
 
     synchronized void runMainThread() {
         if (mWinBollClientThread == null) {
-            ToastUtils.show("runMainThread()");
+            //ToastUtils.show("runMainThread()");
             mWinBollClientThread = new WinBollClientThread();
             mWinBollClientThread.start();
         }
@@ -91,6 +91,7 @@ public class WinBollClientService extends Service implements IWinBollClientServi
     void syncWinBollClientThreadStatus() {
         mWinBollClientServiceBean = WinBollClientServiceBean.loadWinBollClientServiceBean(this);
         mIsEnableService = mWinBollClientServiceBean.isEnable();
+        LogUtils.d(TAG, String.format("mIsEnableService %s", mIsEnableService));
     }
 
 
@@ -155,7 +156,7 @@ public class WinBollClientService extends Service implements IWinBollClientServi
     class WinBollClientThread extends Thread {
         @Override
         public void run() {
-            //ToastUtils.show("WinBollClientThread");
+            ToastUtils.show("WinBollClientThread");
             super.run();
             syncWinBollClientThreadStatus();
             if (mIsEnableService) {
@@ -165,38 +166,40 @@ public class WinBollClientService extends Service implements IWinBollClientServi
 
                     LogUtils.d(TAG, "WinBollClientThread run()");
 
+                    
+                    
                     // 唤醒守护进程
                     //wakeupAndBindAssistant();
-                    String username = "";
-                    String password = "";
-                    String targetUrl= "";
-
-                    if (GlobalApplication.isDebuging()) {
-                        username = PrefUtils.getString(WinBollClientService.this, "metDevUserName", "");
-                        password = PrefUtils.getString(WinBollClientService.this, "metDevUserPassword", "");
-                    } else {
-                        username = "WinBoll";
-                        password = "WinBollPowerByZhanGSKen";
-                    }
-                    targetUrl = "https://" + (GlobalApplication.isDebuging() ?"dev.winboll": "winboll") + ".cc/api/"; // 替换为实际测试的URL
-                    
+//                    String username = "";
+//                    String password = "";
+//                    String targetUrl= "";
+//
+//                    if (GlobalApplication.isDebuging()) {
+//                        username = PrefUtils.getString(WinBollClientService.this, "metDevUserName", "");
+//                        password = PrefUtils.getString(WinBollClientService.this, "metDevUserPassword", "");
+//                    } else {
+//                        username = "WinBoll";
+//                        password = "WinBollPowerByZhanGSKen";
+//                    }
+//                    targetUrl = "https://" + (GlobalApplication.isDebuging() ?"dev.winboll": "winboll") + ".cc/api/"; // 替换为实际测试的URL
+//                    
                     while (mIsEnableService) {
                         // 显示运行状态
-                        LogUtils.d(TAG, String.format("targetUrl %s", targetUrl));
+                        //LogUtils.d(TAG, String.format("targetUrl %s", targetUrl));
 
-                        WinBollServerConnectionTestThread testThread = new WinBollServerConnectionTestThread(
-                            targetUrl,
-                            username,
-                            password,
-                            15000,  // 连接超时15秒
-                            20000,  // 读取超时20秒
-                            3       // 最大重试次数
-                        );
-
-                        testThread.start();
+//                        WinBollServerConnectionTestThread testThread = new WinBollServerConnectionTestThread(
+//                            targetUrl,
+//                            username,
+//                            password,
+//                            15000,  // 连接超时15秒
+//                            20000,  // 读取超时20秒
+//                            3       // 最大重试次数
+//                        );
+//
+//                        testThread.start();
 
                         try {
-                            Thread.sleep(60 * 1000);
+                            Thread.sleep(5 * 1000);
                         } catch (InterruptedException e) {
                             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
                         }

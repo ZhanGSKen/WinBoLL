@@ -18,9 +18,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import cc.winboll.studio.libaes.winboll.WinBollClientService;
 import cc.winboll.studio.libappbase.LogUtils;
-import com.hjq.toast.ToastUtils;
 import cc.winboll.studio.libapputils.R;
+import com.hjq.toast.ToastUtils;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import okhttp3.Authenticator;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.Route;
 //import okhttp3.Authenticator;
 //import okhttp3.Credentials;
 //import okhttp3.OkHttpClient;
@@ -110,22 +122,24 @@ public class WinBollServiceStatusView extends LinearLayout {
         mConnectionStatus = getConnectionStatus();
         //mIsConnected = false;
         //mWinBollServerHostConnectionStatus = WinBollServerHostConnectionStatus.DISCONNECTED;
-        //ToastUtils.show("initView()");
+        ToastUtils.show("initView()");
 
         mViewOnClickListener = new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //ToastUtils.show("onClick()");
-                //ToastUtils.show("mWinBollServerHostConnectionStatus : " + mWinBollServerHostConnectionStatus);
-                //isConnected = !isConnected;
+                LogUtils.d(TAG, "onClick()");
                 if (mConnectionStatus == ConnectionStatus.CONNECTED) {
-                    ToastUtils.show("Click to stop service.");
+                    LogUtils.d(TAG, "Click to stop service.");
                     WinBollClientServiceBean bean = WinBollClientServiceBean.loadWinBollClientServiceBean(mContext);
                     bean.setIsEnable(false);
                     WinBollClientServiceBean.saveBean(mContext, bean);
                     Intent intent = new Intent(mContext, WinBollClientService.class);
                     mContext.stopService(intent);
+                    stopConnectionThread();
+                    mTextView.setText("");
+                    setImageViewByConnection(mImageView, false);
                     mConnectionStatus = ConnectionStatus.DISCONNECTED;
+                    //mConnectionStatus = ConnectionStatus.DISCONNECTED;
 //                  
                     /*//ToastUtils.show("CONNECTED");
                      setConnectionStatusView(false);
@@ -137,25 +151,13 @@ public class WinBollServiceStatusView extends LinearLayout {
                      ToastUtils.show("WinBoll Server Disconnected.");
                      }*/
                 } else if (mConnectionStatus == ConnectionStatus.DISCONNECTED) {
-                    ToastUtils.show("Click to start service.");
+                    LogUtils.d(TAG, "Click to start service.");
                     WinBollClientServiceBean bean = WinBollClientServiceBean.loadWinBollClientServiceBean(mContext);
                     bean.setIsEnable(true);
                     WinBollClientServiceBean.saveBean(mContext, bean);
                     Intent intent = new Intent(mContext, WinBollClientService.class);
                     mContext.startService(intent);
-                    mConnectionStatus = ConnectionStatus.CONNECTED;
-                    ToastUtils.show("startService");
-                    /*//ToastUtils.show("DISCONNECTED");
-                     setConnectionStatusView(true);
-
-                     if (mConnectionThread == null) {
-                     ToastUtils.show("mConnectionThread == null");
-                     mConnectionThread = new ConnectionThread();
-                     mWinBollServerHostConnectionStatus = WinBollServerHostConnectionStatus.START_CONNECT;
-                     mConnectionThread.start();
-                     }*/
-                } else {
-                    ToastUtils.show("Other Click condition.");
+                    startConnectionThread();
                 }
 
                 /*if (isConnected) {
@@ -210,54 +212,99 @@ public class WinBollServiceStatusView extends LinearLayout {
         }
     }
 
-    void requestWithBasicAuth(WinBollServiceViewHandler textViewHandler, String targetUrl, final String username, final String password) {
+    void requestWithBasicAuth(final WinBollServiceViewHandler textViewHandler, String targetUrl, final String username, final String password) {
         // 用户名和密码，替换为实际的认证信息
         //String username = "your_username";
         //String password = "your_password";
+        LogUtils.d(TAG, "requestWithBasicAuth(...)");
+        LogUtils.d(TAG, String.format("targetUrl %s", targetUrl));
 
-//        OkHttpClient client = new OkHttpClient.Builder()
-//            .authenticator(new Authenticator() {
-//                @Override
-//                public Request authenticate(Route route, Response response) throws IOException {
-//                    String credential = Credentials.basic(username, password);
-//                    return response.request().newBuilder()
-//                        .header("Authorization", credential)
-//                        .build();
-//                }
-//            })
-//            .build();
+        OkHttpClient client = new OkHttpClient.Builder()
+            .authenticator(new Authenticator() {
+                @Override
+                public Request authenticate(Route route, Response response) throws IOException {
+                    String credential = Credentials.basic(username, password);
+                    return response.request().newBuilder()
+                        .header("Authorization", credential)
+                        .build();
+                }
+            })
+            .build();
+
+        Request request = new Request.Builder()
+            .url(targetUrl) // 替换为实际要请求的网页地址
+            .build();
+
+
+        //Response response = client.newCall(request).execute();
+
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    // 处理网络请求失败
+                    setImageViewByConnection(mImageView, false);
+                    textViewHandler.postMessageText(e.getMessage());
+                    textViewHandler.postMessageConnectionStatus(false);
+                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+                    //String sz = "请求失败，状态码: " + response.code();
+                    //setImageViewByConnection(mImageView, false);
+                    //LogUtils.d(TAG, sz);
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (!response.isSuccessful()) {
+                        setImageViewByConnection(mImageView, false);
+                        textViewHandler.postMessageText("Unexpected code " + response);
+                        textViewHandler.postMessageConnectionStatus(false);
+                        LogUtils.d(TAG, "Unexpected code " + response, Thread.currentThread().getStackTrace());
+                        return;
+                    }
+
+                    try {
+                        // 读取响应体作为字符串，注意这里可能需要解码
+                        String text = response.body().string();
+                        LogUtils.d(TAG, "Develop Host Connection IP is : " + text);
+                        mConnectionStatus = ConnectionStatus.CONNECTED;
+                        // 获取当前时间
+                        LocalDateTime now = LocalDateTime.now();
+                        // 定义时间格式
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                        // 按照指定格式格式化时间并输出
+                        String formattedDateTime = now.format(formatter);
+                        textViewHandler.postMessageText("ClientIP<" + formattedDateTime + ">: " + text);
+                        textViewHandler.postMessageConnectionStatus(true);
+                        
+                        //org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(text);
+                        //LogUtils.d(TAG, doc.text());
+
+                        // 使用id选择器找到具有特定id的元素
+                        //org.jsoup.nodes.Element elementWithId = doc.select("#LastRelease").first(); // 获取第一个匹配的元素
+
+                        // 提取并打印元素的文本内容
+                        //mszNewestAppPackageName = elementWithId.text();
+                        //ToastUtils.delayedShow(text + "\n" + mszNewestAppPackageName, 5000);
+
+                        //mHandler.sendMessage(mHandler.obtainMessage(MSG_APPUPDATE_CHECKED));
+                        //System.out.println(response.body().string());
+//                        mConnectionStatus = ConnectionStatus.CONNECTED;
+//                        // 获取当前时间
+//                        LocalDateTime now = LocalDateTime.now();
 //
-//        Request request = new Request.Builder()
-//            .url(targetUrl) // 替换为实际要请求的网页地址
-//            .build();
-//
-//        try {
-//            Response response = client.newCall(request).execute();
-//            if (response.isSuccessful()) {
-//                //System.out.println(response.body().string());
-//                //ToastUtils.show("Develop Host Connection IP is : " + response.body().string());
-//                // 获取当前时间
-//                LocalDateTime now = LocalDateTime.now();
-//
-//                // 定义时间格式
-//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-//                // 按照指定格式格式化时间并输出
-//                String formattedDateTime = now.format(formatter);
-//                //System.out.println(formattedDateTime);
-//                textViewHandler.postMessageText("ClientIP<" + formattedDateTime + ">: " + response.body().string());
-//                textViewHandler.postMessageConnectionStatus(true);
-//            } else {
-//                String sz = "请求失败，状态码: " + response.code();
-//                setImageViewByConnection(mImageView, false);
-//                textViewHandler.postMessageText(sz);
-//                textViewHandler.postMessageConnectionStatus(false);
-//                LogUtils.d(TAG, sz);
-//            }
-//        } catch (IOException e) {
-//            textViewHandler.postMessageText(e.getMessage());
-//            textViewHandler.postMessageConnectionStatus(false);
-//            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-//        }
+//                        // 定义时间格式
+//                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+//                        // 按照指定格式格式化时间并输出
+//                        String formattedDateTime = now.format(formatter);
+//                        //System.out.println(formattedDateTime);
+//                        textViewHandler.postMessageText("ClientIP<" + formattedDateTime + ">: " + response.body().string());
+//                        textViewHandler.postMessageConnectionStatus(true);
+                    } catch (Exception e) {
+                        LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+                    }
+                }
+            });
+
     }
 
     class WinBollServiceViewHandler extends Handler {
@@ -293,6 +340,34 @@ public class WinBollServiceStatusView extends LinearLayout {
         }
     }
 
+    public void startConnectionThread() {
+        if (mConnectionStatus == ConnectionStatus.DISCONNECTED) {
+            mConnectionStatus = ConnectionStatus.START_CONNECT;
+            LogUtils.d(TAG, "startConnectionThread");
+            if (mConnectionThread != null) {
+                mConnectionThread.mIsExist = true;
+            }
+            mConnectionThread = new ConnectionThread();
+            mConnectionThread.start();
+        } else if (mConnectionStatus == ConnectionStatus.CONNECTING) {
+            LogUtils.d(TAG, "mConnectionStatus == ConnectionStatus.CONNECTING");
+        } else {
+            LogUtils.d(TAG, "Unknow mConnectionStatus, can not start ConnectionThread.");
+        }
+    }
+
+    public void stopConnectionThread() {
+        if (mConnectionStatus == ConnectionStatus.CONNECTED) {
+            LogUtils.d(TAG, "stopConnectionThread");
+            if (mConnectionThread != null) {
+                mConnectionThread.mIsExist = true;
+                mConnectionThread = null;
+            }
+        } else {
+            LogUtils.d(TAG, "Unknow mConnectionStatus, can not start ConnectionThread.");
+        }
+    }
+
     class ConnectionThread extends Thread {
 
         public volatile boolean mIsExist;
@@ -312,13 +387,20 @@ public class WinBollServiceStatusView extends LinearLayout {
             while (mIsExist == false) {
                 if (mConnectionStatus == ConnectionStatus.START_CONNECT) {
                     mConnectionStatus = ConnectionStatus.CONNECTING;
-                    ToastUtils.show("WinBoll Server Connection Start.");
-                    //LogUtils.d(TAG, "Develop Host Connection Start.");
-                    String targetUrl = "https://" + mszServerHost + "/cip/?simple=true";  // 这里替换成你实际要访问的网址
+                    //ToastUtils.show("WinBoll Server Connection Start.");
+
+                    //String targetUrl = "https://" + (GlobalApplication.isDebuging() ?"dev.winboll": "winboll") + ".cc/api/"; // 替换为实际测试的URL
+                    //String targetUrl = "https://" + mszServerHost + "/api/";  // 这里替换成你实际要访问的网址
+
+                    String targetUrl = mszServerHost + "/cip/?simple=true";  // 这里替换成你实际要访问的网址
+                    LogUtils.d(TAG, String.format("Connection Start. targetUrl %s", targetUrl));
                     requestWithBasicAuth(mWinBollServiceViewHandler, targetUrl, _mUserName, _mPassword);
                 } else if (mConnectionStatus == ConnectionStatus.CONNECTED
-                           && mConnectionStatus == ConnectionStatus.DISCONNECTED) {
-                    ToastUtils.show("mWinBollServerHostConnectionStatus " + mConnectionStatus);
+                           || mConnectionStatus == ConnectionStatus.DISCONNECTED) {
+                    //ToastUtils.show("mWinBollServerHostConnectionStatus " + mConnectionStatus);
+                    LogUtils.d(TAG, String.format("mConnectionStatus done %s", mConnectionStatus));
+                } else {
+                    LogUtils.d(TAG, String.format("mConnectionStatus unknow %s", mConnectionStatus));
                 }
 
                 try {
