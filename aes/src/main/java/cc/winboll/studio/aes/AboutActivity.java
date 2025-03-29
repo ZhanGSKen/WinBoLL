@@ -5,26 +5,38 @@ package cc.winboll.studio.aes;
  * @Date 2025/03/24 23:52:29
  * @Describe AES应用介绍窗口
  */
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import cc.winboll.studio.libaes.winboll.APPInfo;
 import cc.winboll.studio.libaes.winboll.AboutView;
+import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import android.app.Activity;
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends AppCompatActivity implements IWinBollActivity {
+
+    public static final String TAG = "AboutActivity";
 
     Context mContext;
-    
-    public static final String TAG = "AboutActivity";
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        
+
         AboutView aboutView = CreateAboutView();
         // 在 Activity 的 onCreate 或其他生命周期方法中调用
         LinearLayout layout = new LinearLayout(this);
@@ -35,7 +47,14 @@ public class AboutActivity extends Activity {
             ViewGroup.LayoutParams.MATCH_PARENT
         );
         addContentView(aboutView, params);
-        
+
+        GlobalApplication.getWinBollActivityManager().add(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GlobalApplication.getWinBollActivityManager().registeRemove(this);
     }
 
     public AboutView CreateAboutView() {

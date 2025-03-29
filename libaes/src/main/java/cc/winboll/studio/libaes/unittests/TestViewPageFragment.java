@@ -19,7 +19,7 @@ import cc.winboll.studio.libaes.ImagePagerAdapter;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.views.AOHPCTCSeekBar;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libappbase.utils.ToastUtils;
+import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
 

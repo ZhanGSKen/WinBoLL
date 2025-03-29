@@ -17,13 +17,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import cc.winboll.studio.libaes.R;
+import cc.winboll.studio.libaes.utils.AppVersionUtils;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.utils.ToastUtils;
-import cc.winboll.studio.libapputils.app.AppVersionUtils;
-import cc.winboll.studio.libapputils.util.PrefUtils;
-import cc.winboll.studio.libapputils.view.WinBollServiceStatusView;
-import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
+import cc.winboll.studio.libappbase.dialogs.YesNoAlertDialog;
+import cc.winboll.studio.libapputils.utils.PrefUtils;
+import com.hjq.toast.ToastUtils;
 import java.io.IOException;
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
@@ -284,7 +283,7 @@ public class AboutView extends LinearLayout {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             GlobalApplication.setIsDebuging(true);
 
-            WinBollActivityManager.getInstance(context).finishAll();
+            GlobalApplication.getWinBollActivityManager().finishAll();
             context.startActivity(intent);
         } 
     }
@@ -295,7 +294,7 @@ public class AboutView extends LinearLayout {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             GlobalApplication.setIsDebuging(false);
 
-            WinBollActivityManager.getInstance(context).finishAll();
+            GlobalApplication.getWinBollActivityManager().finishAll();
             context.startActivity(intent);
         } 
     }

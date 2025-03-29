@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal">
 
-        <cc.winboll.studio.libapputils.view.WinBollServiceStatusView
+        <cc.winboll.studio.libaes.winboll.WinBollServiceStatusView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/viewaboutdevWinBollServiceStatusView1"/>

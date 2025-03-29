@@ -5,6 +5,7 @@ package cc.winboll.studio.aes;
  * @Date 2024/06/13 19:05:52
  * @Describe 应用主窗口
  */
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,8 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
-import android.widget.Toolbar;
-import androidx.appcompat.app.AppCompatActivity;
 import cc.winboll.studio.aes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
 import cc.winboll.studio.libaes.beans.DrawerMenuBean;
@@ -25,9 +24,10 @@ import cc.winboll.studio.libaes.unittests.TestASupportToolbarActivity;
 import cc.winboll.studio.libaes.unittests.TestAToolbarActivity;
 import cc.winboll.studio.libaes.unittests.TestDrawerFragmentActivity;
 import cc.winboll.studio.libaes.unittests.TestViewPageFragment;
-import cc.winboll.studio.libaes.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import com.a4455jkjh.colorpicker.ColorPickerDialog;
+import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
 
 public class MainActivity extends DrawerFragmentActivity implements IWinBollActivity {
@@ -39,28 +39,13 @@ public class MainActivity extends DrawerFragmentActivity implements IWinBollActi
     TestViewPageFragment mTestViewPageFragment;
     
     @Override
-    public AppCompatActivity getActivity() {
+    public Activity getActivity() {
         return this;
     }
 
     @Override
     public String getTag() {
         return TAG;
-    }
-
-    @Override
-    public Toolbar initToolBar() {
-        return null;
-    }
-
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return false;
     }
 
     @Override
@@ -72,6 +57,7 @@ public class MainActivity extends DrawerFragmentActivity implements IWinBollActi
         }
         showFragment(mTestAButtonFragment);
         //setSubtitle(TAG);
+        ToastUtils.show("onCreate");
     }
 
     @Override

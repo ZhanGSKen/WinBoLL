@@ -13,6 +13,12 @@
 
         <activity android:name="cc.winboll.studio.libaes.unittests.TestASupportToolbarActivity"/>
 
+        <service android:name="cc.winboll.studio.libaes.winboll.WinBollClientService"/>
+
+        <service android:name="cc.winboll.studio.libaes.winboll.AssistantService"/>
+
+        <service android:name="cc.winboll.studio.libaes.winboll.WinBollMail"/>
+
     </application>
 
 </manifest>

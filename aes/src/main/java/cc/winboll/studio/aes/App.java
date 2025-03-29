@@ -6,6 +6,8 @@ package cc.winboll.studio.aes;
  * @Describe AES应用类
  */
 import cc.winboll.studio.libappbase.GlobalApplication;
+import com.hjq.toast.ToastUtils;
+
 
 public class App extends GlobalApplication {
     
@@ -14,6 +16,8 @@ public class App extends GlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        ToastUtils.init(this);
+        ToastUtils.show("App onCreate");
     }
     
 }

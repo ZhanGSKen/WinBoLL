@@ -1,15 +1,13 @@
 package cc.winboll.studio.libaes.unittests;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.widget.Toolbar;
-import androidx.appcompat.app.AppCompatActivity;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
-import cc.winboll.studio.libaes.winboll.APPInfo;
-import cc.winboll.studio.libaes.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 
 /**
  * @Author ZhanGSKen@QQ.COM
@@ -23,28 +21,13 @@ public class SecondaryLibraryActivity extends DrawerFragmentActivity implements 
     SecondaryLibraryFragment mSecondaryLibraryFragment;
 
     @Override
-    public AppCompatActivity getActivity() {
+    public Activity getActivity() {
         return this;
     }
 
     @Override
     public String getTag() {
         return null;
-    }
-
-    @Override
-    public Toolbar initToolBar() {
-        return null;
-    }
-
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return false;
     }
 
     @Override
