@@ -65,7 +65,7 @@ dependencies {
     //api 'androidx.fragment:fragment:1.1.0'
     api 'com.google.android.material:material:1.0.0'
     
-    api 'cc.winboll.studio:libappbase:15.2.2'
-    api 'cc.winboll.studio:libapputils:15.2.1'
     api 'cc.winboll.studio:libaes:15.2.1'
+    api 'cc.winboll.studio:libapputils:15.2.1'
+    api 'cc.winboll.studio:libappbase:15.2.2'
 }
