@@ -10,7 +10,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.Toolbar;
 import cc.winboll.studio.libaes.views.AOHPCTCSeekBar;
 import cc.winboll.studio.mymessagemanager.R;

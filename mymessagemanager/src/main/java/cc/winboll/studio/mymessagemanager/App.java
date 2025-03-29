@@ -6,13 +6,13 @@ package cc.winboll.studio.mymessagemanager;
  * @Describe 全局应用类
  */
 import android.view.Gravity;
+import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.mymessagemanager.R;
-import cc.winboll.studio.shared.app.WinBollApplication;
-import cc.winboll.studio.shared.log.LogUtils;
 import com.hjq.toast.ToastUtils;
 import java.io.File;
 
-public class GlobalApplication extends WinBollApplication {
+public class App extends GlobalApplication {
 
     public static final String TAG = "GlobalApplication";
 

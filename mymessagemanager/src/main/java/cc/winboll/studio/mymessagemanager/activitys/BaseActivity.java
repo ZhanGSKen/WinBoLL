@@ -1,6 +1,5 @@
 package cc.winboll.studio.mymessagemanager.activitys;
 
-import cc.winboll.studio.mymessagemanager.R;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,9 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
-import cc.winboll.studio.shared.log.LogUtils;
-import com.hjq.toast.ToastUtils;
-import cc.winboll.studio.libaes.beans.AESThemeBean;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.mymessagemanager.R;
 
 abstract public class BaseActivity extends AppCompatActivity {
 
@@ -103,7 +101,7 @@ abstract public class BaseActivity extends AppCompatActivity {
             AESThemeUtil.saveThemeStyleID(this, R.style.MyTaoAESTheme);
             recreate();
         } else if (R.id.item_defaulttheme == item.getItemId()) {
-            AESThemeUtil.saveThemeStyleID(this, R.style.MyDefaultAESTheme);
+            AESThemeUtil.saveThemeStyleID(this, R.style.MyAppTheme);
             recreate();
         }
         //ToastUtils.show("nThemeStyleID " + Integer.toString(nThemeStyleID));

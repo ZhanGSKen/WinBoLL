@@ -8,8 +8,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Switch;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.mymessagemanager.dialogs.YesNoAlertDialog;
-import cc.winboll.studio.shared.log.LogUtils;
 
 public class ConfirmSwitchView extends Switch {
 

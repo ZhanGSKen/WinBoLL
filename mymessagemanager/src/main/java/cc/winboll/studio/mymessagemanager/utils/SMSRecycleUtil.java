@@ -6,7 +6,7 @@ package cc.winboll.studio.mymessagemanager.utils;
  * @Describe 短信回收站工具类
  */
 import android.content.Context;
-import cc.winboll.studio.mymessagemanager.GlobalApplication;
+import cc.winboll.studio.mymessagemanager.App;
 import cc.winboll.studio.mymessagemanager.beans.SMSBean;
 import cc.winboll.studio.mymessagemanager.beans.SMSRecycleBean;
 import java.util.ArrayList;

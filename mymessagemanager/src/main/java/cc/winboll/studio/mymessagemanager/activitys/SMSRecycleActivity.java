@@ -8,16 +8,16 @@ package cc.winboll.studio.mymessagemanager.activitys;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import cc.winboll.studio.libappbase.dialogs.YesNoAlertDialog;
 import cc.winboll.studio.mymessagemanager.R;
 import cc.winboll.studio.mymessagemanager.activitys.SMSRecycleActivity;
 import cc.winboll.studio.mymessagemanager.adapters.SMSRecycleAdapter;
 import cc.winboll.studio.mymessagemanager.utils.SMSRecycleUtil;
-import cc.winboll.studio.shared.view.YesNoAlertDialog;
 import com.baoyz.widget.PullRefreshLayout;
 import java.io.File;
-import androidx.appcompat.widget.Toolbar;
 
 public class SMSRecycleActivity extends BaseActivity {
 

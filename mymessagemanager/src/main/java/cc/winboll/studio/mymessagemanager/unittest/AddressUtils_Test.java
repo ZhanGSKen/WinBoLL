@@ -1,6 +1,6 @@
 package cc.winboll.studio.mymessagemanager.unittest;
-import cc.winboll.studio.shared.log.LogUtils;
 import android.content.Context;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.mymessagemanager.utils.AddressUtils;
 
 /**

@@ -8,9 +8,9 @@ package cc.winboll.studio.mymessagemanager.unittest;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.mymessagemanager.R;
-import cc.winboll.studio.shared.log.LogUtils;
-import cc.winboll.studio.shared.log.LogView;
 
 public class UnitTestActivity extends Activity {
 

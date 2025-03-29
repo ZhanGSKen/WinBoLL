@@ -21,7 +21,7 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import cc.winboll.studio.mymessagemanager.GlobalApplication;
+import cc.winboll.studio.mymessagemanager.App;
 import cc.winboll.studio.mymessagemanager.R;
 import cc.winboll.studio.mymessagemanager.activitys.SMSReceiveRuleActivity;
 import cc.winboll.studio.mymessagemanager.adapters.SMSAcceptRuleArrayAdapter;
@@ -114,7 +114,7 @@ public class SMSReceiveRuleActivity extends BaseActivity {
     }
 
     void initSMSAcceptRuleBeanAdd() {
-        mSMSAcceptRuleBeanAdd = new SMSAcceptRuleBean(GlobalApplication.USER_ID, "", true, SMSAcceptRuleBean.RuleType.REFUSE, true);
+        mSMSAcceptRuleBeanAdd = new SMSAcceptRuleBean(App.USER_ID, "", true, SMSAcceptRuleBean.RuleType.REFUSE, true);
     }
 
     @Override

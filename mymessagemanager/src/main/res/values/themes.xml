@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="MyDefaultAESTheme" parent="DefaultAESTheme">
+    <style name="MyAppTheme" parent="AESTheme">
         <item name="android:textSize">20sp</item>
         <item name="attrSMSViewSendColor">@color/colorSMSSendColor</item>
         <item name="attrSMSViewInboxColor">@color/colorSMSInboxColor</item>

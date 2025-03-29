@@ -17,8 +17,8 @@ import android.os.Bundle;
 import android.provider.Telephony;
 import android.telephony.gsm.SmsManager;
 import android.telephony.gsm.SmsMessage;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.mymessagemanager.beans.SMSBean;
-import cc.winboll.studio.shared.log.LogUtils;
 import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
 

@@ -5,9 +5,8 @@ package cc.winboll.studio.mymessagemanager.unittest;
  * @Date 2025/02/25 19:02:15
  * @Describe SMSRecevier 测试类
  */
-import cc.winboll.studio.mymessagemanager.utils.SMSReceiveRuleUtil;
 import android.content.Context;
-import cc.winboll.studio.shared.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.mymessagemanager.receivers.SMSRecevier;
 
 public class SMSRecevier_Test {

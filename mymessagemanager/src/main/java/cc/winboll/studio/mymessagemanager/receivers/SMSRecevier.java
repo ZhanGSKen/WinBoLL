@@ -4,7 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import cc.winboll.studio.mymessagemanager.GlobalApplication;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.mymessagemanager.App;
 import cc.winboll.studio.mymessagemanager.activitys.SMSActivity;
 import cc.winboll.studio.mymessagemanager.beans.SMSBean;
 import cc.winboll.studio.mymessagemanager.utils.AppConfigUtil;
@@ -14,8 +15,6 @@ import cc.winboll.studio.mymessagemanager.utils.SMSReceiveRuleUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSRecycleUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSUtil;
 import cc.winboll.studio.mymessagemanager.utils.TTSPlayRuleUtil;
-import cc.winboll.studio.mymessagemanager.utils.RegexPPiUtils;
-import cc.winboll.studio.shared.log.LogUtils;
 
 public class SMSRecevier extends BroadcastReceiver {
 
@@ -50,7 +49,7 @@ public class SMSRecevier extends BroadcastReceiver {
                     NotificationUtil nu = new NotificationUtil();
                     nu.sendSMSReceivedMessage(context, nResultId, szSmsAddress, szSmsBody);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(SMSActivity.ACTION_NOTIFY_SMS_CHANGED));
-                    GlobalApplication.showApplicationMessage("<" + szSmsAddress + "> : ( " + szSmsBody + " ) [SAVED]");
+                    App.showApplicationMessage("<" + szSmsAddress + "> : ( " + szSmsBody + " ) [SAVED]");
                     if (isEnableTTS) {
                         if (isEnableTTSAnalyzeMode) {
                             TTSPlayRuleUtil ttsPlayRuleUtil = TTSPlayRuleUtil.getInstance(context);

@@ -10,29 +10,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
-import cc.winboll.studio.libaes.views.AToolbar;
+import androidx.appcompat.widget.Toolbar;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.mymessagemanager.BuildConfig;
 import cc.winboll.studio.mymessagemanager.R;
 import cc.winboll.studio.mymessagemanager.activitys.MainActivity;
 import cc.winboll.studio.mymessagemanager.adapters.PhoneArrayAdapter;
 import cc.winboll.studio.mymessagemanager.services.MainService;
+import cc.winboll.studio.mymessagemanager.unittest.UnitTestActivity;
 import cc.winboll.studio.mymessagemanager.utils.AppConfigUtil;
 import cc.winboll.studio.mymessagemanager.utils.AppGoToSettingsUtil;
 import cc.winboll.studio.mymessagemanager.utils.NotificationUtil;
 import cc.winboll.studio.mymessagemanager.utils.PermissionUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSUtil;
-import cc.winboll.studio.mymessagemanager.utils.ThemeUtil;
 import cc.winboll.studio.mymessagemanager.utils.ViewUtil;
 import cc.winboll.studio.mymessagemanager.views.ConfirmSwitchView;
 import cc.winboll.studio.mymessagemanager.views.PhoneListViewForScrollView;
-import cc.winboll.studio.shared.log.LogUtils;
-import cc.winboll.studio.shared.log.LogView;
 import com.baoyz.widget.PullRefreshLayout;
 import java.util.ArrayList;
-import cc.winboll.studio.libaes.utils.AESThemeUtil;
-import cc.winboll.studio.libaes.views.ASupportToolbar;
-import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.mymessagemanager.unittest.UnitTestActivity;
 
 public class MainActivity extends BaseActivity {
 

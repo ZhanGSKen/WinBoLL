@@ -6,24 +6,17 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-   <!--<androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/activityaboutToolbar1"/>-->
+	<cc.winboll.studio.libaes.views.ASupportToolbar
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/toolbar_height"
+		android:id="@+id/toolbar"/>
 
-    <cc.winboll.studio.libaes.views.ASupportToolbar
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-		android:id="@+id/activityaboutASupportToolbar1"/>
-
-    <cc.winboll.studio.shared.view.AboutView
-        app:appname="MyMessageManager"
-        app:appprojectname="MyMessageManager"
-        app:appdescription="用正则表达式方法自定义短信过滤和语音播报的短信应用。"
-        app:appicon="@drawable/ic_winboll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/activityaboutAboutView1"/>
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1.0"
+		android:id="@+id/aboutmain_ll"/>
 
 </LinearLayout>
 

@@ -10,14 +10,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.mymessagemanager.beans.PhoneBean;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import cc.winboll.studio.shared.log.LogUtils;
+import java.util.regex.Pattern;
 
 public class PhoneUtil {
 

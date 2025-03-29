@@ -15,12 +15,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.widget.RemoteViews;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.mymessagemanager.R;
 import cc.winboll.studio.mymessagemanager.activitys.MainActivity;
 import cc.winboll.studio.mymessagemanager.activitys.SMSActivity;
 import cc.winboll.studio.mymessagemanager.beans.MessageNotificationBean;
 import cc.winboll.studio.mymessagemanager.services.MainService;
-import cc.winboll.studio.shared.log.LogUtils;
 
 public class NotificationUtil {
 

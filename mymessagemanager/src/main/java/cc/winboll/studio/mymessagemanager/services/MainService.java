@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.mymessagemanager.R;
 import cc.winboll.studio.mymessagemanager.beans.MessageNotificationBean;
 import cc.winboll.studio.mymessagemanager.receivers.SMSRecevier;
@@ -19,7 +20,6 @@ import cc.winboll.studio.mymessagemanager.services.MainService;
 import cc.winboll.studio.mymessagemanager.utils.AppConfigUtil;
 import cc.winboll.studio.mymessagemanager.utils.NotificationUtil;
 import cc.winboll.studio.mymessagemanager.utils.ServiceUtil;
-import cc.winboll.studio.shared.log.LogUtils;
 import com.hjq.toast.ToastUtils;
 
 public class MainService extends Service {

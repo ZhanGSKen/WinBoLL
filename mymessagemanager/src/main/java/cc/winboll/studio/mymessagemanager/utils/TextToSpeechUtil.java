@@ -14,9 +14,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.mymessagemanager.R;
 import cc.winboll.studio.mymessagemanager.beans.TTSSpeakTextBean;
-import cc.winboll.studio.shared.log.LogUtils;
 import java.util.ArrayList;
 
 public class TextToSpeechUtil {

@@ -7,7 +7,7 @@ package cc.winboll.studio.mymessagemanager.beans;
  */
 import android.util.JsonReader;
 import android.util.JsonWriter;
-import cc.winboll.studio.shared.app.BaseBean;
+import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
 public class TTSPlayRuleBean extends BaseBean {
