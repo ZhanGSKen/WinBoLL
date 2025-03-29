@@ -83,13 +83,21 @@
 			android:layout_marginLeft="5dp"
 			android:layout_marginRight="5dp"/>
 
+		<EditText
+			android:layout_width="50dp"
+			android:ems="10"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:id="@+id/tagsearch_et"/>
+
 		<HorizontalScrollView
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:background="@drawable/bg_border"
 			android:scrollbars="none"
 			android:padding="5dp"
-			android:layout_weight="1.0">
+			android:layout_weight="1.0"
+			android:id="@+id/viewlogHorizontalScrollView1">
 
 			<cc.winboll.studio.libappbase.views.HorizontalListView
 				android:layout_width="wrap_content"

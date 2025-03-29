@@ -8,15 +8,15 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/MyAPPBaseTheme"
-        android:resizeableActivity="true">
+        android:resizeableActivity="true"
+        android:process=":App">
 
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:exported="true"
             android:resizeableActivity="true"
-            android:launchMode="singleInstance"
-            android:taskAffinity="cc.winboll.studio.appbase.task.main"
-            android:exported="true">
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation">
 
             <intent-filter>
 
@@ -32,7 +32,18 @@
 
         </activity>
 
-        <activity android:name=".GlobalApplication$CrashActivity"/>
+        <activity
+            android:name=".activities.NewActivity"
+            android:label="NewActivity"
+            android:exported="true"
+            android:resizeableActivity="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"/>
+
+        <activity android:name=".activities.New2Activity"
+            android:label="New2Activity"
+            android:exported="true"
+            android:resizeableActivity="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"/>
 
         <service
             android:name=".MyTileService"
@@ -111,9 +122,6 @@
             android:name="android.max_aspect"
             android:value="4.0"/>
 
-        <activity android:name=".activities.NewActivity"/>
-
-        <activity android:name=".activities.New2Activity"/>
 
     </application>
 
