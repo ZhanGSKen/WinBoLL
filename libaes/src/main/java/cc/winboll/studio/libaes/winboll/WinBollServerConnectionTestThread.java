@@ -7,14 +7,12 @@ package cc.winboll.studio.libaes.winboll;
  */
 import cc.winboll.studio.libappbase.LogUtils;
 import java.io.IOException;
-import okhttp3.Authenticator;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.Route;
 
 public class WinBollServerConnectionTestThread extends Thread {
 
@@ -45,23 +43,17 @@ public class WinBollServerConnectionTestThread extends Thread {
     @Override
     public void run() {
         LogUtils.d(TAG, String.format("run() url %s\nusername %s\npassword %s", url, username, password));
-        OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(connectTimeout, java.util.concurrent.TimeUnit.MILLISECONDS)
-            .readTimeout(readTimeout, java.util.concurrent.TimeUnit.MILLISECONDS)
-            .authenticator(new Authenticator() {
-                @Override
-                public Request authenticate(Route route, Response response) throws IOException {
-                    return response.request().newBuilder()
-                        .header("Authorization", Credentials.basic(username, password))
-                        .build();
-                }
-            })
-            .build();
+        // 构建包含认证信息的请求
+        String credential = Credentials.basic(username, password);
+        LogUtils.d(TAG, String.format("credential %s", credential));
 
+        OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
             .url(url)
+            .header("Accept", "text/plain") // 设置正确的Content-Type头
+            .header("Authorization", credential)
             .build();
-            
+
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
                 @Override

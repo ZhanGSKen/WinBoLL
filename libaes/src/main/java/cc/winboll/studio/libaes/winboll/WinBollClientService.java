@@ -27,7 +27,7 @@ public class WinBollClientService extends Service implements IWinBollClientServi
     MyServiceConnection mMyServiceConnection;
     volatile boolean mIsWinBollClientThreadRunning;
     volatile boolean mIsEnableService;
-    WinBollClientThread mWinBollClientThread;
+    volatile WinBollClientThread mWinBollClientThread;
 
     public boolean isWinBollClientThreadRunning() {
         return mIsWinBollClientThreadRunning;
@@ -80,7 +80,7 @@ public class WinBollClientService extends Service implements IWinBollClientServi
         return mIsEnableService ? Service.START_STICKY: super.onStartCommand(intent, flags, startId);
     }
 
-    void runMainThread() {
+    synchronized void runMainThread() {
         if (mWinBollClientThread == null) {
             ToastUtils.show("runMainThread()");
             mWinBollClientThread = new WinBollClientThread();
@@ -163,7 +163,7 @@ public class WinBollClientService extends Service implements IWinBollClientServi
                     // 设置运行状态
                     mIsWinBollClientThreadRunning = true;
 
-                    ToastUtils.show("run()");
+                    LogUtils.d(TAG, "WinBollClientThread run()");
 
                     // 唤醒守护进程
                     //wakeupAndBindAssistant();
@@ -178,7 +178,7 @@ public class WinBollClientService extends Service implements IWinBollClientServi
                         username = "WinBoll";
                         password = "WinBollPowerByZhanGSKen";
                     }
-                    targetUrl = "https://" + (GlobalApplication.isDebuging() ?"dev": "www") + ".winboll.cc/api"; // 替换为实际测试的URL
+                    targetUrl = "https://" + (GlobalApplication.isDebuging() ?"dev.winboll": "winboll") + ".cc/api/"; // 替换为实际测试的URL
                     
                     while (mIsEnableService) {
                         // 显示运行状态
