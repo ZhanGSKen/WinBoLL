@@ -7,7 +7,7 @@ package cc.winboll.studio.contacts;
  */
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.app.WinBollActivityManager;
+import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
 import com.hjq.toast.ToastUtils;
 
 public class App extends GlobalApplication {
@@ -18,7 +18,7 @@ public class App extends GlobalApplication {
     public void onCreate() {
         // 必须在调用基类前设置应用调试标志，
         // 这样可以预先设置日志与数据的存储根目录。
-        setIsDebuging(this, BuildConfig.DEBUG);
+        setIsDebuging(BuildConfig.DEBUG);
         super.onCreate();
         // 设置 WinBoll 应用 UI 类型
         WinBollActivityManager.getInstance(this).setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Aplication);

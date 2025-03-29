@@ -19,14 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.beans.PhoneConnectRuleModel;
 import cc.winboll.studio.contacts.dun.Rules;
+import cc.winboll.studio.contacts.views.LeftScrollView;
+import cc.winboll.studio.libappbase.dialogs.YesNoAlertDialog;
+import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
-import android.widget.LinearLayout;
-import android.view.MotionEvent;
-import android.widget.HorizontalScrollView;
-import cc.winboll.studio.contacts.views.LeftScrollView;
-import com.hjq.toast.ToastUtils;
-import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
 
 public class PhoneConnectRuleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

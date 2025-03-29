@@ -33,6 +33,9 @@
     <!-- 读取通话记录 -->
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
 
+    <!-- 录音 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"

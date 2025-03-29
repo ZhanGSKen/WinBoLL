@@ -34,9 +34,9 @@ import cc.winboll.studio.contacts.bobulltoon.TomCat;
 import cc.winboll.studio.contacts.dun.Rules;
 import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.contacts.views.DuInfoTextView;
+import cc.winboll.studio.libaes.winboll.APPInfo;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
-import cc.winboll.studio.libapputils.bean.APPInfo;
+import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import com.hjq.toast.ToastUtils;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -68,11 +68,6 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
     private List<PhoneConnectRuleModel> ruleList;
 
     @Override
-    public APPInfo getAppInfo() {
-        return null;
-    }
-
-    @Override
     public AppCompatActivity getActivity() {
         return this;
     }
@@ -83,21 +78,6 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
     }
 
     @Override
-    public Toolbar initToolBar() {
-        return findViewById(R.id.activitymainToolbar1);
-    }
-
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return false;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
@@ -105,10 +85,8 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
         setSupportActionBar(mToolbar);
-        if (isEnableDisplayHomeAsUp()) {
-            // 显示后退按钮
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        // 显示后退按钮
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setSubtitle(getTag());
 
         mswMainService = findViewById(R.id.sw_mainservice);
@@ -232,7 +210,7 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
         Intent intent = new Intent(this, UnitTestActivity.class);
         startActivity(intent);
     }
-    
+
     public void onAddNewConnectionRule(View view) {
         Rules.getInstance(this).getPhoneBlacRuleBeanList().add(new PhoneConnectRuleModel());
         Rules.getInstance(this).saveRules();
@@ -267,8 +245,8 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
                 }
             }).start();
     }
-    
-    
+
+
 
     public void onSearchBoBullToonPhone(View view) {
         TomCat tomCat = TomCat.getInstance(this);

@@ -32,10 +32,10 @@ import cc.winboll.studio.contacts.fragments.CallLogFragment;
 import cc.winboll.studio.contacts.fragments.ContactsFragment;
 import cc.winboll.studio.contacts.fragments.LogFragment;
 import cc.winboll.studio.contacts.services.MainService;
+import cc.winboll.studio.libaes.winboll.APPInfo;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
-import cc.winboll.studio.libapputils.bean.APPInfo;
+import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,12 +70,12 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     private static final int DIALER_REQUEST_CODE = 1;
 
     @Override
-    public AppCompatActivity getActivity() {
+    public Activity getActivity() {
         return this;
     }
 
-    @Override
-    public APPInfo getAppInfo() {
+//    @Override
+//    public APPInfo getAppInfo() {
 //        String szBranchName = "contacts";
 //
 //        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
@@ -90,8 +90,8 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //        appInfo.setAppAPKName("Contacts");
 //        appInfo.setAppAPKFolderName("Contacts");
 //        return appInfo;
-        return null;
-    }
+//        return null;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,10 +105,10 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
         setSupportActionBar(mToolbar);
-        if (isEnableDisplayHomeAsUp()) {
-            // 显示后退按钮
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+//        if (isEnableDisplayHomeAsUp()) {
+//            // 显示后退按钮
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        }
         getSupportActionBar().setSubtitle(getTag());
         
         tabLayout = findViewById(R.id.tabLayout);
@@ -372,21 +372,6 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     @Override
     public String getTag() {
         return TAG;
-    }
-
-    @Override
-    public Toolbar initToolBar() {
-        return findViewById(R.id.activitymainToolbar1);
-    }
-
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return false;
     }
 
 //    @Override
