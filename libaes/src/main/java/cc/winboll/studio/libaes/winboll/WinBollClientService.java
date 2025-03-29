@@ -13,8 +13,10 @@ import android.content.ServiceConnection;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import cc.winboll.studio.libaes.winboll.AssistantService;
+import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.utils.ServiceUtils;
+import cc.winboll.studio.libapputils.utils.PrefUtils;
 import com.hjq.toast.ToastUtils;
 
 public class WinBollClientService extends Service implements IWinBollClientServiceBinder {
@@ -161,16 +163,40 @@ public class WinBollClientService extends Service implements IWinBollClientServi
                     // 设置运行状态
                     mIsWinBollClientThreadRunning = true;
 
-                    //ToastUtils.show("run()");
+                    ToastUtils.show("run()");
 
                     // 唤醒守护进程
                     //wakeupAndBindAssistant();
+                    String username = "";
+                    String password = "";
+                    String targetUrl= "";
 
+                    if (GlobalApplication.isDebuging()) {
+                        username = PrefUtils.getString(WinBollClientService.this, "metDevUserName", "");
+                        password = PrefUtils.getString(WinBollClientService.this, "metDevUserPassword", "");
+                    } else {
+                        username = "WinBoll";
+                        password = "WinBollPowerByZhanGSKen";
+                    }
+                    targetUrl = "https://" + (GlobalApplication.isDebuging() ?"dev": "www") + ".winboll.cc/api"; // 替换为实际测试的URL
+                    
                     while (mIsEnableService) {
                         // 显示运行状态
-                        ToastUtils.show(TAG + " is running.");
+                        LogUtils.d(TAG, String.format("targetUrl %s", targetUrl));
+
+                        WinBollServerConnectionTestThread testThread = new WinBollServerConnectionTestThread(
+                            targetUrl,
+                            username,
+                            password,
+                            15000,  // 连接超时15秒
+                            20000,  // 读取超时20秒
+                            3       // 最大重试次数
+                        );
+
+                        testThread.start();
+
                         try {
-                            Thread.sleep(2 * 1000);
+                            Thread.sleep(60 * 1000);
                         } catch (InterruptedException e) {
                             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
                         }

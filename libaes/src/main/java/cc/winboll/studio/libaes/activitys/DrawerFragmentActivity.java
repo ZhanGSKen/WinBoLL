@@ -27,6 +27,7 @@ import cc.winboll.studio.libaes.beans.AESThemeBean;
 import cc.winboll.studio.libaes.beans.DrawerMenuBean;
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
 import cc.winboll.studio.libaes.views.ADrawerMenuListView;
+import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import com.baoyz.widget.PullRefreshLayout;
@@ -175,6 +176,8 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
             for (int i = Integer.MIN_VALUE; i < Integer.MAX_VALUE; i++) {
                 getString(i);
             }
+        } else if (R.id.item_log == item.getItemId()) {
+            GlobalApplication.getWinBollActivityManager().startLogActivity(this);
         } else if (R.id.item_about == item.getItemId()) {
             LogUtils.d(TAG, "onAbout");
         } else if (android.R.id.home == item.getItemId()) {
