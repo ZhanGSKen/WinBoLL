@@ -13,6 +13,7 @@ import android.widget.ScrollView;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
+import cc.winboll.studio.mymessagemanager.App;
 import cc.winboll.studio.mymessagemanager.BuildConfig;
 import cc.winboll.studio.mymessagemanager.R;
 import cc.winboll.studio.mymessagemanager.activitys.MainActivity;
@@ -42,7 +43,7 @@ public class MainActivity extends BaseActivity {
     public static final int MY_PERMISSIONS_REQUEST = 0;
 
     static MainActivity _mMainActivity;
-    LogView mLogView;
+    //LogView mLogView;
     AppConfigUtil mAppConfigUtil;
     ConfirmSwitchView msvEnableService;
     ConfirmSwitchView msvOnlyReceiveContacts;
@@ -118,8 +119,8 @@ public class MainActivity extends BaseActivity {
     //
     void initView() {
         // 设置调试日志
-        mLogView = findViewById(R.id.logview);
-        mLogView.start();
+//        mLogView = findViewById(R.id.logview);
+//        mLogView.start();
 
         // 设置消息处理函数
         setOnActivityMessageReceived(mIOnActivityMessageReceived);
@@ -267,7 +268,7 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         reloadSMS();
-        mLogView.start();
+        //mLogView.start();
     }
 
     @Override
@@ -310,7 +311,9 @@ public class MainActivity extends BaseActivity {
             Intent i = new Intent(MainActivity.this, AppSettingsActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
-		} else if (nItemId ==  R.id.app_unittest) {
+		} else if (nItemId ==  R.id.app_log) {
+            App.getWinBollActivityManager().startLogActivity(this);
+        } else if (nItemId ==  R.id.app_unittest) {
             Intent i = new Intent(MainActivity.this, UnitTestActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(i);

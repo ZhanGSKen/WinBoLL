@@ -29,7 +29,7 @@ public class App extends GlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        //setIsDebuging(BuildConfig.DEBUG);
+        setIsDebuging(BuildConfig.DEBUG);
 
         // 初始化 Toast 框架
         ToastUtils.init(this);
