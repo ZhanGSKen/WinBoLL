@@ -5,19 +5,26 @@
 
     <application>
 
-        <activity android:name="cc.winboll.studio.libaes.unittests.SecondaryLibraryActivity"/>
+        <activity android:name="cc.winboll.studio.libaes.unittests.SecondaryLibraryActivity"
+            android:exported="true"/>
 
-        <activity android:name="cc.winboll.studio.libaes.unittests.TestDrawerFragmentActivity"/>
+        <activity android:name="cc.winboll.studio.libaes.unittests.TestDrawerFragmentActivity"
+            android:exported="true"/>
 
-        <activity android:name="cc.winboll.studio.libaes.unittests.TestAToolbarActivity"/>
+        <activity android:name="cc.winboll.studio.libaes.unittests.TestAToolbarActivity"
+            android:exported="true"/>
 
-        <activity android:name="cc.winboll.studio.libaes.unittests.TestASupportToolbarActivity"/>
+        <activity android:name="cc.winboll.studio.libaes.unittests.TestASupportToolbarActivity"
+            android:exported="true"/>
 
-        <service android:name="cc.winboll.studio.libaes.winboll.WinBollClientService"/>
+        <service android:name="cc.winboll.studio.libaes.winboll.WinBollClientService"
+            android:exported="true"/>
 
-        <service android:name="cc.winboll.studio.libaes.winboll.AssistantService"/>
+        <service android:name="cc.winboll.studio.libaes.winboll.AssistantService"
+            android:exported="true"/>
 
-        <service android:name="cc.winboll.studio.libaes.winboll.WinBollMail"/>
+        <service android:name="cc.winboll.studio.libaes.winboll.WinBollMail"
+            android:exported="true"/>
 
     </application>
 
