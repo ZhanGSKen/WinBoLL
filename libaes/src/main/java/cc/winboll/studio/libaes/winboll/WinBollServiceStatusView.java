@@ -218,7 +218,7 @@ public class WinBollServiceStatusView extends LinearLayout {
             String msg = "ClientIP<" + formattedDateTime + ">: " + text;
             mWinBollServiceViewHandler.postMessageText(msg);
             mWinBollServiceViewHandler.postMessageConnectionStatus(true);
-            
+
         }
 
         @Override
@@ -263,91 +263,91 @@ public class WinBollServiceStatusView extends LinearLayout {
     }
 
     /*void requestWithBasicAuth(final WinBollServiceViewHandler textViewHandler, String targetUrl, final String username, final String password) {
-        // 用户名和密码，替换为实际的认证信息
-        //String username = "your_username";
-        //String password = "your_password";
-        LogUtils.d(TAG, "requestWithBasicAuth(...)");
-        LogUtils.d(TAG, String.format("targetUrl %s", targetUrl));
+     // 用户名和密码，替换为实际的认证信息
+     //String username = "your_username";
+     //String password = "your_password";
+     LogUtils.d(TAG, "requestWithBasicAuth(...)");
+     LogUtils.d(TAG, String.format("targetUrl %s", targetUrl));
 
-        // 构建包含认证信息的请求
-        String credential = Credentials.basic(username, password);
-        LogUtils.d(TAG, String.format("credential %s", credential));
+     // 构建包含认证信息的请求
+     String credential = Credentials.basic(username, password);
+     LogUtils.d(TAG, String.format("credential %s", credential));
 
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-            .url(targetUrl)
-            .header("Accept", "text/plain") // 设置正确的Content-Type头
-            .header("Authorization", credential)
-            .build();
+     OkHttpClient client = new OkHttpClient();
+     Request request = new Request.Builder()
+     .url(targetUrl)
+     .header("Accept", "text/plain") // 设置正确的Content-Type头
+     .header("Authorization", credential)
+     .build();
 
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    // 处理网络请求失败
-                    setImageViewByConnection(mImageView, false);
-                    textViewHandler.postMessageText(e.getMessage());
-                    textViewHandler.postMessageConnectionStatus(false);
-                    LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-                    //String sz = "请求失败，状态码: " + response.code();
-                    //setImageViewByConnection(mImageView, false);
-                    //LogUtils.d(TAG, sz);
-                }
+     Call call = client.newCall(request);
+     call.enqueue(new Callback() {
+     @Override
+     public void onFailure(Call call, IOException e) {
+     // 处理网络请求失败
+     setImageViewByConnection(mImageView, false);
+     textViewHandler.postMessageText(e.getMessage());
+     textViewHandler.postMessageConnectionStatus(false);
+     LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+     //String sz = "请求失败，状态码: " + response.code();
+     //setImageViewByConnection(mImageView, false);
+     //LogUtils.d(TAG, sz);
+     }
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (!response.isSuccessful()) {
-                        setImageViewByConnection(mImageView, false);
-                        textViewHandler.postMessageText("Unexpected code " + response);
-                        textViewHandler.postMessageConnectionStatus(false);
-                        LogUtils.d(TAG, "Unexpected code " + response, Thread.currentThread().getStackTrace());
-                        return;
-                    }
+     @Override
+     public void onResponse(Call call, Response response) throws IOException {
+     if (!response.isSuccessful()) {
+     setImageViewByConnection(mImageView, false);
+     textViewHandler.postMessageText("Unexpected code " + response);
+     textViewHandler.postMessageConnectionStatus(false);
+     LogUtils.d(TAG, "Unexpected code " + response, Thread.currentThread().getStackTrace());
+     return;
+     }
 
-                    try {
-                        // 读取响应体作为字符串，注意这里可能需要解码
-                        String text = response.body().string();
-                        LogUtils.d(TAG, "Develop Host Connection IP is : " + text);
-                        mConnectionStatus = ConnectionStatus.CONNECTED;
-                        // 获取当前时间
-                        LocalDateTime now = LocalDateTime.now();
-                        // 定义时间格式
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-                        // 按照指定格式格式化时间并输出
-                        String formattedDateTime = now.format(formatter);
-                        textViewHandler.postMessageText("ClientIP<" + formattedDateTime + ">: " + text);
-                        textViewHandler.postMessageConnectionStatus(true);
+     try {
+     // 读取响应体作为字符串，注意这里可能需要解码
+     String text = response.body().string();
+     LogUtils.d(TAG, "Develop Host Connection IP is : " + text);
+     mConnectionStatus = ConnectionStatus.CONNECTED;
+     // 获取当前时间
+     LocalDateTime now = LocalDateTime.now();
+     // 定义时间格式
+     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+     // 按照指定格式格式化时间并输出
+     String formattedDateTime = now.format(formatter);
+     textViewHandler.postMessageText("ClientIP<" + formattedDateTime + ">: " + text);
+     textViewHandler.postMessageConnectionStatus(true);
 
-                        //org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(text);
-                        //LogUtils.d(TAG, doc.text());
+     //org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(text);
+     //LogUtils.d(TAG, doc.text());
 
-                        // 使用id选择器找到具有特定id的元素
-                        //org.jsoup.nodes.Element elementWithId = doc.select("#LastRelease").first(); // 获取第一个匹配的元素
+     // 使用id选择器找到具有特定id的元素
+     //org.jsoup.nodes.Element elementWithId = doc.select("#LastRelease").first(); // 获取第一个匹配的元素
 
-                        // 提取并打印元素的文本内容
-                        //mszNewestAppPackageName = elementWithId.text();
-                        //ToastUtils.delayedShow(text + "\n" + mszNewestAppPackageName, 5000);
+     // 提取并打印元素的文本内容
+     //mszNewestAppPackageName = elementWithId.text();
+     //ToastUtils.delayedShow(text + "\n" + mszNewestAppPackageName, 5000);
 
-                        //mHandler.sendMessage(mHandler.obtainMessage(MSG_APPUPDATE_CHECKED));
-                        //System.out.println(response.body().string());
-                        //                        mConnectionStatus = ConnectionStatus.CONNECTED;
-                        //                        // 获取当前时间
-                        //                        LocalDateTime now = LocalDateTime.now();
-                        //
-                        //                        // 定义时间格式
-                        //                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-                        //                        // 按照指定格式格式化时间并输出
-                        //                        String formattedDateTime = now.format(formatter);
-                        //                        //System.out.println(formattedDateTime);
-                        //                        textViewHandler.postMessageText("ClientIP<" + formattedDateTime + ">: " + response.body().string());
-                        //                        textViewHandler.postMessageConnectionStatus(true);
-                    } catch (Exception e) {
-                        LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-                    }
-                }
-            });
+     //mHandler.sendMessage(mHandler.obtainMessage(MSG_APPUPDATE_CHECKED));
+     //System.out.println(response.body().string());
+     //                        mConnectionStatus = ConnectionStatus.CONNECTED;
+     //                        // 获取当前时间
+     //                        LocalDateTime now = LocalDateTime.now();
+     //
+     //                        // 定义时间格式
+     //                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+     //                        // 按照指定格式格式化时间并输出
+     //                        String formattedDateTime = now.format(formatter);
+     //                        //System.out.println(formattedDateTime);
+     //                        textViewHandler.postMessageText("ClientIP<" + formattedDateTime + ">: " + response.body().string());
+     //                        textViewHandler.postMessageConnectionStatus(true);
+     } catch (Exception e) {
+     LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+     }
+     }
+     });
 
-    }*/
+     }*/
 
     class WinBollServiceViewHandler extends Handler {
         WinBollServiceStatusView mDevelopHostConnectionStatusView;
@@ -399,26 +399,26 @@ public class WinBollServiceStatusView extends LinearLayout {
             mConnectionStatus = ConnectionStatus.START_CONNECT;
             LogUtils.d(TAG, "startConnectionThread");
             if (mConnectionThread != null) {
+                LogUtils.d(TAG, "mConnectionThread != null");
                 mConnectionThread.mIsExist = true;
             }
             mConnectionThread = new ConnectionThread();
             mConnectionThread.start();
         } else if (mConnectionStatus == ConnectionStatus.CONNECTING) {
             //LogUtils.d(TAG, "mConnectionStatus == ConnectionStatus.CONNECTING");
+        } else if (mConnectionStatus == ConnectionStatus.CONNECTED) {
+            //LogUtils.d(TAG, "mConnectionStatus == ConnectionStatus.CONNECTED");
         } else {
-            LogUtils.d(TAG, "Unknow mConnectionStatus, can not start ConnectionThread.");
+            LogUtils.d(TAG, String.format("Unknow mConnectionStatus %s, can not start ConnectionThread.", mConnectionStatus));
         }
     }
 
     void stopConnectionThread() {
-        if (mConnectionStatus == ConnectionStatus.CONNECTED) {
-            LogUtils.d(TAG, "stopConnectionThread");
-            if (mConnectionThread != null) {
-                mConnectionThread.mIsExist = true;
-                mConnectionThread = null;
-            }
-        } else {
-            LogUtils.d(TAG, "Unknow mConnectionStatus, can not start ConnectionThread.");
+        LogUtils.d(TAG, "stopConnectionThread");
+        if (mConnectionThread != null) {
+            LogUtils.d(TAG, "mConnectionThread != null");
+            mConnectionThread.mIsExist = true;
+            mConnectionThread = null;
         }
     }
 

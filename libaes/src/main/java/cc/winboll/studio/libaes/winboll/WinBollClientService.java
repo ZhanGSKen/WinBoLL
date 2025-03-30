@@ -171,13 +171,13 @@ public class WinBollClientService extends Service implements IWinBollClientServi
                     while (mIsEnableService) {
                         // 显示运行状态
                         WinBollServiceStatusView.startConnection();
-
+                        LogUtils.d(TAG, String.format("while mIsEnableService is %s", mIsEnableService));
+                        
                         try {
                             Thread.sleep(10 * 1000);
                         } catch (InterruptedException e) {
                             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
                         }
-                        LogUtils.d(TAG, "while syncWinBollClientThreadStatus");
                         syncWinBollClientThreadStatus();
                     }
 
