@@ -86,6 +86,7 @@ public class MainActivity extends WinBollActivityBase implements IWinBollActivit
 	public void onSwitchDebugMode(View view) {
         boolean isDebuging = ((CheckBox)view).isChecked();
         GlobalApplication.setIsDebuging(isDebuging);
+        GlobalApplication.saveDebugStatus();
     }
    
     public void onPreviewGlobalCrashActivity(View view) {
