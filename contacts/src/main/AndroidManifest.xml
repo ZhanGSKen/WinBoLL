@@ -188,6 +188,8 @@
 
         <activity android:name="cc.winboll.studio.contacts.activities.UnitTestActivity"/>
 
+        <activity android:name="cc.winboll.studio.contacts.activities.AboutActivity"/>
+
     </application>
 
 </manifest>

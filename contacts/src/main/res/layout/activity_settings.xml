@@ -282,6 +282,25 @@
 
 			</LinearLayout>
 
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="其他："/>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="right">
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="关于应用"
+					android:onClick="onAbout"/>
+
+			</LinearLayout>
+
 		</LinearLayout>
 
 	</LinearLayout>

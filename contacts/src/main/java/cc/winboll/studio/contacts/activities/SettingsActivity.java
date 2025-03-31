@@ -40,6 +40,7 @@ import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import com.hjq.toast.ToastUtils;
 import java.lang.reflect.Field;
 import java.util.List;
+import cc.winboll.studio.contacts.App;
 
 public class SettingsActivity extends AppCompatActivity implements IWinBollActivity {
 
@@ -309,5 +310,9 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
                 Toast.makeText(this, "请在悬浮窗管理中打开权限", Toast.LENGTH_LONG).show();
             }
         }
+    }
+    
+    public void onAbout(View view) {
+        App.getWinBollActivityManager().startWinBollActivity(this, AboutActivity.class);
     }
 }
