@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">PowerBell</string>
     <string name="app_projectname">PowerBell</string>
-    <string name="app_description">Mobile phone power change ringtone alert app.</string>
+    <string name="app_description">A mobile app that receives battery level information from a phone and alerts the user when the battery level reaches a predefined range.</string>
     <string name="about_crashed">This application has crashed, the author level is limited, please understand!</string>
     <string name="item_mainview">Main View</string>
     <string name="item_aboutview">About</string>

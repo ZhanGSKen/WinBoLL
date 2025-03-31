@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">能源钟</string>
-    <string name="app_description">手机电量变化铃声提醒应用。</string>
+    <string name="app_description">一个接收手机电量信息的应用，当电量值达到设定范围时会提醒用户。</string>
     <string name="about_crashed">本应用崩溃了，作者水平有限，敬请谅解！</string>
     <string name="item_mainview">Main View</string>
     <string name="item_aboutview">About</string>
