@@ -5,10 +5,10 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<android.widget.Toolbar
+	<android.support.v7.widget.Toolbar
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:id="@+id/activitymainToolbar1"/>
+		android:id="@+id/toolbar"/>
 
 	<ScrollView
 		android:layout_width="match_parent"
@@ -39,28 +39,41 @@
 					android:layout_height="wrap_content"
 					android:text="Android版本10的代号是“Q”，API级别是29。   Android 10开始谷歌不再公开使用甜品作为版本代号，但内部仍保留了大量与“Q”相关的元素。Android 10本身并没有严格对应某个特定的Java版本，但在开发Android 10应用时，通常可以使用Java 8或更高版本。   Java 8为Android开发带来了诸如Lambda表达式、方法引用等新特性，能提高开发效率和代码可读性，与Android 10开发适配良好。Java 9及更高版本也可用于Android 10开发，能使用一些新的语言特性和API，但可能需要注意兼容性和配置问题。"/>
 
-				<LinearLayout
-					android:orientation="horizontal"
+				<HorizontalScrollView
 					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:gravity="right|center_vertical">
+					android:layout_height="wrap_content">
 
-					<CheckBox
-						android:layout_width="wrap_content"
+					<LinearLayout
+						android:orientation="horizontal"
 						android:layout_height="wrap_content"
-						android:text="Debug Mode"
-						android:layout_weight="1.0"
-						android:onClick="onSwitchDebugMode"
-						android:id="@+id/activitymainCheckBox1"/>
+						android:gravity="right|center_vertical"
+						android:layout_width="wrap_content">
 
-					<Button
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Test Application CrashReport"
-						android:textAllCaps="false"
-						android:onClick="onTestApplicationCrashReport"/>
+						<CheckBox
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="Debug Mode"
+							android:layout_weight="1.0"
+							android:onClick="onSwitchDebugMode"
+							android:id="@+id/activitymainCheckBox1"/>
 
-				</LinearLayout>
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="Test Application CrashReport"
+							android:textAllCaps="false"
+							android:onClick="onTestApplicationCrashReport"/>
+
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="PreviewGlobalCrashActivity"
+							android:textAllCaps="false"
+							android:onClick="onPreviewGlobalCrashActivity"/>
+
+					</LinearLayout>
+
+				</HorizontalScrollView>
 
 				<ScrollView
 					android:layout_width="match_parent"
@@ -72,26 +85,27 @@
 						android:layout_height="wrap_content"
 						android:gravity="right">
 
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+						<LinearLayout
+							android:orientation="horizontal"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content">
 
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="StartCenter"
-                                android:textAllCaps="false"
-                                android:onClick="onStartCenter"/>
+							<Button
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="StartCenter"
+								android:textAllCaps="false"
+								android:onClick="onStartCenter"/>
 
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="StopCenter"
-                                android:textAllCaps="false"
-                                android:onClick="onStopCenter"/>
-                        </LinearLayout>
-                        
+							<Button
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="StopCenter"
+								android:textAllCaps="false"
+								android:onClick="onStopCenter"/>
+
+						</LinearLayout>
+
 						<HorizontalScrollView
 							android:layout_width="match_parent"
 							android:layout_height="wrap_content">
@@ -160,7 +174,6 @@
 
 						</HorizontalScrollView>
 
-
 						<Button
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
@@ -182,6 +195,13 @@
 							android:textAllCaps="false"
 							android:onClick="onTestDemoServiceSOS"/>
 
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="TestOpenNewActivity"
+							android:textAllCaps="false"
+							android:onClick="onTestOpenNewActivity"/>
+
 					</LinearLayout>
 
 				</ScrollView>
@@ -191,11 +211,6 @@
 		</LinearLayout>
 
 	</ScrollView>
-
-	<cc.winboll.studio.libappbase.LogView
-		android:layout_height="300dp"
-		android:layout_width="match_parent"
-		android:id="@+id/activitymainLogView1"/>
 
 </LinearLayout>
 

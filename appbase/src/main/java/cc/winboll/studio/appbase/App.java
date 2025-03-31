@@ -19,7 +19,6 @@ public class App extends GlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        GlobalApplication.setIsDebuging(this, BuildConfig.DEBUG);
         mSOSCenterServiceReceiver = new SOSCenterServiceReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SOS.ACTION_SOS);

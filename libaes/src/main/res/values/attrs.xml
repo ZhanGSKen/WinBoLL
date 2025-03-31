@@ -32,6 +32,13 @@
         <attr name="attrASupportToolbarEndColor"/>
     </declare-styleable>
     
+    <declare-styleable name="AButton">
+        <attr name="attrAButtonTextColor" format="color" />
+        <attr name="attrAButtonPrimary" format="color" />
+        <attr name="attrAButtonPrimaryDark" format="color" />
+        <attr name="attrAButtonAccent" format="color" />
+    </declare-styleable>
+    
     <attr name="ActionSheetList" format="reference"/>
     <!--<declare-styleable name="AToolbarStyle">
 		<attr name="attrAToolbarStartColor" format="color" />

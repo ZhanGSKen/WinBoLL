@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="APPBaseTheme" parent="@android:style/Theme.Holo.Light.NoActionBar">
+    <style name="APPBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="themeGlobalCrashActivity">@style/GlobalCrashActivityTheme</item>
     </style>
 
