@@ -282,6 +282,7 @@ public class AboutView extends LinearLayout {
             //intent.setAction(cc.winboll.studio.libapputils.intent.action.DEBUGVIEW);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             GlobalApplication.setIsDebuging(true);
+            GlobalApplication.saveDebugStatus();
 
             GlobalApplication.getWinBollActivityManager().finishAll();
             context.startActivity(intent);
@@ -293,6 +294,7 @@ public class AboutView extends LinearLayout {
         if (intent != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             GlobalApplication.setIsDebuging(false);
+            GlobalApplication.saveDebugStatus();
 
             GlobalApplication.getWinBollActivityManager().finishAll();
             context.startActivity(intent);

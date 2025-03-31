@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import cc.winboll.studio.libaes.beans.AESThemeBean;
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import android.view.MenuItem;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
@@ -46,5 +47,14 @@ public class WinBollActivity extends AppCompatActivity implements IWinBollActivi
     void setThemeStyle() {
         //setTheme(AESThemeBean.getThemeStyle(getThemeType()));
         setTheme(AESThemeUtil.getThemeTypeID(getApplicationContext()));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
