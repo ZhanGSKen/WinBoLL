@@ -1,7 +1,5 @@
 package cc.winboll.studio.contacts.phonecallui;
 
-import static cc.winboll.studio.contacts.listenphonecall.CallListenerService.formatPhoneNumber;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -10,15 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 import cc.winboll.studio.contacts.ActivityStack;
+import cc.winboll.studio.contacts.MainActivity;
 import cc.winboll.studio.contacts.R;
-
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static cc.winboll.studio.contacts.listenphonecall.CallListenerService.formatPhoneNumber;
 
 
 /**
@@ -157,6 +155,7 @@ public class PhoneCallActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //MainActivity.updateCallLogFragment();
         phoneCallManager.destroy();
     }
 }

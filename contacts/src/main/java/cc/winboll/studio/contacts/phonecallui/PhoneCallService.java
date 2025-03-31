@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi;
 import cc.winboll.studio.contacts.ActivityStack;
 import cc.winboll.studio.contacts.beans.RingTongBean;
 import cc.winboll.studio.contacts.dun.Rules;
+import cc.winboll.studio.contacts.fragments.CallLogFragment;
 import cc.winboll.studio.libappbase.LogUtils;
 import java.io.File;
 import java.io.IOException;
@@ -147,6 +148,12 @@ public class PhoneCallService extends InCallService {
         super.onCallRemoved(call);
         call.unregisterCallback(callback);
         PhoneCallManager.call = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        CallLogFragment.updateCallLogFragment();
     }
 
     public enum CallType {

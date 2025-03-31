@@ -66,6 +66,8 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 
     private TelephonyManager telephonyManager;
     private MyPhoneStateListener phoneStateListener;
+    List<Fragment> fragmentList;
+    List<String> tabTitleList;
 
     private static final int DIALER_REQUEST_CODE = 1;
 
@@ -110,13 +112,13 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        }
         getSupportActionBar().setSubtitle(getTag());
-        
+
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
 
         // 创建Fragment列表和标题列表
-        List<Fragment> fragmentList = new ArrayList<>();
-        List<String> tabTitleList = new ArrayList<>();
+        fragmentList = new ArrayList<>();
+        tabTitleList = new ArrayList<>();
         fragmentList.add(CallLogFragment.newInstance(0));
         fragmentList.add(ContactsFragment.newInstance(1));
         fragmentList.add(LogFragment.newInstance(2));
@@ -130,7 +132,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 
         // 关联TabLayout和ViewPager
         tabLayout.setupWithViewPager(viewPager);
-    
+
 
 
 //        initData();
@@ -175,7 +177,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         phoneStateListener = new MyPhoneStateListener();
         telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
     }
-    
+
 
     // ViewPager的适配器
     private class MyPagerAdapter extends FragmentPagerAdapter {
