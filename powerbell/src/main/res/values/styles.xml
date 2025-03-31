@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme_Base" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+    <style name="AppTheme_Base" parent="AESTheme">
         <!-- Customize your theme here. -->
     </style>
-    <style name="AppTheme_Default" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+    <style name="AppTheme_Default" parent="AESTheme">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
