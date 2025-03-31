@@ -17,5 +17,5 @@
         android:layout_height="0dp"
         android:layout_weight="1.0"
         android:id="@+id/aboutviewroot_ll"/>
-
+    
 </LinearLayout>
