@@ -25,7 +25,7 @@
     <color name="colorShuiDark">#FF0072A4</color>
     <color name="colorShuiAccent">#FF33C1FF</color>
     <color name="colorXinling">#FFFCC500</color>
-    <color name="colorPrimary">@color/colorShui</color>
+    <color name="colorPrimary">@color/colorShuiDark</color>
     <color name="colorPrimaryDark">@color/colorFeng</color>
     <color name="colorAccent">@color/colorShui</color>
     <color name="colorYellow">#FFFFFF00</color>
