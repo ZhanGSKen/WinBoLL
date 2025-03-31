@@ -13,7 +13,7 @@
     <item
         android:id="@+id/item_localfileselectdialog"
         android:title="LocalFileSelectDialog"/>
-    
+
     <item
         android:id="@+id/item_atoolbar"
         android:title="Test AToolbar"/>
