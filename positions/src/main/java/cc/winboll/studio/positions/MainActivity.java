@@ -14,34 +14,28 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
-import cc.winboll.studio.libapputils.app.WinBollActivityManager;
-import cc.winboll.studio.libapputils.bean.APPInfo;
-import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
+import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import cc.winboll.studio.positions.R;
+import cc.winboll.studio.positions.activities.AbsActivity;
 import cc.winboll.studio.positions.activities.JointPositioningActivity;
 import cc.winboll.studio.positions.activities.SettingsActivity;
-import cc.winboll.studio.positions.models.MainServiceBean;
 import cc.winboll.studio.positions.fragments.LogFragment;
 import cc.winboll.studio.positions.fragments.PositionsFragment;
 import cc.winboll.studio.positions.fragments.TXMSFragment;
 import cc.winboll.studio.positions.fragments.TasksFragment;
+import cc.winboll.studio.positions.models.MainServiceBean;
 import com.google.android.material.tabs.TabLayout;
-//import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
-import cc.winboll.studio.positions.activities.AbsActivity;
-import android.widget.Toolbar;
-import cc.winboll.studio.libappbase.utils.ToastUtils;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 
 final public class MainActivity extends AbsActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
@@ -51,11 +45,11 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
     public static final int REQUEST_ABOUT_ACTIVITY = 1;
 
     public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
-    
+
     // 创建Fragment列表和标题列表
     List<Fragment> fragmentList = new ArrayList<>();
     List<String> tabTitleList = new ArrayList<>();
-    
+
     TXMSFragment mTXMSFragment;
     PositionsFragment mPositionsFragment;
     TasksFragment mTasksFragment;
@@ -75,26 +69,6 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
     int currentPoint = 0;//当前被选中中页面的下标
 
     private static final int DIALER_REQUEST_CODE = 1;
-
-
-    @Override
-    public APPInfo getAppInfo() {
-//        String szBranchName = "positions";
-//
-//        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
-//        appInfo.setAppName("Positions");
-//        appInfo.setAppIcon(cc.winboll.studio.libapputils.R.drawable.ic_winboll);
-//        appInfo.setAppDescription("Positions Description");
-//        appInfo.setAppGitName("APP");
-//        appInfo.setAppGitOwner("Studio");
-//        appInfo.setAppGitAPPBranch(szBranchName);
-//        appInfo.setAppGitAPPSubProjectFolder(szBranchName);
-//        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=Positions");
-//        appInfo.setAppAPKName("Positions");
-//        appInfo.setAppAPKFolderName("Positions");
-//        return appInfo;
-        return null;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,17 +102,17 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
         mPositionsFragment = new PositionsFragment();
         fragmentList.add(mPositionsFragment);
         tabTitleList.add("位置");
-        
+
         mTasksFragment = new TasksFragment();
         fragmentList.add(mTasksFragment);
         tabTitleList.add("任务");
-        
-        
+
+
         mLogFragment = new LogFragment();
         fragmentList.add(mLogFragment);
         tabTitleList.add("日志");
-        
-        
+
+
 
         // 设置ViewPager的适配器
         MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
@@ -174,7 +148,7 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
             return tabTitleList.get(position);
         }
     }
-    
+
     //初始化view，即显示的图片
 //    void initViewPager() {
 //        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
@@ -272,19 +246,8 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
     }
 
     @Override
-    public Toolbar initToolBar() {
-        return null;
-        //return findViewById(R.id.toolbar);
-    }
-
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return false;
+    public Activity getActivity() {
+        return this;
     }
 
     @Override
