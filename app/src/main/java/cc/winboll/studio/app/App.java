@@ -5,20 +5,17 @@ package cc.winboll.studio.app;
  * @Date 2024/12/08 15:10:51
  * @Describe 全局应用类
  */
-import cc.winboll.studio.shared.app.WinBollApplication;
-import cc.winboll.studio.shared.log.LogUtils;
+import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
 
-public class App extends WinBollApplication {
+public class App extends GlobalApplication {
 
     public static final String TAG = "App";
 
     @Override
     public void onCreate() {
-        // 必须在调用基类前设置应用调试标志，
-        // 这样可以预先设置日志与数据的存储根目录。
-        //setIsDebug(BuildConfig.DEBUG);
         super.onCreate();
-        LogUtils.d(TAG, "onCreate");
+        getWinBollActivityManager().setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
     }
-
 }
