@@ -7,75 +7,88 @@ package cc.winboll.studio.libappbase;
  */
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
+import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
+import cc.winboll.studio.libappbase.winboll.MyActivityLifecycleCallbacks;
 
 public class GlobalApplication extends Application {
 
     public static final String TAG = "GlobalApplication";
 
-    final static String PREFS = GlobalApplication.class.getName() + "PREFS";
-    final static String PREFS_ISDEBUGING = "PREFS_ISDEBUGING";
-
-
-    private static Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
-
+    volatile static GlobalApplication _GlobalApplication;
     // 是否处于调试状态
     volatile static boolean isDebuging = false;
+    MyActivityLifecycleCallbacks mMyActivityLifecycleCallbacks;
 
-    public static void setIsDebuging(Context context, boolean isDebuging) {
+    public static void setIsDebuging(boolean isDebuging) {
         GlobalApplication.isDebuging = isDebuging;
-        // 获取SharedPreferences实例
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        // 获取编辑器
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        // 保存数据
-        editor.putBoolean(PREFS_ISDEBUGING, GlobalApplication.isDebuging);
-        // 提交更改
-        editor.apply();
+    }
+    
+    public static void saveDebugStatus() {
+        if (_GlobalApplication != null) {
+            APPBaseModel.saveBeanToFile(getAPPBaseModelFilePath(), new APPBaseModel(GlobalApplication.isDebuging));
+        }
+    }
+
+    public static GlobalApplication getInstance() {
+        return _GlobalApplication;
+    }
+
+    static String getAPPBaseModelFilePath() {
+        return _GlobalApplication.getDataDir().getPath() + "/APPBaseModel.json";
     }
 
     public static boolean isDebuging() {
         return isDebuging;
     }
 
-    @Override
-    public Context getApplicationContext() {
-        return super.getApplicationContext();
-    }
-
-    public Application getApplication() {
-        return this;
+    public static WinBollActivityManager getWinBollActivityManager() {
+        return WinBollActivityManager.getInstance(_GlobalApplication);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        //GlobalApplication.isDebuging = true;
-        //GlobalApplication.setIsDebuging(this, true);
+        // 保存初始实例
+        _GlobalApplication = this;
+        
+        setIsDebuging(true);
+        // 添加日志模块
         LogUtils.init(this);
         //LogUtils.setLogLevel(LogUtils.LOG_LEVEL.Debug);
         //LogUtils.setTAGListEnable(GlobalApplication.TAG, true);
         //LogUtils.setALlTAGListEnable(true);
         //LogUtils.d(TAG, "LogUtils init");
-
         // 设置应用异常处理窗口
         CrashHandler.init(this);
-
-        // 设置应用调试状态
-        //SharedPreferences sharedPreferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        //GlobalApplication.isDebuging = sharedPreferences.getBoolean(PREFS_ISDEBUGING, GlobalApplication.isDebuging);
-
         // 初始化 Toast 框架
         ToastUtils.init(this);
-        // 设置 Toast 布局样式
-        //ToastUtils.setView(R.layout.toast_custom_view);
-        //ToastUtils.setStyle(new WhiteToastStyle());
-        //ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
+
+        // 应用保存的调试标志
+        APPBaseModel appBaseModel = APPBaseModel.loadBeanFromFile(getAPPBaseModelFilePath(), APPBaseModel.class);
+        if (appBaseModel == null) {
+            setIsDebuging(false);
+            saveDebugStatus();
+        } else {
+            setIsDebuging(appBaseModel.isDebuging());
+        }
+        
+        getWinBollActivityManager().setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
+        // 注册窗口回调监听
+        mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
+        registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
+    }
+
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        // 注销回调（非必须，但建议释放资源）
+        unregisterActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);
     }
 
     public static String getAppName(Context context) {

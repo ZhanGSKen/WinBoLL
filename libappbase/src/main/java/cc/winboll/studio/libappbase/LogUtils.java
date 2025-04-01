@@ -220,7 +220,17 @@ public class LogUtils {
     }
 
     static boolean isLoggable(String tag, LOG_LEVEL logLevel) {
-        return _IsInited && mapTAGList.get(tag) && isInTheLevel(logLevel);
+        if (!_IsInited) {
+            return false;
+        } 
+        if (mapTAGList.get(tag) == null
+            || !mapTAGList.get(tag)) {
+            return false;
+        } 
+        if (!isInTheLevel(logLevel)) {
+            return false;
+        }
+        return true;
     }
 
     static boolean isInTheLevel(LOG_LEVEL logLevel) {

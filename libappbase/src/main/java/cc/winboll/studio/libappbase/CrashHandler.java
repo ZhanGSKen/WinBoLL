@@ -339,6 +339,7 @@ public final class CrashHandler {
                     int padding = dp2px(16);
                     message.setPadding(padding, padding, padding, padding);
                     message.setText(mLog);
+                    message.setTextColor(Color.BLACK);
                     message.setTextIsSelectable(true);
                 }
                 hw.addView(message);

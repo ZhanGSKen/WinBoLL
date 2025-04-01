@@ -1,13 +1,13 @@
-package cc.winboll.studio.appbase.widgets;
+package cc.winboll.studio.appbase.receivers;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/02/15 17:20:46
- * @Describe WidgetButtonClickListener
+ * @Date 2025/03/24 07:11:44
  */
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import cc.winboll.studio.appbase.widgets.APPNewsWidget;
 import cc.winboll.studio.libappbase.LogUtils;
 
 public class APPNewsWidgetClickListener extends BroadcastReceiver {

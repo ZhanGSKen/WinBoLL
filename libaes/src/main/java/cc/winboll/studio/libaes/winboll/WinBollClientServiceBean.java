@@ -1,22 +1,24 @@
-package cc.winboll.studio.appbase.beans;
+package cc.winboll.studio.libaes.winboll;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/02/13 07:06:13
+ * @Date 2025/03/28 19:05:15
+ * @Describe WinBollService 运行参数配置
  */
+import android.content.Context;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
-public class MainServiceBean extends BaseBean {
+public class WinBollClientServiceBean extends BaseBean {
 
-    public static final String TAG = "MainServiceBean";
+    public static final String TAG = "WinBollClientServiceBean";
 
-    boolean isEnable;
+    volatile boolean isEnable;
 
-    public MainServiceBean() {
-        this.isEnable = false;
+    public WinBollClientServiceBean() {
+        isEnable = false;
     }
 
     public void setIsEnable(boolean isEnable) {
@@ -29,14 +31,14 @@ public class MainServiceBean extends BaseBean {
 
     @Override
     public String getName() {
-        return MainServiceBean.class.getName();
+        return WinBollClientServiceBean.class.getName();
     }
 
     @Override
     public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
         super.writeThisToJsonWriter(jsonWriter);
-        jsonWriter.name("isEnable").value(isEnable());
-
+        WinBollClientServiceBean bean = this;
+        jsonWriter.name("isEnable").value(bean.isEnable());
     }
 
     @Override
@@ -63,5 +65,14 @@ public class MainServiceBean extends BaseBean {
         // 结束 JSON 对象
         jsonReader.endObject();
         return this;
+    }
+
+    public static WinBollClientServiceBean loadWinBollClientServiceBean(Context context) {
+        WinBollClientServiceBean bean = WinBollClientServiceBean.loadBean(context, WinBollClientServiceBean.class);
+        return bean == null ? new WinBollClientServiceBean() : bean;
+    }
+
+    public static boolean saveWinBollServiceBean(WinBollClientService service, WinBollClientServiceBean bean) {
+        return WinBollClientServiceBean.saveBean(service, bean);
     }
 }

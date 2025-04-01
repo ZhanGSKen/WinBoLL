@@ -1,50 +1,54 @@
-package cc.winboll.studio.appbase.beans;
+package cc.winboll.studio.appbase.models;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/03/07 12:49:21
- * @Describe TestDemoServiceBean
+ * @Date 2025/02/17 10:05:09
+ * @Describe APPSOSReportBean
  */
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
-public class TestDemoServiceBean extends BaseBean {
-
-    public static final String TAG = "TestDemoServiceBean";
-
-    boolean isEnable;
-
-    public TestDemoServiceBean() {
-        this.isEnable = false;
+public class WinBollNewsBean extends BaseBean {
+    
+    public static final String TAG = "WinBollNewsBean";
+    
+    protected String message;
+    
+    public WinBollNewsBean() {
+        this.message = "";
     }
 
-    public void setIsEnable(boolean isEnable) {
-        this.isEnable = isEnable;
+    public WinBollNewsBean(String message) {
+        this.message = message;
     }
 
-    public boolean isEnable() {
-        return isEnable;
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     @Override
     public String getName() {
-        return TestDemoServiceBean.class.getName();
+        return WinBollNewsBean.class.getName();
     }
 
     @Override
     public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
         super.writeThisToJsonWriter(jsonWriter);
-        jsonWriter.name("isEnable").value(isEnable());
+        jsonWriter.name("message").value(getMessage());
 
     }
 
     @Override
     public boolean initObjectsFromJsonReader(JsonReader jsonReader, String name) throws IOException {
         if (super.initObjectsFromJsonReader(jsonReader, name)) { return true; } else {
-            if (name.equals("isEnable")) {
-                setIsEnable(jsonReader.nextBoolean());
+            if (name.equals("message")) {
+                setMessage(jsonReader.nextString());
             } else {
                 return false;
             }

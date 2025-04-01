@@ -1,22 +1,21 @@
-package cc.winboll.studio.appbase.beans;
+package cc.winboll.studio.appbase.models;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
- * @Date 2025/03/07 12:47:22
- * @Describe TestServiceBean
+ * @Date 2025/02/13 07:06:13
  */
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
-public class TestDemoBindServiceBean extends BaseBean {
+public class MainServiceBean extends BaseBean {
 
-    public static final String TAG = "TestServiceBean";
+    public static final String TAG = "MainServiceBean";
 
     boolean isEnable;
 
-    public TestDemoBindServiceBean() {
+    public MainServiceBean() {
         this.isEnable = false;
     }
 
@@ -30,13 +29,14 @@ public class TestDemoBindServiceBean extends BaseBean {
 
     @Override
     public String getName() {
-        return TestDemoBindServiceBean.class.getName();
+        return MainServiceBean.class.getName();
     }
 
     @Override
     public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
         super.writeThisToJsonWriter(jsonWriter);
         jsonWriter.name("isEnable").value(isEnable());
+
     }
 
     @Override

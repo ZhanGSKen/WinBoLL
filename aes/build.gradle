@@ -19,17 +19,17 @@ def genVersionName(def versionName){
 
 android {
     compileSdkVersion 32
-    buildToolsVersion "33.0.3"
+    buildToolsVersion "32.0.0"
 
     defaultConfig {
         applicationId "cc.winboll.studio.aes"
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 29
         versionCode 1
         // versionName 更新后需要手动设置 
         // 项目模块目录的 build.gradle 文件的 stageCount=0
         // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
-        versionName "7.6" 
+        versionName "15.2" 
         if(true) {
             versionName = genVersionName("${versionName}")
         }
@@ -41,29 +41,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
 }
 
 dependencies {
 	api project(':libaes')
-    
-    //api 'cc.winboll.studio:winboll-shared:1.6.5'
-    api 'io.github.medyo:android-about-page:2.0.0'
-    api 'com.github.getActivity:ToastUtils:10.5'
-    api 'com.jcraft:jsch:0.1.55'
-    api 'org.jsoup:jsoup:1.13.1'
-    api 'com.squareup.okhttp3:okhttp:4.4.1'
-    
-    api 'androidx.appcompat:appcompat:1.0.0'
-    api 'androidx.fragment:fragment:1.0.0'
-    api 'com.google.android.material:material:1.0.0'
-    
-    api 'cc.winboll.studio:libapputils:9.2.1'
-    api 'cc.winboll.studio:libappbase:1.0.3'
-    
     api fileTree(dir: 'libs', include: ['*.jar'])
 }

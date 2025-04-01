@@ -9,11 +9,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.views.AButton;
-import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
+import com.hjq.toast.ToastUtils;
 
 public class TestAButtonFragment extends Fragment {
 
@@ -28,7 +28,7 @@ public class TestAButtonFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     LogUtils.d(TAG, "onClick");
-                    Toast.makeText(getActivity(), "AButton", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show("AButton");
                 }
 
             });
