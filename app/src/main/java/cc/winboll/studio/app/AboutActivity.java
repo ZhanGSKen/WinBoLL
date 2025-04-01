@@ -71,18 +71,18 @@ public class AboutActivity extends WinBollActivity implements IWinBollActivity {
     }
 
     public AboutView CreateAboutView() {
-        String szBranchName = "aes";
+        String szBranchName = "app";
         APPInfo appInfo = new APPInfo();
-        appInfo.setAppName("AES");
+        appInfo.setAppName("APP");
         appInfo.setAppIcon(cc.winboll.studio.libaes.R.drawable.ic_winboll);
-        appInfo.setAppDescription("AES Description");
+        appInfo.setAppDescription("WinBoll APP");
         appInfo.setAppGitName("APP");
         appInfo.setAppGitOwner("Studio");
         appInfo.setAppGitAPPBranch(szBranchName);
         appInfo.setAppGitAPPSubProjectFolder(szBranchName);
-        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=AES");
-        appInfo.setAppAPKName("AES");
-        appInfo.setAppAPKFolderName("AES");
+        appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=APP");
+        appInfo.setAppAPKName("APP");
+        appInfo.setAppAPKFolderName("APP");
         return new AboutView(mContext, appInfo);
     }
 }
