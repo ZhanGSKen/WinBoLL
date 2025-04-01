@@ -5,6 +5,7 @@ package cc.winboll.studio.mymessagemanager.services;
  * @Date 2024/07/19 14:30:57
  * @Describe 应用主要服务组件类
  */
+import android.app.Notification;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,11 +15,12 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.mymessagemanager.R;
+import cc.winboll.studio.mymessagemanager.activitys.MainActivity;
 import cc.winboll.studio.mymessagemanager.beans.MessageNotificationBean;
 import cc.winboll.studio.mymessagemanager.receivers.SMSRecevier;
 import cc.winboll.studio.mymessagemanager.services.MainService;
 import cc.winboll.studio.mymessagemanager.utils.AppConfigUtil;
-import cc.winboll.studio.mymessagemanager.utils.NotificationUtil;
+import cc.winboll.studio.mymessagemanager.utils.NotificationHelper;
 import cc.winboll.studio.mymessagemanager.utils.ServiceUtil;
 import com.hjq.toast.ToastUtils;
 
@@ -26,6 +28,9 @@ public class MainService extends Service {
 
     public static String TAG = "ManagerService";
 
+    // 前台服务通知工具
+    NotificationHelper mNotificationHelper;
+    Notification notification;
     AppConfigUtil mConfigUtil;
     //MyBinder mMyBinder;
     MyServiceConnection mMyServiceConnection;
@@ -73,17 +78,12 @@ public class MainService extends Service {
                 mSMSRecevier = new SMSRecevier();
                 registerReceiver(mSMSRecevier, localIntentFilter);
 
-
                 // 显示前台通知栏
-                MessageNotificationBean notificationMessage = createNotificationMessage();
-                NotificationUtil nu = new NotificationUtil();
-                nu.sendForegroundNotification(MainService.this, notificationMessage);
+                NotificationHelper helper = new NotificationHelper(this);
+                Intent intent = new Intent(this, MainActivity.class);
+                notification = helper.showForegroundNotification(intent, getString(R.string.app_name), getString(R.string.text_aboutservernotification));
+                startForeground(NotificationHelper.FOREGROUND_NOTIFICATION_ID, notification);
 
-                /*if (mConfigUtil.isEnableTTS()) {
-                 TTSPlayRuleUtil.speakText(ManagerService.this, getString(R.string.text_iamhere), 0);
-                 GlobalApplication.showApplicationMessage(getString(R.string.text_iamhere));
-                 }*/
-                 
                 ToastUtils.show("Service is start.");
                 LogUtils.i(TAG, "Service is start.");
             }
@@ -101,13 +101,6 @@ public class MainService extends Service {
 
     }
 
-    private MessageNotificationBean createNotificationMessage() {
-        String szTitle = getApplicationContext().getString(R.string.app_name);
-        String szContent = getString(R.string.text_aboutservernotification);
-        return new MessageNotificationBean(NotificationUtil.ID_MSG_SERVICE, "", szTitle, szContent);
-
-    }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //return super.onStartCommand(intent, flags, startId);
@@ -116,12 +109,12 @@ public class MainService extends Service {
         return mConfigUtil.mAppConfigBean.isEnableService() ? Service.START_STICKY: super.onStartCommand(intent, flags, startId);
     }
 
-   /*private class MyBinder extends IMyAidlInterface.Stub {
-        @Override
-        public String getServiceName() {
-            return MainService.class.getSimpleName();
-        }
-    }*/
+    /*private class MyBinder extends IMyAidlInterface.Stub {
+     @Override
+     public String getServiceName() {
+     return MainService.class.getSimpleName();
+     }
+     }*/
 
     // 主进程与守护进程连接时需要用到此类
     //

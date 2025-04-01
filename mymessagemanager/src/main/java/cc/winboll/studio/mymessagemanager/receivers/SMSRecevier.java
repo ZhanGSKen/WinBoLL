@@ -9,7 +9,6 @@ import cc.winboll.studio.mymessagemanager.App;
 import cc.winboll.studio.mymessagemanager.activitys.SMSActivity;
 import cc.winboll.studio.mymessagemanager.beans.SMSBean;
 import cc.winboll.studio.mymessagemanager.utils.AppConfigUtil;
-import cc.winboll.studio.mymessagemanager.utils.NotificationUtil;
 import cc.winboll.studio.mymessagemanager.utils.PhoneUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSReceiveRuleUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSRecycleUtil;

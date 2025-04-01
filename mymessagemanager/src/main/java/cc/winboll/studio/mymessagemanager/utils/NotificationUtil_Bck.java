@@ -22,7 +22,7 @@ import cc.winboll.studio.mymessagemanager.activitys.SMSActivity;
 import cc.winboll.studio.mymessagemanager.beans.MessageNotificationBean;
 import cc.winboll.studio.mymessagemanager.services.MainService;
 
-public class NotificationUtil {
+public class NotificationUtil_Bck {
 
     public static final String TAG = "NotificationUtil";
     public static final int ID_MSG_SERVICE = 10000;
