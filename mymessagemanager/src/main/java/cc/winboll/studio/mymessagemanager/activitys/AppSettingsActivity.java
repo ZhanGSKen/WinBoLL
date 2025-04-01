@@ -17,6 +17,8 @@ import cc.winboll.studio.libaes.views.AToolbar;
 import cc.winboll.studio.mymessagemanager.R;
 import cc.winboll.studio.mymessagemanager.utils.AppConfigUtil;
 import cc.winboll.studio.mymessagemanager.utils.PermissionUtil;
+import cc.winboll.studio.mymessagemanager.utils.NotificationHelper;
+import cc.winboll.studio.libappbase.dialogs.YesNoAlertDialog;
 
 public class AppSettingsActivity extends BaseActivity {
 
@@ -95,5 +97,19 @@ public class AppSettingsActivity extends BaseActivity {
         if (PermissionUtil.checkAndGetAppPermission(this)) {
             Toast.makeText(getApplication(), "应用已获得所需权限。", Toast.LENGTH_SHORT).show();
         }
+    }
+    
+    public void onCleanOldChannels(View view) {
+        YesNoAlertDialog.show(this, "通知设置清理", "是否清理旧的通知设置？", new YesNoAlertDialog.OnDialogResultListener(){
+                @Override
+                public void onNo() {
+                }
+
+                @Override
+                public void onYes() {
+                    NotificationHelper notificationHelper = new NotificationHelper(AppSettingsActivity.this);
+                    notificationHelper.cleanOldChannels();
+                }
+            });
     }
 }

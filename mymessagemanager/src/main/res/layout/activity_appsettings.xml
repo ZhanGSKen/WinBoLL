@@ -213,6 +213,12 @@
 						android:text="检查应用权限"
 						android:onClick="onCheckAndGetAppPermission"/>
 
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="清理通知设置"
+                        android:onClick="onCleanOldChannels"/>
+                    
 				</LinearLayout>
 
 			</LinearLayout>

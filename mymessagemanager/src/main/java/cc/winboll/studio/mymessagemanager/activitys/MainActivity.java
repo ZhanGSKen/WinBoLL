@@ -22,7 +22,6 @@ import cc.winboll.studio.mymessagemanager.services.MainService;
 import cc.winboll.studio.mymessagemanager.unittest.UnitTestActivity;
 import cc.winboll.studio.mymessagemanager.utils.AppConfigUtil;
 import cc.winboll.studio.mymessagemanager.utils.AppGoToSettingsUtil;
-import cc.winboll.studio.mymessagemanager.utils.NotificationUtil;
 import cc.winboll.studio.mymessagemanager.utils.PermissionUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSUtil;
 import cc.winboll.studio.mymessagemanager.utils.ViewUtil;
@@ -129,12 +128,7 @@ public class MainActivity extends BaseActivity {
         mToolbar = findViewById(R.id.activitymainASupportToolbar1);
         mToolbar.setSubtitle(getString(R.string.activity_name_main));
         setSupportActionBar(mToolbar);
-
-        // 创建通知频道
-        NotificationUtil nu = new NotificationUtil();
-        nu.createServiceNotificationChannel(MainActivity.this);
-        nu.createSMSNotificationChannel(MainActivity.this);
-
+        
         boolean isEnableService = mAppConfigUtil.mAppConfigBean.isEnableService();
         msvEnableService = findViewById(R.id.activitymainSwitchView1);
         msvEnableService.setChecked(isEnableService);

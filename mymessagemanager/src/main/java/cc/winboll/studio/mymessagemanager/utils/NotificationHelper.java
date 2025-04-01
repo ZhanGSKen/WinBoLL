@@ -16,8 +16,12 @@ import android.os.Build;
 import android.widget.RemoteViews;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.mymessagemanager.R;
 import cc.winboll.studio.mymessagemanager.activitys.SMSActivity;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class NotificationHelper {
     public static final String TAG = "NotificationHelper";
@@ -35,9 +39,24 @@ public class NotificationHelper {
     private final Context mContext;
     private final NotificationManager mNotificationManager;
 
+    // 示例：维护当前使用的渠道ID列表
+    // 键：渠道ID，值：渠道重要性级别
+    Map<String, Integer> activeChannelConfigs = new HashMap<>();
+
     public NotificationHelper(Context context) {
         mContext = context;
         mNotificationManager = context.getSystemService(NotificationManager.class);
+
+        // 初始化配置
+        activeChannelConfigs.put(
+            CHANNEL_ID_FOREGROUND,
+            NotificationManager.IMPORTANCE_HIGH
+        );
+        activeChannelConfigs.put(
+            CHANNEL_ID_TEMPORARY,
+            NotificationManager.IMPORTANCE_DEFAULT
+        );
+
         createNotificationChannels();
     }
 
@@ -97,6 +116,11 @@ public class NotificationHelper {
 
     // 显示临时通知（自动消失）
     public void showTemporaryNotification(Intent intent, String title, String content) {
+        showTemporaryNotification(intent, TEMPORARY_NOTIFICATION_ID, title, content);
+    }
+
+    // 显示临时通知（自动消失）
+    public void showTemporaryNotification(Intent intent, int notificationID, String title, String content) {
         PendingIntent pendingIntent = createPendingIntent(intent);
 
         Notification notification = new NotificationCompat.Builder(mContext, CHANNEL_ID_TEMPORARY)
@@ -110,7 +134,7 @@ public class NotificationHelper {
             .setVibrate(new long[]{100, 200, 300, 400})
             .build();
 
-        mNotificationManager.notify(TEMPORARY_NOTIFICATION_ID, notification);
+        mNotificationManager.notify(notificationID, notification);
     }
 
     // 创建自定义布局通知（可扩展）
@@ -134,6 +158,11 @@ public class NotificationHelper {
         mNotificationManager.cancelAll();
     }
 
+    // 取消指定通知
+    public void cancelNotification(int notificationID) {
+        mNotificationManager.cancel(notificationID);
+    }
+
     // 创建PendingIntent（兼容不同API版本）
     private PendingIntent createPendingIntent(Intent intent) {
         int flags = PendingIntent.FLAG_UPDATE_CURRENT;
@@ -147,12 +176,26 @@ public class NotificationHelper {
             flags
         );
     }
-    
-    public void sendSMSReceivedMessage(int nResultId, String szPhone, String szBody) {
+
+    public void sendSMSReceivedMessage(int notificationID, String szPhone, String szBody) {
         Intent intent = new Intent(mContext, SMSActivity.class);
 		intent.putExtra(SMSActivity.EXTRA_PHONE, szPhone);
         String szTitle = mContext.getString(R.string.text_smsfrom)  + "<" + szPhone + ">";
         String szContent = "[ " + szBody + " ]";
-        showTemporaryNotification(intent, szTitle, szContent);
+        showTemporaryNotification(intent, notificationID, szTitle, szContent);
+    }
+
+    public void cleanOldChannels() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            List<NotificationChannel> allChannels = mNotificationManager.getNotificationChannels();
+            for (NotificationChannel channel : allChannels) {
+                LogUtils.d(TAG, "Clean channel : " + channel.getId());
+                if (!activeChannelConfigs.containsKey(channel.getId())) {
+                    // 安全删除渠道
+                    mNotificationManager.deleteNotificationChannel(channel.getId());
+                    LogUtils.d(TAG, String.format("Deleted Channel %s", channel.getId()));
+                }
+            }
+        }
     }
 }

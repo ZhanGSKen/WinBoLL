@@ -18,7 +18,6 @@ import cc.winboll.studio.mymessagemanager.R;
 import cc.winboll.studio.mymessagemanager.activitys.TTSPlayRuleActivity;
 import cc.winboll.studio.mymessagemanager.beans.SMSBean;
 import cc.winboll.studio.mymessagemanager.dialogs.YesNoAlertDialog;
-import cc.winboll.studio.mymessagemanager.utils.NotificationUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSReceiveRuleUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSRecycleUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSUtil;
@@ -28,6 +27,7 @@ import cc.winboll.studio.mymessagemanager.views.SMSView;
 import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
 import cc.winboll.studio.mymessagemanager.beans.SMSAcceptRuleBean;
+import cc.winboll.studio.mymessagemanager.utils.NotificationHelper;
 
 public class SMSArrayAdapter extends BaseAdapter {
 
@@ -54,7 +54,8 @@ public class SMSArrayAdapter extends BaseAdapter {
 
     public void cancelMessageNotification() {
         for (SMSBean bean : mData) {
-            NotificationUtil.cancelNotification(mContext, bean.getId());
+            NotificationHelper notificationHelper = new NotificationHelper(mContext);
+            notificationHelper.cancelNotification(bean.getId());
         }
     }
 

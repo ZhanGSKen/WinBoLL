@@ -14,6 +14,7 @@ import cc.winboll.studio.mymessagemanager.utils.SMSReceiveRuleUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSRecycleUtil;
 import cc.winboll.studio.mymessagemanager.utils.SMSUtil;
 import cc.winboll.studio.mymessagemanager.utils.TTSPlayRuleUtil;
+import cc.winboll.studio.mymessagemanager.utils.NotificationHelper;
 
 public class SMSRecevier extends BroadcastReceiver {
 
@@ -45,8 +46,8 @@ public class SMSRecevier extends BroadcastReceiver {
             if (checkIsSMSOK(context, szSmsBody, szSmsAddress)) {
                 int nResultId = SMSUtil.saveReceiveSms(context, szSmsAddress, szSmsBody, "0", System.currentTimeMillis(), "inbox");
                 if (nResultId >= 0) {
-                    NotificationUtil nu = new NotificationUtil();
-                    nu.sendSMSReceivedMessage(context, nResultId, szSmsAddress, szSmsBody);
+                    NotificationHelper notificationHelper = new NotificationHelper(context);
+                    notificationHelper.sendSMSReceivedMessage(nResultId, szSmsAddress, szSmsBody);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(SMSActivity.ACTION_NOTIFY_SMS_CHANGED));
                     LogUtils.d(TAG, "<" + szSmsAddress + "> : ( " + szSmsBody + " ) [SAVED]");
                     if (isEnableTTS) {
