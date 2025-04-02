@@ -1,4 +1,4 @@
-package cc.winboll.studio.autoinstaller.beans;
+package cc.winboll.studio.autoinstaller.models;
 
 /**
  * @Author ZhanGSKen@QQ.COM
@@ -8,7 +8,7 @@ package cc.winboll.studio.autoinstaller.beans;
 import android.content.Context;
 import android.util.JsonReader;
 import android.util.JsonWriter;
-import cc.winboll.studio.autoinstaller.beans.AppConfigs;
+import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.utils.FileUtil;
 import cc.winboll.studio.libappbase.LogUtils;
 import java.io.IOException;

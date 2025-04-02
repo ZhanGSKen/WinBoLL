@@ -15,7 +15,7 @@ import android.widget.Switch;
 import android.widget.TextClock;
 import androidx.core.content.FileProvider;
 import cc.winboll.studio.autoinstaller.MainActivity;
-import cc.winboll.studio.autoinstaller.beans.AppConfigs;
+import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.services.MainService;
 import cc.winboll.studio.autoinstaller.utils.NotificationUtil;
 import cc.winboll.studio.autoinstaller.views.ListViewForScrollView;

@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 import cc.winboll.studio.autoinstaller.FileListener;
 import cc.winboll.studio.autoinstaller.MainActivity;
-import cc.winboll.studio.autoinstaller.beans.AppConfigs;
+import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.services.AssistantService;
 import cc.winboll.studio.autoinstaller.services.MainService;
 import cc.winboll.studio.autoinstaller.utils.NotificationUtil;
