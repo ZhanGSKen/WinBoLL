@@ -1,7 +1,3 @@
-// WinBoll-Demo 项目编译设置
-//include ':demo'
-//rootProject.name = "demo"
-
 // APP 项目编译设置
 //include ':app'
 //rootProject.name = "app"
