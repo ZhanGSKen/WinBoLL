@@ -140,7 +140,7 @@ public class MainActivity extends Activity {
         
         Intent intent = getPackageManager().getLaunchIntentForPackage(mszInstalledPackageName);
         if (intent != null) {
-            ToastUtils.show("startActivity");
+            //ToastUtils.show("startActivity");
             startActivity(intent);
         } else {
             // 若没能获取到启动意图，可进行相应提示等操作，比如跳转到应用商店让用户下载该应用（示例）
