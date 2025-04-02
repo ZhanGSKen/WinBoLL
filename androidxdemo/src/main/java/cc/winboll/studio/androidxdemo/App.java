@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -21,7 +22,9 @@ import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import cc.winboll.studio.androidxdemo.R;
 import cc.winboll.studio.libappbase.GlobalApplication;
+import com.hjq.toast.ToastUtils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -46,6 +49,14 @@ public class App extends GlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        
+        // 初始化 Toast 框架
+        ToastUtils.init(this);
+        // 设置 Toast 布局样式
+        ToastUtils.setView(R.layout.view_toast);
+        //ToastUtils.setStyle(new WhiteToastStyle());
+        ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
+        
         //CrashHandler.getInstance().registerGlobal(this);
         //CrashHandler.getInstance().registerPart(this);
     }

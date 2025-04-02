@@ -4,6 +4,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libappbase.LogView;
+import com.hjq.toast.ToastUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 
         mLogView = findViewById(R.id.logview);
+        
+        ToastUtils.show("onCreate");
     }
 
     @Override
