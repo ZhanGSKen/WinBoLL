@@ -252,6 +252,7 @@ public class WinBollServiceStatusView extends LinearLayout {
             username = "WinBoll";
             password = "WinBollPowerByZhanGSKen";
         }
+        
         LogUtils.d(TAG, String.format("Connection Start. targetUrl %s", targetUrl));
         WinBollServerConnectionThread thread = new WinBollServerConnectionThread(
             targetUrl,
