@@ -5,20 +5,26 @@ package cc.winboll.studio.app;
  * @Date 2024/12/08 15:10:51
  * @Describe 全局应用类
  */
-import cc.winboll.studio.shared.app.WinBollApplication;
-import cc.winboll.studio.shared.log.LogUtils;
+import android.view.Gravity;
+import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
+import com.hjq.toast.ToastUtils;
 
-public class App extends WinBollApplication {
+public class App extends GlobalApplication {
 
     public static final String TAG = "App";
 
     @Override
     public void onCreate() {
-        // 必须在调用基类前设置应用调试标志，
-        // 这样可以预先设置日志与数据的存储根目录。
-        //setIsDebug(BuildConfig.DEBUG);
         super.onCreate();
-        LogUtils.d(TAG, "onCreate");
-    }
 
+        // 初始化 Toast 框架
+        ToastUtils.init(this);
+        // 设置 Toast 布局样式
+        //ToastUtils.setView(R.layout.toast_custom_view);
+        //ToastUtils.setStyle(new WhiteToastStyle());
+        ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
+
+        getWinBollActivityManager().setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
+    }
 }
