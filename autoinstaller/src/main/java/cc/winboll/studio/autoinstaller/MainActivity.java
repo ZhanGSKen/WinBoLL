@@ -13,7 +13,6 @@ import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
 import android.widget.Switch;
 import android.widget.TextClock;
-import android.widget.Toast;
 import androidx.core.content.FileProvider;
 import cc.winboll.studio.autoinstaller.MainActivity;
 import cc.winboll.studio.autoinstaller.beans.AppConfigs;
@@ -22,7 +21,7 @@ import cc.winboll.studio.autoinstaller.utils.NotificationUtil;
 import cc.winboll.studio.autoinstaller.views.ListViewForScrollView;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libappbase.utils.ToastUtils;
+import com.hjq.toast.ToastUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -197,7 +196,7 @@ public class MainActivity extends Activity {
             //
             if (szFilePath.trim().equals("")) {
                 sw.setChecked(false);
-                Toast.makeText(getApplication(), "监控路径为空。", Toast.LENGTH_SHORT).show();
+                ToastUtils.show("监控路径为空。");
                 return;
             }
 

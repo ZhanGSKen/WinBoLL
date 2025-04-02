@@ -21,7 +21,7 @@ import cc.winboll.studio.autoinstaller.utils.NotificationUtil;
 import cc.winboll.studio.autoinstaller.utils.PackageUtil;
 import cc.winboll.studio.autoinstaller.utils.ServiceUtil;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.utils.ToastUtils;
+import com.hjq.toast.ToastUtils;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
