@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 import cc.winboll.studio.autoinstaller.FileListener;
 import cc.winboll.studio.autoinstaller.MainActivity;
+import cc.winboll.studio.autoinstaller.models.APKModel;
 import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.services.AssistantService;
 import cc.winboll.studio.autoinstaller.services.MainService;
@@ -24,11 +25,13 @@ import cc.winboll.studio.libappbase.LogUtils;
 import com.hjq.toast.ToastUtils;
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 public class MainService extends Service {
 
     public static String TAG = "MainService";
 
+    ArrayList<APKModel> _APKModelList = new ArrayList<APKModel>();
     private static boolean _mIsServiceAlive;
     //String mszAPKFilePath;
     //String mszAPKFileName;
@@ -177,6 +180,9 @@ public class MainService extends Service {
     // 调用[应用信息查看器]打开应用包
     //
     private void installAPK(String szAPKFilePath) {
+        String szAPKPackageName = PackageUtil.getPackageNameFromApk(this, szAPKFilePath);
+        saveAPKInfo(szAPKPackageName);
+        
         long nTimeNow = System.currentTimeMillis();
         /*SimpleDateFormat dateFormat = new SimpleDateFormat(
          "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -211,13 +217,22 @@ public class MainService extends Service {
     //
     void installAPK2(String szAPKFilePath) {
         LogUtils.d(TAG, "installAPK2()");
+        String szAPKPackageName = PackageUtil.getPackageNameFromApk(this, szAPKFilePath);
+        saveAPKInfo(szAPKPackageName);
+        
         Intent intent = new Intent(this, MainActivity.class);
         intent.setAction(MainActivity.ACTION_NEW_INSTALLTASK);
-        intent.putExtra(MainActivity.EXTRA_INSTALLED_PACKAGENAME, PackageUtil.getPackageNameFromApk(this, szAPKFilePath));
+        intent.putExtra(MainActivity.EXTRA_INSTALLED_PACKAGENAME, szAPKPackageName);
         intent.putExtra(MainActivity.EXTRA_INSTALLED_APKFILEPATH, szAPKFilePath);
         // Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.startActivity(intent);
+    }
+
+    void saveAPKInfo(String szApkPackageName) {
+        APKModel.loadBeanList(this, _APKModelList, APKModel.class);
+        _APKModelList.add(new APKModel(szApkPackageName));
+        APKModel.saveBeanList(this, _APKModelList, APKModel.class);
     }
 
     // 

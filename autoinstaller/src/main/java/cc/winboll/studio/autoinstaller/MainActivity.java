@@ -2,7 +2,6 @@ package cc.winboll.studio.autoinstaller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -15,6 +14,7 @@ import android.widget.Switch;
 import android.widget.TextClock;
 import androidx.core.content.FileProvider;
 import cc.winboll.studio.autoinstaller.MainActivity;
+import cc.winboll.studio.autoinstaller.models.APKModel;
 import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.services.MainService;
 import cc.winboll.studio.autoinstaller.utils.NotificationUtil;
@@ -31,7 +31,8 @@ public class MainActivity extends Activity {
     public static final String TAG = "MainActivity";
 
     private static final int INSTALL_PERMISSION_CODE = 1;
-
+    
+    ArrayList<APKModel> _APKModelList = new ArrayList<APKModel>();
     LogView mLogView;
     TextClock mTextClock;
     EditText mEditText;
@@ -131,12 +132,21 @@ public class MainActivity extends Activity {
 
     }
 
+    String getLastApkPackageName() {
+        APKModel.loadBeanList(this, _APKModelList, APKModel.class);
+        if (_APKModelList.size() > 0) {
+            return _APKModelList.get(_APKModelList.size() - 1).getApkPackageName();
+        }
+        return "";
+    }
+
     public void onOpenAPP(View view) {
-        if (mszInstalledPackageName.trim().equals("")) {
+        String szInstalledPackageName = getLastApkPackageName();
+        if (szInstalledPackageName.trim().equals("")) {
             ToastUtils.show("Installed APP package name is null.");
             return;
         }
-        
+
         Intent intent = getPackageManager().getLaunchIntentForPackage(mszInstalledPackageName);
         if (intent != null) {
             //ToastUtils.show("startActivity");
@@ -252,8 +262,6 @@ public class MainActivity extends Activity {
         Intent intentService = new Intent(MainActivity.this, MainService.class);
         //intentService.putExtra(MainService.EXTRA_APKFILEPATH, szAPKFilePath);
         startService(intentService);
-
-
     }
 
     /*
