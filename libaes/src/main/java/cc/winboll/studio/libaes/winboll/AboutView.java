@@ -118,7 +118,7 @@ public class AboutView extends LinearLayout {
         } else {
             mszGitea = "https://gitea.winboll.cc/" + mAPPInfo.getAppGitOwner() + "/" + mszAppGitName + "/src/branch/" + mAPPInfo.getAppGitAPPBranch() + "/" + mAPPInfo.getAppGitAPPSubProjectFolder();
         }
-        
+
 
         if (GlobalApplication.isDebuging()) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -150,7 +150,7 @@ public class AboutView extends LinearLayout {
 
         // 初始化标题栏
         //setSubtitle(getContext().getString(R.string.text_about));
-        
+
 //        LinearLayout llMain = findViewById(R.id.viewaboutLinearLayout1);
 //        llMain.addView(createAboutPage());
 
@@ -324,14 +324,17 @@ public class AboutView extends LinearLayout {
                             PrefUtils.saveString(mContext, "metDevUserName", metDevUserName.getText().toString());
                             PrefUtils.saveString(mContext, "metDevUserPassword", metDevUserPassword.getText().toString());
                         } else {
-                            credential = Credentials.basic("WinBoll", "WinBollPowerByZhanGSKen");
+                            String username = "WinBoll";
+                            String password = "WinBollPowerByZhanGSKen";
+                            credential = Credentials.basic(username, password);
                         }
-                        OkHttpClient client = new OkHttpClient();
+                        
                         Request request = new Request.Builder()
                             .url(szUrl)
                             .header("Accept", "text/plain") // 设置正确的Content-Type头
                             .header("Authorization", credential)
                             .build();
+                        OkHttpClient client = new OkHttpClient();
                         Call call = client.newCall(request);
                         call.enqueue(new Callback() {
                                 @Override
