@@ -5,6 +5,7 @@ package cc.winboll.studio.libaes.unittests;
  * @Date 2024/07/16 01:35:56
  * @Describe TestViewPageFragment
  */
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +18,17 @@ import androidx.viewpager.widget.ViewPager;
 import cc.winboll.studio.libaes.ImagePagerAdapter;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.views.AOHPCTCSeekBar;
+import cc.winboll.studio.libappbase.LogView;
+import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestViewPageFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
     public static final String TAG = "TestViewPageFragment";
+    
+    Context mContext;
+    LogView mLogView;
 
     private ViewPager viewPager;
     private List<View> views; //用来存放放进ViewPager里面的布局
@@ -36,6 +42,10 @@ public class TestViewPageFragment extends Fragment implements ViewPager.OnPageCh
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_viewpage, container, false);
+        mContext = getActivity();
+        
+        mLogView = mView.findViewById(R.id.logview);
+        mLogView.start();
 
         //viewPager = findViewById(R.id.activitymainViewPager1);
         initData();
@@ -60,12 +70,13 @@ public class TestViewPageFragment extends Fragment implements ViewPager.OnPageCh
         initPoint();//初始化页面下方的点
         viewPager.setOnPageChangeListener(this);
         initAOHPCTCSeekBar();
+        initAOHPCTCSeekBar2();
     }
 
     //初始化所要显示的布局
     void initData() {
         ViewPager viewPager = mView.findViewById(R.id.fragmentviewpageViewPager1);
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         View view1 = inflater.inflate(R.layout.viewpage_atickprogressbar, viewPager, false);
         View view2 = inflater.inflate(R.layout.viewpage_acard, viewPager, false);
         View view3 = inflater.inflate(R.layout.viewpage_aohpctccard, viewPager, false);
@@ -185,14 +196,31 @@ public class TestViewPageFragment extends Fragment implements ViewPager.OnPageCh
     }
 
     void initAOHPCTCSeekBar() {
-        AOHPCTCSeekBar seekbar = mView.findViewById(R.id.fragmentviewpageAOHPCTCSeekBar1);
-        seekbar.setThumb(getActivity().getDrawable(R.drawable.ic_launcher));
-        seekbar.setThumbOffset(10);
+        AOHPCTCSeekBar seekbar = views.get(3).findViewById(R.id.fragmentviewpageAOHPCTCSeekBar1);
+        seekbar.setThumb(mContext.getDrawable(R.drawable.ic_launcher));
+        //seekbar.setThumbOffset(200);
+        //seekbar.setThumbOffset(1);
+        seekbar.setBlurRightDP(50);
         seekbar.setOnOHPCListener(new AOHPCTCSeekBar.OnOHPCListener() {
 
                 @Override
                 public void onOHPCommit() {
-                    Toast.makeText(getActivity(), "onOHPCommit ", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show("onOHPCommit");
+                }
+            });
+    }
+    
+    void initAOHPCTCSeekBar2() {
+        AOHPCTCSeekBar seekbar = views.get(3).findViewById(R.id.fragmentviewpageAOHPCTCSeekBar2);
+        seekbar.setThumb(mContext.getDrawable(R.drawable.ic_call));
+        //seekbar.setThumbOffset(200);
+        //seekbar.setThumbOffset(1);
+        seekbar.setBlurRightDP(50);
+        seekbar.setOnOHPCListener(new AOHPCTCSeekBar.OnOHPCListener() {
+
+                @Override
+                public void onOHPCommit() {
+                    ToastUtils.show("onOHPCommit 2");
                 }
             });
     }

@@ -10,6 +10,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -42,6 +46,7 @@ public class LogView extends RelativeLayout {
     Context mContext;
     ScrollView mScrollView;
     TextView mTextView;
+    EditText metTagSearch;
     CheckBox mSelectableCheckBox;
     CheckBox mSelectAllTAGCheckBox;
     TAGListAdapter mTAGListAdapter;
@@ -107,8 +112,40 @@ public class LogView extends RelativeLayout {
         //
         mScrollView = findViewById(cc.winboll.studio.libappbase.R.id.viewlogScrollViewLog);
         mTextView = findViewById(cc.winboll.studio.libappbase.R.id.viewlogTextViewLog);
+        metTagSearch = findViewById(cc.winboll.studio.libappbase.R.id.tagsearch_et);
         // 获取Log Level spinner实例
         mLogLevelSpinner = findViewById(cc.winboll.studio.libappbase.R.id.viewlogSpinner1);
+
+        metTagSearch.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int p, int p1, int p2) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    LogUtils.d(TAG, s.toString());
+                    if (s.length() > 0) {
+                        scrollToTag(s.toString());
+                    } else {
+                        HorizontalScrollView hsRoot = findViewById(R.id.viewlogHorizontalScrollView1);
+                        hsRoot.smoothScrollTo(0, 0);
+                        mListViewTags.resetScrollToStart();
+                    }
+//                    mListViewTags.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                mListViewTags.scrollToItem(5);
+//                            }
+//                        }, 100);
+                }
+                // 其他方法留空或按需实现
+            });
+
 
         (findViewById(cc.winboll.studio.libappbase.R.id.viewlogButtonClean)).setOnClickListener(new View.OnClickListener(){
 
@@ -190,6 +227,7 @@ public class LogView extends RelativeLayout {
 
         // 加载标签表
         mListViewTags = findViewById(cc.winboll.studio.libappbase.R.id.tags_listview);
+        mListViewTags.setVerticalOffset(10);
         mTAGListAdapter = new TAGListAdapter(mContext, mapTAGList);
         mListViewTags.setAdapter(mTAGListAdapter);
 
@@ -231,6 +269,60 @@ public class LogView extends RelativeLayout {
         mTextView.setText(LogUtils.loadLog());
         scrollLogUp();
     }
+
+    public void scrollToTag(final String prefix) {
+        if (mTAGListAdapter == null || prefix == null || prefix.length() == 0) {
+            LogUtils.d(TAG, "参数为空，无法滚动");
+            return;
+        }
+
+        final List<TAGItemModel> itemList = mTAGListAdapter.getItemList();
+
+        mListViewTags.post(new Runnable() {
+                @Override
+                public void run() {
+                    // 查找匹配的标签位置
+                    int targetPosition = -1;
+
+                    for (int i = 0; i < itemList.size(); i++) {
+                        String tag = itemList.get(i).getTag();
+                        if (tag != null && tag.toLowerCase().startsWith(prefix.toLowerCase())) {
+                            targetPosition = i;
+
+                            break;
+                        }
+                    }
+
+                    if (targetPosition != -1) {
+                        // 优化滚动逻辑
+                        //mListViewTags.setSelection(targetPosition);
+                        //mListViewTags.invalidateViews(); // 强制刷新所有可见项
+
+                        // 单独刷新目标视图
+//                        View targetView = mListViewTags.getChildAt(targetPosition);
+//                        if (targetView != null) {
+//                            targetView.requestLayout();
+//                            targetView.requestFocus();
+//                        }
+
+                        final int scrollPosition = targetPosition;
+
+                        // 延迟滚动确保布局完成
+                        mListViewTags.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    LogUtils.d(TAG, String.format("scrollPosition %d", scrollPosition));
+                                    mListViewTags.scrollToItem(scrollPosition);
+                                }
+                            }, 100);
+                    } else {
+                        LogUtils.d(TAG, "未找到匹配的标签前缀：" + prefix);
+                    }
+                }
+            });
+    }
+
+
 
     class LogViewHandler extends Handler {
 
@@ -299,6 +391,30 @@ public class LogView extends RelativeLayout {
         public void setChecked(boolean checked) {
             isChecked = checked;
         }
+
+        // getter/setter...
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            TAGItemModel that = (TAGItemModel) o;
+            // 手动处理空值比较（Java 6 不支持 Objects.equals）
+            if (tag == null) {
+                return that.tag == null;
+            } else {
+                return tag.equals(that.tag);
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            return tag == null ? 0 : tag.hashCode(); // 手动处理空值
+        }
     }
 
 
@@ -313,7 +429,11 @@ public class LogView extends RelativeLayout {
             mapOrigin = map;
             loadMap(mapOrigin);
         }
-        
+
+        public List<TAGItemModel> getItemList() {
+            return itemList;
+        }
+
         @Override
         public int getCount() {
             return itemList.size();
@@ -343,7 +463,7 @@ public class LogView extends RelativeLayout {
             loadMap(mapOrigin);
             super.notifyDataSetChanged();
         }
-        
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;

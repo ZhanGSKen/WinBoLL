@@ -1,10 +1,5 @@
-// WinBoll-Demo 项目编译设置
-//include ':demo'
-//rootProject.name = "demo"
-
-// WinBoll-APP 项目编译设置
+// APP 项目编译设置
 //include ':app'
-//include ':winboll-shared'
 //rootProject.name = "app"
 
 // AutoInstaller 项目编译设置

@@ -18,25 +18,18 @@ def genVersionName(def versionName){
 }
 
 android {
-	productFlavors {
-		beta {
-		}
-		stage {
-		}
-	}
-
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 32
+    buildToolsVersion "32.0.0"
 
     defaultConfig {
         applicationId "cc.winboll.studio.androiddemo"
-        minSdkVersion 26
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         // versionName 更新后需要手动设置 
         // .winboll/winbollBuildProps.properties 文件的 stageCount=0
         // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
-        versionName "1.0"
+        versionName "15.0"
         if(true) {
             versionName = genVersionName("${versionName}")
         }
@@ -53,22 +46,27 @@ android {
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     
-    // 吐司类库
-    implementation 'com.github.getActivity:ToastUtils:10.5'
-
     // Android 类库
-    // https://mvnrepository.com/artifact/com.android.support/support-v4
-    implementation 'com.android.support:support-v4:28.0.0'
+    //api 'com.android.support:appcompat-v7:28.0.0'
+    api('com.android.support:appcompat-v7:28.0.0'){
+        //exclude group: "com.android.support", module: "support-vector-drawable"
+        exclude group: "com.android.support:animated-vector-drawable:28.0.0"
+    }
     // https://mvnrepository.com/artifact/com.android.support/support-compat
-    implementation 'com.android.support:support-compat:28.0.0'
+    api 'com.android.support:support-compat:28.0.0' // 保留原有依赖（可选）
+    // https://mvnrepository.com/artifact/com.android.support/support-v4
+    api 'com.android.support:support-v4:28.0.0'
     // https://mvnrepository.com/artifact/com.android.support/support-media-compat
-    implementation 'com.android.support:support-media-compat:28.0.0'
+    api 'com.android.support:support-media-compat:28.0.0'
     // https://mvnrepository.com/artifact/com.android.support/support-core-utils
-    implementation 'com.android.support:support-core-utils:28.0.0'
+    api 'com.android.support:support-core-utils:28.0.0'
     // https://mvnrepository.com/artifact/com.android.support/support-core-ui
-    implementation 'com.android.support:support-core-ui:28.0.0'
+    api 'com.android.support:support-core-ui:28.0.0'
     // https://mvnrepository.com/artifact/com.android.support/support-fragment
-    implementation 'com.android.support:support-fragment:28.0.0'
+    api 'com.android.support:support-fragment:28.0.0'
     // https://mvnrepository.com/artifact/com.android.support/recyclerview-v7
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    api 'com.android.support:recyclerview-v7:28.0.0'
+    
+    api 'cc.winboll.studio:libapputils:15.2.1'
+    api 'cc.winboll.studio:libappbase:15.2.2'
 }

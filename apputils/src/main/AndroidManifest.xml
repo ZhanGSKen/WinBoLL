@@ -8,7 +8,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_winboll"
         android:label="@string/app_name"
-        android:theme="@style/WinBoll.SupportThemeNoActionBar"
+        android:theme="@style/MyUtilsTheme"
         android:supportsRtl="true">
 
         <activity
@@ -27,9 +27,13 @@
 
         </activity>
 
-        <activity android:name=".TestWinBollActivity"/>
+        <activity android:name=".TestStringToQRCodeViewActivity"/>
 
-        <activity android:name=".TestStringToQrCodeViewActivity"/>
+        <activity android:name=".TestBBMorseCodeActivity"/>
+
+        <activity android:name=".AssetsHtmlActivity"/>
+
+        <activity android:name=".QRCodeDecodeActivity"/>
 
     </application>
 

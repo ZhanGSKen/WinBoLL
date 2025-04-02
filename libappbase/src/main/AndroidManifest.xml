@@ -9,19 +9,33 @@
     <!-- 发送持久广播 -->
     <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
 
+    <!-- 对正在运行的应用重新排序 -->
+    <uses-permission android:name="android.permission.REORDER_TASKS"/>
+
     <application>
 
         <activity
             android:name=".CrashHandler$CrashActivity"
             android:label="CrashActivity"
-            android:launchMode="standard"/>
+            android:launchMode="singleInstance"
+            android:process=":CrashActivity"/>
 
         <activity
             android:name=".GlobalCrashActivity"
             android:label="GlobalCrashActivity"
-            android:launchMode="standard"/>
+            android:launchMode="singleInstance"
+            android:process=":GlobalCrashActivity"/>
 
-        <activity android:name=".LogActivity"/>
+        <activity
+            android:name=".winboll.LogActivity"
+            android:label="LogActivity"
+            android:resizeableActivity="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:process=":LogActivity">
+
+        </activity>
 
         <service
             android:name=".SimpleOperateSignalCenterService"
@@ -33,7 +47,9 @@
             android:name=".services.TestService"
             android:exported="true"/>
 
-        <receiver android:name=".receiver.MyBroadcastReceiver">
+        <receiver
+            android:name=".receiver.MyBroadcastReceiver"
+            android:exported="true">
 
             <intent-filter>
 
@@ -75,7 +91,9 @@
 
         <service android:name="cc.winboll.studio.libappbase.sos.SOSCenter"/>
 
-        <receiver android:name="cc.winboll.studio.libappbase.sos.SOSCenterServiceReceiver">
+        <receiver
+            android:name="cc.winboll.studio.libappbase.sos.SOSCenterServiceReceiver"
+            android:exported="true">
 
             <intent-filter>
 
