@@ -48,6 +48,8 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
 
     public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
 
+    static MainActivity _MainActivity;
+    
     // 创建Fragment列表和标题列表
     List<Fragment> fragmentList = new ArrayList<>();
     List<String> tabTitleList = new ArrayList<>();
@@ -74,12 +76,10 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // 接收并处理 Intent 数据，函数 Intent 处理接收就直接返回
-        //if (prosessIntents(getIntent())) return;
-        // 以下正常创建主窗口
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        _MainActivity = this;
+        
         // 初始化工具栏
 //        mToolbar = findViewById(R.id.toolbar);
 //        setActionBar(mToolbar);
@@ -130,7 +130,10 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
                 }
             });
     }
-
+    
+    public void startTXRTLocation(){
+        mTXMSFragment.startRTLocation();
+    }
 
     // ViewPager的适配器
     public class MyPagerAdapter extends FragmentStatePagerAdapter {

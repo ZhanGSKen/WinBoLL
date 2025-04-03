@@ -122,7 +122,7 @@ public class TXMSFragment extends Fragment implements /*EasyPermissions.Permissi
         MyLocationStyle myLocationStyle = new MyLocationStyle();
         tencentMap.setMyLocationEnabled(true);
         tencentMap.setMyLocationStyle(myLocationStyle);
-        startLocation();
+        startRTLocation();
 
         return viewRoot;
     }
@@ -147,7 +147,8 @@ public class TXMSFragment extends Fragment implements /*EasyPermissions.Permissi
 
     }
 
-    private void startLocation() {
+    public void startRTLocation() {
+        ToastUtils.show("startRTLocation()");
         mTencentLocationManager.requestLocationUpdates(mTencentLocationRequest, this);
         MyLocationStyle myLocationStyle = new MyLocationStyle();
         tencentMap.setMyLocationEnabled(true);

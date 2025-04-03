@@ -9,7 +9,7 @@
 	<LinearLayout
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
-		android:layout_height="150dp">
+		android:layout_height="wrap_content">
 
 		<LinearLayout
 			android:orientation="vertical"
@@ -20,7 +20,8 @@
 				android:orientation="horizontal"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:padding="10dp">
+				android:padding="10dp"
+				android:gravity="center_vertical">
 
 				<TextView
 					android:layout_width="match_parent"
@@ -41,6 +42,26 @@
 					android:layout_height="wrap_content"
 					android:text="Text"
 					android:id="@+id/phonegpsinfo_tv"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="right">
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="۞"
+					android:id="@+id/txrt_btn"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="+"
+					android:id="@+id/add_btn"/>
 
 			</LinearLayout>
 

@@ -41,6 +41,7 @@ import android.content.ServiceConnection;
 import android.content.ComponentName;
 import android.os.IBinder;
 import cc.winboll.studio.positions.listeners.OnGPSRTLocationListener;
+import cc.winboll.studio.positions.MainActivity;
 
 public class PositionsFragment extends Fragment {
 
@@ -57,6 +58,8 @@ public class PositionsFragment extends Fragment {
     TextView mtvPhoneGPSInfo;
     MyServiceConnection mMyServiceConnection;
     GPSService mGPSService;
+    Button mbtnTXRT;
+    Button mbtnAdd;
     
     TextView mtvPostionFixModelInfo;
     TextView mtvLockPostionInfo;
@@ -113,6 +116,22 @@ public class PositionsFragment extends Fragment {
         Intent intent = new Intent(getActivity(), GPSService.class);
         getActivity().startService(intent);
         getActivity().bindService(intent, mMyServiceConnection, Context.BIND_IMPORTANT);
+        
+        mbtnTXRT = viewMain.findViewById(R.id.txrt_btn);
+        mbtnTXRT.setOnClickListener(new Button.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    //ToastUtils.show("mbtnTXRT");
+                    ((MainActivity)getActivity()).startTXRTLocation();
+                }
+            });
+        mbtnAdd = viewMain.findViewById(R.id.add_btn);
+        mbtnAdd.setOnClickListener(new Button.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    ToastUtils.show("mbtnAdd");
+                }
+            });
         
 //        metLockLatitude = viewMain.findViewById(R.id.locklatitude_et);
 //        metLockLongitude = viewMain.findViewById(R.id.locklongitude_et);
