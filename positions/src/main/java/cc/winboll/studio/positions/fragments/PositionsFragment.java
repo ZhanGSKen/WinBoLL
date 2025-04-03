@@ -42,6 +42,7 @@ import android.content.ComponentName;
 import android.os.IBinder;
 import cc.winboll.studio.positions.listeners.OnGPSRTLocationListener;
 import cc.winboll.studio.positions.MainActivity;
+import cc.winboll.studio.positions.views.PostionUtils;
 
 public class PositionsFragment extends Fragment {
 
@@ -49,7 +50,7 @@ public class PositionsFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
-
+    
     private LocationManager locationManager;
 
     //MyHandler mMyHandler;
@@ -60,6 +61,8 @@ public class PositionsFragment extends Fragment {
     GPSService mGPSService;
     Button mbtnTXRT;
     Button mbtnAdd;
+    Location mLocationTX;
+    Location mLocationPhoneGPS;
     
     TextView mtvPostionFixModelInfo;
     TextView mtvLockPostionInfo;
@@ -77,8 +80,6 @@ public class PositionsFragment extends Fragment {
     double longitudeFuseLock;
 
     PostionFixModel mPostionFixModel;
-    Location mLocationTX;
-    Location mLocationPhoneGPS;
     static Location _LocationPhoneGPSLock;
 
     LocationManager locationManagerPhoneGPS;
@@ -129,7 +130,9 @@ public class PositionsFragment extends Fragment {
         mbtnAdd.setOnClickListener(new Button.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    ToastUtils.show("mbtnAdd");
+                    //ToastUtils.show("mbtnAdd");
+                    PostionUtils postionUtils = PostionUtils.getInstance(getActivity());
+                    postionUtils.addPostion(mLocationPhoneGPS);
                 }
             });
         
