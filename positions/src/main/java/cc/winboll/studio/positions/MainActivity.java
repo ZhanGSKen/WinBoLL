@@ -36,6 +36,8 @@ import cc.winboll.studio.positions.models.MainServiceBean;
 import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
+import cc.winboll.studio.positions.listeners.OnTXRTLocationListener;
+import android.location.Location;
 
 final public class MainActivity extends AbsActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
@@ -112,7 +114,7 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
         fragmentList.add(mLogFragment);
         tabTitleList.add("日志");
 
-
+        
 
         // 设置ViewPager的适配器
         MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
@@ -120,6 +122,13 @@ final public class MainActivity extends AbsActivity implements IWinBollActivity,
 
         // 关联TabLayout和ViewPager
         tabLayout.setupWithViewPager(viewPager);
+        
+        mTXMSFragment.setOnTXRTLocationListener(new OnTXRTLocationListener(){
+                @Override
+                public void onTXRTLocation(Location location) {
+                    mPositionsFragment.showLocationTX(location);
+                }
+            });
     }
 
 

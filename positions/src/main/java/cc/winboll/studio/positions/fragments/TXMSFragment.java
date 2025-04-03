@@ -55,6 +55,7 @@ import com.tencent.tencentmap.mapsdk.maps.model.Marker;
 import com.tencent.tencentmap.mapsdk.maps.model.MarkerOptions;
 import com.tencent.tencentmap.mapsdk.maps.model.MyLocationStyle;
 import java.util.ArrayList;
+import cc.winboll.studio.positions.listeners.OnTXRTLocationListener;
 
 public class TXMSFragment extends Fragment implements /*EasyPermissions.PermissionCallbacks,*/LocationSource, TencentLocationListener,TencentMap.OnMapClickListener {
 
@@ -78,7 +79,8 @@ public class TXMSFragment extends Fragment implements /*EasyPermissions.Permissi
     ArrayList<PostionModel> locationPostionModelList;
     //Location lastLocation;
     static TXMSFragment _TXMSFragment;
-
+    OnTXRTLocationListener mOnTXRTLocationListener;
+    
 
     @Nullable
     @Override
@@ -369,8 +371,10 @@ public class TXMSFragment extends Fragment implements /*EasyPermissions.Permissi
         message.what = TXMSFragment.REALTIME_POSITIONING;
         handler.sendMessage(message);
     }
-
-
+    
+    public void setOnTXRTLocationListener(OnTXRTLocationListener listener) {
+        mOnTXRTLocationListener = listener;
+    }
 
 
     /**
@@ -435,7 +439,8 @@ public class TXMSFragment extends Fragment implements /*EasyPermissions.Permissi
 //            lastLocation.setLongitude(tencentLocation.getLongitude());
 //            lastLocation.setAccuracy(tencentLocation.getAccuracy());
 
-            PositionsFragment.sendInitPositioningMessage(locationTX);
+            //PositionsFragment.sendInitPositioningMessage(locationTX);
+            mOnTXRTLocationListener.onTXRTLocation(locationTX);
 
             // 当不再需要定位时
             // 取消定位监听

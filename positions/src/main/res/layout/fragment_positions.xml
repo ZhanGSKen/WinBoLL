@@ -7,108 +7,42 @@
 	android:layout_height="match_parent">
 
 	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_weight="1.0">
-
-		<TextView
-			android:id="@+id/txmylocationinfo_tv"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:textColor="@color/colorPrimary"
-			android:textStyle="bold"
-			android:textSize="10sp"
-			android:background="#C0FFFFFF">
-
-		</TextView>
-
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
-
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_weight="1.0">
-
-				<ScrollView
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:background="#FFC4EF9E">
-
-					<TextView
-						android:id="@+id/phonemylocationinfo_tv"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:textColor="@color/colorPrimary"
-						android:textStyle="bold"
-						android:textSize="10sp">
-
-					</TextView>
-
-				</ScrollView>
-
-			</LinearLayout>
-
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_weight="1.0">
-
-				<ScrollView
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:background="#FFABE2F7">
-
-					<TextView
-						android:id="@+id/postionfixmodelinfo_tv"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:textColor="@color/colorPrimary"
-						android:textStyle="bold"
-						android:textSize="10sp">
-
-					</TextView>
-
-				</ScrollView>
-
-			</LinearLayout>
-
-		</LinearLayout>
-
-	</LinearLayout>
-
-	<LinearLayout
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="150dp">
 
-		<ScrollView
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="1.0"
-			android:background="#FFADA4FD">
-
-			<TextView
-				android:id="@+id/lockpostioninfo_tv"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:textColor="@color/colorPrimary"
-				android:textStyle="bold"
-				android:textSize="10sp">
-
-			</TextView>
-
-		</ScrollView>
-
 		<LinearLayout
 			android:orientation="vertical"
-			android:layout_width="150dp"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content">
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="10dp">
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="Text"
+					android:id="@+id/txmylocationinfo_tv"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="10dp">
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="Text"
+					android:id="@+id/phonegpsinfo_tv"/>
+
+			</LinearLayout>
 
 			<LinearLayout
 				android:orientation="horizontal"

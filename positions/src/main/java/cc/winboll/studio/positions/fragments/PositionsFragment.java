@@ -34,6 +34,13 @@ import cc.winboll.studio.positions.utils.LocationFusion;
 import cc.winboll.studio.positions.utils.TimeUtils;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.content.Intent;
+import cc.winboll.studio.positions.services.GPSService;
+import android.content.Context;
+import android.content.ServiceConnection;
+import android.content.ComponentName;
+import android.os.IBinder;
+import cc.winboll.studio.positions.listeners.OnGPSRTLocationListener;
 
 public class PositionsFragment extends Fragment {
 
@@ -44,10 +51,13 @@ public class PositionsFragment extends Fragment {
 
     private LocationManager locationManager;
 
-    static MyHandler _MyHandler;
+    //MyHandler mMyHandler;
 
     TextView mtvTXMyLocationInfo;
-    TextView mtvPhoneMyLocationInfo;
+    TextView mtvPhoneGPSInfo;
+    MyServiceConnection mMyServiceConnection;
+    GPSService mGPSService;
+    
     TextView mtvPostionFixModelInfo;
     TextView mtvLockPostionInfo;
 
@@ -64,8 +74,8 @@ public class PositionsFragment extends Fragment {
     double longitudeFuseLock;
 
     PostionFixModel mPostionFixModel;
-    static Location _LocationTX;
-    static Location _LocationPhoneGPS;
+    Location mLocationTX;
+    Location mLocationPhoneGPS;
     static Location _LocationPhoneGPSLock;
 
     LocationManager locationManagerPhoneGPS;
@@ -95,29 +105,33 @@ public class PositionsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View viewMain = inflater.inflate(R.layout.fragment_positions, container, false);
-
-        nCurrentFixActivationCountValue = 0;
-        nGPSUpdateCount = 0;
-
-//        Toolbar toolbar = viewMain.findViewById(R.id.toolbar);
-//        getActivity().getMenuInflater().inflate(R.menu.toolbar_positions,  toolbar.getMenu());
-//        
+        
         mtvTXMyLocationInfo = viewMain.findViewById(R.id.txmylocationinfo_tv);
-        mtvPhoneMyLocationInfo = viewMain.findViewById(R.id.phonemylocationinfo_tv);
-        mtvPostionFixModelInfo = viewMain.findViewById(R.id.postionfixmodelinfo_tv);
-        mtvLockPostionInfo = viewMain.findViewById(R.id.lockpostioninfo_tv);
+        mtvPhoneGPSInfo = viewMain.findViewById(R.id.phonegpsinfo_tv);
+        mMyServiceConnection = new MyServiceConnection();
+        
+        Intent intent = new Intent(getActivity(), GPSService.class);
+        getActivity().startService(intent);
+        getActivity().bindService(intent, mMyServiceConnection, Context.BIND_IMPORTANT);
+        
+//        metLockLatitude = viewMain.findViewById(R.id.locklatitude_et);
+//        metLockLongitude = viewMain.findViewById(R.id.locklongitude_et);
+//        metLockLatitude.setEnabled(false);
+//        metLockLongitude.setEnabled(false);
+//        mswTaskService = viewMain.findViewById(R.id.taskservice_sw);
+        
+        //mMyHandler = new MyHandler();
+        
+        //nCurrentFixActivationCountValue = 0;
+        //nGPSUpdateCount = 0;
 
-        metLockLatitude = viewMain.findViewById(R.id.locklatitude_et);
-        metLockLongitude = viewMain.findViewById(R.id.locklongitude_et);
-        metLockLatitude.setEnabled(false);
-        metLockLongitude.setEnabled(false);
+        
+//        mtvPostionFixModelInfo = viewMain.findViewById(R.id.postionfixmodelinfo_tv);
+//        mtvLockPostionInfo = viewMain.findViewById(R.id.lockpostioninfo_tv);
+//
+        
+        //locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
 
-//        tvWifiLocation = viewMain.findViewById(R.id.wifi_position_tv);
-//        tvGPSLocation = viewMain.findViewById(R.id.gps_position_tv);
-//        tvFuseLocation = viewMain.findViewById(R.id.fuse_position_tv);
-        locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
-
-        mswTaskService = viewMain.findViewById(R.id.taskservice_sw);
 //        mswTaskService.setOnClickListener(new View.OnClickListener(){
 //                @Override
 //                public void onClick(View p1) {
@@ -126,18 +140,18 @@ public class PositionsFragment extends Fragment {
 //            });
 
         // 请求GPS定位
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, phoneGPSLocationListener);
+        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, phoneGPSLocationListener);
 
         // 请求基站（网络）定位
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, networkLocationListener);
+        //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, networkLocationListener);
 
-        _MyHandler = new MyHandler();
 
         //ToastUtils.show("PositionsFragment onCreateView");
 
-        showLocationTX();
-        showLocationPhoneGPS();
-        showPostionFixModelInfo();
+        //showLocationTX();
+        //showLocationPhoneGPS();
+        //showPostionFixModelInfo();
+        
 
         return viewMain;
     }
@@ -150,61 +164,80 @@ public class PositionsFragment extends Fragment {
             _LocationPhoneGPSLock.setLongitude(Double.parseDouble(metLockLongitude.getText().toString()));
             //ToastUtils.show("定位手动设定位置");
         } else {
-            Location locationFix = fixGPSLocationFromPostionFixModel(_LocationPhoneGPS);
+            //Location locationFix = fixGPSLocationFromPostionFixModel(_LocationPhoneGPS);
             //_LocationPhoneGPSLock = _LocationTX;
-            _LocationPhoneGPSLock = locationFix;
+            //_LocationPhoneGPSLock = locationFix;
            //ToastUtils.show("定位GPS设定位置");
         }
-        showLockPostionInfo();
+        //showLockPostionInfo();
         //ToastUtils.show(String.format("%s", locationFix.toString()));
 
         TXMSFragment.moveToLocation(_LocationPhoneGPSLock.getLatitude(), _LocationPhoneGPSLock.getLongitude());
     }
 
-    void showLocationPhoneGPS() {
-        if (_LocationPhoneGPS != null) {
-            String szTemp = String.format("\n(%d)PhoneGPS MyLocation Info\nLatitude %f\nLongitude %f\nAccuracy %f\n", nGPSUpdateCount, _LocationPhoneGPS.getLatitude(), _LocationPhoneGPS.getLongitude(), _LocationPhoneGPS.getAccuracy());
-            mtvPhoneMyLocationInfo.append(szTemp);
-            LogUtils.d(TAG, szTemp);
-        }
-    }
+//    void showLocationPhoneGPS(Location location) {
+//        if (location != null) {
+//            mLocationPhoneGPS = location;
+//            String szTemp = String.format("\n(%d)PhoneGPS MyLocation Info\nLatitude %f\nLongitude %f\nAccuracy %f\n", nGPSUpdateCount, _LocationPhoneGPS.getLatitude(), _LocationPhoneGPS.getLongitude(), _LocationPhoneGPS.getAccuracy());
+//            mtvPhoneMyLocationInfo.append(szTemp);
+//            LogUtils.d(TAG, szTemp);
+//        }
+//    }
 
-    void showPostionFixModelInfo() {
-        if (mPostionFixModel != null && _LocationTX != null && _LocationPhoneGPS != null) {
-            String szTemp = String.format("\n(%d)FixModel Info\nLatitude TX %f\nLatitude GPS %f\nLatitude Fix %f\nLongitude TX %f\nLongitude GPS %f\nLongitude Fix %f\n\n",
-                                          nCurrentFixActivationCountValue,
-                                          _LocationTX.getLatitude(),
-                                          _LocationPhoneGPS.getLatitude(),
-                                          mPostionFixModel.getLatitudeFixModel(),
-                                          _LocationTX.getLongitude(),
-                                          _LocationPhoneGPS.getLongitude(),
-                                          mPostionFixModel.getLongitudeFixModel());
-            mtvPostionFixModelInfo.append(szTemp);
-            LogUtils.d(TAG, szTemp);
-        }
-    }
+//    void showPostionFixModelInfo() {
+//        if (mPostionFixModel != null && mLocationTX != null && _LocationPhoneGPS != null) {
+//            String szTemp = String.format("\n(%d)FixModel Info\nLatitude TX %f\nLatitude GPS %f\nLatitude Fix %f\nLongitude TX %f\nLongitude GPS %f\nLongitude Fix %f\n\n",
+//                                          nCurrentFixActivationCountValue,
+//                                          mLocationTX.getLatitude(),
+//                                          _LocationPhoneGPS.getLatitude(),
+//                                          mPostionFixModel.getLatitudeFixModel(),
+//                                          mLocationTX.getLongitude(),
+//                                          _LocationPhoneGPS.getLongitude(),
+//                                          mPostionFixModel.getLongitudeFixModel());
+//            mtvPostionFixModelInfo.append(szTemp);
+//            LogUtils.d(TAG, szTemp);
+//        }
+//    }
 
-    void showLockPostionInfo() {
-        if (mPostionFixModel != null && _LocationTX != null && _LocationPhoneGPSLock != null) {
-            String szTemp = String.format("\n%s\nFixModel Info\nLatitude TX %f\nLatitude GPS %f\nLatitude Fix %f\nLatitude GPSLock %f\nLongitude TX %f\nLongitude GPS %f\nLongitude Fix %f\nLongitude GPSLock %f\n\n",
-                                          TimeUtils.getCurrentTimeString(),
-                                          _LocationTX.getLatitude(),
-                                          _LocationPhoneGPS.getLatitude(),
-                                          mPostionFixModel.getLatitudeFixModel(),
-                                          _LocationPhoneGPSLock.getLatitude(),
-                                          _LocationTX.getLongitude(),
-                                          _LocationPhoneGPS.getLongitude(),
-                                          mPostionFixModel.getLongitudeFixModel(),
-                                          _LocationPhoneGPSLock.getLongitude());
-            mtvLockPostionInfo.append(szTemp);
-            LogUtils.d(TAG, szTemp);
-        }
-    }
+//    void showLockPostionInfo() {
+//        if (mPostionFixModel != null && mLocationTX != null && _LocationPhoneGPSLock != null) {
+//            String szTemp = String.format("\n%s\nFixModel Info\nLatitude TX %f\nLatitude GPS %f\nLatitude Fix %f\nLatitude GPSLock %f\nLongitude TX %f\nLongitude GPS %f\nLongitude Fix %f\nLongitude GPSLock %f\n\n",
+//                                          TimeUtils.getCurrentTimeString(),
+//                                          mLocationTX.getLatitude(),
+//                                          _LocationPhoneGPS.getLatitude(),
+//                                          mPostionFixModel.getLatitudeFixModel(),
+//                                          _LocationPhoneGPSLock.getLatitude(),
+//                                          mLocationTX.getLongitude(),
+//                                          _LocationPhoneGPS.getLongitude(),
+//                                          mPostionFixModel.getLongitudeFixModel(),
+//                                          _LocationPhoneGPSLock.getLongitude());
+//            mtvLockPostionInfo.append(szTemp);
+//            LogUtils.d(TAG, szTemp);
+//        }
+//    }
 
-    void showLocationTX() {
-        if (_LocationTX != null) {
-            String szTemp = String.format("TX MyLocation Init Info\nLatitude %f, Longitude %f, Accuracy %f", _LocationTX.getLatitude(), _LocationTX.getLongitude(), _LocationTX.getAccuracy());
+//    void showLocationTX() {
+//        if (_LocationTX != null) {
+//            String szTemp = String.format("TX MyLocation Init Info\nLatitude %f, Longitude %f, Accuracy %f", _LocationTX.getLatitude(), _LocationTX.getLongitude(), _LocationTX.getAccuracy());
+//            mtvTXMyLocationInfo.setText(szTemp);
+//            LogUtils.d(TAG, szTemp);
+//        }
+//    }
+    
+    public void showLocationTX(Location location) {
+        if (location != null) {
+            mLocationTX = location;
+            String szTemp = String.format("TX MyLocation Info\nLatitude %f, Longitude %f\nAccuracy %f", mLocationTX.getLatitude(), mLocationTX.getLongitude(), mLocationTX.getAccuracy());
             mtvTXMyLocationInfo.setText(szTemp);
+            LogUtils.d(TAG, szTemp);
+        }
+    }
+    
+    public void showLocationPhoneGPS(Location location) {
+        if (location != null) {
+            mLocationPhoneGPS = location;
+            String szTemp = String.format("Phone GPS Info\nLatitude %f, Longitude %f\nAccuracy %f", mLocationPhoneGPS.getLatitude(), mLocationPhoneGPS.getLongitude(), mLocationPhoneGPS.getAccuracy());
+            mtvPhoneGPSInfo.setText(szTemp);
             LogUtils.d(TAG, szTemp);
         }
     }
@@ -243,38 +276,38 @@ public class PositionsFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    void updatePostionFixModel() {
-        if (_LocationPhoneGPS == null
-            || _LocationTX == null) {
-            return;
-        }
-
-        nCurrentFixActivationCountValue++;
-        if (nCurrentFixActivationCountValue < nFixActivationCountValue)  {
-            mPostionFixModel = PostionFixModel.loadPostionFixModel();
-            mPostionFixModel.setLatitudeFixModel(_LocationPhoneGPS.getLatitude() - _LocationTX.getLatitude());
-            mPostionFixModel.setLongitudeFixModel(_LocationPhoneGPS.getLongitude() - _LocationTX.getLongitude());
-
-//            String szTemp = String.format("PostionFixModel Info\nLatitude Fix %f, Longitude Fix %f", mPostionFixModel.getLatitudeFixModel(), mPostionFixModel.getLongitudeFixModel());
-//            mtvPostionFixModelInfo.setText(szTemp);
-//            LogUtils.d(TAG, szTemp);
-            PostionFixModel.savePostionFixModel(mPostionFixModel);
-            //ToastUtils.show(szTemp);
-            LogUtils.d(TAG, String.format("updatePostionFixModel() run %d", nCurrentFixActivationCountValue));
-
-            showPostionFixModelInfo();
-        } else {
-            // 定位修复模型数据定型, GPS定位监听停止
-            // 在需要停止监听的地方（如onPause/onDestroy）添加：
-            if (locationManagerPhoneGPS != null) {
-                // 取消位置更新监听
-                locationManagerPhoneGPS.removeUpdates(phoneGPSLocationListener);
-                // 可选：停止后释放资源
-                phoneGPSLocationListener = null;
-            }
-            LogUtils.d(TAG, String.format("updatePostionFixModel() stop %d", nCurrentFixActivationCountValue));
-        } 
-    }
+//    void updatePostionFixModel() {
+//        if (_LocationPhoneGPS == null
+//            || mLocationTX == null) {
+//            return;
+//        }
+//
+//        nCurrentFixActivationCountValue++;
+//        if (nCurrentFixActivationCountValue < nFixActivationCountValue)  {
+//            mPostionFixModel = PostionFixModel.loadPostionFixModel();
+//            mPostionFixModel.setLatitudeFixModel(_LocationPhoneGPS.getLatitude() - mLocationTX.getLatitude());
+//            mPostionFixModel.setLongitudeFixModel(_LocationPhoneGPS.getLongitude() - mLocationTX.getLongitude());
+//
+////            String szTemp = String.format("PostionFixModel Info\nLatitude Fix %f, Longitude Fix %f", mPostionFixModel.getLatitudeFixModel(), mPostionFixModel.getLongitudeFixModel());
+////            mtvPostionFixModelInfo.setText(szTemp);
+////            LogUtils.d(TAG, szTemp);
+//            PostionFixModel.savePostionFixModel(mPostionFixModel);
+//            //ToastUtils.show(szTemp);
+//            LogUtils.d(TAG, String.format("updatePostionFixModel() run %d", nCurrentFixActivationCountValue));
+//
+//            showPostionFixModelInfo();
+//        } else {
+//            // 定位修复模型数据定型, GPS定位监听停止
+//            // 在需要停止监听的地方（如onPause/onDestroy）添加：
+//            if (locationManagerPhoneGPS != null) {
+//                // 取消位置更新监听
+//                locationManagerPhoneGPS.removeUpdates(phoneGPSLocationListener);
+//                // 可选：停止后释放资源
+//                phoneGPSLocationListener = null;
+//            }
+//            LogUtils.d(TAG, String.format("updatePostionFixModel() stop %d", nCurrentFixActivationCountValue));
+//        } 
+//    }
 
     private Location fixGPSLocationFromPostionFixModel(Location location) {
         // 用腾讯定位数据与GPS定位数据的数据差修复模型，来修复一下GPS定位数据。
@@ -356,15 +389,15 @@ public class PositionsFragment extends Fragment {
 //            tvGPSLocation.setText(String.format("GPS [ Latitude: %f \nLongitude: %f ]", latitudeGPSLock, longitudeGPSLock));
 //            fuseLocationData();
 
-            _LocationPhoneGPS = location;
+            //_LocationPhoneGPS = location;
             // 位置变化时的处理逻辑
 //            double latitude = location.getLatitude();
 //            double longitude = location.getLongitude();
 //            String szTemp = String.format("Phone GPS MyLocation Init Info\nLatitude %f, Longitude %f, Accuracy %f", _LocationPhoneGPS.getLatitude(), _LocationPhoneGPS.getLongitude(), _LocationPhoneGPS.getAccuracy());
 //            mtvPhoneMyLocationInfo.setText(szTemp);
 //            LogUtils.d(TAG, szTemp);
-            showLocationPhoneGPS();
-            updatePostionFixModel();
+            //showLocationPhoneGPS();
+            //updatePostionFixModel();
             if(mswTaskService.isChecked()) {
                 moveToCurrentLocation();
             }
@@ -389,29 +422,51 @@ public class PositionsFragment extends Fragment {
         //tvFuseLocation.setText(String.format("Fuse [ Latitude: %f \nLongitude: %f ]", latitudeFuseLock, longitudeFuseLock));
     }
 
-    public static final int INIT_POSITION = 1;
-    class MyHandler extends Handler {
+//    public static final int INIT_POSITION = 1;
+//    class MyHandler extends Handler {
+//        @Override
+//        public void handleMessage(@NonNull Message msg) {
+//            switch (msg.what) {
+//                case INIT_POSITION:
+//                    // 在这里处理接收到消息后的逻辑，比如更新 UI
+//                    mLocationTX = (Location)msg.obj;
+//                    //showLocationTX();
+//
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//    };
+
+//    public void sendInitPositioningMessage(Location location) {
+//        if (mMyHandler != null) {
+//            Message message = Message.obtain();
+//            message.what = INIT_POSITION;
+//            message.obj = location;
+//            mMyHandler.sendMessage(message);
+//        }
+//    }
+    
+    private class MyServiceConnection implements ServiceConnection {
         @Override
-        public void handleMessage(@NonNull Message msg) {
-            switch (msg.what) {
-                case INIT_POSITION:
-                    // 在这里处理接收到消息后的逻辑，比如更新 UI
-                    _LocationTX = (Location)msg.obj;
-                    showLocationTX();
-
-                    break;
-                default:
-                    break;
-            }
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            LogUtils.d(TAG, "onServiceConnected(...)");
+            GPSService.MyBinder binder = (GPSService.MyBinder) service;
+            mGPSService = binder.getService();
+            mGPSService.setOnGPSRTLocationListener(new OnGPSRTLocationListener(){
+                    @Override
+                    public void onGPSRTLocation(Location location) {
+                        showLocationPhoneGPS(location);
+                    }
+                });
         }
-    };
 
-    public static void sendInitPositioningMessage(Location location) {
-        if (_MyHandler != null) {
-            Message message = Message.obtain();
-            message.what = INIT_POSITION;
-            message.obj = location;
-            _MyHandler.sendMessage(message);
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            LogUtils.d(TAG, "onServiceDisconnected(...)");
+            mGPSService = null;
         }
+
     }
 }
