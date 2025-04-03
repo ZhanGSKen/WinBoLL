@@ -86,6 +86,8 @@ public class AboutActivity extends WinBollActivity implements IWinBollActivity {
         appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=AES");
         appInfo.setAppAPKName("AES");
         appInfo.setAppAPKFolderName("AES");
+        //appInfo.setIsAddDebugTools(false);
+        appInfo.setIsAddDebugTools(BuildConfig.DEBUG);
         return new AboutView(mContext, appInfo);
     }
 }
