@@ -87,8 +87,9 @@ public class MainSimpleActivity extends AppCompatActivity implements /*EasyPermi
         mLogView = findViewById(R.id.logview);
         mLogView.start();
 
-        TencentMapInitializer.setAgreePrivacy(this, true);
-        TencentMapInitializer.start(this);
+        TencentMapInitializer.setAgreePrivacy(true);
+        //TencentMapInitializer.setAgreePrivacy(this, true);
+        //TencentMapInitializer.start(this);
         TencentLocationManager.setUserAgreePrivacy(true);
 
 

@@ -58,12 +58,16 @@ dependencies {
     
     // 定位服务
     api 'com.google.android.gms:play-services-location:20.0.0'
+    
     // 腾讯地图
-    api 'com.tencent.map:tencent-map-vector-sdk:6.2.1.250120.3f971009.140342819'
-    // 腾讯地图基础库
-    api 'com.tencent.openmap:foundation:0.5.6.9be4e02'
-    api 'com.tencent.map:sdk-utilities:1.0.9'
+    //api 'com.tencent.map:tencent-map-vector-sdk:6.2.1.250120.3f971009.140342819'
+    // 地图库
+    api 'com.tencent.map:tencent-map-vector-sdk:4.5.6'
+    // 地图组件库，包括小车平移、点聚合等组件功能，详见开发指南。
+    api 'com.tencent.map:sdk-utilities:1.0.6'
+    //api 'com.tencent.openmap:foundation:0.5.6.9be4e02'
     api 'com.tencent.map.geolocation:TencentLocationSdk-openplatform:7.5.4.3'
+    
     api 'com.google.code.gson:gson:2.8.5'
     // 权限申请框架
     //implementation 'pub.devrel:easypermissions:2.0.1'

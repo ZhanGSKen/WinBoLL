@@ -86,8 +86,9 @@ public class TXMSFragment extends Fragment implements /*EasyPermissions.Permissi
         View viewRoot = inflater.inflate(R.layout.fragment_txms, container, false);
         locationPostionModelList = new ArrayList<PostionModel>();
 
-        TencentMapInitializer.setAgreePrivacy(getActivity(), true);
-        TencentMapInitializer.start(getActivity());
+        TencentMapInitializer.setAgreePrivacy(true);
+        //TencentMapInitializer.setAgreePrivacy(getActivity(), true);
+        //TencentMapInitializer.start(getActivity());
         TencentLocationManager.setUserAgreePrivacy(true);
 
         mapView = viewRoot.findViewById(R.id.mapview);
