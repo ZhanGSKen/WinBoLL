@@ -21,6 +21,8 @@ public class LogFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
+    
+    LogView mLogView;
 
 //    public static LogFragment newInstance(int page) {
 //        Bundle args = new Bundle();
@@ -43,8 +45,16 @@ public class LogFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_log, container, false);
-//        LogView logView = view.findViewById(R.id.logview);
-//        logView.start();
+        mLogView = view.findViewById(R.id.logview);
+        mLogView.start();
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLogView.start();
+    }
+    
+    
 }

@@ -27,6 +27,9 @@ public class PostionModel extends BaseBean {
     // 精确度
     private double accuracy;
     private String provider;
+    private String comments;
+    private boolean isEnable;
+    private boolean isSimpleView;
     
     public PostionModel() {
         this.uuid = UUID.randomUUID().toString();
@@ -35,6 +38,9 @@ public class PostionModel extends BaseBean {
         this.timestamp = 0L;
         this.accuracy = 0.0f;
         this.provider = "";
+        this.comments = "";
+        this.isEnable = false;
+        this.isSimpleView = true;
     }
 
     public PostionModel(Location location) {
@@ -44,6 +50,33 @@ public class PostionModel extends BaseBean {
         this.timestamp = location.getTime();
         this.accuracy = location.getAccuracy();
         this.provider = location.getProvider();
+        this.comments = "";
+        this.isEnable = false;
+        this.isSimpleView = true;
+    }
+
+    public void setIsEnable(boolean isEnable) {
+        this.isEnable = isEnable;
+    }
+
+    public boolean isEnable() {
+        return isEnable;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setIsSimpleView(boolean isSimpleView) {
+        this.isSimpleView = isSimpleView;
+    }
+
+    public boolean isSimpleView() {
+        return isSimpleView;
     }
 
     public void setUuid(String uuid) {
@@ -109,6 +142,9 @@ public class PostionModel extends BaseBean {
         jsonWriter.name("timestamp").value(getTimestamp());
         jsonWriter.name("accuracy").value(getAccuracy());
         jsonWriter.name("provider").value(getProvider());
+        jsonWriter.name("comments").value(getComments());
+        jsonWriter.name("isEnable").value(isEnable());
+        jsonWriter.name("isSimpleView").value(isSimpleView());
 
     }
 
@@ -127,6 +163,12 @@ public class PostionModel extends BaseBean {
                 setAccuracy(jsonReader.nextDouble());
             } else if (name.equals("provider")) {
                 setProvider(jsonReader.nextString());
+            } else if (name.equals("comments")) {
+                setComments(jsonReader.nextString());
+            } else if (name.equals("isEnable")) {
+                setIsEnable(jsonReader.nextBoolean());
+            } else if (name.equals("isSimpleView")) {
+                setIsSimpleView(jsonReader.nextBoolean());
             } else {
                 return false;
             }

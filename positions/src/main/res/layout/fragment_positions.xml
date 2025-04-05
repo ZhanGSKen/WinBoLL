@@ -9,113 +9,77 @@
 	<LinearLayout
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="80dp"
+		android:padding="10dp"
+		android:gravity="center_vertical">
 
-		<LinearLayout
-			android:orientation="vertical"
+		<ScrollView
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+			android:layout_height="match_parent">
 
-			<LinearLayout
-				android:orientation="horizontal"
+			<TextView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:padding="10dp"
-				android:gravity="center_vertical">
+				android:text="Text"
+				android:id="@+id/txmylocationinfo_tv"/>
 
-				<TextView
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="Text"
-					android:id="@+id/txmylocationinfo_tv"/>
-
-			</LinearLayout>
-
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:padding="10dp">
-
-				<TextView
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="Text"
-					android:id="@+id/phonegpsinfo_tv"/>
-
-			</LinearLayout>
-
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:gravity="right">
-
-				<Button
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="۞"
-					android:id="@+id/txrt_btn"/>
-
-				<Button
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="+"
-					android:id="@+id/add_btn"/>
-
-			</LinearLayout>
-
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:gravity="center_vertical">
-
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="Latitude:"/>
-
-				<EditText
-					android:layout_width="0dp"
-					android:ems="10"
-					android:layout_height="wrap_content"
-					android:layout_weight="1.0"
-					android:id="@+id/locklatitude_et"
-					android:singleLine="true"/>
-
-			</LinearLayout>
-
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:gravity="center_vertical">
-
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="Longitude:"/>
-
-				<EditText
-					android:layout_width="0dp"
-					android:ems="10"
-					android:layout_height="wrap_content"
-					android:layout_weight="1.0"
-					android:id="@+id/locklongitude_et"
-					android:singleLine="true"/>
-
-			</LinearLayout>
-
-			<Switch
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="启用提醒服务"
-				android:id="@+id/taskservice_sw"/>
-
-		</LinearLayout>
+		</ScrollView>
 
 	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="80dp"
+		android:padding="10dp">
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Text"
+				android:id="@+id/phonegpsinfo_tv"/>
+
+		</ScrollView>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="right|center_vertical">
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="۞"
+			android:id="@+id/txrt_btn"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="+"
+			android:id="@+id/add_btn"/>
+
+		<Switch
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="提醒服务总开关"
+			android:id="@+id/taskservice_sw"/>
+
+	</LinearLayout>
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/recycler_view"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:background="@drawable/recycler_view_border"
+		android:layout_margin="5dp"
+		android:layout_weight="1.0"/>
 
 </LinearLayout>
 

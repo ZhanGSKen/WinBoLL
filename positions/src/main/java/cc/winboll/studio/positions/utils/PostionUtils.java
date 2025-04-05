@@ -1,4 +1,4 @@
-package cc.winboll.studio.positions.views;
+package cc.winboll.studio.positions.utils;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
@@ -23,7 +23,7 @@ public class PostionUtils {
         mContext = context;
         PostionModel.loadBeanList(mContext, mPostionModelList, PostionModel.class);
     }
-    
+
     public synchronized static PostionUtils getInstance(Context context) {
         if (_PostionUtils == null) {
             _PostionUtils = new PostionUtils(context);
@@ -31,11 +31,19 @@ public class PostionUtils {
         return _PostionUtils;
     }
     
+    public ArrayList<PostionModel> getPostionModelList() {
+        return mPostionModelList;
+    }
+    
+    public void savePostionModelList() {
+        PostionModel.saveBeanList(mContext, mPostionModelList, PostionModel.class);
+    }
+
     public void addPostion(PostionModel item) {
         mPostionModelList.add(item);
         PostionModel.saveBeanList(mContext, mPostionModelList, PostionModel.class);
     }
-    
+
     public void addPostion(Location location) {
         PostionModel item = new PostionModel();
         item.setLatitude(location.getLatitude());
@@ -43,7 +51,7 @@ public class PostionUtils {
         item.setTimestamp(location.getTime());
         item.setAccuracy(location.getAccuracy());
         item.setProvider(location.getProvider());
-        
+
         mPostionModelList.add(item);
         PostionModel.saveBeanList(mContext, mPostionModelList, PostionModel.class);
     }

@@ -6,13 +6,16 @@ package cc.winboll.studio.positions.fragments;
  * @Describe 联系人
  */
 import android.Manifest;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.os.IBinder;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,28 +24,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.utils.ToastUtils;
-import cc.winboll.studio.positions.R;
-import cc.winboll.studio.positions.models.PostionFixModel;
-import cc.winboll.studio.positions.utils.LocationFusion;
-import cc.winboll.studio.positions.utils.TimeUtils;
-import android.widget.EditText;
-import android.widget.Switch;
-import android.content.Intent;
-import cc.winboll.studio.positions.services.GPSService;
-import android.content.Context;
-import android.content.ServiceConnection;
-import android.content.ComponentName;
-import android.os.IBinder;
-import cc.winboll.studio.positions.listeners.OnGPSRTLocationListener;
 import cc.winboll.studio.positions.MainActivity;
-import cc.winboll.studio.positions.views.PostionUtils;
+import cc.winboll.studio.positions.R;
+import cc.winboll.studio.positions.adapters.PostionModelAdapter;
+import cc.winboll.studio.positions.listeners.OnGPSRTLocationListener;
+import cc.winboll.studio.positions.models.PostionFixModel;
+import cc.winboll.studio.positions.models.PostionModel;
+import cc.winboll.studio.positions.services.GPSService;
+import cc.winboll.studio.positions.utils.LocationFusion;
+import cc.winboll.studio.positions.utils.PostionUtils;
+import java.util.ArrayList;
 
 public class PositionsFragment extends Fragment {
 
@@ -52,6 +53,7 @@ public class PositionsFragment extends Fragment {
     private int mPage;
     
     private LocationManager locationManager;
+    
 
     //MyHandler mMyHandler;
 
@@ -63,6 +65,9 @@ public class PositionsFragment extends Fragment {
     Button mbtnAdd;
     Location mLocationTX;
     Location mLocationPhoneGPS;
+    private RecyclerView recyclerView;
+    private PostionModelAdapter adapter;
+    private ArrayList<PostionModel> mPostionList;
     
     TextView mtvPostionFixModelInfo;
     TextView mtvLockPostionInfo;
@@ -135,6 +140,15 @@ public class PositionsFragment extends Fragment {
                     postionUtils.addPostion(mLocationPhoneGPS);
                 }
             });
+            
+        recyclerView = viewMain.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mPostionList = PostionUtils.getInstance(getActivity()).getPostionModelList();
+
+        adapter = new PostionModelAdapter(getActivity(), mPostionList);
+        recyclerView.setAdapter(adapter);
+        
         
 //        metLockLatitude = viewMain.findViewById(R.id.locklatitude_et);
 //        metLockLongitude = viewMain.findViewById(R.id.locklongitude_et);
@@ -174,7 +188,6 @@ public class PositionsFragment extends Fragment {
         //showLocationPhoneGPS();
         //showPostionFixModelInfo();
         
-
         return viewMain;
     }
     
