@@ -5,12 +5,12 @@ package cc.winboll.studio.positions.adapters;
  * @Date 2025/04/04 13:38:13
  */
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -217,12 +217,15 @@ public class PostionModelAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public SimpleViewHolder(@NonNull ViewGroup parent, @NonNull View itemView) {
             super(itemView);
+            //LinearLayout linearLayout = itemView.findViewById(R.id.linearLayout);
             scrollView = itemView.findViewById(R.id.scrollView);
             //tvRuleText = itemView.findViewById(R.id.ruletext_tv);
             tvComments = new TextView(itemView.getContext());
+            
             //tvComments.setBackgroundColor(Color.GRAY);
-            LogUtils.d(TAG, String.format("getWidth() %d", parent.getWidth()));
-            scrollView.setContentWidth(parent.getWidth());
+            //LogUtils.d(TAG, String.format("linearLayout.getMeasuredWidth() %d", linearLayout.getMeasuredWidth()));
+            LogUtils.d(TAG, String.format("parent.getMeasuredWidth() %d", parent.getMeasuredWidth()));
+            scrollView.setContentWidth(parent.getMeasuredWidth());
             //scrollView.setContentWidth(600);
             scrollView.addContentLayout(tvComments);
         }
