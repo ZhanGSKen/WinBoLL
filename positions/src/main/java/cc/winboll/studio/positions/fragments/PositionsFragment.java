@@ -66,7 +66,7 @@ public class PositionsFragment extends Fragment {
     Location mLocationTX;
     Location mLocationPhoneGPS;
     private RecyclerView recyclerView;
-    private PostionModelAdapter adapter;
+    private PostionModelAdapter mPostionModelAdapter;
     private ArrayList<PostionModel> mPostionList;
     
     TextView mtvPostionFixModelInfo;
@@ -138,6 +138,7 @@ public class PositionsFragment extends Fragment {
                     //ToastUtils.show("mbtnAdd");
                     PostionUtils postionUtils = PostionUtils.getInstance(getActivity());
                     postionUtils.addPostion(mLocationPhoneGPS);
+                    mPostionModelAdapter.notifyDataSetChanged();
                 }
             });
             
@@ -146,8 +147,8 @@ public class PositionsFragment extends Fragment {
 
         mPostionList = PostionUtils.getInstance(getActivity()).getPostionModelList();
 
-        adapter = new PostionModelAdapter(getActivity(), mPostionList);
-        recyclerView.setAdapter(adapter);
+        mPostionModelAdapter = new PostionModelAdapter(getActivity(), mPostionList);
+        recyclerView.setAdapter(mPostionModelAdapter);
         
         
 //        metLockLatitude = viewMain.findViewById(R.id.locklatitude_et);
