@@ -87,11 +87,5 @@
 		android:layout_margin="2dp"
 		android:layout_alignParentBottom="true"/>
 
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_above="@id/recycler_view"/>
-
 </RelativeLayout>
 
