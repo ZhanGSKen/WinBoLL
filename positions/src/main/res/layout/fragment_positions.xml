@@ -70,11 +70,7 @@
 			android:text="+"
 			android:id="@+id/add_btn"/>
 
-		<Switch
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="提醒服务总开关"
-			android:id="@+id/taskservice_sw"/>
+		
 
 	</LinearLayout>
 

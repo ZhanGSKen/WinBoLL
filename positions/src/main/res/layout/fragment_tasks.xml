@@ -6,6 +6,13 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
+	<Switch
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="任务提醒服务总开关"
+		android:id="@+id/taskservice_sw"
+		android:padding="10dp"/>
+
 	<LinearLayout
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
