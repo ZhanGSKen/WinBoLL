@@ -1,7 +1,9 @@
 # Positions
+本项目涉及个人隐私，现转为个人应用开发。项目源码正式停止公开维护。
 
 #### 介绍
 位置应用,与卫星定位有关的应用。可以根据设定的位置与时间条件判断，来发送通知的应用。
+
 
 #### 软件架构
 以腾讯位置服务SDK源码为基础。源码地址：https://lbs.qq.com/mobile/androidMapSDK/developerGuide/configuration
