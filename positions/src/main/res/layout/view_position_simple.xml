@@ -2,16 +2,16 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:orientation="vertical"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:background="#FFCAFECC">
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:padding="2dp"
+	android:id="@+id/linearLayout">
 
-	<TextView
-		android:layout_width="wrap_content"
+	<cc.winboll.studio.positions.views.LeftScrollView
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Text"
-		android:id="@+id/location_text_view"/>
+		android:id="@+id/scrollView"/>
 
 </LinearLayout>
 

@@ -25,7 +25,7 @@
     <!-- 只能在前台获取精确的位置信息 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
-    <!-- 只能在前台获取大概位置（基于网络） -->
+    <!-- 只有在前台运行时才能获取大致位置信息 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <!-- 连接WLAN网络和断开连接 -->
@@ -35,6 +35,8 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
 
     <application
+        tools:replace="android:appComponentFactory"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -44,10 +46,9 @@
         android:theme="@style/MyAppTheme"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
-        tools:targetApi="q">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <activity android:name=".MainSimpleActivity">
+        <activity android:name=".MainActivity">
 
             <intent-filter>
 
@@ -59,7 +60,7 @@
 
         </activity>
 
-        <activity android:name=".MainActivity2">
+        <activity android:name=".MainSimpleActivity">
 
         </activity>
 
@@ -735,6 +736,10 @@
             android:value="SCYBZ-EC5Y4-XMHUI-FX2PU-ZYMMS-IBB7P"/>
 
         <activity android:name="cc.winboll.studio.positions.activities.TestMapViewActivity"/>
+
+        <activity android:name="cc.winboll.studio.positions.activities.JointPositioningActivity"/>
+
+        <service android:name="cc.winboll.studio.positions.services.GPSService"/>
 
     </application>
 

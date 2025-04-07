@@ -4,20 +4,11 @@ package cc.winboll.studio.positions.activities;
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/02/24 12:14:04
  */
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-
+import androidx.appcompat.app.AppCompatActivity;
 import cc.winboll.studio.positions.R;
-import com.tencent.map.vector.demo.heatoverlay.ScatterPlotOverlayActivity;
-import com.tencent.tencentmap.mapsdk.maps.MapView;
 import com.tencent.tencentmap.mapsdk.maps.TencentMap;
-import com.tencent.tencentmap.mapsdk.maps.TencentMapOptions;
 import com.tencent.tencentmap.mapsdk.maps.TextureMapView;
-import com.tencent.tencentmap.mapsdk.maps.model.LatLng;
 
 public class TestMapViewActivity extends AppCompatActivity {
     

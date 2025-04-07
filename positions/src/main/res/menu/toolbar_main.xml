@@ -5,6 +5,9 @@
         android:id="@+id/item_testmapview"
         android:title="TestMapViewActivity"/>
     <item
+        android:id="@+id/item_joint_positioning"
+        android:title="JointPositioningActivity"/>
+    <item
         android:id="@+id/item_demomain"
         android:title="DemoMainActivity"/>
     <item

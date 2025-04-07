@@ -21,30 +21,40 @@ public class LogFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
+    
+    LogView mLogView;
 
-    public static LogFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        LogFragment fragment = new LogFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mPage = getArguments().getInt(ARG_PAGE);
-        }
-    }
+//    public static LogFragment newInstance(int page) {
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_PAGE, page);
+//        LogFragment fragment = new LogFragment();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
+//
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//            mPage = getArguments().getInt(ARG_PAGE);
+//        }
+//    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_log, container, false);
-        LogView logView = view.findViewById(R.id.logview);
-        logView.start();
+        mLogView = view.findViewById(R.id.logview);
+        mLogView.start();
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLogView.start();
+    }
+    
+    
 }

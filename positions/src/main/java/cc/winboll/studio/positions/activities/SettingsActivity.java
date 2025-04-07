@@ -4,6 +4,7 @@ package cc.winboll.studio.positions.activities;
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/02/21 05:37:42
  */
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,14 +15,13 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
+import android.widget.Toolbar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
+import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import cc.winboll.studio.positions.R;
-import com.hjq.toast.ToastUtils;
 import java.lang.reflect.Field;
-import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.libappbase.IWinBollActivity;
-import cc.winboll.studio.libappbase.bean.APPInfo;
 
 public class SettingsActivity extends AppCompatActivity implements IWinBollActivity {
 
@@ -30,35 +30,15 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
     Toolbar mToolbar;
 
     @Override
-    public APPInfo getAppInfo() {
-        return null;
-    }
-
-    @Override
-    public AppCompatActivity getActivity() {
-        return this;
-    }
-    
-    @Override
     public String getTag() {
         return TAG;
     }
 
     @Override
-    public Toolbar initToolBar() {
-        return findViewById(R.id.activitymainToolbar1);
+    public Activity getActivity() {
+        return null;
     }
 
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return false;
-    }
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,13 +46,11 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
 
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
-        setSupportActionBar(mToolbar);
-        if (isEnableDisplayHomeAsUp()) {
-            // 显示后退按钮
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        getSupportActionBar().setSubtitle(getTag());
-        
+        setActionBar(mToolbar);
+        // 显示后退按钮
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setSubtitle(getTag());
+
     }
 
     public void onDefaultPhone(View view) {

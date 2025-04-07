@@ -5,8 +5,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-     <cc.winboll.studio.libappbase.LogView
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:id="@+id/logview"/>
+    
+    <cc.winboll.studio.libappbase.LogView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/logview"/>
+    
 </LinearLayout>

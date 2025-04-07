@@ -29,6 +29,7 @@ import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.positions.R;
 import cc.winboll.studio.positions.activities.SettingsActivity;
 import cc.winboll.studio.positions.activities.TestMapViewActivity;
+import cc.winboll.studio.positions.models.PostionModel;
 import cc.winboll.studio.positions.utils.LocationFileStorage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -51,10 +52,9 @@ import com.tencent.tencentmap.mapsdk.maps.model.MarkerOptions;
 import com.tencent.tencentmap.mapsdk.maps.model.MyLocationStyle;
 import java.util.ArrayList;
 import java.util.List;
-import pub.devrel.easypermissions.EasyPermissions;
-import cc.winboll.studio.positions.beans.LocationJson;
+//import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainSimpleActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,LocationSource, TencentLocationListener {
+public class MainSimpleActivity extends AppCompatActivity implements /*EasyPermissions.PermissionCallbacks,*/LocationSource, TencentLocationListener {
 
     public static final String TAG ="MainSimpleActivity";
 
@@ -69,7 +69,7 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
     private TencentLocationManager locationManager;
     private TencentLocationRequest locationRequest;
     private MyLocationStyle locationStyle;
-    ArrayList<LocationJson> locationJsonList;
+    ArrayList<PostionModel> locationJsonList;
     LogView mLogView;
 
     @Override
@@ -77,7 +77,7 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_simple);
         
-        locationJsonList = new ArrayList<LocationJson>();
+        locationJsonList = new ArrayList<PostionModel>();
         
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
@@ -87,8 +87,9 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
         mLogView = findViewById(R.id.logview);
         mLogView.start();
 
-        TencentMapInitializer.setAgreePrivacy(this, true);
-        TencentMapInitializer.start(this);
+        TencentMapInitializer.setAgreePrivacy(true);
+        //TencentMapInitializer.setAgreePrivacy(this, true);
+        //TencentMapInitializer.start(this);
         TencentLocationManager.setUserAgreePrivacy(true);
 
 
@@ -114,34 +115,34 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
         //建立定位
         //initLocation();
         //对地图操作类进行操作
-        CameraUpdate cameraSigma =
-            CameraUpdateFactory.newCameraPosition(new CameraPosition(
-                                                      new LatLng(22.984066, 116.307548),
-                                                      15,
-                                                      0f,
-                                                      0f));
-        //移动地图
-        tencentMap.moveCamera(cameraSigma);
+//        CameraUpdate cameraSigma =
+//            CameraUpdateFactory.newCameraPosition(new CameraPosition(
+//                                                      new LatLng(22.984066, 116.307548),
+//                                                      15f,
+//                                                      0f,
+//                                                      0f));
+//        //移动地图
+//        tencentMap.moveCamera(cameraSigma);
 
-        // 设置地图点击监听
-        tencentMap.setOnMapClickListener(new TencentMap.OnMapClickListener(){
-
-                @Override
-                public void onMapClick(com.tencent.tencentmap.mapsdk.maps.model.LatLng latLng) {
-                    //创建Marker对象之前，设置属性
-                    //LatLng position = new LatLng(40.011313,116.391907);
-                    BitmapDescriptor custom = BitmapDescriptorFactory.fromResource(R.drawable.marker);
-                    Location location = createLocationFromLatLng(latLng);
-                    addLocationJson(location);
-                    Marker mCustomMarker = tencentMap.addMarker(new MarkerOptions(latLng));
-
-                    //创建Marker对象之后，修改属性
-//                    Animation animation = new AlphaAnimation(0.7f, 0f);
-//                    animation.setDuration(2000);
-//                    mCustomMarker.setAnimation(animation);
-//                    mCustomMarker.startAnimation();
-                }
-            });
+//        // 设置地图点击监听
+//        tencentMap.setOnMapClickListener(new TencentMap.OnMapClickListener(){
+//
+//                @Override
+//                public void onMapClick(com.tencent.tencentmap.mapsdk.maps.model.LatLng latLng) {
+//                    //创建Marker对象之前，设置属性
+//                    //LatLng position = new LatLng(40.011313,116.391907);
+//                    BitmapDescriptor custom = BitmapDescriptorFactory.fromResource(R.drawable.marker);
+//                    Location location = createLocationFromLatLng(latLng);
+//                    addLocationJson(location);
+//                    Marker mCustomMarker = tencentMap.addMarker(new MarkerOptions(latLng));
+//
+//                    //创建Marker对象之后，修改属性
+////                    Animation animation = new AlphaAnimation(0.7f, 0f);
+////                    animation.setDuration(2000);
+////                    mCustomMarker.setAnimation(animation);
+////                    mCustomMarker.startAnimation();
+//                }
+//            });
             
         
     }
@@ -161,10 +162,10 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
         // 读取数据
         locationJsonList = LocationFileStorage.loadFromFile(this);
         
-        for (LocationJson lj : locationJsonList) {
-            tencentMap.addMarker(new MarkerOptions(toTencentLatLng(lj.toLocation())));
-            //LogUtils.d("Location", "Lat: " + loc.getLatitude() + ", Lng: " + loc.getLongitude());
-        }
+//        for (PostionModel lj : locationJsonList) {
+//            tencentMap.addMarker(new MarkerOptions(toTencentLatLng(lj.toLocation())));
+//            //LogUtils.d("Location", "Lat: " + loc.getLatitude() + ", Lng: " + loc.getLongitude());
+//        }
     }
     
     void addLocationJson(Location location) {
@@ -176,7 +177,7 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
 
         // 方式1：保存到文件
         //List<Location> locations = new ArrayList<>();
-        locationJsonList.add(new LocationJson(location));
+        locationJsonList.add(new PostionModel(location));
         LocationFileStorage.saveToFile(this, locationJsonList);
 
         // 读取数据
@@ -215,13 +216,13 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
 
 
     // 添加标记方法
-    private void addMarker(LatLng latLng) {
-        tencentMap.clearAllOverlays();
-        MarkerOptions options = new MarkerOptions(latLng)
-            .icon(BitmapDescriptorFactory.defaultMarker())
-            .title("点击保存");
-        tencentMap.addMarker(options);
-    }
+//    private void addMarker(LatLng latLng) {
+//        tencentMap.clearAllOverlays();
+//        MarkerOptions options = new MarkerOptions(latLng)
+//            .icon(BitmapDescriptorFactory.defaultMarker())
+//            .title("点击保存");
+//        tencentMap.addMarker(options);
+//    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -246,8 +247,8 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
             startActivity(intent);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
         } else if (item.getItemId() == R.id.item_demomain) {
-            Intent intent = new Intent(this, com.tencent.map.vector.demo.DemoMainActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(this, com.tencent.map.vector.demo.DemoMainActivity.class);
+//            startActivity(intent);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
         } else if (item.getItemId() == R.id.item_testmapview) {
             Intent intent = new Intent(this, TestMapViewActivity.class);
@@ -431,15 +432,15 @@ public class MainSimpleActivity extends AppCompatActivity implements EasyPermiss
         locationChangedListener = null;
     }
 
-    @Override
-    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-        Log.e("location quest: ", "success");
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        Log.e("location quest: ", "failed");
-    }
+//    @Override
+//    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+//        Log.e("location quest: ", "success");
+//    }
+//
+//    @Override
+//    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+//        Log.e("location quest: ", "failed");
+//    }
 
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED

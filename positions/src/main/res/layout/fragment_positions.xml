@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:layout_above="@id/fragmentpositionsLinearLayout2"
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="80dp"
+		android:padding="10dp"
+		android:gravity="center_vertical"
+		android:id="@+id/fragmentpositionsLinearLayout1">
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Text"
+				android:id="@+id/txmylocationinfo_tv"/>
+
+		</ScrollView>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_above="@id/fragmentpositionsLinearLayout3"
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="80dp"
+		android:padding="10dp"
+		android:id="@+id/fragmentpositionsLinearLayout2">
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Text"
+				android:id="@+id/phonegpsinfo_tv"/>
+
+		</ScrollView>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_above="@id/recycler_view"
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="right|center_vertical"
+		android:id="@+id/fragmentpositionsLinearLayout3">
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="۞"
+			android:id="@+id/txrt_btn"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="+"
+			android:id="@+id/add_btn"/>
+
+		
+
+	</LinearLayout>
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/recycler_view"
+		android:layout_width="match_parent"
+		android:layout_height="200dp"
+		android:background="@drawable/recycler_view_border"
+		android:padding="2dp"
+		android:layout_margin="2dp"
+		android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>
+
