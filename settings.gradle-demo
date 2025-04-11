@@ -1,7 +1,3 @@
-// APP 项目编译设置
-//include ':app'
-//rootProject.name = "app"
-
 // AutoInstaller 项目编译设置
 //include ':autoinstaller'
 //rootProject.name = "autoinstaller"
