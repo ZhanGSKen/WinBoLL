@@ -9,13 +9,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.util.Log;
 import cc.winboll.studio.contacts.services.MainService;
 import com.hjq.toast.ToastUtils;
 import java.lang.ref.WeakReference;
-import cc.winboll.studio.libappbase.LogUtils;
 
 public class MainReceiver extends BroadcastReceiver {
 
@@ -43,7 +39,7 @@ public class MainReceiver extends BroadcastReceiver {
     public void registerAction(Context context) {
         IntentFilter filter=new IntentFilter();
         filter.addAction(ACTION_BOOT_COMPLETED);
-        //filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        //filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         context.registerReceiver(this, filter);
     }
 }
