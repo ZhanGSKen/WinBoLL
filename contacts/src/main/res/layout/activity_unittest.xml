@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="right">
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Test Main"
+			android:onClick="onTestMain"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_vertical">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="测试号码："/>
+
+		<EditText
+			android:layout_width="0dp"
+			android:inputType="phone"
+			android:layout_height="wrap_content"
+			android:ems="10"
+			android:layout_weight="1.0"
+			android:id="@+id/phone_et"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Test Phone"
+			android:onClick="onTestPhone"/>
+
+	</LinearLayout>
+
+	<cc.winboll.studio.libappbase.LogView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1.0"
+		android:id="@+id/logview"/>
+
+</LinearLayout>
+
