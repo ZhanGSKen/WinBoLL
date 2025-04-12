@@ -9,11 +9,14 @@ import android.util.JsonReader;
 import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
+import cc.winboll.studio.contacts.utils.IntUtils;
 
 public class SettingsModel extends BaseBean {
 
     public static final String TAG = "SettingsModel";
-
+    public static final int MAX_INTRANGE = 666666;
+    public static final int MIN_INTRANGE = 1;
+    
     // 云盾防御层数量
     int dunTotalCount;
     // 当前云盾防御层
@@ -34,15 +37,15 @@ public class SettingsModel extends BaseBean {
     }
 
     public SettingsModel(int dunTotalCount, int dunCurrentCount, int dunResumeSecondCount, int dunResumeCount, boolean isEnableDun) {
-        this.dunTotalCount = dunTotalCount;
-        this.dunCurrentCount = dunCurrentCount;
-        this.dunResumeSecondCount = dunResumeSecondCount;
-        this.dunResumeCount = dunResumeCount;
+        this.dunTotalCount = getSettingsModelRangeInt(dunTotalCount);
+        this.dunCurrentCount = getSettingsModelRangeInt(dunCurrentCount);
+        this.dunResumeSecondCount = getSettingsModelRangeInt(dunResumeSecondCount);
+        this.dunResumeCount = getSettingsModelRangeInt(dunResumeCount);
         this.isEnableDun = isEnableDun;
     }
 
     public void setDunTotalCount(int dunTotalCount) {
-        this.dunTotalCount = dunTotalCount;
+        this.dunTotalCount = getSettingsModelRangeInt(dunTotalCount);
     }
 
     public int getDunTotalCount() {
@@ -50,7 +53,7 @@ public class SettingsModel extends BaseBean {
     }
 
     public void setDunCurrentCount(int dunCurrentCount) {
-        this.dunCurrentCount = dunCurrentCount;
+        this.dunCurrentCount = getSettingsModelRangeInt(dunCurrentCount);
     }
 
     public int getDunCurrentCount() {
@@ -58,7 +61,7 @@ public class SettingsModel extends BaseBean {
     }
 
     public void setDunResumeSecondCount(int dunResumeSecondCount) {
-        this.dunResumeSecondCount = dunResumeSecondCount;
+        this.dunResumeSecondCount = getSettingsModelRangeInt(dunResumeSecondCount);
     }
 
     public int getDunResumeSecondCount() {
@@ -66,7 +69,7 @@ public class SettingsModel extends BaseBean {
     }
 
     public void setDunResumeCount(int dunResumeCount) {
-        this.dunResumeCount = dunResumeCount;
+        this.dunResumeCount = getSettingsModelRangeInt(dunResumeCount);
     }
 
     public int getDunResumeCount() {
@@ -80,7 +83,10 @@ public class SettingsModel extends BaseBean {
     public boolean isEnableDun() {
         return isEnableDun;
     }
-
+    
+    int getSettingsModelRangeInt(int origin) {
+        return IntUtils.getIntInRange(origin, MIN_INTRANGE, MAX_INTRANGE);
+    }
 
 
     @Override
@@ -103,13 +109,13 @@ public class SettingsModel extends BaseBean {
     public boolean initObjectsFromJsonReader(JsonReader jsonReader, String name) throws IOException {
         if (super.initObjectsFromJsonReader(jsonReader, name)) { return true; } else {
             if (name.equals("dunTotalCount")) {
-                setDunTotalCount(jsonReader.nextInt());
+                setDunTotalCount(getSettingsModelRangeInt(jsonReader.nextInt()));
             } else if (name.equals("dunCurrentCount")) {
-                setDunCurrentCount(jsonReader.nextInt());
+                setDunCurrentCount(getSettingsModelRangeInt(jsonReader.nextInt()));
             } else if (name.equals("dunResumeSecondCount")) {
-                setDunResumeSecondCount(jsonReader.nextInt());
+                setDunResumeSecondCount(getSettingsModelRangeInt(jsonReader.nextInt()));
             } else if (name.equals("dunResumeCount")) {
-                setDunResumeCount(jsonReader.nextInt());
+                setDunResumeCount(getSettingsModelRangeInt(jsonReader.nextInt()));
             } else if (name.equals("isEnableDun")) {
                 setIsEnableDun(jsonReader.nextBoolean());
             } else {

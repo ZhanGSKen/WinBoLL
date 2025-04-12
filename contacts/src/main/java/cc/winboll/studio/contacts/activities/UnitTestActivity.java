@@ -3,11 +3,12 @@ package cc.winboll.studio.contacts.activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.dun.Rules;
+import cc.winboll.studio.contacts.utils.IntUtils;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import android.widget.EditText;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
@@ -37,6 +38,9 @@ public class UnitTestActivity extends Activity {
     }
 
     public void onTestMain(View view) {
+        LogUtils.d(TAG, "IntUtils.unittest_getIntInRange();");
+        IntUtils.unittest_getIntInRange();
+        
         Rules rules = Rules.getInstance(this);
 
         // 如果没有规则就添加测试规则
@@ -86,6 +90,5 @@ public class UnitTestActivity extends Activity {
 
         phone = "95566";
         LogUtils.d(TAG, String.format("Test phone : %s\n%s", phone, rules.isAllowed(phone)));
-
     }
 }
