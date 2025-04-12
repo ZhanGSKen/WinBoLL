@@ -81,6 +81,20 @@ public class Rules {
         LogUtils.d(TAG, String.format("saveRules()"));
         PhoneConnectRuleModel.saveBeanList(mContext, _PhoneConnectRuleModelList, PhoneConnectRuleModel.class);
     }
+    
+    public void resetDefaultBoBullToonURL() {
+        mSettingsModel.setBoBullToon_URL(SettingsModel.DEFAULT_BOBULLTOON_URL);
+        saveDun();
+    }
+
+    public void setBoBullToonURL(String szUrl) {
+        mSettingsModel.setBoBullToon_URL(szUrl);
+        saveDun();
+    }
+
+    public String getBoBullToonURL() {
+        return mSettingsModel.getBoBullToon_URL();
+    }
 
     public void loadDun() {
         mSettingsModel = SettingsModel.loadBean(mContext, SettingsModel.class);

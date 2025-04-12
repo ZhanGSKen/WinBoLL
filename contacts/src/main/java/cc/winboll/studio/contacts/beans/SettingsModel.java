@@ -13,6 +13,8 @@ import java.io.IOException;
 public class SettingsModel extends BaseBean {
 
     public static final String TAG = "SettingsModel";
+    
+    public static final String DEFAULT_BOBULLTOON_URL = "http://10.8.0.12:3000/Studio/BoBullToon/archive/main.zip"; // 替换为实际的 ZIP 文件 URL
 
     // 云盾防御层数量
     int dunTotalCount;
@@ -24,6 +26,8 @@ public class SettingsModel extends BaseBean {
     int dunResumeCount;
     // 是否启用云盾
     boolean isEnableDun;
+    // BoBullToon 应用模块数据请求地址
+    String szBoBullToon_URL;
 
     public SettingsModel() {
         this.dunTotalCount = 6;
@@ -31,14 +35,24 @@ public class SettingsModel extends BaseBean {
         this.dunResumeSecondCount = 60;
         this.dunResumeCount = 1;
         this.isEnableDun = false;
+        this.szBoBullToon_URL = DEFAULT_BOBULLTOON_URL;
     }
 
-    public SettingsModel(int dunTotalCount, int dunCurrentCount, int dunResumeSecondCount, int dunResumeCount, boolean isEnableDun) {
+    public SettingsModel(int dunTotalCount, int dunCurrentCount, int dunResumeSecondCount, int dunResumeCount, boolean isEnableDun, String szBoBullToon_URL) {
         this.dunTotalCount = dunTotalCount;
         this.dunCurrentCount = dunCurrentCount;
         this.dunResumeSecondCount = dunResumeSecondCount;
         this.dunResumeCount = dunResumeCount;
         this.isEnableDun = isEnableDun;
+        this.szBoBullToon_URL = szBoBullToon_URL;
+    }
+
+    public void setBoBullToon_URL(String boBullToon_URL) {
+        this.szBoBullToon_URL = boBullToon_URL;
+    }
+
+    public String getBoBullToon_URL() {
+        return szBoBullToon_URL;
     }
 
     public void setDunTotalCount(int dunTotalCount) {
@@ -96,7 +110,8 @@ public class SettingsModel extends BaseBean {
         jsonWriter.name("dunResumeSecondCount").value(getDunResumeSecondCount());
         jsonWriter.name("dunResumeCount").value(getDunResumeCount());
         jsonWriter.name("isEnableDun").value(isEnableDun());
-
+        jsonWriter.name("szBoBullToon_URL").value(getBoBullToon_URL());
+        
     }
 
     @Override
@@ -112,6 +127,8 @@ public class SettingsModel extends BaseBean {
                 setDunResumeCount(jsonReader.nextInt());
             } else if (name.equals("isEnableDun")) {
                 setIsEnableDun(jsonReader.nextBoolean());
+            } else if (name.equals("szBoBullToon_URL")) {
+                setBoBullToon_URL(jsonReader.nextString());
             } else {
                 return false;
             }

@@ -195,16 +195,29 @@
 				android:text="拨不通电话记录查询："/>
 
 			<LinearLayout
-				android:orientation="vertical"
+				android:orientation="horizontal"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:gravity="right"
 				android:layout_margin="10dp">
 
+				<EditText
+					android:layout_width="0dp"
+					android:ems="10"
+					android:layout_height="wrap_content"
+					android:layout_weight="1.0"
+					android:id="@+id/bobulltoonurl_et"/>
+
 				<Button
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="下载 BoBullToon"
+					android:text="重置地址"
+					android:onClick="onResetBoBullToonURL"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="下载数据"
 					android:onClick="onDownloadBoBullToon"/>
 
 			</LinearLayout>

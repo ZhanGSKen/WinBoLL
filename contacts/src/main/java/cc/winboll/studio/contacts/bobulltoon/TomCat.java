@@ -6,6 +6,7 @@ package cc.winboll.studio.contacts.bobulltoon;
  * @Describe 汤姆猫管家 ：使用 BoBullToon 项目，对通讯地址进行筛选判断的好朋友。
  */
 import android.content.Context;
+import cc.winboll.studio.contacts.dun.Rules;
 import cc.winboll.studio.libappbase.LogUtils;
 import com.hjq.toast.ToastUtils;
 import java.io.File;
@@ -28,6 +29,7 @@ public class TomCat {
     public static final String TAG = "TomCat";
 
     List<String> listPhoneBoBullToon = new ArrayList<String>();
+    String mszBoBullToon_URL;
 
     static volatile TomCat _TomCat;
     Context mContext;
@@ -42,7 +44,7 @@ public class TomCat {
         return _TomCat;
     }
 
-    void downloadAndExtractZip(String zipUrl, String destinationFolder) throws IOException {
+    boolean downloadAndExtractZip(String zipUrl, String destinationFolder) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
             .url(zipUrl)
@@ -95,13 +97,16 @@ public class TomCat {
             // 删除临时 ZIP 文件
             tempZipFile.delete();
             LogUtils.d(TAG, "已更新 BoBullToon 数据");
+            return true;
         } catch (Exception e) {
+            ToastUtils.show(e.getMessage());
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+            return false;
         }
     }
 
     public boolean downloadBoBullToon() {
-        String zipUrl = "http://10.8.0.12:3000/Studio/BoBullToon/archive/main.zip"; // 替换为实际的 ZIP 文件 URL
+        String zipUrl = Rules.getInstance(mContext).getBoBullToonURL(); // 替换为实际的 ZIP 文件 URL
         String destinationFolder = getWorkingFolder().getPath(); // 替换为实际的目标文件夹路径
         try {
             // 删除旧文件
@@ -113,9 +118,11 @@ public class TomCat {
             }
 
             // 更新新文件
-            downloadAndExtractZip(zipUrl, destinationFolder);
-            LogUtils.d(TAG, "ZIP 文件下载并解压成功。");
-            return true;
+            if(downloadAndExtractZip(zipUrl, destinationFolder)) {
+                LogUtils.d(TAG, "ZIP 文件下载并解压成功。");
+                return true;
+            }
+            return false;
         } catch (IOException e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }

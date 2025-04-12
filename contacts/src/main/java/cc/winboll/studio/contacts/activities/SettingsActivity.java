@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import cc.winboll.studio.contacts.App;
 import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.adapters.PhoneConnectRuleAdapter;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
@@ -34,13 +35,11 @@ import cc.winboll.studio.contacts.bobulltoon.TomCat;
 import cc.winboll.studio.contacts.dun.Rules;
 import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.contacts.views.DuInfoTextView;
-import cc.winboll.studio.libaes.winboll.APPInfo;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import com.hjq.toast.ToastUtils;
 import java.lang.reflect.Field;
 import java.util.List;
-import cc.winboll.studio.contacts.App;
 
 public class SettingsActivity extends AppCompatActivity implements IWinBollActivity {
 
@@ -177,6 +176,8 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
         etDunResumeSecondCount.setEnabled(!isEnableDun);
         etDunResumeCount.setEnabled(!isEnableDun);
 
+        EditText etBoBullToonURL = findViewById(R.id.bobulltoonurl_et);
+        etBoBullToonURL.setText(Rules.getInstance(this).getBoBullToonURL());
     }
 
     public static void notifyDunInfoUpdate() {
@@ -232,8 +233,17 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
             ToastUtils.show("悬浮窗已开启");
         }
     }
+    
+    public void onResetBoBullToonURL(View view) {
+        Rules.getInstance(this).resetDefaultBoBullToonURL();
+    }
 
     public void onDownloadBoBullToon(View view) {
+        EditText etBoBullToonURL = findViewById(R.id.bobulltoonurl_et);
+        if(!etBoBullToonURL.getText().toString().trim().equals(Rules.getInstance(this).getBoBullToonURL())) {
+            Rules.getInstance(this).setBoBullToonURL(etBoBullToonURL.getText().toString().trim());
+        }
+        
         final TomCat tomCat = TomCat.getInstance(this);
         new Thread(new Runnable() {
                 @Override
@@ -246,8 +256,6 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
                 }
             }).start();
     }
-
-
 
     public void onSearchBoBullToonPhone(View view) {
         TomCat tomCat = TomCat.getInstance(this);
@@ -311,7 +319,7 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
             }
         }
     }
-    
+
     public void onAbout(View view) {
         App.getWinBollActivityManager().startWinBollActivity(this, AboutActivity.class);
     }
