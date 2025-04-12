@@ -101,7 +101,7 @@ public class TomCat {
     }
 
     public boolean downloadBoBullToon() {
-        String zipUrl = "https://gitea.winboll.cc//Studio/BoBullToon/archive/main.zip"; // 替换为实际的 ZIP 文件 URL
+        String zipUrl = "http://10.8.0.12:3000/Studio/BoBullToon/archive/main.zip"; // 替换为实际的 ZIP 文件 URL
         String destinationFolder = getWorkingFolder().getPath(); // 替换为实际的目标文件夹路径
         try {
             // 删除旧文件
