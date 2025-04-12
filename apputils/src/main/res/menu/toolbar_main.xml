@@ -2,15 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/item_testwinboll"
-        android:title="TestWinBollActivity"
-        app:showAsAction="ifRoom"/>
-    <item
         android:id="@+id/item_teststringtoqrcodeview"
-        android:title="TestStringToQrCodeViewActivity"
-        app:showAsAction="ifRoom"/>
+        android:title="TestStringToQRCodeViewActivity"/>
     <item
         android:id="@+id/item_testqrcodedecodeactivity"
-        android:title="TestQRCodeDecodeActivity"
-        app:showAsAction="ifRoom"/>
+        android:title="TestQRCodeDecodeActivity"/>
+    <item
+        android:id="@+id/item_testcrashreport"
+        android:title="TestCrashReportActivity"/>
 </menu>

@@ -11,7 +11,20 @@
     <attr name="attrAToolbarStartColor" format="color" />
     <attr name="attrAToolbarCenterColor" format="color" />
     <attr name="attrAToolbarEndColor" format="color" />
-	
+        
+	<declare-styleable name="AboutView">
+        <attr name="app_name" format="string" />
+        <attr name="app_apkfoldername" format="string" />
+        <attr name="app_apkname" format="string" />
+        <attr name="app_gitname" format="string" />
+        <attr name="app_gitowner" format="string" />
+        <attr name="app_gitappbranch" format="string" />
+        <attr name="app_gitappsubprojectfolder" format="string" />
+        <attr name="appdescription" format="string" />
+        <attr name="appicon" format="reference" />
+        <attr name="is_adddebugtools" format="boolean" />
+    </declare-styleable>
+    
     <declare-styleable name="AToolbar">
         <attr name="attrAToolbarTitleTextColor"/>
         <attr name="attrAToolbarStartColor"/>
@@ -30,6 +43,13 @@
         <attr name="attrASupportToolbarStartColor"/>
         <attr name="attrASupportToolbarCenterColor"/>
         <attr name="attrASupportToolbarEndColor"/>
+    </declare-styleable>
+    
+    <declare-styleable name="AButton">
+        <attr name="attrAButtonTextColor" format="color" />
+        <attr name="attrAButtonPrimary" format="color" />
+        <attr name="attrAButtonPrimaryDark" format="color" />
+        <attr name="attrAButtonAccent" format="color" />
     </declare-styleable>
     
     <attr name="ActionSheetList" format="reference"/>

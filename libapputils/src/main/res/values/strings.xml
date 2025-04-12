@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="lib_name">library</string>
+    <string name="lib_name">libapputils</string>
     <string name="app_normal">Click here is switch to Normal APP</string>
     <string name="app_debug">Click here is switch to APP DEBUG</string>
     <string name="gitea_home">GITEA HOME</string>

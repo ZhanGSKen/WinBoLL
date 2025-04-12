@@ -11,6 +11,7 @@ import cc.winboll.studio.contacts.beans.PhoneConnectRuleModel;
 import cc.winboll.studio.contacts.beans.SettingsModel;
 import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.contacts.utils.ContactUtils;
+import cc.winboll.studio.contacts.utils.IntUtils;
 import cc.winboll.studio.contacts.utils.RegexPPiUtils;
 import cc.winboll.studio.libappbase.LogUtils;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class Rules {
 
         // 盾牌恢复定时器
         mDunResumeTimer = new Timer();
+        int ss = IntUtils.getIntInRange(mSettingsModel.getDunResumeSecondCount() * 1000, SettingsModel.MIN_INTRANGE, SettingsModel.MAX_INTRANGE);
         mDunResumeTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -69,7 +71,7 @@ public class Rules {
                         SettingsActivity.notifyDunInfoUpdate();
                     }
                 }
-            }, 1000, mSettingsModel.getDunResumeSecondCount() * 1000);
+            }, 1000, ss);
     }
 
     public void loadRules() {

@@ -5,11 +5,11 @@ apply from: '../.winboll/winboll_lint_build.gradle'
 
 android {
     compileSdkVersion 32
-    buildToolsVersion "33.0.3"
+    buildToolsVersion "32.0.0"
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion 24
+        targetSdkVersion 29
     }
     buildTypes {
         release {
@@ -17,28 +17,43 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
 }
 
 dependencies {
-    // 二维码使用的类库
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    // Android 类库
+    //api 'com.android.support:appcompat-v7:28.0.0'
+    api('com.android.support:appcompat-v7:28.0.0'){
+        //exclude group: "com.android.support", module: "support-vector-drawable"
+        exclude group: "com.android.support:animated-vector-drawable:28.0.0"
+    }
+    // https://mvnrepository.com/artifact/com.android.support/support-compat
+    //api 'com.android.support:support-compat:28.0.0' // 保留原有依赖（可选）
+    // https://mvnrepository.com/artifact/com.android.support/support-v4
+    api 'com.android.support:support-v4:28.0.0'
+    // https://mvnrepository.com/artifact/com.android.support/support-media-compat
+    api 'com.android.support:support-media-compat:28.0.0'
+    // https://mvnrepository.com/artifact/com.android.support/support-core-utils
+    api 'com.android.support:support-core-utils:28.0.0'
+    // https://mvnrepository.com/artifact/com.android.support/support-core-ui
+    api 'com.android.support:support-core-ui:28.0.0'
+    // https://mvnrepository.com/artifact/com.android.support/support-fragment
+    api 'com.android.support:support-fragment:28.0.0'
+    // https://mvnrepository.com/artifact/com.android.support/recyclerview-v7
+    api 'com.android.support:recyclerview-v7:28.0.0'
+
+    api 'cc.winboll.studio:libappbase:15.2.0'
+    
+    // 二维码类库
     api 'com.google.zxing:core:3.4.1'
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
     
-    api 'io.github.medyo:android-about-page:2.0.0'
-    api 'com.github.getActivity:ToastUtils:10.5'
-    api 'com.jcraft:jsch:0.1.55'
-    api 'org.jsoup:jsoup:1.13.1'
+    // 网络连接类库
     api 'com.squareup.okhttp3:okhttp:4.4.1'
     
-    api 'androidx.appcompat:appcompat:1.0.0'
-    api 'androidx.fragment:fragment:1.0.0'
-    api 'com.google.android.material:material:1.0.0'
+    // Html 解析
+    api 'org.jsoup:jsoup:1.13.1'
     
-    api 'cc.winboll.studio:libappbase:1.0.3'
-    
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    // SSH
+    //api 'com.jcraft:jsch:0.1.55'
 }

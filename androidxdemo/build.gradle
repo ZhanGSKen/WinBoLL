@@ -23,7 +23,7 @@ android {
 
     defaultConfig {
         applicationId "cc.winboll.studio.androidxdemo"
-        minSdkVersion 26
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         // versionName 更新后需要手动设置 
@@ -67,7 +67,7 @@ dependencies {
     //api 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
     //api 'androidx.fragment:fragment:1.1.0'
     
-    api 'cc.winboll.studio:libaes:15.2.1'
-    api 'cc.winboll.studio:libapputils:15.2.1'
+    api 'cc.winboll.studio:libaes:15.2.6'
+    api 'cc.winboll.studio:libapputils:15.2.2'
     api 'cc.winboll.studio:libappbase:15.2.2'
 }
