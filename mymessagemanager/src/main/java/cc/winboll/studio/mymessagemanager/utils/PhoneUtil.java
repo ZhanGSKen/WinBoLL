@@ -62,11 +62,37 @@ public class PhoneUtil {
 
     public boolean isPhoneInContacts(String szPhone) {
         List<PhoneBean> listPhoneDto = getPhoneList();
+        LogUtils.d(TAG, String.format("isPhoneInContacts(...) listPhoneDto.size() %d", listPhoneDto.size()));
         for (int i = 0; i < listPhoneDto.size(); i++) {
-            if (listPhoneDto.get(i).getTelPhone().equals(szPhone)) {
+            if (isTheSamePhoneNumber(listPhoneDto.get(i).getTelPhone(), szPhone)) {
                 return true;
             }
         }
+        return false;
+    }
+    
+    boolean isTheSamePhoneNumber(String szNum1, String szNum2) {
+        //LogUtils.d(TAG, String.format("szNum1 %s\nszNum2 %s", szNum1, szNum2));
+        if(szNum1.equals(szNum2)) {
+            LogUtils.d(TAG, "szNum1.equals(szNum2)");
+            return true;
+        }
+        
+        if(UnitAreaUtils.getInstance(mContext).isCurrentUnitAreaNumber(szNum1)) {
+            if(szNum1.equals(UnitAreaUtils.getInstance(mContext).genCurrentUnitAreaNumber(szNum2))) {
+                LogUtils.d(TAG, "szNum1.equals(UnitAreaUtils.genCurrentUnitAreaNumber(szNum2))");
+                return true;
+            }
+        }
+        
+        if(UnitAreaUtils.getInstance(mContext).isCurrentUnitAreaNumber(szNum2)) {
+            if(szNum2.equals(UnitAreaUtils.getInstance(mContext).genCurrentUnitAreaNumber(szNum1))) {
+                LogUtils.d(TAG, "szNum2.equals(UnitAreaUtils.genCurrentUnitAreaNumber(szNum1))");
+                return true;
+            }
+        }
+        
+        LogUtils.d(TAG, "isTheSamePhoneNumber(...) return false;");
         return false;
     }
 

@@ -36,7 +36,7 @@ public class SMSRecevier extends BroadcastReceiver {
 
         String szAction = intent.getAction();
         if (szAction.equals(ACTION_SMS_RECEIVED)) {
-            //LogUtils.d(TAG, "ACTION_SMS_RECEIVED");
+            LogUtils.d(TAG, "ACTION_SMS_RECEIVED");
             String szSmsBody = SMSUtil.getSmsBody(intent);
             String szSmsAddress = SMSUtil.getSmsAddress(intent);
             AppConfigUtil configUtil = AppConfigUtil.getInstance(context);
