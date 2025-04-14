@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Pattern;
+import cc.winboll.studio.contacts.bobulltoon.TomCat;
 
 public class Rules {
 
@@ -85,7 +86,7 @@ public class Rules {
     }
     
     public void resetDefaultBoBullToonURL() {
-        mSettingsModel.setBoBullToon_URL(SettingsModel.DEFAULT_BOBULLTOON_URL);
+        mSettingsModel.setBoBullToon_URL(TomCat.getInstance(mContext).getDefaultBobulltoonUrl());
         saveDun();
     }
 

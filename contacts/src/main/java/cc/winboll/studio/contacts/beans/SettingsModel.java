@@ -14,8 +14,7 @@ import cc.winboll.studio.contacts.utils.IntUtils;
 public class SettingsModel extends BaseBean {
 
     public static final String TAG = "SettingsModel";
-    public static final String DEFAULT_BOBULLTOON_URL = "http://10.8.0.12:3000/Studio/BoBullToon/archive/main.zip"; // 替换为实际的 ZIP 文件 URL
-
+    
     public static final int MAX_INTRANGE = 666666;
     public static final int MIN_INTRANGE = 1;
     
@@ -38,7 +37,7 @@ public class SettingsModel extends BaseBean {
         this.dunResumeSecondCount = 60;
         this.dunResumeCount = 1;
         this.isEnableDun = false;
-        this.szBoBullToon_URL = DEFAULT_BOBULLTOON_URL;
+        this.szBoBullToon_URL = "";
     }
 
     public SettingsModel(int dunTotalCount, int dunCurrentCount, int dunResumeSecondCount, int dunResumeCount, boolean isEnableDun, String szBoBullToon_URL) {

@@ -2,5 +2,6 @@
 <resources>
 
     <string name="app_name">Contacts</string>
+    <string name="default_bobulltoon_url">http://10.8.0.12:3000/Studio/BoBullToon/archive/main.zip</string>
 
 </resources>

@@ -233,17 +233,19 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
             ToastUtils.show("悬浮窗已开启");
         }
     }
-    
+
     public void onResetBoBullToonURL(View view) {
         Rules.getInstance(this).resetDefaultBoBullToonURL();
+        EditText etBoBullToonURL = findViewById(R.id.bobulltoonurl_et);
+        etBoBullToonURL.setText(Rules.getInstance(this).getBoBullToonURL());
     }
 
     public void onDownloadBoBullToon(View view) {
         EditText etBoBullToonURL = findViewById(R.id.bobulltoonurl_et);
-        if(!etBoBullToonURL.getText().toString().trim().equals(Rules.getInstance(this).getBoBullToonURL())) {
+        if (!etBoBullToonURL.getText().toString().trim().equals(Rules.getInstance(this).getBoBullToonURL())) {
             Rules.getInstance(this).setBoBullToonURL(etBoBullToonURL.getText().toString().trim());
         }
-        
+
         final TomCat tomCat = TomCat.getInstance(this);
         new Thread(new Runnable() {
                 @Override

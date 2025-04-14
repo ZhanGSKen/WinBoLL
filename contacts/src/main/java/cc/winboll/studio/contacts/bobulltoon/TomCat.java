@@ -6,6 +6,7 @@ package cc.winboll.studio.contacts.bobulltoon;
  * @Describe 汤姆猫管家 ：使用 BoBullToon 项目，对通讯地址进行筛选判断的好朋友。
  */
 import android.content.Context;
+import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.contacts.dun.Rules;
 import cc.winboll.studio.libappbase.LogUtils;
 import com.hjq.toast.ToastUtils;
@@ -42,6 +43,10 @@ public class TomCat {
             _TomCat = new TomCat(context);
         }
         return _TomCat;
+    }
+    
+    public String getDefaultBobulltoonUrl() {
+        return mContext.getString(R.string.default_bobulltoon_url);
     }
 
     boolean downloadAndExtractZip(String zipUrl, String destinationFolder) throws IOException {
