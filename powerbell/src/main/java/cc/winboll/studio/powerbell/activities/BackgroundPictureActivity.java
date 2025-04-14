@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +14,7 @@ import android.widget.Toast;
 import cc.winboll.studio.libaes.views.AToolbar;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
+import cc.winboll.studio.powerbell.App;
 import cc.winboll.studio.powerbell.R;
 import cc.winboll.studio.powerbell.activities.BackgroundPictureActivity;
 import cc.winboll.studio.powerbell.beans.BackgroundPictureBean;
@@ -70,7 +70,8 @@ implements BackgroundPicturePreviewDialog.IOnRecivedPictureListener {
         if (!mfBackgroundDir.exists()) {
             mfBackgroundDir.mkdirs();
         }
-        mfPictureDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), getString(R.string.app_projectname));
+        //mfPictureDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), getString(R.string.app_projectname));
+        mfPictureDir = new File(App.getTempDirPath());
         if (!mfPictureDir.exists()) {
             mfPictureDir.mkdirs();
         }

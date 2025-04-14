@@ -7,6 +7,7 @@ import cc.winboll.studio.powerbell.receivers.GlobalApplicationReceiver;
 import cc.winboll.studio.powerbell.utils.AppCacheUtils;
 import cc.winboll.studio.powerbell.utils.AppConfigUtils;
 import com.hjq.toast.ToastUtils;
+import java.io.File;
 
 public class App extends GlobalApplication {
 
@@ -16,10 +17,23 @@ public class App extends GlobalApplication {
     static AppConfigUtils _mAppConfigUtils;
     static AppCacheUtils _mAppCacheUtils;
     GlobalApplicationReceiver mReceiver;
+    static String szTempDir = "";
+    
+    public static String getTempDirPath() {
+        return szTempDir;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        
+        // 初始化临时文件夹目录
+        File fTempDir = new File(getExternalCacheDir(), "TempDir");
+        if(!fTempDir.exists()) {
+            fTempDir.mkdirs();
+        }
+        szTempDir = fTempDir.getAbsolutePath();
+        
         
         // 初始化 Toast 框架
         ToastUtils.init(this);
