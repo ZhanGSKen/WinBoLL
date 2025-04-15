@@ -20,10 +20,10 @@ public class AppBaseTileService extends TileService {
 
         if (AppConfigs.getInstance(AppBaseTileService.this).isEnableService()) {
             tile.setState(Tile.STATE_ACTIVE);
-            tile.setIcon(android.graphics.drawable.Icon.createWithResource(this, R.drawable.ic_cloud));
+            tile.setIcon(android.graphics.drawable.Icon.createWithResource(this, R.drawable.ic_android));
         } else {
             tile.setState(Tile.STATE_INACTIVE);
-            tile.setIcon(android.graphics.drawable.Icon.createWithResource(this, R.drawable.ic_cloud_outline));
+            tile.setIcon(android.graphics.drawable.Icon.createWithResource(this, R.drawable.ic_android));
         }
         tile.updateTile();
     }
