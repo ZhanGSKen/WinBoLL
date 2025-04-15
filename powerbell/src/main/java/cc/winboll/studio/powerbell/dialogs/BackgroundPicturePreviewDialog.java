@@ -72,6 +72,7 @@ public class BackgroundPicturePreviewDialog extends Dialog {
     }
     
     void initEnv() {
+        LogUtils.d(TAG, "initEnv()");
         mszPreReceivedFileName = "PreReceived.data";
     }
 

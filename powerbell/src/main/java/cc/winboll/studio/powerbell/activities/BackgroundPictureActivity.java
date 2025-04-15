@@ -132,8 +132,9 @@ implements BackgroundPicturePreviewDialog.IOnRecivedPictureListener {
             dlg.show();
         }
     }
-    
+
     void initEnv() {
+        LogUtils.d(TAG, "initEnv()");
         _RecivedPictureFileName = "Recived.data";
     }
 
@@ -152,7 +153,7 @@ implements BackgroundPicturePreviewDialog.IOnRecivedPictureListener {
         // 加载背景
         startCropImageActivity(false);
     }
-    
+
     //
     // 更新预览背景
     //
