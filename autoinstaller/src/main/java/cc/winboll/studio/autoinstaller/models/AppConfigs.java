@@ -11,12 +11,11 @@ import android.util.JsonWriter;
 import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.utils.FileUtil;
 import cc.winboll.studio.libappbase.LogUtils;
+import com.hjq.toast.ToastUtils;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.io.StringWriter;
-import android.drm.DrmConvertedStatus;
-import com.hjq.toast.ToastUtils;
 
 public class AppConfigs implements Serializable {
 
@@ -32,12 +31,13 @@ public class AppConfigs implements Serializable {
     Context mContext;
 
     AppConfigs(Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
     }
 
     public static synchronized AppConfigs getInstance(Context context) {
         if (_AppConfigs == null) {
             _AppConfigs = new AppConfigs(context);
+            _AppConfigs.loadAppConfigs(_AppConfigs.mContext);
         }
         return _AppConfigs;
     }
@@ -137,11 +137,22 @@ public class AppConfigs implements Serializable {
     static String getDataPath(Context context) {
         return context.getExternalFilesDir(TAG) + "/" + TAG + ".json";
     }
+    
+    public AppConfigs loadAppConfigs() {
+        AppConfigs appConfigs = null;
+        try {
+            String szJson = FileUtil.readFile(getDataPath(mContext));
+            appConfigs = AppConfigs.getInstance(mContext).parseAppConfigs(szJson);
+        } catch (IOException e) {
+            LogUtils.d(TAG, e.getMessage(), Thread.currentThread().getStackTrace());
+        }
+        return appConfigs;
+    }
 
     public AppConfigs loadAppConfigs(Context context) {
         AppConfigs appConfigs = null;
         try {
-            String szJson = FileUtil.readFile(getDataPath(context));
+            String szJson = FileUtil.readFile(getDataPath(context.getApplicationContext()));
             appConfigs = AppConfigs.getInstance(mContext).parseAppConfigs(szJson);
         } catch (IOException e) {
             LogUtils.d(TAG, e.getMessage(), Thread.currentThread().getStackTrace());
@@ -159,7 +170,7 @@ public class AppConfigs implements Serializable {
             LogUtils.d(TAG, e.getMessage(), Thread.currentThread().getStackTrace());
         }
     }
-    
+
     public void saveAppConfigs() {
         saveAppConfigs(mContext, this);
     }
