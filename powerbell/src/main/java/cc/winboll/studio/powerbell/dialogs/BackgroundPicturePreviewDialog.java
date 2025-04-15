@@ -37,6 +37,8 @@ public class BackgroundPicturePreviewDialog extends Dialog {
     public BackgroundPicturePreviewDialog(Context context) {
         super(context);
         setContentView(R.layout.dialog_backgroundpicturepreview);
+        initEnv();
+        
         mContext = context;
         mBackgroundPictureUtils = ((BackgroundPictureActivity)context).mBackgroundPictureUtils;
         
@@ -68,6 +70,10 @@ public class BackgroundPicturePreviewDialog extends Dialog {
                 }
             });
     }
+    
+    void initEnv() {
+        mszPreReceivedFileName = "PreReceived.data";
+    }
 
     void copyAndViewRecivePicture(ImageView imageView) {
         //AppConfigUtils appConfigUtils = AppConfigUtils.getInstance((GlobalApplication)mContext.getApplicationContext());
@@ -87,7 +93,6 @@ public class BackgroundPicturePreviewDialog extends Dialog {
         }
 
         File fSrcImage = new File(szSrcImage);
-        mszPreReceivedFileName = "PreReceived.data";
         //mszPreReceivedFileName = DateUtils.getDateNowString() + "-" + fSrcImage.getName();
         File mfPreReceivedPhoto = new File(activity.mBackgroundPictureUtils.getBackgroundDir(), mszPreReceivedFileName);
         // 复制源图片到剪裁文件
@@ -96,7 +101,7 @@ public class BackgroundPicturePreviewDialog extends Dialog {
             LogUtils.d(TAG, "copyFileUsingFileChannels");
             Drawable drawable = Drawable.createFromPath(mfPreReceivedPhoto.getPath());
             imageView.setBackground(drawable);
-            LogUtils.d(TAG, "mszPreReceivedFileName : " + mszPreReceivedFileName);
+            //LogUtils.d(TAG, "mszPreReceivedFileName : " + mszPreReceivedFileName);
         } catch (IOException e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }

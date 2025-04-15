@@ -32,7 +32,7 @@ import java.io.File;
 
 public class MainViewFragment extends Fragment {
 
-    public static final String TAG = MainViewFragment.class.getSimpleName();
+    public static final String TAG = "MainViewFragment";
 
     public static final int MSG_RELOAD_APPCONFIG = 0;
     public static final int MSG_CURRENTVALUEBATTERY = 1;

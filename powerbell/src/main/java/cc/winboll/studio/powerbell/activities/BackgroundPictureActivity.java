@@ -59,11 +59,13 @@ implements BackgroundPicturePreviewDialog.IOnRecivedPictureListener {
     static String _mszCommonFileType = "jpeg";
     // 背景图片的压缩比
     int mnPictureCompress = 100;
+    static String _RecivedPictureFileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_backgroundpicture);
+        initEnv();
 
         mBackgroundPictureUtils = BackgroundPictureUtils.getInstance(this);
         mfBackgroundDir = new File(mBackgroundPictureUtils.getBackgroundDir());
@@ -129,6 +131,10 @@ implements BackgroundPicturePreviewDialog.IOnRecivedPictureListener {
             BackgroundPicturePreviewDialog dlg= new BackgroundPicturePreviewDialog(this);
             dlg.show();
         }
+    }
+    
+    void initEnv() {
+        _RecivedPictureFileName = "Recived.data";
     }
 
     public static String getBackgroundFileName() {
@@ -331,10 +337,9 @@ implements BackgroundPicturePreviewDialog.IOnRecivedPictureListener {
     }
 
     public static File getRecivedPictureFile(Context context) {
-        String szRecivedPictureFileName = "Recived.data";
         BackgroundPictureUtils utils = BackgroundPictureUtils.getInstance(context);
         utils.loadBackgroundPictureBean();
-        return new File(utils.getBackgroundDir(), szRecivedPictureFileName);
+        return new File(utils.getBackgroundDir(), _RecivedPictureFileName);
     }
 
     @Override
