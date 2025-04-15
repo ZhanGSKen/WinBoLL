@@ -10,10 +10,13 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.service.quicksettings.Tile;
+import android.service.quicksettings.TileService;
 import android.widget.Toast;
 import androidx.core.content.FileProvider;
 import cc.winboll.studio.autoinstaller.FileListener;
 import cc.winboll.studio.autoinstaller.MainActivity;
+import cc.winboll.studio.autoinstaller.R;
 import cc.winboll.studio.autoinstaller.models.APKModel;
 import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.services.AssistantService;
@@ -22,15 +25,15 @@ import cc.winboll.studio.autoinstaller.utils.NotificationUtil;
 import cc.winboll.studio.autoinstaller.utils.PackageUtil;
 import cc.winboll.studio.autoinstaller.utils.ServiceUtil;
 import cc.winboll.studio.libappbase.LogUtils;
-import com.hjq.toast.ToastUtils;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import cc.winboll.studio.autoinstaller.models.MainServiceBean;
 
 public class MainService extends Service {
 
     public static String TAG = "MainService";
+    
+    Context mContext;
 
     ArrayList<APKModel> _APKModelList = new ArrayList<APKModel>();
     private static boolean _mIsServiceAlive;
@@ -51,6 +54,7 @@ public class MainService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        mContext = this;
         LogUtils.d(TAG, "onCreate()");
         _mIsServiceAlive = false;
         mHandler = new MyHandler(MainService.this);
@@ -59,6 +63,9 @@ public class MainService extends Service {
         }
 
         run();
+        
+        // 初始化磁贴工具服务
+        MainTileService mainTileService = new MainTileService(this);
     }
 
     private void run() {
@@ -99,6 +106,7 @@ public class MainService extends Service {
         }
         _mIsServiceAlive = false;
         LogUtils.d(TAG, "onDestroy()");
+        mContext = null;
     }
 
     @Override
@@ -183,7 +191,7 @@ public class MainService extends Service {
     private void installAPK(String szAPKFilePath) {
         String szAPKPackageName = PackageUtil.getPackageNameFromApk(this, szAPKFilePath);
         saveAPKInfo(szAPKPackageName);
-        
+
         long nTimeNow = System.currentTimeMillis();
         /*SimpleDateFormat dateFormat = new SimpleDateFormat(
          "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -220,7 +228,7 @@ public class MainService extends Service {
         LogUtils.d(TAG, "installAPK2()");
         String szAPKPackageName = PackageUtil.getPackageNameFromApk(this, szAPKFilePath);
         saveAPKInfo(szAPKPackageName);
-        
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.setAction(MainActivity.ACTION_NEW_INSTALLTASK);
         intent.putExtra(MainActivity.EXTRA_INSTALLED_PACKAGENAME, szAPKPackageName);
@@ -262,4 +270,21 @@ public class MainService extends Service {
             super.handleMessage(message);
         }
 	}
+
+    static class MainTileService extends TileService {
+        Context mContext;
+        MainTileService(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        public void onStartListening() {
+            super.onStartListening();
+            Tile tile = getQsTile();
+            tile.setIcon(android.graphics.drawable.Icon.createWithResource(this, R.drawable.ic_android));
+            // 更新磁贴状态
+            tile.setState((mContext == null || mContext.getApplicationContext() == null )?Tile.STATE_INACTIVE: Tile.STATE_ACTIVE);
+            tile.updateTile();
+        }
+    }
 }
