@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -30,8 +32,12 @@ import java.util.Map;
 public class MainActivity extends Activity {
     public static final String TAG = "MainActivity";
 
+    public static final int MSG_UPDATE_STATUS = 0;
+
     private static final int INSTALL_PERMISSION_CODE = 1;
-    
+
+    static MainActivity _MainActivity;
+
     ArrayList<APKModel> _APKModelList = new ArrayList<APKModel>();
     LogView mLogView;
     TextClock mTextClock;
@@ -61,6 +67,7 @@ public class MainActivity extends Activity {
 
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+        _MainActivity = this;
         initView();
 
         if (getIntent().getAction().equals(ACTION_NEW_INSTALLTASK)) {
@@ -77,11 +84,7 @@ public class MainActivity extends Activity {
         mLogView = findViewById(R.id.logview);
         mLogView.start();
 
-        AppConfigs appConfigs = AppConfigs.loadAppConfigs(this);
-        if (appConfigs == null) {
-            appConfigs = new AppConfigs(); 
-            AppConfigs.saveAppConfigs(this, appConfigs);
-        }
+        AppConfigs appConfigs = AppConfigs.getInstance(this).loadAppConfigs(this);
 
         if (appConfigs.getSetupMode() == AppConfigs.SetupMode.WATCHOUTPUTINSTALLER) {
             ((RadioButton)findViewById(R.id.activitymainRadioButton1)).setChecked(true);
@@ -196,10 +199,15 @@ public class MainActivity extends Activity {
     }
 
     public void onLockPath(View view) {
-        AppConfigs appConfigs = AppConfigs.loadAppConfigs(this);
-
         Switch sw = (Switch)view;
-        if (sw.isChecked()) {
+        setMainServiceStatus(sw.isChecked());
+    }
+
+    public void setMainServiceStatus(boolean isEnable) {
+        AppConfigs appConfigs = AppConfigs.getInstance(this).loadAppConfigs(this);
+
+        Switch sw = (Switch)findViewById(R.id.activitymainSwitch1);
+        if (isEnable) {
             String szFilePath = mEditText.getText().toString();
 
             // 设置空路径时退出
@@ -247,7 +255,7 @@ public class MainActivity extends Activity {
             stopWatchingFile();
 
         }
-        AppConfigs.saveAppConfigs(this, appConfigs);
+        AppConfigs.getInstance(this).saveAppConfigs(this, appConfigs);
     }
 
     void stopWatchingFile() {
@@ -307,7 +315,7 @@ public class MainActivity extends Activity {
      }*/
 
     public void onChangeSetupMode(View view) {
-        AppConfigs appConfigs = AppConfigs.loadAppConfigs(this);
+        AppConfigs appConfigs = AppConfigs.getInstance(this).loadAppConfigs(this);
 
         if (view.getId() == R.id.activitymainRadioButton1) {
             appConfigs.setSetupMode(AppConfigs.SetupMode.WATCHOUTPUTINSTALLER);
@@ -316,6 +324,42 @@ public class MainActivity extends Activity {
             appConfigs.setSetupMode(AppConfigs.SetupMode.NEWAPKINFONEWAPKINFO);
             ((RadioButton)findViewById(R.id.activitymainRadioButton1)).setChecked(false);
         }
-        AppConfigs.saveAppConfigs(this, appConfigs);
+        AppConfigs.getInstance(this).saveAppConfigs(this, appConfigs);
+    }
+
+    // 定义Handler
+    static Handler _Handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == MSG_UPDATE_STATUS) {
+                if (_MainActivity != null) {
+                    boolean isEnableMainService = (boolean)msg.obj;
+                    // 处理消息，这里更新 MainService 的状态
+                    _MainActivity.setMainServiceStatus(isEnableMainService);
+                }
+            }
+        }
+    };
+    
+    static void updateMainServiceStatus(boolean isEnable) {
+        if (_Handler != null) {
+            Message msg = new Message();
+            msg.obj = isEnable;
+            msg.what = MSG_UPDATE_STATUS;
+            _Handler.sendMessage(msg);
+        }
+    }
+    
+    public static void stopMainService() {
+        if (_MainActivity != null && _Handler != null) {
+            updateMainServiceStatus(false);
+        }
+    }
+    
+    public static void startMainService() {
+        if (_MainActivity != null && _Handler != null) {
+            updateMainServiceStatus(true);
+        }
     }
 }

@@ -26,6 +26,7 @@ import com.hjq.toast.ToastUtils;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import cc.winboll.studio.autoinstaller.models.MainServiceBean;
 
 public class MainService extends Service {
 
@@ -62,7 +63,7 @@ public class MainService extends Service {
 
     private void run() {
 
-        AppConfigs appConfigs = AppConfigs.loadAppConfigs(MainService.this);
+        AppConfigs appConfigs = AppConfigs.getInstance(MainService.this).loadAppConfigs(MainService.this);
         if (appConfigs.isEnableService()) {
             if (_mIsServiceAlive == false) {
                 // 设置运行状态
@@ -77,8 +78,8 @@ public class MainService extends Service {
 
                 startWatchingFile(appConfigs.getWatchingFilePath());
 
-                LogUtils.d(TAG, "running...");
-                ToastUtils.show("running...");
+                //LogUtils.d(TAG, "running...");
+                //ToastUtils.show("running...");
 
             } else {
                 LogUtils.d(TAG, "_mIsServiceAlive is " + Boolean.toString(_mIsServiceAlive));
@@ -105,7 +106,7 @@ public class MainService extends Service {
         LogUtils.d(TAG, "onStartCommand");
 
         run();
-        AppConfigs appConfigs = AppConfigs.loadAppConfigs(MainService.this);
+        AppConfigs appConfigs = AppConfigs.getInstance(MainService.this).loadAppConfigs(MainService.this);
 
         return appConfigs.isEnableService() ? Service.START_STICKY: super.onStartCommand(intent, flags, startId);
     }
@@ -122,7 +123,7 @@ public class MainService extends Service {
         @Override
         public void onServiceDisconnected(ComponentName name) {
             //LogUtils.d(TAG, "call onServiceConnected(...)");
-            AppConfigs appConfigs = AppConfigs.loadAppConfigs(MainService.this);
+            AppConfigs appConfigs = AppConfigs.getInstance(MainService.this).loadAppConfigs(MainService.this);
             if (appConfigs.isEnableService()) {
                 // 唤醒守护进程
                 wakeupAndBindAssistant();
@@ -164,7 +165,7 @@ public class MainService extends Service {
 
                     });
                 mFileListener.startWatching();
-                ToastUtils.show("Start watching.");
+                //ToastUtils.show("Start watching.");
             } else {
                 // 父级文件夹不存在，就提示用户
                 Toast.makeText(getApplication(), fParentDir.toString() + " no exist.", Toast.LENGTH_SHORT).show();
@@ -247,7 +248,7 @@ public class MainService extends Service {
             switch (message.what) {
                 case MSG_INSTALL_APK:
                     {
-                        AppConfigs appConfigs = AppConfigs.loadAppConfigs(theActivity);
+                        AppConfigs appConfigs = AppConfigs.getInstance(theActivity).loadAppConfigs(theActivity);
                         if (appConfigs.getSetupMode() == AppConfigs.SetupMode.WATCHOUTPUTINSTALLER) {
                             theActivity.installAPK2((String)message.obj);
                         } else if (appConfigs.getSetupMode() == AppConfigs.SetupMode.NEWAPKINFONEWAPKINFO) {
