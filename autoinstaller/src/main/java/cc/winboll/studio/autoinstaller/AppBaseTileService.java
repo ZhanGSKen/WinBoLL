@@ -46,7 +46,10 @@ public class AppBaseTileService extends TileService {
         // 更新磁贴状态
         //updateServiceIconStatus(this);
     }
-    
+
+    //
+    // 更新磁贴状态
+    //
 //    public static void updateServiceIconStatus(Context context) {
 //        if (_AppBaseTileService == null) {
 //            return;
