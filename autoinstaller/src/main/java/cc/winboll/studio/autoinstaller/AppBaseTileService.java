@@ -5,22 +5,17 @@ package cc.winboll.studio.autoinstaller;
  * @Date 2025/04/15 09:24:46
  * @Describe 磁贴工具服务类
  */
-import android.content.Context;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import cc.winboll.studio.autoinstaller.models.AppConfigs;
-import cc.winboll.studio.autoinstaller.models.MainServiceBean;
 
 public class AppBaseTileService extends TileService {
-    
-    public static final String TAG = "AppBaseTileService";
 
-    //volatile static AppBaseTileService _AppBaseTileService;
+    public static final String TAG = "AppBaseTileService";
 
     @Override
     public void onStartListening() {
         super.onStartListening();
-        //_AppBaseTileService = this;
         Tile tile = getQsTile();
 
         if (AppConfigs.getInstance(AppBaseTileService.this).isEnableService()) {
@@ -31,7 +26,6 @@ public class AppBaseTileService extends TileService {
             tile.setIcon(android.graphics.drawable.Icon.createWithResource(this, R.drawable.ic_cloud_outline));
         }
         tile.updateTile();
-
     }
 
     @Override
@@ -48,11 +42,11 @@ public class AppBaseTileService extends TileService {
             AppConfigs.getInstance(AppBaseTileService.this).saveAppConfigs();
             MainActivity.startMainService();
         }
-        
+
         // 更新磁贴状态
         //updateServiceIconStatus(this);
     }
-
+    
 //    public static void updateServiceIconStatus(Context context) {
 //        if (_AppBaseTileService == null) {
 //            return;
