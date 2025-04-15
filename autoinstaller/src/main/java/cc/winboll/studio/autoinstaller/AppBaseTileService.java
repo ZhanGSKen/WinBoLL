@@ -15,12 +15,12 @@ public class AppBaseTileService extends TileService {
     
     public static final String TAG = "AppBaseTileService";
 
-    volatile static AppBaseTileService _AppBaseTileService;
+    //volatile static AppBaseTileService _AppBaseTileService;
 
     @Override
     public void onStartListening() {
         super.onStartListening();
-        _AppBaseTileService = this;
+        //_AppBaseTileService = this;
         Tile tile = getQsTile();
 
         if (AppConfigs.getInstance(AppBaseTileService.this).isEnableService()) {
@@ -48,23 +48,25 @@ public class AppBaseTileService extends TileService {
             AppConfigs.getInstance(AppBaseTileService.this).saveAppConfigs();
             MainActivity.startMainService();
         }
-        updateServiceIconStatus(this);
+        
+        // 更新磁贴状态
+        //updateServiceIconStatus(this);
     }
 
-    public static void updateServiceIconStatus(Context context) {
-        if (_AppBaseTileService == null) {
-            return;
-        }
-
-        Tile tile = _AppBaseTileService.getQsTile();
-        MainServiceBean bean = MainServiceBean.loadBean(context, MainServiceBean.class);
-        if (bean != null && bean.isEnable()) {
-            tile.setState(Tile.STATE_ACTIVE);
-            tile.setIcon(android.graphics.drawable.Icon.createWithResource(context, R.drawable.ic_cloud));
-        } else {
-            tile.setState(Tile.STATE_INACTIVE);
-            tile.setIcon(android.graphics.drawable.Icon.createWithResource(context, R.drawable.ic_cloud_outline));
-        }
-        tile.updateTile();
-    }
+//    public static void updateServiceIconStatus(Context context) {
+//        if (_AppBaseTileService == null) {
+//            return;
+//        }
+//
+//        Tile tile = _AppBaseTileService.getQsTile();
+//        MainServiceBean bean = MainServiceBean.loadBean(context, MainServiceBean.class);
+//        if (bean != null && bean.isEnable()) {
+//            tile.setState(Tile.STATE_ACTIVE);
+//            tile.setIcon(android.graphics.drawable.Icon.createWithResource(context, R.drawable.ic_cloud));
+//        } else {
+//            tile.setState(Tile.STATE_INACTIVE);
+//            tile.setIcon(android.graphics.drawable.Icon.createWithResource(context, R.drawable.ic_cloud_outline));
+//        }
+//        tile.updateTile();
+//    }
 }
