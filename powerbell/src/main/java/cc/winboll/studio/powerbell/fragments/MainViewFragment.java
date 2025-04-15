@@ -308,6 +308,7 @@ public class MainViewFragment extends Fragment {
         String szBackgroundFilePath = BackgroundPictureUtils.getInstance(getActivity()).getBackgroundDir() + BackgroundPictureActivity.getBackgroundFileName();
         File fBackgroundFilePath = new File(szBackgroundFilePath);
         LogUtils.d(TAG, "szBackgroundFilePath : " + szBackgroundFilePath);
+        LogUtils.d(TAG, String.format("fBackgroundFilePath.exists() %s", fBackgroundFilePath.exists()));
         if (bean.isUseBackgroundFile() && fBackgroundFilePath.exists()) {
             Drawable drawableBackground = Drawable.createFromPath(szBackgroundFilePath);
             drawableBackground.setAlpha(120);
