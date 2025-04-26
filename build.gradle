@@ -2,11 +2,11 @@
 buildscript {
     repositories {
         // 本地 Maven 仓库（默认路径为 ~/.m2/repository）
-        mavenLocal()
+        //mavenLocal()
         // 或自定义本地仓库路径
         //maven { url "file:///sdcard/.m2/repository" }
         // 或自定义本地仓库路径
-        maven { url "file:///sdcard/ZhanGSKen/AIDE/MavenReps/repository" }
+        //maven { url "file:///sdcard/ZhanGSKen/AIDE/MavenReps/repository" }
         
         maven { url 'https://maven.aliyun.com/repository/public/' } 
         maven { url 'https://maven.aliyun.com/repository/google/' }
@@ -34,11 +34,11 @@ buildscript {
 allprojects {
     repositories {
         // 本地 Maven 仓库（默认路径为 ~/.m2/repository）
-        mavenLocal()
+        //mavenLocal()
         // 或自定义本地仓库路径
         //maven { url "file:///sdcard/.m2/repository" }
         // 或自定义本地仓库路径
-        maven { url "file:///sdcard/ZhanGSKen/AIDE/MavenReps/repository" }
+        //maven { url "file:///sdcard/ZhanGSKen/AIDE/MavenReps/repository" }
         
         maven { url 'https://maven.aliyun.com/repository/public/' } 
         maven { url 'https://maven.aliyun.com/repository/google/' }
@@ -48,7 +48,7 @@ allprojects {
         maven { url "https://jitpack.io" }
         mavenCentral()
         google()
-        //mavenLocal()
+        mavenLocal()
         
         // Nexus Maven 库地址
         // "WinBoll Release"

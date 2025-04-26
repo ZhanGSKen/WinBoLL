@@ -18,6 +18,7 @@
 // APPUtils 项目编译设置
 //include ':apputils'
 //include ':libapputils'
+//include ':libappbase'
 //rootProject.name = "apputils"
 
 // JC 项目编译设置
