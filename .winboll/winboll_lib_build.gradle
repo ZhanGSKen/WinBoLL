@@ -14,7 +14,7 @@ def DefaultGroupId = 'cc.winboll.studio' // 类库所有者groupId
 def DefaultVersion = getDefaultVersion() // 版本号
 def DeveloperId='zhangsken' // 开发者账号
 def DeveloperName='ZhanGSKen' // 开发者名称
-def DeveloperEMail='ZhanGSKen@QQ.COM' // 开发者邮箱地址
+def DeveloperEMail='zhangsken@188.com' // 开发者邮箱地址
 def LicenseName='The Apache Software License, Version 2.0'
 def LicenseUrl='http://www.apache.org/licenses/LICENSE-2.0.txt'
 
