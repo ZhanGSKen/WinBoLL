@@ -9,8 +9,8 @@
 
 ## WinBoll 项目组研发计划
 致力于把 WinBoll-APP 应用在手机端 Android 项目开发。
-也在探索 https://gitea.winboll.cc/<WinBoll 项目组>/WinBoll-APP.git 应用于 WinBoll-APP APK 分发。
-更想进阶 https://github.com/<WinBoll 项目组>/WinBoll-APP.git 应用于 WinBoll-APP Beta APK 分发。
+也在探索 https://gitea.winboll.cc/<WinBoll 项目组>/APP.git 应用于 WinBoll-APP APK 分发。
+更想进阶 https://github.com/<WinBoll 项目组>/APP.git 应用于 WinBoll-APP Beta APK 分发。
 
 ## WinBoll-APP 汗下...
 #### ☁应用何置如此呢。且观用户云云。
@@ -55,10 +55,10 @@
 ☁ WinBoll 主机建立 1Panel Gitea 应用。
 ☁ WinBoll 主机设置 WinBoll 应用为非登录状态。
 ☁ WinBoll 主机建立 WinBoll 账户与 WinBoll 用户组。
-☁ WinBoll 账户 User ID 为： winboll。
-☁ WinBoll 用户组 Group ID 为： winboll。
+☁ WinBoll 账户 User ID 为： J。
+☁ WinBoll 用户组 Group ID 为： Studio。
 ☁ WinBoll 主机 WinBoll 1Panel Gitea 建立 WinBoll 工作组。
-☁ WinBoll 主机 WinBoll 1Panel Gitea 用户项目 APK 编译输出目录为 /sdcard/<用户名>/WinBoll/app/
+☁ WinBoll 主机 WinBoll 1Panel Gitea 用户项目 APK 编译输出目录为 /sdcard/WinBollStudio/<用户名>/APKs/
 ☁ WinBoll 项目配置文件示例为 "<WinBoll 项目根目录>/.winboll/winboll.properties-demo"(WinBoll 项目已设置)
 ☁ WinBoll 项目配置文件为 "<WinBoll 项目根目录>/.winboll/winboll.properties"
 ☁ WinBoll 项目配置文件设定为源码提交时忽略。(WinBoll 项目已设置)
@@ -72,17 +72,17 @@
 ☁ MySQL winbollclient 数据库中
    WinBoll 客户端用户信息设定为：
    <用户名, 验证密码, 验证邮箱, 验证手机, 唯一存储令牌Token, 备用验证邮箱>。
-☁ WinBoll 项目源码仓库托管在 WinBoll 1Panel Gitea 目录 /opt/1panel/apps/gitea/gitea/data/git/repositories/winboll/winboll.git中。
+☁ WinBoll 项目源码仓库托管在 WinBoll 1Panel Gitea 目录 /opt/1panel/apps/gitea/gitea/data/git/repositories/studio/app.git中。
 ☁ WinBoll 主机提供 WinBoll 1Panel Gitea 应用的 WinBoll 项目源码仓库存取功能。（Gitea 应用已提供）
 ☁ WinBoll 主机提供 WinBoll Gitea 项目仓库存档功能。（Gitea 应用已提供）
 ☁ 提供 WinBoll 客户端用户登录功能。（Gitea 应用已提供）
 
 ### ☁ 看远方 ☁ ###
 ### ☁ 心忧虑 ☁ WinBoll-APP 应用前置需求
-☁ WinBoll-APP WinBoll 项目根目录设定为手机的 /sdcard/WinBoll 目录。（需要用户手动建立文件夹）
+☁ WinBoll-APP WinBoll 项目根目录设定为手机的 /sdcard/WinBollStudio/Sources 目录。（需要用户手动建立文件夹）
 ☁ WinBoll-APP 具有手机 /sdcard/WinBoll 目录的存储权限。（需要手机操作系统授权）
-☁ WinBoll-APP WinBoll 项目仓库源码存储路径为 /sdcard/WinBoll/repositories/winboll.git（需要用户手动建立文件夹）
-☁ WinBoll-APP 项目 APK 编译输出目录为 /sdcard/WinBoll/app/
+☁ WinBoll-APP WinBoll 项目仓库源码存储路径为 /sdcard/WinBollStudio/Sources/APP.git（需要用户手动建立文件夹）
+☁ WinBoll-APP 项目 APK 编译输出目录为 /sdcard/WinBollStudio/APKs/
 ☁ WinBoll-APP 应用签名验证可定制化。（WinBoll 项目已提供）
 ☁ WinBoll-APP 与系列衍生 APP 应用共享 cc.winboll.studio 命名空间资源。（WinBoll 项目已提供）
 ☁ WinBoll-APP 用户客户端信息存储在命名空间为 WinBoll APP MySQLLite 应用的 winbollappclient 数据库中。
@@ -92,7 +92,12 @@
 
 ### ☁ 云游四方 ☁ ###
 ### ☁ 呔！ ☁ WinBoll-APP 应用需求规划
-☁ WinBoll-APP 提供手机目录 /sdcard/WinBoll 的 WinBoll 项目源码管理功能。 
+☁ 如要使用 WinBoLL Android 项目的 Gradle 编译功能，则需要设置以下两个文件夹。
+☁ 1. 则需要建立数据存储目录 /sdcard/WinBoLLStudio/APKs。
+   WinBoLL 项目源码编译出来的安装包会拷贝一份到 /sdcard/WinBoLLStudio/APKs 目录下。 
+☁ 2. 则需要建立数据存储目录 /sdcard/AppProjects。
+   WinBoLL 项目源码编译出来的安装包会拷贝一份并命名 "app.apk" 的安装文件为到 /sdcard/AppProjects 目录下。 
+
 
 ### ☁ 吁！ ☁ WinBoll-APP 共享计划前景
 ☁ WinBoll-APP 将会实现 https://winboll.cc/api 访问功能。

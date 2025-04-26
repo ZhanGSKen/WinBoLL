@@ -25,9 +25,12 @@ public class GlobalApplication extends Application {
     MyActivityLifecycleCallbacks mMyActivityLifecycleCallbacks;
 
     public static void setIsDebuging(boolean isDebuging) {
+        GlobalApplication.isDebuging = isDebuging;
+    }
+    
+    public static void saveDebugStatus() {
         if (_GlobalApplication != null) {
-            GlobalApplication.isDebuging = isDebuging;
-            APPBaseModel.saveBeanToFile(getAPPBaseModelFilePath(), new APPBaseModel(isDebuging));
+            APPBaseModel.saveBeanToFile(getAPPBaseModelFilePath(), new APPBaseModel(GlobalApplication.isDebuging));
         }
     }
 
@@ -69,6 +72,7 @@ public class GlobalApplication extends Application {
         APPBaseModel appBaseModel = APPBaseModel.loadBeanFromFile(getAPPBaseModelFilePath(), APPBaseModel.class);
         if (appBaseModel == null) {
             setIsDebuging(false);
+            saveDebugStatus();
         } else {
             setIsDebuging(appBaseModel.isDebuging());
         }

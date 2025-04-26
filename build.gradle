@@ -1,11 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        // Nexus Maven 库地址
-        // "WinBoll Release"
-        maven { url "https://nexus.winboll.cc/repository/maven-public/" }
-        // "WinBoll Snapshot"
-        maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
+        // 本地 Maven 仓库（默认路径为 ~/.m2/repository）
+        //mavenLocal()
+        // 或自定义本地仓库路径
+        //maven { url "file:///sdcard/.m2/repository" }
+        // 或自定义本地仓库路径
+        //maven { url "file:///sdcard/ZhanGSKen/AIDE/MavenReps/repository" }
         
         maven { url 'https://maven.aliyun.com/repository/public/' } 
         maven { url 'https://maven.aliyun.com/repository/google/' }
@@ -15,7 +16,13 @@ buildscript {
         maven { url "https://jitpack.io" }
         mavenCentral()
         google()
-        mavenLocal()
+        //mavenLocal()
+        
+        // Nexus Maven 库地址
+        // "WinBoll Release"
+        maven { url "https://192.168.123.26:8801/repository/maven-public/" }
+        // "WinBoll Snapshot"
+        maven { url "https://192.168.123.26:8801/repository/maven-snapshots/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.2.1' // 对应 compileSdkVersion 32
@@ -26,11 +33,12 @@ buildscript {
 
 allprojects {
     repositories {
-        // Nexus Maven 库地址
-        // "WinBoll Release"
-        maven { url "https://nexus.winboll.cc/repository/maven-public/" }
-        // "WinBoll Snapshot"
-        maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
+        // 本地 Maven 仓库（默认路径为 ~/.m2/repository）
+        //mavenLocal()
+        // 或自定义本地仓库路径
+        //maven { url "file:///sdcard/.m2/repository" }
+        // 或自定义本地仓库路径
+        //maven { url "file:///sdcard/ZhanGSKen/AIDE/MavenReps/repository" }
         
         maven { url 'https://maven.aliyun.com/repository/public/' } 
         maven { url 'https://maven.aliyun.com/repository/google/' }
@@ -41,6 +49,12 @@ allprojects {
         mavenCentral()
         google()
         mavenLocal()
+        
+        // Nexus Maven 库地址
+        // "WinBoll Release"
+        maven { url "https://192.168.123.26:8801/repository/maven-public/" }
+        // "WinBoll Snapshot"
+        maven { url "https://192.168.123.26:8801/repository/maven-snapshots/" }
     }
     ext {
         // 定义全局变量，常用于版本管理
@@ -51,7 +65,8 @@ allprojects {
         bashCommitAppPublishBuildFlagInfoFilePath = ".winboll/bashCommitAppPublishBuildFlagInfo.sh"
         
         winbollFilePath = "winboll.properties"
-        keyPropsFilePath = "winboll-x/current.keystore"
+        //keyPropsFilePath = "winboll-x/current.keystore"
+        keyPropsFilePath = "current.keystore"
         // 定义 lint 输出文件
         lintXmlReportFilePath = "build/reports/lint-results.xml"
         lintHTMLReportFilePath = "build/reports/lint-results.html"

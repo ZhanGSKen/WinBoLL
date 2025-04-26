@@ -21,6 +21,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import cc.winboll.studio.contacts.MainActivity;
 import cc.winboll.studio.contacts.R;
+import cc.winboll.studio.contacts.phonecallui.PhoneCallActivity;
+import cc.winboll.studio.contacts.phonecallui.PhoneCallService;
 
 
 public class CallListenerService extends Service {
@@ -152,9 +154,12 @@ public class CallListenerService extends Service {
 
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    CallListenerService.this.startActivity(intent);
+//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    CallListenerService.this.startActivity(intent);
+
+                    PhoneCallService.CallType callType = isCallingIn ? PhoneCallService.CallType.CALL_IN: PhoneCallService.CallType.CALL_OUT;
+                    PhoneCallActivity.actionStart(CallListenerService.this, callNumber, callType);
                 }
             });
     }

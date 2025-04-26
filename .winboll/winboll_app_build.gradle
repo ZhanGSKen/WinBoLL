@@ -75,9 +75,9 @@ android {
             def outputFileName=project.rootDir.name + "_${versionName}.apk"
             
             // 创建 WinBoll Studio 发布接口文件夹
-            File fWinBollStudioDir = file("/sdcard/WinBollStudio/APKs");
-            if(!fWinBollStudioDir.exists()) {
-                //fWinBollStudioDir.mkdirs();
+            File fWinBoLLStudioDir = file("/sdcard/WinBoLLStudio/APKs");
+            if(!fWinBoLLStudioDir.exists()) {
+                //fWinBoLLStudioDir.mkdirs();
                 // 如果没有发布接口文件就不用进行APK发布和源码管理操作
                 // 当前编译环境不是 WinBoll 主机, 以下将忽略APK发布和源码管理操作。
                 println 'The current compilation environment is not in WinBoll host, and the following APK publishing and source management operations will be ignore.'
@@ -94,12 +94,12 @@ android {
                             // 如果正在调试，就拷贝到 WinBoll 备份管理文件夹
                             // 
                             if(variant.flavorName == "beta"&&variant.buildType.name == "debug"){
-                                //File outBuildBckDir = new File(fWinBollStudioDir, "/${rootProject.name}/${variant.buildType.name}")
-                                File outBuildBckDir = new File(fWinBollStudioDir, "/" + project.rootDir.name + "/${variant.buildType.name}")
+                                //File outBuildBckDir = new File(fWinBoLLStudioDir, "/${rootProject.name}/${variant.buildType.name}")
+                                File outBuildBckDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/${variant.buildType.name}")
                                 // 创建目标路径目录
                                 if(!outBuildBckDir.exists()) {
                                     outBuildBckDir.mkdirs();
-                                    println "Output Folder Created.(WinBollStudio) : " + outBuildBckDir.getAbsolutePath()
+                                    println "Output Folder Created.(WinBoLLStudio) : " + outBuildBckDir.getAbsolutePath()
                                 }
                                 if(outBuildBckDir.exists()) {
                                     copy{
@@ -108,7 +108,7 @@ android {
                                         rename {
                                             String fileName -> "${outputFileName}"
                                         }
-                                        println "Output APK (WinBollStudio): " + outBuildBckDir.getAbsolutePath() + "/${outputFileName}"
+                                        println "Output APK (WinBoLLStudio): " + outBuildBckDir.getAbsolutePath() + "/${outputFileName}"
                                     }
                                     // 检查编译标志位配置
                                     assert (winbollBuildProps['buildCount'] != null)
@@ -151,8 +151,8 @@ android {
                                 String szCommonTagAPKName = project.rootDir.name + "_" + szShortVersionName + ".apk"
                                 println "CommonTagAPKName is : " + szCommonTagAPKName
                                 
-                                //File outTagDir = new File(fWinBollStudioDir, "/${rootProject.name}/tag/")
-                                File outTagDir = new File(fWinBollStudioDir, "/" + project.rootDir.name + "/tag/")
+                                //File outTagDir = new File(fWinBoLLStudioDir, "/${rootProject.name}/tag/")
+                                File outTagDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/tag/")
                                 // 创建目标路径目录
                                 if(!outTagDir.exists()) {
                                     outTagDir.mkdirs();

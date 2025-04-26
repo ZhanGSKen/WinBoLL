@@ -1,7 +1,5 @@
 package cc.winboll.studio.contacts.phonecallui;
 
-import static cc.winboll.studio.contacts.listenphonecall.CallListenerService.formatPhoneNumber;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -10,15 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 import cc.winboll.studio.contacts.ActivityStack;
+import cc.winboll.studio.contacts.MainActivity;
 import cc.winboll.studio.contacts.R;
-
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static cc.winboll.studio.contacts.listenphonecall.CallListenerService.formatPhoneNumber;
 
 
 /**
@@ -57,10 +55,9 @@ public class PhoneCallActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_phone_call);
 
         ActivityStack.getInstance().addActivity(this);
-
         initData();
-
         initView();
+
     }
 
     private void initData() {
@@ -74,9 +71,9 @@ public class PhoneCallActivity extends AppCompatActivity implements View.OnClick
 
     private void initView() {
         int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION //hide navigationBar
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION //hide navigationBar
+            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
         getWindow().getDecorView().setSystemUiVisibility(uiOptions);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
@@ -94,9 +91,7 @@ public class PhoneCallActivity extends AppCompatActivity implements View.OnClick
         if (callType == PhoneCallService.CallType.CALL_IN) {
             tvCallNumberLabel.setText("来电号码");
             tvPickUp.setVisibility(View.VISIBLE);
-        }
-        // 打出的电话
-        else if (callType == PhoneCallService.CallType.CALL_OUT) {
+        } else if (callType == PhoneCallService.CallType.CALL_OUT) {
             tvCallNumberLabel.setText("呼叫号码");
             tvPickUp.setVisibility(View.GONE);
             phoneCallManager.openSpeaker();
@@ -107,13 +102,13 @@ public class PhoneCallActivity extends AppCompatActivity implements View.OnClick
 
     public void showOnLockScreen() {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
-                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+                                  WindowManager.LayoutParams.FLAG_FULLSCREEN |
+                                  WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                                  WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
+                                  WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                                  WindowManager.LayoutParams.FLAG_FULLSCREEN |
+                                  WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                                  WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     }
 
     @Override
@@ -123,18 +118,18 @@ public class PhoneCallActivity extends AppCompatActivity implements View.OnClick
             tvPickUp.setVisibility(View.GONE);
             tvCallingTime.setVisibility(View.VISIBLE);
             onGoingCallTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    runOnUiThread(new Runnable() {
-                        @SuppressLint("SetTextI18n")
-                        @Override
-                        public void run() {
-                            callingTime++;
-                            tvCallingTime.setText("通话中：" + getCallingTime());
-                        }
-                    });
-                }
-            }, 0, 1000);
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                                @SuppressLint("SetTextI18n")
+                                @Override
+                                public void run() {
+                                    callingTime++;
+                                    tvCallingTime.setText("通话中：" + getCallingTime());
+                                }
+                            });
+                    }
+                }, 0, 1000);
         } else if (v.getId() == R.id.tv_phone_hang_up) {
             phoneCallManager.disconnect();
             stopTimer();
@@ -145,8 +140,8 @@ public class PhoneCallActivity extends AppCompatActivity implements View.OnClick
         int minute = callingTime / 60;
         int second = callingTime % 60;
         return (minute < 10 ? "0" + minute : minute) +
-                ":" +
-                (second < 10 ? "0" + second : second);
+            ":" +
+            (second < 10 ? "0" + second : second);
     }
 
     private void stopTimer() {
@@ -160,7 +155,7 @@ public class PhoneCallActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        //MainActivity.updateCallLogFragment();
         phoneCallManager.destroy();
     }
 }

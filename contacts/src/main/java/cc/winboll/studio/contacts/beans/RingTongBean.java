@@ -12,26 +12,26 @@ import android.media.AudioManager;
 import android.util.JsonReader;
 
 public class RingTongBean extends BaseBean {
-    
+
     public static final String TAG = "AudioRingTongBean";
-    
-    // 模式
-    int ringerMode;
+
+    // 铃声音量
+    int streamVolume;
     
     public RingTongBean() {
-        this.ringerMode = AudioManager.RINGER_MODE_NORMAL;
+        this.streamVolume = 100;
     }
 
-    public RingTongBean(int ringerMode) {
-        this.ringerMode = ringerMode;
+    public RingTongBean(int streamVolume) {
+        this.streamVolume = streamVolume;
     }
 
-    public void setRingerMode(int ringerMode) {
-        this.ringerMode = ringerMode;
+    public void setStreamVolume(int streamVolume) {
+        this.streamVolume = streamVolume;
     }
 
-    public int getRingerMode() {
-        return ringerMode;
+    public int getStreamVolume() {
+        return streamVolume;
     }
 
     @Override
@@ -42,15 +42,15 @@ public class RingTongBean extends BaseBean {
     @Override
     public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
         super.writeThisToJsonWriter(jsonWriter);
-        jsonWriter.name("ringerMode").value(getRingerMode());
+        jsonWriter.name("streamVolume").value(getStreamVolume());
 
     }
 
     @Override
     public boolean initObjectsFromJsonReader(JsonReader jsonReader, String name) throws IOException {
         if (super.initObjectsFromJsonReader(jsonReader, name)) { return true; } else {
-            if (name.equals("ringerMode")) {
-                setRingerMode(jsonReader.nextInt());
+            if (name.equals("streamVolume")) {
+                setStreamVolume(jsonReader.nextInt());
             } else {
                 return false;
             }
