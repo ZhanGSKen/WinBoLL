@@ -1,6 +1,6 @@
-# ☁ ☁ ☁ WinBoll APP ☁ ☁ ☁ ☁ ☁ ☁   ☁ ☁   ☁  ☁ ☁ ☁ ☁  ☁ ☁ ☁ ☁ ☁ ☁ 
-# ☁    ☁ 这是 WinBoll 系列 APP 汇总项目。☁ ☁   ☁ ☁ ☁ ☁  ☁ ☁ ☁ ☁ ☁  ☁ ☁ ☁ 
-# ☁ ☁ ☁ WinBoll 网站地址 https://www.winboll.cc/studio/app/ ☁ ☁ ☁ ☁  ☁ ☁ ☁ ☁
+# ☁ ☁ ☁ WinBoLL APP ☁ ☁ ☁ ☁ ☁ ☁   ☁ ☁   ☁  ☁ ☁ ☁ ☁  ☁ ☁ ☁ ☁ ☁ ☁ 
+# ☁    ☁ WinBoLL Studio Android 应用开源项目。☁ ☁   ☁ ☁ ☁ ☁  ☁ ☁ ☁ ☁ ☁  ☁ ☁ ☁ 
+# ☁ ☁ ☁ WinBoLL 网站地址 https://www.winboll.cc/ ☁ ☁ ☁ ☁  ☁ ☁ ☁ ☁
 
 ## WinBoll 提问
 同样是 /sdcard 目录，在开发 Android 应用时，
