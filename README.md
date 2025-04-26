@@ -92,7 +92,12 @@
 
 ### ☁ 云游四方 ☁ ###
 ### ☁ 呔！ ☁ WinBoll-APP 应用需求规划
-☁ WinBoll-APP 提供手机目录 /sdcard/WinBollStudio/Sources 的 WinBoll 项目源码管理功能。 
+☁ 如要使用 WinBoLL Android 项目的 Gradle 编译功能，则需要设置以下两个文件夹。
+☁ 1. 则需要建立数据存储目录 /sdcard/WinBoLLStudio/APKs。
+   WinBoLL 项目源码编译出来的安装包会拷贝一份到 /sdcard/WinBoLLStudio/APKs 目录下。 
+☁ 2. 则需要建立数据存储目录 /sdcard/AppProjects。
+   WinBoLL 项目源码编译出来的安装包会拷贝一份并命名 "app.apk" 的安装文件为到 /sdcard/AppProjects 目录下。 
+
 
 ### ☁ 吁！ ☁ WinBoll-APP 共享计划前景
 ☁ WinBoll-APP 将会实现 https://winboll.cc/api 访问功能。
