@@ -4,19 +4,20 @@ package cc.winboll.studio.libappbase;
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/02/11 00:14:05
  */
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import cc.winboll.studio.libappbase.R;
 
-public final class GlobalCrashActivity extends Activity implements MenuItem.OnMenuItemClickListener {
+public final class GlobalCrashActivity extends AppCompatActivity implements MenuItem.OnMenuItemClickListener {
 
     private static final int MENUITEM_COPY = 0;
     private static final int MENUITEM_RESTART = 1;
@@ -38,10 +39,10 @@ public final class GlobalCrashActivity extends Activity implements MenuItem.OnMe
         setContentView(R.layout.activity_globalcrash);
         mGlobalCrashReportView = findViewById(R.id.activityglobalcrashGlobalCrashReportView1);
         mGlobalCrashReportView.setReport(mLog);
-        setActionBar(mGlobalCrashReportView.getToolbar());
+        setSupportActionBar(mGlobalCrashReportView.getToolbar());
         
-        getActionBar().setTitle(CrashHandler.TITTLE);
-        getActionBar().setSubtitle(GlobalApplication.getAppName(getApplicationContext()));
+        getSupportActionBar().setTitle(CrashHandler.TITTLE);
+        getSupportActionBar().setSubtitle(GlobalApplication.getAppName(getApplicationContext()));
     }
 
     @Override

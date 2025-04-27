@@ -4,18 +4,22 @@
     <item
         android:id="@+id/item_minimal"
         android:title="MINIMAL"
-        android:icon="@drawable/ic_winboll_point"/>
+        android:icon="@drawable/ic_winboll_point"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/item_about"
         android:title="ABOUT"
-        android:icon="@drawable/ic_winboll_logo"/>
+        android:icon="@drawable/ic_winboll_logo"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/item_help"
         android:title="HELP"
-        android:icon="@drawable/ic_winboll_help"/>
+        android:icon="@drawable/ic_winboll_help"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/item_log"
         android:title="LOG"
-        android:icon="@drawable/ic_winboll_log"/>
+        android:icon="@drawable/ic_winboll_log"
+        app:showAsAction="always"/>
 </menu>
