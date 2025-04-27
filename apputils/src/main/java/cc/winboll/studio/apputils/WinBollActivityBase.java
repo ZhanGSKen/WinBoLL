@@ -8,12 +8,11 @@ package cc.winboll.studio.apputils;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
 
-public class WinBollActivityBase extends AppCompatActivity implements IWinBollActivity {
+public class WinBollActivityBase extends Activity implements IWinBollActivity {
 
     public static final String TAG = "WinBollActivityBase";
 
