@@ -8,7 +8,6 @@ package cc.winboll.studio.appbase;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import cc.winboll.studio.appbase.App;
 import cc.winboll.studio.appbase.R;
@@ -17,7 +16,7 @@ import cc.winboll.studio.libappbase.dialogs.YesNoAlertDialog;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
 
-public class WinBollActivityBase extends AppCompatActivity implements IWinBollActivity {
+public class WinBollActivityBase extends Activity implements IWinBollActivity {
 
     public static final String TAG = "WinBollActivityBase";
 
