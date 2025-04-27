@@ -47,25 +47,4 @@ android {
 dependencies {
     api project(':libappbase')
     api fileTree(dir: 'libs', include: ['*.jar'])
-    
-    // Android 类库
-    //api 'com.android.support:appcompat-v7:28.0.0'
-    implementation('com.android.support:appcompat-v7:28.0.0'){
-        //exclude group: "com.android.support", module: "support-vector-drawable"
-        exclude group: "com.android.support:animated-vector-drawable:28.0.0"
-    }
-    // https://mvnrepository.com/artifact/com.android.support/support-compat
-    //api 'com.android.support:support-compat:28.0.0' // 保留原有依赖（可选）
-    // https://mvnrepository.com/artifact/com.android.support/support-v4
-    implementation 'com.android.support:support-v4:28.0.0'
-    // https://mvnrepository.com/artifact/com.android.support/support-media-compat
-    implementation 'com.android.support:support-media-compat:28.0.0'
-    // https://mvnrepository.com/artifact/com.android.support/support-core-utils
-    implementation 'com.android.support:support-core-utils:28.0.0'
-    // https://mvnrepository.com/artifact/com.android.support/support-core-ui
-    implementation 'com.android.support:support-core-ui:28.0.0'
-    // https://mvnrepository.com/artifact/com.android.support/support-fragment
-    implementation 'com.android.support:support-fragment:28.0.0'
-    // https://mvnrepository.com/artifact/com.android.support/recyclerview-v7
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
 }

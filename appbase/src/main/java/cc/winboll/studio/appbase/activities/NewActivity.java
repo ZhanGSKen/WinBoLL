@@ -11,11 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import cc.winboll.studio.appbase.R;
-import cc.winboll.studio.appbase.WinBollActivityBase;
+import cc.winboll.studio.appbase.WinBoLLActivity;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 
-public class NewActivity extends WinBollActivityBase implements IWinBollActivity {
+public class NewActivity extends WinBoLLActivity implements IWinBollActivity {
 
     public static final String TAG = "NewActivity";
 

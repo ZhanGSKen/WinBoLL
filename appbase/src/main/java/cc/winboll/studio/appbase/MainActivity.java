@@ -22,9 +22,8 @@ import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
-import cc.winboll.studio.libappbase.dialogs.YesNoAlertDialog;
 
-public class MainActivity extends WinBollActivityBase implements IWinBollActivity {
+public class MainActivity extends WinBoLLActivity implements IWinBollActivity {
 
     public static final String TAG = "MainActivity";
 

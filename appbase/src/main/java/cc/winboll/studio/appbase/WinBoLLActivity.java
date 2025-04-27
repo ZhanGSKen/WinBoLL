@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Toast;
 import cc.winboll.studio.appbase.App;
 import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.libappbase.GlobalApplication;
@@ -17,7 +18,7 @@ import cc.winboll.studio.libappbase.dialogs.YesNoAlertDialog;
 import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
 
-public class WinBollActivityBase extends AppCompatActivity implements IWinBollActivity {
+public class WinBoLLActivity extends AppCompatActivity implements IWinBollActivity {
 
     public static final String TAG = "WinBollActivityBase";
 
@@ -45,14 +46,17 @@ public class WinBollActivityBase extends AppCompatActivity implements IWinBollAc
     public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onPostCreate(savedInstanceState, persistentState);
     }
-    
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == cc.winboll.studio.appbase.R.id.item_log) {
             GlobalApplication.getWinBollActivityManager().startLogActivity(this);
             return true;
-        } else if(item.getItemId() == cc.winboll.studio.appbase.R.id.item_minimal) {
+        } else if (item.getItemId() == cc.winboll.studio.libappbase.R.id.item_about) {
+            Toast.makeText(getApplication(), "item_about", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (item.getItemId() == cc.winboll.studio.appbase.R.id.item_minimal) {
             //moveTaskToBack(true);
             exit();
         }
