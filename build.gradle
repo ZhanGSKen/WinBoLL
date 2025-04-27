@@ -56,7 +56,7 @@ allprojects {
         bashCommitAppPublishBuildFlagInfoFilePath = ".winboll/bashCommitAppPublishBuildFlagInfo.sh"
         
         winbollFilePath = "winboll.properties"
-        keyPropsFilePath = "winboll-x/current.keystore"
+        keyPropsFilePath = "current.keystore"
         // 定义 lint 输出文件
         lintXmlReportFilePath = "build/reports/lint-results.xml"
         lintHTMLReportFilePath = "build/reports/lint-results.html"
