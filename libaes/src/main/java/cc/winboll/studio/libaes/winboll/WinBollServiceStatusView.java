@@ -5,6 +5,7 @@ package cc.winboll.studio.libaes.winboll;
  * @Date 2025/03/28 17:41:55
  * @Describe WinBoll 服务主机连接状态视图
  */
+import cc.winboll.studio.libaes.R;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +22,6 @@ import android.widget.TextView;
 import cc.winboll.studio.libaes.winboll.WinBollClientService;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libapputils.R;
 import cc.winboll.studio.libapputils.utils.PrefUtils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
