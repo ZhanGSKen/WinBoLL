@@ -38,24 +38,24 @@ function askAddWorkflowsTag {
 	fi
 }
 
-function addWinBollTag {
+function addWinBoLLTag {
 	# 就读取脚本 .winboll/winboll_app_build.gradle 生成的 publishVersion。
     # 如果文件中有 publishVersion 这一项，
 	# 使用grep找到包含"publishVersion="的那一行，然后用awk提取其后的值
 	PUBLISH_VERSION=$(grep -o "publishVersion=.*" $1/build.properties | awk -F '=' '{print $2}')
 	echo "< $1/build.properties publishVersion : ${PUBLISH_VERSION} >"
-	## 设新的 WinBoll 标签
+	## 设新的 WinBoLL 标签
 	# 脚本调试时使用
 	#tag="projectname-v7.6.4-test1"
 	# 正式设置标签时使用
 	tag=$1"-v"${PUBLISH_VERSION}
-	echo "< WinBoll Tag To: $tag >";
-	# 检查是否已经添加了 WinBoll Tag
+	echo "< WinBoLL Tag To: $tag >";
+	# 检查是否已经添加了 WinBoLL Tag
 	if [ "$(git tag -l ${tag})" == "${tag}" ]; then
-        echo -e "< WinBoll Tag ${tag} exist! >"
-        return 1 # WinBoll标签重复
+        echo -e "< WinBoLL Tag ${tag} exist! >"
+        return 1 # WinBoLL标签重复
     fi
-    # 添加WinBoll标签
+    # 添加WinBoLL标签
 	git tag -a ${tag} -F $1/app_update_description.txt
     return 0
 }
@@ -119,22 +119,22 @@ if [[ $? -eq 0 ]]; then
 	echo $result
 
     # 发布应用
-	echo "Publishing WinBoll APK ..."
+	echo "Publishing WinBoLL APK ..."
 	# 脚本调试时使用
 	#bash gradlew :$1:assembleBetaDebug
 	# 正式发布
     bash gradlew :$1:assembleStageRelease
-    echo "Publishing WinBoll APK OK."
+    echo "Publishing WinBoLL APK OK."
     
-    # 添加 WinBoll 标签
-    result=$(addWinBollTag $1)
+    # 添加 WinBoLL 标签
+    result=$(addWinBoLLTag $1)
     echo $result
 	if [[ $? -eq 0 ]]; then
 	    echo $result
-    	# WinBoll 标签添加成功
+    	# WinBoLL 标签添加成功
 	else
-    	echo -e "${0}: addWinBollTag $1\n${result}\nAdd WinBoll tag cancel."
-        exit 1 # addWinBollTag 异常
+    	echo -e "${0}: addWinBoLLTag $1\n${result}\nAdd WinBoLL tag cancel."
+        exit 1 # addWinBoLLTag 异常
 	fi
     
     # 添加 GitHub 工作流标签

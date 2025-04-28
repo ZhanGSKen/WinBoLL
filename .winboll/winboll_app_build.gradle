@@ -1,4 +1,4 @@
-// WinBoll 应用签名配置
+// WinBoLL 应用签名配置
 //
 
 android {
@@ -31,18 +31,18 @@ android {
         }
     }
     
-    flavorDimensions "WinBollApp"
+    flavorDimensions "WinBoLLApp"
     productFlavors {
         beta {
             // 检查编译标志位配置
             assert (winbollBuildProps['buildCount'] != null)
-            dimension "WinBollApp"
+            dimension "WinBoLLApp"
             applicationIdSuffix ".beta"
             LocalDateTime localDateTimeNow = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
             versionNameSuffix "-beta" + winbollBuildProps['buildCount'] + "_" + localDateTimeNow.format('mmss')
         }
         stage {
-            dimension "WinBollApp"
+            dimension "WinBoLLApp"
         }
     }
 
@@ -61,7 +61,7 @@ android {
         }
         
         //
-        // WinBoll 应用包输出配置
+        // WinBoLL 应用包输出配置
         // 1. 配置 Stage Release 版应用包输出
         // 2. 配置 Beta Debug 版应用包输出
 	    //
@@ -74,13 +74,13 @@ android {
             //def outputFileName="${rootProject.name}_${versionName}.apk"
             def outputFileName=project.rootDir.name + "_${versionName}.apk"
             
-            // 创建 WinBoll Studio 发布接口文件夹
-            File fWinBollStudioDir = file("/sdcard/WinBollStudio/APKs");
-            if(!fWinBollStudioDir.exists()) {
-                //fWinBollStudioDir.mkdirs();
+            // 创建 WinBoLL Studio 发布接口文件夹
+            File fWinBoLLStudioDir = file("/sdcard/WinBoLLStudio/APKs");
+            if(!fWinBoLLStudioDir.exists()) {
+                //fWinBoLLStudioDir.mkdirs();
                 // 如果没有发布接口文件就不用进行APK发布和源码管理操作
-                // 当前编译环境不是 WinBoll 主机, 以下将忽略APK发布和源码管理操作。
-                println 'The current compilation environment is not in WinBoll host, and the following APK publishing and source management operations will be ignore.'
+                // 当前编译环境不是 WinBoLL 主机, 以下将忽略APK发布和源码管理操作。
+                println 'The current compilation environment is not in WinBoLL host, and the following APK publishing and source management operations will be ignore.'
             } else {
                 /// WINBOLL 主机的 APK 发布和源码管理操作 ///
                 variant.getAssembleProvider().get().doFirst {
@@ -91,15 +91,15 @@ android {
                 //
                 variant.getAssembleProvider().get().doLast {
                         variant.outputs.forEach{ file->
-                            // 如果正在调试，就拷贝到 WinBoll 备份管理文件夹
+                            // 如果正在调试，就拷贝到 WinBoLL 备份管理文件夹
                             // 
                             if(variant.flavorName == "beta"&&variant.buildType.name == "debug"){
-                                //File outBuildBckDir = new File(fWinBollStudioDir, "/${rootProject.name}/${variant.buildType.name}")
-                                File outBuildBckDir = new File(fWinBollStudioDir, "/" + project.rootDir.name + "/${variant.buildType.name}")
+                                //File outBuildBckDir = new File(fWinBoLLStudioDir, "/${rootProject.name}/${variant.buildType.name}")
+                                File outBuildBckDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/${variant.buildType.name}")
                                 // 创建目标路径目录
                                 if(!outBuildBckDir.exists()) {
                                     outBuildBckDir.mkdirs();
-                                    println "Output Folder Created.(WinBollStudio) : " + outBuildBckDir.getAbsolutePath()
+                                    println "Output Folder Created.(WinBoLLStudio) : " + outBuildBckDir.getAbsolutePath()
                                 }
                                 if(outBuildBckDir.exists()) {
                                     copy{
@@ -108,7 +108,7 @@ android {
                                         rename {
                                             String fileName -> "${outputFileName}"
                                         }
-                                        println "Output APK (WinBollStudio): " + outBuildBckDir.getAbsolutePath() + "/${outputFileName}"
+                                        println "Output APK (WinBoLLStudio): " + outBuildBckDir.getAbsolutePath() + "/${outputFileName}"
                                     }
                                     // 检查编译标志位配置
                                     assert (winbollBuildProps['buildCount'] != null)
@@ -137,7 +137,7 @@ android {
                                 }
                             }
                             
-                            // 如果正在发布，就拷贝到 WinBoll 标签管理文件夹
+                            // 如果正在发布，就拷贝到 WinBoLL 标签管理文件夹
                             //
                             if((variant.flavorName == "stage"&&variant.buildType.name == "debug")
                                 || (variant.flavorName == "stage"&&variant.buildType.name == "release")){
@@ -151,8 +151,8 @@ android {
                                 String szCommonTagAPKName = project.rootDir.name + "_" + szShortVersionName + ".apk"
                                 println "CommonTagAPKName is : " + szCommonTagAPKName
                                 
-                                //File outTagDir = new File(fWinBollStudioDir, "/${rootProject.name}/tag/")
-                                File outTagDir = new File(fWinBollStudioDir, "/" + project.rootDir.name + "/tag/")
+                                //File outTagDir = new File(fWinBoLLStudioDir, "/${rootProject.name}/tag/")
+                                File outTagDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/tag/")
                                 // 创建目标路径目录
                                 if(!outTagDir.exists()) {
                                     outTagDir.mkdirs();

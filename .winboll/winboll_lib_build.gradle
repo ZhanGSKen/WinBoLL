@@ -1,4 +1,4 @@
-// 本机和 WinBoll Maven 仓库传输配置。
+// 本机和 WinBoLL Maven 仓库传输配置。
 //
 
 def getDefaultVersion(){
@@ -9,7 +9,7 @@ def getDefaultVersion(){
 }
 
 def siteUrl = 'https://winboll.cc/?page=studio/details.php&app=${rootProject.name}' // 项目主页
-def gitUrl = 'https://gitea.winboll.cc/WinBoll/${rootProject.name}' // 项目的git地址
+def gitUrl = 'https://gitea.winboll.cc/WinBoLL/${rootProject.name}' // 项目的git地址
 def DefaultGroupId = 'cc.winboll.studio' // 类库所有者groupId
 def DefaultVersion = getDefaultVersion() // 版本号
 def DeveloperId='zhangsken' // 开发者账号
@@ -27,10 +27,10 @@ afterEvaluate {
                 properties.load(file("${RootProjectDir}/${winbollFilePath}").newDataInputStream())
                 def NexusUserName = properties.getProperty("Nexus.name")
                 def NexusPassword = properties.getProperty("Nexus.password")
-                // WinBoll Release 仓库
+                // WinBoLL Release 仓库
                 maven{
                     //仓库的名字和地址
-                    name = "WinBollRelease"
+                    name = "WinBoLLRelease"
                     url="https://nexus.winboll.cc/repository/maven-releases/"
                     // 仓库用户名密码
                     credentials {
@@ -38,10 +38,10 @@ afterEvaluate {
                         password = NexusPassword
                     }
                 }
-                // WinBoll Snapshot 仓库
+                // WinBoLL Snapshot 仓库
                 maven{
                     //仓库的名字和地址
-                    name = "WinBollSnapshot"
+                    name = "WinBoLLSnapshot"
                     url="https://nexus.winboll.cc/repository/maven-snapshots/"
                     // 仓库用户名密码
                     credentials {
@@ -101,9 +101,9 @@ afterEvaluate {
                 }
             }
             
-            // WinBoll Maven Release 仓库传输任务
+            // WinBoLL Maven Release 仓库传输任务
             //
-            releaseWinBoll(MavenPublication) {
+            releaseWinBoLL(MavenPublication) {
                 // 需要使用的变体，假设有free和pay两个变体，可以选择一个
                 //from components.free
                 
@@ -154,9 +154,9 @@ afterEvaluate {
                 
             } // 创建名为 release 的任务结束
             
-            // WinBoll Maven Snapshot 仓库传输任务
+            // WinBoLL Maven Snapshot 仓库传输任务
             //
-            snapshotWinBoll(MavenPublication) {
+            snapshotWinBoLL(MavenPublication) {
                 // 需要使用的变体，假设有free和pay两个变体，可以选择一个
                 //from components.free
                 
