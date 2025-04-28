@@ -37,7 +37,7 @@ fi
 # 使用grep找到包含"publishVersion="的那一行，然后用awk提取其后的值
 PUBLISH_VERSION=$(grep -o "publishVersion=.*" $1/build.properties | awk -F '=' '{print $2}')
 echo "< $1/build.properties publishVersion : ${PUBLISH_VERSION} >"
-## 设新的 WinBoll 标签
+## 设新的 WinBoLL 标签
 # 脚本调试时使用
 #tag="v7.6.4-test1"
 # 正式设置标签时使用
