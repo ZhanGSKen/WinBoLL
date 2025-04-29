@@ -29,7 +29,7 @@ public interface IAPPFiles {
         static String _mFilesRoot = "";
 
         HashFile(Context context) {
-            _mapFiles.put(UUID_WINBOLLCLIENTSERVICEBEAN_JSON, "/BaseBean/cc.winboll.studio.shared.service.WinBollClientServiceBean.json");
+            _mapFiles.put(UUID_WINBOLLCLIENTSERVICEBEAN_JSON, "/BaseBean/cc.winboll.studio.shared.service.WinBoLLClientServiceBean.json");
             _mapFiles.put(UUID_LOGUTILS_JSON, "/LogUtils/LogUtils.json");
         }
 
