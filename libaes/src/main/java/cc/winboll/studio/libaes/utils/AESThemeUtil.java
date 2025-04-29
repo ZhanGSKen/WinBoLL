@@ -41,7 +41,7 @@ public class AESThemeUtil {
         activity.setTheme(getThemeTypeID(activity));
     }
 
-    /*public static <T extends WinBollActivity> void applyWinBollTheme(T activity) {
+    /*public static <T extends WinBoLLActivity> void applyWinBoLLTheme(T activity) {
         activity.setTheme(getThemeTypeID(activity.getApplicationContext()));
     }*/
 
@@ -53,7 +53,7 @@ public class AESThemeUtil {
         activity.setTheme(AESThemeBean.getThemeStyleID(themeType));
     }
 
-    /*public static <T extends WinBollActivity> void applyWinBollTheme(Activity activity, AESThemeBean.ThemeType themeType) {
+    /*public static <T extends WinBoLLActivity> void applyWinBoLLTheme(Activity activity, AESThemeBean.ThemeType themeType) {
         activity.setTheme(AESThemeBean.getThemeStyleID(themeType));
     }*/
 
@@ -65,7 +65,7 @@ public class AESThemeUtil {
         activity.getMenuInflater().inflate(R.menu.toolbar_apptheme, menu);
     }
 
-    /*public static <T extends WinBollActivity> void inflateWinBollMenu(T activity, Menu menu) {
+    /*public static <T extends WinBoLLActivity> void inflateWinBoLLMenu(T activity, Menu menu) {
         activity.getMenuInflater().inflate(R.menu.toolbar_apptheme, menu);
     }*/
 
@@ -131,7 +131,7 @@ public class AESThemeUtil {
         return false;
     }
 
-    public static <T extends AppCompatActivity> boolean onWinBollThemeItemSelected(T activity, MenuItem item) {
+    public static <T extends AppCompatActivity> boolean onWinBoLLThemeItemSelected(T activity, MenuItem item) {
         int nThemeStyleID;
         if (R.id.item_depththeme == item.getItemId()) {
             nThemeStyleID = AESThemeBean.getThemeStyleID(AESThemeBean.ThemeType.DEPTH);
@@ -162,7 +162,7 @@ public class AESThemeUtil {
         return false;
     }
     
-    public static <T extends DrawerFragmentActivity> boolean onWinBollThemeItemSelected(T activity, MenuItem item) {
+    public static <T extends DrawerFragmentActivity> boolean onWinBoLLThemeItemSelected(T activity, MenuItem item) {
         int nThemeStyleID;
         if (R.id.item_depththeme == item.getItemId()) {
             nThemeStyleID = AESThemeBean.getThemeStyleID(AESThemeBean.ThemeType.DEPTH);

@@ -6,11 +6,7 @@ package cc.winboll.studio.contacts.threads;
  */
 import android.content.Context;
 import cc.winboll.studio.contacts.handlers.MainServiceHandler;
-import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.SOS;
-import cc.winboll.studio.libappbase.bean.APPSOSBean;
-import com.hjq.toast.ToastUtils;
 import java.lang.ref.WeakReference;
 
 public class MainServiceThread extends Thread {

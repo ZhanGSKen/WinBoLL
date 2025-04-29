@@ -19,17 +19,17 @@ def genVersionName(def versionName){
 
 android {
     compileSdkVersion 32
-    buildToolsVersion "33.0.3"
+    buildToolsVersion "32.0.0"
 
     defaultConfig {
         applicationId "cc.winboll.studio.apputils"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         // versionName 更新后需要手动设置 
         // 项目模块目录的 build.gradle 文件的 stageCount=0
         // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
-        versionName "9.2" 
+        versionName "15.3" 
         if(true) {
             versionName = genVersionName("${versionName}")
         }
@@ -41,15 +41,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
 }
 
 dependencies {
 	api project(':libapputils')
-    api 'cc.winboll.studio:libappbase:1.0.3'
     api fileTree(dir: 'libs', include: ['*.jar'])
 }

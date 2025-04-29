@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:padding="16dp">
+
+	<EditText
+		android:id="@+id/edit_text"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:hint="请输入规则文本"/>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="right|center_vertical">
+
+		<CheckBox
+			android:id="@+id/checkbox_allow"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="允许连接"/>
+
+        <CheckBox
+            android:id="@+id/checkbox_enable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="启用"/>
+
+        <Button
+            android:id="@+id/button_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确定"/>
+        
+	</LinearLayout>
+
+
+</LinearLayout>
+

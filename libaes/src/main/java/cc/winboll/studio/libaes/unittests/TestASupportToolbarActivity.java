@@ -11,9 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 
-public class TestASupportToolbarActivity extends AppCompatActivity implements IWinBollActivity  {
+public class TestASupportToolbarActivity extends AppCompatActivity implements IWinBoLLActivity  {
 
     public static final String TAG = "TestASupportToolbarActivity";
 
