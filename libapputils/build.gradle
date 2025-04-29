@@ -21,7 +21,7 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    api 'cc.winboll.studio:libappbase:15.7.5'
+    api 'cc.winboll.studio:libappbase:15.7.6'
     
     // 二维码类库
     api 'com.google.zxing:core:3.4.1'

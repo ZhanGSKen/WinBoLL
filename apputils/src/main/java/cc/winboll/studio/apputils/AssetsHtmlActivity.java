@@ -15,12 +15,12 @@ import android.view.MenuItem;
 import android.widget.Toolbar;
 import cc.winboll.studio.apputils.R;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 import cc.winboll.studio.libapputils.views.SimpleWebView;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class AssetsHtmlActivity extends WinBollActivityBase implements IWinBollActivity {
+public class AssetsHtmlActivity extends WinBoLLActivityBase implements IWinBoLLActivity {
 
     @Override
     public Activity getActivity() {
@@ -57,7 +57,7 @@ public class AssetsHtmlActivity extends WinBollActivityBase implements IWinBollA
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 //        if (item.getItemId() == android.R.id.home) {
-//            WinBollActivityManager.getInstance(this).finish(this);
+//            WinBoLLActivityManager.getInstance(this).finish(this);
 //        }
         return super.onOptionsItemSelected(item);
     }

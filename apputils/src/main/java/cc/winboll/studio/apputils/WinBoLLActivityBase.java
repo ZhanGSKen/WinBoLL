@@ -9,12 +9,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import cc.winboll.studio.libappbase.GlobalApplication;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
-import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
+import cc.winboll.studio.libappbase.winboll.WinBoLLActivityManager;
 
-public class WinBollActivityBase extends Activity implements IWinBollActivity {
+public class WinBoLLActivityBase extends Activity implements IWinBoLLActivity {
 
-    public static final String TAG = "WinBollActivityBase";
+    public static final String TAG = "WinBoLLActivityBase";
 
     @Override
     public Activity getActivity() {
@@ -26,14 +26,14 @@ public class WinBollActivityBase extends Activity implements IWinBollActivity {
         return TAG;
     }
 
-    WinBollActivityManager getWinBollActivityManager() {
-        return WinBollActivityManager.getInstance(GlobalApplication.getInstance());
+    WinBoLLActivityManager getWinBoLLActivityManager() {
+        return WinBoLLActivityManager.getInstance(GlobalApplication.getInstance());
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWinBollActivityManager().add(this);
+        getWinBoLLActivityManager().add(this);
     }
 
     @Override
@@ -46,6 +46,6 @@ public class WinBollActivityBase extends Activity implements IWinBollActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        getWinBollActivityManager().registeRemove(this);
+        getWinBoLLActivityManager().registeRemove(this);
     }
 }

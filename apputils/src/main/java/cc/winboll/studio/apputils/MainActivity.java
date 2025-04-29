@@ -60,9 +60,9 @@ final public class MainActivity extends Activity {
         //if (prosessIntents(getIntent())) return;
         // 以下正常创建主窗口
 
-//        // 设置 WinBoll 应用 UI 类型
-//        WinBollApplication.setWinBollUI_TYPE(WinBollApplication.WinBollUI_TYPE.Aplication);
-//        //ToastUtils.show("WinBollUI_TYPE " + WinBollApplication.getWinBollUI_TYPE());
+//        // 设置 WinBoLL 应用 UI 类型
+//        WinBoLLApplication.setWinBoLLUI_TYPE(WinBoLLApplication.WinBoLLUI_TYPE.Aplication);
+//        //ToastUtils.show("WinBoLLUI_TYPE " + WinBoLLApplication.getWinBoLLUI_TYPE());
 //        LogUtils.d(TAG, "BuildConfig.DEBUG : " + Boolean.toString(BuildConfig.DEBUG));
     }
 
@@ -77,7 +77,7 @@ final public class MainActivity extends Activity {
                 if (intent.getAction() != null) {
 //                    if (intent.getAction().equals(cc.winboll.studio.libapputils.intent.action.DEBUGVIEW)) {
 //                        App.setIsDebug(true);
-//                        //ToastUtils.show!("WinBollApplication.setIsDebug(true) by action : " + intent.getAction());
+//                        //ToastUtils.show!("WinBoLLApplication.setIsDebug(true) by action : " + intent.getAction());
 //
 //                    }
                 }
@@ -130,12 +130,12 @@ final public class MainActivity extends Activity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // 缓存当前 activity
-        //WinBollActivityManager.getInstance(this).add(this);
+        //WinBoLLActivityManager.getInstance(this).add(this);
     }
 
     @Override
     public void onDestroy() {
-        //WinBollActivityManager.getInstance(this).registeRemove(this);
+        //WinBoLLActivityManager.getInstance(this).registeRemove(this);
         super.onDestroy();
     }
 
@@ -150,8 +150,8 @@ final public class MainActivity extends Activity {
 //        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 //        startActivity(intent);
 
-        //WinBollActivityManager.getInstance().printAvtivityListInfo();
-        //WinBollActivityManager.getInstance(this).startWinBollActivity(this, LogActivity.class);
+        //WinBoLLActivityManager.getInstance().printAvtivityListInfo();
+        //WinBoLLActivityManager.getInstance(this).startWinBoLLActivity(this, LogActivity.class);
     }
 
     //
@@ -165,7 +165,7 @@ final public class MainActivity extends Activity {
 
 //        if (intent.getAction().equals(StringToQrCodeView.ACTION_UNITTEST_QRCODE)) {
 //            try {
-//                WinBollActivity clazzActivity = UnitTestActivity.class.newInstance();
+//                WinBoLLActivity clazzActivity = UnitTestActivity.class.newInstance();
 //                String tag = clazzActivity.getTag();
 //                LogUtils.d(TAG, "String tag = clazzActivity.getTag(); tag " + tag);
 //                Intent subIntent = new Intent(this, UnitTestActivity.class);
@@ -183,8 +183,8 @@ final public class MainActivity extends Activity {
 //                }
 //
 //                Files.copy(Paths.get(szSrcPath), Paths.get(file.getPath()));
-//                //startWinBollActivity(subIntent, tag);
-//                WinBollActivityManager.getInstance(this).startWinBollActivity(this, subIntent, UnitTestActivity.class);
+//                //startWinBoLLActivity(subIntent, tag);
+//                WinBoLLActivityManager.getInstance(this).startWinBoLLActivity(this, subIntent, UnitTestActivity.class);
 //            } catch (IllegalAccessException | InstantiationException | IOException e) {
 //                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
 //                // 函数处理异常返回失败
@@ -201,8 +201,8 @@ final public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //ToastUtils.show("onCreateOptionsMenu");
         getMenuInflater().inflate(R.menu.toolbar_main, menu);
-//        if (isAddWinBollToolBar()) {
-//            //ToastUtils.show("mIWinBoll.isAddWinBollToolBar()");
+//        if (isAddWinBoLLToolBar()) {
+//            //ToastUtils.show("mIWinBoLL.isAddWinBoLLToolBar()");
 //            getMenuInflater().inflate(R.menu.toolbar_winboll_shared_main, menu);
 //        }
         if (App.isDebuging()) {
@@ -220,7 +220,7 @@ final public class MainActivity extends Activity {
         } else if (item.getItemId() == R.id.item_teststringtoqrcodeview) {
             Intent intent = new Intent(this, TestStringToQRCodeViewActivity.class);
             startActivityForResult(intent, REQUEST_QRCODEDECODE_ACTIVITY);
-            //WinBollActivityManager.getInstance(this).startWinBollActivity(this, TestStringToQrCodeViewActivity.class);
+            //WinBoLLActivityManager.getInstance(this).startWinBoLLActivity(this, TestStringToQrCodeViewActivity.class);
         } else if (item.getItemId() == R.id.item_testqrcodedecodeactivity) {
             Intent intent = new Intent(this, QRCodeDecodeActivity.class);
             startActivityForResult(intent, REQUEST_QRCODEDECODE_ACTIVITY);
@@ -230,13 +230,13 @@ final public class MainActivity extends Activity {
             }
             return true;
         } else if (item.getItemId() == R.id.item_log) {
-            //WinBollActivityManager.getInstance(this).startWinBollActivity(this, LogActivity.class);
+            //WinBoLLActivityManager.getInstance(this).startWinBoLLActivity(this, LogActivity.class);
             return true;
         } else if (item.getItemId() == R.id.item_exitdebug) {
             //AboutView.setApp2NormalMode(this);
             return true;
         } else if (item.getItemId() == android.R.id.home) {
-            //WinBollActivityManager.getInstance(this).finish(this);
+            //WinBoLLActivityManager.getInstance(this).finish(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -247,7 +247,7 @@ final public class MainActivity extends Activity {
 //
 //            @Override
 //            public void onYes() {
-//                //WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
+//                //WinBoLLActivityManager.getInstance(getApplicationContext()).finishAll();
 //            }
 //
 //            @Override
@@ -260,10 +260,10 @@ final public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-//        if (WinBollActivityManager.getInstance(getApplicationContext()).isFirstIWinBollActivity(this)) {
+//        if (WinBoLLActivityManager.getInstance(getApplicationContext()).isFirstIWinBoLLActivity(this)) {
 //            exit();
 //        } else {
-//            WinBollActivityManager.getInstance(this).finish(this);
+//            WinBoLLActivityManager.getInstance(this).finish(this);
 //            super.onBackPressed();
 //        }
     }
@@ -275,7 +275,7 @@ final public class MainActivity extends Activity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         startActivity(intent);
-        //WinBollActivityManager.getInstance(this).startWinBollActivity(this, intent, AssetsHtmlActivity.class);
+        //WinBoLLActivityManager.getInstance(this).startWinBoLLActivity(this, intent, AssetsHtmlActivity.class);
     }
 
     @Override
