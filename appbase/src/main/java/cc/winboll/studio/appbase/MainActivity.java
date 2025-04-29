@@ -21,9 +21,9 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 
-public class MainActivity extends WinBollActivityBase implements IWinBollActivity {
+public class MainActivity extends WinBoLLActivityBase implements IWinBoLLActivity {
 
     public static final String TAG = "MainActivity";
 
@@ -176,7 +176,7 @@ public class MainActivity extends WinBollActivityBase implements IWinBollActivit
     }
 
     public void onTestOpenNewActivity(View view) {
-        GlobalApplication.getWinBollActivityManager().startWinBollActivity(this, NewActivity.class);
+        GlobalApplication.getWinBoLLActivityManager().startWinBoLLActivity(this, NewActivity.class);
     }
 
     

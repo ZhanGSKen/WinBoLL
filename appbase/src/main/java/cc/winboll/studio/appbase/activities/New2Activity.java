@@ -12,11 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
-import cc.winboll.studio.appbase.WinBollActivityBase;
+import cc.winboll.studio.appbase.WinBoLLActivityBase;
 import cc.winboll.studio.libappbase.GlobalApplication;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 
-public class New2Activity extends WinBollActivityBase implements IWinBollActivity {
+public class New2Activity extends WinBoLLActivityBase implements IWinBoLLActivity {
 
     public static final String TAG = "New2Activity";
 
@@ -52,15 +52,15 @@ public class New2Activity extends WinBollActivityBase implements IWinBollActivit
     }
 
     public void onCloseThisActivity(View view) {
-        GlobalApplication.getWinBollActivityManager().finish(this);
+        GlobalApplication.getWinBoLLActivityManager().finish(this);
     }
 
     public void onCloseAllActivity(View view) {
-        GlobalApplication.getWinBollActivityManager().finishAll();
+        GlobalApplication.getWinBoLLActivityManager().finishAll();
     }
 
     public void onNewActivity(View view) {
-        GlobalApplication.getWinBollActivityManager().startWinBollActivity(this, NewActivity.class);
+        GlobalApplication.getWinBoLLActivityManager().startWinBoLLActivity(this, NewActivity.class);
     }
     
 
@@ -74,7 +74,7 @@ public class New2Activity extends WinBollActivityBase implements IWinBollActivit
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == cc.winboll.studio.appbase.R.id.item_log) {
-            GlobalApplication.getWinBollActivityManager().startLogActivity(this);
+            GlobalApplication.getWinBoLLActivityManager().startLogActivity(this);
             return true;
         }
         // 在switch语句中处理每个ID，并在处理完后返回true，未处理的情况返回false。

@@ -12,7 +12,7 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
-import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
+import cc.winboll.studio.libappbase.winboll.WinBoLLActivityManager;
 import cc.winboll.studio.libappbase.winboll.MyActivityLifecycleCallbacks;
 
 public class GlobalApplication extends Application {
@@ -46,8 +46,8 @@ public class GlobalApplication extends Application {
         return isDebuging;
     }
 
-    public static WinBollActivityManager getWinBollActivityManager() {
-        return WinBollActivityManager.getInstance(_GlobalApplication);
+    public static WinBoLLActivityManager getWinBoLLActivityManager() {
+        return WinBoLLActivityManager.getInstance(_GlobalApplication);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class GlobalApplication extends Application {
             setIsDebuging(appBaseModel.isDebuging());
         }
         
-        getWinBollActivityManager().setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Service);
+        getWinBoLLActivityManager().setWinBoLLUI_TYPE(WinBoLLActivityManager.WinBoLLUI_TYPE.Service);
         // 注册窗口回调监听
         mMyActivityLifecycleCallbacks = new MyActivityLifecycleCallbacks();
         registerActivityLifecycleCallbacks(mMyActivityLifecycleCallbacks);

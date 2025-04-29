@@ -12,7 +12,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import cc.winboll.studio.appbase.models.TestDemoBindServiceBean;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.sos.WinBoll;
+import cc.winboll.studio.libappbase.sos.WinBoLL;
 import cc.winboll.studio.appbase.App;
 import cc.winboll.studio.libappbase.sos.SOS;
 
@@ -156,9 +156,9 @@ public class TestDemoBindService extends Service {
                 super.run();
                 LogUtils.d(TAG, "run() start");
                 if (App.isDebuging()) {
-                    WinBoll.bindToAPPBaseBeta(mContext, TestDemoBindService.class.getName());
+                    WinBoLL.bindToAPPBaseBeta(mContext, TestDemoBindService.class.getName());
                 } else {
-                    WinBoll.bindToAPPBase(mContext, TestDemoBindService.class.getName());
+                    WinBoLL.bindToAPPBase(mContext, TestDemoBindService.class.getName());
                 }
 
                 while (!isExit()) {
