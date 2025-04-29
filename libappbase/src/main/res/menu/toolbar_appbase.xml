@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/item_minimal"
         android:title="MINIMAL"
-        android:icon="@drawable/ic_winboll_point"
-        app:showAsAction="always"/>
+        android:icon="@drawable/ic_winboll_point"/>
     <item
         android:id="@+id/item_about"
         android:title="ABOUT"
-        android:icon="@drawable/ic_winboll_logo"
-        app:showAsAction="always"/>
+        android:icon="@drawable/ic_winboll_logo"/>
     <item
         android:id="@+id/item_help"
         android:title="HELP"
-        android:icon="@drawable/ic_winboll_help"
-        app:showAsAction="always"/>
+        android:icon="@drawable/ic_winboll_help"/>
 
     <item
         android:id="@+id/item_log"
         android:title="LOG"
-        android:icon="@drawable/ic_winboll_log"
-        app:showAsAction="always"/>
+        android:icon="@drawable/ic_winboll_log"/>
 </menu>
