@@ -6,10 +6,10 @@ package cc.winboll.studio.appbase.activities;
  */
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.appbase.WinBollActivityBase;
 import cc.winboll.studio.libappbase.GlobalApplication;
@@ -39,7 +39,7 @@ public class NewActivity extends WinBollActivityBase implements IWinBollActivity
 //        mLogView = findViewById(R.id.logview);
 //        mLogView.start();
         mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        setActionBar(mToolbar);
         
     }
 
