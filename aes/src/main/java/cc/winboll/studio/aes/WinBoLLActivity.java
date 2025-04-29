@@ -5,17 +5,17 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import cc.winboll.studio.libaes.beans.AESThemeBean;
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 import android.view.MenuItem;
 
 /**
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/03/30 00:34:02
- * @Describe WinBoll 活动窗口通用基类
+ * @Describe WinBoLL 活动窗口通用基类
  */
-public class WinBollActivity extends AppCompatActivity implements IWinBollActivity {
+public class WinBoLLActivity extends AppCompatActivity implements IWinBoLLActivity {
 
-    public static final String TAG = "WinBollActivity";
+    public static final String TAG = "WinBoLLActivity";
 
     protected volatile AESThemeBean.ThemeType mThemeType;
 

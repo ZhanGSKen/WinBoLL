@@ -3,7 +3,7 @@ package cc.winboll.studio.libaes.winboll;
 /**
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/03/28 19:11:27
- * @Describe WinBoll UI 状态图标枚举
+ * @Describe WinBoLL UI 状态图标枚举
  */
 import cc.winboll.studio.libaes.R;
 
