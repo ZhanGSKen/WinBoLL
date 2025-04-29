@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         minSdkVersion 24
-        targetSdkVersion 29
+        targetSdkVersion 30
     }
     buildTypes {
         release {
@@ -51,6 +51,6 @@ dependencies {
     //api 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
     //api 'androidx.fragment:fragment:1.1.0'
     
-    api 'cc.winboll.studio:libapputils:15.3.1'
-    api 'cc.winboll.studio:libappbase:15.4.8'
+    api 'cc.winboll.studio:libapputils:15.3.4'
+    api 'cc.winboll.studio:libappbase:15.7.6'
 }
