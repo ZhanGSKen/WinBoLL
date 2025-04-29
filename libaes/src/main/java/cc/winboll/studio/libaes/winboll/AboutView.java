@@ -3,7 +3,7 @@ package cc.winboll.studio.libaes.winboll;
 /**
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/03/24 15:08:52
- * @Describe WinBoll应用介绍视图
+ * @Describe WinBoLL应用介绍视图
  */
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +43,7 @@ public class AboutView extends LinearLayout {
     Context mContext;
     APPInfo mAPPInfo;
 
-    WinBollServiceStatusView mWinBollServiceStatusView;
+    WinBoLLServiceStatusView mWinBoLLServiceStatusView;
     OnRequestDevUserInfoAutofillListener mOnRequestDevUserInfoAutofillListener;
     String mszAppName = "";
     String mszAppAPKFolderName = "";
@@ -57,7 +57,7 @@ public class AboutView extends LinearLayout {
     String mszHomePage = "";
     String mszGitea = "";
     int mnAppIcon = 0;
-    String mszWinBollServerHost;
+    String mszWinBoLLServerHost;
     String mszReleaseAPKName;
     EditText metDevUserName;
     EditText metDevUserPassword;
@@ -107,7 +107,7 @@ public class AboutView extends LinearLayout {
         mszAppDescription = mAPPInfo.getAppDescription();
         mnAppIcon = mAPPInfo.getAppIcon();
 
-        mszWinBollServerHost = GlobalApplication.isDebuging() ?  "https://dev.winboll.cc": "https://www.winboll.cc";
+        mszWinBoLLServerHost = GlobalApplication.isDebuging() ?  "https://dev.winboll.cc": "https://www.winboll.cc";
 
         try {
             mszAppVersionName = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
@@ -115,7 +115,7 @@ public class AboutView extends LinearLayout {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }
         mszCurrentAppPackageName = mszAppAPKName + "_" + mszAppVersionName + ".apk";
-        mszHomePage = mszWinBollServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
+        mszHomePage = mszWinBoLLServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
         if (mAPPInfo.getAppGitAPPBranch().equals("")) {
             mszGitea = "https://gitea.winboll.cc/" + mAPPInfo.getAppGitOwner() + "/" + mszAppGitName;
         } else {
@@ -132,9 +132,9 @@ public class AboutView extends LinearLayout {
             metDevUserName.setText(PrefUtils.getString(mContext, "metDevUserName", ""));
             metDevUserPassword.setText(PrefUtils.getString(mContext, "metDevUserPassword", ""));
             //mDevelopHostConnectionStatusView = new DevelopHostConnectionStatusView(context);
-            mWinBollServiceStatusView = addedView.findViewById(R.id.viewaboutdevWinBollServiceStatusView1);
-            mWinBollServiceStatusView.setServerHost(mszWinBollServerHost);
-            mWinBollServiceStatusView.setAuthInfo(metDevUserName.getText().toString(), metDevUserPassword.getText().toString());
+            mWinBoLLServiceStatusView = addedView.findViewById(R.id.viewaboutdevWinBoLLServiceStatusView1);
+            mWinBoLLServiceStatusView.setServerHost(mszWinBoLLServerHost);
+            mWinBoLLServiceStatusView.setAuthInfo(metDevUserName.getText().toString(), metDevUserPassword.getText().toString());
             //llMain.addView(mDevelopHostConnectionStatusView);
             llMain.addView(createAboutPage());
             addView(addedView);
@@ -143,9 +143,9 @@ public class AboutView extends LinearLayout {
             View addedView = inflater.inflate(R.layout.view_about_www, this, false);
             LinearLayout llMain = addedView.findViewById(R.id.viewaboutwwwLinearLayout1);
             //mDevelopHostConnectionStatusView = new DevelopHostConnectionStatusView(context);
-            mWinBollServiceStatusView = addedView.findViewById(R.id.viewaboutwwwWinBollServiceStatusView1);
-            mWinBollServiceStatusView.setServerHost(mszWinBollServerHost);
-            mWinBollServiceStatusView.setAuthInfo("", "");
+            mWinBoLLServiceStatusView = addedView.findViewById(R.id.viewaboutwwwWinBoLLServiceStatusView1);
+            mWinBoLLServiceStatusView.setServerHost(mszWinBoLLServerHost);
+            mWinBoLLServiceStatusView.setAuthInfo("", "");
             //llMain.addView(mDevelopHostConnectionStatusView);
             llMain.addView(createAboutPage());
             addView(addedView);
@@ -291,7 +291,7 @@ public class AboutView extends LinearLayout {
             GlobalApplication.setIsDebuging(true);
             GlobalApplication.saveDebugStatus();
 
-            GlobalApplication.getWinBollActivityManager().finishAll();
+            GlobalApplication.getWinBoLLActivityManager().finishAll();
             context.startActivity(intent);
         } 
     }
@@ -303,7 +303,7 @@ public class AboutView extends LinearLayout {
             GlobalApplication.setIsDebuging(false);
             GlobalApplication.saveDebugStatus();
 
-            GlobalApplication.getWinBollActivityManager().finishAll();
+            GlobalApplication.getWinBoLLActivityManager().finishAll();
             context.startActivity(intent);
         } 
     }
@@ -323,7 +323,7 @@ public class AboutView extends LinearLayout {
             new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        String szUrl = mszWinBollServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
+                        String szUrl = mszWinBoLLServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
                         // 构建包含认证信息的请求
                         String credential = "";
                         if (GlobalApplication.isDebuging()) {
@@ -331,8 +331,8 @@ public class AboutView extends LinearLayout {
                             PrefUtils.saveString(mContext, "metDevUserName", metDevUserName.getText().toString());
                             PrefUtils.saveString(mContext, "metDevUserPassword", metDevUserPassword.getText().toString());
                         } else {
-                            String username = "WinBoll";
-                            String password = "WinBollPowerByZhanGSKen";
+                            String username = "WinBoLL";
+                            String password = "WinBoLLPowerByZhanGSKen";
                             credential = Credentials.basic(username, password);
                         }
 
@@ -384,7 +384,7 @@ public class AboutView extends LinearLayout {
     YesNoAlertDialog.OnDialogResultListener mIsDownlaodUpdateListener = new YesNoAlertDialog.OnDialogResultListener() {
         @Override
         public void onYes() {
-            String szUrl = mszWinBollServerHost + "/studio/download.php?appname=" + mszAppAPKFolderName + "&apkname=" + mszNewestAppPackageName;
+            String szUrl = mszWinBoLLServerHost + "/studio/download.php?appname=" + mszAppAPKFolderName + "&apkname=" + mszNewestAppPackageName;
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(szUrl));
             mContext.startActivity(browserIntent);
         }

@@ -3,7 +3,7 @@ package cc.winboll.studio.libaes.winboll;
 /**
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/03/28 19:06:54
- * @Describe WinBoll 客户端服务
+ * @Describe WinBoLL 客户端服务
  */
 import android.app.Service;
 import android.content.ComponentName;
@@ -19,28 +19,28 @@ import cc.winboll.studio.libappbase.utils.ServiceUtils;
 import cc.winboll.studio.libapputils.utils.PrefUtils;
 import com.hjq.toast.ToastUtils;
 
-public class WinBollClientService extends Service implements IWinBollClientServiceBinder {
+public class WinBoLLClientService extends Service implements IWinBoLLClientServiceBinder {
 
-    public static final String TAG = "WinBollClientService";
+    public static final String TAG = "WinBoLLClientService";
 
-    WinBollClientServiceBean mWinBollClientServiceBean;
+    WinBoLLClientServiceBean mWinBoLLClientServiceBean;
     MyServiceConnection mMyServiceConnection;
-    volatile boolean mIsWinBollClientThreadRunning;
+    volatile boolean mIsWinBoLLClientThreadRunning;
     volatile boolean mIsEnableService;
-    volatile WinBollClientThread mWinBollClientThread;
+    volatile WinBoLLClientThread mWinBoLLClientThread;
 
-    public boolean isWinBollClientThreadRunning() {
-        return mIsWinBollClientThreadRunning;
+    public boolean isWinBoLLClientThreadRunning() {
+        return mIsWinBoLLClientThreadRunning;
     }
 
     @Override
-    public WinBollClientService getService() {
-        return WinBollClientService.this;
+    public WinBoLLClientService getService() {
+        return WinBoLLClientService.this;
     }
 
     @Override
     public Drawable getCurrentStatusIconDrawable() {
-        return mIsWinBollClientThreadRunning ?
+        return mIsWinBoLLClientThreadRunning ?
             getDrawable(EWUIStatusIconDrawable.getIconDrawableId(EWUIStatusIconDrawable.NORMAL))
             : getDrawable(EWUIStatusIconDrawable.getIconDrawableId(EWUIStatusIconDrawable.NEWS));
     }
@@ -54,9 +54,9 @@ public class WinBollClientService extends Service implements IWinBollClientServi
     public void onCreate() {
         //ToastUtils.show("onCreate");
         super.onCreate();
-        mWinBollClientThread = null;
-        mWinBollClientServiceBean = WinBollClientServiceBean.loadWinBollClientServiceBean(this);
-        mIsEnableService = mWinBollClientServiceBean.isEnable();
+        mWinBoLLClientThread = null;
+        mWinBoLLClientServiceBean = WinBoLLClientServiceBean.loadWinBoLLClientServiceBean(this);
+        mIsEnableService = mWinBoLLClientServiceBean.isEnable();
 
         if (mMyServiceConnection == null) {
             mMyServiceConnection = new MyServiceConnection();
@@ -74,23 +74,23 @@ public class WinBollClientService extends Service implements IWinBollClientServi
 
         // 返回运行参数持久化存储后，服务状态控制参数
         // 无论 Intent 传入如何，服务状态一直以持久化存储后的参数控制，
-        // PS: 另外当然可以通过 Intent 传入的指标来修改 mWinBollServiceBean，
+        // PS: 另外当然可以通过 Intent 传入的指标来修改 mWinBoLLServiceBean，
         //     不过本服务的应用方向会变得繁琐，
-        //     现阶段只要满足手机端启动与停止本服务，WinBoll 客户端实例运行在手机端就可以了。
+        //     现阶段只要满足手机端启动与停止本服务，WinBoLL 客户端实例运行在手机端就可以了。
         return mIsEnableService ? Service.START_STICKY: super.onStartCommand(intent, flags, startId);
     }
 
     synchronized void runMainThread() {
-        if (mWinBollClientThread == null) {
+        if (mWinBoLLClientThread == null) {
             //ToastUtils.show("runMainThread()");
-            mWinBollClientThread = new WinBollClientThread();
-            mWinBollClientThread.start();
+            mWinBoLLClientThread = new WinBoLLClientThread();
+            mWinBoLLClientThread.start();
         }
     }
 
-    void syncWinBollClientThreadStatus() {
-        mWinBollClientServiceBean = WinBollClientServiceBean.loadWinBollClientServiceBean(this);
-        mIsEnableService = mWinBollClientServiceBean.isEnable();
+    void syncWinBoLLClientThreadStatus() {
+        mWinBoLLClientServiceBean = WinBoLLClientServiceBean.loadWinBoLLClientServiceBean(this);
+        mIsEnableService = mWinBoLLClientServiceBean.isEnable();
         LogUtils.d(TAG, String.format("mIsEnableService %s", mIsEnableService));
     }
 
@@ -99,9 +99,9 @@ public class WinBollClientService extends Service implements IWinBollClientServi
     //
     void wakeupAndBindAssistant() {
         if (ServiceUtils.isServiceRunning(getApplicationContext(), AssistantService.class.getName()) == false) {
-            startService(new Intent(WinBollClientService.this, AssistantService.class));
+            startService(new Intent(WinBoLLClientService.this, AssistantService.class));
             //LogUtils.d(TAG, "call wakeupAndBindAssistant() : Binding... AssistantService");
-            bindService(new Intent(WinBollClientService.this, AssistantService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
+            bindService(new Intent(WinBoLLClientService.this, AssistantService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
         }
     }
 
@@ -115,8 +115,8 @@ public class WinBollClientService extends Service implements IWinBollClientServi
 
         @Override
         public void onServiceDisconnected(ComponentName name) {            
-            mWinBollClientServiceBean = WinBollClientServiceBean.loadWinBollClientServiceBean(WinBollClientService.this);
-            if (mWinBollClientServiceBean.isEnable()) {
+            mWinBoLLClientServiceBean = WinBoLLClientServiceBean.loadWinBoLLClientServiceBean(WinBoLLClientService.this);
+            if (mWinBoLLClientServiceBean.isEnable()) {
                 // 唤醒守护进程
                 wakeupAndBindAssistant();
             }
@@ -134,15 +134,15 @@ public class WinBollClientService extends Service implements IWinBollClientServi
         super.onStart(intent, startId);
     }
 
-    void setWinBollServiceEnableStatus(boolean isEnable) {
-        WinBollClientServiceBean bean = WinBollClientServiceBean.loadWinBollClientServiceBean(this);
+    void setWinBoLLServiceEnableStatus(boolean isEnable) {
+        WinBoLLClientServiceBean bean = WinBoLLClientServiceBean.loadWinBoLLClientServiceBean(this);
         bean.setIsEnable(isEnable);
-        WinBollClientServiceBean.saveWinBollServiceBean(this, bean);
+        WinBoLLClientServiceBean.saveWinBoLLServiceBean(this, bean);
     }
 
-    boolean getWinBollServiceEnableStatus(Context context) {
-        mWinBollClientServiceBean = WinBollClientServiceBean.loadWinBollClientServiceBean(context);
-        return mWinBollClientServiceBean.isEnable();
+    boolean getWinBoLLServiceEnableStatus(Context context) {
+        mWinBoLLClientServiceBean = WinBoLLClientServiceBean.loadWinBoLLClientServiceBean(context);
+        return mWinBoLLClientServiceBean.isEnable();
     }
 
     /*public interface OnServiceStatusChangeListener {
@@ -153,24 +153,24 @@ public class WinBollClientService extends Service implements IWinBollClientServi
      mOnServerStatusChangeListener = l;
      }*/
 
-    class WinBollClientThread extends Thread {
+    class WinBoLLClientThread extends Thread {
         @Override
         public void run() {
             super.run();
-            LogUtils.d(TAG, "run syncWinBollClientThreadStatus");
-            syncWinBollClientThreadStatus();
+            LogUtils.d(TAG, "run syncWinBoLLClientThreadStatus");
+            syncWinBoLLClientThreadStatus();
             if (mIsEnableService) {
-                if (mIsWinBollClientThreadRunning == false) {
+                if (mIsWinBoLLClientThreadRunning == false) {
                     // 设置运行状态
-                    mIsWinBollClientThreadRunning = true;
-                    LogUtils.d(TAG, "WinBollClientThread run()");
+                    mIsWinBoLLClientThreadRunning = true;
+                    LogUtils.d(TAG, "WinBoLLClientThread run()");
 
                     // 唤醒守护进程
                     //wakeupAndBindAssistant();
                     
                     while (mIsEnableService) {
                         // 显示运行状态
-                        WinBollServiceStatusView.startConnection();
+                        WinBoLLServiceStatusView.startConnection();
                         LogUtils.d(TAG, String.format("while mIsEnableService is %s", mIsEnableService));
                         
                         try {
@@ -178,13 +178,13 @@ public class WinBollClientService extends Service implements IWinBollClientServi
                         } catch (InterruptedException e) {
                             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
                         }
-                        syncWinBollClientThreadStatus();
+                        syncWinBoLLClientThreadStatus();
                     }
 
                     // 服务进程退出, 重置进程运行状态
-                    WinBollServiceStatusView.stopConnection();
-                    mIsWinBollClientThreadRunning = false;
-                    mWinBollClientThread = null;
+                    WinBoLLServiceStatusView.stopConnection();
+                    mIsWinBoLLClientThreadRunning = false;
+                    mWinBoLLClientThread = null;
                 }
             }
         }

@@ -3,7 +3,7 @@ package cc.winboll.studio.libaes.winboll;
 /**
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/03/29 15:57:28
- * @Describe WinBoll 服务器服务情况测试访问进程。
+ * @Describe WinBoLL 服务器服务情况测试访问进程。
  */
 import cc.winboll.studio.libappbase.LogUtils;
 import java.io.IOException;
@@ -20,9 +20,9 @@ interface TextCallback {
     void onFailure(Exception e);
 }
 
-public class WinBollServerConnectionThread extends Thread {
+public class WinBoLLServerConnectionThread extends Thread {
 
-    public static final String TAG = "WinBollClientService";
+    public static final String TAG = "WinBoLLClientService";
 
     private final String url;
     private final String username;
@@ -33,12 +33,12 @@ public class WinBollServerConnectionThread extends Thread {
     private final TextCallback callback; // 新增回调成员变量
 
     // 新增带回调的构造函数
-    public WinBollServerConnectionThread(String url, String username, String password, TextCallback callback) {
+    public WinBoLLServerConnectionThread(String url, String username, String password, TextCallback callback) {
         this(url, username, password, 10000, 10000, 5, callback);
     }
 
     // 修改原有构造函数，添加回调参数
-    public WinBollServerConnectionThread(String url, String username, String password, 
+    public WinBoLLServerConnectionThread(String url, String username, String password, 
                                              int connectTimeout, int readTimeout, int maxRetries, TextCallback callback) {
         this.url = url;
         this.username = username;

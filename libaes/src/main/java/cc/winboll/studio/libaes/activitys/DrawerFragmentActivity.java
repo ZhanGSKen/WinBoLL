@@ -29,11 +29,11 @@ import cc.winboll.studio.libaes.utils.AESThemeUtil;
 import cc.winboll.studio.libaes.views.ADrawerMenuListView;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 import com.baoyz.widget.PullRefreshLayout;
 import java.util.ArrayList;
 
-public abstract class DrawerFragmentActivity extends AppCompatActivity implements IWinBollActivity,AdapterView.OnItemClickListener {
+public abstract class DrawerFragmentActivity extends AppCompatActivity implements IWinBoLLActivity,AdapterView.OnItemClickListener {
 
     public static final String TAG = "DrawerFragmentActivity";
 
@@ -177,7 +177,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
                 getString(i);
             }
         } else if (R.id.item_log == item.getItemId()) {
-            GlobalApplication.getWinBollActivityManager().startLogActivity(this);
+            GlobalApplication.getWinBoLLActivityManager().startLogActivity(this);
         } else if (R.id.item_about == item.getItemId()) {
             LogUtils.d(TAG, "onAbout");
         } else if (android.R.id.home == item.getItemId()) {
