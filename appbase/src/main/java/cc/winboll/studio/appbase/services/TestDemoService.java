@@ -12,7 +12,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import cc.winboll.studio.appbase.models.TestDemoServiceBean;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.sos.WinBoll;
+import cc.winboll.studio.libappbase.sos.WinBoLL;
 
 public class TestDemoService extends Service {
 

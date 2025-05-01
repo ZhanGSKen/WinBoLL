@@ -7,9 +7,9 @@ buildscript {
         maven { url "file:///sdcard/.m2/repository" }
         
         // Nexus Maven 库地址
-        // "WinBoll Release"
+        // "WinBoLL Release"
         maven { url "https://nexus.winboll.cc/repository/maven-public/" }
-        // "WinBoll Snapshot"
+        // "WinBoLL Snapshot"
         maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
         
         maven { url 'https://maven.aliyun.com/repository/public/' } 
@@ -32,9 +32,9 @@ buildscript {
 allprojects {
     repositories {
         // Nexus Maven 库地址
-        // "WinBoll Release"
+        // "WinBoLL Release"
         maven { url "https://nexus.winboll.cc/repository/maven-public/" }
-        // "WinBoll Snapshot"
+        // "WinBoLL Snapshot"
         maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
         
         maven { url 'https://maven.aliyun.com/repository/public/' } 
@@ -56,7 +56,7 @@ allprojects {
         bashCommitAppPublishBuildFlagInfoFilePath = ".winboll/bashCommitAppPublishBuildFlagInfo.sh"
         
         winbollFilePath = "winboll.properties"
-        keyPropsFilePath = "winboll-x/current.keystore"
+        keyPropsFilePath = "current.keystore"
         // 定义 lint 输出文件
         lintXmlReportFilePath = "build/reports/lint-results.xml"
         lintHTMLReportFilePath = "build/reports/lint-results.html"

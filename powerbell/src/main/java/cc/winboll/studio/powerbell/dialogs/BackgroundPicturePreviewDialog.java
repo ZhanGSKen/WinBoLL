@@ -1,5 +1,4 @@
 package cc.winboll.studio.powerbell.dialogs;
-import cc.winboll.studio.powerbell.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.powerbell.MainActivity;
+import cc.winboll.studio.powerbell.R;
 import cc.winboll.studio.powerbell.activities.BackgroundPictureActivity;
 import cc.winboll.studio.powerbell.utils.BackgroundPictureUtils;
 import cc.winboll.studio.powerbell.utils.FileUtils;
 import cc.winboll.studio.powerbell.utils.UriUtil;
-import cc.winboll.studio.shared.log.LogUtils;
 import java.io.File;
 import java.io.IOException;
 
@@ -37,6 +37,8 @@ public class BackgroundPicturePreviewDialog extends Dialog {
     public BackgroundPicturePreviewDialog(Context context) {
         super(context);
         setContentView(R.layout.dialog_backgroundpicturepreview);
+        initEnv();
+        
         mContext = context;
         mBackgroundPictureUtils = ((BackgroundPictureActivity)context).mBackgroundPictureUtils;
         
@@ -68,6 +70,11 @@ public class BackgroundPicturePreviewDialog extends Dialog {
                 }
             });
     }
+    
+    void initEnv() {
+        LogUtils.d(TAG, "initEnv()");
+        mszPreReceivedFileName = "PreReceived.data";
+    }
 
     void copyAndViewRecivePicture(ImageView imageView) {
         //AppConfigUtils appConfigUtils = AppConfigUtils.getInstance((GlobalApplication)mContext.getApplicationContext());
@@ -87,7 +94,6 @@ public class BackgroundPicturePreviewDialog extends Dialog {
         }
 
         File fSrcImage = new File(szSrcImage);
-        mszPreReceivedFileName = "PreReceived.data";
         //mszPreReceivedFileName = DateUtils.getDateNowString() + "-" + fSrcImage.getName();
         File mfPreReceivedPhoto = new File(activity.mBackgroundPictureUtils.getBackgroundDir(), mszPreReceivedFileName);
         // 复制源图片到剪裁文件
@@ -96,7 +102,7 @@ public class BackgroundPicturePreviewDialog extends Dialog {
             LogUtils.d(TAG, "copyFileUsingFileChannels");
             Drawable drawable = Drawable.createFromPath(mfPreReceivedPhoto.getPath());
             imageView.setBackground(drawable);
-            LogUtils.d(TAG, "mszPreReceivedFileName : " + mszPreReceivedFileName);
+            //LogUtils.d(TAG, "mszPreReceivedFileName : " + mszPreReceivedFileName);
         } catch (IOException e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }

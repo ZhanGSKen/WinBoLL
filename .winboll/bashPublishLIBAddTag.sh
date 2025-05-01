@@ -8,7 +8,7 @@ if [ -z "$1" ]; then
 fi
 
 ## 正式发布使用
-git pull && bash gradlew :$1:publishReleasePublicationToWinBollReleaseRepository && bash .winboll/bashCommitLibReleaseBuildFlagInfo.sh $1
+git pull && bash gradlew :$1:publishReleasePublicationToWinBoLLReleaseRepository && bash .winboll/bashCommitLibReleaseBuildFlagInfo.sh $1
 
 ## 调试使用
-#bash gradlew :$1:publishSnapshotWinBollPublicationToWinBollSnapshotRepository && bash .winboll/bashCommitLibReleaseBuildFlagInfo.sh $1
+#bash gradlew :$1:publishSnapshotWinBoLLPublicationToWinBoLLSnapshotRepository && bash .winboll/bashCommitLibReleaseBuildFlagInfo.sh $1

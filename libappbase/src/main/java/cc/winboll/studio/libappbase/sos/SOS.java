@@ -3,7 +3,7 @@ package cc.winboll.studio.libappbase.sos;
 /**
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/03/02 09:36:29
- * @Describe WinBoll 应用 SOS 机理保护类
+ * @Describe WinBoLL 应用 SOS 机理保护类
  */
 import android.content.Context;
 import android.content.Intent;

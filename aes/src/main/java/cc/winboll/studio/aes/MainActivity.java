@@ -25,12 +25,12 @@ import cc.winboll.studio.libaes.unittests.TestAToolbarActivity;
 import cc.winboll.studio.libaes.unittests.TestDrawerFragmentActivity;
 import cc.winboll.studio.libaes.unittests.TestViewPageFragment;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 import com.a4455jkjh.colorpicker.ColorPickerDialog;
 import com.hjq.toast.ToastUtils;
 import java.util.ArrayList;
 
-public class MainActivity extends DrawerFragmentActivity implements IWinBollActivity {
+public class MainActivity extends DrawerFragmentActivity implements IWinBoLLActivity {
 
 
     public static final String TAG = "MainActivity";
@@ -123,7 +123,7 @@ public class MainActivity extends DrawerFragmentActivity implements IWinBollActi
     public boolean onOptionsItemSelected(MenuItem item) {
         int nItemId = item.getItemId();
 //        if (item.getItemId() == R.id.item_log) {
-//            WinBollActivityManager.getInstance(this).startWinBollActivity(getApplicationContext(), LogActivity.class);
+//            WinBoLLActivityManager.getInstance(this).startWinBoLLActivity(getApplicationContext(), LogActivity.class);
 //        } else 
         if (nItemId == R.id.item_atoast) {
             Toast.makeText(getApplication(), "item_testatoast", Toast.LENGTH_SHORT).show();

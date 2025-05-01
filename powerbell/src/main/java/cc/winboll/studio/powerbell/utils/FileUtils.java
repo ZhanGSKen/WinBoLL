@@ -2,7 +2,7 @@ package cc.winboll.studio.powerbell.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import cc.winboll.studio.shared.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

@@ -3,7 +3,7 @@ package cc.winboll.studio.powerbell.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import cc.winboll.studio.shared.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

@@ -11,16 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
 import cc.winboll.studio.libaes.beans.DrawerMenuBean;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 import java.util.ArrayList;
 
-public class TestDrawerFragmentActivity extends DrawerFragmentActivity implements IWinBollActivity {
+public class TestDrawerFragmentActivity extends DrawerFragmentActivity implements IWinBoLLActivity {
 
     @Override
     public Activity getActivity() {
