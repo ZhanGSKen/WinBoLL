@@ -20,6 +20,7 @@ import cc.winboll.studio.autoinstaller.models.APKModel;
 import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.services.MainService;
 import cc.winboll.studio.autoinstaller.utils.NotificationUtil;
+import cc.winboll.studio.autoinstaller.utils.PackageUtil;
 import cc.winboll.studio.autoinstaller.views.ListViewForScrollView;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
@@ -142,7 +143,7 @@ public class MainActivity extends Activity {
         }
         return "";
     }
-
+    
     public void onOpenAPP(View view) {
         String szInstalledPackageName = getLastApkPackageName();
         if (szInstalledPackageName.trim().equals("")) {
@@ -150,17 +151,27 @@ public class MainActivity extends Activity {
             return;
         }
 
-        Intent intent = getPackageManager().getLaunchIntentForPackage(mszInstalledPackageName);
-        if (intent != null) {
-            //ToastUtils.show("startActivity");
-            startActivity(intent);
-        } else {
-            // 若没能获取到启动意图，可进行相应提示等操作，比如跳转到应用商店让用户下载该应用（示例）
-            Intent marketIntent = new Intent(Intent.ACTION_VIEW);
-            marketIntent.setData(Uri.parse("market://details?id=" + mszInstalledPackageName));
-            startActivity(marketIntent);
-        }
+        PackageUtil.openAPP(this, szInstalledPackageName);
     }
+
+//    public void onOpenAPP(View view) {
+//        String szInstalledPackageName = getLastApkPackageName();
+//        if (szInstalledPackageName.trim().equals("")) {
+//            ToastUtils.show("Installed APP package name is null.");
+//            return;
+//        }
+//
+//        Intent intent = getPackageManager().getLaunchIntentForPackage(mszInstalledPackageName);
+//        if (intent != null) {
+//            //ToastUtils.show("startActivity");
+//            startActivity(intent);
+//        } else {
+//            // 若没能获取到启动意图，可进行相应提示等操作，比如跳转到应用商店让用户下载该应用（示例）
+//            Intent marketIntent = new Intent(Intent.ACTION_VIEW);
+//            marketIntent.setData(Uri.parse("market://details?id=" + mszInstalledPackageName));
+//            startActivity(marketIntent);
+//        }
+//    }
 
     public void onInstallAPK(View view) {
         installAPK();
