@@ -306,7 +306,7 @@ public class MainActivity extends BaseActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
 		} else if (nItemId ==  R.id.app_log) {
-            App.getWinBollActivityManager().startLogActivity(this);
+            App.getWinBoLLActivityManager().startLogActivity(this);
         } else if (nItemId ==  R.id.app_unittest) {
             Intent i = new Intent(MainActivity.this, UnitTestActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

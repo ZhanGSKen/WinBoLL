@@ -13,12 +13,11 @@ import android.widget.LinearLayout;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libaes.winboll.APPInfo;
 import cc.winboll.studio.libaes.winboll.AboutView;
-import cc.winboll.studio.libappbase.GlobalApplication;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
+import cc.winboll.studio.mymessagemanager.App;
 import cc.winboll.studio.mymessagemanager.R;
-import android.view.MenuItem;
 
-public class AboutActivity extends WinBollActivity implements IWinBollActivity {
+public class AboutActivity extends WinBollActivity implements IWinBoLLActivity {
 
     public static final String TAG = "AboutActivity";
 
@@ -65,13 +64,13 @@ public class AboutActivity extends WinBollActivity implements IWinBollActivity {
         );
         layout.addView(aboutView, params);
 
-        GlobalApplication.getWinBollActivityManager().add(this);
+        App.getWinBoLLActivityManager().add(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        GlobalApplication.getWinBollActivityManager().registeRemove(this);
+        App.getWinBoLLActivityManager().registeRemove(this);
     }
 
     public AboutView CreateAboutView() {

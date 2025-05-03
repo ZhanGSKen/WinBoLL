@@ -11,9 +11,9 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import cc.winboll.studio.libaes.beans.AESThemeBean;
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 
-public class WinBollActivity extends AppCompatActivity implements IWinBollActivity {
+public class WinBollActivity extends AppCompatActivity implements IWinBoLLActivity {
 
     public static final String TAG = "WinBollActivity";
 
