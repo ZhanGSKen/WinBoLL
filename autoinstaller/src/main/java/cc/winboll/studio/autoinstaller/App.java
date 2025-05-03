@@ -6,9 +6,9 @@ package cc.winboll.studio.autoinstaller;
  * @Describe 全局应用类
  */
 import android.view.Gravity;
-import cc.winboll.studio.autoinstaller.R;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import com.hjq.toast.ToastUtils;
+import com.hjq.toast.style.WhiteToastStyle;
 
 public class App extends GlobalApplication {
     
@@ -21,8 +21,8 @@ public class App extends GlobalApplication {
         // 初始化 Toast 框架
         ToastUtils.init(this);
         // 设置 Toast 布局样式
-        ToastUtils.setView(R.layout.view_toast);
-        //ToastUtils.setStyle(new WhiteToastStyle());
+        //ToastUtils.setView(R.layout.view_toast);
+        ToastUtils.setStyle(new WhiteToastStyle());
         ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
     }
 }

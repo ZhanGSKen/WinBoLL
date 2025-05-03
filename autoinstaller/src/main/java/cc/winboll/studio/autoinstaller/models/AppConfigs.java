@@ -154,10 +154,13 @@ public class AppConfigs implements Serializable {
         try {
             String szJson = FileUtil.readFile(getDataPath(context.getApplicationContext()));
             appConfigs = AppConfigs.getInstance(mContext).parseAppConfigs(szJson);
+            if(appConfigs != null) {
+                _AppConfigs = appConfigs;
+            }
         } catch (IOException e) {
             LogUtils.d(TAG, e.getMessage(), Thread.currentThread().getStackTrace());
         }
-        return appConfigs;
+        return _AppConfigs;
     }
 
     public void saveAppConfigs(Context context, AppConfigs appConfigs) {
