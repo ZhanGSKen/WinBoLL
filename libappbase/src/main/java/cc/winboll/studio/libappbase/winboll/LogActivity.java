@@ -13,7 +13,7 @@ import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.R;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 
-public class LogActivity extends Activity implements IWinBollActivity {
+public class LogActivity extends Activity implements IWinBoLLActivity {
 
     public static final String TAG = "LogActivity";
 

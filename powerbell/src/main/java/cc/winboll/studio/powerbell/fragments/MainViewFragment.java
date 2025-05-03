@@ -17,7 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import cc.winboll.studio.powerbell.GlobalApplication;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.powerbell.App;
 import cc.winboll.studio.powerbell.R;
 import cc.winboll.studio.powerbell.activities.BackgroundPictureActivity;
 import cc.winboll.studio.powerbell.beans.BackgroundPictureBean;
@@ -27,12 +28,11 @@ import cc.winboll.studio.powerbell.utils.BackgroundPictureUtils;
 import cc.winboll.studio.powerbell.utils.ServiceUtils;
 import cc.winboll.studio.powerbell.views.BatteryDrawable;
 import cc.winboll.studio.powerbell.views.VerticalSeekBar;
-import cc.winboll.studio.shared.log.LogUtils;
 import java.io.File;
 
 public class MainViewFragment extends Fragment {
 
-    public static final String TAG = MainViewFragment.class.getSimpleName();
+    public static final String TAG = "MainViewFragment";
 
     public static final int MSG_RELOAD_APPCONFIG = 0;
     public static final int MSG_CURRENTVALUEBATTERY = 1;
@@ -78,7 +78,7 @@ public class MainViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_mainview, container, false);
         _mMainViewFragment = MainViewFragment.this;
-        mAppConfigUtils = GlobalApplication.getAppConfigUtils(getActivity());
+        mAppConfigUtils = App.getAppConfigUtils(getActivity());
         
         // 获取指定ID的View实例
         final View mainImageView = mView.findViewById(R.id.fragmentmainviewImageView1);
@@ -308,6 +308,7 @@ public class MainViewFragment extends Fragment {
         String szBackgroundFilePath = BackgroundPictureUtils.getInstance(getActivity()).getBackgroundDir() + BackgroundPictureActivity.getBackgroundFileName();
         File fBackgroundFilePath = new File(szBackgroundFilePath);
         LogUtils.d(TAG, "szBackgroundFilePath : " + szBackgroundFilePath);
+        LogUtils.d(TAG, String.format("fBackgroundFilePath.exists() %s", fBackgroundFilePath.exists()));
         if (bean.isUseBackgroundFile() && fBackgroundFilePath.exists()) {
             Drawable drawableBackground = Drawable.createFromPath(szBackgroundFilePath);
             drawableBackground.setAlpha(120);

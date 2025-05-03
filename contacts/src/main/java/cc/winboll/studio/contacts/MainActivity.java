@@ -1,52 +1,44 @@
 package cc.winboll.studio.contacts;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.role.RoleManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.telecom.TelecomManager;
-import android.view.LayoutInflater;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import cc.winboll.studio.contacts.R;
-import cc.winboll.studio.contacts.activities.CallActivity;
-import cc.winboll.studio.contacts.adapters.MyPagerAdapter;
+import cc.winboll.studio.contacts.activities.SettingsActivity;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
+import cc.winboll.studio.contacts.fragments.CallLogFragment;
+import cc.winboll.studio.contacts.fragments.ContactsFragment;
+import cc.winboll.studio.contacts.fragments.LogFragment;
 import cc.winboll.studio.contacts.services.MainService;
+import cc.winboll.studio.libaes.winboll.APPInfo;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libapputils.app.IWinBollActivity;
-import cc.winboll.studio.libapputils.app.WinBollActivityManager;
-import cc.winboll.studio.libapputils.bean.APPInfo;
-import cc.winboll.studio.libapputils.view.YesNoAlertDialog;
-import cc.winboll.studio.contacts.listenphonecall.CallListenerService;
+import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
 import com.google.android.material.tabs.TabLayout;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import android.content.DialogInterface;
-import cc.winboll.studio.contacts.activities.SettingsActivity;
 
 final public class MainActivity extends AppCompatActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
@@ -57,11 +49,13 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 
     public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
 
+    static MainActivity _MainActivity;
     LogView mLogView;
     Toolbar mToolbar;
     CheckBox cbMainService;
     MainServiceBean mMainServiceBean;
-    ViewPager viewPager;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     private List<View> views; //用来存放放进ViewPager里面的布局
     //实例化存储imageView（导航原点）的集合
     ImageView[] imageViews;
@@ -70,15 +64,20 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
     LinearLayout linearLayout;//下标所在在LinearLayout布局里
     int currentPoint = 0;//当前被选中中页面的下标
 
+    private TelephonyManager telephonyManager;
+    private MyPhoneStateListener phoneStateListener;
+    List<Fragment> fragmentList;
+    List<String> tabTitleList;
+
     private static final int DIALER_REQUEST_CODE = 1;
 
     @Override
-    public AppCompatActivity getActivity() {
+    public Activity getActivity() {
         return this;
     }
 
-    @Override
-    public APPInfo getAppInfo() {
+//    @Override
+//    public APPInfo getAppInfo() {
 //        String szBranchName = "contacts";
 //
 //        APPInfo appInfo = AboutActivityFactory.buildDefaultAPPInfo();
@@ -93,8 +92,8 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //        appInfo.setAppAPKName("Contacts");
 //        appInfo.setAppAPKFolderName("Contacts");
 //        return appInfo;
-        return null;
-    }
+//        return null;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,27 +101,50 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         //if (prosessIntents(getIntent())) return;
         // 以下正常创建主窗口
         super.onCreate(savedInstanceState);
+        _MainActivity = this;
         setContentView(R.layout.activity_main);
 
         // 初始化工具栏
         mToolbar = findViewById(R.id.activitymainToolbar1);
         setSupportActionBar(mToolbar);
-        if (isEnableDisplayHomeAsUp()) {
-            // 显示后退按钮
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+//        if (isEnableDisplayHomeAsUp()) {
+//            // 显示后退按钮
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        }
         getSupportActionBar().setSubtitle(getTag());
 
-        initData();
-        initView();
-        //initPoint();//调用初始化导航原点的方法
-        viewPager.addOnPageChangeListener(this);//滑动事件
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
 
-        ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
-        MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        TabLayout tabLayout = findViewById(R.id.activitymainTabLayout1);
+        // 创建Fragment列表和标题列表
+        fragmentList = new ArrayList<>();
+        tabTitleList = new ArrayList<>();
+        fragmentList.add(CallLogFragment.newInstance(0));
+        fragmentList.add(ContactsFragment.newInstance(1));
+        fragmentList.add(LogFragment.newInstance(2));
+        tabTitleList.add("通话记录");
+        tabTitleList.add("联系人");
+        tabTitleList.add("应用日志");
+
+        // 设置ViewPager的适配器
+        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager(), fragmentList, tabTitleList);
+        viewPager.setAdapter(adapter);
+
+        // 关联TabLayout和ViewPager
         tabLayout.setupWithViewPager(viewPager);
+
+
+
+//        initData();
+//        initView();
+//        //initPoint();//调用初始化导航原点的方法
+//        viewPager.addOnPageChangeListener(this);//滑动事件
+
+        //ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
+        //MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        //viewPager.setAdapter(pagerAdapter);
+        //TabLayout tabLayout = findViewById(R.id.activitymainTabLayout1);
+        //tabLayout.setupWithViewPager(viewPager);
 
 //        mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
 //        if (mMainServiceBean == null) {
@@ -140,36 +162,86 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //                    }
 //                }
 //            });
-        MainService.startMainService(MainActivity.this);
+
+        MainServiceBean mMainServiceBean = MainServiceBean.loadBean(this, MainServiceBean.class);
+        if (mMainServiceBean == null) {
+            mMainServiceBean = new MainServiceBean();
+            MainServiceBean.saveBean(this, mMainServiceBean);
+        }
+        if (mMainServiceBean.isEnable()) {
+            MainService.startMainService(this);
+        }
+
+        // 初始化TelephonyManager和PhoneStateListener
+        telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        phoneStateListener = new MyPhoneStateListener();
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+    }
+
+
+    // ViewPager的适配器
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+
+        private List<Fragment> fragmentList;
+        private List<String> tabTitleList;
+
+        public MyPagerAdapter(FragmentManager fm, List<Fragment> fragmentList, List<String> tabTitleList) {
+            super(fm);
+            this.fragmentList = fragmentList;
+            this.tabTitleList = tabTitleList;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitleList.get(position);
+        }
+    }
+
+    public static void dialPhoneNumber(String phoneNumber) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(android.net.Uri.parse("tel:" + phoneNumber));
+        if (ActivityCompat.checkSelfPermission(_MainActivity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        _MainActivity.startActivity(intent);
     }
 
     //初始化view，即显示的图片
-    void initView() {
-        viewPager = findViewById(R.id.activitymainViewPager1);
-        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        //adapter = new MyPagerAdapter(views);
-        //viewPager = findViewById(R.id.activitymainViewPager1);
-        //viewPager.setAdapter(adapter);
-        //linearLayout = findViewById(R.id.activitymainLinearLayout1);
-        //initPoint();//初始化页面下方的点
-        viewPager.setOnPageChangeListener(this);
-
-    }
+//    void initView() {
+//        viewPager = findViewById(R.id.activitymainViewPager1);
+//        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+//        viewPager.setAdapter(pagerAdapter);
+//        //adapter = new MyPagerAdapter(views);
+//        //viewPager = findViewById(R.id.activitymainViewPager1);
+//        //viewPager.setAdapter(adapter);
+//        //linearLayout = findViewById(R.id.activitymainLinearLayout1);
+//        //initPoint();//初始化页面下方的点
+//        viewPager.setOnPageChangeListener(this);
+//
+//    }
 
     //初始化所要显示的布局
-    void initData() {
-        ViewPager viewPager = findViewById(R.id.activitymainViewPager1);
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view1 = inflater.inflate(R.layout.fragment_call, viewPager, false);
-        View view2 = inflater.inflate(R.layout.fragment_contacts, viewPager, false);
-        View view3 = inflater.inflate(R.layout.fragment_log, viewPager, false);
-
-        views = new ArrayList<>();
-        views.add(view1);
-        views.add(view2);
-        views.add(view3);
-    }
+//    void initData() {
+//        LayoutInflater inflater = LayoutInflater.from(getActivity());
+//        View view1 = inflater.inflate(R.layout.fragment_call_log, viewPager, false);
+//        View view2 = inflater.inflate(R.layout.fragment_contacts, viewPager, false);
+//        View view3 = inflater.inflate(R.layout.fragment_log, viewPager, false);
+//
+//        views = new ArrayList<>();
+//        views.add(view1);
+//        views.add(view2);
+//        views.add(view3);
+//    }
 
 //    void initPoint() {
 //        imageViews = new ImageView[5];//实例化5个图片
@@ -231,6 +303,23 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         //setSubTitle("");
     }
 
+    private class MyPhoneStateListener extends PhoneStateListener {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            switch (state) {
+                case TelephonyManager.CALL_STATE_IDLE:
+                    LogUtils.d(TAG, "电话已挂断");
+                    break;
+                case TelephonyManager.CALL_STATE_OFFHOOK:
+                    LogUtils.d(TAG, "正在通话中");
+                    break;
+                case TelephonyManager.CALL_STATE_RINGING:
+                    LogUtils.d(TAG, "来电: " + incomingNumber);
+                    break;
+            }
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -287,40 +376,25 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         return TAG;
     }
 
-    @Override
-    public Toolbar initToolBar() {
-        return findViewById(R.id.activitymainToolbar1);
-    }
-
-    @Override
-    public boolean isAddWinBollToolBar() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnableDisplayHomeAsUp() {
-        return false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        exit();
-    }
-
-    void exit() {
-        YesNoAlertDialog.OnDialogResultListener listener = new YesNoAlertDialog.OnDialogResultListener(){
-
-            @Override
-            public void onYes() {
-                WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
-            }
-
-            @Override
-            public void onNo() {
-            }
-        };
-        YesNoAlertDialog.show(this, "[ " + getString(R.string.app_name) + " ]", "Exit(Yes/No).\nIs close all activity?", listener);
-    }
+//    @Override
+//    public void onBackPressed() {
+//        exit();
+//    }
+//
+//    void exit() {
+//        YesNoAlertDialog.OnDialogResultListener listener = new YesNoAlertDialog.OnDialogResultListener(){
+//
+//            @Override
+//            public void onYes() {
+//                WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
+//            }
+//
+//            @Override
+//            public void onNo() {
+//            }
+//        };
+//        YesNoAlertDialog.show(this, "[ " + getString(R.string.app_name) + " ]", "Exit(Yes/No).\nIs close all activity?", listener);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -331,11 +405,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.item_call) {
-            Intent intent = new Intent(this, CallActivity.class);
-            startActivity(intent);
-            //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
-        } else if (item.getItemId() == R.id.item_settings) {
+        if (item.getItemId() == R.id.item_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);

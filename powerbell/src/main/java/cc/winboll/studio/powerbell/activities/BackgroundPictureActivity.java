@@ -7,12 +7,14 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 import cc.winboll.studio.libaes.views.AToolbar;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.utils.ToastUtils;
+import cc.winboll.studio.powerbell.App;
 import cc.winboll.studio.powerbell.R;
 import cc.winboll.studio.powerbell.activities.BackgroundPictureActivity;
 import cc.winboll.studio.powerbell.beans.BackgroundPictureBean;
@@ -20,8 +22,6 @@ import cc.winboll.studio.powerbell.dialogs.BackgroundPicturePreviewDialog;
 import cc.winboll.studio.powerbell.utils.BackgroundPictureUtils;
 import cc.winboll.studio.powerbell.utils.FileUtils;
 import cc.winboll.studio.powerbell.utils.UriUtil;
-import cc.winboll.studio.shared.log.LogUtils;
-import com.hjq.toast.ToastUtils;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,18 +59,21 @@ implements BackgroundPicturePreviewDialog.IOnRecivedPictureListener {
     static String _mszCommonFileType = "jpeg";
     // 背景图片的压缩比
     int mnPictureCompress = 100;
+    static String _RecivedPictureFileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_backgroundpicture);
+        initEnv();
 
         mBackgroundPictureUtils = BackgroundPictureUtils.getInstance(this);
         mfBackgroundDir = new File(mBackgroundPictureUtils.getBackgroundDir());
         if (!mfBackgroundDir.exists()) {
             mfBackgroundDir.mkdirs();
         }
-        mfPictureDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), getString(R.string.app_projectname));
+        //mfPictureDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), getString(R.string.app_projectname));
+        mfPictureDir = new File(App.getTempDirPath());
         if (!mfPictureDir.exists()) {
             mfPictureDir.mkdirs();
         }
@@ -84,8 +87,8 @@ implements BackgroundPicturePreviewDialog.IOnRecivedPictureListener {
         setActionBar(mAToolbar);
         //mAToolbar.setTitle(getTitle() + "-" + getString(R.string.subtitle_activity_backgroundpicture));
         mAToolbar.setSubtitle(R.string.subtitle_activity_backgroundpicture);
-        mAToolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
-        mAToolbar.setSubtitleTextAppearance(this, R.style.Toolbar_SubTitleText);
+        //mAToolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
+        //mAToolbar.setSubtitleTextAppearance(this, R.style.Toolbar_SubTitleText);
         //mAToolbar.setBackgroundColor(getColor(R.color.colorPrimary));
         setActionBar(mAToolbar);
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -130,6 +133,11 @@ implements BackgroundPicturePreviewDialog.IOnRecivedPictureListener {
         }
     }
 
+    void initEnv() {
+        LogUtils.d(TAG, "initEnv()");
+        _RecivedPictureFileName = "Recived.data";
+    }
+
     public static String getBackgroundFileName() {
         return _mszRecivedCropPicture;
     }
@@ -145,7 +153,7 @@ implements BackgroundPicturePreviewDialog.IOnRecivedPictureListener {
         // 加载背景
         startCropImageActivity(false);
     }
-    
+
     //
     // 更新预览背景
     //
@@ -330,10 +338,9 @@ implements BackgroundPicturePreviewDialog.IOnRecivedPictureListener {
     }
 
     public static File getRecivedPictureFile(Context context) {
-        String szRecivedPictureFileName = "Recived.data";
         BackgroundPictureUtils utils = BackgroundPictureUtils.getInstance(context);
         utils.loadBackgroundPictureBean();
-        return new File(utils.getBackgroundDir(), szRecivedPictureFileName);
+        return new File(utils.getBackgroundDir(), _RecivedPictureFileName);
     }
 
     @Override

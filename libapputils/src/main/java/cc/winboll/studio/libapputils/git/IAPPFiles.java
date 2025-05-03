@@ -1,6 +1,6 @@
 package cc.winboll.studio.libapputils.git;
 import android.content.Context;
-import cc.winboll.studio.libapputils.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public interface IAPPFiles {
         static String _mFilesRoot = "";
 
         HashFile(Context context) {
-            _mapFiles.put(UUID_WINBOLLCLIENTSERVICEBEAN_JSON, "/BaseBean/cc.winboll.studio.shared.service.WinBollClientServiceBean.json");
+            _mapFiles.put(UUID_WINBOLLCLIENTSERVICEBEAN_JSON, "/BaseBean/cc.winboll.studio.shared.service.WinBoLLClientServiceBean.json");
             _mapFiles.put(UUID_LOGUTILS_JSON, "/LogUtils/LogUtils.json");
         }
 

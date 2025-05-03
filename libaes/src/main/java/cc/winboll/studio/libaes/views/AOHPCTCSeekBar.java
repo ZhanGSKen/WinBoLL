@@ -6,24 +6,30 @@ package cc.winboll.studio.libaes.views;
  * @Describe AOneHundredPercantClickToCommitSeekBar
  */
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.SeekBar;
+import cc.winboll.studio.libappbase.LogUtils;
 
 public class AOHPCTCSeekBar extends SeekBar {
 
     public static final String TAG = "AOHPCTCSeekBar";
 
-    // 可开始拉动的起始位置(百分比值)
-    static final int ENABLE_POST_PERCENT_X = 20;
-    // 最小拉动值，滑块拉动值要超过这个值，确定事件才会提交。
-    static final int TO_MIN_VALUE = 15;
+    volatile int thumbWidth = 1;
+    volatile int progressBarWidth = 1;
+    // 设置按钮模糊右边边缘像素
+    volatile int blurRightDP = 1;
+    // 是否从起点拉动的标志
+    volatile boolean isStartSeek = false;
+
     // 外部接口对象，确定事件提交会调用该对象的方法
     OnOHPCListener mOnOHPCListener;
-    // 是否从起点拉动的标志
-    boolean mIsStartTo = false;
-    // 拉动的滑动值
-    int mnTo = 0;
+
+
+    public void setBlurRightDP(int blurRight) {
+        this.blurRightDP = blurRight;
+    }
 
     public void setOnOHPCListener(OnOHPCListener listener) {
         mOnOHPCListener = listener;
@@ -35,83 +41,68 @@ public class AOHPCTCSeekBar extends SeekBar {
 
     public AOHPCTCSeekBar(Context context) {
         super(context);
+        initView(context);
     }
 
     public AOHPCTCSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        //LogUtils.d(TAG, "AOHPCTCSeekBar(...)");
-
-        // 获得TypedArray
-        //TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AToolbar);
-        // 获得attrs.xml里面的属性值,格式为:名称_属性名,后面是默认值
-        //int colorBackgroud = a.getColor(R.styleable.ACard_backgroudColor, context.getColor(R.color.colorACardBackgroung));
-        //int centerColor = a.getColor(R.styleable.AToolbar_centerColor, context.getColor(R.color.colorAToolbarCenterColor));
-        //int endColor = a.getColor(R.styleable.AToolbar_endColor, context.getColor(R.color.colorAToolbarEndColor));
-        //float tSize = a.getDimension(R.styleable.CustomView_tSize, 35);
-        //p.setColor(tColor);
-        //p.setTextSize(tSize);
-        //Drawable drawable = context.getDrawable(R.drawable.frame_atoolbar);
-
-        //setBackground(context.getDrawable(R.drawable.acard_frame_main));
-
-        // 返回一个绑定资源结束的信号给资源
-        //a.recycle();
+        initView(context);
     }
 
     public AOHPCTCSeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initView(context);
     }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-
+    void initView(Context context) {
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            //LogUtils.d(TAG, "ACTION_DOWN");
-            // 有效的拖动起始位置(ENABLE_POST_PERCENT_X)%
-            int nEnablePostX = ((getRight() - getLeft()) * ENABLE_POST_PERCENT_X / 100) + getLeft();
-
-            if ((getLeft() < event.getX())
-                && (event.getX() < nEnablePostX)) {
-                //LogUtils.d(TAG, "event.getX() is " + Float.toString(event.getX()));
-                mIsStartTo = true;
-                return super.dispatchTouchEvent(event);
-            }
-            if (!mIsStartTo) {
-                resetView();
-                return false;
+            if (thumbWidth + blurRightDP > event.getX() && event.getX() > 0) {
+                getParent().requestDisallowInterceptTouchEvent(true);
+                isStartSeek = true;
             }
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            //LogUtils.d(TAG, "ACTION_MOVE");
-            if (mIsStartTo) {
-                mnTo++;
+            if (isStartSeek) {
+                super.dispatchTouchEvent(event);
             }
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
-            //LogUtils.d(TAG, Integer.toString(getProgress()));
-            // 提交100%确定事件
-            if ((getProgress() == 100) && (mnTo > TO_MIN_VALUE)) {
-                //LogUtils.d(TAG, "Commit mnTo is " + Integer.toString(mnTo));
+        } else if (event.getAction() == MotionEvent.ACTION_UP 
+                   || event.getAction() == MotionEvent.ACTION_CANCEL) {
+            getParent().requestDisallowInterceptTouchEvent(false);
+            if (getProgress() == progressBarWidth) {
                 mOnOHPCListener.onOHPCommit();
-                //resetView();
-                //return true;
             }
-            resetView();
-            return false;
+            // 重置控件状态
+            setProgress(0);
+            isStartSeek = false;
         }
-        //LogUtils.d(TAG, "dispatchTouchEvent End");
-        return super.dispatchTouchEvent(event);
+        return true;
     }
 
-    // 重置控件状态
-    //
-    void resetView() {
-        setProgress(0);
-        mnTo = 0;
-        mIsStartTo = false;
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        //int height = MeasureSpec.getSize(heightMeasureSpec);
+        //LogUtils.d(TAG, String.format("width %d height %d", width, height));
+
+        // 获取SeekBar的图标宽度
+        Drawable thumbDrawable = getThumb();
+        if (thumbDrawable != null) {
+            // 获取图标宽度
+            thumbWidth = thumbDrawable.getIntrinsicWidth();
+        }
+
+        // 获取进度条宽度
+        progressBarWidth = width;
+
+        //LogUtils.d(TAG, String.format("thumbWidth %d progressBarWidth %d", thumbWidth, progressBarWidth));
+
+        // 设置图标位置
+        setThumbOffset(0);
+        // 设置进度条刻度
+        setMax(progressBarWidth);
     }
 }

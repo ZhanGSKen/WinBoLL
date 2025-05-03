@@ -4,11 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.powerbell.beans.AppConfigBean;
 import cc.winboll.studio.powerbell.services.ControlCenterService;
 import cc.winboll.studio.powerbell.utils.AppConfigUtils;
 import cc.winboll.studio.powerbell.utils.BatteryUtils;
-import cc.winboll.studio.shared.log.LogUtils;
 import java.lang.ref.WeakReference;
 
 public class ControlCenterServiceReceiver extends BroadcastReceiver {
@@ -52,6 +52,13 @@ public class ControlCenterServiceReceiver extends BroadcastReceiver {
                 appConfigBean.setCurrentValue(nTheQuantityOfElectricity);
                 appConfigBean.setIsCharging(isCharging);
                 mwrService.get().startRemindThread(appConfigBean);
+                
+                // 保存电池报告
+                // 示例数据更新逻辑
+//                List<BatteryData> newData = new ArrayList<>(adapter.getDataList());
+//                newData.add(0, new BatteryData(percentage, "00:00:00", "00:00:00"));
+//                adapter.updateData(newData);
+                
                 // 保存好新的电池状态标志
                 _mIsCharging = isCharging;
                 _mnTheQuantityOfElectricityOld = nTheQuantityOfElectricity;

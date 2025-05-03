@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import cc.winboll.studio.powerbell.GlobalApplication;
+import cc.winboll.studio.powerbell.App;
 import cc.winboll.studio.powerbell.services.ControlCenterService;
 import cc.winboll.studio.powerbell.utils.AppConfigUtils;
 import cc.winboll.studio.powerbell.utils.ServiceUtils;
@@ -29,7 +29,7 @@ public class AssistantService extends Service {
     public void onCreate() {
         //LogUtils.d(TAG, "onCreate");
         super.onCreate();
-        mAppConfigUtils = GlobalApplication.getAppConfigUtils(this);
+        mAppConfigUtils = App.getAppConfigUtils(this);
 
         //mMyBinder = new MyBinder();
         if (mMyServiceConnection == null) {

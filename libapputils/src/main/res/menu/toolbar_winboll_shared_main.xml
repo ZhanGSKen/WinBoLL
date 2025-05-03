@@ -4,11 +4,9 @@
     <item
         android:id="@+id/item_exit"
         android:title="EXIT"
-        android:icon="@drawable/winboll_point"
-        app:showAsAction="always"/>
+        android:icon="@drawable/winboll_point"/>
     <item
         android:id="@+id/item_about"
         android:title="About"
-        android:icon="@drawable/winboll_logo"
-        app:showAsAction="always"/>
+        android:icon="@drawable/winboll_logo"/>
 </menu>

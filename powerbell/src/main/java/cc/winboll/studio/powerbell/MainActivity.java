@@ -12,14 +12,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import cc.winboll.studio.libaes.views.AToolbar;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.powerbell.MainActivity;
 import cc.winboll.studio.powerbell.activities.AboutActivity;
 import cc.winboll.studio.powerbell.activities.BackgroundPictureActivity;
+import cc.winboll.studio.powerbell.activities.BatteryReporterActivity;
 import cc.winboll.studio.powerbell.activities.ClearRecordActivity;
 import cc.winboll.studio.powerbell.fragments.MainViewFragment;
-import cc.winboll.studio.powerbell.utils.NotificationUtils;
-import cc.winboll.studio.shared.log.LogUtils;
-import cc.winboll.studio.shared.log.LogView;
 
 public class MainActivity extends Activity {
     public static final String TAG = "MainActivity";
@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
     public static MainActivity _mMainActivity;
     LogView mLogView;
     //ArrayList<Fragment> mlistFragment;
-    GlobalApplication mApplication;
+    App mApplication;
     //AppConfigUtils mAppConfigUtils;
     Menu mMenu;
     Fragment mCurrentShowFragment;
@@ -48,12 +48,13 @@ public class MainActivity extends Activity {
         mLogView.updateLogView();
 
         _mMainActivity = MainActivity.this;
-        mApplication = (GlobalApplication) getApplication();
+        mApplication = (App) getApplication();
         //mAppConfigUtils = AppConfigUtils.getInstance(mApplication);
 
         // 初始化工具栏
         mAToolbar = (AToolbar) findViewById(R.id.toolbar);
         setActionBar(mAToolbar);
+        //mAToolbar.setSubtitle("Main");
         mAToolbar.setTitleTextAppearance(this, R.style.Toolbar_TitleText);
 
         if (mMainViewFragment == null) {
@@ -64,8 +65,10 @@ public class MainActivity extends Activity {
         }
         showFragment(mMainViewFragment);
 
-        NotificationUtils notificationUtils = new NotificationUtils(this);
-        notificationUtils.createNotificationChannel();
+//        NotificationHelper notificationUtils = new NotificationHelper(this);
+//        notificationUtils.createNotificationChannels();
+
+
     }
 
     void showFragment(Fragment fragment) {
@@ -113,7 +116,7 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         // 回到窗口自动取消提醒消息
-        NotificationUtils.cancelRemindNotification(this);
+        //NotificationHelper.cancelRemindNotification(this);
 
         reloadBackground();
     }
@@ -140,8 +143,11 @@ public class MainActivity extends Activity {
         super.onOptionsItemSelected(item); 
         int menuItemId = item.getItemId();
         if (menuItemId == R.id.action_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+        } else if (menuItemId == R.id.action_battery_reporter) {
             Intent intent = new Intent();
-            intent.setClass(this, AboutActivity.class);
+            intent.setClass(this, BatteryReporterActivity.class);
             startActivity(intent);
         } else if (menuItemId == R.id.action_clearrecord) {
             Intent intent = new Intent();

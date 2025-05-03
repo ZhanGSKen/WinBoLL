@@ -1,22 +1,34 @@
 package cc.winboll.studio.libaes.unittests;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 
 /**
  * @Author ZhanGSKen@QQ.COM
  * @Date 2024/06/15 00:58:10
  * @Describe 第二级窗口
  */
-public class SecondaryLibraryActivity extends DrawerFragmentActivity {
+public class SecondaryLibraryActivity extends DrawerFragmentActivity implements IWinBoLLActivity {
 
     public static final String TAG = "SecondaryLibraryActivity";
 
     SecondaryLibraryFragment mSecondaryLibraryFragment;
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public String getTag() {
+        return null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +55,7 @@ public class SecondaryLibraryActivity extends DrawerFragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int nItemId = item.getItemId();
         if (nItemId == R.id.item_test) {
-            Toast.makeText(getApplication(), "item_test", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "item_test", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="lib_name">libaes</string>
-    <string name="lib_description">云宝APP应用安卓元素类库示例。源码仅供调试参考，请勿直接引用。(WinBoll APP application Android element class library example. The source is just for demo debug test, Do not quote directly.)</string>
+    <string name="lib_description">云宝APP应用安卓元素类库示例。源码仅供调试参考，请勿直接引用。(WinBoLL APP application Android element class library example. The source is just for demo debug test, Do not quote directly.)</string>
     <string name="lib_home">https://winboll.cc/libaes</string>
     <string name="text_about">About</string>
     <string name="text_AppTheme">AppTheme</string>
