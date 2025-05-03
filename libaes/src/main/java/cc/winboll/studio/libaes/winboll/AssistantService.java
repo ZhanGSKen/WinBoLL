@@ -11,14 +11,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import cc.winboll.studio.libaes.winboll.WinBollClientService;
+import cc.winboll.studio.libaes.winboll.WinBoLLClientService;
 import cc.winboll.studio.libappbase.utils.ServiceUtils;
 
 public class AssistantService extends Service {
 
     public final static String TAG = "AssistantService";
 
-    WinBollClientServiceBean mWinBollServiceBean;
+    WinBoLLClientServiceBean mWinBoLLServiceBean;
     MyServiceConnection mMyServiceConnection;
     volatile boolean mIsServiceRunning;
 
@@ -30,7 +30,7 @@ public class AssistantService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mWinBollServiceBean = WinBollClientServiceBean.loadWinBollClientServiceBean(this);
+        mWinBoLLServiceBean = WinBoLLClientServiceBean.loadWinBoLLClientServiceBean(this);
         if (mMyServiceConnection == null) {
             mMyServiceConnection = new MyServiceConnection();
         }
@@ -55,8 +55,8 @@ public class AssistantService extends Service {
     // 运行服务内容
     //
     void run() {
-        mWinBollServiceBean = WinBollClientServiceBean.loadWinBollClientServiceBean(this);
-        if (mWinBollServiceBean.isEnable()) {
+        mWinBoLLServiceBean = WinBoLLClientServiceBean.loadWinBoLLClientServiceBean(this);
+        if (mWinBoLLServiceBean.isEnable()) {
             if (mIsServiceRunning == false) {
                 // 设置运行状态
                 mIsServiceRunning = true;
@@ -70,11 +70,11 @@ public class AssistantService extends Service {
     // 唤醒和绑定主进程
     //
     void wakeupAndBindMain() {
-        if (ServiceUtils.isServiceRunning(getApplicationContext(), WinBollClientService.class.getName()) == false) {
-            startForegroundService(new Intent(AssistantService.this, WinBollClientService.class));
+        if (ServiceUtils.isServiceRunning(getApplicationContext(), WinBoLLClientService.class.getName()) == false) {
+            startForegroundService(new Intent(AssistantService.this, WinBoLLClientService.class));
         }
 
-        bindService(new Intent(AssistantService.this, WinBollClientService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
+        bindService(new Intent(AssistantService.this, WinBoLLClientService.class), mMyServiceConnection, Context.BIND_IMPORTANT);
     }
 
     //
@@ -87,8 +87,8 @@ public class AssistantService extends Service {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            mWinBollServiceBean = WinBollClientServiceBean.loadWinBollClientServiceBean(AssistantService.this);
-            if (mWinBollServiceBean.isEnable()) {
+            mWinBoLLServiceBean = WinBoLLClientServiceBean.loadWinBoLLClientServiceBean(AssistantService.this);
+            if (mWinBoLLServiceBean.isEnable()) {
                 wakeupAndBindMain();
             }
         }

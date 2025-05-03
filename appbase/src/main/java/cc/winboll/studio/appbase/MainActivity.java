@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.appbase.activities.NewActivity;
 import cc.winboll.studio.appbase.services.MainService;
@@ -21,10 +21,9 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
-import cc.winboll.studio.libappbase.dialogs.YesNoAlertDialog;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 
-public class MainActivity extends WinBollActivityBase implements IWinBollActivity {
+public class MainActivity extends WinBoLLActivityBase implements IWinBoLLActivity {
 
     public static final String TAG = "MainActivity";
 
@@ -48,7 +47,7 @@ public class MainActivity extends WinBollActivityBase implements IWinBollActivit
         setContentView(R.layout.activity_main);
 
         mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        setActionBar(mToolbar);
 
         CheckBox cbIsDebugMode = findViewById(R.id.activitymainCheckBox1);
         cbIsDebugMode.setChecked(GlobalApplication.isDebuging());
@@ -177,7 +176,7 @@ public class MainActivity extends WinBollActivityBase implements IWinBollActivit
     }
 
     public void onTestOpenNewActivity(View view) {
-        GlobalApplication.getWinBollActivityManager().startWinBollActivity(this, NewActivity.class);
+        GlobalApplication.getWinBoLLActivityManager().startWinBoLLActivity(this, NewActivity.class);
     }
 
     

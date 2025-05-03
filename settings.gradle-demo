@@ -1,7 +1,3 @@
-// APP 项目编译设置
-//include ':app'
-//rootProject.name = "app"
-
 // AutoInstaller 项目编译设置
 //include ':autoinstaller'
 //rootProject.name = "autoinstaller"
@@ -36,10 +32,6 @@
 // Contacts 项目编译设置
 //include ':contacts'
 //rootProject.name = "contacts"
-
-// Positions 项目编译设置
-//include ':positions'
-//rootProject.name = "positions"
 
 // MyMessageManager 项目编译设置
 //include ':mymessagemanager'

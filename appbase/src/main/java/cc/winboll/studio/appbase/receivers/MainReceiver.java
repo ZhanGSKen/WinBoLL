@@ -10,7 +10,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import cc.winboll.studio.appbase.models.WinBollNewsBean;
+import cc.winboll.studio.appbase.models.WinBoLLNewsBean;
 import cc.winboll.studio.appbase.services.MainService;
 import cc.winboll.studio.appbase.widgets.APPNewsWidget;
 import cc.winboll.studio.libappbase.AppUtils;
@@ -18,7 +18,7 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.sos.APPModel;
 import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.sos.SOSObject;
-import cc.winboll.studio.libappbase.sos.WinBoll;
+import cc.winboll.studio.libappbase.sos.WinBoLL;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -42,11 +42,11 @@ public class MainReceiver extends BroadcastReceiver {
         String szAction = intent.getAction();
         if (szAction.equals(ACTION_BOOT_COMPLETED)) {
             ToastUtils.show("ACTION_BOOT_COMPLETED");
-        } else if (szAction.equals(WinBoll.ACTION_BIND)) {
+        } else if (szAction.equals(WinBoLL.ACTION_BIND)) {
             LogUtils.d(TAG, "ACTION_BIND");
             LogUtils.d(TAG, String.format("context.getPackageName() %s", context.getPackageName()));
             LogUtils.d(TAG, String.format("intent.getAction() %s", intent.getAction()));
-            String szAPPModel = intent.getStringExtra(WinBoll.EXTRA_APPMODEL);
+            String szAPPModel = intent.getStringExtra(WinBoLL.EXTRA_APPMODEL);
             LogUtils.d(TAG, String.format("szAPPModel %s", szAPPModel));
             if (szAPPModel != null && !szAPPModel.equals("")) {
                 try {
@@ -80,7 +80,7 @@ public class MainReceiver extends BroadcastReceiver {
 
                     String appName = AppUtils.getAppNameByPackageName(context, szObjectPackageName);
                     LogUtils.d(TAG, String.format("appName %s", appName));
-                    WinBollNewsBean appWinBollNewsBean = new WinBollNewsBean(appName);
+                    WinBoLLNewsBean appWinBoLLNewsBean = new WinBoLLNewsBean(appName);
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                     String currentTime = sdf.format(new Date());
                     StringBuilder sbLine = new StringBuilder();
@@ -88,9 +88,9 @@ public class MainReceiver extends BroadcastReceiver {
                     sbLine.append(currentTime);
                     sbLine.append("] Power to ");
                     sbLine.append(appName);
-                    appWinBollNewsBean.setMessage(sbLine.toString());
+                    appWinBoLLNewsBean.setMessage(sbLine.toString());
 
-                    APPNewsWidget.addWinBollNewsBean(context, appWinBollNewsBean);
+                    APPNewsWidget.addWinBoLLNewsBean(context, appWinBoLLNewsBean);
 
                     Intent intentWidget = new Intent(context, APPNewsWidget.class);
                     intentWidget.setAction(APPNewsWidget.ACTION_RELOAD_REPORT);
@@ -110,7 +110,7 @@ public class MainReceiver extends BroadcastReceiver {
         IntentFilter filter=new IntentFilter();
         filter.addAction(ACTION_BOOT_COMPLETED);
         filter.addAction(SOS.ACTION_SOS);
-        filter.addAction(WinBoll.ACTION_BIND);
+        filter.addAction(WinBoLL.ACTION_BIND);
         //filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         service.registerReceiver(this, filter);
     }

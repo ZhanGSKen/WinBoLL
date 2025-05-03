@@ -1,51 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
-
-	<androidx.appcompat.widget.Toolbar
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/activitymainToolbar1"/>
 
 	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_weight="1.0">
+		android:layout_height="wrap_content">
 
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="应用权限设置："/>
-
-		<LinearLayout
-			android:orientation="horizontal"
+		<androidx.appcompat.widget.Toolbar
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:gravity="right">
+			android:id="@+id/activitymainToolbar1"/>
 
-			<Button
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1.0">
+
+			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="悬浮窗设置"
-				android:id="@+id/activitysettingsButton2"
-				android:onClick="onCanDrawOverlays"/>
+				android:text="服务设置："/>
 
-			<Button
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<Switch
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="主要服务"
+					android:id="@+id/sw_mainservice"
+					android:layout_margin="5dp"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="云盾设置："/>
+
+				<cc.winboll.studio.contacts.views.DuInfoTextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/tv_DunInfo"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<Switch
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="是否启用云盾防御"
+					android:layout_margin="5dp"
+					android:id="@+id/sw_IsEnableDun"
+					android:onClick="onSW_IsEnableDun"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="初始防御层的叠加数量："/>
+
+				<EditText
+					android:layout_width="0dp"
+					android:inputType="number"
+					android:layout_height="wrap_content"
+					android:ems="10"
+					android:layout_weight="1.0"
+					android:id="@+id/et_DunTotalCount"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="防御层每次恢复的时间间隔(秒钟)："/>
+
+				<EditText
+					android:layout_width="0dp"
+					android:inputType="number"
+					android:layout_height="wrap_content"
+					android:ems="10"
+					android:layout_weight="1.0"
+					android:id="@+id/et_DunResumeSecondCount"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="防御层每次恢复的叠加数量："/>
+
+				<EditText
+					android:layout_width="0dp"
+					android:inputType="number"
+					android:layout_height="wrap_content"
+					android:ems="10"
+					android:layout_weight="1.0"
+					android:id="@+id/et_DunResumeCount"/>
+
+			</LinearLayout>
+
+			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="默认拨号设置"
-				android:id="@+id/activitysettingsButton1"
-				android:onClick="onDefaultPhone"/>
+				android:text="应用权限设置："/>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="right">
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="悬浮窗设置"
+					android:id="@+id/activitysettingsButton2"
+					android:onClick="onCanDrawOverlays"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="默认拨号设置"
+					android:id="@+id/activitysettingsButton1"
+					android:onClick="onDefaultPhone"/>
+
+			</LinearLayout>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="音量设置："/>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="10dp"
+					android:id="@+id/tv_volume"/>
+
+				<SeekBar
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_margin="10dp"
+					android:max="100"
+					android:id="@+id/bellvolume"/>
+
+			</LinearLayout>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="拨不通电话记录查询："/>
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="right"
+				android:layout_margin="10dp">
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="下载 BoBullToon"
+					android:onClick="onDownloadBoBullToon"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="right|center_vertical"
+				android:layout_margin="10dp">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="查询电话："/>
+
+				<EditText
+					android:layout_width="0dp"
+					android:inputType="phone"
+					android:layout_height="wrap_content"
+					android:ems="10"
+					android:layout_weight="1.0"
+					android:id="@+id/activitysettingsEditText1"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="查询记录"
+					android:onClick="onSearchBoBullToonPhone"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:text="Phone Connect Rule :"
+					android:layout_weight="1.0"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="添加新规则"
+					android:onClick="onAddNewConnectionRule"/>
+
+			</LinearLayout>
+
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/recycler_view"
+				android:layout_width="match_parent"
+				android:layout_height="300dp"
+				android:background="@drawable/recycler_view_border"
+				android:layout_margin="5dp"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="单元测试："/>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="right">
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Unit Test"
+					android:onClick="onUnitTest"/>
+
+			</LinearLayout>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="其他："/>
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="right">
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="关于应用"
+					android:onClick="onAbout"/>
+
+			</LinearLayout>
 
 		</LinearLayout>
 
 	</LinearLayout>
 
-</LinearLayout>
+</ScrollView>
 

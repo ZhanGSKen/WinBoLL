@@ -6,20 +6,26 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<cc.winboll.studio.libaes.views.AToolbar
+	<LinearLayout
+		android:orientation="horizontal"
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/toolbar_height"
-		android:id="@+id/toolbar"
-		style="@style/DefaultAToolbar"/>
+		android:layout_height="wrap_content">
 
-    <cc.winboll.studio.shared.view.AboutView
-        app:appname="PowerBell"
-        app:appprojectname="PowerBell"
-        app:appdescription="@string/app_description"
-        app:appicon="@drawable/ic_launcher"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/activityaboutAboutView1"/>
+		<cc.winboll.studio.libaes.views.AToolbar
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/toolbar_height"
+			android:id="@+id/toolbar"
+			android:gravity="center_vertical"
+			style="@style/DefaultAToolbar"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1.0"
+		android:id="@+id/root_ll"/>
 
 </LinearLayout>
 

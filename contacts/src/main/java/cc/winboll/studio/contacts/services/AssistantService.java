@@ -15,8 +15,6 @@ import android.os.IBinder;
 import cc.winboll.studio.contacts.beans.MainServiceBean;
 import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.SOS;
-import cc.winboll.studio.libappbase.bean.APPSOSBean;
 
 public class AssistantService extends Service {
 

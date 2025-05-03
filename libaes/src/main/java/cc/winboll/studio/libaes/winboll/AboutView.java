@@ -3,7 +3,7 @@ package cc.winboll.studio.libaes.winboll;
 /**
  * @Author ZhanGSKen@AliYun.Com
  * @Date 2025/03/24 15:08:52
- * @Describe WinBoll应用介绍视图
+ * @Describe WinBoLL应用介绍视图
  */
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +32,7 @@ import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import mehdi.sakout.aboutpage.BuildConfig;
 
 public class AboutView extends LinearLayout {
 
@@ -42,7 +43,7 @@ public class AboutView extends LinearLayout {
     Context mContext;
     APPInfo mAPPInfo;
 
-    WinBollServiceStatusView mWinBollServiceStatusView;
+    WinBoLLServiceStatusView mWinBoLLServiceStatusView;
     OnRequestDevUserInfoAutofillListener mOnRequestDevUserInfoAutofillListener;
     String mszAppName = "";
     String mszAppAPKFolderName = "";
@@ -50,12 +51,13 @@ public class AboutView extends LinearLayout {
     String mszAppGitName = "";
     String mszAppVersionName = "";
     String mszCurrentAppPackageName = "";
+    boolean mIsAddDebugTools;
     volatile String mszNewestAppPackageName = "";
     String mszAppDescription = "";
     String mszHomePage = "";
     String mszGitea = "";
     int mnAppIcon = 0;
-    String mszWinBollServerHost;
+    String mszWinBoLLServerHost;
     String mszReleaseAPKName;
     EditText metDevUserName;
     EditText metDevUserPassword;
@@ -91,6 +93,7 @@ public class AboutView extends LinearLayout {
         appInfo.setAppGitAPPSubProjectFolder(typedArray.getString(R.styleable.AboutView_app_gitappsubprojectfolder));
         appInfo.setAppDescription(typedArray.getString(R.styleable.AboutView_appdescription));
         appInfo.setAppIcon(typedArray.getResourceId(R.styleable.AboutView_appicon, R.drawable.ic_winboll));
+        appInfo.setIsAddDebugTools(typedArray.getBoolean(R.styleable.AboutView_is_adddebugtools, false));
         // 返回一个绑定资源结束的信号给资源
         typedArray.recycle();
         return appInfo;
@@ -104,7 +107,7 @@ public class AboutView extends LinearLayout {
         mszAppDescription = mAPPInfo.getAppDescription();
         mnAppIcon = mAPPInfo.getAppIcon();
 
-        mszWinBollServerHost = GlobalApplication.isDebuging() ?  "https://dev.winboll.cc": "https://www.winboll.cc";
+        mszWinBoLLServerHost = GlobalApplication.isDebuging() ?  "https://dev.winboll.cc": "https://www.winboll.cc";
 
         try {
             mszAppVersionName = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
@@ -112,7 +115,7 @@ public class AboutView extends LinearLayout {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }
         mszCurrentAppPackageName = mszAppAPKName + "_" + mszAppVersionName + ".apk";
-        mszHomePage = mszWinBollServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
+        mszHomePage = mszWinBoLLServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
         if (mAPPInfo.getAppGitAPPBranch().equals("")) {
             mszGitea = "https://gitea.winboll.cc/" + mAPPInfo.getAppGitOwner() + "/" + mszAppGitName;
         } else {
@@ -129,9 +132,9 @@ public class AboutView extends LinearLayout {
             metDevUserName.setText(PrefUtils.getString(mContext, "metDevUserName", ""));
             metDevUserPassword.setText(PrefUtils.getString(mContext, "metDevUserPassword", ""));
             //mDevelopHostConnectionStatusView = new DevelopHostConnectionStatusView(context);
-            mWinBollServiceStatusView = addedView.findViewById(R.id.viewaboutdevWinBollServiceStatusView1);
-            mWinBollServiceStatusView.setServerHost(mszWinBollServerHost);
-            mWinBollServiceStatusView.setAuthInfo(metDevUserName.getText().toString(), metDevUserPassword.getText().toString());
+            mWinBoLLServiceStatusView = addedView.findViewById(R.id.viewaboutdevWinBoLLServiceStatusView1);
+            mWinBoLLServiceStatusView.setServerHost(mszWinBoLLServerHost);
+            mWinBoLLServiceStatusView.setAuthInfo(metDevUserName.getText().toString(), metDevUserPassword.getText().toString());
             //llMain.addView(mDevelopHostConnectionStatusView);
             llMain.addView(createAboutPage());
             addView(addedView);
@@ -140,9 +143,9 @@ public class AboutView extends LinearLayout {
             View addedView = inflater.inflate(R.layout.view_about_www, this, false);
             LinearLayout llMain = addedView.findViewById(R.id.viewaboutwwwLinearLayout1);
             //mDevelopHostConnectionStatusView = new DevelopHostConnectionStatusView(context);
-            mWinBollServiceStatusView = addedView.findViewById(R.id.viewaboutwwwWinBollServiceStatusView1);
-            mWinBollServiceStatusView.setServerHost(mszWinBollServerHost);
-            mWinBollServiceStatusView.setAuthInfo("", "");
+            mWinBoLLServiceStatusView = addedView.findViewById(R.id.viewaboutwwwWinBoLLServiceStatusView1);
+            mWinBoLLServiceStatusView.setServerHost(mszWinBoLLServerHost);
+            mWinBoLLServiceStatusView.setAuthInfo("", "");
             //llMain.addView(mDevelopHostConnectionStatusView);
             llMain.addView(createAboutPage());
             addView(addedView);
@@ -210,16 +213,6 @@ public class AboutView extends LinearLayout {
     };
 
     protected View createAboutPage() {
-        // 定义应用调试按钮
-        //
-        Element elementAppMode;
-        if (GlobalApplication.isDebuging()) {
-            elementAppMode = new Element(mContext.getString(R.string.app_normal), R.drawable.ic_winboll);
-            elementAppMode.setOnClickListener(mAppNormalOnClickListener);
-        } else {
-            elementAppMode = new Element(mContext.getString(R.string.app_debug), R.drawable.ic_winboll);
-            elementAppMode.setOnClickListener(mAppDebugOnClickListener);
-        }
         // 定义 GitWeb 按钮
         //
         Element elementGitWeb = new Element(mContext.getString(R.string.gitea_home), R.drawable.ic_winboll);
@@ -237,8 +230,8 @@ public class AboutView extends LinearLayout {
         } catch (PackageManager.NameNotFoundException e) {
             LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
         }
-        View aboutPage = new AboutPage(mContext)
-            .setDescription(szAppInfo)
+        AboutPage aboutPage = new AboutPage(mContext);
+        aboutPage.setDescription(szAppInfo)
             //.isRTL(false)
             //.setCustomFont(String) // or Typeface
             .setImage(mnAppIcon)
@@ -247,17 +240,31 @@ public class AboutView extends LinearLayout {
             //.addGroup("Connect with us")
             .addEmail("ZhanGSKen@AliYun.Com")
             .addWebsite(mszHomePage)
-            .addItem(elementAppMode)
             .addItem(elementGitWeb)
-            .addItem(elementAppUpdate)
-            //.addFacebook("the.medy")
-            //.addTwitter("medyo80")
-            //.addYoutube("UCdPQtdWIsg7_pi4mrRu46vA")
-            //.addPlayStore("com.ideashower.readitlater.pro")
-            //.addGitHub("medyo")
-            //.addInstagram("medyo80")
-            .create();
-        return aboutPage;
+            .addItem(elementAppUpdate);
+        //.addFacebook("the.medy")
+        //.addTwitter("medyo80")
+        //.addYoutube("UCdPQtdWIsg7_pi4mrRu46vA")
+        //.addPlayStore("com.ideashower.readitlater.pro")
+        //.addGitHub("medyo")
+        //.addInstagram("medyo80")
+        //.create();
+
+        if (mAPPInfo.isAddDebugTools()) {
+            // 定义应用调试按钮
+            //
+            Element elementAppMode;
+            if (GlobalApplication.isDebuging()) {
+                elementAppMode = new Element(mContext.getString(R.string.app_normal), R.drawable.ic_winboll);
+                elementAppMode.setOnClickListener(mAppNormalOnClickListener);
+            } else {
+                elementAppMode = new Element(mContext.getString(R.string.app_debug), R.drawable.ic_winboll);
+                elementAppMode.setOnClickListener(mAppDebugOnClickListener);
+            }
+            aboutPage.addItem(elementAppMode);
+        }
+
+        return aboutPage.create();
     }
 
     View.OnClickListener mAppDebugOnClickListener = new View.OnClickListener(){
@@ -284,7 +291,7 @@ public class AboutView extends LinearLayout {
             GlobalApplication.setIsDebuging(true);
             GlobalApplication.saveDebugStatus();
 
-            GlobalApplication.getWinBollActivityManager().finishAll();
+            GlobalApplication.getWinBoLLActivityManager().finishAll();
             context.startActivity(intent);
         } 
     }
@@ -296,7 +303,7 @@ public class AboutView extends LinearLayout {
             GlobalApplication.setIsDebuging(false);
             GlobalApplication.saveDebugStatus();
 
-            GlobalApplication.getWinBollActivityManager().finishAll();
+            GlobalApplication.getWinBoLLActivityManager().finishAll();
             context.startActivity(intent);
         } 
     }
@@ -316,7 +323,7 @@ public class AboutView extends LinearLayout {
             new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        String szUrl = mszWinBollServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
+                        String szUrl = mszWinBoLLServerHost + "/studio/details.php?app=" + mszAppAPKFolderName;
                         // 构建包含认证信息的请求
                         String credential = "";
                         if (GlobalApplication.isDebuging()) {
@@ -324,11 +331,11 @@ public class AboutView extends LinearLayout {
                             PrefUtils.saveString(mContext, "metDevUserName", metDevUserName.getText().toString());
                             PrefUtils.saveString(mContext, "metDevUserPassword", metDevUserPassword.getText().toString());
                         } else {
-                            String username = "WinBoll";
-                            String password = "WinBollPowerByZhanGSKen";
+                            String username = "WinBoLL";
+                            String password = "WinBoLLPowerByZhanGSKen";
                             credential = Credentials.basic(username, password);
                         }
-                        
+
                         Request request = new Request.Builder()
                             .url(szUrl)
                             .header("Accept", "text/plain") // 设置正确的Content-Type头
@@ -377,7 +384,7 @@ public class AboutView extends LinearLayout {
     YesNoAlertDialog.OnDialogResultListener mIsDownlaodUpdateListener = new YesNoAlertDialog.OnDialogResultListener() {
         @Override
         public void onYes() {
-            String szUrl = mszWinBollServerHost + "/studio/download.php?appname=" + mszAppAPKFolderName + "&apkname=" + mszNewestAppPackageName;
+            String szUrl = mszWinBoLLServerHost + "/studio/download.php?appname=" + mszAppAPKFolderName + "&apkname=" + mszNewestAppPackageName;
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(szUrl));
             mContext.startActivity(browserIntent);
         }

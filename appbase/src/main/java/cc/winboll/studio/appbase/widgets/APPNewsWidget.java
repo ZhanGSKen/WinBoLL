@@ -12,12 +12,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 import cc.winboll.studio.appbase.R;
-import cc.winboll.studio.appbase.models.WinBollNewsBean;
+import cc.winboll.studio.appbase.models.WinBoLLNewsBean;
 import cc.winboll.studio.appbase.receivers.APPNewsWidgetClickListener;
 import cc.winboll.studio.libappbase.AppUtils;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.sos.APPModel;
-import cc.winboll.studio.libappbase.sos.WinBoll;
+import cc.winboll.studio.libappbase.sos.WinBoLL;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,14 +31,14 @@ public class APPNewsWidget extends AppWidgetProvider {
     public static final String ACTION_RELOAD_REPORT = APPNewsWidget.class.getName() + ".ACTION_RELOAD_REPORT";
 
 
-    volatile static ArrayList<WinBollNewsBean> _WinBollNewsBeanList;
+    volatile static ArrayList<WinBoLLNewsBean> _WinBoLLNewsBeanList;
     final static int _MAX_PAGES = 10;
     final static int _OnePageLinesCount = 5;
     volatile static int _CurrentPageIndex = 0;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        initWinBollNewsBeanList(context);
+        initWinBoLLNewsBeanList(context);
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
@@ -47,7 +47,7 @@ public class APPNewsWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        initWinBollNewsBeanList(context);
+        initWinBoLLNewsBeanList(context);
         if (intent.getAction().equals(ACTION_RELOAD_REPORT)) {
             LogUtils.d(TAG, "ACTION_RELOAD_REPORT");
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -57,7 +57,7 @@ public class APPNewsWidget extends AppWidgetProvider {
             }
         }else if (intent.getAction().equals(ACTION_WAKEUP_SERVICE)) {
             LogUtils.d(TAG, "ACTION_WAKEUP_SERVICE");
-            String szAPPModel = intent.getStringExtra(WinBoll.EXTRA_APPMODEL);
+            String szAPPModel = intent.getStringExtra(WinBoLL.EXTRA_APPMODEL);
             LogUtils.d(TAG, String.format("szAPPModel %s", szAPPModel));
             if (szAPPModel != null && !szAPPModel.equals("")) {
                 try {
@@ -71,7 +71,7 @@ public class APPNewsWidget extends AppWidgetProvider {
                         
                         String appName = AppUtils.getAppNameByPackageName(context, szAppPackageName);
                         LogUtils.d(TAG, String.format("appName %s", appName));
-                        WinBollNewsBean winBollNewsBean = new WinBollNewsBean(appName);
+                        WinBoLLNewsBean winBollNewsBean = new WinBoLLNewsBean(appName);
                         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                         String currentTime = sdf.format(new Date());
                         StringBuilder sbLine = new StringBuilder();
@@ -81,7 +81,7 @@ public class APPNewsWidget extends AppWidgetProvider {
                         sbLine.append(appName);
                         winBollNewsBean.setMessage(sbLine.toString());
                         
-                        addWinBollNewsBean(context, winBollNewsBean);
+                        addWinBoLLNewsBean(context, winBollNewsBean);
 
                         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, APPNewsWidget.class));
@@ -99,24 +99,24 @@ public class APPNewsWidget extends AppWidgetProvider {
     //
     // 加入新报告信息
     //
-    public synchronized static void addWinBollNewsBean(Context context, WinBollNewsBean bean) {
-        initWinBollNewsBeanList(context);
-        _WinBollNewsBeanList.add(0, bean);
+    public synchronized static void addWinBoLLNewsBean(Context context, WinBoLLNewsBean bean) {
+        initWinBoLLNewsBeanList(context);
+        _WinBoLLNewsBeanList.add(0, bean);
         // 控制记录总数
-        while (_WinBollNewsBeanList.size() > _MAX_PAGES * _OnePageLinesCount) {
-            _WinBollNewsBeanList.remove(_WinBollNewsBeanList.size() - 1);
+        while (_WinBoLLNewsBeanList.size() > _MAX_PAGES * _OnePageLinesCount) {
+            _WinBoLLNewsBeanList.remove(_WinBoLLNewsBeanList.size() - 1);
         }
-        WinBollNewsBean.saveBeanList(context, _WinBollNewsBeanList, WinBollNewsBean.class);
+        WinBoLLNewsBean.saveBeanList(context, _WinBoLLNewsBeanList, WinBoLLNewsBean.class);
     }
 
-    synchronized static void initWinBollNewsBeanList(Context context) {
-        if (_WinBollNewsBeanList == null) {
-            _WinBollNewsBeanList = new ArrayList<WinBollNewsBean>();
-            WinBollNewsBean.loadBeanList(context, _WinBollNewsBeanList, WinBollNewsBean.class);
+    synchronized static void initWinBoLLNewsBeanList(Context context) {
+        if (_WinBoLLNewsBeanList == null) {
+            _WinBoLLNewsBeanList = new ArrayList<WinBoLLNewsBean>();
+            WinBoLLNewsBean.loadBeanList(context, _WinBoLLNewsBeanList, WinBoLLNewsBean.class);
         }
-        if (_WinBollNewsBeanList == null) {
-            _WinBollNewsBeanList = new ArrayList<WinBollNewsBean>();
-            WinBollNewsBean.saveBeanList(context, _WinBollNewsBeanList, WinBollNewsBean.class);
+        if (_WinBoLLNewsBeanList == null) {
+            _WinBoLLNewsBeanList = new ArrayList<WinBoLLNewsBean>();
+            WinBoLLNewsBean.saveBeanList(context, _WinBoLLNewsBeanList, WinBoLLNewsBean.class);
         }
     }
 
@@ -141,11 +141,11 @@ public class APPNewsWidget extends AppWidgetProvider {
 
     public static String getMessage() {
         ArrayList<String> msgTemp = new ArrayList<String>();
-        if (_WinBollNewsBeanList != null) {
+        if (_WinBoLLNewsBeanList != null) {
             int start = _OnePageLinesCount * _CurrentPageIndex;
-            start = _WinBollNewsBeanList.size() > start ? start : _WinBollNewsBeanList.size() - 1;
-            for (int i = start, j = 0; i < _WinBollNewsBeanList.size() && j < _OnePageLinesCount && start > -1; i++, j++) {
-                msgTemp.add(_WinBollNewsBeanList.get(i).getMessage());
+            start = _WinBoLLNewsBeanList.size() > start ? start : _WinBoLLNewsBeanList.size() - 1;
+            for (int i = start, j = 0; i < _WinBoLLNewsBeanList.size() && j < _OnePageLinesCount && start > -1; i++, j++) {
+                msgTemp.add(_WinBoLLNewsBeanList.get(i).getMessage());
             }
             String message = String.join("\n", msgTemp);
             return message;
@@ -154,7 +154,7 @@ public class APPNewsWidget extends AppWidgetProvider {
     }
 
     public static void prePage(Context context) {
-        if (_WinBollNewsBeanList != null) {
+        if (_WinBoLLNewsBeanList != null) {
             if (_CurrentPageIndex > 0) {
                 _CurrentPageIndex = _CurrentPageIndex - 1;
             }
@@ -165,8 +165,8 @@ public class APPNewsWidget extends AppWidgetProvider {
     }
 
     public static void nextPage(Context context) {
-        if (_WinBollNewsBeanList != null) {
-            if ((_CurrentPageIndex + 1) * _OnePageLinesCount < _WinBollNewsBeanList.size()) {
+        if (_WinBoLLNewsBeanList != null) {
+            if ((_CurrentPageIndex + 1) * _OnePageLinesCount < _WinBoLLNewsBeanList.size()) {
                 _CurrentPageIndex = _CurrentPageIndex + 1;
             }
             Intent intentWidget = new Intent(context, APPNewsWidget.class);
@@ -176,11 +176,11 @@ public class APPNewsWidget extends AppWidgetProvider {
     }
 
     String getPageInfo() {
-        if (_WinBollNewsBeanList == null) {
+        if (_WinBoLLNewsBeanList == null) {
             return "0/0";
         }
-        int leftCount = _WinBollNewsBeanList.size() % _OnePageLinesCount;
-        int currentPageCount = _WinBollNewsBeanList.size() / _OnePageLinesCount + (leftCount == 0 ?0: 1);
+        int leftCount = _WinBoLLNewsBeanList.size() % _OnePageLinesCount;
+        int currentPageCount = _WinBoLLNewsBeanList.size() / _OnePageLinesCount + (leftCount == 0 ?0: 1);
         return String.format("%d/%d", _CurrentPageIndex + 1, currentPageCount);
     }
 }

@@ -32,7 +32,9 @@ public class APPInfo implements Serializable {
     String appAPKName;
     // 应用包存储文件夹名称
     String appAPKFolderName;
-
+    // 是否添加调试工具
+    boolean isAddDebugTools;
+    
     public APPInfo(String appName, int appIcon, String appDescription, String appGitName, String appGitOwner, String appGitAPPBranch, String appGitAPPSubProjectFolder, String appHomePage, String appAPKName, String appAPKFolderName) {
         this.appName = appName;
         this.appIcon = appIcon;
@@ -44,6 +46,21 @@ public class APPInfo implements Serializable {
         this.appHomePage = appHomePage;
         this.appAPKName = appAPKName;
         this.appAPKFolderName = appAPKFolderName;
+        this.isAddDebugTools = false;
+    }
+
+    public APPInfo(String appName, int appIcon, String appDescription, String appGitName, String appGitOwner, String appGitAPPBranch, String appGitAPPSubProjectFolder, String appHomePage, String appAPKName, String appAPKFolderName, boolean isAddDebugTools) {
+        this.appName = appName;
+        this.appIcon = appIcon;
+        this.appDescription = appDescription;
+        this.appGitName = appGitName;
+        this.appGitOwner = appGitOwner;
+        this.appGitAPPBranch = appGitAPPBranch;
+        this.appGitAPPSubProjectFolder = appGitAPPSubProjectFolder;
+        this.appHomePage = appHomePage;
+        this.appAPKName = appAPKName;
+        this.appAPKFolderName = appAPKFolderName;
+        this.isAddDebugTools = isAddDebugTools;
     }
 
     public APPInfo() {
@@ -58,6 +75,15 @@ public class APPInfo implements Serializable {
         this.appHomePage = "https://www.winboll.cc/studio/details.php?app=APP";
         this.appAPKName = "APP";
         this.appAPKFolderName = "APP";
+        this.isAddDebugTools = false;
+    }
+
+    public void setIsAddDebugTools(boolean isAddDebugTools) {
+        this.isAddDebugTools = isAddDebugTools;
+    }
+
+    public boolean isAddDebugTools() {
+        return isAddDebugTools;
     }
 
     public void setAppGitOwner(String appGitOwner) {

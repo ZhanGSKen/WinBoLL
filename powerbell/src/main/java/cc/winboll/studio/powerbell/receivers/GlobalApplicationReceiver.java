@@ -4,18 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import cc.winboll.studio.powerbell.GlobalApplication;
+import cc.winboll.studio.powerbell.App;
 import cc.winboll.studio.powerbell.fragments.MainViewFragment;
 import cc.winboll.studio.powerbell.utils.AppConfigUtils;
 import cc.winboll.studio.powerbell.utils.BatteryUtils;
-import cc.winboll.studio.powerbell.utils.NotificationUtils;
+import cc.winboll.studio.powerbell.utils.NotificationHelper;
 
 public class GlobalApplicationReceiver extends BroadcastReceiver {
 
     public static final String TAG = "GlobalApplicationReceiver";
 
     AppConfigUtils mAppConfigUtils;
-    GlobalApplication mGlobalApplication;
+    App mGlobalApplication;
     // 存储电量指示值，
     // 用于校验电量消息时的电量变化
     static volatile int _mnTheQuantityOfElectricityOld = -1;
@@ -24,10 +24,10 @@ public class GlobalApplicationReceiver extends BroadcastReceiver {
     // 便利封装 registerAction() 函数
     GlobalApplicationReceiver mReceiver;
 
-    public GlobalApplicationReceiver(GlobalApplication globalApplication) {
+    public GlobalApplicationReceiver(App globalApplication) {
         mReceiver = this;
         mGlobalApplication = globalApplication;
-        mAppConfigUtils = GlobalApplication.getAppConfigUtils(mGlobalApplication);
+        mAppConfigUtils = App.getAppConfigUtils(mGlobalApplication);
     }
 
     @Override
@@ -45,9 +45,9 @@ public class GlobalApplicationReceiver extends BroadcastReceiver {
             // 新电池状态标志某一个有变化就更新显示信息
             if (_mIsCharging != isCharging || _mnTheQuantityOfElectricityOld != nTheQuantityOfElectricity) {
                 // 电池状态改变先取消旧的提醒消息
-                NotificationUtils.cancelRemindNotification(context);
+                //NotificationHelper.cancelRemindNotification(context);
                 
-                GlobalApplication.getAppCacheUtils(context).addChangingTime(nTheQuantityOfElectricity);
+                App.getAppCacheUtils(context).addChangingTime(nTheQuantityOfElectricity);
                 MainViewFragment.sendMsgCurrentValueBattery(nTheQuantityOfElectricity);
                 // 保存好新的电池状态标志
                 _mIsCharging = isCharging;

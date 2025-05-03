@@ -7,14 +7,14 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 
 /**
  * @Author ZhanGSKen@QQ.COM
  * @Date 2024/06/15 00:58:10
  * @Describe 第二级窗口
  */
-public class SecondaryLibraryActivity extends DrawerFragmentActivity implements IWinBollActivity {
+public class SecondaryLibraryActivity extends DrawerFragmentActivity implements IWinBoLLActivity {
 
     public static final String TAG = "SecondaryLibraryActivity";
 

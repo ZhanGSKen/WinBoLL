@@ -2,8 +2,8 @@ package cc.winboll.studio.powerbell.threads;
 
 import android.content.Context;
 import android.os.Message;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.powerbell.handlers.ControlCenterServiceHandler;
-import cc.winboll.studio.shared.log.LogUtils;
 import java.lang.ref.WeakReference;
 
 public class RemindThread extends Thread {

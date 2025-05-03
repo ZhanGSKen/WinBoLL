@@ -10,14 +10,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libaes.winboll.APPInfo;
 import cc.winboll.studio.libaes.winboll.AboutView;
 import cc.winboll.studio.libappbase.GlobalApplication;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 
-public class AboutActivity extends WinBollActivity implements IWinBollActivity {
+public class AboutActivity extends WinBoLLActivity implements IWinBoLLActivity {
 
     public static final String TAG = "AboutActivity";
 
@@ -64,13 +63,13 @@ public class AboutActivity extends WinBollActivity implements IWinBollActivity {
         );
         layout.addView(aboutView, params);
 
-        GlobalApplication.getWinBollActivityManager().add(this);
+        GlobalApplication.getWinBoLLActivityManager().add(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        GlobalApplication.getWinBollActivityManager().registeRemove(this);
+        GlobalApplication.getWinBoLLActivityManager().registeRemove(this);
     }
 
     public AboutView CreateAboutView() {
@@ -86,6 +85,8 @@ public class AboutActivity extends WinBollActivity implements IWinBollActivity {
         appInfo.setAppHomePage("https://www.winboll.cc/studio/details.php?app=AES");
         appInfo.setAppAPKName("AES");
         appInfo.setAppAPKFolderName("AES");
+        //appInfo.setIsAddDebugTools(false);
+        appInfo.setIsAddDebugTools(BuildConfig.DEBUG);
         return new AboutView(mContext, appInfo);
     }
 }

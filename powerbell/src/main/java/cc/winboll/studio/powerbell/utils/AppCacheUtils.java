@@ -1,8 +1,8 @@
 package cc.winboll.studio.powerbell.utils;
 
 import android.content.Context;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.powerbell.beans.BatteryInfoBean;
-import cc.winboll.studio.shared.log.LogUtils;
 import java.util.ArrayList;
 
 public class AppCacheUtils {
