@@ -33,11 +33,13 @@ public class PackageUtil {
     public static void openAPP(Context context, String packageName) {
         // 这里假设要打开微信，微信的包名是com.tencent.mm
         //String packageName = "com.tencent.mm"; 
+        LogUtils.d(TAG, "packageName : " + packageName);
         PackageManager packageManager = context.getPackageManager();
         Intent intent = packageManager.getLaunchIntentForPackage(packageName);
         if (intent != null) {
             ResolveInfo resolveInfo = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
             if (resolveInfo != null) {
+                LogUtils.d(TAG, "startActivity...");
                 context.startActivity(intent);
             }
         }

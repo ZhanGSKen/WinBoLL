@@ -146,6 +146,7 @@ public class MainActivity extends Activity {
     
     public void onOpenAPP(View view) {
         String szInstalledPackageName = getLastApkPackageName();
+        LogUtils.d(TAG, "szInstalledPackageName : " + szInstalledPackageName);
         if (szInstalledPackageName.trim().equals("")) {
             ToastUtils.show("Installed APP package name is null.");
             return;
