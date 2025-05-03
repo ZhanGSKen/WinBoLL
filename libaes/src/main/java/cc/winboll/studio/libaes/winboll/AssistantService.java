@@ -11,7 +11,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import cc.winboll.studio.libaes.winboll.WinBoLLClientService;
+import cc.winboll.studio.libaes.beans.WinBoLLClientServiceBean;
+import cc.winboll.studio.libaes.winboll.AssistantService;
 import cc.winboll.studio.libappbase.utils.ServiceUtils;
 
 public class AssistantService extends Service {
