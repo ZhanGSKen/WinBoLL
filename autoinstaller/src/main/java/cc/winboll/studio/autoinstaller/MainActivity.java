@@ -71,7 +71,8 @@ public class MainActivity extends Activity {
         _MainActivity = this;
         initView();
 
-        if (getIntent().getAction().equals(ACTION_NEW_INSTALLTASK)) {
+        String action = getIntent().getAction();
+        if ((action != null) && action.equals(ACTION_NEW_INSTALLTASK)) {
             mszInstalledPackageName = getIntent().getStringExtra(EXTRA_INSTALLED_PACKAGENAME);
             mszInstalledAPKFilePath = getIntent().getStringExtra(EXTRA_INSTALLED_APKFILEPATH);
             installAPK();
@@ -143,7 +144,7 @@ public class MainActivity extends Activity {
         }
         return "";
     }
-    
+
     public void onOpenAPP(View view) {
         String szInstalledPackageName = getLastApkPackageName();
         LogUtils.d(TAG, "szInstalledPackageName : " + szInstalledPackageName);
@@ -353,7 +354,7 @@ public class MainActivity extends Activity {
             }
         }
     };
-    
+
     static void updateMainServiceStatus(boolean isEnable) {
         if (_Handler != null) {
             Message msg = new Message();
@@ -362,13 +363,13 @@ public class MainActivity extends Activity {
             _Handler.sendMessage(msg);
         }
     }
-    
+
     public static void stopMainService() {
         if (_MainActivity != null && _Handler != null) {
             updateMainServiceStatus(false);
         }
     }
-    
+
     public static void startMainService() {
         if (_MainActivity != null && _Handler != null) {
             updateMainServiceStatus(true);
