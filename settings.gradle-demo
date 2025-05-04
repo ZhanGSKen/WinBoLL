@@ -37,6 +37,10 @@
 //include ':mymessagemanager'
 //rootProject.name = "mymessagemanager"
 
+// TimeStamp 项目编译设置
+//include ':timestamp'
+//rootProject.name = "timestamp"
+
 // AndroidDemo 项目编译设置
 //include ':androiddemo'
 //rootProject.name = "androiddemo"
