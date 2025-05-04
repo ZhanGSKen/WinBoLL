@@ -10,6 +10,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.contacts.R;
 import cc.winboll.studio.libaes.winboll.APPInfo;
@@ -17,7 +18,7 @@ import cc.winboll.studio.libaes.winboll.AboutView;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 
-public class AboutActivity extends WinBoLLActivity implements IWinBoLLActivity {
+public class AboutActivity extends AppCompatActivity implements IWinBoLLActivity {
 
     public static final String TAG = "AboutActivity";
 

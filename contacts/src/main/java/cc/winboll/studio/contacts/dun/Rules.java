@@ -84,7 +84,7 @@ public class Rules {
         LogUtils.d(TAG, String.format("saveRules()"));
         PhoneConnectRuleModel.saveBeanList(mContext, _PhoneConnectRuleModelList, PhoneConnectRuleModel.class);
     }
-    
+
     public void resetDefaultBoBullToonURL() {
         mSettingsModel.setBoBullToon_URL(TomCat.getInstance(mContext).getDefaultBobulltoonUrl());
         saveDun();
@@ -124,8 +124,12 @@ public class Rules {
         boolean isDefend = false; // 盾牌是否生效
         boolean isConnect = true; // 防御结果是否连接
 
+        // 进行盾牌层数预计缩减计算
+        int nDunCurrentCount = mSettingsModel.getDunCurrentCount() - 1;
+        LogUtils.d(TAG, String.format("nDunCurrentCount : %d", nDunCurrentCount));
+
         // 如果盾值小于1，则解除防御
-        if (!isDefend && mSettingsModel.getDunCurrentCount() < 1) {
+        if (!isDefend && nDunCurrentCount < 1) {
             // 盾层为1以下，防御解除
             LogUtils.d(TAG, "盾层为1以下，防御解除");
             isDefend = true;
@@ -189,17 +193,17 @@ public class Rules {
             // 就减少防御盾牌层数。
             // 每校验一次规则，云盾防御层数减1
             // 当云盾防御层数为0时，再次进行以下程序段则恢复满值防御。
-            int newDunCount = mSettingsModel.getDunCurrentCount() - 1;
+            int newDunCount = nDunCurrentCount;
             LogUtils.d(TAG, String.format("新的防御层数预计为 %d", newDunCount));
 
-            // 保证盾值在[0，DunTotalCount]之内其他值一律重置为 DunTotalCount。
-            if (newDunCount < 0 || newDunCount > mSettingsModel.getDunTotalCount()) {
-                mSettingsModel.setDunCurrentCount(mSettingsModel.getDunTotalCount());
-                LogUtils.d(TAG, String.format("盾值不在[0，%d]区间，恢复防御最大值%d", mSettingsModel.getDunTotalCount(), mSettingsModel.getDunTotalCount()));
-            } else {
+            // 保证盾值在[1，DunTotalCount]之内其他值一律重置为 DunTotalCount。
+            if (newDunCount > 0 && newDunCount < mSettingsModel.getDunTotalCount()) {
                 mSettingsModel.setDunCurrentCount(newDunCount);
                 LogUtils.d(TAG, String.format("设置防御层数为 %d", newDunCount));
-            }
+            } else {
+                mSettingsModel.setDunCurrentCount(mSettingsModel.getDunTotalCount());
+                LogUtils.d(TAG, String.format("盾值不在[0，%d]区间，恢复防御最大值%d", mSettingsModel.getDunTotalCount(), mSettingsModel.getDunTotalCount()));
+            } 
 
             saveDun();
             SettingsActivity.notifyDunInfoUpdate();

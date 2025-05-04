@@ -202,6 +202,11 @@ public class SettingsActivity extends AppCompatActivity implements IWinBoLLActiv
         settingsModel.setIsEnableDun(isEnableDun);
         Rules.getInstance(this).saveDun();
         Rules.getInstance(this).reload();
+        
+        // 重新加载盾牌参数
+        etDunTotalCount.setText(Integer.toString(settingsModel.getDunTotalCount()));
+        etDunResumeSecondCount.setText(Integer.toString(settingsModel.getDunResumeSecondCount()));
+        etDunResumeCount.setText(Integer.toString(settingsModel.getDunResumeCount()));
     }
 
     void updateStreamVolumeTextView() {
