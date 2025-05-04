@@ -31,7 +31,7 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.sos.SOS;
 import java.util.Timer;
 import java.util.TimerTask;
-import cc.winboll.studio.libappbase.sos.WinBoll;
+import cc.winboll.studio.libappbase.sos.WinBoLL;
 import cc.winboll.studio.contacts.App;
 import cc.winboll.studio.libappbase.sos.APPModel;
 
@@ -129,11 +129,11 @@ public class MainService extends Service {
             isServiceRunning = true;
             // 唤醒守护进程
             wakeupAndBindAssistant();
-            // 召唤 WinBoll APP 绑定本服务
+            // 召唤 WinBoLL APP 绑定本服务
             if (App.isDebuging()) {
-                WinBoll.bindToAPPBaseBeta(this, MainService.class.getName());
+                WinBoLL.bindToAPPBaseBeta(this, MainService.class.getName());
             } else {
-                WinBoll.bindToAPPBase(this, MainService.class.getName());
+                WinBoLL.bindToAPPBase(this, MainService.class.getName());
             }
 
             // 初始化服务运行参数

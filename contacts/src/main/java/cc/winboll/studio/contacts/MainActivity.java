@@ -35,19 +35,19 @@ import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.libaes.winboll.APPInfo;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-final public class MainActivity extends AppCompatActivity implements IWinBollActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
+final public class MainActivity extends AppCompatActivity implements IWinBoLLActivity, ViewPager.OnPageChangeListener, View.OnClickListener {
 
 	public static final String TAG = "MainActivity";
 
     public static final int REQUEST_HOME_ACTIVITY = 0;
     public static final int REQUEST_ABOUT_ACTIVITY = 1;
 
-    public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoll.ACTION_SOS";
+    public static final String ACTION_SOS = "cc.winboll.studio.libappbase.WinBoLL.ACTION_SOS";
 
     static MainActivity _MainActivity;
     LogView mLogView;
@@ -71,10 +71,10 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 
     private static final int DIALER_REQUEST_CODE = 1;
 
-    @Override
-    public Activity getActivity() {
-        return this;
-    }
+//    @Override
+//    public Activity getActivity() {
+//        return this;
+//    }
 
 //    @Override
 //    public APPInfo getAppInfo() {
@@ -111,7 +111,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //            // 显示后退按钮
 //            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        }
-        getSupportActionBar().setSubtitle(getTag());
+        getSupportActionBar().setSubtitle(TAG);
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
@@ -339,7 +339,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //
 //        if (intent.getAction().equals(StringToQrCodeView.ACTION_UNITTEST_QRCODE)) {
 //            try {
-//                WinBollActivity clazzActivity = UnitTestActivity.class.newInstance();
+//                WinBoLLActivity clazzActivity = UnitTestActivity.class.newInstance();
 //                String tag = clazzActivity.getTag();
 //                LogUtils.d(TAG, "String tag = clazzActivity.getTag(); tag " + tag);
 //                Intent subIntent = new Intent(this, UnitTestActivity.class);
@@ -357,8 +357,8 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //                }
 //
 //                Files.copy(Paths.get(szSrcPath), Paths.get(file.getPath()));
-//                //startWinBollActivity(subIntent, tag);
-//                WinBollActivityManager.getInstance(this).startWinBollActivity(this, subIntent, UnitTestActivity.class);
+//                //startWinBoLLActivity(subIntent, tag);
+//                WinBoLLActivityManager.getInstance(this).startWinBoLLActivity(this, subIntent, UnitTestActivity.class);
 //            } catch (IllegalAccessException | InstantiationException | IOException e) {
 //                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
 //                // 函数处理异常返回失败
@@ -371,10 +371,10 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //        return true;
 //    }
 
-    @Override
-    public String getTag() {
-        return TAG;
-    }
+//    @Override
+//    public String getTag() {
+//        return TAG;
+//    }
 
 //    @Override
 //    public void onBackPressed() {
@@ -386,7 +386,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
 //
 //            @Override
 //            public void onYes() {
-//                WinBollActivityManager.getInstance(getApplicationContext()).finishAll();
+//                WinBoLLActivityManager.getInstance(getApplicationContext()).finishAll();
 //            }
 //
 //            @Override
@@ -408,7 +408,7 @@ final public class MainActivity extends AppCompatActivity implements IWinBollAct
         if (item.getItemId() == R.id.item_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
-            //WinBollActivityManager.getInstance(this).startWinBollActivity(this, CallActivity.class);
+            //WinBoLLActivityManager.getInstance(this).startWinBoLLActivity(this, CallActivity.class);
         }
 //        } else 
 //        if (item.getItemId() == R.id.item_exit) {

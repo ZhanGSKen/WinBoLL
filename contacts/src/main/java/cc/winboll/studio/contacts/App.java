@@ -7,7 +7,7 @@ package cc.winboll.studio.contacts;
  */
 import android.view.Gravity;
 import cc.winboll.studio.libappbase.GlobalApplication;
-import cc.winboll.studio.libappbase.winboll.WinBollActivityManager;
+import cc.winboll.studio.libappbase.winboll.WinBoLLActivityManager;
 import com.hjq.toast.ToastUtils;
 
 public class App extends GlobalApplication {
@@ -20,8 +20,8 @@ public class App extends GlobalApplication {
         // 这样可以预先设置日志与数据的存储根目录。
         //setIsDebuging(BuildConfig.DEBUG);
         super.onCreate();
-        // 设置 WinBoll 应用 UI 类型
-        WinBollActivityManager.getInstance(this).setWinBollUI_TYPE(WinBollActivityManager.WinBollUI_TYPE.Aplication);
+        // 设置 WinBoLL 应用 UI 类型
+        getWinBoLLActivityManager().setWinBoLLUI_TYPE(WinBoLLActivityManager.WinBoLLUI_TYPE.Aplication);
         
         //LogUtils.d(TAG, "onCreate");
         

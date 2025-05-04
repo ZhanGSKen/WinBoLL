@@ -36,12 +36,12 @@ import cc.winboll.studio.contacts.dun.Rules;
 import cc.winboll.studio.contacts.services.MainService;
 import cc.winboll.studio.contacts.views.DuInfoTextView;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.winboll.IWinBollActivity;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 import com.hjq.toast.ToastUtils;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class SettingsActivity extends AppCompatActivity implements IWinBollActivity {
+public class SettingsActivity extends AppCompatActivity implements IWinBoLLActivity {
 
     public static final String TAG = "SettingsActivity";
 
@@ -323,6 +323,6 @@ public class SettingsActivity extends AppCompatActivity implements IWinBollActiv
     }
 
     public void onAbout(View view) {
-        App.getWinBollActivityManager().startWinBollActivity(this, AboutActivity.class);
+        App.getWinBoLLActivityManager().startWinBoLLActivity(this, AboutActivity.class);
     }
 }
