@@ -6,21 +6,24 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
 import android.widget.Switch;
 import android.widget.TextClock;
-import android.widget.Toast;
 import androidx.core.content.FileProvider;
-import cc.winboll.studio.shared.log.LogUtils;
-import cc.winboll.studio.shared.log.LogView;
 import cc.winboll.studio.autoinstaller.MainActivity;
-import cc.winboll.studio.autoinstaller.beans.AppConfigs;
+import cc.winboll.studio.autoinstaller.models.APKModel;
+import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.services.MainService;
 import cc.winboll.studio.autoinstaller.utils.NotificationUtil;
+import cc.winboll.studio.autoinstaller.utils.PackageUtil;
 import cc.winboll.studio.autoinstaller.views.ListViewForScrollView;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.LogView;
 import com.hjq.toast.ToastUtils;
 import java.io.File;
 import java.util.ArrayList;
@@ -30,8 +33,13 @@ import java.util.Map;
 public class MainActivity extends Activity {
     public static final String TAG = "MainActivity";
 
+    public static final int MSG_UPDATE_STATUS = 0;
+
     private static final int INSTALL_PERMISSION_CODE = 1;
 
+    static MainActivity _MainActivity;
+
+    ArrayList<APKModel> _APKModelList = new ArrayList<APKModel>();
     LogView mLogView;
     TextClock mTextClock;
     EditText mEditText;
@@ -60,9 +68,11 @@ public class MainActivity extends Activity {
 
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+        _MainActivity = this;
         initView();
 
-        if (getIntent().getAction().equals(ACTION_NEW_INSTALLTASK)) {
+        String action = getIntent().getAction();
+        if ((action != null) && action.equals(ACTION_NEW_INSTALLTASK)) {
             mszInstalledPackageName = getIntent().getStringExtra(EXTRA_INSTALLED_PACKAGENAME);
             mszInstalledAPKFilePath = getIntent().getStringExtra(EXTRA_INSTALLED_APKFILEPATH);
             installAPK();
@@ -76,11 +86,7 @@ public class MainActivity extends Activity {
         mLogView = findViewById(R.id.logview);
         mLogView.start();
 
-        AppConfigs appConfigs = AppConfigs.loadAppConfigs(this);
-        if (appConfigs == null) {
-            appConfigs = new AppConfigs(); 
-            AppConfigs.saveAppConfigs(this, appConfigs);
-        }
+        AppConfigs appConfigs = AppConfigs.getInstance(this).loadAppConfigs(this);
 
         if (appConfigs.getSetupMode() == AppConfigs.SetupMode.WATCHOUTPUTINSTALLER) {
             ((RadioButton)findViewById(R.id.activitymainRadioButton1)).setChecked(true);
@@ -131,22 +137,43 @@ public class MainActivity extends Activity {
 
     }
 
+    String getLastApkPackageName() {
+        APKModel.loadBeanList(this, _APKModelList, APKModel.class);
+        if (_APKModelList.size() > 0) {
+            return _APKModelList.get(_APKModelList.size() - 1).getApkPackageName();
+        }
+        return "";
+    }
+
     public void onOpenAPP(View view) {
-        if (mszInstalledPackageName.trim().equals("")) {
+        String szInstalledPackageName = getLastApkPackageName();
+        LogUtils.d(TAG, "szInstalledPackageName : " + szInstalledPackageName);
+        if (szInstalledPackageName.trim().equals("")) {
             ToastUtils.show("Installed APP package name is null.");
             return;
         }
 
-        Intent intent = getPackageManager().getLaunchIntentForPackage(mszInstalledPackageName);
-        if (intent != null) {
-            startActivity(intent);
-        } else {
-            // 若没能获取到启动意图，可进行相应提示等操作，比如跳转到应用商店让用户下载该应用（示例）
-            Intent marketIntent = new Intent(Intent.ACTION_VIEW);
-            marketIntent.setData(Uri.parse("market://details?id=" + mszInstalledPackageName));
-            startActivity(marketIntent);
-        }
+        PackageUtil.openAPP(this, szInstalledPackageName);
     }
+
+//    public void onOpenAPP(View view) {
+//        String szInstalledPackageName = getLastApkPackageName();
+//        if (szInstalledPackageName.trim().equals("")) {
+//            ToastUtils.show("Installed APP package name is null.");
+//            return;
+//        }
+//
+//        Intent intent = getPackageManager().getLaunchIntentForPackage(mszInstalledPackageName);
+//        if (intent != null) {
+//            //ToastUtils.show("startActivity");
+//            startActivity(intent);
+//        } else {
+//            // 若没能获取到启动意图，可进行相应提示等操作，比如跳转到应用商店让用户下载该应用（示例）
+//            Intent marketIntent = new Intent(Intent.ACTION_VIEW);
+//            marketIntent.setData(Uri.parse("market://details?id=" + mszInstalledPackageName));
+//            startActivity(marketIntent);
+//        }
+//    }
 
     public void onInstallAPK(View view) {
         installAPK();
@@ -185,17 +212,22 @@ public class MainActivity extends Activity {
     }
 
     public void onLockPath(View view) {
-        AppConfigs appConfigs = AppConfigs.loadAppConfigs(this);
-
         Switch sw = (Switch)view;
-        if (sw.isChecked()) {
+        setMainServiceStatus(sw.isChecked());
+    }
+
+    public void setMainServiceStatus(boolean isEnable) {
+        AppConfigs appConfigs = AppConfigs.getInstance(this).loadAppConfigs(this);
+
+        Switch sw = (Switch)findViewById(R.id.activitymainSwitch1);
+        if (isEnable) {
             String szFilePath = mEditText.getText().toString();
 
             // 设置空路径时退出
             //
             if (szFilePath.trim().equals("")) {
                 sw.setChecked(false);
-                Toast.makeText(getApplication(), "监控路径为空。", Toast.LENGTH_SHORT).show();
+                ToastUtils.show("监控路径为空。");
                 return;
             }
 
@@ -236,7 +268,7 @@ public class MainActivity extends Activity {
             stopWatchingFile();
 
         }
-        AppConfigs.saveAppConfigs(this, appConfigs);
+        AppConfigs.getInstance(this).saveAppConfigs(this, appConfigs);
     }
 
     void stopWatchingFile() {
@@ -251,8 +283,6 @@ public class MainActivity extends Activity {
         Intent intentService = new Intent(MainActivity.this, MainService.class);
         //intentService.putExtra(MainService.EXTRA_APKFILEPATH, szAPKFilePath);
         startService(intentService);
-
-
     }
 
     /*
@@ -298,7 +328,7 @@ public class MainActivity extends Activity {
      }*/
 
     public void onChangeSetupMode(View view) {
-        AppConfigs appConfigs = AppConfigs.loadAppConfigs(this);
+        AppConfigs appConfigs = AppConfigs.getInstance(this).loadAppConfigs(this);
 
         if (view.getId() == R.id.activitymainRadioButton1) {
             appConfigs.setSetupMode(AppConfigs.SetupMode.WATCHOUTPUTINSTALLER);
@@ -307,6 +337,42 @@ public class MainActivity extends Activity {
             appConfigs.setSetupMode(AppConfigs.SetupMode.NEWAPKINFONEWAPKINFO);
             ((RadioButton)findViewById(R.id.activitymainRadioButton1)).setChecked(false);
         }
-        AppConfigs.saveAppConfigs(this, appConfigs);
+        AppConfigs.getInstance(this).saveAppConfigs(this, appConfigs);
+    }
+
+    // 定义Handler
+    static Handler _Handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == MSG_UPDATE_STATUS) {
+                if (_MainActivity != null) {
+                    boolean isEnableMainService = (boolean)msg.obj;
+                    // 处理消息，这里更新 MainService 的状态
+                    _MainActivity.setMainServiceStatus(isEnableMainService);
+                }
+            }
+        }
+    };
+
+    static void updateMainServiceStatus(boolean isEnable) {
+        if (_Handler != null) {
+            Message msg = new Message();
+            msg.obj = isEnable;
+            msg.what = MSG_UPDATE_STATUS;
+            _Handler.sendMessage(msg);
+        }
+    }
+
+    public static void stopMainService() {
+        if (_MainActivity != null && _Handler != null) {
+            updateMainServiceStatus(false);
+        }
+    }
+
+    public static void startMainService() {
+        if (_MainActivity != null && _Handler != null) {
+            updateMainServiceStatus(true);
+        }
     }
 }

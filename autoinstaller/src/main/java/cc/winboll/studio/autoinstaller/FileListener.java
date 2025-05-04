@@ -1,7 +1,7 @@
 package cc.winboll.studio.autoinstaller;
 
 import android.os.FileObserver;
-import cc.winboll.studio.shared.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 
 public class FileListener extends FileObserver {
 	public final static String TAG = "FileListener";

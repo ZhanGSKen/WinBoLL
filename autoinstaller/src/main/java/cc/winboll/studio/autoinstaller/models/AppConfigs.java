@@ -1,4 +1,4 @@
-package cc.winboll.studio.autoinstaller.beans;
+package cc.winboll.studio.autoinstaller.models;
 
 /**
  * @Author ZhanGSKen@QQ.COM
@@ -8,13 +8,14 @@ package cc.winboll.studio.autoinstaller.beans;
 import android.content.Context;
 import android.util.JsonReader;
 import android.util.JsonWriter;
-import cc.winboll.studio.autoinstaller.beans.AppConfigs;
+import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.utils.FileUtil;
+import cc.winboll.studio.libappbase.LogUtils;
+import com.hjq.toast.ToastUtils;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.io.StringWriter;
-import cc.winboll.studio.shared.log.LogUtils;
 
 public class AppConfigs implements Serializable {
 
@@ -25,6 +26,21 @@ public class AppConfigs implements Serializable {
         WATCHOUTPUTINSTALLER, // 本应用直接调用安装
         NEWAPKINFONEWAPKINFO  // 调用[应用信息查看器]打开应用包
         };
+
+    static volatile AppConfigs _AppConfigs;
+    Context mContext;
+
+    AppConfigs(Context context) {
+        mContext = context.getApplicationContext();
+    }
+
+    public static synchronized AppConfigs getInstance(Context context) {
+        if (_AppConfigs == null) {
+            _AppConfigs = new AppConfigs(context);
+            _AppConfigs.loadAppConfigs(_AppConfigs.mContext);
+        }
+        return _AppConfigs;
+    }
 
     // 监控文件路径
     private String watchingFilePath = "";
@@ -85,8 +101,8 @@ public class AppConfigs implements Serializable {
         return "";
     }
 
-    public static AppConfigs parseAppConfigs(String szAppConfigs) {
-        AppConfigs appConfigs = new AppConfigs();
+    public AppConfigs parseAppConfigs(String szAppConfigs) {
+        AppConfigs appConfigs = new AppConfigs(mContext);
         // 创建 JsonWriter 对象
         StringReader stringReader = new StringReader(szAppConfigs);
         JsonReader jsonReader = new
@@ -121,25 +137,44 @@ public class AppConfigs implements Serializable {
     static String getDataPath(Context context) {
         return context.getExternalFilesDir(TAG) + "/" + TAG + ".json";
     }
-
-    public static AppConfigs loadAppConfigs(Context context) {
+    
+    public AppConfigs loadAppConfigs() {
         AppConfigs appConfigs = null;
         try {
-            String szJson = FileUtil.readFile(getDataPath(context));
-            appConfigs = AppConfigs.parseAppConfigs(szJson);
+            String szJson = FileUtil.readFile(getDataPath(mContext));
+            appConfigs = AppConfigs.getInstance(mContext).parseAppConfigs(szJson);
         } catch (IOException e) {
             LogUtils.d(TAG, e.getMessage(), Thread.currentThread().getStackTrace());
         }
         return appConfigs;
     }
 
-    public static void saveAppConfigs(Context context, AppConfigs appConfigs) {
+    public AppConfigs loadAppConfigs(Context context) {
+        AppConfigs appConfigs = null;
         try {
+            String szJson = FileUtil.readFile(getDataPath(context.getApplicationContext()));
+            appConfigs = AppConfigs.getInstance(mContext).parseAppConfigs(szJson);
+            if(appConfigs != null) {
+                _AppConfigs = appConfigs;
+            }
+        } catch (IOException e) {
+            LogUtils.d(TAG, e.getMessage(), Thread.currentThread().getStackTrace());
+        }
+        return _AppConfigs;
+    }
+
+    public void saveAppConfigs(Context context, AppConfigs appConfigs) {
+        try {
+            ToastUtils.show(String.format("AppConfigs set enable service to %s", appConfigs.isEnableService()));
             //LogUtils.d(TAG, "appConfigs is : " + appConfigs.toString());
             String szJson = appConfigs.toString();
             FileUtil.writeFile(getDataPath(context), szJson);
         } catch (IOException e) {
             LogUtils.d(TAG, e.getMessage(), Thread.currentThread().getStackTrace());
         }
+    }
+
+    public void saveAppConfigs() {
+        saveAppConfigs(mContext, this);
     }
 }

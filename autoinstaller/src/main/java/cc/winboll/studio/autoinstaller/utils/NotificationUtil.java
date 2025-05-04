@@ -55,8 +55,9 @@ public class NotificationUtil {
 
         Notification mForegroundNotification = new Notification.Builder(service, szServiceChannelID)
             .setAutoCancel(true)
-            .setContentTitle(service.getString(R.string.app_name))
-            .setContentText(service.TAG + " is started.")
+            //.setContentTitle(service.getString(R.string.app_name))
+            .setContentTitle(service.TAG + " is started.")
+            //.setContentText(service.TAG + " is started.")
             .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.drawable.ic_launcher)
             //设置红色

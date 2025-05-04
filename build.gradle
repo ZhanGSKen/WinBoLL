@@ -2,7 +2,7 @@
 buildscript {
     repositories {
         // 本地 Maven 仓库（默认路径为 ~/.m2/repository）
-        mavenLocal()
+        //mavenLocal()
         // 或自定义本地仓库路径
         maven { url "file:///sdcard/.m2/repository" }
         
@@ -31,6 +31,11 @@ buildscript {
 
 allprojects {
     repositories {
+        // 本地 Maven 仓库（默认路径为 ~/.m2/repository）
+        //mavenLocal()
+        // 或自定义本地仓库路径
+        maven { url "file:///sdcard/.m2/repository" }
+        
         // Nexus Maven 库地址
         // "WinBoLL Release"
         maven { url "https://nexus.winboll.cc/repository/maven-public/" }

@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import cc.winboll.studio.autoinstaller.beans.AppConfigs;
+import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.utils.ServiceUtil;
 
 /**
@@ -46,7 +46,7 @@ public class AssistantService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         //LogUtils.d(TAG, "call onStartCommand(...)");
         run();
-        AppConfigs appConfigs = AppConfigs.loadAppConfigs(AssistantService.this);
+        AppConfigs appConfigs = AppConfigs.getInstance(AssistantService.this).loadAppConfigs(AssistantService.this);
         return appConfigs.isEnableService() ? Service.START_STICKY: super.onStartCommand(intent, flags, startId);
     }
 
@@ -68,7 +68,7 @@ public class AssistantService extends Service {
     //
     void run() {
         //LogUtils.d(TAG, "call run()");
-        AppConfigs appConfigs = AppConfigs.loadAppConfigs(AssistantService.this);
+        AppConfigs appConfigs = AppConfigs.getInstance(AssistantService.this).loadAppConfigs(AssistantService.this);
         if (appConfigs.isEnableService()) {
             if (mIsThreadAlive == false) {
                 // 设置运行状态
@@ -101,7 +101,7 @@ public class AssistantService extends Service {
         @Override
         public void onServiceDisconnected(ComponentName name) {
             //LogUtils.d(TAG, "call onServiceDisconnected(...)");
-            AppConfigs appConfigs = AppConfigs.loadAppConfigs(AssistantService.this);
+            AppConfigs appConfigs = AppConfigs.getInstance(AssistantService.this).loadAppConfigs(AssistantService.this);
             if (appConfigs.isEnableService()) {
                 wakeupAndBindMain();
             }

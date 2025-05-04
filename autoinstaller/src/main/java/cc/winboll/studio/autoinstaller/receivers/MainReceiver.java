@@ -4,9 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import cc.winboll.studio.autoinstaller.beans.AppConfigs;
+import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.services.MainService;
-import cc.winboll.studio.shared.log.LogUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 
 /**
  * @Author ZhanGSKen@QQ.COM
@@ -23,7 +23,7 @@ public class MainReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String szAction = intent.getAction();
         if (szAction.equals(ACTION_BOOT_COMPLETED)) {
-            AppConfigs appConfigs = AppConfigs.loadAppConfigs(context);
+            AppConfigs appConfigs = AppConfigs.getInstance(context).loadAppConfigs(context);
             if (appConfigs.isEnableService()) {
                 Intent intentService = new Intent(context, MainService.class);
                 //intentService.putExtra(MainService.EXTRA_APKFILEPATH, appConfigs.getWatchingFilePath());

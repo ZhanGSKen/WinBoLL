@@ -10,25 +10,32 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.service.quicksettings.Tile;
+import android.service.quicksettings.TileService;
 import android.widget.Toast;
 import androidx.core.content.FileProvider;
-import cc.winboll.studio.shared.log.LogUtils;
 import cc.winboll.studio.autoinstaller.FileListener;
 import cc.winboll.studio.autoinstaller.MainActivity;
-import cc.winboll.studio.autoinstaller.beans.AppConfigs;
+import cc.winboll.studio.autoinstaller.R;
+import cc.winboll.studio.autoinstaller.models.APKModel;
+import cc.winboll.studio.autoinstaller.models.AppConfigs;
 import cc.winboll.studio.autoinstaller.services.AssistantService;
 import cc.winboll.studio.autoinstaller.services.MainService;
 import cc.winboll.studio.autoinstaller.utils.NotificationUtil;
 import cc.winboll.studio.autoinstaller.utils.PackageUtil;
 import cc.winboll.studio.autoinstaller.utils.ServiceUtil;
-import com.hjq.toast.ToastUtils;
+import cc.winboll.studio.libappbase.LogUtils;
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 public class MainService extends Service {
 
     public static String TAG = "MainService";
+    
+    Context mContext;
 
+    ArrayList<APKModel> _APKModelList = new ArrayList<APKModel>();
     private static boolean _mIsServiceAlive;
     //String mszAPKFilePath;
     //String mszAPKFileName;
@@ -47,6 +54,7 @@ public class MainService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        mContext = this;
         LogUtils.d(TAG, "onCreate()");
         _mIsServiceAlive = false;
         mHandler = new MyHandler(MainService.this);
@@ -55,11 +63,14 @@ public class MainService extends Service {
         }
 
         run();
+        
+        // 初始化磁贴工具服务
+        MainTileService mainTileService = new MainTileService(this);
     }
 
     private void run() {
 
-        AppConfigs appConfigs = AppConfigs.loadAppConfigs(MainService.this);
+        AppConfigs appConfigs = AppConfigs.getInstance(MainService.this).loadAppConfigs(MainService.this);
         if (appConfigs.isEnableService()) {
             if (_mIsServiceAlive == false) {
                 // 设置运行状态
@@ -74,7 +85,8 @@ public class MainService extends Service {
 
                 startWatchingFile(appConfigs.getWatchingFilePath());
 
-                LogUtils.d(TAG, "running...");
+                //LogUtils.d(TAG, "running...");
+                //ToastUtils.show("running...");
 
             } else {
                 LogUtils.d(TAG, "_mIsServiceAlive is " + Boolean.toString(_mIsServiceAlive));
@@ -94,6 +106,7 @@ public class MainService extends Service {
         }
         _mIsServiceAlive = false;
         LogUtils.d(TAG, "onDestroy()");
+        mContext = null;
     }
 
     @Override
@@ -101,7 +114,7 @@ public class MainService extends Service {
         LogUtils.d(TAG, "onStartCommand");
 
         run();
-        AppConfigs appConfigs = AppConfigs.loadAppConfigs(MainService.this);
+        AppConfigs appConfigs = AppConfigs.getInstance(MainService.this).loadAppConfigs(MainService.this);
 
         return appConfigs.isEnableService() ? Service.START_STICKY: super.onStartCommand(intent, flags, startId);
     }
@@ -118,7 +131,7 @@ public class MainService extends Service {
         @Override
         public void onServiceDisconnected(ComponentName name) {
             //LogUtils.d(TAG, "call onServiceConnected(...)");
-            AppConfigs appConfigs = AppConfigs.loadAppConfigs(MainService.this);
+            AppConfigs appConfigs = AppConfigs.getInstance(MainService.this).loadAppConfigs(MainService.this);
             if (appConfigs.isEnableService()) {
                 // 唤醒守护进程
                 wakeupAndBindAssistant();
@@ -160,7 +173,7 @@ public class MainService extends Service {
 
                     });
                 mFileListener.startWatching();
-                ToastUtils.show("Start watching.");
+                //ToastUtils.show("Start watching.");
             } else {
                 // 父级文件夹不存在，就提示用户
                 Toast.makeText(getApplication(), fParentDir.toString() + " no exist.", Toast.LENGTH_SHORT).show();
@@ -176,6 +189,9 @@ public class MainService extends Service {
     // 调用[应用信息查看器]打开应用包
     //
     private void installAPK(String szAPKFilePath) {
+        String szAPKPackageName = PackageUtil.getPackageNameFromApk(this, szAPKFilePath);
+        saveAPKInfo(szAPKPackageName);
+
         long nTimeNow = System.currentTimeMillis();
         /*SimpleDateFormat dateFormat = new SimpleDateFormat(
          "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -210,13 +226,22 @@ public class MainService extends Service {
     //
     void installAPK2(String szAPKFilePath) {
         LogUtils.d(TAG, "installAPK2()");
+        String szAPKPackageName = PackageUtil.getPackageNameFromApk(this, szAPKFilePath);
+        saveAPKInfo(szAPKPackageName);
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.setAction(MainActivity.ACTION_NEW_INSTALLTASK);
-        intent.putExtra(MainActivity.EXTRA_INSTALLED_PACKAGENAME, PackageUtil.getPackageNameFromApk(this, szAPKFilePath));
+        intent.putExtra(MainActivity.EXTRA_INSTALLED_PACKAGENAME, szAPKPackageName);
         intent.putExtra(MainActivity.EXTRA_INSTALLED_APKFILEPATH, szAPKFilePath);
         // Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.startActivity(intent);
+    }
+
+    void saveAPKInfo(String szApkPackageName) {
+        APKModel.loadBeanList(this, _APKModelList, APKModel.class);
+        _APKModelList.add(new APKModel(szApkPackageName));
+        APKModel.saveBeanList(this, _APKModelList, APKModel.class);
     }
 
     // 
@@ -231,7 +256,7 @@ public class MainService extends Service {
             switch (message.what) {
                 case MSG_INSTALL_APK:
                     {
-                        AppConfigs appConfigs = AppConfigs.loadAppConfigs(theActivity);
+                        AppConfigs appConfigs = AppConfigs.getInstance(theActivity).loadAppConfigs(theActivity);
                         if (appConfigs.getSetupMode() == AppConfigs.SetupMode.WATCHOUTPUTINSTALLER) {
                             theActivity.installAPK2((String)message.obj);
                         } else if (appConfigs.getSetupMode() == AppConfigs.SetupMode.NEWAPKINFONEWAPKINFO) {
@@ -245,4 +270,21 @@ public class MainService extends Service {
             super.handleMessage(message);
         }
 	}
+
+    static class MainTileService extends TileService {
+        Context mContext;
+        MainTileService(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        public void onStartListening() {
+            super.onStartListening();
+            Tile tile = getQsTile();
+            tile.setIcon(android.graphics.drawable.Icon.createWithResource(this, R.drawable.ic_android));
+            // 更新磁贴状态
+            tile.setState((mContext == null || mContext.getApplicationContext() == null )?Tile.STATE_INACTIVE: Tile.STATE_ACTIVE);
+            tile.updateTile();
+        }
+    }
 }
