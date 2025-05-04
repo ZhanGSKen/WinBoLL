@@ -32,6 +32,8 @@ import cc.winboll.studio.powerbell.utils.AppConfigUtils;
 import cc.winboll.studio.powerbell.utils.NotificationHelper;
 import cc.winboll.studio.powerbell.utils.ServiceUtils;
 import cc.winboll.studio.powerbell.utils.StringUtils;
+import android.os.Handler;
+import android.os.Looper;
 
 public class ControlCenterService extends Service {
 
@@ -114,9 +116,17 @@ public class ControlCenterService extends Service {
                 mControlCenterServiceReceiver = new ControlCenterServiceReceiver(this);
                 mControlCenterServiceReceiver.registerAction(this);
             }
-            startRemindThread(mAppConfigUtils.mAppConfigBean);
-            ToastUtils.show("Service Is Start.");
-            LogUtils.i(TAG, "Service Is Start.");
+            
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable(){
+
+                    @Override
+                    public void run() {
+                        startRemindThread(mAppConfigUtils.mAppConfigBean);
+                        ToastUtils.show("Service Is Start.");
+                        LogUtils.i(TAG, "Service Is Start.");
+                    }
+                }, 2000);
+            
         }
     }
 
