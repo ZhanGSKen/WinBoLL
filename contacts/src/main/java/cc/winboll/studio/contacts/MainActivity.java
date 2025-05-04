@@ -32,7 +32,6 @@ import cc.winboll.studio.contacts.fragments.CallLogFragment;
 import cc.winboll.studio.contacts.fragments.ContactsFragment;
 import cc.winboll.studio.contacts.fragments.LogFragment;
 import cc.winboll.studio.contacts.services.MainService;
-import cc.winboll.studio.libaes.winboll.APPInfo;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
@@ -94,6 +93,17 @@ final public class MainActivity extends AppCompatActivity implements IWinBoLLAct
 //        return appInfo;
 //        return null;
 //    }
+
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
