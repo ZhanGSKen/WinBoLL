@@ -6,18 +6,17 @@ package cc.winboll.studio.timestamp;
  * @Describe 主要服务
  */
 import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.widget.RemoteViews;
 import android.widget.TextView;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.timestamp.AssistantService;
 import cc.winboll.studio.timestamp.MainService;
@@ -26,12 +25,15 @@ import cc.winboll.studio.timestamp.receivers.ButtonClickReceiver;
 import cc.winboll.studio.timestamp.utils.AppConfigsUtil;
 import cc.winboll.studio.timestamp.utils.NotificationHelper;
 import cc.winboll.studio.timestamp.utils.ServiceUtil;
+import cc.winboll.studio.timestamp.utils.TimeStampRemoteViewsUtil;
 import java.util.Timer;
-import android.app.NotificationManager;
+import java.util.TimerTask;
 
 public class MainService extends Service {
 
     public static String TAG = "MainService";
+
+    public static final int MSG_UPDATE_TIMESTAMP = 0;
 
     ButtonClickReceiver mButtonClickReceiver;
     NotificationHelper mNotificationHelper;
@@ -42,7 +44,7 @@ public class MainService extends Service {
     private static boolean _mIsServiceAlive;
     public static final String EXTRA_APKFILEPATH = "EXTRA_APKFILEPATH";
     final static int MSG_INSTALL_APK = 0;
-    //MyHandler mMyHandler;
+    MyHandler mMyHandler;
     MyServiceConnection mMyServiceConnection;
     MainActivity mInstallCompletedFollowUpActivity;
 
@@ -55,8 +57,8 @@ public class MainService extends Service {
     public void onCreate() {
         super.onCreate();
         // 创建 RemoteViews 对象，并使用包含自定义 View 的布局
-        mRemoteViews = new RemoteViews(getPackageName(), R.layout.remoteviews_timestamp);
-        
+        //mRemoteViews = new RemoteViews(getPackageName(), R.layout.remoteviews_timestamp);
+
 
         // 创建广播接收器实例
         mButtonClickReceiver = new ButtonClickReceiver();
@@ -69,7 +71,8 @@ public class MainService extends Service {
 
         LogUtils.d(TAG, "onCreate()");
         _mIsServiceAlive = false;
-        //mMyHandler = new MyHandler(MainService.this);
+
+        mMyHandler = new MyHandler();
         if (mMyServiceConnection == null) {
             mMyServiceConnection = new MyServiceConnection();
         }
@@ -85,15 +88,26 @@ public class MainService extends Service {
                 _mIsServiceAlive = true;
 
                 // 显示前台通知栏
-                mNotificationHelper = new NotificationHelper(this);
-                //notification = helper.showForegroundNotification(intent, getString(R.string.app_name), getString(R.string.text_aboutservernotification));
-                mNotification = mNotificationHelper.showCustomForegroundNotification(new Intent(this, MainActivity.class), mRemoteViews, mRemoteViews);
-                startForeground(NotificationHelper.FOREGROUND_NOTIFICATION_ID, mNotification);
+//                mNotificationHelper = new NotificationHelper(this);
+//                //notification = helper.showForegroundNotification(intent, getString(R.string.app_name), getString(R.string.text_aboutservernotification));
+//                mNotification = mNotificationHelper.showCustomForegroundNotification(new Intent(this, MainActivity.class), mRemoteViews, mRemoteViews);
+//                startForeground(NotificationHelper.FOREGROUND_NOTIFICATION_ID, mNotification);
 
                 // 唤醒守护进程
                 wakeupAndBindAssistant();
 
                 LogUtils.d(TAG, "running...");
+
+                mTimer = new Timer();
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        //System.out.println("定时任务执行了");
+                        mMyHandler.sendEmptyMessage(MSG_UPDATE_TIMESTAMP);
+                    }
+                };
+                // 延迟2秒后开始执行，之后每隔2000毫秒执行一次
+                mTimer.schedule(task, 2000, 2000);
 
 
 
@@ -180,30 +194,23 @@ public class MainService extends Service {
 //        //startForeground(NotificationHelper.FOREGROUND_NOTIFICATION_ID, notification);
 //    }
 //
-//    // 
-//    // 服务事务处理类
-//    //
-//    class MyHandler extends Handler {
-//        WeakReference<MainService> weakReference;  
-//        MyHandler(MainService service) {  
-//            weakReference = new WeakReference<MainService>(service);  
-//        }
-//        public void handleMessage(Message message) {
-//            MainService theService = weakReference.get();
-//            switch (message.what) {
-//                case MSG_UPDATE_TIMESTAMP:
-//                    {
-//                        if (theService != null) {
-//                            theService.updateTimeStamp();
-//                        }
-//                        break;
-//                    }
-//                default:
-//                    break;
-//            }
-//            super.handleMessage(message);
-//        }
-//
-//
-//    }
+    // 
+    // 服务事务处理类
+    //
+    class MyHandler extends Handler {
+
+        public void handleMessage(Message message) {
+            switch (message.what) {
+                case MSG_UPDATE_TIMESTAMP:
+                    {
+                        TimeStampRemoteViewsUtil.getInstance(MainService.this).showNotification("Hello, World");
+                        LogUtils.d(TAG, "Hello, World");
+                        break;
+                    }
+                default:
+                    break;
+            }
+            super.handleMessage(message);
+        }
+    }
 }

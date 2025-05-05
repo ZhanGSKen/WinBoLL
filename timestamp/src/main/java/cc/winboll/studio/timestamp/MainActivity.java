@@ -5,12 +5,18 @@ import android.view.View;
 import android.widget.Switch;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.LogView;
+import cc.winboll.studio.timestamp.R;
 import cc.winboll.studio.timestamp.utils.AppConfigsUtil;
+import cc.winboll.studio.timestamp.utils.TimeStampRemoteViewsUtil;
 import com.hjq.toast.ToastUtils;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String TAG = "MainActivity";
+
+    
     LogView mLogView;
     Switch mswEnableMainService;
 
@@ -30,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         ToastUtils.show("onCreate");
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -38,5 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSetMainServiceStatus(View view) {
         MainService.setMainServiceStatus(this, mswEnableMainService.isChecked());
+
     }
 }
