@@ -31,6 +31,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Timer;
 import java.util.TimerTask;
+import android.content.IntentFilter;
 
 public class MainService extends Service {
 
@@ -38,6 +39,7 @@ public class MainService extends Service {
 
     public static final int MSG_UPDATE_TIMESTAMP = 0;
 
+    ButtonClickReceiver mButtonClickReceiver;
     Intent intentMainService;
     Intent mButtonBroadcastIntent;
     PendingIntent mButtonPendingIntent;
@@ -73,6 +75,17 @@ public class MainService extends Service {
             mButtonBroadcastIntent, // Intent
             PendingIntent.FLAG_UPDATE_CURRENT // 标志位，用于更新已存在的 PendingIntent
         );
+        // 为按钮设置点击事件
+        mRemoteViews.setOnClickPendingIntent(R.id.btn_copytimestamp, mButtonPendingIntent);
+        
+        // 创建广播接收器实例
+        mButtonClickReceiver = new ButtonClickReceiver();
+
+        // 创建 IntentFilter 并设置要接收的广播动作
+        IntentFilter filter = new IntentFilter(ButtonClickReceiver.BUTTON_COPYTIMESTAMP_ACTION);
+
+        // 注册广播接收器
+        registerReceiver(mButtonClickReceiver, filter);
         
         LogUtils.d(TAG, "onCreate()");
         _mIsServiceAlive = false;
@@ -189,8 +202,6 @@ public class MainService extends Service {
         String formattedDateTime = ldt.format(formatter);
         //System.out.println(formattedDateTime);
         mRemoteViews.setTextViewText(R.id.tv_timestamp, formattedDateTime);
-        // 为按钮设置点击事件
-        mRemoteViews.setOnClickPendingIntent(R.id.btn_copytimestamp, mButtonPendingIntent);
         notification = mNotificationHelper.showCustomForegroundNotification(intentMainService, mRemoteViews, mRemoteViews);
         //startForeground(NotificationHelper.FOREGROUND_NOTIFICATION_ID, notification);
     }
