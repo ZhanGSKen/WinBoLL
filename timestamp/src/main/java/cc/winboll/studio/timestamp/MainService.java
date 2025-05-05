@@ -6,6 +6,7 @@ package cc.winboll.studio.timestamp;
  * @Describe 主要服务
  */
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -20,6 +21,7 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.timestamp.AssistantService;
 import cc.winboll.studio.timestamp.MainService;
 import cc.winboll.studio.timestamp.models.AppConfigs;
+import cc.winboll.studio.timestamp.receivers.ButtonClickReceiver;
 import cc.winboll.studio.timestamp.utils.NotificationHelper;
 import cc.winboll.studio.timestamp.utils.ServiceUtil;
 import java.lang.ref.WeakReference;
@@ -37,6 +39,8 @@ public class MainService extends Service {
     public static final int MSG_UPDATE_TIMESTAMP = 0;
 
     Intent intentMainService;
+    Intent mButtonBroadcastIntent;
+    PendingIntent mButtonPendingIntent;
     NotificationHelper mNotificationHelper;
     Notification notification;
     RemoteViews mRemoteViews;
@@ -60,6 +64,15 @@ public class MainService extends Service {
 
         mRemoteViews = new RemoteViews(getPackageName(), R.layout.remoteviews_timestamp);
         intentMainService = new Intent(this, MainActivity.class);
+
+        // 创建点击按钮后要发送的广播 Intent
+        mButtonBroadcastIntent = new Intent(ButtonClickReceiver.BUTTON_COPYTIMESTAMP_ACTION);
+        mButtonPendingIntent = PendingIntent.getBroadcast(
+            this, // 上下文
+            0, // 请求码，用于区分不同的 PendingIntent
+            mButtonBroadcastIntent, // Intent
+            PendingIntent.FLAG_UPDATE_CURRENT // 标志位，用于更新已存在的 PendingIntent
+        );
         
         LogUtils.d(TAG, "onCreate()");
         _mIsServiceAlive = false;
@@ -83,7 +96,7 @@ public class MainService extends Service {
                 //notification = helper.showForegroundNotification(intent, getString(R.string.app_name), getString(R.string.text_aboutservernotification));
                 notification = mNotificationHelper.showCustomForegroundNotification(intentMainService, mRemoteViews, mRemoteViews);
                 startForeground(NotificationHelper.FOREGROUND_NOTIFICATION_ID, notification);
-
+                
                 // 唤醒守护进程
                 wakeupAndBindAssistant();
 
@@ -176,6 +189,8 @@ public class MainService extends Service {
         String formattedDateTime = ldt.format(formatter);
         //System.out.println(formattedDateTime);
         mRemoteViews.setTextViewText(R.id.tv_timestamp, formattedDateTime);
+        // 为按钮设置点击事件
+        mRemoteViews.setOnClickPendingIntent(R.id.btn_copytimestamp, mButtonPendingIntent);
         notification = mNotificationHelper.showCustomForegroundNotification(intentMainService, mRemoteViews, mRemoteViews);
         //startForeground(NotificationHelper.FOREGROUND_NOTIFICATION_ID, notification);
     }

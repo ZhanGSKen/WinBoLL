@@ -39,6 +39,12 @@
 
         <service android:name=".AssistantService"/>
 
+        <receiver android:name=".receivers.ButtonClickReceiver">
+            <intent-filter>
+                <action android:name="com.example.BUTTON_CLICK_ACTION" />
+            </intent-filter>
+        </receiver>
+        
     </application>
 
 </manifest>
