@@ -20,17 +20,25 @@
 	</com.google.android.material.appbar.AppBarLayout>
 
 	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<Switch
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="启用通知栏计时器"
+			android:id="@+id/activitymainSwitch1"
+			android:onClick="onSetMainServiceStatus"/>
+
+	</LinearLayout>
+
+	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1.0"
 		android:gravity="center_vertical|center_horizontal">
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="AndroidX Demo"
-			android:textAppearance="?android:attr/textAppearanceLarge"/>
 
 	</LinearLayout>
 

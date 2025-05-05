@@ -3,6 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="cc.winboll.studio.timestamp">
 
+    <!-- 运行前台服务 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -31,6 +34,10 @@
             android:value="4.0"/>
 
         <activity android:name=".GlobalApplication$CrashActivity"/>
+
+        <service android:name=".MainService"/>
+
+        <service android:name=".AssistantService"/>
 
     </application>
 

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TimeStamp</string>
+    <string name="text_aboutservernotification">This is the prompt window when the SMS service runs, which you can set to hide this class notification in the notification message settings.</string>
     
 </resources>
