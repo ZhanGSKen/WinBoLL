@@ -2,12 +2,12 @@ package cc.winboll.studio.timestamp;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Switch;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libappbase.LogView;
+import cc.winboll.studio.timestamp.utils.AppConfigsUtil;
 import com.hjq.toast.ToastUtils;
-import android.widget.Switch;
-import cc.winboll.studio.timestamp.models.AppConfigs;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 
         mswEnableMainService = findViewById(R.id.activitymainSwitch1);
-        mswEnableMainService.setChecked(AppConfigs.getInstance(this).loadAppConfigs().isEnableService());
+        mswEnableMainService.setChecked(AppConfigsUtil.getInstance(this).loadAppConfigs().isEnableService());
 
         mLogView = findViewById(R.id.logview);
 

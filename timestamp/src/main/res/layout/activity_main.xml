@@ -22,7 +22,8 @@
 	<LinearLayout
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:padding="10dp">
 
 		<Switch
 			android:layout_width="match_parent"
@@ -30,6 +31,38 @@
 			android:text="启用通知栏计时器"
 			android:id="@+id/activitymainSwitch1"
 			android:onClick="onSetMainServiceStatus"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<cc.winboll.studio.timestamp.views.TimeStampView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="10dp">
+
+		<EditText
+			android:layout_width="0dp"
+			android:ems="10"
+			android:layout_height="wrap_content"
+			android:id="@+id/et_timestampformatstring"
+			android:layout_weight="1.0"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Save Format"
+			android:id="@+id/btn_saveformatstring"/>
 
 	</LinearLayout>
 
