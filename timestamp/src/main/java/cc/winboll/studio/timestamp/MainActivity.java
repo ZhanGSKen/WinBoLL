@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libappbase.LogView;
 import com.hjq.toast.ToastUtils;
 import android.widget.Switch;
+import cc.winboll.studio.timestamp.models.AppConfigs;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 
         mswEnableMainService = findViewById(R.id.activitymainSwitch1);
+        mswEnableMainService.setChecked(AppConfigs.getInstance(this).loadAppConfigs().isEnableService());
 
         mLogView = findViewById(R.id.logview);
 

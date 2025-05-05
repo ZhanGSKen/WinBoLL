@@ -113,6 +113,28 @@ public class NotificationHelper {
         mNotificationManager.notify(FOREGROUND_NOTIFICATION_ID, notification);
         return notification;
     }
+    
+
+    // 显示常驻通知（通常用于前台服务）
+    public Notification showCustomForegroundNotification(Intent intent, RemoteViews contentView, RemoteViews bigContentView) {
+        PendingIntent pendingIntent = createPendingIntent(intent);
+        
+        
+        Notification notification = new NotificationCompat.Builder(mContext, CHANNEL_ID_TEMPORARY)
+            .setSmallIcon(R.drawable.ic_launcher)
+            .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher))
+            //.setContentTitle(title)
+            .setContentIntent(pendingIntent)
+            .setContent(contentView)
+            .setCustomBigContentView(bigContentView)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .setOngoing(true)
+            .build();
+
+        mNotificationManager.notify(FOREGROUND_NOTIFICATION_ID, notification);
+        return notification;
+    }
 
     // 显示临时通知（自动消失）
     public void showTemporaryNotification(Intent intent, String title, String content) {

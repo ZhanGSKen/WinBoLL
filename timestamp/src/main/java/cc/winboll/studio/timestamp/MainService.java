@@ -11,23 +11,41 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.widget.RemoteViews;
+import android.widget.TextView;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.timestamp.AssistantService;
 import cc.winboll.studio.timestamp.MainService;
 import cc.winboll.studio.timestamp.models.AppConfigs;
 import cc.winboll.studio.timestamp.utils.NotificationHelper;
 import cc.winboll.studio.timestamp.utils.ServiceUtil;
+import java.lang.ref.WeakReference;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainService extends Service {
 
     public static String TAG = "MainService";
 
+    public static final int MSG_UPDATE_TIMESTAMP = 0;
+
+    Intent intentMainService;
+    NotificationHelper mNotificationHelper;
     Notification notification;
+    RemoteViews mRemoteViews;
+    TextView mtvTimeStamp;
+    Timer mTimer;
     private static boolean _mIsServiceAlive;
     public static final String EXTRA_APKFILEPATH = "EXTRA_APKFILEPATH";
     final static int MSG_INSTALL_APK = 0;
-    //Handler mHandler;
+    MyHandler mMyHandler;
     MyServiceConnection mMyServiceConnection;
     MainActivity mInstallCompletedFollowUpActivity;
 
@@ -39,9 +57,13 @@ public class MainService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        mRemoteViews = new RemoteViews(getPackageName(), R.layout.remoteviews_timestamp);
+        intentMainService = new Intent(this, MainActivity.class);
+        
         LogUtils.d(TAG, "onCreate()");
         _mIsServiceAlive = false;
-        //mHandler = new MyHandler(MainService.this);
+        mMyHandler = new MyHandler(MainService.this);
         if (mMyServiceConnection == null) {
             mMyServiceConnection = new MyServiceConnection();
         }
@@ -56,17 +78,27 @@ public class MainService extends Service {
                 // 设置运行状态
                 _mIsServiceAlive = true;
 
-
                 // 显示前台通知栏
-                NotificationHelper helper = new NotificationHelper(this);
-                Intent intent = new Intent(this, MainActivity.class);
-                notification = helper.showForegroundNotification(intent, getString(R.string.app_name), getString(R.string.text_aboutservernotification));
+                mNotificationHelper = new NotificationHelper(this);
+                //notification = helper.showForegroundNotification(intent, getString(R.string.app_name), getString(R.string.text_aboutservernotification));
+                notification = mNotificationHelper.showCustomForegroundNotification(intentMainService, mRemoteViews, mRemoteViews);
                 startForeground(NotificationHelper.FOREGROUND_NOTIFICATION_ID, notification);
 
                 // 唤醒守护进程
                 wakeupAndBindAssistant();
 
                 LogUtils.d(TAG, "running...");
+                mTimer = new Timer();
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        //System.out.println("定时任务执行了");
+                        mMyHandler.sendEmptyMessage(MSG_UPDATE_TIMESTAMP);
+                    }
+                };
+                // 延迟1秒后开始执行，之后每隔2秒执行一次
+                mTimer.schedule(task, 1000, 2000);
+
 
             } else {
                 LogUtils.d(TAG, "_mIsServiceAlive is " + Boolean.toString(_mIsServiceAlive));
@@ -78,6 +110,9 @@ public class MainService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
 
         _mIsServiceAlive = false;
         LogUtils.d(TAG, "onDestroy()");
@@ -104,8 +139,8 @@ public class MainService extends Service {
         }
     }
 
-    // 主进程与守护进程连接时需要用到此类
-    //
+// 主进程与守护进程连接时需要用到此类
+//
     private class MyServiceConnection implements ServiceConnection {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -133,25 +168,46 @@ public class MainService extends Service {
         }
     }
 
+    void updateTimeStamp() {
+        long currentMillis = System.currentTimeMillis();
+        Instant instant = Instant.ofEpochMilli(currentMillis);
+        LocalDateTime ldt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = ldt.format(formatter);
+        //System.out.println(formattedDateTime);
+        mRemoteViews.setTextViewText(R.id.tv_timestamp, formattedDateTime);
+        notification = mNotificationHelper.showCustomForegroundNotification(intentMainService, mRemoteViews, mRemoteViews);
+        //startForeground(NotificationHelper.FOREGROUND_NOTIFICATION_ID, notification);
+    }
+
     // 
     // 服务事务处理类
     //
-//    static class MyHandler extends Handler {
-//        WeakReference<MainService> weakReference;  
-//        MyHandler(MainService service) {  
-//            weakReference = new WeakReference<MainService>(service);  
-//        }
-//        public void handleMessage(Message message) {
-//            MainService theActivity = weakReference.get();
-//            switch (message.what) {
-//                case MSG_INSTALL_APK:
-//                    {
-//                        break;
-//                    }
-//                default:
-//                    break;
-//            }
-//            super.handleMessage(message);
-//        }
-//    }
+    class MyHandler extends Handler {
+        WeakReference<MainService> weakReference;  
+        MyHandler(MainService service) {  
+            weakReference = new WeakReference<MainService>(service);  
+        }
+        public void handleMessage(Message message) {
+            MainService theService = weakReference.get();
+            switch (message.what) {
+                case MSG_UPDATE_TIMESTAMP:
+                    {
+                        if (theService != null) {
+                            theService.updateTimeStamp();
+                        }
+                        break;
+                    }
+                default:
+                    break;
+            }
+            super.handleMessage(message);
+        }
+
+
+    }
+
+    public void sendUpdateTimeStampMessage() {
+
+    }
 }
