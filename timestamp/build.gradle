@@ -24,7 +24,7 @@ android {
     defaultConfig {
         applicationId "cc.winboll.studio.timestamp"
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 29
         versionCode 1
         // versionName 更新后需要手动设置 
         // .winboll/winbollBuildProps.properties 文件的 stageCount=0

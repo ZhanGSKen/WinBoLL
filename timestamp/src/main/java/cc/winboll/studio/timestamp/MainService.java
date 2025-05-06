@@ -26,7 +26,6 @@ import cc.winboll.studio.timestamp.receivers.ButtonClickReceiver;
 import cc.winboll.studio.timestamp.utils.AppConfigsUtil;
 import cc.winboll.studio.timestamp.utils.NotificationHelper;
 import cc.winboll.studio.timestamp.utils.ServiceUtil;
-import cc.winboll.studio.timestamp.utils.TimeStampRemoteViewsUtil;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -59,10 +58,9 @@ public class MainService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        // 创建 RemoteViews 对象，并使用包含自定义 View 的布局
-        //mRemoteViews = new RemoteViews(getPackageName(), R.layout.remoteviews_timestamp);
-
-
+        mNotificationHelper = new NotificationHelper();
+        mNotificationHelper.createServiceNotificationChannel(this);
+        
         // 创建广播接收器实例
         mButtonClickReceiver = new ButtonClickReceiver();
 
@@ -219,7 +217,7 @@ public class MainService extends Service {
                         String szTimeStampFormatString = AppConfigsUtil.getInstance(MainService.this).getAppConfigsModel().getTimeStampFormatString();
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(szTimeStampFormatString);
                         String formattedDateTime = ldt.format(formatter);
-                        TimeStampRemoteViewsUtil.getInstance(MainService.this).showNotification("时间戳：\n" + formattedDateTime + "\n已拷贝到剪贴板。");
+                        mNotificationHelper.sendForegroundNotification(MainService.this, "时间戳：\n" + formattedDateTime + "\n已拷贝到剪贴板。");
 
                         LogUtils.d(TAG, "Hello, World! " + formattedDateTime);
                         break;
