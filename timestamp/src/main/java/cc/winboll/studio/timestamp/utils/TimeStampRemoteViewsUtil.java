@@ -102,31 +102,30 @@ public class TimeStampRemoteViewsUtil {
         if (mRemoteViews == null) {
             // 创建 RemoteViews 对象，加载布局
             mRemoteViews = new RemoteViews(mContext.getPackageName(), R.layout.custom_notification_layout);
-
-            // 自定义 TextView 的文本
-            mRemoteViews.setTextViewText(R.id.tv_timestamp, msg);
-            // 自定义 TextView 的文本颜色
-            mRemoteViews.setTextColor(R.id.tv_timestamp, mContext.getResources().getColor(R.color.colorAccent, null));
-            // 这里虽然不能直接设置字体大小，但可以通过反射等方式尝试（不推荐，且有兼容性问题）
-
-            // 创建点击通知后的意图
-            mIntentMain = new Intent(mContext, MainActivity.class);
-            PendingIntent pendingMainIntent = PendingIntent.getActivity(mContext, 0, mIntentMain, PendingIntent.FLAG_UPDATE_CURRENT);
-            // 设置通知的点击事件
-            mRemoteViews.setOnClickPendingIntent(R.id.tv_timestamp, pendingMainIntent);
-
-            // 创建点击按钮后要发送的广播 Intent
-            Intent broadcastIntent = new Intent(ButtonClickReceiver.BUTTON_COPYTIMESTAMP_ACTION);
-            android.app.PendingIntent pendingIntent = android.app.PendingIntent.getBroadcast(
-                mContext,
-                0,
-                broadcastIntent,
-                android.app.PendingIntent.FLAG_UPDATE_CURRENT
-            );
-
-            // 为按钮设置点击事件
-            mRemoteViews.setOnClickPendingIntent(R.id.btn_copytimestamp, pendingIntent);
         }
+        // 自定义 TextView 的文本
+        mRemoteViews.setTextViewText(R.id.tv_timestamp, msg);
+        // 自定义 TextView 的文本颜色
+        mRemoteViews.setTextColor(R.id.tv_timestamp, mContext.getResources().getColor(R.color.colorAccent, null));
+        // 这里虽然不能直接设置字体大小，但可以通过反射等方式尝试（不推荐，且有兼容性问题）
+
+        // 创建点击通知后的意图
+        mIntentMain = new Intent(mContext, MainActivity.class);
+        PendingIntent pendingMainIntent = PendingIntent.getActivity(mContext, 0, mIntentMain, PendingIntent.FLAG_UPDATE_CURRENT);
+        // 设置通知的点击事件
+        mRemoteViews.setOnClickPendingIntent(R.id.tv_timestamp, pendingMainIntent);
+
+        // 创建点击按钮后要发送的广播 Intent
+        Intent broadcastIntent = new Intent(ButtonClickReceiver.BUTTON_COPYTIMESTAMP_ACTION);
+        android.app.PendingIntent pendingIntent = android.app.PendingIntent.getBroadcast(
+            mContext,
+            0,
+            broadcastIntent,
+            android.app.PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        // 为按钮设置点击事件
+        mRemoteViews.setOnClickPendingIntent(R.id.btn_copytimestamp, pendingIntent);
 
         mNotificationHelper.showCustomForegroundNotification(mIntentMain, mRemoteViews, mRemoteViews);
     }

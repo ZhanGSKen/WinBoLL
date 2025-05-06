@@ -31,8 +31,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainService extends Service {
 
@@ -45,11 +43,11 @@ public class MainService extends Service {
     Notification mNotification;
     RemoteViews mRemoteViews;
     TextView mtvTimeStamp;
-    Timer mTimer;
+    //Timer mTimer;
     private static boolean _mIsServiceAlive;
     public static final String EXTRA_APKFILEPATH = "EXTRA_APKFILEPATH";
     final static int MSG_INSTALL_APK = 0;
-    MyHandler mMyHandler;
+    static MyHandler _MyHandler;
     MyServiceConnection mMyServiceConnection;
     MainActivity mInstallCompletedFollowUpActivity;
 
@@ -77,7 +75,7 @@ public class MainService extends Service {
         LogUtils.d(TAG, "onCreate()");
         _mIsServiceAlive = false;
 
-        mMyHandler = new MyHandler();
+        _MyHandler = new MyHandler();
         if (mMyServiceConnection == null) {
             mMyServiceConnection = new MyServiceConnection();
         }
@@ -102,17 +100,18 @@ public class MainService extends Service {
                 wakeupAndBindAssistant();
 
                 LogUtils.d(TAG, "running...");
+                _MyHandler.sendEmptyMessage(MSG_UPDATE_TIMESTAMP);
 
-                mTimer = new Timer();
-                TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        //System.out.println("定时任务执行了");
-                        mMyHandler.sendEmptyMessage(MSG_UPDATE_TIMESTAMP);
-                    }
-                };
-                // 延迟1秒后开始执行，之后每隔100毫秒执行一次
-                mTimer.schedule(task, 1000, 100);
+//                mTimer = new Timer();
+//                TimerTask task = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        //System.out.println("定时任务执行了");
+//                        mMyHandler.sendEmptyMessage(MSG_UPDATE_TIMESTAMP);
+//                    }
+//                };
+//                // 延迟1秒后开始执行，之后每隔100毫秒执行一次
+//                mTimer.schedule(task, 1000, 100);
 
 
 
@@ -126,14 +125,17 @@ public class MainService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
-        
+
+
+//        if (mTimer != null) {
+//            mTimer.cancel();
+//        }
+
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.cancelAll();
 
         _mIsServiceAlive = false;
+        _MyHandler = null;
         LogUtils.d(TAG, "onDestroy()");
     }
 
@@ -217,15 +219,21 @@ public class MainService extends Service {
                         String szTimeStampFormatString = AppConfigsUtil.getInstance(MainService.this).getAppConfigsModel().getTimeStampFormatString();
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(szTimeStampFormatString);
                         String formattedDateTime = ldt.format(formatter);
-                        TimeStampRemoteViewsUtil.getInstance(MainService.this).showNotification(formattedDateTime);
+                        TimeStampRemoteViewsUtil.getInstance(MainService.this).showNotification(formattedDateTime + " 已复制");
 
-                        //LogUtils.d(TAG, "Hello, World");
+                        LogUtils.d(TAG, "Hello, World! " + formattedDateTime);
                         break;
                     }
                 default:
                     break;
             }
             super.handleMessage(message);
+        }
+    }
+
+    public static void updateCopiedTimeStamp() {
+        if (_MyHandler != null) {
+            _MyHandler.sendEmptyMessage(MSG_UPDATE_TIMESTAMP);
         }
     }
 }

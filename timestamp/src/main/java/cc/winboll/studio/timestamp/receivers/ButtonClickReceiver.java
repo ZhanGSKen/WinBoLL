@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.timestamp.MainService;
 import cc.winboll.studio.timestamp.utils.AppConfigsUtil;
 import cc.winboll.studio.timestamp.utils.ClipboardUtil;
 import java.time.Instant;
@@ -39,6 +40,7 @@ public class ButtonClickReceiver extends BroadcastReceiver {
 
             // 比如显示一个Toast
             Toast.makeText(context, formattedDateTime + " 已复制", Toast.LENGTH_SHORT).show();
+            MainService.updateCopiedTimeStamp();
         }
     }
 
