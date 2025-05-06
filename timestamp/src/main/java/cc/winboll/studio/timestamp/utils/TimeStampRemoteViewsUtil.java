@@ -5,17 +5,19 @@ package cc.winboll.studio.timestamp.utils;
  * @Date 2025/05/05 21:10
  * @Describe TimeStampRemoteViewsUtil
  */
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import androidx.core.app.NotificationCompat;
+import cc.winboll.studio.timestamp.MainActivity;
 import cc.winboll.studio.timestamp.R;
 import cc.winboll.studio.timestamp.receivers.ButtonClickReceiver;
-import android.app.Notification;
 
 public class TimeStampRemoteViewsUtil {
 
@@ -66,10 +68,10 @@ public class TimeStampRemoteViewsUtil {
         // 这里虽然不能直接设置字体大小，但可以通过反射等方式尝试（不推荐，且有兼容性问题）
         
         // 创建点击通知后的意图
-        //Intent intent = new Intent(mContext, MainActivity.class);
-        //PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(mContext, MainActivity.class);
+        PendingIntent pendingMainIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         // 设置通知的点击事件
-        //mRemoteViews.setOnClickPendingIntent(R.id.btn_copytimestamp, pendingIntent);
+        mRemoteViews.setOnClickPendingIntent(R.id.tv_timestamp, pendingMainIntent);
         
         // 创建点击按钮后要发送的广播 Intent
         Intent broadcastIntent = new Intent(ButtonClickReceiver.BUTTON_COPYTIMESTAMP_ACTION);
