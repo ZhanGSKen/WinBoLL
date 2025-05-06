@@ -219,7 +219,7 @@ public class MainService extends Service {
                         String szTimeStampFormatString = AppConfigsUtil.getInstance(MainService.this).getAppConfigsModel().getTimeStampFormatString();
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(szTimeStampFormatString);
                         String formattedDateTime = ldt.format(formatter);
-                        TimeStampRemoteViewsUtil.getInstance(MainService.this).showNotification(formattedDateTime + " 已复制");
+                        TimeStampRemoteViewsUtil.getInstance(MainService.this).showNotification("时间戳：\n" + formattedDateTime + "\n已拷贝到剪贴板。");
 
                         LogUtils.d(TAG, "Hello, World! " + formattedDateTime);
                         break;

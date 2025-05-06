@@ -39,7 +39,7 @@ public class ButtonClickReceiver extends BroadcastReceiver {
             ClipboardUtil.copyTextToClipboard(context, formattedDateTime);
 
             // 比如显示一个Toast
-            Toast.makeText(context, formattedDateTime + " 已复制", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "时间戳：\n" + formattedDateTime + "\n已拷贝到剪贴板。", Toast.LENGTH_SHORT).show();
             MainService.updateCopiedTimeStamp();
         }
     }
