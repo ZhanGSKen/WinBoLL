@@ -26,6 +26,10 @@ import cc.winboll.studio.timestamp.utils.AppConfigsUtil;
 import cc.winboll.studio.timestamp.utils.NotificationHelper;
 import cc.winboll.studio.timestamp.utils.ServiceUtil;
 import cc.winboll.studio.timestamp.utils.TimeStampRemoteViewsUtil;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -106,8 +110,8 @@ public class MainService extends Service {
                         mMyHandler.sendEmptyMessage(MSG_UPDATE_TIMESTAMP);
                     }
                 };
-                // 延迟2秒后开始执行，之后每隔2000毫秒执行一次
-                mTimer.schedule(task, 2000, 2000);
+                // 延迟1秒后开始执行，之后每隔100毫秒执行一次
+                mTimer.schedule(task, 1000, 100);
 
 
 
@@ -203,8 +207,15 @@ public class MainService extends Service {
             switch (message.what) {
                 case MSG_UPDATE_TIMESTAMP:
                     {
-                        TimeStampRemoteViewsUtil.getInstance(MainService.this).showNotification("Hello, World");
-                        LogUtils.d(TAG, "Hello, World");
+                        long currentMillis = System.currentTimeMillis();
+                        Instant instant = Instant.ofEpochMilli(currentMillis);
+                        LocalDateTime ldt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+                        String szTimeStampFormatString = AppConfigsUtil.getInstance(MainService.this).getAppConfigsModel().getTimeStampFormatString();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(szTimeStampFormatString);
+                        String formattedDateTime = ldt.format(formatter);
+                        TimeStampRemoteViewsUtil.getInstance(MainService.this).showNotification(formattedDateTime);
+
+                        //LogUtils.d(TAG, "Hello, World");
                         break;
                     }
                 default:

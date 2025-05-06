@@ -87,14 +87,7 @@ public class TimeStampView extends View {
 
 //    public void updateTimeStamp() {
 //        try {
-//            long currentMillis = System.currentTimeMillis();
-//            Instant instant = Instant.ofEpochMilli(currentMillis);
-//            LocalDateTime ldt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-//            String szTimeStampFormatString = AppConfigsUtil.getInstance(this.mContext).getAppConfigsModel().getTimeStampFormatString();
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(szTimeStampFormatString);
-//            String formattedDateTime = ldt.format(formatter);
-//            //System.out.println(formattedDateTime);
-//            mtvTimeStamp.setText(formattedDateTime);
+//            
 //        } catch (Exception e) {
 //            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
 //            ToastUtils.show(e);
