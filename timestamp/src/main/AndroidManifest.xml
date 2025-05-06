@@ -5,6 +5,8 @@
 
     <!-- 运行前台服务 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.READ_CLIPBOARD" />
+    <uses-permission android:name="android.permission.WRITE_CLIPBOARD" />
     
     <application
         android:allowBackup="true"
