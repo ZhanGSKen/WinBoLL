@@ -63,6 +63,7 @@ public class AppConfigsModel extends BaseBean {
         super.writeThisToJsonWriter(jsonWriter);
         jsonWriter.name("isEnableService").value(isEnableService());
         jsonWriter.name("timeStampFormatString").value(getTimeStampFormatString());
+        jsonWriter.name("timeStampCopyFormatString").value(getTimeStampCopyFormatString());
     }
 
     @Override
@@ -72,6 +73,8 @@ public class AppConfigsModel extends BaseBean {
                 setIsEnableService(jsonReader.nextBoolean());
             } else if (name.equals("timeStampFormatString")) {
                 setTimeStampFormatString(jsonReader.nextString());
+            } else if (name.equals("timeStampCopyFormatString")) {
+                setTimeStampCopyFormatString(jsonReader.nextString());
             } else {
                 return false;
             }
