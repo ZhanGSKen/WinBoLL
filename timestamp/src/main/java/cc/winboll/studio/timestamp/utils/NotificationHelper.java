@@ -128,8 +128,14 @@ public class NotificationHelper {
 
         service.startForeground(ID_MSG_SERVICE, mForegroundNotification);
 
+        // 播放默认短信铃声
         Uri defaultSmsRingtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        AudioPlayerUtil.playAudio(service, defaultSmsRingtoneUri);
+        AudioPlayerUriUtil.playAudio(service, defaultSmsRingtoneUri);
+
+        // 播放应用铃声
+        // 获取MP3文件的Uri
+        Uri soundUri = Uri.parse("android.resource://" + service.getPackageName() + "/" + R.raw.diweiyi);
+        AudioPlayerUriUtil.playAudio(service, soundUri);
     }
 
 //    public void sendSMSNotification(Context context, MessageNotificationBean messageNotificationBean) {

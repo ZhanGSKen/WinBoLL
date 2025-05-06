@@ -2,26 +2,27 @@ package cc.winboll.studio.timestamp.utils;
 
 /**
  * @Author ZhanGSKen
- * @Date 2025/05/07 02:31
- * @Describe AudioPlayerUtil
+ * @Date 2025/05/07 02:38
+ * @Describe AudioPlayer
  */
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
-public class AudioPlayerUtil {
+public class AudioPlayerMP3Util {
 
-    public static final String TAG = "AudioPlayerUtil";
+    public static final String TAG = "AudioPlayer";
 
     private static MediaPlayer mediaPlayer;
 
     /**
-     * 播放指定Uri的音频
+     * 播放指定的 MP3 文件
+     *
      * @param context 上下文
-     * @param audioUri 音频的Uri
+     * @param mp3FilePath MP3 文件的路径，例如："/storage/emulated/0/Music/song.mp3"
      */
-    public static void playAudio(Context context, Uri audioUri) {
+    public static void playMp3(Context context, String mp3FilePath) {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -30,7 +31,8 @@ public class AudioPlayerUtil {
 
         try {
             mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(context, audioUri);
+            Uri uri = Uri.parse(mp3FilePath);
+            mediaPlayer.setDataSource(context, uri);
             mediaPlayer.prepare();
             mediaPlayer.start();
 
@@ -56,7 +58,7 @@ public class AudioPlayerUtil {
     }
 
     /**
-     * 释放MediaPlayer资源
+     * 释放 MediaPlayer 资源
      */
     private static void releaseMediaPlayer() {
         if (mediaPlayer != null) {
