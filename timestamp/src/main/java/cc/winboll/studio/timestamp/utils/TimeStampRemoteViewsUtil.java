@@ -85,6 +85,8 @@ public class TimeStampRemoteViewsUtil {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContent(mRemoteViews)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setOngoing(true)
             .setAutoCancel(true);
 
         // 显示通知
