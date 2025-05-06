@@ -18,12 +18,13 @@
 1.自启动权限允许。
 2.省电策略-无限制权限允许。
 3.设置背景图片需要读写手机存储权限。
+4.要在锁屏充电的时候提醒，还需要设置允许锁屏通知权限。
 
 #### 参与贡献
 
 1.  Fork 本仓库
 2.  新建 Feat_xxx 分支
-3.  提交代码 : ZhanGSKen(ZhanGSKen@QQ.COM)
+3.  提交代码 : ZhanGSKen(zhangsken@188.com)
 4.  新建 Pull Request
 
 
