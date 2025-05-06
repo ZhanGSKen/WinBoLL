@@ -39,9 +39,17 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
-		<cc.winboll.studio.timestamp.views.TimeStampView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"/>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Show Format :"
+			android:paddingRight="10dp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Text"
+			android:id="@+id/tv_timestampformatstring"/>
 
 	</LinearLayout>
 
@@ -61,8 +69,52 @@
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Save Format"
-			android:id="@+id/btn_saveformatstring"/>
+			android:text="ApplySave"
+			android:id="@+id/btn_saveformatstring"
+			android:textAllCaps="false"
+			android:onClick="onSaveFormatString"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Copy Format :"
+			android:paddingRight="10dp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Text"
+			android:id="@+id/tv_timestampcopyformatstring"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="10dp">
+
+		<EditText
+			android:layout_width="0dp"
+			android:ems="10"
+			android:layout_height="wrap_content"
+			android:id="@+id/et_timestampcopyformatstring"
+			android:layout_weight="1.0"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="ApplyCopy"
+			android:id="@+id/btn_savecopyformatstring"
+			android:textAllCaps="false"
+			android:onClick="onSaveCopyFormatString"/>
 
 	</LinearLayout>
 

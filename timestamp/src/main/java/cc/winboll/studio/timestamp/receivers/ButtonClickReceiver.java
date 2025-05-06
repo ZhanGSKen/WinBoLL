@@ -15,7 +15,7 @@ public class ButtonClickReceiver extends BroadcastReceiver {
 
     public static final String TAG = "ButtonClickReceiver";
 
-    public static final String BUTTON_COPYTIMESTAMP_ACTION = "com.example.BUTTON_CLICK_ACTION";
+    public static final String BUTTON_COPYTIMESTAMP_ACTION = "cc.winboll.studio.timestamp.receivers.ButtonClickReceiver.BUTTON_COPYTIMESTAMP_ACTION";
 
     @Override
     public void onReceive(Context context, Intent intent) {

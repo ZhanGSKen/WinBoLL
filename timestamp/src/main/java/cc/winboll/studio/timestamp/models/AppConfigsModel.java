@@ -18,11 +18,23 @@ public class AppConfigsModel extends BaseBean {
 
     // 是否启动服务
     boolean isEnableService;
+    // 时间戳显示格式
     String timeStampFormatString;
+    // 时间戳拷贝格式
+    String timeStampCopyFormatString;
 
     public AppConfigsModel() {
         this.isEnableService = false;
         this.timeStampFormatString = "yyyy-MM-dd HH:mm:ss";
+        this.timeStampCopyFormatString = "yyyy_MM_dd-HH_mm_ss";
+    }
+
+    public void setTimeStampCopyFormatString(String timeStampCopyFormatString) {
+        this.timeStampCopyFormatString = timeStampCopyFormatString;
+    }
+
+    public String getTimeStampCopyFormatString() {
+        return timeStampCopyFormatString;
     }
     
     public void setTimeStampFormatString(String timeStampFormatString) {
