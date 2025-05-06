@@ -120,7 +120,7 @@ public class NotificationHelper {
         PendingIntent pendingIntent = createPendingIntent(intent);
         
         
-        Notification notification = new NotificationCompat.Builder(mContext, CHANNEL_ID_TEMPORARY)
+        Notification notification = new NotificationCompat.Builder(mContext, CHANNEL_ID_FOREGROUND)
             .setSmallIcon(R.drawable.ic_launcher)
             .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher))
             //.setContentTitle(title)
