@@ -6,6 +6,7 @@ package cc.winboll.studio.timestamp;
  * @Describe 主要服务
  */
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -128,6 +129,9 @@ public class MainService extends Service {
         if (mTimer != null) {
             mTimer.cancel();
         }
+        
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.cancelAll();
 
         _mIsServiceAlive = false;
         LogUtils.d(TAG, "onDestroy()");

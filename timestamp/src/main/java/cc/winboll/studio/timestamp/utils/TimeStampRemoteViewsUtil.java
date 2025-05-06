@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.core.app.NotificationCompat;
 import cc.winboll.studio.timestamp.R;
 import cc.winboll.studio.timestamp.receivers.ButtonClickReceiver;
+import android.app.Notification;
 
 public class TimeStampRemoteViewsUtil {
 
@@ -26,6 +27,7 @@ public class TimeStampRemoteViewsUtil {
     Context mContext;
     RemoteViews mRemoteViews;
     TextView mtvMessage;
+    Notification mNotification;
 
     TimeStampRemoteViewsUtil(Context context) {
         mContext = context;
@@ -91,6 +93,7 @@ public class TimeStampRemoteViewsUtil {
 
         // 显示通知
         NotificationManager notificationManager = mContext.getSystemService(NotificationManager.class);
-        notificationManager.notify(1, builder.build());
+        mNotification = builder.build();
+        notificationManager.notify(1, mNotification);
     }
 }
