@@ -11,5 +11,5 @@
         android:top="1dp" 
         android:right="1dp" 
         android:bottom="1dp"
-        android:drawable="@drawable/ic_launcher_foreground"/>
+        android:drawable="@drawable/ic_timestamp"/>
 </layer-list>
