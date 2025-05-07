@@ -28,21 +28,21 @@
 		<Switch
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:text="启用通知栏计时器"
+			android:text="启用时间戳常驻通知栏"
 			android:id="@+id/activitymainSwitch1"
 			android:onClick="onSetMainServiceStatus"/>
 
 	</LinearLayout>
 
 	<LinearLayout
-		android:orientation="horizontal"
+		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Show Format :"
+			android:text="Show Format Preview:"
 			android:paddingRight="10dp"/>
 
 		<TextView
@@ -69,7 +69,7 @@
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="ApplySave"
+			android:text="ApplyShow"
 			android:id="@+id/btn_saveformatstring"
 			android:textAllCaps="false"
 			android:onClick="onSaveFormatString"/>
@@ -77,14 +77,14 @@
 	</LinearLayout>
 
 	<LinearLayout
-		android:orientation="horizontal"
+		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Copy Format :"
+			android:text="Copy Format Preview:"
 			android:paddingRight="10dp"/>
 
 		<TextView
