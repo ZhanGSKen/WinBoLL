@@ -39,7 +39,7 @@ public class TimeStampUtil {
         long currentMillis = mTimeStamp;
         Instant instant = Instant.ofEpochMilli(currentMillis);
         LocalDateTime ldt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        String szTimeStampFormatString = AppConfigsUtil.getInstance(mContext).getAppConfigsModel().getTimeStampCopyFormatString();
+        String szTimeStampFormatString = AppConfigsUtil.getInstance(mContext).getAppConfigsModel().getTimeStampFormatString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(szTimeStampFormatString);
         String formattedDateTime = ldt.format(formatter);
         return formattedDateTime;
