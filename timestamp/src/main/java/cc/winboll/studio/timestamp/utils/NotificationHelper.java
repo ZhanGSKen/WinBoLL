@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.widget.RemoteViews;
+import cc.winboll.studio.timestamp.App;
 import cc.winboll.studio.timestamp.MainActivity;
 import cc.winboll.studio.timestamp.MainService;
 import cc.winboll.studio.timestamp.R;
@@ -89,10 +90,10 @@ public class NotificationHelper {
             //.setContentText(nessageNotificationBean.getContent())
             //.setContent(remoteviews)
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_launcher)
+            .setSmallIcon(App.getAPPIcon())
             //设置红色
             .setColor(Color.parseColor("#F00606"))
-            .setLargeIcon(BitmapFactory.decodeResource(service.getResources(), R.drawable.ic_launcher))
+            .setLargeIcon(BitmapFactory.decodeResource(service.getResources(), App.getAPPIcon()))
             .setContentIntent(mForegroundPendingIntent)
             .build();
 
@@ -105,6 +106,8 @@ public class NotificationHelper {
         remoteViews.setTextColor(R.id.tv_timestamp, mContext.getResources().getColor(R.color.colorAccent, null));
         // 这里虽然不能直接设置字体大小，但可以通过反射等方式尝试（不推荐，且有兼容性问题）
 
+        // 设置按钮图片
+        remoteViews.setImageViewResource(R.id.iv_copytimestamp, App.getAPPIcon());
         // 创建点击通知后的意图
         Intent intentMain = new Intent(mContext, MainActivity.class);
         PendingIntent pendingMainIntent = PendingIntent.getActivity(mContext, 0, intentMain, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -121,7 +124,7 @@ public class NotificationHelper {
         );
 
         // 为按钮设置点击事件
-        remoteViews.setOnClickPendingIntent(R.id.btn_copytimestamp, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.iv_copytimestamp, pendingIntent);
 
         mForegroundNotification.contentView = remoteViews;
         mForegroundNotification.bigContentView = remoteViews;
@@ -137,6 +140,8 @@ public class NotificationHelper {
         Uri soundUri = Uri.parse("android.resource://" + service.getPackageName() + "/" + R.raw.diweiyi);
         AudioPlayerUriUtil.playAudio(service, soundUri);
     }
+    
+    
 
 //    public void sendSMSNotification(Context context, MessageNotificationBean messageNotificationBean) {
 //        NotificationManager notificationManager = (NotificationManager) context.getSystemService(

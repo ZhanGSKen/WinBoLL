@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
 
-    <application>
+    <application
+        tools:replace="android:icon,android:roundIcon"
+        android:icon="@drawable/ic_launcher_beta"
+        android:roundIcon="@drawable/ic_launcher_beta">
 
         <!-- Put flavor specific code here -->
 

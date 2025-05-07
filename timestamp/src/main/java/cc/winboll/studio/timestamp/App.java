@@ -60,6 +60,10 @@ public class App extends GlobalApplication {
         //CrashHandler.getInstance().registerGlobal(this);
         //CrashHandler.getInstance().registerPart(this);
     }
+    
+    public static int getAPPIcon() {
+        return BuildConfig.DEBUG?R.drawable.ic_launcher_beta:R.drawable.ic_launcher_stage;
+    }
 
     public static void write(InputStream input, OutputStream output) throws IOException {
         byte[] buf = new byte[1024 * 8];

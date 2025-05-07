@@ -16,11 +16,10 @@
 		android:textSize="14sp"
 		android:layout_weight="1.0"/>
 
-	<Button
+	<ImageView
 		android:layout_width="60dp"
 		android:layout_height="60dp"
-		android:id="@+id/btn_copytimestamp"
-		android:background="@drawable/ic_launcher"/>
+		android:id="@+id/iv_copytimestamp"/>
 
 </LinearLayout>
 
