@@ -25,8 +25,8 @@ public class AppConfigsModel extends BaseBean {
 
     public AppConfigsModel() {
         this.isEnableService = false;
-        this.timeStampFormatString = "yyyy-MM-dd HH:mm:ss";
-        this.timeStampCopyFormatString = "yyyy_MM_dd-HH_mm_ss";
+        this.timeStampFormatString = "yyyy-MM-dd HH:mm:ss SSS";
+        this.timeStampCopyFormatString = "yyyy_MM_dd-HH_mm_ss-SSS";
     }
 
     public void setTimeStampCopyFormatString(String timeStampCopyFormatString) {
