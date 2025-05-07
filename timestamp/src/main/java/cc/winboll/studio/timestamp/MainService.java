@@ -209,7 +209,7 @@ public class MainService extends Service {
                 case MSG_UPDATE_TIMESTAMP:
                     {
                         String szTimeStampShowString = TimeStampUtil.getInstance(MainService.this).getTimeStampShowString();
-                        mNotificationHelper.sendForegroundNotification(MainService.this, "时间戳：\n" + szTimeStampShowString + "\n已拷贝到剪贴板。");
+                        mNotificationHelper.sendForegroundNotification(MainService.this, "时间戳：\n" + szTimeStampShowString + "\n已截取。");
 
                         LogUtils.d(TAG, "Hello, World! " + szTimeStampShowString);
                         break;
