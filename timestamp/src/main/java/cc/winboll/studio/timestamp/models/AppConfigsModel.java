@@ -25,8 +25,8 @@ public class AppConfigsModel extends BaseBean {
 
     public AppConfigsModel() {
         this.isEnableService = false;
-        this.timeStampFormatString = "yyyy-MM-dd HH:mm:ss";
-        this.timeStampCopyFormatString = "yyyy_MM_dd-HH_mm_ss";
+        this.timeStampFormatString = "yyyy-MM-dd HH:mm:ss SSS";
+        this.timeStampCopyFormatString = "yyyy_MM_dd-HH_mm_ss-SSS";
     }
 
     public void setTimeStampCopyFormatString(String timeStampCopyFormatString) {
@@ -63,6 +63,7 @@ public class AppConfigsModel extends BaseBean {
         super.writeThisToJsonWriter(jsonWriter);
         jsonWriter.name("isEnableService").value(isEnableService());
         jsonWriter.name("timeStampFormatString").value(getTimeStampFormatString());
+        jsonWriter.name("timeStampCopyFormatString").value(getTimeStampCopyFormatString());
     }
 
     @Override
@@ -72,6 +73,8 @@ public class AppConfigsModel extends BaseBean {
                 setIsEnableService(jsonReader.nextBoolean());
             } else if (name.equals("timeStampFormatString")) {
                 setTimeStampFormatString(jsonReader.nextString());
+            } else if (name.equals("timeStampCopyFormatString")) {
+                setTimeStampCopyFormatString(jsonReader.nextString());
             } else {
                 return false;
             }

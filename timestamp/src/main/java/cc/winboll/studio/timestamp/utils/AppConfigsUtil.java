@@ -22,12 +22,12 @@ public class AppConfigsUtil {
     
     AppConfigsUtil(Context context) {
         this.mContext = context;
+        loadAppConfigs();
     }
     
     public synchronized static AppConfigsUtil getInstance(Context context){
         if(_AppConfigsUtil == null) {
             _AppConfigsUtil = new AppConfigsUtil(context);
-            _AppConfigsUtil.loadAppConfigs();
         }
         return _AppConfigsUtil;
     }
@@ -42,8 +42,8 @@ public class AppConfigsUtil {
         if (appConfigsModel != null) {
             mAppConfigsModel = appConfigsModel;
         } else {
-            saveAppConfigs(new AppConfigsModel());
-            _AppConfigsUtil = this;
+            mAppConfigsModel = new AppConfigsModel();
+            saveAppConfigs(mAppConfigsModel);
         }
         return mAppConfigsModel;
     }

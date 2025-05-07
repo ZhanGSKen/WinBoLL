@@ -6,6 +6,7 @@ package cc.winboll.studio.timestamp;
  * @Describe 主要服务
  */
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,13 +26,7 @@ import cc.winboll.studio.timestamp.receivers.ButtonClickReceiver;
 import cc.winboll.studio.timestamp.utils.AppConfigsUtil;
 import cc.winboll.studio.timestamp.utils.NotificationHelper;
 import cc.winboll.studio.timestamp.utils.ServiceUtil;
-import cc.winboll.studio.timestamp.utils.TimeStampRemoteViewsUtil;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Timer;
-import java.util.TimerTask;
+import cc.winboll.studio.timestamp.utils.TimeStampUtil;
 
 public class MainService extends Service {
 
@@ -44,11 +39,11 @@ public class MainService extends Service {
     Notification mNotification;
     RemoteViews mRemoteViews;
     TextView mtvTimeStamp;
-    Timer mTimer;
+    //Timer mTimer;
     private static boolean _mIsServiceAlive;
     public static final String EXTRA_APKFILEPATH = "EXTRA_APKFILEPATH";
     final static int MSG_INSTALL_APK = 0;
-    MyHandler mMyHandler;
+    static MyHandler _MyHandler;
     MyServiceConnection mMyServiceConnection;
     MainActivity mInstallCompletedFollowUpActivity;
 
@@ -60,10 +55,9 @@ public class MainService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        // 创建 RemoteViews 对象，并使用包含自定义 View 的布局
-        //mRemoteViews = new RemoteViews(getPackageName(), R.layout.remoteviews_timestamp);
-
-
+        mNotificationHelper = new NotificationHelper();
+        mNotificationHelper.createServiceNotificationChannel(this);
+        
         // 创建广播接收器实例
         mButtonClickReceiver = new ButtonClickReceiver();
 
@@ -76,7 +70,7 @@ public class MainService extends Service {
         LogUtils.d(TAG, "onCreate()");
         _mIsServiceAlive = false;
 
-        mMyHandler = new MyHandler();
+        _MyHandler = new MyHandler();
         if (mMyServiceConnection == null) {
             mMyServiceConnection = new MyServiceConnection();
         }
@@ -101,17 +95,18 @@ public class MainService extends Service {
                 wakeupAndBindAssistant();
 
                 LogUtils.d(TAG, "running...");
+                _MyHandler.sendEmptyMessage(MSG_UPDATE_TIMESTAMP);
 
-                mTimer = new Timer();
-                TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        //System.out.println("定时任务执行了");
-                        mMyHandler.sendEmptyMessage(MSG_UPDATE_TIMESTAMP);
-                    }
-                };
-                // 延迟1秒后开始执行，之后每隔100毫秒执行一次
-                mTimer.schedule(task, 1000, 100);
+//                mTimer = new Timer();
+//                TimerTask task = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        //System.out.println("定时任务执行了");
+//                        mMyHandler.sendEmptyMessage(MSG_UPDATE_TIMESTAMP);
+//                    }
+//                };
+//                // 延迟1秒后开始执行，之后每隔100毫秒执行一次
+//                mTimer.schedule(task, 1000, 100);
 
 
 
@@ -125,11 +120,17 @@ public class MainService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
+
+
+//        if (mTimer != null) {
+//            mTimer.cancel();
+//        }
+
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.cancelAll();
 
         _mIsServiceAlive = false;
+        _MyHandler = null;
         LogUtils.d(TAG, "onDestroy()");
     }
 
@@ -207,21 +208,22 @@ public class MainService extends Service {
             switch (message.what) {
                 case MSG_UPDATE_TIMESTAMP:
                     {
-                        long currentMillis = System.currentTimeMillis();
-                        Instant instant = Instant.ofEpochMilli(currentMillis);
-                        LocalDateTime ldt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-                        String szTimeStampFormatString = AppConfigsUtil.getInstance(MainService.this).getAppConfigsModel().getTimeStampFormatString();
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(szTimeStampFormatString);
-                        String formattedDateTime = ldt.format(formatter);
-                        TimeStampRemoteViewsUtil.getInstance(MainService.this).showNotification(formattedDateTime);
+                        String szTimeStampShowString = TimeStampUtil.getInstance(MainService.this).getTimeStampShowString();
+                        mNotificationHelper.sendForegroundNotification(MainService.this, "时间戳：\n" + szTimeStampShowString + "\n已拷贝到剪贴板。");
 
-                        //LogUtils.d(TAG, "Hello, World");
+                        LogUtils.d(TAG, "Hello, World! " + szTimeStampShowString);
                         break;
                     }
                 default:
                     break;
             }
             super.handleMessage(message);
+        }
+    }
+
+    public static void updateCopiedTimeStamp() {
+        if (_MyHandler != null) {
+            _MyHandler.sendEmptyMessage(MSG_UPDATE_TIMESTAMP);
         }
     }
 }

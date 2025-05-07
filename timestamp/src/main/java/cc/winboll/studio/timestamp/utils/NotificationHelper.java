@@ -12,212 +12,190 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.os.Build;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.widget.RemoteViews;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
-import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.timestamp.MainActivity;
+import cc.winboll.studio.timestamp.MainService;
 import cc.winboll.studio.timestamp.R;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import cc.winboll.studio.timestamp.receivers.ButtonClickReceiver;
 
 public class NotificationHelper {
-    public static final String TAG = "NotificationHelper";
 
-    // 渠道ID和名称
-    private static final String CHANNEL_ID_FOREGROUND = "foreground_channel";
-    private static final String CHANNEL_NAME_FOREGROUND = "Foreground Service";
-    private static final String CHANNEL_ID_TEMPORARY = "temporary_channel";
-    private static final String CHANNEL_NAME_TEMPORARY = "Temporary Notifications";
+    public static final String TAG = "NotificationUtil";
+    public static final int ID_MSG_SERVICE = 10000;
 
-    // 通知ID
-    public static final int FOREGROUND_NOTIFICATION_ID = 1001;
-    public static final int TEMPORARY_NOTIFICATION_ID = 2001;
+    static final String szSMSChannelID = "1";
 
-    private final Context mContext;
-    private final NotificationManager mNotificationManager;
+    static final String szServiceChannelID = "0";
 
-    // 示例：维护当前使用的渠道ID列表
-    // 键：渠道ID，值：渠道重要性级别
-    Map<String, Integer> activeChannelConfigs = new HashMap<>();
 
-    public NotificationHelper(Context context) {
+    //static int mNumSendForegroundNotification = 10000;
+    //static int mNumSendSMSNotification = 20000;
+    Context mContext;
+
+
+    public NotificationManager createServiceNotificationChannel(Context context) {
         mContext = context;
-        mNotificationManager = context.getSystemService(NotificationManager.class);
-
-        // 初始化配置
-        activeChannelConfigs.put(
-            CHANNEL_ID_FOREGROUND,
-            NotificationManager.IMPORTANCE_HIGH
-        );
-        activeChannelConfigs.put(
-            CHANNEL_ID_TEMPORARY,
-            NotificationManager.IMPORTANCE_DEFAULT
-        );
-
-        createNotificationChannels();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void createNotificationChannels() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createForegroundChannel();
-            createTemporaryChannel();
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void createForegroundChannel() {
-        NotificationChannel channel = new NotificationChannel(
-            CHANNEL_ID_FOREGROUND,
-            CHANNEL_NAME_FOREGROUND,
-            NotificationManager.IMPORTANCE_LOW
-        );
-        channel.setDescription("Persistent service notifications");
+        //创建通知渠道ID
+        String channelId = szServiceChannelID;
+        //创建通知渠道名称
+        String channelName = "Service Message";
+        //创建通知渠道重要性
+        int importance = NotificationManager.IMPORTANCE_MIN;
+        NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
         channel.setSound(null, null);
-        channel.enableVibration(false);
-        mNotificationManager.createNotificationChannel(channel);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(
+            Context.NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(channel);
+        return notificationManager;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void createTemporaryChannel() {
-        NotificationChannel channel = new NotificationChannel(
-            CHANNEL_ID_TEMPORARY,
-            CHANNEL_NAME_TEMPORARY,
-            NotificationManager.IMPORTANCE_HIGH
-        );
-        channel.setDescription("Temporary alert notifications");
-        channel.setSound(null, null);
-        channel.enableVibration(true);
-        channel.setVibrationPattern(new long[]{100, 200, 300, 400});
-        channel.setBypassDnd(true);
-        mNotificationManager.createNotificationChannel(channel);
+    public NotificationManager createSMSNotificationChannel(Context context) {
+        //创建通知渠道ID
+        String channelId = szSMSChannelID;
+        //创建通知渠道名称
+        String channelName = "SMS Message";
+        //创建通知渠道重要性
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+        channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE), Notification.AUDIO_ATTRIBUTES_DEFAULT);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(
+            Context.NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(channel);
+        return notificationManager;
     }
 
-    // 显示常驻通知（通常用于前台服务）
-    public Notification showForegroundNotification(Intent intent, String title, String content) {
-        PendingIntent pendingIntent = createPendingIntent(intent);
+    // 创建通知
+    //
+    public void sendForegroundNotification(MainService service, String message) {
+        //创建Notification，传入Context和channelId
+        Intent intent = new Intent();//这个intent会传给目标,可以使用getIntent来获取
+        intent.setClass(mContext, MainActivity.class);
 
-        Notification notification = new NotificationCompat.Builder(mContext, CHANNEL_ID_FOREGROUND)
-            .setSmallIcon(R.drawable.ic_launcher)
-            .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher))
-            //.setContentTitle(title)
-            .setContentTitle(content)
-            //.setContentText(content)
-            .setContentIntent(pendingIntent)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setOngoing(true)
-            .build();
+        //这里放一个count用来区分每一个通知
+        //intent.putExtra("intent", "intent--->" + count);//这里设置一个数据,带过去
 
-        mNotificationManager.notify(FOREGROUND_NOTIFICATION_ID, notification);
-        return notification;
-    }
-    
+        //参数1:context 上下文对象
+        //参数2:发送者私有的请求码(Private request code for the sender)
+        //参数3:intent 意图对象
+        //参数4:必须为FLAG_ONE_SHOT,FLAG_NO_CREATE,FLAG_CANCEL_CURRENT,FLAG_UPDATE_CURRENT,中的一个
+        PendingIntent mForegroundPendingIntent = PendingIntent.getActivity(service, ID_MSG_SERVICE, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT);
 
-    // 显示常驻通知（通常用于前台服务）
-    public Notification showCustomForegroundNotification(Intent intent, RemoteViews contentView, RemoteViews bigContentView) {
-        PendingIntent pendingIntent = createPendingIntent(intent);
-        
-        
-        Notification notification = new NotificationCompat.Builder(mContext, CHANNEL_ID_TEMPORARY)
-            .setSmallIcon(R.drawable.ic_launcher)
-            .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher))
-            //.setContentTitle(title)
-            .setContentIntent(pendingIntent)
-            .setContent(contentView)
-            .setCustomBigContentView(bigContentView)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+        Notification mForegroundNotification = new Notification.Builder(service, szServiceChannelID)
             .setAutoCancel(true)
-            .setOngoing(true)
-            .build();
-
-        mNotificationManager.notify(FOREGROUND_NOTIFICATION_ID, notification);
-        return notification;
-    }
-
-    // 显示临时通知（自动消失）
-    public void showTemporaryNotification(Intent intent, String title, String content) {
-        showTemporaryNotification(intent, TEMPORARY_NOTIFICATION_ID, title, content);
-    }
-
-    // 显示临时通知（自动消失）
-    public void showTemporaryNotification(Intent intent, int notificationID, String title, String content) {
-        PendingIntent pendingIntent = createPendingIntent(intent);
-
-        Notification notification = new NotificationCompat.Builder(mContext, CHANNEL_ID_TEMPORARY)
+            //.setContentTitle(nessageNotificationBean.getTitle())
+            //.setContentText(nessageNotificationBean.getContent())
+            //.setContent(remoteviews)
+            .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.drawable.ic_launcher)
-            .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher))
-            .setContentTitle(title)
-            .setContentText(content)
-            .setContentIntent(pendingIntent)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
-            .setVibrate(new long[]{100, 200, 300, 400})
+            //设置红色
+            .setColor(Color.parseColor("#F00606"))
+            .setLargeIcon(BitmapFactory.decodeResource(service.getResources(), R.drawable.ic_launcher))
+            .setContentIntent(mForegroundPendingIntent)
             .build();
 
-        mNotificationManager.notify(notificationID, notification);
-    }
+        // 创建 RemoteViews 对象，加载布局
+        RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.custom_notification_layout);
 
-    // 创建自定义布局通知（可扩展）
-    public void showCustomNotification(Intent intent, RemoteViews contentView, RemoteViews bigContentView) {
-        PendingIntent pendingIntent = createPendingIntent(intent);
+        // 自定义 TextView 的文本
+        remoteViews.setTextViewText(R.id.tv_timestamp, message);
+        // 自定义 TextView 的文本颜色
+        remoteViews.setTextColor(R.id.tv_timestamp, mContext.getResources().getColor(R.color.colorAccent, null));
+        // 这里虽然不能直接设置字体大小，但可以通过反射等方式尝试（不推荐，且有兼容性问题）
 
-        Notification notification = new NotificationCompat.Builder(mContext, CHANNEL_ID_TEMPORARY)
-            .setSmallIcon(R.drawable.ic_launcher)
-            .setContentIntent(pendingIntent)
-            .setContent(contentView)
-            .setCustomBigContentView(bigContentView)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
-            .build();
+        // 创建点击通知后的意图
+        Intent intentMain = new Intent(mContext, MainActivity.class);
+        PendingIntent pendingMainIntent = PendingIntent.getActivity(mContext, 0, intentMain, PendingIntent.FLAG_UPDATE_CURRENT);
+        // 设置通知的点击事件
+        remoteViews.setOnClickPendingIntent(R.id.tv_timestamp, pendingMainIntent);
 
-        mNotificationManager.notify(TEMPORARY_NOTIFICATION_ID + 1, notification);
-    }
-
-    // 取消所有通知
-    public void cancelAllNotifications() {
-        mNotificationManager.cancelAll();
-    }
-
-    // 取消指定通知
-    public void cancelNotification(int notificationID) {
-        mNotificationManager.cancel(notificationID);
-    }
-
-    // 创建PendingIntent（兼容不同API版本）
-    private PendingIntent createPendingIntent(Intent intent) {
-        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            flags |= PendingIntent.FLAG_IMMUTABLE;
-//        }
-        return PendingIntent.getActivity(
+        // 创建点击按钮后要发送的广播 Intent
+        Intent broadcastIntent = new Intent(ButtonClickReceiver.BUTTON_COPYTIMESTAMP_ACTION);
+        android.app.PendingIntent pendingIntent = android.app.PendingIntent.getBroadcast(
             mContext,
             0,
-            intent,
-            flags
+            broadcastIntent,
+            android.app.PendingIntent.FLAG_UPDATE_CURRENT
         );
+
+        // 为按钮设置点击事件
+        remoteViews.setOnClickPendingIntent(R.id.btn_copytimestamp, pendingIntent);
+
+        mForegroundNotification.contentView = remoteViews;
+        mForegroundNotification.bigContentView = remoteViews;
+
+        service.startForeground(ID_MSG_SERVICE, mForegroundNotification);
+
+        // 播放默认短信铃声
+        Uri defaultSmsRingtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        AudioPlayerUriUtil.playAudio(service, defaultSmsRingtoneUri);
+
+        // 播放应用铃声
+        // 获取MP3文件的Uri
+        Uri soundUri = Uri.parse("android.resource://" + service.getPackageName() + "/" + R.raw.diweiyi);
+        AudioPlayerUriUtil.playAudio(service, soundUri);
     }
 
-//    public void sendSMSReceivedMessage(int notificationID, String szPhone, String szBody) {
-//        Intent intent = new Intent(mContext, SMSActivity.class);
-//        intent.putExtra(SMSActivity.EXTRA_PHONE, szPhone);
-//        String szTitle = mContext.getString(R.string.text_smsfrom)  + "<" + szPhone + ">";
-//        String szContent = "[ " + szBody + " ]";
-//        showTemporaryNotification(intent, notificationID, szTitle, szContent);
+//    public void sendSMSNotification(Context context, MessageNotificationBean messageNotificationBean) {
+//        NotificationManager notificationManager = (NotificationManager) context.getSystemService(
+//            Context.NOTIFICATION_SERVICE);
+//        /*NotificationManager notificationManager = createSMSNotificationChannel(context);
+//         if (notificationManager == null) {
+//         LogUtils.d(TAG, "createSMSNotificationChannel failed.");
+//         return;
+//         }*/
+//
+//        //创建Notification，传入Context和channelId
+//        Intent intent = new Intent(context, SMSActivity.class);
+//        intent.putExtra(SMSActivity.EXTRA_PHONE, messageNotificationBean.getPhone());
+//        LogUtils.d(TAG, "sendSMSNotification(...) message.getPhone() is : " + messageNotificationBean.getPhone());
+//        //Intent intent = new Intent();//这个intent会传给目标,可以使用getIntent来获取
+//        //intent.setClass(context, MainActivity.class);
+//        //这里放一个count用来区分每一个通知
+//        //intent.putExtra("intent", "intent--->" + count);//这里设置一个数据,带过去
+//
+//        //参数1:context 上下文对象
+//        //参数2:发送者私有的请求码(Private request code for the sender)
+//        //参数3:intent 意图对象
+//        //参数4:必须为FLAG_ONE_SHOT,FLAG_NO_CREATE,FLAG_CANCEL_CURRENT,FLAG_UPDATE_CURRENT,中的一个
+//        PendingIntent mRemindPendingIntent = PendingIntent.getActivity(context, messageNotificationBean.getMessageId(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT);
+//        Notification mSMSNotification = new Notification.Builder(context, szSMSChannelID)
+//            .setAutoCancel(true)
+//            .setContentTitle(messageNotificationBean.getTitle())
+//            .setContentText(messageNotificationBean.getContent())
+//            .setWhen(System.currentTimeMillis())
+//            .setSmallIcon(R.drawable.ic_launcher)
+//            //设置红色
+//            .setColor(Color.parseColor("#F00606"))
+//            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
+//            .setContentIntent(mRemindPendingIntent)
+//            .build();
+//
+//        RemoteViews mrvSMSNotificationView = new RemoteViews(context.getPackageName(), R.layout.remoteview);
+//        mrvSMSNotificationView.setTextViewText(R.id.remoteviewTextView1, messageNotificationBean.getTitle());
+//        mrvSMSNotificationView.setTextViewText(R.id.remoteviewTextView2, messageNotificationBean.getContent());
+//        mrvSMSNotificationView.setImageViewResource(R.id.remoteviewImageView1, R.drawable.ic_launcher);
+//        mSMSNotification.contentView = mrvSMSNotificationView;
+//        mSMSNotification.bigContentView = mrvSMSNotificationView;
+//        notificationManager.notify(messageNotificationBean.getMessageId(), mSMSNotification);
+//        LogUtils.d(TAG, "getMessageId is : " + Integer.toString(messageNotificationBean.getMessageId()));
+//
 //    }
 
-    public void cleanOldChannels() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            List<NotificationChannel> allChannels = mNotificationManager.getNotificationChannels();
-            for (NotificationChannel channel : allChannels) {
-                LogUtils.d(TAG, "Clean channel : " + channel.getId());
-                if (!activeChannelConfigs.containsKey(channel.getId())) {
-                    // 安全删除渠道
-                    mNotificationManager.deleteNotificationChannel(channel.getId());
-                    LogUtils.d(TAG, String.format("Deleted Channel %s", channel.getId()));
-                }
-            }
-        }
-    }
+//    public void sendSMSReceivedMessage(Context context, int nMessageId, String szPhone, String szBody) {
+//        String szTitle = context.getString(R.string.text_smsfrom)  + "<" + szPhone + ">";
+//        String szContent = "[ " + szBody + " ]";
+//        sendSMSNotification(context, new MessageNotificationBean(nMessageId, szPhone, szTitle, szContent));
+//    }
+
+//    public static void cancelNotification(Context context, int notificationId) {
+//        // 获取 NotificationManager 实例
+//        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//        // 撤回指定 ID 的通知栏消息
+//        notificationManager.cancel(notificationId);
+//    }
 }
+
+
