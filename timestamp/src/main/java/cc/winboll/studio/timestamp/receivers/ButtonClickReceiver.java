@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.timestamp.BuildConfig;
 import cc.winboll.studio.timestamp.MainService;
 import cc.winboll.studio.timestamp.utils.ClipboardUtil;
 import cc.winboll.studio.timestamp.utils.TimeStampUtil;
@@ -18,7 +19,7 @@ public class ButtonClickReceiver extends BroadcastReceiver {
 
     public static final String TAG = "ButtonClickReceiver";
 
-    public static final String BUTTON_COPYTIMESTAMP_ACTION = "cc.winboll.studio.timestamp.receivers.ButtonClickReceiver.BUTTON_COPYTIMESTAMP_ACTION";
+    public static final String BUTTON_COPYTIMESTAMP_ACTION = ButtonClickReceiver.class.getName() + (BuildConfig.DEBUG ?".DEBUG_": ".") + "BUTTON_COPYTIMESTAMP_ACTION";
 
     @Override
     public void onReceive(Context context, Intent intent) {
