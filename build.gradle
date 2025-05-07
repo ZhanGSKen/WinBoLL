@@ -2,7 +2,7 @@
 buildscript {
     repositories {
         //本地 maven 库
-        maven { url "https://localhost:8080/maven/" }
+        maven { url "file:///sdcard/.aide/maven/" }
         // Nexus Maven 库地址
         // "WinBoLL Release"
         maven { url "https://nexus.winboll.cc/repository/maven-public/" }
@@ -29,7 +29,7 @@ buildscript {
 allprojects {
     repositories {
         //本地 maven 库
-        maven { url "https://localhost:8080/maven/" }
+        maven { url "file:///sdcard/.aide/maven/" }
         // Nexus Maven 库地址
         // "WinBoLL Release"
         maven { url "https://nexus.winboll.cc/repository/maven-public/" }
