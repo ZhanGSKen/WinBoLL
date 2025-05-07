@@ -22,6 +22,7 @@ public class TimeStampUtil {
 
     TimeStampUtil(Context context) {
         mContext = context;
+        mTimeStamp = System.currentTimeMillis();
     }
 
     public synchronized static TimeStampUtil getInstance(Context context) {
