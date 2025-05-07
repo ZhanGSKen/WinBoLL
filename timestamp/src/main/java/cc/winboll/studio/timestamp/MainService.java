@@ -26,10 +26,7 @@ import cc.winboll.studio.timestamp.receivers.ButtonClickReceiver;
 import cc.winboll.studio.timestamp.utils.AppConfigsUtil;
 import cc.winboll.studio.timestamp.utils.NotificationHelper;
 import cc.winboll.studio.timestamp.utils.ServiceUtil;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import cc.winboll.studio.timestamp.utils.TimeStampUtil;
 
 public class MainService extends Service {
 
@@ -211,15 +208,10 @@ public class MainService extends Service {
             switch (message.what) {
                 case MSG_UPDATE_TIMESTAMP:
                     {
-                        long currentMillis = System.currentTimeMillis();
-                        Instant instant = Instant.ofEpochMilli(currentMillis);
-                        LocalDateTime ldt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-                        String szTimeStampFormatString = AppConfigsUtil.getInstance(MainService.this).getAppConfigsModel().getTimeStampFormatString();
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(szTimeStampFormatString);
-                        String formattedDateTime = ldt.format(formatter);
-                        mNotificationHelper.sendForegroundNotification(MainService.this, "时间戳：\n" + formattedDateTime + "\n已拷贝到剪贴板。");
+                        String szTimeStampShowString = TimeStampUtil.getInstance(MainService.this).getTimeStampShowString();
+                        mNotificationHelper.sendForegroundNotification(MainService.this, "时间戳：\n" + szTimeStampShowString + "\n已拷贝到剪贴板。");
 
-                        LogUtils.d(TAG, "Hello, World! " + formattedDateTime);
+                        LogUtils.d(TAG, "Hello, World! " + szTimeStampShowString);
                         break;
                     }
                 default:
