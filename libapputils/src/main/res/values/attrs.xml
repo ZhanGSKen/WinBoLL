@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AboutView">
+        <attr name="app_name" format="string" />
+        <attr name="app_apkfoldername" format="string" />
+        <attr name="app_apkname" format="string" />
+        <attr name="app_gitname" format="string" />
+        <attr name="app_gitowner" format="string" />
+        <attr name="app_gitappbranch" format="string" />
+        <attr name="app_gitappsubprojectfolder" format="string" />
+        <attr name="appdescription" format="string" />
+        <attr name="appicon" format="reference" />
+    </declare-styleable>
+</resources>

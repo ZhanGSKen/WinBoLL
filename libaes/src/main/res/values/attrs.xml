@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <attr name="colorTextColor" format="color" />
+    <attr name="colorPrimary" format="color" />
+    <attr name="colorPrimaryDark" format="color" />
+    <attr name="colorAccent" format="color" />
+    
+    <attr name="aToolbar" format="reference"/>
+    <attr name="attrAToolbarTitleTextColor" format="color" />
+    <attr name="attrAToolbarStartColor" format="color" />
+    <attr name="attrAToolbarCenterColor" format="color" />
+    <attr name="attrAToolbarEndColor" format="color" />
+        
+	<declare-styleable name="AboutView">
+        <attr name="app_name" format="string" />
+        <attr name="app_apkfoldername" format="string" />
+        <attr name="app_apkname" format="string" />
+        <attr name="app_gitname" format="string" />
+        <attr name="app_gitowner" format="string" />
+        <attr name="app_gitappbranch" format="string" />
+        <attr name="app_gitappsubprojectfolder" format="string" />
+        <attr name="appdescription" format="string" />
+        <attr name="appicon" format="reference" />
+        <attr name="is_adddebugtools" format="boolean" />
+    </declare-styleable>
+    
+    <declare-styleable name="AToolbar">
+        <attr name="attrAToolbarTitleTextColor"/>
+        <attr name="attrAToolbarStartColor"/>
+        <attr name="attrAToolbarCenterColor"/>
+        <attr name="attrAToolbarEndColor"/>
+    </declare-styleable>
+    
+    <attr name="aSupportToolbar" format="reference"/>
+    <attr name="attrASupportToolbarTitleTextColor" format="color" />
+    <attr name="attrASupportToolbarStartColor" format="color" />
+    <attr name="attrASupportToolbarCenterColor" format="color" />
+    <attr name="attrASupportToolbarEndColor" format="color" />
+	
+    <declare-styleable name="ASupportToolbar">
+        <attr name="attrASupportToolbarTitleTextColor"/>
+        <attr name="attrASupportToolbarStartColor"/>
+        <attr name="attrASupportToolbarCenterColor"/>
+        <attr name="attrASupportToolbarEndColor"/>
+    </declare-styleable>
+    
+    <declare-styleable name="AButton">
+        <attr name="attrAButtonTextColor" format="color" />
+        <attr name="attrAButtonPrimary" format="color" />
+        <attr name="attrAButtonPrimaryDark" format="color" />
+        <attr name="attrAButtonAccent" format="color" />
+    </declare-styleable>
+    
+    <attr name="ActionSheetList" format="reference"/>
+    <!--<declare-styleable name="AToolbarStyle">
+		<attr name="attrAToolbarStartColor" format="color" />
+		<attr name="attrAToolbarCenterColor" format="color" />
+		<attr name="attrAToolbarEndColor" format="color" />
+	</declare-styleable>-->
+    <declare-styleable name="ACard">
+        <attr name="attrACardBackgroudColor" format="color" />
+        <attr name="attrACardShadowColor" format="color" />
+        <attr name="attrACardFrameColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="ATickProgressBar">
+        <attr name="attrATickProgressBarBackgroudColor" format="color" />
+        <attr name="attrATickProgressBarProgressColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="OneHundredPercantClickToSendProgressBar">
+        <attr name="attrOHPCTSBackgroundColor" format="color" />
+        <attr name="attrOHPCTSSecondaryProgressColor" format="color" />
+        <attr name="attrOHPCTSProgressColor" format="color" />
+    </declare-styleable>
+</resources>

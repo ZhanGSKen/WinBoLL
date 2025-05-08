@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">能源钟</string>
+    <string name="app_description">一个接收手机电量信息的应用，当电量值达到设定范围时会提醒用户。</string>
+    <string name="about_crashed">本应用崩溃了，作者水平有限，敬请谅解！</string>
+    <string name="item_mainview">Main View</string>
+    <string name="item_aboutview">About</string>
+    <string name="item_clearrecord">Clear Record</string>
+    <string name="item_changepicture">Change Picture</string>
+    <string name="item_devoloperoptionsview">Developer View</string>
+    <string name="item_logview">Log View</string>
+    <string name="item_sourceview">Source View</string>
+    <string name="txt_aboveswitch">消息总开关</string>
+    <string name="txt_aboveswitchtips">当电量低于左边（放电状态）或高于右边（充电状态），就会发送一个提醒铃声。</string>
+    <string name="texthint_CustomSlideToCleanRecord">Slide Right To Clean Up APP Record.</string>
+    <string name="subtitle_activity_clearrecord">清理记录</string>
+    <string name="subtitle_activity_backgroundpicture">更换背景图片</string>
+    <string name="subtitle_activity_about">关于应用</string>
+    <string name="msg_AOHPCTCSeekBar_ClearRecord">&gt;&gt;&gt;Seek 100% To Clear Battery Record.&gt;&gt;&gt;</string>
+</resources>

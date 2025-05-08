@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<cc.winboll.studio.libaes.views.AToolbar
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/toolbar_height"
+			android:id="@+id/toolbar"
+			android:gravity="center_vertical"
+			style="@style/DefaultAToolbar"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1.0">
+
+		<FrameLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:id="@+id/activitymainFrameLayout1"/>
+
+	</LinearLayout>
+
+	<cc.winboll.studio.libappbase.LogView
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="200dp"
+		android:id="@+id/logview"/>
+
+</LinearLayout>
+

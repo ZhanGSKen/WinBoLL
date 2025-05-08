@@ -1,0 +1,10 @@
+## WinBoLL Nexus Settings
+## These properties is setting for publishing
+## library project to WinBoLL Nexus Maven Repository.
+##
+
+## WinBoLL Nexus UserName
+#Nexus.name=nexustestuser1
+
+## WinBoLL Nexus Password
+#Nexus.password=nexustestuserpassword

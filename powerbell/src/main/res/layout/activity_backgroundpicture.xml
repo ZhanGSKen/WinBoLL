@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<cc.winboll.studio.libaes.views.AToolbar
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/toolbar_height"
+		android:id="@+id/toolbar"
+		style="@style/DefaultAToolbar"/>
+
+	<ImageView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/activitybackgroundpictureImageView1"
+		android:layout_below="@id/toolbar">
+
+	</ImageView>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/toolbar">
+
+		<RelativeLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+			<cc.winboll.studio.libaes.views.AButton
+				android:layout_width="160dp"
+				android:layout_height="36dp"
+				android:text="Origin BG"
+				android:id="@+id/activitybackgroundpictureAButton5"
+				android:layout_alignParentLeft="true"
+				android:layout_margin="5dp"/>
+
+			<cc.winboll.studio.libaes.views.AButton
+				android:layout_width="160dp"
+				android:layout_height="36dp"
+				android:text="Received BG"
+				android:id="@+id/activitybackgroundpictureAButton4"
+				android:layout_alignParentRight="true"
+				android:layout_margin="5dp"/>
+
+		</RelativeLayout>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="right">
+
+			<cc.winboll.studio.libaes.views.AButton
+				android:layout_width="50dp"
+				android:layout_height="36dp"
+				android:text="◎"
+				android:layout_gravity="center_vertical"
+				android:layout_margin="10dp"
+				android:id="@+id/activitybackgroundpictureAButton1"/>
+
+			<cc.winboll.studio.libaes.views.AButton
+				android:layout_width="50dp"
+				android:layout_height="36dp"
+				android:text="☑"
+				android:layout_gravity="center_vertical"
+				android:layout_margin="10dp"
+				android:id="@+id/activitybackgroundpictureAButton2"/>
+
+			<cc.winboll.studio.libaes.views.AButton
+				android:layout_width="50dp"
+				android:layout_height="36dp"
+				android:text="[+]"
+				android:layout_gravity="center_vertical"
+				android:layout_margin="10dp"
+				android:id="@+id/activitybackgroundpictureAButton3"/>
+
+			<cc.winboll.studio.libaes.views.AButton
+				android:layout_width="50dp"
+				android:layout_height="36dp"
+				android:text="[+~]"
+				android:layout_gravity="center_vertical"
+				android:layout_margin="10dp"
+				android:id="@+id/activitybackgroundpictureAButton6"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</RelativeLayout>
+

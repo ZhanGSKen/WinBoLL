@@ -1,0 +1,117 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        // 本地 Maven 仓库（默认路径为 ~/.m2/repository）
+        println "mavenLocal : ==========="
+        println mavenLocal().url
+        println "mavenLocal : ==========="
+        mavenLocal()
+        
+        // 或自定义本地仓库路径
+        maven { url "file:///sdcard/.aide/maven/" }
+        
+        // Nexus Maven 库地址
+        // "WinBoLL Release"
+        maven { url "https://nexus.winboll.cc/repository/maven-public/" }
+        // "WinBoLL Snapshot"
+        maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
+        
+        maven { url 'https://maven.aliyun.com/repository/public/' } 
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+        maven { url 'https://dl.bintray.com/ppartisan/maven/' }
+        maven { url "https://clojars.org/repo/" }
+        maven { url "https://jitpack.io" }
+        mavenCentral()
+        google()
+        //mavenLocal()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.2.1' // 对应 compileSdkVersion 32
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        // 本地 Maven 仓库（默认路径为 ~/.m2/repository）
+        println "mavenLocal : ==========="
+        println mavenLocal().url
+        println "mavenLocal : ==========="
+        mavenLocal()
+        
+        // 或自定义本地仓库路径
+        maven { url "file:///sdcard/.aide/maven/" }
+        
+        // Nexus Maven 库地址
+        // "WinBoLL Release"
+        maven { url "https://nexus.winboll.cc/repository/maven-public/" }
+        // "WinBoLL Snapshot"
+        maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
+        
+        maven { url 'https://maven.aliyun.com/repository/public/' } 
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+        maven { url 'https://dl.bintray.com/ppartisan/maven/' }
+        maven { url "https://clojars.org/repo/" }
+        maven { url "https://jitpack.io" }
+        mavenCentral()
+        google()
+        mavenLocal()
+    }
+    ext {
+        // 定义全局变量，常用于版本管理
+        // 变量在子模块的build.gradle中直接以： $NAME 的形式调用
+        // 定义版本管理文件
+        RootProjectDir = "${rootProject.projectDir}".replace("\\", "/")
+        bashCheckGitCommitStatusFilePath = ".winboll/bashCheckGitCommitStatus.sh"
+        bashCommitAppPublishBuildFlagInfoFilePath = ".winboll/bashCommitAppPublishBuildFlagInfo.sh"
+        
+        winbollFilePath = "winboll.properties"
+        keyPropsFilePath = "current.keystore"
+        // 定义 lint 输出文件
+        lintXmlReportFilePath = "build/reports/lint-results.xml"
+        lintHTMLReportFilePath = "build/reports/lint-results.html"
+        
+        // 检查编译配置文件
+        subProjectPath = "$RootProjectDir/$project.name"
+        println "Sub project path: $subProjectPath"
+        winbollBuildPropsDesc="Created by .winboll/winboll_app_build.gradle"
+        winbollBuildPropsFile = rootProject.file("$subProjectPath/build.properties")
+        winbollBuildPropsFilePath = winbollBuildPropsFile.getAbsolutePath();
+        assert(winbollBuildPropsFile.exists())
+        winbollBuildProps = new Properties()
+        // 读取编译标志位配置文件
+        winbollBuildProps.load(new FileInputStream(winbollBuildPropsFile))
+        // 读取编译标志位配置文件
+        assert (winbollBuildProps['stageCount'] != null)
+        assert (winbollBuildProps['baseVersion'] != null)
+        assert (winbollBuildProps['publishVersion'] != null)
+	    assert (winbollBuildProps['buildCount'] != null)
+    }
+    
+    afterEvaluate {
+        task cleanLintFile() {
+            dependsOn tasks.findAll { task -> task.name.startsWith('lint') }
+            doFirst {
+                // 这里是将在Lint任务开始前执行的代码
+                println "Lint task will run after this setup."
+            }
+	    }
+    }
+    
+    subprojects {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-parameters"
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+

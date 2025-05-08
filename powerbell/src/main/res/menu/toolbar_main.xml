@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_battery_reporter"
+        android:title="@string/item_battery_reporter"/>
+    <item
+        android:id="@+id/action_clearrecord"
+        android:title="@string/item_clearrecord"/>
+    <item
+        android:id="@+id/action_changepicture"
+        android:title="@string/item_changepicture"/>
+    <item
+        android:id="@+id/action_about"
+        android:title="@string/item_aboutview"/>
+</menu>

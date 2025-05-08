@@ -1,0 +1,90 @@
+<resources>
+
+    <style name="MyDefaultAESTheme" parent="DefaultAESTheme">
+        <item name="android:textSize">20sp</item>
+        <item name="attrSMSViewSendColor">@color/colorSMSSendColor</item>
+        <item name="attrSMSViewInboxColor">@color/colorSMSInboxColor</item>
+        <item name="attrTTSRuleViewBackgroundColor">@color/colorTTSRuleViewBackgroundColor</item>
+    </style>
+
+    <style name="MyDepthAESTheme" parent="DepthAESTheme">
+        <item name="android:textSize">20sp</item>
+        <item name="attrSMSViewSendColor">@color/colorSMSSendColorDepth</item>
+        <item name="attrSMSViewInboxColor">@color/colorSMSInboxColorDepth</item>
+        <item name="attrTTSRuleViewBackgroundColor">@color/colorTTSRuleViewBackgroundColorDepth</item>
+    </style>
+
+    <style name="MySkyAESTheme" parent="SkyAESTheme">
+        <item name="android:textSize">20sp</item>
+        <item name="attrSMSViewSendColor">@color/colorSMSSendColorSky</item>
+        <item name="attrSMSViewInboxColor">@color/colorSMSInboxColorSky</item>
+        <item name="attrTTSRuleViewBackgroundColor">@color/colorTTSRuleViewBackgroundColorSky</item>
+    </style>
+
+    <style name="MyGoldenAESTheme" parent="GoldenAESTheme">
+        <item name="android:textSize">20sp</item>
+        <item name="attrSMSViewSendColor">@color/colorSMSSendColorGolden</item>
+        <item name="attrSMSViewInboxColor">@color/colorSMSInboxColorGolden</item>
+        <item name="attrTTSRuleViewBackgroundColor">@color/colorTTSRuleViewBackgroundColorGolden</item>
+    </style>
+    
+    <style name="MyMemorAESTheme" parent="MemorAESTheme">
+        <item name="android:textSize">20sp</item>
+        <item name="attrSMSViewSendColor">@color/colorSMSSendColorMemor</item>
+        <item name="attrSMSViewInboxColor">@color/colorSMSInboxColorMemor</item>
+        <item name="attrTTSRuleViewBackgroundColor">@color/colorTTSRuleViewBackgroundColorMemor</item>
+    </style>
+
+    <style name="MyTaoAESTheme" parent="TaoAESTheme">
+        <item name="android:textSize">20sp</item>
+        <item name="attrSMSViewSendColor">@color/colorSMSSendColorTao</item>
+        <item name="attrSMSViewInboxColor">@color/colorSMSInboxColorTao</item>
+        <item name="attrTTSRuleViewBackgroundColor">@color/colorTTSRuleViewBackgroundColorTao</item>
+    </style>
+
+    <!--<style name="AppTheme_Base" parent="android:Theme.Material.Light.NoActionBar">
+    <item name="colorPrimary">#FFC4C4C4</item>
+    <item name="colorPrimaryDark">#FF9F9F9F</item>
+    <item name="colorAccent">#FF888888</item>
+    </style>
+    <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
+    <item name="colorPrimary">#FFC4C4C4</item>
+    <item name="colorPrimaryDark">#FF9F9F9F</item>
+    <item name="colorAccent">#FF888888</item>
+    </style>
+    <style name="AppTheme_Default" parent="android:Theme.Material.Light.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:textSize">20sp</item>
+    <item name="aToolbar">@style/DefaultAToolbar</item>
+    <item name="attrSMSViewSendColor">@color/colorSMSSendColor</item>
+    <item name="attrSMSViewInboxColor">@color/colorSMSInboxColor</item>
+    <item name="attrTTSRuleViewBackgroundColor">@color/colorTTSRuleViewBackgroundColor</item>
+    </style>
+
+	<style name="AppTheme_Sky" parent="android:Theme.Material.Light.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimarySky</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDarkSky</item>
+    <item name="colorAccent">@color/colorAccentSky</item>
+    <item name="android:textSize">20sp</item>
+    <item name="aToolbar">@style/SKyAToolbar</item>
+    <item name="attrSMSViewSendColor">@color/colorSMSSendColorSky</item>
+    <item name="attrSMSViewInboxColor">@color/colorSMSInboxColorSky</item>
+    <item name="attrTTSRuleViewBackgroundColor">@color/colorTTSRuleViewBackgroundColorSky</item>
+    </style>
+
+    <style name="AppTheme_Golden" parent="android:Theme.Material.Light.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimaryGolden</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDarkGolden</item>
+    <item name="colorAccent">@color/colorAccentGolden</item>
+    <item name="android:textSize">20sp</item>
+    <item name="aToolbar">@style/GoldenAToolbar</item>
+    <item name="attrSMSViewSendColor">@color/colorSMSSendColorGolden</item>
+    <item name="attrSMSViewInboxColor">@color/colorSMSInboxColorGolden</item>
+    <item name="attrTTSRuleViewBackgroundColor">@color/colorTTSRuleViewBackgroundColorGolden</item>
+    </style>
+    -->
+
+
+</resources>

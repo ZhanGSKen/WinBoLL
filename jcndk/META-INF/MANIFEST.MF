@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Built-By: Generated-by-ADT
+Created-By: Android Gradle 3.5.0
+
+Name: AndroidManifest.xml
+SHA1-Digest: U36A0NWthb49+Rxs33tkIuNYFCI=
+
+Name: jni/Android.mk
+SHA1-Digest: ZpGSlRJPL0g9OejiWbQorqj40/Y=
+
+Name: jni/Application.mk
+SHA1-Digest: TKh2CbRLeKfvgL4cPfmoxcVz+vc=
+
+Name: jni/hello-jni.cpp
+SHA1-Digest: 1btXO19SqB6rDvPo5ynG0brDqTk=
+
+Name: project.properties
+SHA1-Digest: 0ekOiGTFMVJOWqAFzNFj/1vxPL8=
+
+Name: res/values/strings.xml
+SHA1-Digest: FgRO/zbNaC1wuZKVT7h6NSYBmpY=
+
+Name: src/$package_name$/HelloJni.java
+SHA1-Digest: p0e9DNKocjRnsOhetb9bnp9s9J4=
+

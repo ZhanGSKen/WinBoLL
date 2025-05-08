@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="@string/text_AppTheme">
+        <menu >
+            <item
+                android:id="@+id/item_defaulttheme"
+                android:title="@string/text_DefaultTheme"/>
+            <item
+                android:id="@+id/item_depththeme"
+                android:title="@string/text_DepthTheme"/>
+            <item
+                android:id="@+id/item_skytheme"
+                android:title="@string/text_SkyTheme"/>
+            <item
+                android:id="@+id/item_goldentheme"
+                android:title="@string/text_GoldenTheme"/>
+            <item
+                android:id="@+id/item_memortheme"
+                android:title="@string/text_MemorTheme"/>
+            <item
+                android:id="@+id/item_taotheme"
+                android:title="@string/text_TaoTheme"/>
+        </menu>
+    </item>
+</menu>

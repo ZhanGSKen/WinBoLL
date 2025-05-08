@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">我的短信管家</string>
+    <string name="app_description">用正则表达式方法自定义短信过滤和语音播报的短信应用。</string>
+    <string name="app_log">应用日志</string>
+    <string name="app_theme">应用主题</string>
+    <string name="app_defaulttheme">默认主题</string>
+    <string name="app_skytheme">蓝色天空主题</string>
+    <string name="app_goldentheme">辉煌历程主题</string>
+    <string name="app_developoptions">开发选项</string>
+    <string name="app_default_app_settings">默认应用设置</string>
+    <string name="app_crashtest">应用异常崩溃处理测试</string>
+    <string name="app_about">关于应用</string>
+    <string name="app_smsrecycle">短信回收站</string>
+    <string name="app_permission_require_info">应用权限申请提示</string>
+    <string name="app_website">https://winboll.cc/studio/details.php?app=MyMessageManager</string>
+    <string name="activity_name_main">短信管理中心</string>
+    <string name="activity_name_sharedjsonreceive">JSON 文件处理</string>
+    <string name="activity_name_composesms">发送短信</string>
+    <string name="activity_name_smsinphone">短信列表</string>
+    <string name="activity_name_log">应用日志</string>
+    <string name="activity_name_about">关于应用</string>
+    <string name="activity_name_appsettings">应用设置</string>
+    <string name="text_smsdeletetime">删除时间：</string>
+    <string name="text_smsfrom">来自：</string>
+    <string name="text_aboutservernotification">这是短信服务运行时的提示窗口，您可以在应用设置的通知消息设置中设置为隐藏本类通知。</string>
+    <string name="text_ttsrule">TTS语音播报规则</string>
+    <string name="text_smsrule">短信接收规则</string>
+    <string name="text_item_rule_share">分享设置</string>
+    <string name="text_item_rule_reset">重置设置</string>
+    <string name="text_item_rule_clean">清理设置</string>
+    <string name="text_sendsms">发送短信</string>
+    <string name="text_mainservice">短信服务管理总开关</string>
+    <string name="text_onlyreceivecontacts">只接收联系人短信</string>
+    <string name="text_usingtts">使用TTS语音播报</string>
+    <string name="text_usingttsrule">使用TTS语音自定义规则</string>
+    <string name="text_iamhere">短信管理服务已启动。</string>
+    <string name="text_havearest">短信管理服务已关闭。</string>
+    <string name="text_notincontacts">(未在联系人列表)</string>
+    <string name="text_appsettings">应用设置</string>
+    <string name="text_ttsplaydelaytimes">TTS播放延迟时间（秒）：</string>
+    <string name="msg_newsms">接收到新的消息。</string>
+    <string name="msg_100sendmsg">&gt;&gt;&gt;拉图标动到 100% 以发送信息。&gt;&gt;&gt;</string>
+    <string name="msg_100applysettings">&gt;&gt;&gt;拉图标动到 100% 应用设置。&gt;&gt;&gt;</string>
+</resources>

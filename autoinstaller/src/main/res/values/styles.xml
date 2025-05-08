@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="MyAppTheme" parent="APPBaseTheme">
+        <item name="attrColorPrimary">@color/colorPrimary</item>
+        <item name="themeGlobalCrashActivity">@style/MyGlobalCrashActivityTheme</item>
+    </style>
+
+    <style name="MyGlobalCrashActivityTheme" parent="GlobalCrashActivityTheme">
+        <item name="colorTittle">#FFFFFFFF</item>
+        <item name="colorTittleBackgound">#FF00A4B3</item>
+        <item name="colorText">#FFFFFFFF</item>
+        <item name="colorTextBackgound">#FF000000</item>
+	</style>
+</resources>

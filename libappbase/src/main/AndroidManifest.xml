@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='utf-8'?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cc.winboll.studio.libappbase">
+
+    <!-- 拥有完全的网络访问权限 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- 发送持久广播 -->
+    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
+
+    <!-- 对正在运行的应用重新排序 -->
+    <uses-permission android:name="android.permission.REORDER_TASKS"/>
+
+    <application>
+
+        <activity
+            android:name=".CrashHandler$CrashActivity"
+            android:label="CrashActivity"
+            android:launchMode="singleInstance"
+            android:process=":CrashActivity"/>
+
+        <activity
+            android:name=".GlobalCrashActivity"
+            android:label="GlobalCrashActivity"
+            android:launchMode="singleInstance"
+            android:process=":GlobalCrashActivity"/>
+
+        <activity
+            android:name=".winboll.LogActivity"
+            android:label="LogActivity"
+            android:resizeableActivity="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:process=":LogActivity">
+
+        </activity>
+
+        <service
+            android:name=".SimpleOperateSignalCenterService"
+            android:exported="true">
+
+        </service>
+
+        <service
+            android:name=".services.TestService"
+            android:exported="true"/>
+
+        <receiver
+            android:name=".receiver.MyBroadcastReceiver"
+            android:exported="true">
+
+            <intent-filter>
+
+                <action android:name="cc.winboll.studio.libappbase.action.SOS"/>
+
+            </intent-filter>
+
+        </receiver>
+
+        <receiver
+            android:name=".widgets.StatusWidget"
+            android:exported="true">
+
+            <intent-filter>
+
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+
+                <action android:name="cc.winboll.studio.libappbase.widgets.StatusWidget.ACTION_STATUS_UPDATE"/>
+
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider_info_status"/>
+
+        </receiver>
+
+        <receiver
+            android:name=".widgets.StatusWidgetClickListener"
+            android:exported="true">
+
+            <intent-filter>
+
+                <action android:name="cc.winboll.studio.libappbase.widgets.StatusWidgetClickListener.ACTION_IVAPP"/>
+
+            </intent-filter>
+
+        </receiver>
+
+        <service android:name="cc.winboll.studio.libappbase.sos.SOSCenter"/>
+
+        <receiver
+            android:name="cc.winboll.studio.libappbase.sos.SOSCenterServiceReceiver"
+            android:exported="true">
+
+            <intent-filter>
+
+                <action android:name="cc.winboll.studio.libappbase.sos.SOSCenterServiceReceiver"/>
+
+            </intent-filter>
+
+        </receiver>
+
+    </application>
+
+</manifest>

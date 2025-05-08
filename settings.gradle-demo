@@ -1,0 +1,50 @@
+// AutoInstaller 项目编译设置
+//include ':autoinstaller'
+//rootProject.name = "autoinstaller"
+
+// MJ 项目编译设置
+//include ':mj'
+//rootProject.name = "mj"
+
+// PowerBell 项目编译设置
+//include ':powerbell'
+//rootProject.name = "powerbell"
+
+// APPBase 项目编译设置
+//include ':appbase'
+//include ':libappbase'
+//rootProject.name = "appbase"
+
+// APPUtils 项目编译设置
+//include ':apputils'
+//include ':libapputils'
+//rootProject.name = "apputils"
+
+// JC 项目编译设置
+//include ':jc'
+//rootProject.name = "jc"
+
+// AES 项目编译设置
+//include ':aes'
+//include ':libaes'
+//rootProject.name = "aes"
+
+// Contacts 项目编译设置
+//include ':contacts'
+//rootProject.name = "contacts"
+
+// MyMessageManager 项目编译设置
+//include ':mymessagemanager'
+//rootProject.name = "mymessagemanager"
+
+// TimeStamp 项目编译设置
+//include ':timestamp'
+//rootProject.name = "timestamp"
+
+// AndroidDemo 项目编译设置
+//include ':androiddemo'
+//rootProject.name = "androiddemo"
+
+// AndroidXDemo 项目编译设置
+//include ':androidxdemo'
+//rootProject.name = "androidxdemo"

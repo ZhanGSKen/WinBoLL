@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<item name="top_weight" type="dimen" format="integer">5</item>
+    要在xml中引用上述定义的dimens，可以使用@dimen/text_line_spacing。 
+    要在代码中引用上述定义的dimens，可以使用如下代码。
+    TypedValue outValue = new TypedValue();
+    getResources().getValue(R.dimen.text_line_spacing, outValue, true);
+    float value = outValue.getFloat();
+    注意：不能通过getResources().getDimension(R.dimen.text_line_spacing);方式来引用，如果用这种方式引用上述方法定义的dimens，编译时不会报错，但是运行时会抛出NotFoundException。
+    参考：https://blog.csdn.net/qluojieq/article/details/49591535?app_version=5.15.7&code=app_1562916241&csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%2249591535%22%2C%22source%22%3A%22weixin_38986226%22%7D&uLinkId=usr1mkqgl919blen&utm_source=app
+    -->
+    <item name="dialogPivotX" type="dimen" format="integer">900</item>
+    <item name="dialogPivotY" type="dimen" format="integer">-900</item>
+    <!--<item name="buttonHeight" type="dimen">100px</item>-->
+
+</resources>

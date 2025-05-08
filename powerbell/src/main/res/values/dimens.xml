@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toolbar_height">60dp</dimen>
+    <dimen name="slide_width">76dp</dimen>
+    <dimen name="text_content_size">18dp</dimen>
+    <dimen name="text_title_size">24dp</dimen>
+    <dimen name="text_subtitle_size">16dp</dimen>
+</resources>

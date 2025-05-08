@@ -1,0 +1,49 @@
+apply plugin: 'com.android.application'
+apply from: '../.winboll/winboll_app_build.gradle'
+apply from: '../.winboll/winboll_lint_build.gradle'
+
+def genVersionName(def versionName){
+    // 检查编译标志位配置
+    assert (winbollBuildProps['stageCount'] != null)
+    assert (winbollBuildProps['baseVersion'] != null)
+    // 保存基础版本号
+    winbollBuildProps.setProperty("baseVersion", "${versionName}");
+    //保存编译标志配置
+    FileOutputStream fos = new FileOutputStream(winbollBuildPropsFile)
+    winbollBuildProps.store(fos, "${winbollBuildPropsDesc}");
+    fos.close();
+    
+    // 返回编译版本号
+    return "${versionName}." + winbollBuildProps['stageCount']
+}
+
+android {
+    compileSdkVersion 32
+    buildToolsVersion "32.0.0"
+
+    defaultConfig {
+        applicationId "cc.winboll.studio.apputils"
+        minSdkVersion 26
+        targetSdkVersion 30
+        versionCode 1
+        // versionName 更新后需要手动设置 
+        // 项目模块目录的 build.gradle 文件的 stageCount=0
+        // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
+        versionName "15.3" 
+        if(true) {
+            versionName = genVersionName("${versionName}")
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+	api project(':libapputils')
+    api fileTree(dir: 'libs', include: ['*.jar'])
+}

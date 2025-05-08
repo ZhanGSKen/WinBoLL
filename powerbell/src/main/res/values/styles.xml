@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme_Base" parent="AESTheme">
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="AppTheme_Default" parent="AESTheme">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/text_content_size</item>
+    </style>
+
+    <style name="DefaultAToolbar">
+        <item name="attrAToolbarTitleTextColor">#FF000000</item>
+        <item name="attrAToolbarStartColor">@color/colorShuiDark</item>
+        <item name="attrAToolbarCenterColor">@color/colorShui</item>
+        <item name="attrAToolbarEndColor">@color/colorShuiAccent</item>
+    </style>
+    
+    <!-- 设置Toolbar标题字体的大小 -->
+    <style name="Toolbar.TitleText" parent="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/text_title_size</item>
+    </style>
+    <style name="Toolbar.SubTitleText" parent="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/text_subtitle_size</item>
+    </style>
+   
+</resources>

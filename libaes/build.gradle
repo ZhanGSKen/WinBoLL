@@ -1,0 +1,56 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply from: '../.winboll/winboll_lib_build.gradle'
+apply from: '../.winboll/winboll_lint_build.gradle'
+
+android {
+    compileSdkVersion 32
+    buildToolsVersion "32.0.0"
+
+    defaultConfig {
+        minSdkVersion 24
+        targetSdkVersion 30
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    //api 'cc.winboll.studio:libaes:15.6.0'
+    api 'cc.winboll.studio:libapputils:15.3.4'
+    api 'cc.winboll.studio:libappbase:15.7.6'
+    
+    // 吐司类库
+    api 'com.github.getActivity:ToastUtils:10.5'
+    
+    // 权限请求框架：https://github.com/getActivity/XXPermissions
+    api 'com.github.getActivity:XXPermissions:18.63'
+    // 下拉控件
+    api 'com.baoyz.pullrefreshlayout:library:1.2.0'
+    // 拼音搜索
+    // https://mvnrepository.com/artifact/com.github.open-android/pinyin4j
+    api 'com.github.open-android:pinyin4j:2.5.0'
+    // SSH
+    api 'com.jcraft:jsch:0.1.55'
+    // Html 解析
+    api 'org.jsoup:jsoup:1.13.1'
+    // 二维码类库
+    api 'com.google.zxing:core:3.4.1'
+    api 'com.journeyapps:zxing-android-embedded:3.6.0'
+    // 应用介绍页类库
+    api 'io.github.medyo:android-about-page:2.0.0'
+    // 网络连接类库
+    api 'com.squareup.okhttp3:okhttp:4.4.1'
+    // AndroidX 类库
+    api 'androidx.appcompat:appcompat:1.1.0'
+    //api 'com.google.android.material:material:1.4.0'
+    //api 'androidx.viewpager:viewpager:1.0.0'
+    //api 'androidx.vectordrawable:vectordrawable:1.1.0'
+    //api 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
+    //api 'androidx.fragment:fragment:1.1.0'
+}

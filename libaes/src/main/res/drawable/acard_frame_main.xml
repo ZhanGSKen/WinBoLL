@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" > 
+    <!-- 边框阴影部分 --> 
+    <!-- 相对边框的Offset设置(android:left, top, right, bottom) --> 
+    <item 
+        android:left="0dp" 
+        android:top="0dp" 
+        android:right="0dp" 
+        android:bottom="0dp"> 
+        <shape android:shape="rectangle" > 
+            <gradient 
+                android:angle="270" 
+                android:startColor="@color/colorACardShadow"
+                android:centerColor="@color/colorACardShadow"
+                android:endColor="@color/colorACardShadow"/> 
+            <corners 
+                android:bottomLeftRadius="6dip" 
+                android:bottomRightRadius="6dip" 
+                android:topLeftRadius="6dip" 
+                android:topRightRadius="6dip" /> 
+        </shape> 
+    </item>
+    <!-- 边框部分 -->
+    <item 
+        android:left="0dp" 
+        android:top="0dp" 
+        android:right="1dp" 
+        android:bottom="2dp"> 
+        <shape android:shape="rectangle" > 
+            <gradient 
+                android:angle="270" 
+                android:startColor="@color/colorACardFrame"
+                android:centerColor="@color/colorACardFrame"
+                android:endColor="@color/colorACardFrame"/> 
+            <corners 
+                android:bottomLeftRadius="6dip" 
+                android:bottomRightRadius="6dip" 
+                android:topLeftRadius="6dip" 
+                android:topRightRadius="6dip" /> 
+        </shape> 
+    </item>
+    <!-- 背景主体部分 -->
+    <item
+        android:left="2dp" 
+        android:top="2dp" 
+        android:right="3dp" 
+        android:bottom="3dp"> 
+        <shape android:shape="rectangle" > 
+            <gradient
+                android:type="linear"
+                android:angle="90"
+                android:startColor="@color/colorACardBackgroung"
+                android:centerColor="@color/colorACardBackgroung"
+                android:endColor="@color/colorACardBackgroung"/> 
+            <corners 
+                android:bottomLeftRadius="6dip" 
+                android:bottomRightRadius="6dip" 
+                android:topLeftRadius="6dip" 
+                android:topRightRadius="6dip" /> 
+        </shape> 
+    </item> 
+</layer-list>

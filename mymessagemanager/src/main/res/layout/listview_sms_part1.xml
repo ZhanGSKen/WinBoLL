@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:padding="10dp"
+		android:layout_marginBottom="10dp"
+		android:gravity="right"
+		android:id="@+id/listviewsmspart1LinearLayout1">
+
+		<cc.winboll.studio.mymessagemanager.views.DateAgoTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Text"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
+			android:id="@+id/listviewsmspart1DateAgoTextView1"/>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@drawable/bg_frame"
+			android:gravity="center_vertical"
+			android:id="@+id/listviewsmspart1LinearLayout2">
+
+			<View
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:id="@+id/listviewsmspart1View1"
+				android:layout_centerInParent="true"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Text"
+				android:layout_marginRight="10dp"
+				android:layout_margin="10dp"
+				android:id="@+id/listviewsmspart1TextView1"
+				android:layout_alignParentTop="true"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>
+

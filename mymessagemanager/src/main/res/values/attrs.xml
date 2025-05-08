@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<attr name="appTheme" format="reference"/>-->
+	<declare-styleable name="SMSView">
+        <attr name="attrSMSType" format="string"/>
+        <attr name="attrSMSViewSendColor" format="color" />
+        <attr name="attrSMSViewInboxColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="TTSRuleView">
+        <attr name="attrTTSRuleViewBackgroundColor" format="color" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LogView">
+        <attr name="tagList" format="string" />
+        <attr name="levelDefault" format="string" />
+        <attr name="textColor" format="color" />
+        <attr name="textIsSelectable" format="boolean" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@drawable/bg_frame_white"
+	android:layout_gravity="center_vertical|center_horizontal"
+	android:id="@+id/viewttsbackLinearLayout1">
+
+	<LinearLayout
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:padding="10dp"
+		android:gravity="center_horizontal">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/app_name"
+			android:textColor="#FF000000"
+			android:textStyle="bold"
+			android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+		<ImageView
+			android:layout_width="50dp"
+			android:layout_height="50dp"
+			android:textAllCaps="false"
+			android:background="@drawable/speaker"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Click To Stop TTS Play"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="#FF000000"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+

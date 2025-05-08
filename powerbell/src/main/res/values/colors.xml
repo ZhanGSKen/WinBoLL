@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    <color name="colorPrimary">@color/colorShui</color>
+    <color name="colorPrimaryDark">@color/colorXinling</color>
+    <color name="colorAccent">@color/colorShui</color>
+    -->
+    <!-- 地球超人主题配置方案 -->
+    <!--
+    我们的大地神盖亚已经无法忍受世界的环境污染恐怕会毁了地球，
+    她把五个拥有巨大魔力的戒指给了五大洲的五个特殊中学生：
+    非洲的夸美，拥有土地的威力;
+    北美的辉乐，拥有火的威力;
+    苏联的琳卡，拥有风的威力;
+    亚洲的姬伊，拥有水的威力;
+    南美的玛狄，拥有心灵的威力。
+    五个中学生的威力联合起来，就能唤来最伟大的地球超人! 
+    地球超人!力量是你们的!
+    引用：(360百科) https://m.baike.so.com/doc/2093525-2214593.html
+    -->
+    <color name="colorTudi">#FF05CF00</color>
+    <color name="colorHuo">#FFC61414</color>
+    <color name="colorFeng">#FFDEDEDE</color>
+    <color name="colorShui">#FF009ADE</color>
+    <color name="colorShuiDark">#FF0072A4</color>
+    <color name="colorShuiAccent">#FF33C1FF</color>
+    <color name="colorXinling">#FFFCC500</color>
+    <color name="colorPrimary">@color/colorShuiDark</color>
+    <color name="colorPrimaryDark">@color/colorFeng</color>
+    <color name="colorAccent">@color/colorShui</color>
+    <color name="colorYellow">#FFFFFF00</color>
+    <color name="colorRed">#FFFF0000</color>
+    <color name="colorBlue">#FF000FFF</color>
+    <color name="colorBlack">#FF000000</color>
+    <color name="colorUsege">@color/colorHuo</color>
+    <color name="colorCurrent">@color/colorShui</color>
+    <color name="colorCharge">@color/colorXinling</color>
+    <!-- 调试配置
+    <color name="colorYellow">#FF630066</color>
+    <color name="colorRed">#FF23244D</color>
+    <color name="colorBlue">#FF00E2F7</color>
+    <color name="colorBlack">#FF54FF00</color>
+    -->
+    <!-- 明色配置 
+    <color name="colorYellow">#FFFFBD00</color>
+    <color name="colorRed">#FFE00000</color>
+    <color name="colorBlue">#FF000DE5</color>
+    <color name="colorBlack">#FF000000</color>
+    -->
+    <!-- 原色配置
+    <color name="colorYellow">#FFFFFF00</color>
+    <color name="colorRed">#FFFF0000</color>
+    <color name="colorBlue">#FF000FFF</color>
+    <color name="colorBlack">#FF000000</color>
+    <color name="colorUsege">@color/colorRed</color>
+    <color name="colorCurrent">@color/colorBlue</color>
+    <color name="colorCharge">@color/colorYellow</color>
+    -->
+    <!--CustomSlideToUnlockView控件配置-->
+    <color name="colorCustomSlideToUnlockViewWhite">#FFFFFFFF</color>
+    
+    <!---->
+</resources>

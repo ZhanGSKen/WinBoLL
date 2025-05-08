@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" > 
+    <!-- 边框阴影部分 --> 
+    <!-- 相对边框的Offset设置(android:left, top, right, bottom) --> 
+    <item 
+        android:left="0dp" 
+        android:top="0dp" 
+        android:right="0dp" 
+        android:bottom="2dp"> 
+        <shape android:shape="rectangle" > 
+            <gradient 
+                android:angle="270" 
+                android:startColor="?attr/attrAToolbarEndColor"
+                android:centerColor="?attr/attrAToolbarCenterColor"
+                android:endColor="?attr/attrAToolbarStartColor"/> 
+            <corners 
+                android:bottomLeftRadius="6dip" 
+                android:bottomRightRadius="6dip" 
+                android:topLeftRadius="6dip" 
+                android:topRightRadius="6dip" /> 
+        </shape>
+    </item>
+    <!-- 边框部分 -->
+    <item 
+        android:left="2dp" 
+        android:top="2dp" 
+        android:right="2dp" 
+        android:bottom="4dp"> 
+        <shape android:shape="rectangle" > 
+            <gradient 
+                android:angle="270" 
+                android:startColor="?attr/attrAToolbarCenterColor"
+                android:centerColor="?attr/attrAToolbarCenterColor"
+                android:endColor="?attr/attrAToolbarCenterColor"/> 
+            <corners 
+                android:bottomLeftRadius="6dip" 
+                android:bottomRightRadius="6dip" 
+                android:topLeftRadius="6dip" 
+                android:topRightRadius="6dip" /> 
+        </shape> 
+    </item>
+    <!-- 背景主体部分 -->
+    <item
+        android:left="4dp" 
+        android:top="4dp" 
+        android:right="4dp" 
+        android:bottom="6dp"> 
+        <shape android:shape="rectangle" > 
+            <gradient
+                android:type="linear"
+                android:angle="90"
+                android:startColor="?attr/attrAToolbarStartColor"
+                android:centerColor="?attr/attrAToolbarCenterColor"
+                android:endColor="?attr/attrAToolbarEndColor"/> 
+            <corners 
+                android:bottomLeftRadius="6dip" 
+                android:bottomRightRadius="6dip" 
+                android:topLeftRadius="6dip" 
+                android:topRightRadius="6dip" /> 
+        </shape> 
+    </item> 
+</layer-list>

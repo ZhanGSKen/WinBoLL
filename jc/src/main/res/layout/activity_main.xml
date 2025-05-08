@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<androidx.appcompat.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/activitymainToolbar1"/>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/activitymainLinearLayout1">
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1.0"
+			android:layout_margin="10dp"
+			android:id="@+id/activitymainScrollView1">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textIsSelectable="true"
+				android:id="@+id/activitymainTextView1"/>
+
+		</ScrollView>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Server :"/>
+
+			<EditText
+				android:layout_width="0dp"
+				android:ems="10"
+				android:layout_height="wrap_content"
+				android:layout_weight="1.0"
+				android:id="@+id/activitymainEditText2"/>
+
+			<Switch
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/activitymainSwitch1"
+				android:onClick="onConnectToServer"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical">
+
+			<EditText
+				android:layout_width="0dp"
+				android:ems="10"
+				android:layout_height="wrap_content"
+				android:layout_weight="1.0"
+				android:id="@+id/activitymainEditText1"/>
+
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Enter"
+				android:id="@+id/activitymainButton1"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>
+

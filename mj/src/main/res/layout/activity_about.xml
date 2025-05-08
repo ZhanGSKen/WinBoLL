@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<androidx.appcompat.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/activityaboutToolbar1"/>
+
+    <cc.winboll.studio.shared.view.AboutView
+        app:appname="WinBoll-Demo"
+        app:appprojectname="WinBoll-Demo"
+        app:appdescription="WinBoll.CC APP 分支应用示例。"
+        app:appicon="@drawable/ic_winboll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/activityaboutAboutView1"/>
+
+</LinearLayout>
+
