@@ -1,7 +1,7 @@
 package cc.winboll.studio.libapputils.utils;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/23 16:17:54
  * @Describe 哔哔振动响铃工具集
  */

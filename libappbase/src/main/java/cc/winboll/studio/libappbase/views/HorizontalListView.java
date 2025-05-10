@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase.views;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/12 12:29:01
  * @Describe 水平布局的 ListView
  */

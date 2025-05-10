@@ -1,7 +1,7 @@
 package cc.winboll.studio.libaes.utils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/11/29 22:52:09
  * @Describe AES 主题工具集
  */

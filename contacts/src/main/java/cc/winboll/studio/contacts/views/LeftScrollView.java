@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.views;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/04 10:51:50
  * @Describe CustomHorizontalScrollView
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.appbase.receivers;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/13 06:58:04
  * @Describe 主要广播接收器
  */
@@ -10,7 +10,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import cc.winboll.studio.appbase.models.WinBoLLNewsBean;
 import cc.winboll.studio.appbase.services.MainService;
 import cc.winboll.studio.appbase.widgets.APPNewsWidget;
 import cc.winboll.studio.libappbase.AppUtils;
@@ -18,7 +17,6 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.sos.APPModel;
 import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.sos.SOSObject;
-import cc.winboll.studio.libappbase.sos.WinBoLL;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import java.io.IOException;
 import java.lang.ref.WeakReference;

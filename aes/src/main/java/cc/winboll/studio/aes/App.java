@@ -1,7 +1,7 @@
 package cc.winboll.studio.aes;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/06/13 19:03:58
  * @Describe AES应用类
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.receivers;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/05/28 20:22:12
  * @Describe 在文件 AndroidManifest.xml 注册监听的广播接收类，
  *           用于接收系统启动完毕的广播消息。

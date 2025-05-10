@@ -1,7 +1,7 @@
 package cc.winboll.studio.libapputils.views;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/03 11:05:45
  * @Describe 简单网页视图类
  */

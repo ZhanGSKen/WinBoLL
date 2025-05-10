@@ -1,7 +1,7 @@
 package cc.winboll.studio.libjc.cmd;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/11 12:43:29
  * @Describe 列举定义了main函数的所有类。
  */

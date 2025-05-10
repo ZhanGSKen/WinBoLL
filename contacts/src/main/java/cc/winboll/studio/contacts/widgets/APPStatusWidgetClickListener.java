@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.widgets;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/17 14:59:55
  * @Describe WidgetButtonClickListener
  */

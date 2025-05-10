@@ -1,7 +1,7 @@
 package cc.winboll.studio.libaes.activitys;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/06/13 18:58:54
  * @Describe 可以加入Fragment的有抽屉的活动窗口抽象类
  */

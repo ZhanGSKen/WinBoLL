@@ -1,7 +1,7 @@
 package cc.winboll.studio.libaes.beans;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/06/14 01:53:34
  * @Describe 抽屉菜单项目类
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.appbase.receivers;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/24 07:11:44
  */
 import android.content.BroadcastReceiver;

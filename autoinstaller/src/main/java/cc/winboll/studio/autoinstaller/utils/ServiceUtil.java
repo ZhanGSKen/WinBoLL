@@ -1,7 +1,7 @@
 package cc.winboll.studio.autoinstaller.utils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/05/27 20:20:03
  * @Describe 服务类工具
  */

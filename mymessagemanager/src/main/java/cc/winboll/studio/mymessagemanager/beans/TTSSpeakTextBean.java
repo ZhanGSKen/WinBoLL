@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.beans;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/05/28 20:22:12
  * @Describe TTS 语音播放文本内容类
  */

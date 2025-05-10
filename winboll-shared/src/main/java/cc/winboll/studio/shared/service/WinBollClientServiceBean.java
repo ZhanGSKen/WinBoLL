@@ -6,7 +6,7 @@ import android.util.JsonWriter;
 import android.content.Context;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/08 19:44:57
  * @Describe WinBollService 运行参数配置
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase.sos;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/02 10:28:08
  * @Describe APPModel
  */

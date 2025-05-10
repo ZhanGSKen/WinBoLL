@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.activities;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/20 17:15:46
  * @Describe 拨号窗口
  */

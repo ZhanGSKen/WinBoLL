@@ -1,7 +1,7 @@
 package cc.winboll.studio.mj.activities;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/07/14 13:20:33
  * @Describe 应用关于对话窗口
  */

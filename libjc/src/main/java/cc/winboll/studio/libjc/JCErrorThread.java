@@ -1,7 +1,7 @@
 package cc.winboll.studio.libjc;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/07 13:51:14
  * @Describe 错误输出流进程
  */

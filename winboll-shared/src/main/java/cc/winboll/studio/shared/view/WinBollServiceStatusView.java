@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.view;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/07 20:15:47
  * @Describe WinBoll 服务主机连接状态视图
  */

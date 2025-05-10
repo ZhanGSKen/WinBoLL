@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.utils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/07/24 16:20:13
  * @Describe 用户视觉系统保护模式工具集
  */

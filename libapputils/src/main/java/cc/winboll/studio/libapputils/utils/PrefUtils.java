@@ -1,7 +1,7 @@
 package cc.winboll.studio.libapputils.utils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/11/28 15:03:12
  * @Describe 应用变量保存工具
  */

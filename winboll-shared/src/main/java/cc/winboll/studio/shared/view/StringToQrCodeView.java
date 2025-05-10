@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.view;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/19 13:49:14
  */
 import android.content.Context;

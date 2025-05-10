@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.service;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/09 08:19:06
  * @Describe WinBoll 邮件服务
  */

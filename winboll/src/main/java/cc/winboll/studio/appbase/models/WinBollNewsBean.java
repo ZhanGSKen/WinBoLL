@@ -1,7 +1,7 @@
 package cc.winboll.studio.appbase.models;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/17 10:05:09
  * @Describe APPSOSReportBean
  */

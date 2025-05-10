@@ -1,7 +1,7 @@
 package cc.winboll.studio.libaes.unittests;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/07/16 02:36:34
  * @Describe SecondaryLibraryFragment
  */

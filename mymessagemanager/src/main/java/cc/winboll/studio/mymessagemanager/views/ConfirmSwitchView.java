@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.views;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2023/07/25 13:37:55
  */
 import android.content.Context;

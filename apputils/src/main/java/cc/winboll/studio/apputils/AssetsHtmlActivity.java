@@ -1,7 +1,7 @@
 package cc.winboll.studio.apputils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/03 11:02:49
  * @Describe 一个可以浏览随 APP 附带的 Html 文档的窗口
  */

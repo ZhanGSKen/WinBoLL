@@ -1,7 +1,7 @@
 package cc.winboll.studio.libjc.util;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/08/12 13:46:32
  * @Describe 文件处理工具
  */

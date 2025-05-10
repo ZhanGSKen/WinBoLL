@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.utils;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/06 21:08:16
  * @Describe ContactUtils
  */

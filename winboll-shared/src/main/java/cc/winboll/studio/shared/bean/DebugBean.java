@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.bean;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/25 12:38:07
  * @Describe 应用调试配置类
  */

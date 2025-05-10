@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.util;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/07/19 14:30:57
  * @Describe 文件工具类
  */

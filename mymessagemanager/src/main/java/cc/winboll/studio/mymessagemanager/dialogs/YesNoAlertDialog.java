@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.dialogs;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/05/30 09:53:26
  * @Describe 用户确定与否选择框
  */

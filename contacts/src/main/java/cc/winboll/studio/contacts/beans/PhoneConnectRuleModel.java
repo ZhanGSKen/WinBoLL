@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.beans;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/21 09:52:10
  * @Describe 电话黑名单规则
  */

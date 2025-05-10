@@ -11,7 +11,7 @@ import cc.winboll.studio.shared.app.WinBollActivityManager;
 import cc.winboll.studio.shared.log.LogUtils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/07/14 13:20:33
  * @Describe AboutFragment Test
  */

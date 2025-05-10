@@ -1,7 +1,7 @@
 package cc.winboll.studio.wvmapp;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/20 08:34:57
  * @Describe 全局应用
  */

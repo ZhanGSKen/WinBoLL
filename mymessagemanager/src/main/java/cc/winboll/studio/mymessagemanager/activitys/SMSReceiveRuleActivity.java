@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.activitys;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/07/19 12:50:52
  * @Describe 短信匹配过滤规则设置窗口
  */

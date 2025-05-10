@@ -1,7 +1,7 @@
 package cc.winboll.studio.libaes.views;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/07/16 01:41:22
  * @Describe AButton
  */

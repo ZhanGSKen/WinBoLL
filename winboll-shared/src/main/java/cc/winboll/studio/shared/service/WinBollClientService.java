@@ -16,7 +16,7 @@ import java.io.FileDescriptor;
 import android.graphics.drawable.Drawable;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/08 19:42:07
  * @Describe WinBoll 客户端服务
  */

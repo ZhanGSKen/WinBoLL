@@ -1,7 +1,7 @@
 package cc.winboll.studio.powerbell.receivers;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/06/06 15:01:39
  * @Describe 应用广播消息接收类
  */

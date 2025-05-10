@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.view;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/08/12 14:46:25
  * @Describe 询问用户确定与否的选择框
  */

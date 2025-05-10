@@ -1,7 +1,7 @@
 package cc.winboll.studio.powerbell.activities;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/25 01:16:32
  * @Describe 应用介绍窗口
  */

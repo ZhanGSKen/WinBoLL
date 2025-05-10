@@ -3,7 +3,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/12 12:02:31
  */
 public class ToastUtils {

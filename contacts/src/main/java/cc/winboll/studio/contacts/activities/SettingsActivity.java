@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.activities;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/21 05:37:42
  */
 import android.content.Context;

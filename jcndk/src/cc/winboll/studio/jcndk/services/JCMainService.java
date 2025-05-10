@@ -1,7 +1,7 @@
 package cc.winboll.studio.jcndk.services;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/09 11:19:28
  * @Describe JC 主服务类
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.libaes.unittests;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/06/30 15:00:51
  */
 import android.app.Activity;

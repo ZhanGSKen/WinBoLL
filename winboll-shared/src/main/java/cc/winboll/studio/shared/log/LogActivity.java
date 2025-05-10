@@ -9,7 +9,7 @@ import cc.winboll.studio.shared.app.WinBollApplication;
 import android.view.View;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/08/12 15:07:58
  * @Describe WinBoll 应用日志窗口
  */

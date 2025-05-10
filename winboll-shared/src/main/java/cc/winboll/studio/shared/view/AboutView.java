@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.view;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/08/12 14:38:03
  * @Describe AboutView
  */
@@ -200,7 +200,7 @@ public class AboutView extends LinearLayout {
             //.addItem(versionElement)
             //.addItem(adsElement)
             //.addGroup("Connect with us")
-            .addEmail("ZhanGSKen@QQ.COM")
+            .addEmail("ZhanGSKen<zhangsken@188.com>")
             .addWebsite(mszHomePage)
             .addItem(elementAppMode)
             .addItem(elementGitWeb)

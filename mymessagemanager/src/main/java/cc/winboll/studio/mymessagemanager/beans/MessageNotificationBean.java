@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.beans;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/07/19 13:10:44
  * @Describe 短信通知栏消息结构
  */

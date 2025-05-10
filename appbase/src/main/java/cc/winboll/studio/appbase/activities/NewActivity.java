@@ -1,7 +1,7 @@
 package cc.winboll.studio.appbase.activities;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/25 05:04:22
  */
 import android.app.Activity;

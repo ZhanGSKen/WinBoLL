@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.activities;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/03 11:02:49
  * @Describe HelpActivity
  */

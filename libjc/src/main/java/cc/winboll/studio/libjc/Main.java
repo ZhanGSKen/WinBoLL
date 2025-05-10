@@ -10,7 +10,7 @@ public class Main {
     public final static String TAG = "Main";
 
     /**
-     * @Author ZhanGSKen@QQ.COM
+     * @Author ZhanGSKen<zhangsken@188.com>
      * @Date 2025/01/09 17:03:50
      * @Describe 当前源码实例的运行模式。
      */

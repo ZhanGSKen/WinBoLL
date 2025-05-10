@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/08/12 13:22:12
  * @Describe 异常处理类
  */

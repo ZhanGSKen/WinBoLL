@@ -1,7 +1,7 @@
 package main.java.cc.winboll.studio.libjc.bean;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/08/23 15:40:30
  * @Describe Json Bean 基础类。
  */

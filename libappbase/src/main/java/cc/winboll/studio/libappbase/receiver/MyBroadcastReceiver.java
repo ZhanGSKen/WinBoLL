@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase.receiver;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/13 21:19:09
  * @Describe MyBroadcastReceiver
  */

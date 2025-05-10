@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/08 15:10:51
  * @Describe 全局应用类
  */

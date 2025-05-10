@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.beans;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/24 18:47:11
  * @Describe 手机铃声设置参数类
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/25 02:52:46
  * @Describe 基础应用数据模型
  */

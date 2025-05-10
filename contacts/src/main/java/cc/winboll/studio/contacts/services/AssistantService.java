@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.services;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/14 03:38:31
  * @Describe 守护进程服务
  */

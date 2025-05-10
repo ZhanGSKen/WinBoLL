@@ -1,7 +1,7 @@
 package cc.winboll.studio.powerbell.utils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/06/28 04:23:04
  * @Describe UriUtil
  */

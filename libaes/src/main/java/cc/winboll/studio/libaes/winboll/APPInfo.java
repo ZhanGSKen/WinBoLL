@@ -1,7 +1,7 @@
 package cc.winboll.studio.libaes.winboll;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/20 14:19:02
  * @Describe 应用信息类
  */

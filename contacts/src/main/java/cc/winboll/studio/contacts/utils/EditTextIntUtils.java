@@ -3,7 +3,7 @@ import android.widget.EditText;
 import cc.winboll.studio.libappbase.LogUtils;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/04/13 00:59:13
  * @Describe Int类型数字输入框工具集
  */

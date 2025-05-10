@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase.sos;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/27 14:04:35
  * @Describe SOSCenterServiceReceiver
  */

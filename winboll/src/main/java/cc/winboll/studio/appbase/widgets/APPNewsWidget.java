@@ -1,6 +1,6 @@
 package cc.winboll.studio.appbase.widgets;
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/15 14:41:25
  * @Describe TimeWidget
  */

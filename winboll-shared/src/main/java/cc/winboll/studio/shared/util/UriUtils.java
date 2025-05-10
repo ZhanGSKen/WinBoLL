@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.util;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Describe Uri 资源管理工具类
  */
 import android.content.ContentResolver;

@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.ads;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/09 15:37:35
  * @Describe WinBoll 应用推广视图
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.libjc;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/09 08:49:08
  * @Describe 测试类B
  */

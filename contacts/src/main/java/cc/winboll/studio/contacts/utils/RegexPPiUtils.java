@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.utils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/09 19:00:21
  * @Describe .* 前置预防针
  regex pointer preventive injection

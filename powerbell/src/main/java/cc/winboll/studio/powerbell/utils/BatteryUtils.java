@@ -1,7 +1,7 @@
 package cc.winboll.studio.powerbell.utils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/07/18 04:32:46
  * @Describe 电池工具类
  */

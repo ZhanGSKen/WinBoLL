@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/15 11:11:52
  * @Describe Json Bean 基础类。
  */

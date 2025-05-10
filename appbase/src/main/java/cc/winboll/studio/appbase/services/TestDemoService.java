@@ -1,7 +1,7 @@
 package cc.winboll.studio.appbase.services;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/07 12:39:24
  * @Describe 普通服务示例
  */

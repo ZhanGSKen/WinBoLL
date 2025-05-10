@@ -1,7 +1,7 @@
 package cc.winboll.studio.appbase;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/13 19:30:10
  */
 import android.content.Context;

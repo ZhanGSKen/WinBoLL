@@ -1,7 +1,7 @@
 package cc.winboll.studio.intent;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/24 18:51:20
  */
 public class action {

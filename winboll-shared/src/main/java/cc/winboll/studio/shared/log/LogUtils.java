@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.log;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/08/12 13:44:06
  * @Describe LogUtils
  * @Describe 应用日志类

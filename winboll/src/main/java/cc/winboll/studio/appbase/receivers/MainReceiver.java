@@ -1,7 +1,7 @@
 package cc.winboll.studio.appbase.receivers;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/13 06:58:04
  * @Describe 主要广播接收器
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.libapputils.views;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/19 13:49:14
  * @Describe 把字符串转化为二维码的视图
  */

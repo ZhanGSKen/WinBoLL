@@ -1,7 +1,7 @@
 package cc.winboll.studio.libaes.beans;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/06/14 02:42:57
  * @Describe 主题元素项目类
  */

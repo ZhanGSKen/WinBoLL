@@ -5,7 +5,7 @@ import java.io.IOException;
 import main.java.cc.winboll.studio.libjc.bean.BaseBean;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/09 20:07:06
  * @Describe 消息类
  */

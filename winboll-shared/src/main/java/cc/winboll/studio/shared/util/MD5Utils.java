@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.util;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/19 15:26:58
  */
 import java.math.BigInteger;

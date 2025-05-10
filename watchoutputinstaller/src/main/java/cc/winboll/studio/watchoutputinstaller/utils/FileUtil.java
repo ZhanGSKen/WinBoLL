@@ -1,7 +1,7 @@
 package cc.winboll.studio.watchoutputinstaller.utils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/05/27 17:56:31
  * @Describe 文件管理类
  */

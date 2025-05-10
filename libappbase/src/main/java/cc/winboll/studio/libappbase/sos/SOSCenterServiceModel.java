@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase.sos;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/02 09:49:45
  * @Describe SOSCenterServiceModel
  *           Simple Operate Signal Service Model.

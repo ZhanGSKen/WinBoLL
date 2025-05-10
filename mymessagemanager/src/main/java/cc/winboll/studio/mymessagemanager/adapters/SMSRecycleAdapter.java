@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.adapters;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/07/19 17:07:34
  * @Describe 短信回收站短信数据适配器
  */

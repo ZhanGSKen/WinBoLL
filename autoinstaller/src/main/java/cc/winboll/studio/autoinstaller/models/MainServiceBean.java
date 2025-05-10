@@ -5,7 +5,7 @@ import cc.winboll.studio.libappbase.BaseBean;
 import java.io.IOException;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/04/15 09:27:39
  * @Describe MainServiceBean
  */

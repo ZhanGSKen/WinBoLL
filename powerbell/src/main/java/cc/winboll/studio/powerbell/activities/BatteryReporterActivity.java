@@ -1,7 +1,7 @@
 package cc.winboll.studio.powerbell.activities;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/22 14:20:15
  */
 import android.app.Activity;

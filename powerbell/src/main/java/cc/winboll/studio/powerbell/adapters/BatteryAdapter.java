@@ -1,7 +1,7 @@
 package cc.winboll.studio.powerbell.adapters;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/22 14:38:55
  * @Describe 电池报告数据适配器
  */

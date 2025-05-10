@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.service;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/08 20:15:42
  * @Describe 应用主要服务组件类守护进程服务组件类
  */

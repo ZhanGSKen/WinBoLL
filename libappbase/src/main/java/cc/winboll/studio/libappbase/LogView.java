@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/08/12 14:36:18
  * @Describe 日志视图类，继承 RelativeLayout 类。
  */

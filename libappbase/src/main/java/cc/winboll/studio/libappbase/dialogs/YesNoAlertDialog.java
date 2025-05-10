@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase.dialogs;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/28 17:40:47
  * @Date 2024/08/12 14:46:25
  * @Describe 询问用户确定与否的选择框

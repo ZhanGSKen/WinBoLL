@@ -10,7 +10,7 @@ import cc.winboll.studio.watchoutputinstaller.beans.AppConfigs;
 import cc.winboll.studio.watchoutputinstaller.utils.ServiceUtil;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/05/27 20:16:00
  * @Describe MainService 守护进程服务
  */

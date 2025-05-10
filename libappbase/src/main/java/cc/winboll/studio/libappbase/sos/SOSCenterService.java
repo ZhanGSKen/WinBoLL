@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase.sos;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/27 14:00:21
  * @Describe Simple Operate Signal Service Center.
  *           简单操作信号服务中心

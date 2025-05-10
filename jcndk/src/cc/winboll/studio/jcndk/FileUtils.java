@@ -1,7 +1,7 @@
 package cc.winboll.studio.jcndk;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/08 16:31:28
  * @Describe 文件工具类
  */

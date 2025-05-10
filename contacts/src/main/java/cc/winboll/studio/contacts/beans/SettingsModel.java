@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.beans;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/02 19:51:40
  * @Describe SettingsModel
  */

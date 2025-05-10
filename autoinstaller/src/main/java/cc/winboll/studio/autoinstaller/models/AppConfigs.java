@@ -1,7 +1,7 @@
 package cc.winboll.studio.autoinstaller.models;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/05/27 17:36:01
  * @Describe 应用配置数据类
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.libaes.winboll;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/24 15:08:52
  * @Describe WinBoLL应用介绍视图
  */
@@ -238,7 +238,7 @@ public class AboutView extends LinearLayout {
             //.addItem(versionElement)
             //.addItem(adsElement)
             //.addGroup("Connect with us")
-            .addEmail("ZhanGSKen@AliYun.Com")
+            .addEmail("ZhanGSKen<zhangsken@188.com>")
             .addWebsite(mszHomePage)
             .addItem(elementGitWeb)
             .addItem(elementAppUpdate);

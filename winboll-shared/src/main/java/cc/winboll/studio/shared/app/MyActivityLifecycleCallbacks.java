@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.app;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/24 11:02:08
  */
 import android.app.Activity;

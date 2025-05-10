@@ -1,7 +1,7 @@
 package cc.winboll.studio.shared.app;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/08/12 16:09:15
  * @Describe 应用活动窗口管理器
  * 参考 ：

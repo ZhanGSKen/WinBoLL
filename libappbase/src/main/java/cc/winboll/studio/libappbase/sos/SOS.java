@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase.sos;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/02 09:36:29
  * @Describe WinBoLL 应用 SOS 机理保护类
  */

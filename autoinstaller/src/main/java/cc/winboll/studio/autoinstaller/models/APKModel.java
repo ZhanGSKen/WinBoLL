@@ -1,7 +1,7 @@
 package cc.winboll.studio.autoinstaller.models;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/04/02 20:50:29
  * @Describe 监控的 APK 安装文件对应的应用信息数据模型
  */

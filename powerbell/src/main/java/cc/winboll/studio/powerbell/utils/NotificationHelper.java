@@ -1,7 +1,7 @@
 package cc.winboll.studio.powerbell.utils;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/22 04:39:40
  * @Describe 通知工具类
  */

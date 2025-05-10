@@ -16,7 +16,7 @@ import com.hjq.toast.ToastUtils;
 import java.util.UUID;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/19 14:00:26
  */
 public class UnitTestActivity extends WinBollActivity {

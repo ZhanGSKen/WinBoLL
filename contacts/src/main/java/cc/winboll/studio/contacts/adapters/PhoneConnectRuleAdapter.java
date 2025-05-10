@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.adapters;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/02 17:27:41
  * @Describe PhoneConnectRuleAdapter
  */

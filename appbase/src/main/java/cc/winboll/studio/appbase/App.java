@@ -1,7 +1,7 @@
 package cc.winboll.studio.appbase;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/05 09:54:42
  * @Describe APPbase 应用类
  */

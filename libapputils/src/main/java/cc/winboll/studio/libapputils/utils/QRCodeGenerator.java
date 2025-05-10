@@ -1,7 +1,7 @@
 package cc.winboll.studio.libapputils.utils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/01/17 20:49:55
  * @Describe 二维码工具
  */

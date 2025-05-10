@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.services;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/07/19 14:30:57
  * @Describe TTS 语音播放服务组件类
  */

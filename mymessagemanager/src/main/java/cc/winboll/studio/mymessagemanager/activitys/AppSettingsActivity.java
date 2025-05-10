@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.activitys;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/05/12 20:03:42
  * @Describe 应用设置窗口
  */

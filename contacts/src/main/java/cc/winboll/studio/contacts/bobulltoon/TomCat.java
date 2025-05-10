@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.bobulltoon;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/02 13:47:48
  * @Describe 汤姆猫管家 ：使用 BoBullToon 项目，对通讯地址进行筛选判断的好朋友。
  */

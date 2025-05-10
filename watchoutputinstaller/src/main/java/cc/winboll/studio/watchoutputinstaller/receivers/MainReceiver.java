@@ -9,7 +9,7 @@ import cc.winboll.studio.watchoutputinstaller.services.MainService;
 import cc.winboll.studio.shared.log.LogUtils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/06/06 13:19:38
  * @Describe 应用消息接收类
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.fragments;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/20 12:57:50
  * @Describe 联系人
  */

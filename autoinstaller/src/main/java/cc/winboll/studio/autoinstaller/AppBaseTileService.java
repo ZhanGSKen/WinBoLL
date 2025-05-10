@@ -1,7 +1,7 @@
 package cc.winboll.studio.autoinstaller;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/04/15 09:24:46
  * @Describe 磁贴工具服务类
  */

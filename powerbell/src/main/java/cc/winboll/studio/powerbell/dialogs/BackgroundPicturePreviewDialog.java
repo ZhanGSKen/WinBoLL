@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/04/25 16:27:53
  * @Describe 背景图片的接收分享文件后的预览对话框
  */

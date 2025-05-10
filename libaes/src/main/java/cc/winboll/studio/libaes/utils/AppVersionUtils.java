@@ -2,7 +2,7 @@ package cc.winboll.studio.libaes.utils;
 
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/08/12 14:45:35
  * @Describe 应用版本工具集
  */

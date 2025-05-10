@@ -1,7 +1,7 @@
 package cc.winboll.studio.apputils;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/23 16:14:45
  */
 import android.app.Activity;

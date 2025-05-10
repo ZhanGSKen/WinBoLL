@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.utils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/05/31 17:58:27
  * @Describe 调用应用属性设置页工具类
  *  来源：https://blog.csdn.net/zhuhai__yizhi/article/details/78737593

@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.adapters;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/05/18 16:08:20
  * @Describe TTSRuleBean RecyclerView Adapter
  */

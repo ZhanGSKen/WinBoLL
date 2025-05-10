@@ -1,7 +1,7 @@
 package cc.winboll.studio.appbase.handlers;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/14 03:51:40
  */
 import android.os.Handler;

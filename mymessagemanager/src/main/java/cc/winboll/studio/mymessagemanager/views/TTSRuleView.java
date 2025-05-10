@@ -1,7 +1,7 @@
 package cc.winboll.studio.mymessagemanager.views;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2023/07/24 15:08:31
  * @Describe TTS语音规则视图
  */

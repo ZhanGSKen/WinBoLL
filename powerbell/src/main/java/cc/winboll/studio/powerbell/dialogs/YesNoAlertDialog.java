@@ -1,7 +1,7 @@
 package cc.winboll.studio.powerbell.dialogs;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/06/10 19:32:55
  * @Describe 用户确定与否选择框
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.contacts.dun;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/21 06:15:10
  * @Describe 云盾防御规则
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.libappbase.widgets;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/02/17 20:32:12
  */
 import android.app.PendingIntent;

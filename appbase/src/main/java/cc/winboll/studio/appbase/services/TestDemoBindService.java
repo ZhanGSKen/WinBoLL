@@ -1,7 +1,7 @@
 package cc.winboll.studio.appbase.services;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/07 12:45:49
  * @Describe 启动时申请绑定到APPBase主服务的服务示例
  */

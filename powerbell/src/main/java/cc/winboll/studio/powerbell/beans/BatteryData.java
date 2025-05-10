@@ -1,7 +1,7 @@
 package cc.winboll.studio.powerbell.beans;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/22 14:30:51
  * @Describe 电池报告数据模型
  */

@@ -1,7 +1,7 @@
 package cc.winboll.studio.autoinstaller.utils;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/12/11 06:28:50
  * @Describe 一个获取安卓APK安装文件的应用包名的函数
  */

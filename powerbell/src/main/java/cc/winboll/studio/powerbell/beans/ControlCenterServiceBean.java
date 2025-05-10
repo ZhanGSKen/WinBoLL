@@ -1,7 +1,7 @@
 package cc.winboll.studio.powerbell.beans;
 
 /**
- * @Author ZhanGSKen@QQ.COM
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2024/07/18 07:06:07
  * @Describe 服务控制参数
  */

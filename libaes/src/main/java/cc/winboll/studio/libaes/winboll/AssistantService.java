@@ -1,7 +1,7 @@
 package cc.winboll.studio.libaes.winboll;
 
 /**
- * @Author ZhanGSKen@AliYun.Com
+ * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/28 19:12:12
  * @Describe 应用主要服务组件类守护进程服务组件类
  */
