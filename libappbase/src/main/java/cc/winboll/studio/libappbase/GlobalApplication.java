@@ -9,11 +9,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.os.Handler;
-import android.os.Looper;
+import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.libappbase.models.APPModel;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
-import cc.winboll.studio.libappbase.winboll.WinBoLLActivityManager;
 import cc.winboll.studio.libappbase.winboll.MyActivityLifecycleCallbacks;
+import cc.winboll.studio.libappbase.winboll.WinBoLLActivityManager;
 
 public class GlobalApplication extends Application {
 
@@ -30,7 +30,7 @@ public class GlobalApplication extends Application {
     
     public static void saveDebugStatus() {
         if (_GlobalApplication != null) {
-            APPBaseModel.saveBeanToFile(getAPPBaseModelFilePath(), new APPBaseModel(GlobalApplication.isDebuging));
+            APPModel.saveBeanToFile(getAPPModelFilePath(), new APPModel(GlobalApplication.isDebuging));
         }
     }
 
@@ -38,8 +38,8 @@ public class GlobalApplication extends Application {
         return _GlobalApplication;
     }
 
-    static String getAPPBaseModelFilePath() {
-        return _GlobalApplication.getDataDir().getPath() + "/APPBaseModel.json";
+    static String getAPPModelFilePath() {
+        return _GlobalApplication.getDataDir().getPath() + "/APPModel.json";
     }
 
     public static boolean isDebuging() {
@@ -69,12 +69,12 @@ public class GlobalApplication extends Application {
         ToastUtils.init(this);
 
         // 应用保存的调试标志
-        APPBaseModel appBaseModel = APPBaseModel.loadBeanFromFile(getAPPBaseModelFilePath(), APPBaseModel.class);
-        if (appBaseModel == null) {
+        APPModel appModel = APPModel.loadBeanFromFile(getAPPModelFilePath(), APPModel.class);
+        if (appModel == null) {
             setIsDebuging(false);
             saveDebugStatus();
         } else {
-            setIsDebuging(appBaseModel.isDebuging());
+            setIsDebuging(appModel.isDebuging());
         }
         
         getWinBoLLActivityManager().setWinBoLLUI_TYPE(WinBoLLActivityManager.WinBoLLUI_TYPE.Service);

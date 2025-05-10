@@ -14,10 +14,14 @@ import cc.winboll.studio.appbase.services.MainService;
 import cc.winboll.studio.appbase.widgets.APPNewsWidget;
 import cc.winboll.studio.libappbase.AppUtils;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.sos.APPModel;
+import cc.winboll.studio.libappbase.models.APPModel;
+import cc.winboll.studio.libappbase.models.WinBoLLModel;
+import cc.winboll.studio.libappbase.models.WinBoLLNewsBean;
 import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.sos.SOSObject;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
+import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
+import cc.winboll.studio.libappbase.winboll.WinBoLL;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
@@ -40,21 +44,21 @@ public class MainReceiver extends BroadcastReceiver {
         String szAction = intent.getAction();
         if (szAction.equals(ACTION_BOOT_COMPLETED)) {
             ToastUtils.show("ACTION_BOOT_COMPLETED");
-        } else if (szAction.equals(WinBoLL.ACTION_BIND)) {
+        } else if (szAction.equals(IWinBoLLActivity.ACTION_BIND)) {
             LogUtils.d(TAG, "ACTION_BIND");
             LogUtils.d(TAG, String.format("context.getPackageName() %s", context.getPackageName()));
             LogUtils.d(TAG, String.format("intent.getAction() %s", intent.getAction()));
-            String szAPPModel = intent.getStringExtra(WinBoLL.EXTRA_APPMODEL);
-            LogUtils.d(TAG, String.format("szAPPModel %s", szAPPModel));
-            if (szAPPModel != null && !szAPPModel.equals("")) {
+            String szWinBoLLModel = intent.getStringExtra(WinBoLL.EXTRA_WINBOLLMODEL);
+            LogUtils.d(TAG, String.format("szAPPModel %s", szWinBoLLModel));
+            if (szWinBoLLModel != null && !szWinBoLLModel.equals("")) {
                 try {
-                    APPModel bean = APPModel.parseStringToBean(szAPPModel, APPModel.class);
+                    WinBoLLModel bean = WinBoLLModel.parseStringToBean(szWinBoLLModel, WinBoLLModel.class);
                     if (bean != null) {
                         String szAppPackageName = bean.getAppPackageName();
                         LogUtils.d(TAG, String.format("szAppPackageName %s", szAppPackageName));
                         String szAppMainServiveName = bean.getAppMainServiveName();
                         LogUtils.d(TAG, String.format("szAppMainServiveName %s", szAppMainServiveName));
-                        mwrService.get().bindAPPModelConnection(bean);
+                        mwrService.get().bindWinBoLLModelConnection(bean);
                     }
                 } catch (IOException e) {
                     LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());

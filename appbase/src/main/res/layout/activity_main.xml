@@ -212,5 +212,10 @@
 
 	</ScrollView>
 
+	<cc.winboll.studio.libappbase.LogView
+		android:layout_width="match_parent"
+		android:layout_height="300dp"
+		android:id="@+id/logview"/>
+
 </LinearLayout>
 

@@ -12,16 +12,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 import cc.winboll.studio.appbase.R;
-import cc.winboll.studio.appbase.models.WinBoLLNewsBean;
 import cc.winboll.studio.appbase.receivers.APPNewsWidgetClickListener;
 import cc.winboll.studio.libappbase.AppUtils;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.sos.APPModel;
-import cc.winboll.studio.libappbase.sos.WinBoLL;
+import cc.winboll.studio.libappbase.models.APPModel;
+import cc.winboll.studio.libappbase.models.WinBoLLNewsBean;
+import cc.winboll.studio.libappbase.winboll.WinBoLL;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import cc.winboll.studio.libappbase.models.WinBoLLModel;
 
 public class APPNewsWidget extends AppWidgetProvider {
 
@@ -57,11 +58,11 @@ public class APPNewsWidget extends AppWidgetProvider {
             }
         }else if (intent.getAction().equals(ACTION_WAKEUP_SERVICE)) {
             LogUtils.d(TAG, "ACTION_WAKEUP_SERVICE");
-            String szAPPModel = intent.getStringExtra(WinBoLL.EXTRA_APPMODEL);
-            LogUtils.d(TAG, String.format("szAPPModel %s", szAPPModel));
-            if (szAPPModel != null && !szAPPModel.equals("")) {
+            String szWinBoLLModel = intent.getStringExtra(WinBoLL.EXTRA_WINBOLLMODEL);
+            LogUtils.d(TAG, String.format("szWinBoLLModel %s", szWinBoLLModel));
+            if (szWinBoLLModel != null && !szWinBoLLModel.equals("")) {
                 try {
-                    APPModel bean = APPModel.parseStringToBean(szAPPModel, APPModel.class);
+                    WinBoLLModel bean = WinBoLLModel.parseStringToBean(szWinBoLLModel, WinBoLLModel.class);
                     if (bean != null) {
                         String szAppPackageName = bean.getAppPackageName();
                         LogUtils.d(TAG, String.format("szAppPackageName %s", szAppPackageName));

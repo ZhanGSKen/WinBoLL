@@ -18,15 +18,16 @@ import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import cc.winboll.studio.appbase.MyTileService;
-import cc.winboll.studio.appbase.models.MainServiceBean;
 import cc.winboll.studio.appbase.handlers.MainServiceHandler;
+import cc.winboll.studio.appbase.models.MainServiceBean;
 import cc.winboll.studio.appbase.receivers.MainReceiver;
 import cc.winboll.studio.appbase.services.AssistantService;
 import cc.winboll.studio.appbase.threads.MainServiceThread;
 import cc.winboll.studio.appbase.widgets.APPNewsWidget;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.models.APPModel;
+import cc.winboll.studio.libappbase.models.WinBoLLModel;
 import java.util.ArrayList;
-import cc.winboll.studio.libappbase.sos.APPModel;
 
 public class MainService extends Service {
 
@@ -182,7 +183,7 @@ public class MainService extends Service {
         }
     }
 
-    public void bindAPPModelConnection(APPModel bean) {
+    public void bindWinBoLLModelConnection(WinBoLLModel bean) {
         LogUtils.d(TAG, "bindAPPModelConnection(...)");
         // 清理旧的绑定链接
         for (int i = mAPPModelConnectionList.size() - 1; i > -1; i--) {
@@ -203,7 +204,7 @@ public class MainService extends Service {
         
         Intent intentWidget = new Intent(this, APPNewsWidget.class);
         intentWidget.setAction(APPNewsWidget.ACTION_WAKEUP_SERVICE);
-        APPModel appSOSBean = new APPModel(bean.getAppPackageName(), bean.getAppMainServiveName());
+        WinBoLLModel appSOSBean = new WinBoLLModel(bean.getAppPackageName(), bean.getAppMainServiveName());
         intentWidget.putExtra("APPSOSBean", appSOSBean.toString());
         sendBroadcast(intentWidget);
     }
@@ -212,7 +213,7 @@ public class MainService extends Service {
 
         ComponentName mComponentName;
 
-        boolean isBindToAPP(APPModel bean) {
+        boolean isBindToAPP(WinBoLLModel bean) {
             return mComponentName != null
                 && mComponentName.getClassName().equals(bean.getAppMainServiveName())
                 && mComponentName.getPackageName().equals(bean.getAppPackageName());

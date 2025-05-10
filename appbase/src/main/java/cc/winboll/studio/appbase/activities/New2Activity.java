@@ -12,11 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
-import cc.winboll.studio.appbase.WinBoLLActivityBase;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 
-public class New2Activity extends WinBoLLActivityBase implements IWinBoLLActivity {
+public class New2Activity extends WinBoLLActivity implements IWinBoLLActivity {
 
     public static final String TAG = "New2Activity";
 
@@ -74,7 +73,7 @@ public class New2Activity extends WinBoLLActivityBase implements IWinBoLLActivit
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == cc.winboll.studio.appbase.R.id.item_log) {
-            GlobalApplication.getWinBoLLActivityManager().startLogActivity(this);
+            //GlobalApplication.getWinBoLLActivityManager().startLogActivity(this);
             return true;
         }
         // 在switch语句中处理每个ID，并在处理完后返回true，未处理的情况返回false。

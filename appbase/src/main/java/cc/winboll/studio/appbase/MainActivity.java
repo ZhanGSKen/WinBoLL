@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.appbase.activities.NewActivity;
+import cc.winboll.studio.appbase.activities.WinBoLLActivity;
 import cc.winboll.studio.appbase.services.MainService;
 import cc.winboll.studio.appbase.services.TestDemoBindService;
 import cc.winboll.studio.appbase.services.TestDemoService;
@@ -18,12 +19,13 @@ import cc.winboll.studio.libappbase.CrashHandler;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.GlobalCrashActivity;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.LogView;
 import cc.winboll.studio.libappbase.sos.SOS;
 import cc.winboll.studio.libappbase.utils.ToastUtils;
 import cc.winboll.studio.libappbase.widgets.StatusWidget;
 import cc.winboll.studio.libappbase.winboll.IWinBoLLActivity;
 
-public class MainActivity extends WinBoLLActivityBase implements IWinBoLLActivity {
+public class MainActivity extends WinBoLLActivity implements IWinBoLLActivity {
 
     public static final String TAG = "MainActivity";
 
@@ -38,7 +40,7 @@ public class MainActivity extends WinBoLLActivityBase implements IWinBoLLActivit
     }
 
     Toolbar mToolbar;
-    //LogView mLogView;
+    LogView mLogView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +53,8 @@ public class MainActivity extends WinBoLLActivityBase implements IWinBoLLActivit
 
         CheckBox cbIsDebugMode = findViewById(R.id.activitymainCheckBox1);
         cbIsDebugMode.setChecked(GlobalApplication.isDebuging());
-        //mLogView = findViewById(R.id.activitymainLogView1);
-
-//        if (GlobalApplication.isDebuging()) {
-//            mLogView.start(); 
-//            ToastUtils.show("LogView start.");
-//        }
+        mLogView = findViewById(R.id.logview);
+        mLogView.start(); 
     }
 
     @Override
@@ -72,8 +70,6 @@ public class MainActivity extends WinBoLLActivityBase implements IWinBoLLActivit
         return super.onOptionsItemSelected(item);
     }
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -87,7 +83,7 @@ public class MainActivity extends WinBoLLActivityBase implements IWinBoLLActivit
         GlobalApplication.setIsDebuging(isDebuging);
         GlobalApplication.saveDebugStatus();
     }
-   
+
     public void onPreviewGlobalCrashActivity(View view) {
         Intent intent = new Intent(this, GlobalCrashActivity.class);
         intent.putExtra(CrashHandler.EXTRA_CRASH_INFO, "Demo log...");
@@ -137,8 +133,6 @@ public class MainActivity extends WinBoLLActivityBase implements IWinBoLLActivit
         startService(intent);
 
     }
-    
-    
 
     public void onStopTestDemoService(View view) {
         Intent intent = new Intent(this, TestDemoService.class);
@@ -179,5 +173,11 @@ public class MainActivity extends WinBoLLActivityBase implements IWinBoLLActivit
         GlobalApplication.getWinBoLLActivityManager().startWinBoLLActivity(this, NewActivity.class);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mLogView.start();
+    }
+    
     
 }

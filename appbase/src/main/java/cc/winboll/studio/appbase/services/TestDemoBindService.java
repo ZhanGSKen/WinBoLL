@@ -10,11 +10,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import cc.winboll.studio.appbase.models.TestDemoBindServiceBean;
-import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.sos.WinBoLL;
 import cc.winboll.studio.appbase.App;
+import cc.winboll.studio.appbase.models.TestDemoBindServiceBean;
+import cc.winboll.studio.appbase.services.TestDemoBindService;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.sos.SOS;
+import cc.winboll.studio.libappbase.winboll.WinBoLL;
 
 public class TestDemoBindService extends Service {
 

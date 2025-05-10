@@ -1,9 +1,9 @@
-package cc.winboll.studio.libappbase.sos;
+package cc.winboll.studio.libappbase.models;
 
 /**
  * @Author ZhanGSKen<zhangsken@188.com>
  * @Date 2025/03/02 10:28:08
- * @Describe APPModel
+ * @Describe 应用调试模型
  */
 import android.util.JsonReader;
 import android.util.JsonWriter;
@@ -14,33 +14,24 @@ public class APPModel extends BaseBean {
 
     public static final String TAG = "APPModel";
 
-    String appPackageName;
-    String appMainServiveName;
+    // 应用是否处于正在调试状态
+    //
+    boolean isDebuging = false;
 
     public APPModel() {
-        this.appPackageName = "";
-        this.appMainServiveName = "";
+        this.isDebuging = false;
     }
 
-    public APPModel(String appPackageName, String appMainServiveName) {
-        this.appPackageName = appPackageName;
-        this.appMainServiveName = appMainServiveName;
+    public APPModel(boolean isDebuging) {
+        this.isDebuging = isDebuging;
     }
 
-    public void setAppPackageName(String appPackageName) {
-        this.appPackageName = appPackageName;
+    public void setIsDebuging(boolean isDebuging) {
+        this.isDebuging = isDebuging;
     }
 
-    public String getAppPackageName() {
-        return appPackageName;
-    }
-
-    public void setAppMainServiveName(String appMainServiveName) {
-        this.appMainServiveName = appMainServiveName;
-    }
-
-    public String getAppMainServiveName() {
-        return appMainServiveName;
+    public boolean isDebuging() {
+        return isDebuging;
     }
 
     @Override
@@ -51,18 +42,14 @@ public class APPModel extends BaseBean {
     @Override
     public void writeThisToJsonWriter(JsonWriter jsonWriter) throws IOException {
         super.writeThisToJsonWriter(jsonWriter);
-        jsonWriter.name("appPackageName").value(getAppPackageName());
-        jsonWriter.name("appMainServiveName").value(getAppMainServiveName());
-
+        jsonWriter.name("isDebuging").value(isDebuging());
     }
 
     @Override
     public boolean initObjectsFromJsonReader(JsonReader jsonReader, String name) throws IOException {
         if (super.initObjectsFromJsonReader(jsonReader, name)) { return true; } else {
-            if (name.equals("appPackageName")) {
-                setAppPackageName(jsonReader.nextString());
-            } else if (name.equals("appMainServiveName")) {
-                setAppMainServiveName(jsonReader.nextString());
+            if (name.equals("isDebuging")) {
+                setIsDebuging(jsonReader.nextBoolean());
             } else {
                 return false;
             }
