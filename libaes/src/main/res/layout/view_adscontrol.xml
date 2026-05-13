@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp" android:background="@drawable/bg_container_border">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="应用支持模式设置："
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp"/>
+
+    <RadioGroup
+        android:id="@+id/rg_ads_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/rb_standalone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="无扰单机模式"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/rb_mimo_sdk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="米盟广告模式"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/rb_store_qrcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="云宝物语模式"
+            android:textSize="14sp"/>
+
+    </RadioGroup>
+
+    <!-- 关键修改：添加layout_marginTop="0dp" 移除顶部间距，设置layout_marginTop为负值可进一步紧贴 -->
+    <RelativeLayout
+        android:id="@+id/rl_winboll_store"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="0dp"> <!-- 移除顶部多余间距 -- android:background="@drawable/bg_container_border">
+
+        <ImageView
+            android:id="@+id/iv_winboll_store"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_winboll_store"
+            android:scaleType="centerInside"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"/> <!-- 让图片自适应尺寸，无多余空白 -->
+
+        <TextView
+            android:id="@+id/view_popmenu_anchor_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
+

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- 原有配置 保留 -->
+        <domain includeSubdomains="true">winboll.cc</domain>
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+
+        <!-- 精准配置10.8.0.0/24 前20个IP（10.8.0.0~10.8.0.19）-->
+        <domain includeSubdomains="false">10.8.0.0</domain>
+        <domain includeSubdomains="false">10.8.0.1</domain>
+        <domain includeSubdomains="false">10.8.0.2</domain>
+        <domain includeSubdomains="false">10.8.0.3</domain>
+        <domain includeSubdomains="false">10.8.0.4</domain>
+        <domain includeSubdomains="false">10.8.0.5</domain>
+        <domain includeSubdomains="false">10.8.0.6</domain>
+        <domain includeSubdomains="false">10.8.0.7</domain>
+        <domain includeSubdomains="false">10.8.0.8</domain>
+        <domain includeSubdomains="false">10.8.0.9</domain>
+        <domain includeSubdomains="false">10.8.0.10</domain>
+        <domain includeSubdomains="false">10.8.0.11</domain>
+        <domain includeSubdomains="false">10.8.0.12</domain>
+        <domain includeSubdomains="false">10.8.0.13</domain>
+        <domain includeSubdomains="false">10.8.0.14</domain>
+        <domain includeSubdomains="false">10.8.0.15</domain>
+        <domain includeSubdomains="false">10.8.0.16</domain>
+        <domain includeSubdomains="false">10.8.0.17</domain>
+        <domain includeSubdomains="false">10.8.0.18</domain>
+        <domain includeSubdomains="false">10.8.0.19</domain>
+    </domain-config>
+</network-security-config>
+
+
+
+

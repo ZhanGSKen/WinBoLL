@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF1E3A5F</color>
+    <color name="colorPrimaryDark">#FF15253D</color>
+    <color name="colorAccent">#FF4DA6FF</color>
+    <color name="colorText">#FFE0E0E0</color>
+	<color name="colorTextBackgound">#FF0D1B2A</color>
+
+	<!-- ============== 基础黑白（必含，适配文字/背景） ============== -->
+	<color name="white">#FFFFFF</color>
+	<color name="black">#000000</color>
+
+	<!-- ============== 基础色系（按钮/强调色常用） ============== -->
+	<color name="blue_light">#4A90E2</color>
+	<color name="blue_normal">#2196F3</color>
+	<color name="blue_dark">#1976D2</color>
+	<color name="green_light">#66BB6A</color>
+	<color name="green_normal">#4CAF50</color>
+	<color name="green_dark">#388E3C</color>
+	<color name="red_light">#EF5350</color>
+	<color name="red_normal">#F44336</color>
+	<color name="red_dark">#D32F2F</color>
+	<color name="yellow_light">#FFF59D</color>
+	<color name="yellow_normal">#FFC107</color>
+	<color name="yellow_dark">#FFA000</color>
+	<color name="orange_normal">#FF9800</color>
+	<color name="purple_normal">#9C27B0</color>
+
+	<!-- ============== 透明色（遮罩/背景叠加） ============== -->
+	<color name="transparent">#00000000</color>
+	<color name="black_transparent_50">#80000000</color>
+
+	<!-- ============== 不透明灰色（常用深浅梯度） ============== -->
+	<color name="gray_100">#1A1A1A</color>
+	<color name="gray_200">#262626</color>
+	<color name="gray_300">#333333</color>
+	<color name="gray_400">#4D4D4D</color>
+	<color name="gray_500">#666666</color>
+	<color name="gray_600">#808080</color>
+	<color name="gray_700">#999999</color>
+	<color name="gray_800">#B3B3B3</color>
+	<color name="gray_900">#CCCCCC</color>
+
+	<!-- ============== 半透明灰色 ============== -->
+	<color name="gray_transparent_30">#4D333333</color>
+	<color name="gray_transparent_50">#80333333</color>
+	<color name="gray_transparent_70">#B3333333</color>
+
+	<color name="gray_light">#333333</color>
+	<color name="gray_mid">#666666</color>
+	<color name="gray_dark">#999999</color>
+	<color name="gray_black">#CCCCCC</color>
+
+	<!-- ============== 遮罩/蒙层 ============== -->
+	<color name="mask_gray">#804D4D4D</color>
+	<color name="bg_overlay_gray">#4D1A1A1A</color>
+
+	<!-- ============== 按钮灰色 ============== -->
+	<color name="btn_gray_normal">#666666</color>
+	<color name="btn_gray_pressed">#4D4D4D</color>
+	<color name="btn_gray_disabled">#333333</color>
+
+	<!-- ============== 主题颜色 ============== -->
+	<color name="mainWindowBackgroundColor">#FF0D1B2A</color>
+	<color name="mainWindowTextColor">#FFE0E0E0</color>
+	<color name="toolbarTextColor">#FFE0E0E0</color>
+	<color name="toolbarBackgroundColor">#FF1E3A5F</color>
+	
+	<color name="debugTextColor">#FF00FF00</color>
+
+</resources>

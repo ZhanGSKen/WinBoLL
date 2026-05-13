@@ -110,8 +110,8 @@ lint-results.html
 #LICENSE-Private-Demo
 #LICENSE-Private-Demo_docs
 #README.md
-aes
-appbase
+#aes
+#appbase
 autonfc
 #build.gradle
 contacts
@@ -122,8 +122,8 @@ gpsrelaysentinel
 #gradle.properties-android-demo
 #gradle.properties-androidx-demo
 #gradlew
-libaes
-libappbase
+#libaes
+#libappbase
 #libdebugtemp
 libgpsrelaysentinel
 libwinboll

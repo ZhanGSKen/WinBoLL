@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorTextColor">#FF000000</color>
+    <color name="colorPrimary">#FF03AB4E</color>
+    <color name="colorPrimaryDark">#FF027C39</color>
+    <color name="colorAccent">#FF3DDC84</color>
+    <color name="colorText">#FFFFFB8D</color>
+    <color name="colorToastFrame">#FFA9A9A9</color>
+    <color name="colorToastShadow">#FF000000</color>
+    <color name="colorToastBackgroung">#FFFFFFFF</color>
+    <color name="colorAToolbarStartColor">#FF7D3F12</color>
+    <color name="colorAToolbarCenterColor">#FFCC6E2B</color>
+    <color name="colorAToolbarEndColor">#FFF4B98F</color>
+
+    <color name="colorACardShadow">@color/colorPrimaryDark</color>
+    <color name="colorACardFrame">@color/colorPrimary</color>
+    <color name="colorACardBackgroung">@color/colorAccent</color>
+
+    <color name="colorATickProgressBarBackgroung">@color/colorAccent</color>
+    <color name="colorATickProgressBarProgress">@color/colorPrimary</color>
+
+    <color name="colorOHPCTSBackground">@color/colorAccent</color>
+    <color name="colorOHPCTSSecondaryProgress">@color/colorPrimary</color>
+    <color name="colorOHPCTSProgress">@color/colorPrimaryDark</color>
+
+    <color name="toolbarBackgroundColor">#FF03AB4E</color>
+    <color name="toolbarTextColor">#FFFFFFFF</color>
+    <color name="mainWindowBackgroundColor">#FFFFFFFF</color>
+    <color name="mainWindowTextColor">#FF000000</color>
+    <color name="debugTextColor">#FFFF0000</color>
+
+</resources>
