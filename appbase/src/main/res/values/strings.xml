@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">APPBase</string>
-    <string name="app_description">WinBoLL 安卓手机端安卓应用开发基础类库。</string>
-    <string name="app_normal">Click here is switch to Normal APP</string>
-    <string name="app_debug">Click here is switch to APP DEBUG</string>
-	<string name="gitea_home">GITEA HOME</string>
-    <string name="app_update">APP UPDATE</string>
-</resources>

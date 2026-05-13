@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 选中状态：深灰色背景（可根据需求调整颜色） -->
-    <item android:state_selected="true" android:drawable="@color/list_item_selected"/>
-    <!-- 按压状态：浅灰色背景 -->
-    <item android:state_pressed="true" android:drawable="@color/list_item_pressed"/>
-    <!-- 默认状态：透明背景 -->
-    <item android:drawable="@android:color/transparent"/>
-</selector>
