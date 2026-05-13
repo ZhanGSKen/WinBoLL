@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <item
+        android:id="@+id/copy"
+        android:title="Copy"/>
+    
+    <item
+        android:id="@+id/delete"
+        android:title="Delete"/>
+	
+	<item
+        android:id="@+id/addttsrule"
+        android:title="Add TTS Rule"/>
+ 
+    <item
+        android:id="@+id/testtts"
+        android:title="Test TTS"/>
+
+    <item
+        android:id="@+id/testreceivetule"
+        android:title="Test Receive Rule"/>
+</menu>

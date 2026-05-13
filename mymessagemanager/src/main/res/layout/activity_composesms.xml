@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="@drawable/bg_container_border">
+
+    <cc.winboll.studio.libaes.views.AToolbar
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:id="@+id/activitycomposesmsASupportToolbar1"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_frame">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/activitycomposesmsRelativeLayout1" android:background="@drawable/bg_container_border">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/activitycomposesmsLinearLayout1"
+                android:gravity="center_vertical"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true" android:background="@drawable/bg_container_border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(拼音搜索):"/>
+
+                <EditText
+                    android:layout_width="80dp"
+                    android:ems="10"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/activitycomposesmsEditText2"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@id/activitycomposesmsEditText2"
+                    android:id="@+id/activitycomposesmsTextView2"
+                    android:layout_weight="1.0"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_below="@id/activitycomposesmsLinearLayout1"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" android:background="@drawable/bg_container_border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(SMS TO) :"
+                    android:id="@+id/activitycomposesmsTextView1"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:inputType="phone"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:id="@+id/activitycomposesmsEditText1"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="10dp"
+        android:layout_weight="1.0" android:background="@drawable/bg_container_border">
+
+        <!-- 关键修改：添加 listSelector 属性，关联选中样式 -->
+        <ListView
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/activitycomposesmsinclude1"
+            android:id="@+id/activitycomposesmsListView1"
+            android:listSelector="@drawable/listview_item_selector"
+            android:choiceMode="singleChoice"/> <!-- 开启单选模式，确保选中状态唯一 -->
+
+        <include
+            layout="@layout/view_smssend"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/activitycomposesmsinclude1"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
+

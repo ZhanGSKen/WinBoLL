@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MyAppTheme" parent="AESTheme">
+        <item name="borderCornerRadius">6dp</item>
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:textColorPrimary">@color/text_color_primary_default</item>
+        <item name="textColorPrimary">@color/text_color_primary_default</item>
+        <item name="android:textColor">@color/text_color_primary_default</item>
+        <item name="colorTextColor">@color/text_color_primary_default</item>
+	</style>
+
+    <style name="MyDepthAESTheme" parent="DepthAESTheme">
+		<item name="borderCornerRadius">6dp</item>
+		<item name="android:windowBackground">@color/window_background</item>
+		<item name="android:textColorPrimary">@color/text_color_primary_depth</item>
+		<item name="textColorPrimary">@color/text_color_primary_depth</item>
+		<item name="android:textColor">@color/text_color_primary_depth</item>
+		<item name="colorTextColor">@color/text_color_primary_depth</item>
+    </style>
+
+    <style name="MySkyAESTheme" parent="SkyAESTheme">
+		<item name="borderCornerRadius">6dp</item>
+		<item name="android:windowBackground">@color/window_background</item>
+		<item name="android:textColorPrimary">@color/text_color_primary_sky</item>
+		<item name="textColorPrimary">@color/text_color_primary_sky</item>
+		<item name="android:textColor">@color/text_color_primary_sky</item>
+		<item name="colorTextColor">@color/text_color_primary_sky</item>
+    </style>
+
+    <style name="MyGoldenAESTheme" parent="GoldenAESTheme">
+		<item name="borderCornerRadius">6dp</item>
+		<item name="android:windowBackground">@color/window_background</item>
+		<item name="android:textColorPrimary">@color/text_color_primary_golden</item>
+		<item name="textColorPrimary">@color/text_color_primary_golden</item>
+		<item name="android:textColor">@color/text_color_primary_golden</item>
+		<item name="colorTextColor">@color/text_color_primary_golden</item>
+    </style>
+
+    <style name="MyMemorAESTheme" parent="MemorAESTheme">
+		<item name="borderCornerRadius">6dp</item>
+		<item name="android:windowBackground">@color/window_background</item>
+		<item name="android:textColorPrimary">@color/text_color_primary_memor</item>
+		<item name="textColorPrimary">@color/text_color_primary_memor</item>
+		<item name="android:textColor">@color/text_color_primary_memor</item>
+		<item name="colorTextColor">@color/text_color_primary_memor</item>
+    </style>
+
+    <style name="MyTaoAESTheme" parent="TaoAESTheme">
+		<item name="borderCornerRadius">6dp</item>
+		<item name="android:windowBackground">@color/window_background</item>
+		<item name="android:textColorPrimary">@color/text_color_primary_tao</item>
+		<item name="textColorPrimary">@color/text_color_primary_tao</item>
+		<item name="android:textColor">@color/text_color_primary_tao</item>
+		<item name="colorTextColor">@color/text_color_primary_tao</item>
+    </style>
+
+</resources>

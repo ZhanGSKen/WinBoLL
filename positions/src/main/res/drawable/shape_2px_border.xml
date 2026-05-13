@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"> <!-- 矩形形状（匹配 LinearLayout ） -->
+
+    <!-- 1px 边框（关键：stroke 标签控制边框） -->
+    <stroke
+        android:width="2px"
+        android:color="?attr/colorAccent" /> <!-- 边框颜色（替换为你的颜色，如 #CCCCCC） -->
+
+    <!-- 可选：设置 LinearLayout 背景色（若需要） -->
+    <solid android:color="#00000000" /> <!-- 内部填充色，默认透明可删除 -->
+
+    <!-- 可选：设置圆角（不需要圆角可删除） -->
+    <corners android:radius="0dp" />
+</shape>

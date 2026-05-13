@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Contacts</string>
+    <string name="default_bobulltoon_url">https://gitea.winboll.cc/Studio/BoBullToon/archive/main.zip</string>
+
+</resources>

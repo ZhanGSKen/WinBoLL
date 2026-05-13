@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomToolbar">
+        <attr name="toolbarTitle" format="string" />
+        <attr name="toolbarTitleColor" format="color" />
+        <attr name="toolbarBackgroundColor" format="color" />
+    </declare-styleable>
+
+	<declare-styleable name="TermuxButton">
+		<attr name="exeCommand" format="string" />
+		<attr name="workDir" format="string" />
+		<attr name="isCommitted" format="boolean" />
+		<attr name="commitTitle" format="string" />
+		<attr name="commitInfo" format="string" />
+	</declare-styleable>
+</resources>
+

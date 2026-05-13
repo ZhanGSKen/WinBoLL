@@ -1,0 +1,108 @@
+apply plugin: 'com.android.application'
+apply from: '../.winboll/winboll_app_build.gradle'
+apply from: '../.winboll/winboll_lint_build.gradle'
+
+def genVersionName(def versionName){
+    // 检查编译标志位配置
+    assert (winbollBuildProps['stageCount'] != null)
+    assert (winbollBuildProps['baseVersion'] != null)
+    // 保存基础版本号
+    winbollBuildProps.setProperty("baseVersion", "${versionName}");
+    //保存编译标志配置
+    FileOutputStream fos = new FileOutputStream(winbollBuildPropsFile)
+    winbollBuildProps.store(fos, "${winbollBuildPropsDesc}");
+    fos.close();
+    
+    // 返回编译版本号
+    return "${versionName}." + winbollBuildProps['stageCount']
+}
+
+android {
+	// 适配MIUI12
+	compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+	
+    defaultConfig {
+        applicationId "cc.winboll.studio.winboll"
+        minSdkVersion 26
+		// 适配MIUI12
+        targetSdkVersion 30
+        versionCode 1
+        // versionName 更新后需要手动设置 
+        // .winboll/winbollBuildProps.properties 文件的 stageCount=0
+        // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
+        versionName "15.20"
+        if(true) {
+            versionName = genVersionName("${versionName}")
+        }
+    }
+
+	// 米盟 SDK
+    packagingOptions {
+         doNotStrip "*/*/libmimo_1011.so"
+    }
+	
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs'] // 若SO库放在libs目录下
+        }
+    }
+}
+
+dependencies {
+	api project(':libwinboll')
+    api 'com.google.code.gson:gson:2.10.1'
+	
+	// 下拉控件
+    api 'com.baoyz.pullrefreshlayout:library:1.2.0'
+    
+    // SSH
+    api 'com.jcraft:jsch:0.1.55'
+    // Html 解析
+    api 'org.jsoup:jsoup:1.13.1'
+    // 二维码类库
+    api 'com.google.zxing:core:3.4.1'
+    api 'com.journeyapps:zxing-android-embedded:3.6.0'
+    // 应用介绍页类库
+    api 'io.github.medyo:android-about-page:2.0.0'
+	// 网络连接类库
+    api 'com.squareup.okhttp3:okhttp:4.4.1'
+     // FastJSON解析
+     implementation 'com.alibaba:fastjson:1.2.76'
+    
+	// AndroidX 类库
+    /*api 'androidx.appcompat:appcompat:1.1.0'
+    //api 'com.google.android.material:material:1.4.0'
+    //api 'androidx.viewpager:viewpager:1.0.0'
+    //api 'androidx.vectordrawable:vectordrawable:1.1.0'
+    //api 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
+    //api 'androidx.fragment:fragment:1.1.0'*/
+	
+	
+	// 米盟
+	api 'com.miui.zeus:mimo-ad-sdk:5.3.+'//请使用最新版sdk
+     //注意：以下5个库必须要引入
+    //implementation 'androidx.appcompat:appcompat:1.4.1'
+    api 'androidx.recyclerview:recyclerview:1.0.0'
+    api 'com.github.bumptech.glide:glide:4.9.0'
+    //annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
+	implementation "androidx.annotation:annotation:1.3.0"
+    implementation "androidx.core:core:1.6.0"
+    implementation "androidx.drawerlayout:drawerlayout:1.1.1"
+    implementation "androidx.preference:preference:1.1.1"
+    implementation "androidx.viewpager:viewpager:1.0.0"
+    implementation "com.google.android.material:material:1.4.0"
+    implementation "com.google.guava:guava:24.1-jre"
+    /*
+	implementation "io.noties.markwon:core:$markwonVersion"
+    implementation "io.noties.markwon:ext-strikethrough:$markwonVersion"
+    implementation "io.noties.markwon:linkify:$markwonVersion"
+    implementation "io.noties.markwon:recycler:$markwonVersion"
+	*/
+	implementation 'com.termux:terminal-emulator:0.118.0'
+	implementation 'com.termux:terminal-view:0.118.0'
+	implementation 'com.termux:termux-shared:0.118.0'
+	
+	api fileTree(dir: 'libs', include: ['*.jar'])
+}

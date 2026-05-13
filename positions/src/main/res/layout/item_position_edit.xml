@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:padding="12dp"
+	android:background="@drawable/item_bg_edit">
+
+	<TextView
+		android:id="@+id/tv_edit_longitude"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="14sp"
+		android:textColor="#999999"/>
+
+	<TextView
+		android:id="@+id/tv_edit_latitude"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="14sp"
+		android:textColor="#999999"
+		android:layout_marginTop="4dp"/>
+
+	<EditText
+		android:id="@+id/et_edit_memo"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:hint="请输入位置备注"
+		android:textSize="14sp"
+		android:padding="8dp"
+		android:layout_marginTop="8dp"
+		android:background="@drawable/edittext_bg"/>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_marginTop="10dp">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="14sp"
+			android:textColor="#333333"
+			android:id="@+id/tv_edit_distance"/>
+
+		<RadioGroup
+			android:id="@+id/rg_distance_switch"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:layout_marginLeft="8dp">
+
+			<RadioButton
+				android:id="@+id/rb_distance_disable"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="禁用"
+				android:textSize="14sp"
+				android:checked="true"/>
+
+			<RadioButton
+				android:id="@+id/rb_distance_enable"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="启用"
+				android:textSize="14sp"
+				android:layout_marginLeft="15dp"/>
+
+		</RadioGroup>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_marginTop="12dp">
+
+		<Button
+			android:id="@+id/btn_edit_delete"
+			android:layout_width="wrap_content"
+			android:layout_height="32dp"
+			android:background="@drawable/btn_delete_bg"
+			android:text="删除位置"
+			android:textColor="@android:color/white"
+			android:textSize="13sp"
+			android:paddingStart="15dp"
+			android:paddingEnd="15dp"/>
+
+		<View
+			android:layout_width="10dp"
+			android:layout_height="match_parent"/>
+
+		<Button
+			android:id="@+id/btn_edit_cancel"
+			android:layout_width="wrap_content"
+			android:layout_height="32dp"
+			android:background="@drawable/btn_cancel_bg"
+			android:text="取消"
+			android:textColor="@android:color/white"
+			android:textSize="13sp"
+			android:paddingStart="15dp"
+			android:paddingEnd="15dp"/>
+
+		<View
+			android:layout_width="10dp"
+			android:layout_height="match_parent"/>
+
+		<Button
+			android:id="@+id/btn_edit_save"
+			android:layout_width="wrap_content"
+			android:layout_height="32dp"
+			android:background="@drawable/btn_confirm_bg"
+			android:text="确定"
+			android:textColor="@android:color/white"
+			android:textSize="13sp"
+			android:paddingStart="15dp"
+			android:paddingEnd="15dp"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_marginTop="16dp">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="30dp"
+			android:orientation="horizontal">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:gravity="center_vertical"
+				android:text="关联任务（可编辑）："
+				android:textSize="14sp"
+				android:textColor="#333333"/>
+
+			<TextView
+				android:id="@+id/tv_task_count"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:gravity="center_vertical"
+				android:textSize="14sp"
+				android:textColor="#333333"/>
+			
+			<View
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"/>
+
+			<Button
+				android:id="@+id/btn_add_task"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:background="@drawable/btn_confirm_bg"
+				android:text="添加新任务"
+				android:textColor="@android:color/white"
+				android:textSize="12sp"
+				android:paddingStart="12dp"
+				android:paddingEnd="12dp"/>
+
+		</LinearLayout>
+
+		<cc.winboll.studio.positions.views.PositionTaskListView
+			android:id="@+id/ptlv_edit_tasks"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="6dp"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+

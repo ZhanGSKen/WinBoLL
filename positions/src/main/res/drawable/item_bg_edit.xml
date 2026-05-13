@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/item_bg_edit.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 状态1：按压时（编辑项被点击，反馈明确） -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#E0E6ED" /> <!-- 按压底色：比默认深一点的灰蓝色，反馈清晰 -->
+            <corners android:radius="8dp" />  <!-- 保持圆角统一 -->
+            <stroke
+                android:width="1.5dp"
+                android:color="#A0B4C8" />    <!-- 按压时边框加深，增强视觉焦点 -->
+        </shape>
+    </item>
+
+    <!-- 状态2：默认状态（未按压，区分简单视图） -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#EEEEEE" /> <!-- 默认底色：比简单视图深，明确编辑模式 -->
+            <corners android:radius="8dp" />  <!-- 与简单视图一致的圆角，UI不割裂 -->
+            <stroke
+                android:width="1.5dp"
+                android:color="#D0D8E0" />    <!-- 淡蓝色边框，暗示“可编辑” -->
+        </shape>
+    </item>
+</selector>
+

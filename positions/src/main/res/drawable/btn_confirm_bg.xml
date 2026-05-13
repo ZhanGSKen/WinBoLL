@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 按压状态（加深蓝色） -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#303F9F"/>
+            <corners android:radius="4dp"/>
+        </shape>
+    </item>
+    <!-- 默认状态（标准蓝色） -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#3F51B5"/>
+            <corners android:radius="4dp"/>
+        </shape>
+    </item>
+</selector>
+

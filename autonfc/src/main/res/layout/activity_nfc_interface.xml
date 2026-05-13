@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:padding="16dp">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="脚本名称 script:"/>
+
+		<EditText
+			android:id="@+id/et_script"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="如 auth.sh"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:text="参数 args (逗号分隔):"/>
+
+		<EditText
+			android:id="@+id/et_args"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="user1,pass123"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:text="工作目录 workDir:"/>
+
+		<EditText
+			android:id="@+id/et_workDir"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="/data/data/com.termux/files/home"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:text="后台执行 background (true/false):"/>
+
+		<EditText
+			android:id="@+id/et_background"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="true"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:text="结果目录 resultDir:"/>
+
+		<EditText
+			android:id="@+id/et_resultDir"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="/data/data/com.termux/files/log"/>
+
+		<Button
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="16dp"
+			android:onClick="onFillTestDataClick"
+			android:text="填入调试数据 (BuildWinBoLLProject.sh)"/>
+
+		<Button
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:onClick="onWriteClick"
+			android:text="写入 NFC (NfcTermuxCmd JSON)"/>
+
+		<TextView
+			android:id="@+id/tv_status"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="16dp"
+			android:text="状态"/>
+
+		<TextView
+			android:id="@+id/tv_result"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="16dp"
+			android:scrollbars="vertical"
+			android:textSize="14sp"/>
+
+	</LinearLayout>
+
+</ScrollView>
+

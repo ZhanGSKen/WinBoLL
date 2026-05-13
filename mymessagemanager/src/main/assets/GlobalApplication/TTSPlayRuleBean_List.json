@@ -1,0 +1,38 @@
+[
+  {
+    "userId": 1,
+    "ruleName": "规则1",
+    "demoSMSText": "【短信应用A】验证码123456",
+    "patternText": "^(【.*】)验证码(\\d)(\\d)(\\d)(\\d)(\\d)(\\d)$",
+    "ttdRuleText": "$1验证码是($2)($3)($4)($5)($6)($7)。",
+    "isSimpleView": false,
+    "isEnable": true
+  },
+  {
+    "userId": 1,
+    "ruleName": "规则2",
+    "demoSMSText": "[短信应用A]验证码123456",
+    "patternText": "^(\\[.*\\])验证码(\\d)(\\d)(\\d)(\\d)(\\d)(\\d)$",
+    "ttdRuleText": "$1验证码是($2)($3)($4)($5)($6)($7)。",
+    "isSimpleView": false,
+    "isEnable": true
+  },
+  {
+    "userId": 1,
+    "ruleName": "规则3",
+    "demoSMSText": "【短信应用A】验证码123456",
+    "patternText": ".*(【.+】).*",
+    "ttdRuleText": "短信来自$1。",
+    "isSimpleView": false,
+    "isEnable": true
+  },
+  {
+    "userId": 1,
+    "ruleName": "规则4",
+    "demoSMSText": "[短信应用A]验证码123456",
+    "patternText": ".*(\\[.*\\]).*",
+    "ttdRuleText": "短信来自$1。",
+    "isSimpleView": false,
+    "isEnable": true
+  }
+]

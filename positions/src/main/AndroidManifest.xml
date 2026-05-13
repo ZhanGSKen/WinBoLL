@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='utf-8'?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cc.winboll.studio.positions">
+
+    <!-- 只有在前台运行时才能获取大致位置信息 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!-- 在后台使用位置信息 -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
+    <!-- 运行前台服务 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <!-- 运行“location”类型的前台服务 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
+
+    <!-- 拥有完全的网络访问权限 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- 安装快捷方式 -->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+
+    <!-- 读取您共享存储空间中的内容 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!-- 修改或删除您共享存储空间中的内容 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <!-- 只能在前台获取精确的位置信息 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/MyAppTheme"
+        android:resizeableActivity="true"
+        android:name=".App">
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:exported="true">
+
+            <intent-filter>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <action android:name="android.intent.action.SEND"/>
+
+                <action android:name="android.intent.action.VIEW"/>
+
+                <action android:name="android.intent.action.EDIT"/>
+
+                <data android:mimeType="application/json"/>
+
+                <data android:mimeType="text/x-json"/>
+
+            </intent-filter>
+
+        </activity>
+
+        <activity-alias
+            android:name=".MainActivityWukong"
+            android:targetActivity=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:icon="@drawable/ic_launcher"
+            android:enabled="true">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcutsmain"/>
+
+        </activity-alias>
+
+        <activity-alias
+            android:name=".MainActivityLaojun"
+            android:targetActivity=".MainActivity"
+            android:exported="true"
+            android:label="@string/appplus_name"
+            android:icon="@drawable/ic_positions_plus"
+            android:enabled="false">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcutsplus"/>
+
+        </activity-alias>
+
+        <activity android:name="cc.winboll.studio.positions.activities.LocationActivity"/>
+
+        <activity android:name="cc.winboll.studio.positions.activities.ShortcutActionActivity"/>
+
+        <service
+            android:name=".services.MainService"
+            android:exported="false"/>
+
+        <service
+            android:name=".services.AssistantService"
+            android:exported="false"/>
+
+        <service
+            android:name=".services.DistanceRefreshService"
+            android:exported="false"/>
+
+        <receiver android:name="cc.winboll.studio.positions.receivers.MotionStatusReceiver">
+
+            <intent-filter>
+
+                <action android:name="cc.winboll.studio.positions.receivers.MotionStatusReceiver"/>
+
+            </intent-filter>
+
+        </receiver>
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="4.0"/>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider"/>
+
+        </provider>
+
+        <activity android:name="cc.winboll.studio.positions.activities.SettingsActivity"/>
+
+        <activity android:name="cc.winboll.studio.positions.activities.AboutActivity"/>
+
+    </application>
+
+</manifest>

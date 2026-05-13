@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 切换启动入口的快捷菜单 -->
+	<shortcut
+        android:shortcutId="switchto_en1"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher"
+        android:shortcutShortLabel="@string/switchto_en1"
+        android:shortcutLongLabel="@string/switchto_en1"
+        android:shortcutDisabledMessage="@string/en1_switch_disabled">
+        <intent
+            android:action="cc.winboll.studio.powerbell.App.ACTION_SWITCHTO_EN1"
+            android:targetPackage="cc.winboll.studio.powerbell"
+            android:targetClass="cc.winboll.studio.powerbell.activities.ShortcutActionActivity"
+            android:data="switchto_en1" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+	<!--<shortcut
+        android:shortcutId="switchto_cn1"
+        android:enabled="true"
+	    android:icon="@drawable/ic_launcher"
+        android:shortcutShortLabel="@string/switchto_cn1"
+        android:shortcutLongLabel="@string/switchto_cn1"
+        android:shortcutDisabledMessage="@string/cn1_switch_disabled">
+        <intent
+            android:action="cc.winboll.studio.powerbell.App.ACTION_SWITCHTO_CN1"
+            android:targetPackage="cc.winboll.studio.powerbell"
+            android:targetClass="cc.winboll.studio.powerbell.activities.ShortcutActionActivity"
+            android:data="switchto_cn1" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>-->
+	<shortcut
+        android:shortcutId="switchto_cn2"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher"
+        android:shortcutShortLabel="@string/switchto_cn2"
+        android:shortcutLongLabel="@string/switchto_cn2"
+        android:shortcutDisabledMessage="@string/cn2_switch_disabled">
+        <intent
+            android:action="cc.winboll.studio.powerbell.App.ACTION_SWITCHTO_CN2"
+            android:targetPackage="cc.winboll.studio.powerbell"
+            android:targetClass="cc.winboll.studio.powerbell.activities.ShortcutActionActivity"
+            android:data="switchto_cn2" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+</shortcuts>

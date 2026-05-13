@@ -1,0 +1,69 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply from: '../.winboll/winboll_lib_build.gradle'
+apply from: '../.winboll/winboll_lint_build.gradle'
+
+android {
+	// 适配MIUI12
+	compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+	
+    defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 30
+    }
+	
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+	
+    // 米盟 SDK
+    packagingOptions {
+         doNotStrip "*/*/libmimo_1011.so"
+    }
+}
+
+dependencies {
+    // 下拉控件
+    api 'com.baoyz.pullrefreshlayout:library:1.2.0'
+    // 拼音搜索
+    // https://mvnrepository.com/artifact/com.github.open-android/pinyin4j
+    api 'com.github.open-android:pinyin4j:2.5.0'
+    // SSH
+    api 'com.jcraft:jsch:0.1.55'
+    // Html 解析
+    api 'org.jsoup:jsoup:1.13.1'
+    // 二维码类库
+    api 'com.google.zxing:core:3.4.1'
+    api 'com.journeyapps:zxing-android-embedded:3.6.0'
+    // 应用介绍页类库
+    api 'io.github.medyo:android-about-page:2.0.0'
+    // 网络连接类库
+    api 'com.squareup.okhttp3:okhttp:4.4.1'
+    // AndroidX 类库
+    api 'androidx.appcompat:appcompat:1.1.0'
+    //api 'com.google.android.material:material:1.4.0'
+    //api 'androidx.viewpager:viewpager:1.0.0'
+    //api 'androidx.vectordrawable:vectordrawable:1.1.0'
+    //api 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
+    //api 'androidx.fragment:fragment:1.1.0'
+	
+	// 米盟
+	api 'com.miui.zeus:mimo-ad-sdk:5.3.+'//请使用最新版sdk
+     //注意：以下5个库必须要引入
+    //implementation 'androidx.appcompat:appcompat:1.4.1'
+    api 'androidx.recyclerview:recyclerview:1.0.0'
+    api 'com.google.code.gson:gson:2.8.5'
+    api 'com.github.bumptech.glide:glide:4.9.0'
+    //annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+	
+	// WinBoLL库 nexus.winboll.cc 地址
+    api 'cc.winboll.studio:libappbase:15.20.9'
+	// 备用库 jitpack.io 地址
+	//api 'com.github.ZhanGSKen:APPBase:appbase-v15.15.3'
+	
+    api fileTree(dir: 'libs', include: ['*.jar'])
+}

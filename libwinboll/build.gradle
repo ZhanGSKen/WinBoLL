@@ -1,0 +1,42 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply from: '../.winboll/winboll_lib_build.gradle'
+apply from: '../.winboll/winboll_lint_build.gradle'
+
+android {
+	// 适配MIUI12
+	compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 30
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+	// 网络连接类库
+    api 'com.squareup.okhttp3:okhttp:4.4.1'
+	// Gson
+	api 'com.google.code.gson:gson:2.8.9'
+    // Html 解析
+    api 'org.jsoup:jsoup:1.13.1'
+	// 添加JSch依赖（SFTP核心，com.jcraft:jsch:0.1.54）
+	api 'com.jcraft:jsch:0.1.54'
+	
+	// WinBoLL库 nexus.winboll.cc 地址
+	api 'cc.winboll.studio:libaes:15.20.3'
+    api 'cc.winboll.studio:libappbase:15.20.9'
+	
+    api fileTree(dir: 'libs', include: ['*.jar'])
+}

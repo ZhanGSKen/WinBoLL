@@ -1,0 +1,18 @@
+## WinBoLL Nexus Settings
+## These properties is setting for publishing
+## library project to WinBoLL Nexus Maven Repository.
+##
+
+## WinBoLL Extra APK file Output Path
+#APKOutputPath=/sdcard/WinBoLLStudio/APKs
+#APKOutputPath=/sdcard/WinBoLLStudio/APKs2
+
+## WinBoLL Extra APK file Output Path
+#ExtraAPKOutputPath=/sdcard/AppProjects/app.apk
+#ExtraAPKOutputPath=/sdcard/AppProjects/app2.apk
+
+## WinBoLL Nexus UserName
+#Nexus.name=nexustestuser1
+
+## WinBoLL Nexus Password
+#Nexus.password=nexustestuserpassword

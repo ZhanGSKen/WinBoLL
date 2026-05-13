@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 圆形按钮背景：默认青色，按压时深色 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 按钮按压状态（深色，增强交互反馈） -->
+    <item android:state_pressed="true">
+        <shape android:shape="oval"> <!-- oval=圆形 -->
+            <solid android:color="#0F9D58"/> <!-- 按压时颜色：深青色（接近Google绿，美观且醒目） -->
+            <stroke android:width="1dp" android:color="#0F9D58"/> <!-- 边框颜色与背景一致，避免白边 -->
+        </shape>
+    </item>
+
+    <!-- 按钮默认状态（青色） -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#14C38E"/> <!-- 默认颜色：亮青色（视觉舒适，符合悬浮按钮风格） -->
+            <stroke android:width="1dp" android:color="#14C38E"/>
+        </shape>
+    </item>
+
+</selector>

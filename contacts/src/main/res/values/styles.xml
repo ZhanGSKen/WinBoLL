@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 方案1：无 ActionBar 主题（推荐，适合自定义标题栏） -->
+    <style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+
+    </style>
+
+    <style name="GlobalCrashActivityTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorTittle">@color/colorAccent</item>
+        <item name="colorTittleBackgound">@color/colorPrimary</item>
+        <item name="colorText">@color/colorAccent</item>
+        <item name="colorTextBackgound">@color/colorPrimaryDark</item>
+
+    </style>
+
+    <!-- 方案2：带 ActionBar 主题（如需系统默认标题栏，启用此方案） -->
+    <!--
+    <style name="MyAppTheme" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+
+        <item name="android:textSizeHeadline">18sp</item>
+        <item name="android:textSizeBody">16sp</item>
+        <item name="android:textSizeSubtitle">14sp</item>
+        <item name="android:textSizeCaption">12sp</item>
+    </style>
+
+    <style name="GlobalCrashActivityTheme" parent="Theme.MaterialComponents.Light">
+        <item name="colorTittle">@color/colorAccent</item>
+        <item name="colorTittleBackgound">@color/colorPrimary</item>
+        <item name="colorText">@color/colorAccent</item>
+        <item name="colorTextBackgound">@color/colorPrimaryDark</item>
+
+        <item name="android:textSizeHeadline">20sp</item>
+        <item name="android:textSizeBody">14sp</item>
+        <item name="android:textSizeButton">16sp</item>
+    </style>
+    -->
+</resources>
+

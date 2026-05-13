@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+	
+	<cc.winboll.studio.libaes.views.ASupportToolbar
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/toolbar_height"
+		android:id="@+id/toolbar"
+		android:gravity="center_vertical"
+		style="@style/DefaultAToolbar"/>
+
+    <!-- 搜索框：提示文本改为“搜索应用名称或包名” -->
+    <EditText
+        android:id="@+id/et_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="12dp"
+        android:hint="搜索应用名称或包名"
+        android:background="@android:drawable/btn_default_small"
+        android:inputType="text"
+        android:textSize="16sp"/>
+
+    <!-- 应用列表 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_battery_report"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"/>
+
+</LinearLayout>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_sort"
+        android:icon="@drawable/ic_sort"
+        android:title="排序"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/sort_time_desc"
+                    android:title="时间倒序"/>
+                <item
+                    android:id="@+id/sort_time_asc"
+                    android:title="时间正序"/>
+                <item
+                    android:id="@+id/sort_name_desc"
+                    android:title="名称倒序"/>
+                <item
+                    android:id="@+id/sort_name_asc"
+                    android:title="名称正序"/>
+            </group>
+        </menu>
+    </item>
+</menu>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<cc.winboll.studio.libaes.views.ASupportToolbar
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/toolbar_height"
+		android:id="@+id/toolbar"
+		android:gravity="center_vertical"/>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:padding="20dp"
+		android:layout_weight="1.0">
+
+		<LinearLayout
+			android:id="@+id/layout_location_info"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="30dp"
+			android:orientation="vertical"
+			android:gravity="left">
+
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:gravity="center">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="实时位置信息"
+					android:textSize="22sp"
+					android:textStyle="bold"/>
+
+			</LinearLayout>
+
+			<TextView
+				android:id="@+id/tv_timenow"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="现在时间：等待更新..."
+				android:textSize="18sp"
+				android:layout_marginTop="10dp"/>
+
+			<TextView
+				android:id="@+id/tv_longitude"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="当前经度：等待更新..."
+				android:textSize="18sp"
+				android:layout_marginTop="10dp"/>
+
+			<TextView
+				android:id="@+id/tv_latitude"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="当前纬度：等待更新..."
+				android:textSize="18sp"
+				android:layout_marginTop="10dp"/>
+
+
+		</LinearLayout>
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/rv_position_list"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_below="@id/layout_location_info"
+			android:layout_above="@id/fab_p_button"
+			android:layout_marginTop="20dp"
+			android:paddingBottom="10dp"/>
+
+		<Button
+			android:id="@+id/fab_p_button"
+			android:layout_width="60dp"
+			android:layout_height="60dp"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true"
+			android:layout_margin="20dp"
+			android:background="@drawable/circle_button_bg"
+			android:text="P"
+			android:textColor="@android:color/white"
+			android:textSize="24sp"
+			android:elevation="6dp"
+			android:padding="0dp"
+			android:onClick="addNewPosition"/>
+
+	</RelativeLayout>
+
+</LinearLayout>
+
