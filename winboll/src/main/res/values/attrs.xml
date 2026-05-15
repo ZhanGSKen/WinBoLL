@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="borderCornerRadius" format="dimension" />
+
     <declare-styleable name="CustomToolbar">
         <attr name="toolbarTitle" format="string" />
         <attr name="toolbarTitleColor" format="color" />
