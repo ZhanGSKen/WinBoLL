@@ -12,13 +12,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.R;
 import cc.winboll.studio.libappbase.ToastUtils;
 import cc.winboll.studio.libappbase.dialogs.DebugHostDialog;
-import cc.winboll.studio.libappbase.dialogs.APPValidationDialog;
 import cc.winboll.studio.libappbase.models.APPInfo;
 
 /**
@@ -328,14 +326,7 @@ public class AboutView extends LinearLayout {
 					ToastUtils.show("已取消调试状态，重启应用可生效。");
 				}
 			});
-		// 正版校验弹窗
-        ibSigngetDialog.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					LogUtils.d(TAG, "ibSigngetDialog onClick：唤起应用正版校验弹窗");
-					new APPValidationDialog(mContext, mszAppName, mszAppVersionName).show();
-				}
-			});
+        
         // 调试地址配置弹窗
         ibWinBoLLHostDialog.setOnClickListener(new OnClickListener() {
 				@Override

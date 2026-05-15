@@ -26,11 +26,4 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-
-    // JSch for SFTP
-    api 'com.jcraft:jsch:0.1.55'
-    // Gson for JSON
-    api 'com.google.code.gson:gson:2.8.9'
-    // OkHttp for HTTP
-    api 'com.squareup.okhttp3:okhttp:3.12.13'
 }
