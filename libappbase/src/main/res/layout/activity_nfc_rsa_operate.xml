@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal"
+    android:background="?attr/activityBackgroundColor">
+
+    <!-- NFC状态提示文本 -->
+    <TextView
+        android:id="@+id/tv_nfc_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="正在监听NFC卡片，请贴近设备检测密钥..."
+        android:textSize="17sp"
+        android:textColor="?attr/activityTextColor"
+        android:gravity="center"
+        android:padding="12dp"
+        android:layout_marginBottom="30dp"/>
+
+    <!-- 私钥显示区域 -->
+    <TextView
+        android:id="@+id/tv_private_key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="私钥内容：无"
+        android:textSize="14sp"
+        android:textColor="?attr/activityTextColor"
+        android:layout_marginBottom="12dp"
+        android:maxLines="5"
+        android:ellipsize="end"/>
+
+    <!-- 公钥显示区域 -->
+    <TextView
+        android:id="@+id/tv_public_key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="公钥内容：无"
+        android:textSize="14sp"
+        android:textColor="?attr/activityTextColor"
+        android:layout_marginBottom="40dp"
+        android:maxLines="5"
+        android:ellipsize="end"/>
+
+    <!-- 核心功能按钮（复用：保存本地/初始化密钥） -->
+    <Button
+        android:id="@+id/btn_create_write_key"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="功能按钮待激活"
+        android:textSize="16sp"
+        android:textColor="?attr/toolbarTextColor"
+        android:backgroundTint="?attr/toolbarBackgroundColor"
+        android:padding="14dp"
+        android:enabled="false"/>
+
+</LinearLayout>

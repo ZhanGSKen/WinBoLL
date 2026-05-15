@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- APPBaseTheme 普通模式主题 -->
+    <style name="APPBaseTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+        <item name="themeDebug">@style/DebugActivityTheme</item>
+        <item name="aboutViewBackgroundColor">?attr/mainWindowBackgroundColor</item>
+        <item name="aboutViewTextColor">?attr/mainWindowTextColor</item>
+        <item name="aboutViewTitleColor">?attr/mainWindowTextColor</item>
+        <item name="aboutViewDividerColor">?attr/mainWindowDarkTextColor</item>
+        
+        
+        <item name="dialogBackgroundColor">?attr/mainWindowBackgroundColor</item>
+        <item name="dialogTextColor">?attr/mainWindowTextColor</item>
+        <item name="toolbarBackgroundColor">@color/toolbarBackgroundColor</item>
+        <item name="toolbarTextColor">@color/toolbarTextColor</item>
+        <item name="textViewBackgroundColor">?attr/mainWindowBackgroundColor</item>
+        <item name="textViewTextColor">?attr/mainWindowTextColor</item>
+        <item name="editTextBackgroundColor">?attr/mainWindowBackgroundColor</item>
+        <item name="editTextTextColor">?attr/mainWindowTextColor</item>
+        <item name="scrollViewBackgroundColor">?attr/mainWindowBackgroundColor</item>
+        <item name="activityBackgroundColor">?attr/mainWindowBackgroundColor</item>
+        <item name="activityTextColor">?attr/mainWindowTextColor</item>
+        <item name="mainWindowBackgroundColor">@color/mainWindowBackgroundColor</item>
+        <item name="mainWindowTextColor">@color/mainWindowTextColor</item>
+        <item name="mainWindowDarkBackgroundColor">@color/mainWindowBackgroundColor</item>
+        <item name="mainWindowDarkTextColor">@color/mainWindowTextColor</item>
+    </style>
+
+    <!-- DebugActivityTheme 普通模式样式 -->
+    <style name="DebugActivityTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/toolbarBackgroundColor</item>
+        <item name="colorTittle">?attr/mainWindowTextColor</item>
+        <item name="colorTittleBackgound">@color/toolbarBackgroundColor</item>
+        <item name="colorText">?attr/debugTextColor</item>
+        <item name="colorTextBackgound">?attr/mainWindowBackgroundColor</item>
+        <item name="debugTextColor">@color/debugTextColor</item>
+        <item name="toolbarTextColor">@color/toolbarTextColor</item>
+        
+	</style>
+
+    <!-- DialogStyle 对话框样式 -->
+	<style name="DialogStyle" parent="@android:style/Theme.Dialog">
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:windowNoTitle">true</item>
+	</style>
+
+</resources>
