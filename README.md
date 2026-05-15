@@ -9,15 +9,15 @@ WinBoLL 手机源码计划，旨在通过核心项目 WinBoLL 构建手机端与
 #### **仓库类型：功能说明**
 ☆ 基础项目分支 WinBoLL：手机端安卓应用开发基础模板。
 ☆ 应用项目分支 APPBase、AES、PowerBell、Positions**：安卓应用单一管理系列项目。
-☆ 源码汇总管理 OriginMaster**：各类分支源码合并存档，不适宜作为开发库使用。
+☆ 源码汇总管理 Projects_Keeper**：各类分支源码合并存档，不适宜作为开发库使用。
 
 ### 3. 源码合并管理推送路线图
 ⚠️ **注意**：仅仅展示不同应用模块源码的综合管理路线。分支合并操作时，必须具备 Git 管理经验。
 
-★ WinBoLL → APPBase → OriginMaster
-★ WinBoLL → AES → OriginMaster
-★ WinBoLL → PowerBell → OriginMaster
-★ WinBoLL → Positions → OriginMaster
+★ WinBoLL → APPBase → Projects_Keeper
+★ WinBoLL → AES → Projects_Keeper
+★ WinBoLL → PowerBell → Projects_Keeper
+★ WinBoLL → Positions → Projects_Keeper
 
 ## 二、WinBoLL 项目核心信息
 
