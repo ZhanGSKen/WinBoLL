@@ -25,14 +25,5 @@ android {
 }
 
 dependencies {
-	// 网络连接类库
-    api 'com.squareup.okhttp3:okhttp:4.4.1'
-	// Gson
-	api 'com.google.code.gson:gson:2.8.9'
-    // Html 解析
-    api 'org.jsoup:jsoup:1.13.1'
-	// 添加JSch依赖（SFTP核心，com.jcraft:jsch:0.1.54）
-	api 'com.jcraft:jsch:0.1.54'
-
     api fileTree(dir: 'libs', include: ['*.jar'])
 }
