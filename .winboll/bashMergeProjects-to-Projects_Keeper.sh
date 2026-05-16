@@ -187,3 +187,6 @@ git checkout origin/$item_lower $item_lower lib$item_lower
     git add .
     git commit -m "合并 $item 项目"
 done
+
+echo '正在推送 Projects_Keeper 项目'
+git push
