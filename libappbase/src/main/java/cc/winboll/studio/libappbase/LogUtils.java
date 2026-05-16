@@ -135,8 +135,8 @@ public class LogUtils {
             return;
         }
 
-        final long MAX_FILE_SIZE = 6291456L;
-        final long KEEP_FILE_SIZE = 3145728L;
+		final long KEEP_FILE_SIZE = 512000L; // 500K
+        final long MAX_FILE_SIZE = 2*KEEP_FILE_SIZE;
         final long fileSize = _mfLogCatchFile.length();
 
         if (fileSize <= MAX_FILE_SIZE) {
