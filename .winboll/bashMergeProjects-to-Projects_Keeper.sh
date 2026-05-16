@@ -160,7 +160,7 @@ echo -e "## 对象列表结束
 MERGE_APP_PROJECT_LIST=(
 DemoAPP
 )
-echo -e "#@@@ 开始合并模块源码 @@@#
+echo -e "#@@@ 开始合并应用型模块源码 @@@#
 ## 目标合并对象列表："
 
 for item in "${MERGE_APP_PROJECT_LIST[@]}"; do
@@ -177,7 +177,7 @@ WinBoLL
 APPBase
 AES
 )
-echo -e "#@@@ 开始合并模块源码 @@@#
+echo -e "#@@@ 开始合并类库型模块源码 @@@#
 ## 目标合并对象列表："
 
 for item in "${MERGE_LIB_PROJECT_LIST[@]}"; do
