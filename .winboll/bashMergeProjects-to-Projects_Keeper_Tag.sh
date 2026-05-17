@@ -1,34 +1,23 @@
 #!/system/bin/sh
-## 合并远程模块指定标签对应提交点文件夹到本地 projects_keeper_tag 分支
+## 流程：获取远程最新Tag → 获取Tag对应Commit → 按Commit合并远程模块目录到本地
 
-# ====================== 获取模块标签与对应Commit ======================
-get_module_tag_commit() {
-    local module_dir="$1"
-    local remote_branch="origin/${module_dir}"
-
-    git fetch origin "$module_dir" 2>/dev/null
+# ====================== 1. 获取模块远程最新版本TAG ======================
+get_module_latest_tag() {
+    local module_name="$1"
     git fetch origin --tags 2>/dev/null
-
-    # 获取远程分支最新commit
-    local latest_commit
-    latest_commit=$(git log -1 --pretty=format:%H "$remote_branch" 2>/dev/null)
-
-    echo "  调试：模块[$module_dir] 远程分支最新Commit = $latest_commit" >&2
-
-    if [ -z "$latest_commit" ]; then
-        echo ""
-        return
-    fi
-
-    # 匹配模块名-开头标签，取出标签名
-    local target_tag
-    target_tag=$(git ls-remote --tags origin "${module_dir}-*" 2>/dev/null \
+    # 筛选 模块名- 开头标签，按版本排序取最新
+    git ls-remote --tags origin "${module_name}-*" 2>/dev/null \
     | grep -v '\^{}' \
-    | awk -v cm="$latest_commit" '$1==cm{print $2}' \
-    | sed 's/refs\/tags\///')
+    | sort -V \
+    | tail -1 \
+    | awk '{print $2}' \
+    | sed 's/refs\/tags\///'
+}
 
-    # 输出格式：标签名|commit哈希
-    echo "${target_tag}|${latest_commit}"
+# ====================== 2. 通过TAG获取对应提交Commit哈希 ======================
+get_commit_by_tag() {
+    local tag_name="$1"
+    git rev-list -1 "$tag_name" 2>/dev/null
 }
 
 # ====================== 进入工作目录 ======================
@@ -39,16 +28,16 @@ if ! cd "$TARGET_DIR"; then
     exit 1
 fi
 
-# ====================== 同步远程代码与标签 ======================
+# ====================== 同步远程全部标签 ======================
 echo "=============================================="
-echo "同步远程代码及全部版本标签"
+echo "同步远程所有分支与版本标签"
 echo "=============================================="
-git pull
+git fetch origin --prune
 git fetch origin --tags
 echo "同步完成"
 echo ""
 
-# ====================== 锁定目标分支 ======================
+# ====================== 锁定本地目标分支 ======================
 CUR_BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null)
 TARGET_BRANCH="projects_keeper_tag"
 if [ "$CUR_BRANCH" != "$TARGET_BRANCH" ]; then
@@ -56,7 +45,7 @@ if [ "$CUR_BRANCH" != "$TARGET_BRANCH" ]; then
     exit 1
 fi
 
-# ====================== 目录结构校验 ======================
+# ====================== 目录结构校验（保留原有） ======================
 MERGE_OBJECTS_LIST=(
 .git
 .gitignore
@@ -134,54 +123,67 @@ check_diff() {
 }
 check_diff
 
-# ====================== 开始合并模块 ======================
-echo -e "#@@@ 开始按标签对应提交点合并模块 @@@#"
+# ====================== 开始批量合并模块 ======================
+echo -e "#@@@ 开始按【最新Tag+对应Commit】合并模块 @@@#"
 
 ## 合并应用型模块
 MERGE_APP_PROJECT_LIST=(DemoAPP)
-echo -e "#@@@ 应用型模块合并开始 @@#"
+echo -e "---------- 应用型模块合并 ----------"
 for item in "${MERGE_APP_PROJECT_LIST[@]}"; do
     item_lower=$(echo "$item" | tr 'A-Z' 'a-z')
-    tag_info=$(get_module_tag_commit "$item_lower")
-
-    # 分割 标签名 和 commit哈希
-    MOD_TAG=${tag_info%%|*}
-    MOD_COMMIT=${tag_info##*|}
-
-    if [ -z "$MOD_TAG" ] || [ -z "$MOD_COMMIT" ]; then
-        echo "跳过 $item_lower 未匹配有效标签与提交点"
+    # 1.获取远程最新TAG
+    LATEST_TAG=$(get_module_latest_tag "$item_lower")
+    if [ -z "$LATEST_TAG" ]; then
+        echo "跳过 $item_lower ：未查询到任何版本标签"
+        continue
+    fi
+    # 2.通过TAG获取对应提交点Commit
+    TARGET_COMMIT=$(get_commit_by_tag "$LATEST_TAG")
+    if [ -z "$TARGET_COMMIT" ]; then
+        echo "跳过 $item_lower ：标签 $LATEST_TAG 未查询到对应提交点"
         continue
     fi
 
-    echo "模块：$item_lower  标签：$MOD_TAG  对应提交点：$MOD_COMMIT"
-    # 核心：从远程模块分支 指定commit拉取对应文件夹
-    git checkout "origin/${item_lower}" "${MOD_COMMIT}:${item_lower}"
-    git add "${item_lower}"
-    git commit -m "合并模块 $item ，来源标签:$MOD_TAG 提交点:$MOD_COMMIT"
+    echo "模块：$item_lower"
+    echo "最新标签：$LATEST_TAG"
+    echo "对应提交点：$TARGET_COMMIT"
+    echo "----------------------------------------"
+
+    # 3.使用Commit从远程模块分支拉取目录合并到本地
+    git checkout origin/${item_lower} ${TARGET_COMMIT}:${item_lower}
+    git add ${item_lower}
+    git commit -m "合并模块${item} 来源最新标签:${LATEST_TAG} 提交点:${TARGET_COMMIT}"
 done
 
 ## 合并类库模块
 MERGE_LIB_PROJECT_LIST=(WinBoLL APPBase AES)
-echo -e "#@@@ 类库模块合并开始 @@#"
+echo -e "---------- 类库模块合并 ----------"
 for item in "${MERGE_LIB_PROJECT_LIST[@]}"; do
     item_lower=$(echo "$item" | tr 'A-Z' 'a-z')
-    tag_info=$(get_module_tag_commit "$item_lower")
-
-    MOD_TAG=${tag_info%%|*}
-    MOD_COMMIT=${tag_info##*|}
-
-    if [ -z "$MOD_TAG" ] || [ -z "$MOD_COMMIT" ]; then
-        echo "跳过 $item_lower 未匹配有效标签与提交点"
+    # 1.获取远程最新TAG
+    LATEST_TAG=$(get_module_latest_tag "$item_lower")
+    if [ -z "$LATEST_TAG" ]; then
+        echo "跳过 $item_lower ：未查询到任何版本标签"
+        continue
+    fi
+    # 2.通过TAG获取对应提交点Commit
+    TARGET_COMMIT=$(get_commit_by_tag "$LATEST_TAG")
+    if [ -z "$TARGET_COMMIT" ]; then
+        echo "跳过 $item_lower ：标签 $LATEST_TAG 未查询到对应提交点"
         continue
     fi
 
-    echo "模块：$item_lower  标签：$MOD_TAG  对应提交点：$MOD_COMMIT"
-    # 拉取主目录 + lib目录 指定commit文件
-    git checkout "origin/${item_lower}" "${MOD_COMMIT}:${item_lower}" "${MOD_COMMIT}:lib${item_lower}"
-    git add "${item_lower}" "lib${item_lower}"
-    git commit -m "合并模块 $item ，来源标签:$MOD_TAG 提交点:$MOD_COMMIT"
+    echo "模块：$item_lower"
+    echo "最新标签：$LATEST_TAG"
+    echo "对应提交点：$TARGET_COMMIT"
+    echo "----------------------------------------"
+
+    # 3.拉取主目录 + lib目录
+    git checkout origin/${item_lower} ${TARGET_COMMIT}:${item_lower} ${TARGET_COMMIT}:lib${item_lower}
+    git add ${item_lower} lib${item_lower}
+    git commit -m "合并模块${item} 来源最新标签:${LATEST_TAG} 提交点:${TARGET_COMMIT}"
 done
 
-echo "所有模块合并完成"
-echo "准备推送远程分支"
+echo "所有模块合并流程执行完毕"
+echo "准备推送至远程分支"
 git push
