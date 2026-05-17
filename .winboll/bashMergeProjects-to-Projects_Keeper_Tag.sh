@@ -203,7 +203,7 @@ for item in "${MERGE_APP_PROJECT_LIST[@]}"; do
     echo "合并 $item_lower （远程分支：origin/$item_lower，标签：$MOD_TAG）"
     git checkout origin/$item_lower $item_lower
     git add .
-    git commit -m "合并 $item 项目，关联版本标签：$MOD_TAG"
+    git commit -m "合并 $item 项目，$MOD_TAG"
 done
 
 ## 合并 LIB 项目
@@ -225,7 +225,7 @@ for item in "${MERGE_LIB_PROJECT_LIST[@]}"; do
     echo "合并 $item_lower （远程分支：origin/$item_lower，标签：$MOD_TAG）"
     git checkout origin/$item_lower $item_lower lib$item_lower
     git add .
-    git commit -m "合并 $item 项目，关联版本标签：$MOD_TAG"
+    git commit -m "合并 $item 项目，$MOD_TAG"
 done
 
 echo '正在推送 Projects_Keeper 项目'
