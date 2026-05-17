@@ -1,18 +1,19 @@
 #!/system/bin/sh
-## 合并其他项目分支的模块源码到projects_keeper_tag分支。
+## 合并其他项目 对应版本标签提交点 模块源码到projects_keeper_tag分支。
 
 # ====================== 函数定义：获取模块最新提交对应的远程标签 ======================
 # 参数1：模块名（小写如appbase、aes）
-# 自动以 origin/模块名 作为远程分支
+# 自动匹配 模块名- 开头版本标签
 # 返回：有标签输出标签名，无标签输出空
 get_module_latest_tag() {
     local module_dir="$1"
     local remote_branch="origin/${module_dir}"
 
-    # 先同步远程分支元数据
+    # 同步远程分支 + 同步全部远程标签
     git fetch origin "$module_dir" 2>/dev/null
+    git fetch origin --tags 2>/dev/null
 
-    # 修复：取整个远程分支最新Commit，不限制子目录
+    # 获取远程分支最新提交哈希
     local latest_commit
     latest_commit=$(git log -1 --pretty=format:%H "$remote_branch" 2>/dev/null)
 
@@ -24,7 +25,7 @@ get_module_latest_tag() {
         return
     fi
 
-    # 精准匹配：模块名- 开头标签 + 严格比对commit哈希
+    # 精准匹配：模块名- 开头标签 + 严格绑定当前commit哈希
     git ls-remote --tags origin "${module_dir}-*" 2>/dev/null \
     | grep -v '\^{}' \
     | awk -v target_commit="$latest_commit" '$1 == target_commit {print $2}' \
@@ -44,7 +45,7 @@ fi
 
 # ====================== 1. 拉取远程最新源码(失败直接退出) ======================
 echo "=============================================="
-echo "正在拉取远程最新源码..."
+echo "正在拉取远程最新源码与标签..."
 echo "=============================================="
 if ! git pull; then
     echo "=============================================="
@@ -53,7 +54,9 @@ if ! git pull; then
     echo "=============================================="
     exit 1
 fi
-echo "✅ 源码已拉取为最新状态"
+# 全局同步所有远程标签
+git fetch origin --tags
+echo "✅ 源码与标签同步完成"
 echo ""
 
 # ====================== 2. 目录路径检查 ======================
@@ -197,13 +200,14 @@ for item in "${MERGE_APP_PROJECT_LIST[@]}"; do
     MOD_TAG=$(get_module_latest_tag "$item_lower")
     # 无标签直接跳过所有操作：不checkout、不add、不commit
     if [ -z "$MOD_TAG" ]; then
-        echo "跳过 $item_lower ：最新提交未打标签"
+        echo "跳过 $item_lower ：未匹配到对应版本标签"
         continue
     fi
-    echo "合并 $item_lower （远程分支：origin/$item_lower，标签：$MOD_TAG）"
-    git checkout origin/$item_lower $item_lower
+    echo "合并 $item_lower （对应版本标签：$MOD_TAG）"
+    # 重点修改：从【标签】拉取对应模块文件夹，而非远程分支
+    git checkout "$MOD_TAG" "$item_lower"
     git add .
-    git commit -m "合并 $item 项目，$MOD_TAG"
+    git commit -m "合并 $item 项目，对应版本标签：$MOD_TAG"
 done
 
 ## 合并 LIB 项目
@@ -219,13 +223,14 @@ for item in "${MERGE_LIB_PROJECT_LIST[@]}"; do
     MOD_TAG=$(get_module_latest_tag "$item_lower")
     # 无标签直接跳过所有操作
     if [ -z "$MOD_TAG" ]; then
-        echo "跳过 $item_lower ：最新提交未打标签"
+        echo "跳过 $item_lower ：未匹配到对应版本标签"
         continue
     fi
-    echo "合并 $item_lower （远程分支：origin/$item_lower，标签：$MOD_TAG）"
-    git checkout origin/$item_lower $item_lower lib$item_lower
+    echo "合并 $item_lower （对应版本标签：$MOD_TAG）"
+    # 从指定标签节点拉取对应目录文件
+    git checkout "$MOD_TAG" "$item_lower" "lib$item_lower"
     git add .
-    git commit -m "合并 $item 项目，$MOD_TAG"
+    git commit -m "合并 $item 项目，对应版本标签：$MOD_TAG"
 done
 
 echo '正在推送 Projects_Keeper 项目'
