@@ -194,8 +194,8 @@ echo -e "#@@@ 开始合并应用型模块源码 @@@#"
 
 for item in "${MERGE_APP_PROJECT_LIST[@]}"; do
     item_lower=$(echo "$item" | tr 'A-Z' 'a-z')
-    # 自动使用 origin/模块名 作为远程分支，检测标签
     MOD_TAG=$(get_module_latest_tag "$item_lower")
+    # 无标签直接跳过所有操作：不checkout、不add、不commit
     if [ -z "$MOD_TAG" ]; then
         echo "跳过 $item_lower ：最新提交未打标签"
         continue
@@ -216,8 +216,8 @@ echo -e "#@@@ 开始合并类库型模块源码 @@@#"
 
 for item in "${MERGE_LIB_PROJECT_LIST[@]}"; do
     item_lower=$(echo "$item" | tr 'A-Z' 'a-z')
-    # 自动使用 origin/模块名 作为远程分支，检测标签
     MOD_TAG=$(get_module_latest_tag "$item_lower")
+    # 无标签直接跳过所有操作
     if [ -z "$MOD_TAG" ]; then
         echo "跳过 $item_lower ：最新提交未打标签"
         continue
