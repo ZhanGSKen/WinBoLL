@@ -9,14 +9,25 @@ get_module_latest_tag() {
     local module_dir="$1"
     local remote_branch="origin/${module_dir}"
 
-    # 获取该模块目录最新一次提交CommitHash
+    # 先同步远程分支元数据
+    git fetch origin "$module_dir" 2>/dev/null
+
+    # 【修复】直接取远程分支最新完整Commit，再限定模块目录
     local latest_commit
     latest_commit=$(git log -1 --pretty=format:%H "$remote_branch" -- "$module_dir"/ 2>/dev/null)
 
-    # 匹配远程同commit、模块前缀的标签，过滤废弃^{}引用
+    echo "  调试：模块[$module_dir] 最新Commit = $latest_commit"
+
+    # 无commit直接返回空
+    if [ -z "$latest_commit" ]; then
+        echo "  调试：未获取到有效Commit，跳过"
+        return
+    fi
+
+    # 【修复】放宽匹配，不用严格行首，兼容ls-remote输出格式
     git ls-remote --tags origin "${module_dir}*" 2>/dev/null \
     | grep -v '\^{}' \
-    | grep "^${latest_commit}" \
+    | grep "$latest_commit" \
     | awk '{print $2}' \
     | sed "s/refs\/tags\///"
 }
@@ -220,4 +231,3 @@ done
 
 echo '正在推送 Projects_Keeper 项目'
 git push
-
