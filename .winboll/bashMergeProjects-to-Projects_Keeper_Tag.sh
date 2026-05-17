@@ -1,84 +1,65 @@
 #!/system/bin/sh
-## 合并其他项目 对应版本标签提交点 模块源码到projects_keeper_tag分支。
+## 合并远程指定版本标签下模块文件夹到本地 projects_keeper_tag 分支
 
-# ====================== 函数定义：获取模块最新提交对应的远程标签 ======================
-# 参数1：模块名（小写如appbase、aes）
-# 自动匹配 模块名- 开头版本标签
-# 返回：有标签输出标签名，无标签输出空
+# ====================== 获取模块对应远程版本标签 ======================
 get_module_latest_tag() {
     local module_dir="$1"
     local remote_branch="origin/${module_dir}"
 
-    # 同步远程分支 + 同步全部远程标签
-    git fetch origin "$module_dir" 2>/dev/null
-    git fetch origin --tags 2>/dev/null
+    # 强制拉取远程分支+全部远程标签到本地
+    git fetch origin "$module_dir"
+    git fetch origin --tags
 
     # 获取远程分支最新提交哈希
     local latest_commit
     latest_commit=$(git log -1 --pretty=format:%H "$remote_branch" 2>/dev/null)
 
-    echo "  调试：模块[$module_dir] 远程分支最新Commit = $latest_commit"
+    # 调试信息输出到错误流，不污染返回值
+    echo "  调试：模块[$module_dir] 远程最新Commit = $latest_commit" >&2
 
-    # 无commit直接返回空
     if [ -z "$latest_commit" ]; then
-        echo "  调试：未获取到有效Commit，跳过"
+        echo "  调试：无有效提交" >&2
+        echo ""
         return
     fi
 
-    # 精准匹配：模块名- 开头标签 + 严格绑定当前commit哈希
-    git ls-remote --tags origin "${module_dir}-*" 2>/dev/null \
+    # 匹配 模块名-xxx 格式标签，绑定对应commit
+    local tag_val
+    tag_val=$(git ls-remote --tags origin "${module_dir}-*" 2>/dev/null \
     | grep -v '\^{}' \
-    | awk -v target_commit="$latest_commit" '$1 == target_commit {print $2}' \
-    | sed "s/refs\/tags\///"
+    | awk -v cm="$latest_commit" '$1==cm{print $2}' \
+    | sed 's/refs\/tags\///')
+
+    # 纯净返回标签字符串
+    echo "$tag_val"
 }
 
-# ====================== 0. 进入目标目录 ======================
+# ====================== 进入工作目录 ======================
 TARGET_DIR="/sdcard/AppProjects/Projects_Keeper_Tag"
-
-echo "切换工作目录到：$TARGET_DIR"
+echo "切换工作目录：$TARGET_DIR"
 if ! cd "$TARGET_DIR"; then
-    echo "=============================================="
-    echo "错误：无法进入目标目录 $TARGET_DIR"
-    echo "=============================================="
+    echo "目录切换失败！"
     exit 1
 fi
 
-# ====================== 1. 拉取远程最新源码(失败直接退出) ======================
+# ====================== 同步远程代码与所有标签 ======================
 echo "=============================================="
-echo "正在拉取远程最新源码与标签..."
+echo "同步远程代码及全部版本标签"
 echo "=============================================="
-if ! git pull; then
-    echo "=============================================="
-    echo "错误：拉取远程源码失败！"
-    echo "请检查网络、仓库冲突或手动处理 git 状态后再执行脚本。"
-    echo "=============================================="
-    exit 1
-fi
-# 全局同步所有远程标签
+git pull
 git fetch origin --tags
-echo "✅ 源码与标签同步完成"
+echo "同步完成"
 echo ""
 
-# ====================== 2. 目录路径检查 ======================
-CUR_DIR=$(pwd)
-if [ "$CUR_DIR" != "$TARGET_DIR" ]; then
-    echo "错误：当前目录不是项目根目录！"
-    echo "请先进入目录：$TARGET_DIR"
-    exit 1
-fi
-
-# ====================== 3. Git 分支检查 ======================
+# ====================== 强制锁定本地分支 ======================
 CUR_BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null)
 TARGET_BRANCH="projects_keeper_tag"
-
 if [ "$CUR_BRANCH" != "$TARGET_BRANCH" ]; then
-    echo "错误：当前不在 $TARGET_BRANCH 分支！"
-    echo "当前分支：$CUR_BRANCH"
-    echo "请先执行：git checkout $TARGET_BRANCH"
+    echo "错误：当前不在 $TARGET_BRANCH 分支，请先切换！"
     exit 1
 fi
 
-# ====================== 4. 预设标准模块列表 ======================
+# ====================== 目录校验数组(保留原样) ======================
 MERGE_OBJECTS_LIST=(
 .git
 .gitignore
@@ -115,7 +96,6 @@ winboll
 winboll.properties-demo
 )
 
-# ====================== 5. 获取当前目录真实文件列表 ======================
 REAL_ITEMS=()
 while IFS= read -r line; do
     if [[ "$line" != "." && "$line" != ".." ]]; then
@@ -123,11 +103,9 @@ while IFS= read -r line; do
     fi
 done < <(ls -a)
 
-# ====================== 6. 差异比对函数 ======================
 check_diff() {
     local missing=()
     local extra=()
-
     for item in "${MERGE_OBJECTS_LIST[@]}"; do
         local found=0
         for r in "${REAL_ITEMS[@]}"; do
@@ -140,7 +118,6 @@ check_diff() {
             missing+=("$item")
         fi
     done
-
     for r in "${REAL_ITEMS[@]}"; do
         local found=0
         for item in "${MERGE_OBJECTS_LIST[@]}"; do
@@ -153,85 +130,55 @@ check_diff() {
             extra+=("$r")
         fi
     done
-
     if [[ ${#missing[@]} -gt 0 || ${#extra[@]} -gt 0 ]]; then
-        echo "=============================================="
-        echo "【错误】合并环境与脚本预设列表不匹配！"
-        echo "请手动核对并修改合并脚本。"
-        echo "=============================================="
-
-        if [[ ${#missing[@]} -gt 0 ]]; then
-            echo -e "\n👉 本地缺失项目："
-            for m in "${missing[@]}"; do echo "  $m"; done
-        fi
-
-        if [[ ${#extra[@]} -gt 0 ]]; then
-            echo -e "\n👉 本地多余项目："
-            for e in "${extra[@]}"; do echo "  $e"; done
-        fi
-
-        echo -e "\n=============================================="
+        echo "目录结构不匹配，终止执行"
         exit 1
     fi
 }
-
-# 执行差异校验
 check_diff
 
-# ====================== 全部校验通过，继续执行合并 ======================
-echo -e "#@@@ 开始合并模块源码 @@@#
-## 目标合并对象列表："
+# ====================== 开始合并模块 ======================
+echo -e "#@@@ 开始合并标签版本模块源码 @@@#"
 
-for item in "${MERGE_OBJECTS_LIST[@]}"; do
-    echo "$item"
-done
-
-echo -e "## 对象列表结束
-"
-
-## 合并 APP 项目
-MERGE_APP_PROJECT_LIST=(
-DemoAPP
-)
-echo -e "#@@@ 开始合并应用型模块源码 @@@#"
-
+## 合并应用型模块
+MERGE_APP_PROJECT_LIST=(DemoAPP)
+echo -e "#@@@ 应用型模块开始合并 @@#"
 for item in "${MERGE_APP_PROJECT_LIST[@]}"; do
     item_lower=$(echo "$item" | tr 'A-Z' 'a-z')
     MOD_TAG=$(get_module_latest_tag "$item_lower")
-    # 无标签直接跳过所有操作：不checkout、不add、不commit
+
+    # 无标签直接跳过，不执行任何操作
     if [ -z "$MOD_TAG" ]; then
-        echo "跳过 $item_lower ：未匹配到对应版本标签"
+        echo "跳过 $item_lower 未匹配对应版本标签"
         continue
     fi
-    echo "合并 $item_lower （对应版本标签：$MOD_TAG）"
-    # 重点修改：从【标签】拉取对应模块文件夹，而非远程分支
-    git checkout "$MOD_TAG" "$item_lower"
-    git add .
-    git commit -m "合并 $item 项目，对应版本标签：$MOD_TAG"
+
+    echo "正在合并 $item_lower 标签版本：$MOD_TAG"
+    # 从远程标签拉取文件夹覆盖到本地
+    git checkout origin/tags/"$MOD_TAG" -- "$item_lower"
+    # 仅添加当前模块文件，不全局add
+    git add "$item_lower"
+    git commit -m "合并模块 $item ，来源版本标签：$MOD_TAG"
 done
 
-## 合并 LIB 项目
-MERGE_LIB_PROJECT_LIST=(
-WinBoLL
-APPBase
-AES
-)
-echo -e "#@@@ 开始合并类库型模块源码 @@@#"
-
+## 合并类库模块
+MERGE_LIB_PROJECT_LIST=(WinBoLL APPBase AES)
+echo -e "#@@@ 类库模块开始合并 @@#"
 for item in "${MERGE_LIB_PROJECT_LIST[@]}"; do
     item_lower=$(echo "$item" | tr 'A-Z' 'a-z')
     MOD_TAG=$(get_module_latest_tag "$item_lower")
-    # 无标签直接跳过所有操作
+
     if [ -z "$MOD_TAG" ]; then
-        echo "跳过 $item_lower ：未匹配到对应版本标签"
+        echo "跳过 $item_lower 未匹配对应版本标签"
         continue
     fi
-    echo "合并 $item_lower （对应版本标签：$MOD_TAG）"
-    # 从指定标签节点拉取对应目录文件
-    git checkout "$MOD_TAG" "$item_lower" "lib$item_lower"
-    git add .
-    git commit -m "合并 $item 项目，对应版本标签：$MOD_TAG"
+
+    echo "正在合并 $item_lower 标签版本：$MOD_TAG"
+    git checkout origin/tags/"$MOD_TAG" -- "$item_lower" "lib$item_lower"
+    git add "$item_lower" "lib$item_lower"
+    git commit -m "合并模块 $item ，来源版本标签：$MOD_TAG"
 done
 
-echo '正在推送 Projects_Keeper 项目'
+echo "所有模块合并执行完毕"
+echo "准备推送远程分支"
 git push
