@@ -21,6 +21,11 @@ android {
     }
 	
     // 米盟 SDK
+     compileOptions {
+         sourceCompatibility JavaVersion.VERSION_1_7
+         targetCompatibility JavaVersion.VERSION_1_7
+     }
+
     packagingOptions {
          doNotStrip "*/*/libmimo_1011.so"
     }
