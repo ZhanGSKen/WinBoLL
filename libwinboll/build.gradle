@@ -36,7 +36,7 @@ dependencies {
 	
 	// WinBoLL库 nexus.winboll.cc 地址
 	api 'cc.winboll.studio:libaes:15.20.3'
-    api 'cc.winboll.studio:libappbase:15.20.9'
+    api 'cc.winboll.studio:libappbase:15.20.15'
 	
     api fileTree(dir: 'libs', include: ['*.jar'])
 }
