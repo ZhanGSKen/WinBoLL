@@ -1,5 +1,5 @@
 #!/system/bin/sh
-## 合并其他项目分支的模块源码到projects-keeper分支。
+## 合并其他项目分支的模块源码到projects_keeper_tag分支。
 
 # ====================== 函数定义：获取模块最新提交对应的远程标签 ======================
 # 参数1：模块名（小写如appbase、aes）
@@ -56,7 +56,7 @@ fi
 
 # ====================== 3. Git 分支检查 ======================
 CUR_BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null)
-TARGET_BRANCH="projects-keeper"
+TARGET_BRANCH="projects_keeper_tag"
 
 if [ "$CUR_BRANCH" != "$TARGET_BRANCH" ]; then
     echo "错误：当前不在 $TARGET_BRANCH 分支！"
