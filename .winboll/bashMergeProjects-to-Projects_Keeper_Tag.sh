@@ -1,50 +1,42 @@
 #!/system/bin/sh
-## 流程：获取远程最新Tag → 获取Tag对应远程Commit → 从远程分支指定提交点合并模块目录
+## 执行流程
+## 1.拉取远程所有标签 2.取模块最新标签 3.取标签对应commit 4.从远程commit拉取指定目录到本地
 
-# 获取模块远程完整最新TAG 无多余空格
-get_module_latest_tag() {
-    local module_name="$1"
-    git fetch origin --tags 2>/dev/null
-    git ls-remote --tags origin "${module_name}-*" 2>/dev/null \
-    | grep -v '\^{}' \
-    | sort -V \
-    | tail -1 \
-    | awk '{print $2}' \
-    | sed 's/refs\/tags\///'
+# 获取模块最新完整标签
+get_latest_module_tag(){
+    local mod=$1
+    git ls-remote --tags origin "${mod}-*" | grep -v '\^{}' | sort -V | tail -1 | awk '{print $2}' | sed 's/refs\/tags\///'
 }
 
-# 通过远程标签获取对应提交哈希
-get_remote_commit_by_tag() {
-    local tag_name="$1"
-    git rev-parse --verify "${tag_name}^{commit}" 2>/dev/null
+# 纯标签获取commit 不加多余前缀
+get_commit_from_tag(){
+    local tag=$1
+    git rev-parse --short "${tag}^{commit}"
 }
 
-# 进入工作目录
+# 工作目录
 TARGET_DIR="/sdcard/AppProjects/Projects_Keeper_Tag"
-echo "切换工作目录：$TARGET_DIR"
-if ! cd "$TARGET_DIR"; then
-    echo "目录切换失败！"
-    exit 1
-fi
+echo "进入目录：${TARGET_DIR}"
+cd "${TARGET_DIR}" || exit 1
 
-# 同步远程
-echo "=============================================="
+# 同步远程数据
+echo "========================================"
 echo "同步远程分支与全部版本标签"
-echo "=============================================="
+echo "========================================"
 git fetch origin --prune
 git fetch origin --tags
 echo "同步完成"
 echo ""
 
-# 锁定目标分支
-CUR_BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null)
+# 强制校验当前分支
+NOW_BRANCH=$(git symbolic-ref --short HEAD)
 TARGET_BRANCH="projects_keeper_tag"
-if [ "$CUR_BRANCH" != "$TARGET_BRANCH" ]; then
-    echo "错误：当前不在 $TARGET_BRANCH 分支，请先切换！"
+if [ "${NOW_BRANCH}" != "${TARGET_BRANCH}" ];then
+    echo "错误：请先切换到 ${TARGET_BRANCH} 分支"
     exit 1
 fi
 
-# 目录校验
+# 目录结构校验保留
 MERGE_OBJECTS_LIST=(
 .git
 .gitignore
@@ -83,90 +75,69 @@ winboll.properties-demo
 
 REAL_ITEMS=()
 while IFS= read -r line; do
-    if [[ "$line" != "." && "$line" != ".." ]]; then
-        REAL_ITEMS+=("$line")
-    fi
+    [[ $line != "." && $line != ".." ]] && REAL_ITEMS+=("$line")
 done < <(ls -a)
 
-check_diff() {
-    local missing=()
-    local extra=()
-    for item in "${MERGE_OBJECTS_LIST[@]}"; do
-        local found=0
-        for r in "${REAL_ITEMS[@]}"; do
-            if [[ "$item" == "$r" ]]; then
-                found=1
-                break
-            fi
-        done
-        if (( found == 0 )); then
-            missing+=("$item")
-        fi
+check_diff(){
+    local miss=() extra=()
+    for i in "${MERGE_OBJECTS_LIST[@]}";do
+        [[ ! " ${REAL_ITEMS[@]} " =~ " ${i} " ]] && miss+=("$i")
     done
-    for r in "${REAL_ITEMS[@]}"; do
-        local found=0
-        for item in "${MERGE_OBJECTS_LIST[@]}"; do
-            if [[ "$item" == "$r" ]]; then
-                found=1
-                break
-            fi
-        done
-        if (( found == 0 )); then
-            extra+=("$r")
-        fi
+    for i in "${REAL_ITEMS[@]}";do
+        [[ ! " ${MERGE_OBJECTS_LIST[@]} " =~ " ${i} " ]] && extra+=("$i")
     done
-    if [[ ${#missing[@]} -gt 0 || ${#extra[@]} -gt 0 ]]; then
-        echo "目录结构不匹配，终止执行"
+    if [[ ${#miss[@]} -gt 0 || ${#extra[@]} -gt 0 ]];then
+        echo "本地目录结构不一致，终止运行"
         exit 1
     fi
 }
 check_diff
 
-echo -e "#@@@ 开始按远程最新标签合并模块 @@@#"
+echo -e "#@@@ 开始按远程最新标签合并模块源码 @@@#"
 
 # 应用型模块
 MERGE_APP_PROJECT_LIST=(DemoAPP)
-echo -e "---------- 应用型模块合并 ----------"
-for item in "${MERGE_APP_PROJECT_LIST[@]}"; do
-    item_lower=$(echo "$item" | tr 'A-Z' 'a-z')
-    TAG=$(get_module_latest_tag "${item_lower}")
-    if [[ -z "$TAG" ]]; then
-        echo "跳过 ${item_lower}：无远程版本标签"
+echo -e "---------- 应用型模块 ----------"
+for name in "${MERGE_APP_PROJECT_LIST[@]}";do
+    low_name=$(echo "$name" | tr 'A-Z' 'a-z')
+    tag=$(get_latest_module_tag "${low_name}")
+    if [[ -z "${tag}" ]];then
+        echo "跳过 ${low_name}：无远程标签"
         continue
     fi
-    COMMIT=$(get_remote_commit_by_tag "$TAG")
-    if [[ -z "$COMMIT" ]]; then
-        echo "跳过 ${item_lower}：标签 $TAG 无有效提交点"
+    commit=$(get_commit_from_tag "${tag}")
+    if [[ -z "${commit}" ]];then
+        echo "跳过 ${low_name}：标签无有效提交点"
         continue
     fi
-    echo "模块：${item_lower} | 标签：$TAG | 提交哈希：$COMMIT"
-    # 从远程分支该提交点拉取目录
-    git checkout origin/${item_lower} ${COMMIT} -- ${item_lower}
-    git add ${item_lower}
-    git commit -m "合并模块${item} 来源远程标签:${TAG} 提交点:${COMMIT}"
+    echo "模块:${low_name} 最新标签:${tag} 提交ID:${commit}"
+    # 标准正确拉取命令
+    git checkout "${tag}" -- "${low_name}"
+    git add "${low_name}"
+    git commit -m "合并模块${name} 来源标签${tag} 提交${commit}"
 done
 
 # 类库模块
 MERGE_LIB_PROJECT_LIST=(WinBoLL APPBase AES)
-echo -e "---------- 类库模块合并 ----------"
-for item in "${MERGE_LIB_PROJECT_LIST[@]}"; do
-    item_lower=$(echo "$item" | tr 'A-Z' 'a-z')
-    TAG=$(get_module_latest_tag "${item_lower}")
-    if [[ -z "$TAG" ]]; then
-        echo "跳过 ${item_lower}：无远程版本标签"
+echo -e "---------- 类库模块 ----------"
+for name in "${MERGE_LIB_PROJECT_LIST[@]}";do
+    low_name=$(echo "$name" | tr 'A-Z' 'a-z')
+    tag=$(get_latest_module_tag "${low_name}")
+    if [[ -z "${tag}" ]];then
+        echo "跳过 ${low_name}：无远程标签"
         continue
     fi
-    COMMIT=$(get_remote_commit_by_tag "$TAG")
-    if [[ -z "$COMMIT" ]]; then
-        echo "跳过 ${item_lower}：标签 $TAG 无有效提交点"
+    commit=$(get_commit_from_tag "${tag}")
+    if [[ -z "${commit}" ]];then
+        echo "跳过 ${low_name}：标签无有效提交点"
         continue
     fi
-    echo "模块：${item_lower} | 标签：$TAG | 提交哈希：$COMMIT"
-    git checkout origin/${item_lower} ${COMMIT} -- ${item_lower} lib${item_lower}
-    git add ${item_lower} lib${item_lower}
-    git commit -m "合并模块${item} 来源远程标签:${TAG} 提交点:${COMMIT}"
+    echo "模块:${low_name} 最新标签:${tag} 提交ID:${commit}"
+    git checkout "${tag}" -- "${low_name}" "lib${low_name}"
+    git add "${low_name}" "lib${low_name}"
+    git commit -m "合并模块${name} 来源标签${tag} 提交${commit}"
 done
 
-echo "所有模块合并完成"
-echo "准备推送远程"
+echo "全部模块合并执行完毕"
+echo "执行推送：git push"
 git push
