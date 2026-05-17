@@ -1,16 +1,18 @@
 #!/system/bin/sh
 ## 流程：获取远程最新Tag → 获取Tag对应Commit → 按Commit合并远程模块目录到本地
 
-# ====================== 1. 获取模块远程最新版本TAG ======================
+# ====================== 1. 获取模块远程最新版本TAG（修复版本排序） ======================
 get_module_latest_tag() {
     local module_name="$1"
     git fetch origin --tags 2>/dev/null
+    # 取出所有同前缀标签，去除头部，纯版本排序，取最大最新
     git ls-remote --tags origin "${module_name}-*" 2>/dev/null \
     | grep -v '\^{}' \
-    | sort -V \
-    | tail -1 \
     | awk '{print $2}' \
-    | sed 's/refs\/tags\///'
+    | sed "s/refs\/tags\/${module_name}-//" \
+    | sort -t '.' -k1,1n -k2,2n -k3,3n -k4,4n \
+    | tail -1 \
+    | xargs echo "${module_name}-"
 }
 
 # ====================== 2. 通过TAG获取对应提交Commit哈希 ======================
@@ -146,9 +148,9 @@ for item in "${MERGE_APP_PROJECT_LIST[@]}"; do
     echo "对应提交点：$TARGET_COMMIT"
     echo "----------------------------------------"
 
-    # 正确写法：用commit检出指定目录
-    git checkout ${TARGET_COMMIT} -- ${item_lower}
-    git add ${item_lower}
+    # 正确语法：从指定提交点拉取文件夹覆盖本地
+    git checkout "${TARGET_COMMIT}" -- "${item_lower}"
+    git add "${item_lower}"
     git commit -m "合并模块${item} 来源最新标签:${LATEST_TAG} 提交点:${TARGET_COMMIT}"
 done
 
@@ -173,9 +175,8 @@ for item in "${MERGE_LIB_PROJECT_LIST[@]}"; do
     echo "对应提交点：$TARGET_COMMIT"
     echo "----------------------------------------"
 
-    # 同时检出主目录 + lib目录
-    git checkout ${TARGET_COMMIT} -- ${item_lower} lib${item_lower}
-    git add ${item_lower} lib${item_lower}
+    git checkout "${TARGET_COMMIT}" -- "${item_lower}" "lib${item_lower}"
+    git add "${item_lower}" "lib${item_lower}"
     git commit -m "合并模块${item} 来源最新标签:${LATEST_TAG} 提交点:${TARGET_COMMIT}"
 done
 
