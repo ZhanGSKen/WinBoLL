@@ -12,18 +12,22 @@ get_module_latest_tag() {
     # 先同步远程分支元数据
     git fetch origin "$module_dir" 2>/dev/null
 
-    # 获取该模块目录最新一次提交CommitHash
+    # 修复：取整个远程分支最新Commit，不限制子目录
     local latest_commit
-    latest_commit=$(git log -1 --pretty=format:%H "$remote_branch" -- "$module_dir"/ 2>/dev/null)
+    latest_commit=$(git log -1 --pretty=format:%H "$remote_branch" 2>/dev/null)
+
+    echo "  调试：模块[$module_dir] 远程分支最新Commit = $latest_commit"
 
     # 无commit直接返回空
-    [ -z "$latest_commit" ] && return
+    if [ -z "$latest_commit" ]; then
+        echo "  调试：未获取到有效Commit，跳过"
+        return
+    fi
 
-    # 匹配远程同commit、模块前缀的标签，过滤废弃^{}引用
-    git ls-remote --tags origin "${module_dir}*" 2>/dev/null \
+    # 精准匹配：模块名- 开头标签 + 严格比对commit哈希
+    git ls-remote --tags origin "${module_dir}-*" 2>/dev/null \
     | grep -v '\^{}' \
-    | grep "$latest_commit" \
-    | awk '{print $2}' \
+    | awk -v target_commit="$latest_commit" '$1 == target_commit {print $2}' \
     | sed "s/refs\/tags\///"
 }
 
@@ -190,6 +194,7 @@ echo -e "#@@@ 开始合并应用型模块源码 @@@#"
 
 for item in "${MERGE_APP_PROJECT_LIST[@]}"; do
     item_lower=$(echo "$item" | tr 'A-Z' 'a-z')
+    # 自动使用 origin/模块名 作为远程分支，检测标签
     MOD_TAG=$(get_module_latest_tag "$item_lower")
     if [ -z "$MOD_TAG" ]; then
         echo "跳过 $item_lower ：最新提交未打标签"
@@ -198,8 +203,7 @@ for item in "${MERGE_APP_PROJECT_LIST[@]}"; do
     echo "合并 $item_lower （远程分支：origin/$item_lower，标签：$MOD_TAG）"
     git checkout origin/$item_lower $item_lower
     git add .
-    # 提交备注带上标签名
-    git commit -m "合并 $item 项目，关联标签：$MOD_TAG"
+    git commit -m "合并 $item 项目，关联版本标签：$MOD_TAG"
 done
 
 ## 合并 LIB 项目
@@ -212,6 +216,7 @@ echo -e "#@@@ 开始合并类库型模块源码 @@@#"
 
 for item in "${MERGE_LIB_PROJECT_LIST[@]}"; do
     item_lower=$(echo "$item" | tr 'A-Z' 'a-z')
+    # 自动使用 origin/模块名 作为远程分支，检测标签
     MOD_TAG=$(get_module_latest_tag "$item_lower")
     if [ -z "$MOD_TAG" ]; then
         echo "跳过 $item_lower ：最新提交未打标签"
@@ -220,8 +225,7 @@ for item in "${MERGE_LIB_PROJECT_LIST[@]}"; do
     echo "合并 $item_lower （远程分支：origin/$item_lower，标签：$MOD_TAG）"
     git checkout origin/$item_lower $item_lower lib$item_lower
     git add .
-    # 提交备注带上标签名
-    git commit -m "合并 $item 项目，关联标签：$MOD_TAG"
+    git commit -m "合并 $item 项目，关联版本标签：$MOD_TAG"
 done
 
 echo '正在推送 Projects_Keeper 项目'
