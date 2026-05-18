@@ -50,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:layout_marginTop="0dp"> <!-- 移除顶部多余间距 -- android:background="@drawable/bg_container_border">
+        android:layout_marginTop="0dp"> <!-- 移除顶部多余间距 - android:background="@drawable/bg_container_border" -->
 
         <ImageView
             android:id="@+id/iv_winboll_store"

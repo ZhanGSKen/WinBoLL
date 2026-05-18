@@ -28,6 +28,6 @@
     <color name="toolbarTextColor">#FFFFFFFF</color>
     <color name="mainWindowBackgroundColor">#FF2C2C2C</color>
     <color name="mainWindowTextColor">#FFFFFFFF</color>
-    <color name="debugTextColor">#FFFF0000</color>
+    <color name="debugTextColor">#FFAAAAAA</color>
 
 </resources>
