@@ -1,11 +1,34 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="themeDebug">@style/MyDebugActivityTheme</item>
+        <item name="toolbarBackgroundColor">@color/toolbarBackgroundColor</item>
+        <item name="toolbarTextColor">@color/toolbarTextColor</item>
+        <item name="textViewBackgroundColor">?attr/mainWindowBackgroundColor</item>
+        <item name="textViewTextColor">?attr/mainWindowTextColor</item>
+        <item name="editTextBackgroundColor">?attr/mainWindowBackgroundColor</item>
+        <item name="editTextTextColor">?attr/mainWindowTextColor</item>
+        <item name="scrollViewBackgroundColor">?attr/mainWindowBackgroundColor</item>
+        <item name="activityBackgroundColor">?attr/mainWindowBackgroundColor</item>
+        <item name="activityTextColor">?attr/mainWindowTextColor</item>
+        <item name="mainWindowBackgroundColor">@color/mainWindowBackgroundColor</item>
+        <item name="mainWindowTextColor">@color/mainWindowTextColor</item>
+        <item name="mainWindowDarkBackgroundColor">@color/mainWindowBackgroundColor</item>
+        <item name="mainWindowDarkTextColor">@color/mainWindowTextColor</item>
+    </style>
+
+    <style name="MyDebugActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="colorTittle">?attr/mainWindowTextColor</item>
+        <item name="colorTittleBackgound">?attr/toolbarBackgroundColor</item>
+        <item name="colorText">?attr/debugTextColor</item>
+        <item name="colorTextBackgound">?attr/mainWindowBackgroundColor</item>
+        <item name="debugTextColor">@color/debugTextColor</item>
+        <item name="toolbarTextColor">@color/toolbarTextColor</item>
     </style>
 
 </resources>
