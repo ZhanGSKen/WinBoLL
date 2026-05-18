@@ -96,3 +96,7 @@
 // AutoNFC 项目编译设置
 //include ':autonfc'
 //rootProject.name = "autonfc"
+
+// DailyStamp 项目编译设置
+//include ':dailystamp'
+//rootProject.name = "dailystamp"
