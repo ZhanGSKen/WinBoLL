@@ -2,6 +2,7 @@ package cc.winboll.studio.libappbase;
 
 import android.util.JsonReader;
 import android.util.JsonWriter;
+import cc.winboll.studio.libappbase.models.libs1520000.BaseBean;
 import java.io.IOException;
 
 /**
