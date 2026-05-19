@@ -26,7 +26,7 @@ android {
         applicationId "cc.winboll.studio.appbase"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 1
+        versionCode 1520000
         // versionName 更新后需要手动设置 
         // .winboll/winbollBuildProps.properties 文件的 stageCount=0
         // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
