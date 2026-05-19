@@ -1,6 +1,7 @@
 package cc.winboll.studio.libappbase;
 
 import android.os.FileObserver;
+import java.io.File;
 import java.lang.ref.WeakReference;
 
 /**
@@ -54,7 +55,12 @@ public class LogViewThread extends Thread {
 		// 调试状态进行日志输出任务
 		if (GlobalApplication.isDebugging()) {
 			// 获取日志缓存目录路径（从 LogUtils 统一获取，确保路径一致性）
-			String logDirPath = LogUtils.getLogCacheDir().getPath();
+			File logDir = LogUtils.getLogCacheDir();
+			if (logDir == null) {
+				LogUtils.d(TAG, "日志缓存目录未初始化，线程退出");
+				return;
+			}
+			String logDirPath = logDir.getPath();
 			LogUtils.d(TAG, "启动日志文件监听，监听目录：" + logDirPath);
 
 			// 初始化日志文件监听器（监听目标目录的文件事件）

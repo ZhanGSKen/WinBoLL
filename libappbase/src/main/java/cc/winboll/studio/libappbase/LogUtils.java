@@ -71,6 +71,9 @@ public class LogUtils {
     }
 
     public static void init(final Context context, final LOG_LEVEL logLevel) {
+		if (!GlobalApplication.isDebugging()) {
+			return;
+		}
 		Log.d(TAG, "init 执行日志工具初始化");
 		_mContext = context;
 
@@ -247,6 +250,9 @@ public class LogUtils {
     }
 
     public static void setTAGListEnable(final String tag, final boolean isEnable) {
+        if (!_IsInited) {
+            return;
+        }
         final Iterator<Map.Entry<String, Boolean>> iterator = mapTAGList.entrySet().iterator();
         while (iterator.hasNext()) {
             final Map.Entry<String, Boolean> entry = iterator.next();
@@ -260,6 +266,9 @@ public class LogUtils {
     }
 
     public static void setALlTAGListEnable(final boolean isEnable) {
+        if (!_IsInited) {
+            return;
+        }
         for (final Map.Entry<String, Boolean> entry : mapTAGList.entrySet()) {
             entry.setValue(isEnable);
         }
@@ -269,6 +278,10 @@ public class LogUtils {
 
     // ====================== 日志级别控制 ======================
     public static void setLogLevel(final LOG_LEVEL logLevel) {
+        if (_mLogUtilsBean == null) {
+            Log.d(TAG, "setLogLevel LogUtils未初始化，忽略设置日志级别");
+            return;
+        }
         _mLogUtilsBean.setLogLevel(logLevel);
         _mLogUtilsBean.saveBeanToFile(_mfLogUtilsBeanFile.getPath(), _mLogUtilsBean);
     }
