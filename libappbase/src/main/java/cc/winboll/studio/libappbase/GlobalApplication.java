@@ -144,7 +144,11 @@ public class GlobalApplication extends Application {
      */
     private void initCoreComponents() {
         // 初始化日志工具（传入 Application 上下文）
-        LogUtils.init(this);
+		
+		// 调试状态下初始化日志工具
+		if (GlobalApplication.isDebugging()) {
+			LogUtils.init(this);
+		}
         // 初始化全局异常处理器（捕获应用崩溃信息，用于调试或上报）
         CrashHandler.init(this);
         // 初始化 Toast 工具（统一 Toast 样式、避免内存泄漏等）

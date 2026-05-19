@@ -51,30 +51,33 @@ public class LogViewThread extends Thread {
      */
     @Override
     public void run() {
-        // 获取日志缓存目录路径（从 LogUtils 统一获取，确保路径一致性）
-        String logDirPath = LogUtils.getLogCacheDir().getPath();
-        LogUtils.d(TAG, "启动日志文件监听，监听目录：" + logDirPath);
+		// 调试状态进行日志输出任务
+		if (GlobalApplication.isDebugging()) {
+			// 获取日志缓存目录路径（从 LogUtils 统一获取，确保路径一致性）
+			String logDirPath = LogUtils.getLogCacheDir().getPath();
+			LogUtils.d(TAG, "启动日志文件监听，监听目录：" + logDirPath);
 
-        // 初始化日志文件监听器（监听目标目录的文件事件）
-        mLogListener = new LogListener(logDirPath);
-        // 开始监听文件事件（非阻塞，内部通过 Native 层实现）
-        mLogListener.startWatching();
+			// 初始化日志文件监听器（监听目标目录的文件事件）
+			mLogListener = new LogListener(logDirPath);
+			// 开始监听文件事件（非阻塞，内部通过 Native 层实现）
+			mLogListener.startWatching();
 
-        // 循环等待退出标志（每 1 秒检查一次，降低 CPU 占用）
-        while (!isExit()) {
-            try {
-                Thread.sleep(1000); // 休眠 1 秒，避免忙等
-            } catch (InterruptedException e) {
-                // 线程被中断时，恢复中断标志并退出循环（避免无限阻塞）
-                Thread.currentThread().interrupt();
-                LogUtils.d(TAG, "日志监听线程被中断，准备退出。" + e);
-                break;
-            }
-        }
+			// 循环等待退出标志（每 1 秒检查一次，降低 CPU 占用）
+			while (!isExit()) {
+				try {
+					Thread.sleep(1000); // 休眠 1 秒，避免忙等
+				} catch (InterruptedException e) {
+					// 线程被中断时，恢复中断标志并退出循环（避免无限阻塞）
+					Thread.currentThread().interrupt();
+					LogUtils.d(TAG, "日志监听线程被中断，准备退出。" + e);
+					break;
+				}
+			}
 
-        // 收到退出标志，停止监听并释放资源
-        mLogListener.stopWatching();
-        LogUtils.d(TAG, "日志文件监听已停止，线程退出");
+			// 收到退出标志，停止监听并释放资源
+			mLogListener.stopWatching();
+			LogUtils.d(TAG, "日志文件监听已停止，线程退出");
+		}
     }
 
     /**

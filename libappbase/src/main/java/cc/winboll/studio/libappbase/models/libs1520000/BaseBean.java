@@ -152,7 +152,7 @@ public abstract class BaseBean<T extends BaseBean> {
         final JsonReader jsonReader = new JsonReader(stringReader);
         try {
             final T beanTemp = clazz.newInstance();
-            return beanTemp.readBeanFromJsonReader(jsonReader);
+            return (T) beanTemp.readBeanFromJsonReader(jsonReader);
         } catch (final InstantiationException e) {
             LogUtils.d(TAG, "实体反射实例化失败(InstantiationException)", Thread.currentThread().getStackTrace());
         } catch (final IllegalAccessException e) {
@@ -169,7 +169,7 @@ public abstract class BaseBean<T extends BaseBean> {
      * @param <T> 实体泛型
      * @return 解析结果
      */
-    public static <T extends BaseBean> boolean parseStringToBeanList(final String szBeanList, final ArrayList<T> beanList, final Class<T> clazz) {
+    public static <T extends BaseBean> boolean parseStringToBeanList(final String szBeanList, ArrayList<T> beanList, final Class<T> clazz) {
         LogUtils.d(TAG, "进入列表字符串解析方法");
         try {
             if (beanList == null) {
@@ -182,7 +182,7 @@ public abstract class BaseBean<T extends BaseBean> {
             jsonReader.beginArray();
             while (jsonReader.hasNext()) {
                 final T beanTemp = clazz.newInstance();
-                final T bean = beanTemp.readBeanFromJsonReader(jsonReader);
+                final T bean = (T) beanTemp.readBeanFromJsonReader(jsonReader);
                 if (bean != null) {
                     beanList.add(bean);
                 }

@@ -22,12 +22,6 @@ public class App extends GlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-		// 如果应用不在调试状态，就根据编译类型设置调试状态
-		if (isDebugging() != true) {
-			setIsDebugging(BuildConfig.DEBUG);
-		}
-		// release 版调试码
-		//setIsDebugging(!BuildConfig.DEBUG);
 		
         // 初始化 Toast 工具类（传入应用全局上下文，确保 Toast 可在任意地方调用）
         ToastUtils.init(getApplicationContext());

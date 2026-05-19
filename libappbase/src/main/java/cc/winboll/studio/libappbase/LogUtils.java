@@ -67,45 +67,26 @@ public class LogUtils {
 
     // ====================== 初始化入口 ======================
     public static void init(final Context context) {
-        init(context, LOG_LEVEL.Off);
+		init(context, LOG_LEVEL.Off);
     }
 
     public static void init(final Context context, final LOG_LEVEL logLevel) {
-        Log.d(TAG, "init 执行日志工具初始化");
-        _mContext = context;
+		Log.d(TAG, "init 执行日志工具初始化");
+		_mContext = context;
 
-        if (GlobalApplication.isDebugging()) {
-            initDebugDir();
-        } else {
-            initReleaseDir();
-        }
+		initLogUtilsDir();
 
-        initLogConfigBean();
-        addClassTAGList();
-        loadTAGBeanSettings();
-        checkAndTrimLogFileSize();
+		initLogConfigBean();
+		addClassTAGList();
+		loadTAGBeanSettings();
+		checkAndTrimLogFileSize();
 
-        _IsInited = true;
-        Log.d(TAG, "init 日志工具初始化完成");
+		_IsInited = true;
+		Log.d(TAG, "init 执行日志工具初始化完成");
     }
 
     // ====================== 目录初始化 ======================
-    private static void initDebugDir() {
-        final Context appContext = _mContext.getApplicationContext();
-        _mfLogCacheDir = new File(appContext.getExternalCacheDir(), TAG);
-        if (!_mfLogCacheDir.exists()) {
-            _mfLogCacheDir.mkdirs();
-        }
-        _mfLogCatchFile = new File(_mfLogCacheDir, "log.txt");
-
-        _mfLogDataDir = appContext.getExternalFilesDir(TAG);
-        if (!_mfLogDataDir.exists()) {
-            _mfLogDataDir.mkdirs();
-        }
-        _mfLogUtilsBeanFile = new File(_mfLogDataDir, TAG + ".json");
-    }
-
-    private static void initReleaseDir() {
+    private static void initLogUtilsDir() {
         final Context appContext = _mContext.getApplicationContext();
         _mfLogCacheDir = new File(appContext.getCacheDir(), TAG);
         if (!_mfLogCacheDir.exists()) {
@@ -113,7 +94,7 @@ public class LogUtils {
         }
         _mfLogCatchFile = new File(_mfLogCacheDir, "log.txt");
 
-        _mfLogDataDir = new File(appContext.getFilesDir(), TAG);
+        _mfLogDataDir = appContext.getExternalFilesDir(TAG);
         if (!_mfLogDataDir.exists()) {
             _mfLogDataDir.mkdirs();
         }
@@ -136,7 +117,7 @@ public class LogUtils {
         }
 
 		final long KEEP_FILE_SIZE = 25000L; // ~25KB 确保剪贴板可完整复制
-        final long MAX_FILE_SIZE = 2*KEEP_FILE_SIZE;
+        final long MAX_FILE_SIZE = 2 * KEEP_FILE_SIZE;
         final long fileSize = _mfLogCatchFile.length();
 
         if (fileSize <= MAX_FILE_SIZE) {
@@ -293,10 +274,13 @@ public class LogUtils {
     }
 
     public static LOG_LEVEL getLogLevel() {
-        return _mLogUtilsBean.getLogLevel();
+        return _mLogUtilsBean == null ?LOG_LEVEL.Off: _mLogUtilsBean.getLogLevel();
     }
 
     private static boolean isLoggable(final String tag, final LOG_LEVEL logLevel) {
+		if (!GlobalApplication.isDebugging()) {
+			return false;
+		}
         if (!_IsInited) {
             return false;
         }
