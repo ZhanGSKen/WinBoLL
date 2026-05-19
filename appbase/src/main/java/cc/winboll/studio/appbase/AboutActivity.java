@@ -37,7 +37,7 @@ public class AboutActivity extends Activity {
         appInfo.setAppName("APPBase");
         appInfo.setAppIcon(R.drawable.ic_winboll);
         appInfo.setAppDescription(getString(R.string.app_description));
-        appInfo.setAppGitName("WinBoLL");
+        appInfo.setAppGitName("APPBase");
         appInfo.setAppGitOwner("Studio");
         appInfo.setAppGitAPPBranch(branchName);
         appInfo.setAppGitAPPSubProjectFolder(branchName);
