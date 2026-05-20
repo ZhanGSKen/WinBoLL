@@ -101,4 +101,5 @@ lint-results.html
 #/gradle.properties
 
 ## APPBase 项目配置
-
+aes/
+libaes/
