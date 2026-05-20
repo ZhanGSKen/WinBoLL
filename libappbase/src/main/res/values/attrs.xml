@@ -60,4 +60,7 @@
     <!-- DebugLogStyle 应用调试日志样式属性 -->
     <attr name="debugTextColor" format="color"/>
 
+    <!-- 边框圆角属性 -->
+    <attr name="borderCornerRadius" format="dimension"/>
+
 </resources>
