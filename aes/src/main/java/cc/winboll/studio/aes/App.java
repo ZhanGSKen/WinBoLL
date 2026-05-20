@@ -18,8 +18,6 @@ public class App extends GlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-		setIsDebugging(BuildConfig.DEBUG);
-		//setIsDebugging(false);
 		WinBoLLActivityManager.init(this);
 
         // 初始化 Toast 框架
