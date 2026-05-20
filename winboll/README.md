@@ -21,7 +21,7 @@ WinBoLL 网站浏览器。
 
 1.  Fork 本仓库
 2.  新建 Feat_xxx 分支
-3.  提交代码 : ZhanGSKen(ZhanGSKen<zhangsken@188.com>)
+3.  提交代码 : ZhanGSKen(ZhanGSKen<ZhanGSKen@QQ.COM>)
 4.  新建 Pull Request
 
 
