@@ -129,11 +129,10 @@ public class GlobalApplication extends Application {
         // 初始化单例实例（确保在所有初始化操作前完成）
         sInstance = this;
 
+        restoreDebugStatus();
         // 初始化基础组件（日志、崩溃处理、Toast）
         initCoreComponents();
-        // 恢复/初始化调试模式状态（从本地文件读取，无文件则默认关闭调试）
-        restoreDebugStatus();
-        // 新增：初始化服务器地址（从 SP 读取到内存，提高后续访问效率）
+        // 初始化服务器地址（从 SP 读取到内存，提高后续访问效率）
         initWinbollHost();
 
         LogUtils.d(TAG, "GlobalApplication 初始化完成，单例实例已创建");
@@ -144,7 +143,11 @@ public class GlobalApplication extends Application {
      */
     private void initCoreComponents() {
         // 初始化日志工具（传入 Application 上下文）
-        LogUtils.init(this);
+		
+		// 调试状态下初始化日志工具
+		if (GlobalApplication.isDebugging()) {
+			LogUtils.init(this);
+		}
         // 初始化全局异常处理器（捕获应用崩溃信息，用于调试或上报）
         CrashHandler.init(this);
         // 初始化 Toast 工具（统一 Toast 样式、避免内存泄漏等）
