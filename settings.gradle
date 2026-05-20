@@ -1,0 +1,5 @@
+// APPBase 项目编译设置
+include ':appbase'
+include ':libappbase'
+rootProject.name = "appbase"
+
