@@ -27,6 +27,11 @@ public class LogActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		if(!GlobalApplication.isDebugging()) {
+			ToastUtils.show("非调试状态日志功能不可用");
+			finish();
+		}
+		
         // 设置布局文件（包含 LogView 控件）
         setContentView(R.layout.activity_log);
 

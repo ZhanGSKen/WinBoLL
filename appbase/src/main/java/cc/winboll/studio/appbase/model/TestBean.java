@@ -2,8 +2,8 @@ package cc.winboll.studio.appbase.model;
 
 import android.util.JsonReader;
 import android.util.JsonWriter;
-import cc.winboll.studio.libappbase.BaseBean;
 import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.models.libs1520000.BaseBean;
 import java.io.IOException;
 
 /**
