@@ -97,5 +97,5 @@ lint-results.html
 ## WinBoLL 基础应用(避免上传敏感配置)
 /winboll.properties
 /local.properties
-/settings.gradle
-/gradle.properties
+#/settings.gradle
+#/gradle.properties

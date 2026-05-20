@@ -1,0 +1,5 @@
+// AES 项目编译设置
+include ':aes'
+include ':libaes'
+rootProject.name = "aes"
+
