@@ -335,6 +335,7 @@ public class AboutView extends LinearLayout {
                         String savedToken = DebugSwitchInfoImageView.getDebugToken();
                         if (savedToken != null && savedToken.equals(inputToken)) {
                             GlobalApplication.setIsDebugging(true);
+                            GlobalApplication.saveDebugStatus(GlobalApplication.getInstance());
                             Toast.makeText(mContext, "调试解锁成功，重启应用后生效", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(mContext, "调试Token不匹配", Toast.LENGTH_SHORT).show();
