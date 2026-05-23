@@ -81,7 +81,8 @@
 				android:layout_width="48dp"
 				android:layout_height="48dp"
 				android:src="@drawable/ic_key"
-				android:id="@+id/ib_signgetdialog"
+				android:id="@+id/ib_debug_unlock"
+				android:contentDescription="应用调试解锁"
 				android:scaleType="fitCenter"
 				android:adjustViewBounds="true"
 				android:background="@null"/>
