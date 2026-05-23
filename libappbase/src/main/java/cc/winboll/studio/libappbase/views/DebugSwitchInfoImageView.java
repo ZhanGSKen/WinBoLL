@@ -1,10 +1,12 @@
 package cc.winboll.studio.libappbase.views;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+import java.util.UUID;
 import cc.winboll.studio.libappbase.GlobalApplication;
 
 /**
@@ -12,31 +14,51 @@ import cc.winboll.studio.libappbase.GlobalApplication;
  * @Date 2026/04/06 19:32
  * @Describe 具有调试模式切换功能的应用Logo控件，连续点击10次弹出提示
  */
-public class DebugSwitchImageView extends ImageView {
+public class DebugSwitchInfoImageView extends ImageView {
 
-    public static final String TAG = "DebugSwitchImageView";
+    public static final String TAG = "DebugSwitchInfoImageView";
 
     // 连续点击计数
     private int mClickCount = 0;
     // 目标点击次数
     private static final int TARGET_CLICK_COUNT = 10;
 
-	public DebugSwitchImageView(Context context) {
+    private static String mDebugToken = null;
+    private static final String SP_DEBUG_TOKEN = "debug_token_prefs";
+    private static final String KEY_DEBUG_TOKEN = "debug_token";
+
+    public static String getDebugToken() {
+        if (mDebugToken != null) {
+            return mDebugToken;
+        }
+        Context context = GlobalApplication.getInstance();
+        if (context != null) {
+            SharedPreferences sp = context.getSharedPreferences(SP_DEBUG_TOKEN, Context.MODE_PRIVATE);
+            mDebugToken = sp.getString(KEY_DEBUG_TOKEN, null);
+            if (mDebugToken == null) {
+                mDebugToken = UUID.randomUUID().toString();
+                sp.edit().putString(KEY_DEBUG_TOKEN, mDebugToken).apply();
+            }
+        }
+        return mDebugToken;
+    }
+
+	public DebugSwitchInfoImageView(Context context) {
         super(context);
         init();
     }
 
-    public DebugSwitchImageView(Context context, AttributeSet attrs) {
+    public DebugSwitchInfoImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public DebugSwitchImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DebugSwitchInfoImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    public DebugSwitchImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public DebugSwitchInfoImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }

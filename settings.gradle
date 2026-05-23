@@ -1,5 +1,98 @@
+// AutoInstaller 项目编译设置
+//include ':autoinstaller'
+//rootProject.name = "autoinstaller"
+
+// MJ 项目编译设置
+//include ':mj'
+//rootProject.name = "mj"
+
+// PowerBell 项目编译设置
+//include ':powerbell'
+//rootProject.name = "powerbell"
+
 // APPBase 项目编译设置
 include ':appbase'
 include ':libappbase'
 rootProject.name = "appbase"
 
+// APPUtils 项目编译设置
+//include ':apputils'
+//include ':libapputils'
+//rootProject.name = "apputils"
+
+// JC 项目编译设置
+//include ':jc'
+//include ':libjc'
+//rootProject.name = "jc"
+
+// AES 项目编译设置
+//include ':aes'
+//include ':libaes'
+//rootProject.name = "aes"
+
+// Contacts 项目编译设置
+//include ':contacts'
+//rootProject.name = "contacts"
+
+// MyMessageManager 项目编译设置
+//include ':mymessagemanager'
+//rootProject.name = "mymessagemanager"
+
+// TimeStamp 项目编译设置
+//include ':timestamp'
+//rootProject.name = "timestamp"
+
+// AndroidDemo 项目编译设置
+//include ':androiddemo'
+//rootProject.name = "androiddemo"
+
+// AndroidXDemo 项目编译设置
+//include ':androidxdemo'
+//rootProject.name = "androidxdemo"
+
+// Ollama 项目编译设置
+//include ':ollama'
+//rootProject.name = "ollama"
+
+// NumTable 项目编译设置
+//include ':numtable'
+//rootProject.name = "numtable"
+
+// MidiPlayer 项目编译设置
+//include ':midiplayer'
+//rootProject.name = "midiplayer"
+
+// WebPageSources 项目编译设置
+//include ':webpagesources'
+//rootProject.name = "webpagesources"
+
+// Positions 项目编译设置
+//include ':positions'
+//rootProject.name = "positions"
+
+// WinBoLL 项目编译设置
+//include ':winboll'
+//include ':libwinboll'
+//rootProject.name = "winboll"
+
+// RegExpUtils 项目编译设置
+//include ':regexputils'
+//rootProject.name = "regexputils"
+
+// GPSRelaySentinel 项目编译设置
+//include ':gpsrelaysentinel'
+//include ':libgpsrelaysentinel'
+//rootProject.name = "gpsrelaysentinel"
+
+// Gallery 项目编译设置
+//include ':gallery'
+//rootProject.name = "gallery"
+
+// DebugTemp 项目编译设置
+//include ':debugtemp'
+//include ':libdebugtemp'
+//rootProject.name = "debugtemp"
+
+// AutoNFC 项目编译设置
+//include ':autonfc'
+//rootProject.name = "autonfc"
