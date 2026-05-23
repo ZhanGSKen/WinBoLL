@@ -74,7 +74,7 @@ public class AboutView extends LinearLayout {
     private EditText metDevUserPassword;
 
     // ===================================== 页面视图控件 =====================================
-    private DebugSwitchImageView ivAppIcon;
+    private DebugSwitchInfoImageView ivAppIcon;
     private TextView tvAppNameVersion;
     private TextView tvAppDesc;
     private LinearLayout llFunctionContainer;
