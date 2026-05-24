@@ -21,6 +21,11 @@ android {
     }
 	
     // 米盟 SDK
+     compileOptions {
+         sourceCompatibility JavaVersion.VERSION_1_7
+         targetCompatibility JavaVersion.VERSION_1_7
+     }
+
     packagingOptions {
          doNotStrip "*/*/libmimo_1011.so"
     }
@@ -61,7 +66,7 @@ dependencies {
     //annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 	
 	// WinBoLL库 nexus.winboll.cc 地址
-    api 'cc.winboll.studio:libappbase:15.20.9'
+    api 'cc.winboll.studio:libappbase:15.20.18'
 	// 备用库 jitpack.io 地址
 	//api 'com.github.ZhanGSKen:APPBase:appbase-v15.15.3'
 	

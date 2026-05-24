@@ -1,6 +1,8 @@
 package cc.winboll.studio.libappbase.views;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -12,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.R;
@@ -74,12 +77,12 @@ public class AboutView extends LinearLayout {
     private EditText metDevUserPassword;
 
     // ===================================== 页面视图控件 =====================================
-    private DebugSwitchImageView ivAppIcon;
+    private DebugSwitchInfoImageView ivAppIcon;
     private TextView tvAppNameVersion;
     private TextView tvAppDesc;
     private LinearLayout llFunctionContainer;
 	private ImageButton ibSebugStepOver;
-    private ImageButton ibSigngetDialog;
+    private ImageButton ibDebugUnlock;
     private ImageButton ibWinBoLLHostDialog;
 
     // ===================================== 构造方法（按参数从少到多排序） =====================================
@@ -193,12 +196,12 @@ public class AboutView extends LinearLayout {
 		llFunctionContainer = findViewById(R.id.ll_function_container);
 		// 功能按钮绑定
 		ibSebugStepOver = findViewById(R.id.ib_debug_step_over);
-		ibSigngetDialog = findViewById(R.id.ib_signgetdialog);
+		ibDebugUnlock = findViewById(R.id.ib_debug_unlock);
 		ibWinBoLLHostDialog = findViewById(R.id.ib_winbollhostdialog);
 
 		// 调试按钮统一只在调试模式显示
 		ibWinBoLLHostDialog.setVisibility(GlobalApplication.isDebugging() ? View.VISIBLE : View.GONE);
-		//ibSigngetDialog.setVisibility(GlobalApplication.isDebugging() ? View.VISIBLE : View.GONE);
+		//ibDebugUnlock.setVisibility(GlobalApplication.isDebugging() ? View.VISIBLE : View.GONE);
 		ibSebugStepOver.setVisibility(GlobalApplication.isDebugging() ? View.VISIBLE : View.GONE);
 
 		// 绑定按钮点击事件
@@ -310,6 +313,47 @@ public class AboutView extends LinearLayout {
         LogUtils.d(TAG, "initAboutPageView()：视图组装完成，功能项加载完毕");
     }
 
+    // ===================================== 调试解锁弹窗 =====================================
+    private void showDebugUnlockDialog() {
+        final AlertDialog dialog = new AlertDialog.Builder(mContext).create();
+        dialog.setTitle("应用调试解锁");
+        dialog.setCanceledOnTouchOutside(true);
+
+        final EditText etToken = new EditText(mContext);
+        etToken.setHint("请输入调试Token");
+        dialog.setView(etToken);
+
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "调试解锁", (DialogInterface.OnClickListener) null);
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "关闭", (DialogInterface.OnClickListener) null);
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface d) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String inputToken = etToken.getText().toString().trim();
+                        String savedToken = DebugSwitchInfoImageView.getDebugToken();
+                        if (savedToken != null && savedToken.equals(inputToken)) {
+                            GlobalApplication.setIsDebugging(true);
+                            GlobalApplication.saveDebugStatus(GlobalApplication.getInstance());
+                            Toast.makeText(mContext, "调试解锁成功，重启应用后生效", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mContext, "调试Token不匹配", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+        dialog.show();
+    }
+
     // ===================================== 内部工具/事件方法 =====================================
     /**
      * 绑定功能按钮点击事件，处理正版校验、调试地址配置弹窗唤起
@@ -333,6 +377,15 @@ public class AboutView extends LinearLayout {
 				public void onClick(View v) {
 					LogUtils.d(TAG, "ibWinBoLLHostDialog onClick：唤起调试地址配置弹窗");
 					new DebugHostDialog(mContext).show();
+				}
+			});
+
+        // 应用调试解锁按钮
+        ibDebugUnlock.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					LogUtils.d(TAG, "ibDebugUnlock onClick：弹出调试解锁对话框");
+					showDebugUnlockDialog();
 				}
 			});
         LogUtils.d(TAG, "setBtnClickListener()：功能按钮点击事件绑定完成");
