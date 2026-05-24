@@ -207,7 +207,7 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${outputFileName}"
                                     }
-                                    // 设置权限775
+                                    // 设置权限775。
                                     if(fullApkFile.exists()){
                                         exec {
                                             commandLine 'chmod', '775', fullApkFile.absolutePath
@@ -225,7 +225,7 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${szCommonTagAPKName}"
                                     }
-                                    // 设置权限775
+                                    // 设置权限775。
                                     if(shortApkFile.exists()){
                                         exec {
                                             commandLine 'chmod', '775', shortApkFile.absolutePath
@@ -307,7 +307,7 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${outputFileName}"
                                     }
-                                    // 权限设为775
+                                    // 权限设为775。
                                     if(debugFullApk.exists()){
                                         exec {
                                             commandLine 'chmod', '775', debugFullApk.absolutePath
