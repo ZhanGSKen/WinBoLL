@@ -1,7 +1,8 @@
 package cc.winboll.studio.winboll.models;
 
 import android.content.Context;
-import cc.winboll.studio.libappbase.BaseBean;
+import cc.winboll.studio.libappbase.models.libs1520000.BaseBean;
+import cc.winboll.studio.winboll.models.TermuxButtonModel;
 import java.util.ArrayList;
 
 public class TermuxButtonManager {
