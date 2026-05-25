@@ -7,9 +7,9 @@ package cc.winboll.studio.winboll.models;
  */
 import android.util.JsonReader;
 import android.util.JsonWriter;
-import cc.winboll.studio.libappbase.BaseBean;
-import java.io.IOException;
 import cc.winboll.studio.libappbase.APPModel;
+import cc.winboll.studio.libappbase.models.libs1520000.BaseBean;
+import java.io.IOException;
 
 public class WinBoLLModel extends BaseBean {
     
