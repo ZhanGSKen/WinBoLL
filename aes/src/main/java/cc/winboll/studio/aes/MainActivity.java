@@ -84,11 +84,12 @@ public class MainActivity extends DrawerFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.toolbar_main, menu);
 //        if(App.isDebugging()) {
 //            getMenuInflater().inflate(cc.winboll.studio.libaes.R.menu.toolbar_studio_debug, menu);
 //        }
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override

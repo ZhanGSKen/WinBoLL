@@ -2,6 +2,9 @@
 <resources>
 
     <style name="AESTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#FF03AB4E</item>
+        <item name="colorPrimaryDark">#FF027C39</item>
+        <item name="colorAccent">#FF3DDC84</item>
         <item name="themeDebug">@style/DebugActivityTheme</item>
         <item name="aboutViewBackgroundColor">@color/mainWindowBackgroundColor</item>
         <item name="aboutViewTextColor">@color/mainWindowTextColor</item>
@@ -40,16 +43,16 @@
 
     <style name="AESAToolbar">
         <item name="attrAToolbarTitleTextColor">@color/colorTextColor</item>
-        <item name="attrAToolbarStartColor">@color/colorPrimaryDark</item>
-        <item name="attrAToolbarCenterColor">@color/colorPrimary</item>
-        <item name="attrAToolbarEndColor">@color/colorAccent</item>
+        <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
+        <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
+        <item name="attrAToolbarEndColor">?attr/colorAccent</item>
     </style>
 
     <style name="AESASupportToolbar">
         <item name="attrASupportToolbarTitleTextColor">@color/colorTextColor</item>
-        <item name="attrASupportToolbarStartColor">@color/colorPrimaryDark</item>
-        <item name="attrASupportToolbarCenterColor">@color/colorPrimary</item>
-        <item name="attrASupportToolbarEndColor">@color/colorAccent</item>
+        <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
+        <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
+        <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
     </style>
 
     <style name="DepthAESTheme" parent="AESTheme">
