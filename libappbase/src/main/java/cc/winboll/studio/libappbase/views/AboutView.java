@@ -1,14 +1,14 @@
 package cc.winboll.studio.libappbase.views;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -315,58 +315,42 @@ public class AboutView extends LinearLayout {
 
     // ===================================== 调试解锁弹窗 =====================================
     private void showDebugUnlockDialog() {
-        final Dialog dialog = new Dialog(mContext);
+        final AlertDialog dialog = new AlertDialog.Builder(mContext).create();
         dialog.setTitle("应用调试解锁");
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-
-        LinearLayout layout = new LinearLayout(mContext);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        int paddingPx = (int) (24 * mContext.getResources().getDisplayMetrics().density);
-        layout.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
+        dialog.setCanceledOnTouchOutside(true);
 
         final EditText etToken = new EditText(mContext);
         etToken.setHint("请输入调试Token");
-        layout.addView(etToken);
+        dialog.setView(etToken);
 
-        LinearLayout buttonLayout = new LinearLayout(mContext);
-        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-        buttonLayout.setGravity(Gravity.END);
-
-        Button closeButton = new Button(mContext);
-        closeButton.setText("关闭");
-        buttonLayout.addView(closeButton);
-
-        Button unlockButton = new Button(mContext);
-        unlockButton.setText("调试解锁");
-        buttonLayout.addView(unlockButton);
-
-        layout.addView(buttonLayout);
-        dialog.setContentView(layout);
-
-        unlockButton.setOnClickListener(new View.OnClickListener() {
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "调试解锁", (DialogInterface.OnClickListener) null);
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "关闭", (DialogInterface.OnClickListener) null);
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onClick(View v) {
-                String inputToken = etToken.getText().toString().trim();
-                String savedToken = DebugSwitchInfoImageView.getDebugToken();
-                if (savedToken != null && savedToken.equals(inputToken)) {
-                    GlobalApplication.setIsDebugging(true);
-                    GlobalApplication.saveDebugStatus(GlobalApplication.getInstance());
-                    Toast.makeText(mContext, "调试解锁成功，重启应用后生效", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(mContext, "调试Token不匹配", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
+            public void onShow(DialogInterface d) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String inputToken = etToken.getText().toString().trim();
+                        String savedToken = DebugSwitchInfoImageView.getDebugToken();
+                        if (savedToken != null && savedToken.equals(inputToken)) {
+                            GlobalApplication.setIsDebugging(true);
+                            GlobalApplication.saveDebugStatus(GlobalApplication.getInstance());
+                            Toast.makeText(mContext, "调试解锁成功，重启应用后生效", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mContext, "调试Token不匹配", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
-
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
         dialog.show();
     }
 
