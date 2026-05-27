@@ -59,7 +59,7 @@ public class DebugSwitchInfoImageView extends ImageView {
         final AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
         dialog.setTitle("调试Token");
         dialog.setMessage(getDebugToken());
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "复制到剪贴板", (DialogInterface.OnClickListener) null);
         dialog.setButton(DialogInterface.BUTTON_NEUTRAL, "重置", (DialogInterface.OnClickListener) null);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "关闭", (DialogInterface.OnClickListener) null);
