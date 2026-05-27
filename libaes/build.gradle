@@ -66,7 +66,7 @@ dependencies {
     //annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 	
 	// WinBoLL库 nexus.winboll.cc 地址
-    api 'cc.winboll.studio:libappbase:15.20.21'
+    api 'cc.winboll.studio:libappbase:15.20.22'
 	// 备用库 jitpack.io 地址
 	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.15.21'
 	
