@@ -12,7 +12,6 @@ import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.interfaces.IWinBoLLActivity;
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
-import cc.winboll.studio.libaes.views.ASupportToolbar;
 import cc.winboll.studio.libappbase.LogUtils;
 
 public class TestASupportToolbarActivity extends AppCompatActivity implements IWinBoLLActivity  {
@@ -28,11 +27,12 @@ public class TestASupportToolbarActivity extends AppCompatActivity implements IW
     public String getTag() {
         return TAG;
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LogUtils.d(TAG, "onCreate() start");
-        AESThemeUtil.applyAppTheme(this);
+        // 替换此处：原 applyAppTheme -> 新方法 applyAppCompatTheme
+        AESThemeUtil.applyAppCompatTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testasupporttoolbar);
         LogUtils.d(TAG, "setContentView() done");
@@ -45,3 +45,4 @@ public class TestASupportToolbarActivity extends AppCompatActivity implements IW
         LogUtils.d(TAG, "onCreate() end");
     }
 }
+

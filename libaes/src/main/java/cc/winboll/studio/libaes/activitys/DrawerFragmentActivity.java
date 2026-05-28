@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,8 +23,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import cc.winboll.studio.libaes.DrawerMenuDataAdapter;
 import cc.winboll.studio.libaes.R;
+import cc.winboll.studio.libaes.interfaces.IWinBoLLActivity;
 import cc.winboll.studio.libaes.models.AESThemeBean;
 import cc.winboll.studio.libaes.models.DrawerMenuBean;
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
@@ -34,8 +37,8 @@ import cc.winboll.studio.libaes.views.ADsBannerView;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import com.baoyz.widget.PullRefreshLayout;
+
 import java.util.ArrayList;
-import cc.winboll.studio.libaes.interfaces.IWinBoLLActivity;
 
 public abstract class DrawerFragmentActivity extends AppCompatActivity implements IWinBoLLActivity, AdapterView.OnItemClickListener {
 
@@ -44,7 +47,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     static final String SHAREDPREFERENCES_NAME = "SHAREDPREFERENCES_NAME";
     static final String DRAWER_THEME_TYPE = "DRAWER_THEME_TYPE";
 
-    //protected Context mContext;
     ActivityType mActivityType;
     ActionBarDrawerToggle mActionBarDrawerToggle;
     DrawerLayout mDrawerLayout;
@@ -59,13 +61,14 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public enum ActivityType { Main, Secondary }
     protected volatile AESThemeBean.ThemeType mThemeType;
     protected ArrayList<DrawerMenuBean> malDrawerMenuItem;
+
     abstract protected ActivityType initActivityType();
-    //abstract protected View initContentView(LayoutInflater inflater, ViewGroup rootView);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 替换：使用工具类统一应用主题
+        AESThemeUtil.applyAppCompatTheme(this);
         mThemeType = AESThemeBean.getThemeStyleType(AESThemeUtil.getThemeTypeID(getApplicationContext()));
-        setTheme(AESThemeUtil.getThemeTypeID(getApplicationContext()));
         super.onCreate(savedInstanceState);
         WinBoLLActivityManager.getInstance().add(this);
         mActivityType = initActivityType();
@@ -78,52 +81,31 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         return this;
     }
 
-	@Override
-	public String getTag() {
-		return TAG;
-	}
+    @Override
+    public String getTag() {
+        return TAG;
+    }
 
     @Override
     protected void onDestroy() {
-		WinBoLLActivityManager.getInstance().registeRemove(this);
+        WinBoLLActivityManager.getInstance().registeRemove(this);
         super.onDestroy();
-		// 修复：释放广告资源，避免内存泄漏
-		ADsBannerView adsBannerView = findViewById(R.id.adsbanner);
-		if (adsBannerView != null) {
-			adsBannerView.releaseAdResources();
-		}
+        // 修复：释放广告资源，避免内存泄漏
+        ADsBannerView adsBannerView = findViewById(R.id.adsbanner);
+        if (adsBannerView != null) {
+            adsBannerView.releaseAdResources();
+        }
     }
-
-    /*@Override
-	 public Intent getIntent() {
-	 // TODO: Implement this method
-	 return super.getIntent();
-	 }
-
-	 public Context getContext() {
-	 return this.mContext;
-	 }*/
 
     @Override
     public MenuInflater getMenuInflater() {
-        // TODO: Implement this method
         return super.getMenuInflater();
     }
-
-    /*public void setSubtitle(CharSequence context) {
-	 // TODO: Implement this method
-	 getSupportActionBar().setSubtitle(context);
-	 }*/
 
     @Override
     public void recreate() {
         super.recreate();
     }
-
-    /*@Override
-	 public boolean moveTaskToBack(boolean nonRoot) {
-	 return super.moveTaskToBack(nonRoot);
-	 }*/
 
     @Override
     public void startActivity(Intent intent) {
@@ -135,26 +117,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         super.startActivityForResult(intent, requestCode, options);
     }
 
-    /*@Override
-	 public FragmentManager getSupportFragmentManager() {
-	 return super.getSupportFragmentManager();
-	 }
-
-	 public void setSubtitle(int resId) {
-	 // TODO: Implement this method
-	 getSupportActionBar().setSubtitle(resId);
-	 }
-
-	 public void setTitle(CharSequence context) {
-	 // TODO: Implement this method
-	 getSupportActionBar().setTitle(context);
-	 }
-
-	 public void setTitle(int resId) {
-	 // TODO: Implement this method
-	 getSupportActionBar().setTitle(resId);
-	 }*/
-
     @Override
     public SharedPreferences getSharedPreferences(String name, int mode) {
         return super.getSharedPreferences(name, mode);
@@ -162,7 +124,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
 
     @Override
     public Context getApplicationContext() {
-        // TODO: Implement this method
         return super.getApplicationContext();
     }
 
@@ -173,25 +134,27 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (AESThemeUtil.onAppThemeItemSelected(this, item)) {
+        // 替换为 DrawerFragmentActivity 专属点击处理方法
+        if (AESThemeUtil.onWinBoLLThemeItemSelected(this, item)) {
             recreate();
-        } if (DevelopUtils.onDevelopItemSelected(this, item)) {
-			LogUtils.d(TAG, String.format("onOptionsItemSelected item.getItemId() %d ", item.getItemId()));
-		} else {
-			return super.onOptionsItemSelected(item);
-		}
+        }
+        if (DevelopUtils.onDevelopItemSelected(this, item)) {
+            LogUtils.d(TAG, String.format("onOptionsItemSelected item.getItemId() %d ", item.getItemId()));
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
 
-		return true;
+        return true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-		ADsBannerView adsBannerView = findViewById(R.id.adsbanner);
-		if (adsBannerView != null) {
-			adsBannerView.resumeADs(DrawerFragmentActivity.this);
-		}
+        ADsBannerView adsBannerView = findViewById(R.id.adsbanner);
+        if (adsBannerView != null) {
+            adsBannerView.resumeADs(DrawerFragmentActivity.this);
+        }
     }
 
     void initRootView() {
@@ -213,14 +176,13 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         mPullRefreshLayout = findViewById(R.id.activitydrawerfragmentPullRefreshLayout1);
 
         mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    //LogUtils.d(TAG, "onRefresh");
-                    reinitDrawerMenuItemList(malDrawerMenuItem);
-                    mDrawerMenuDataAdapter.notifyDataSetChanged();
-                    mPullRefreshLayout.setRefreshing(false);
-                }
-            });
+				@Override
+				public void onRefresh() {
+					reinitDrawerMenuItemList(malDrawerMenuItem);
+					mDrawerMenuDataAdapter.notifyDataSetChanged();
+					mPullRefreshLayout.setRefreshing(false);
+				}
+			});
 
         malDrawerMenuItem = new ArrayList<DrawerMenuBean>();
 
@@ -236,68 +198,51 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
 
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.lib_name, R.string.lib_name) {
             @Override
-            public void onDrawerOpened(View drawerView) {//完全打开时触发
+            public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 mIsDrawerOpened = true;
                 mIsDrawerOpening = false;
-                //Toast.makeText(MainActivity.this,"onDrawerOpened",Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onDrawerClosed(View drawerView) {//完全关闭时触发
+            public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 mIsDrawerOpened = false;
                 mIsDrawerClosing = false;
-                //Toast.makeText(MainActivity.this,"onDrawerClosed",Toast.LENGTH_SHORT).show();
             }
 
-            /** 
-             * 当抽屉被滑动的时候调用此方法 
-             * slideOffset表示 滑动的幅度（0-1） 
-             */  
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
             }
 
-            /** 
-             * 当抽屉滑动状态改变的时候被调用 
-             * 状态值是STATE_IDLE（闲置--0）, STATE_DRAGGING（拖拽的--1）, STATE_SETTLING（固定--2）中之一。 
-             *具体状态可以慢慢调试
-             */  
             @Override
             public void onDrawerStateChanged(int newState) {
                 super.onDrawerStateChanged(newState);
             }
         };
 
-        //设置显示旋转菜单
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //通过下面这句实现toolbar和Drawer的联动：如果没有这行代码，箭头是不会随着侧滑菜单的开关而变换的（或者没有箭头），
-        // 可以尝试一下，不影响正常侧滑
         mActionBarDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-        //去掉侧滑的默认图标（动画箭头图标），也可以选择不去，
-        //不去的话把这一行注释掉或者改成true，然后把toolbar.setNavigationIcon注释掉就行了
-        //mActionBarDrawerToggle.setDrawerIndicatorEnabled(false);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mIsDrawerOpened || mIsDrawerOpening) {
-                        mIsDrawerClosing = true;
-                        mIsDrawerOpening = false;
-                        mDrawerLayout.closeDrawer(mPullRefreshLayout);
-                        return;
-                    } 
-                    if (!mIsDrawerOpened || mIsDrawerClosing) {
-                        mIsDrawerOpening = true;
-                        mIsDrawerClosing = false;
-                        mDrawerLayout.openDrawer(mPullRefreshLayout);
-                        return;
-                    }
-                }
-            });
+				@Override
+				public void onClick(View v) {
+					if (mIsDrawerOpened || mIsDrawerOpening) {
+						mIsDrawerClosing = true;
+						mIsDrawerOpening = false;
+						mDrawerLayout.closeDrawer(mPullRefreshLayout);
+						return;
+					}
+					if (!mIsDrawerOpened || mIsDrawerClosing) {
+						mIsDrawerOpening = true;
+						mIsDrawerClosing = false;
+						mDrawerLayout.openDrawer(mPullRefreshLayout);
+						return;
+					}
+				}
+			});
 
         initDrawerMenuItemList(malDrawerMenuItem);
     }
@@ -305,12 +250,11 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     void initSecondaryRootView() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //LogUtils.d(TAG, "onClick " + Integer.toString(v.getId()));
-                    finish();
-                }
-            });
+				@Override
+				public void onClick(View v) {
+					finish();
+				}
+			});
     }
 
     public <T extends Fragment> int removeFragment(T fragment) {
@@ -375,13 +319,13 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mActivityType == ActivityType.Main) {
-			// 主题菜单
-            AESThemeUtil.inflateMenu(this, menu);
-			// 调试工具菜单
-			if (GlobalApplication.isDebugging()) {
-				DevelopUtils.inflateMenu(this, menu);
-			}
-			// 应用信息菜单
+            // 替换为兼容版菜单加载方法
+            AESThemeUtil.inflateCompatThemeMenu(this, menu);
+            // 调试工具菜单
+            if (GlobalApplication.isDebugging()) {
+                DevelopUtils.inflateMenu(this, menu);
+            }
+            // 应用信息菜单
             getMenuInflater().inflate(R.menu.toolbar_drawerbase, menu);
         }
         return super.onCreateOptionsMenu(menu);
@@ -392,3 +336,4 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         super.onActivityResult(who, targetFragment, requestCode);
     }
 }
+
