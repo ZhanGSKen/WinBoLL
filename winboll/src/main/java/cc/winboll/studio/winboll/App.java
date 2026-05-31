@@ -58,7 +58,7 @@ public class App extends GlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-		setIsDebugging(BuildConfig.DEBUG);
+		//setIsDebugging(BuildConfig.DEBUG);
 		//setIsDebugging(false);
 		
 		WinBoLLActivityManager.init(this);

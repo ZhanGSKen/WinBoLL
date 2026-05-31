@@ -34,9 +34,23 @@ dependencies {
 	// 添加JSch依赖（SFTP核心，com.jcraft:jsch:0.1.54）
 	api 'com.jcraft:jsch:0.1.54'
 	
+	// 米盟
+	api 'com.miui.zeus:mimo-ad-sdk:5.3.+'//请使用最新版sdk
+     //注意：以下5个库必须要引入
+    //implementation 'androidx.appcompat:appcompat:1.4.1'
+    api 'androidx.recyclerview:recyclerview:1.0.0'
+    api 'com.google.code.gson:gson:2.8.5'
+    api 'com.github.bumptech.glide:glide:4.9.0'
+    //annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+	
 	// WinBoLL库 nexus.winboll.cc 地址
-	api 'cc.winboll.studio:libaes:15.20.3'
-    api 'cc.winboll.studio:libappbase:15.20.9'
+    api 'cc.winboll.studio:libappbase:15.20.21'
+    api 'cc.winboll.studio:libaes:15.20.9'
+	
+	// 备用库 jitpack.io 地址
+	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.20'
+	//api 'com.github.ZhanGSKen:libaes:aes-v15.20.8'
+	
 	
     api fileTree(dir: 'libs', include: ['*.jar'])
 }
