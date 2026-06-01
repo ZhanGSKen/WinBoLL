@@ -105,12 +105,12 @@ dependencies {
 	implementation 'com.termux:termux-shared:0.118.0'
 	
 	// WinBoLL库 nexus.winboll.cc 地址
-    api 'cc.winboll.studio:libappbase:15.20.22'
-    api 'cc.winboll.studio:libaes:15.20.11'
+    //api 'cc.winboll.studio:libappbase:15.20.22'
+    //api 'cc.winboll.studio:libaes:15.20.11'
 	
 	// 备用库 jitpack.io 地址
-	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.21'
-	//api 'com.github.ZhanGSKen:libaes:aes-v15.20.9'
+	api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.22'
+	api 'com.github.ZhanGSKen:libaes:aes-v15.20.11'
 	
 	api fileTree(dir: 'libs', include: ['*.jar'])
 }
