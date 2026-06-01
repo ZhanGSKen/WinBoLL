@@ -34,6 +34,7 @@ public class AESThemeUtil {
      */
     public static void init(ArrayList<Integer> themeStyleIDList) {
 		if(themeStyleIDList == null) {
+			themeStyleIDList = new ArrayList<Integer>();
 			AESThemeBean.fillThemeStyleIDList(themeStyleIDList);
 		}
 		AESThemeUtil.themeStyleIDList.clear();
