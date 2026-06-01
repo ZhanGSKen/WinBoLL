@@ -33,7 +33,11 @@ public class AESThemeUtil {
      * 初始化主题样式ID集合
      */
     public static void init(ArrayList<Integer> themeStyleIDList) {
-        AESThemeUtil.themeStyleIDList = themeStyleIDList;
+		if(themeStyleIDList == null) {
+			AESThemeBean.fillThemeStyleIDList(themeStyleIDList);
+		}
+		AESThemeUtil.themeStyleIDList.clear();
+		AESThemeUtil.themeStyleIDList.addAll(themeStyleIDList);
     }
 
     /**
