@@ -106,7 +106,7 @@ dependencies {
 	
 	// WinBoLL库 nexus.winboll.cc 地址
     api 'cc.winboll.studio:libappbase:15.20.22'
-    api 'cc.winboll.studio:libaes:15.20.10'
+    api 'cc.winboll.studio:libaes:15.20.11'
 	
 	// 备用库 jitpack.io 地址
 	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.21'
