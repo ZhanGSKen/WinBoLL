@@ -37,7 +37,7 @@ public class MainActivity extends DrawerFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(cc.winboll.studio.winboll.theme.WinBoLLThemeUtil.getThemeTypeID(this));
+        setTheme(cc.winboll.studio.winboll.theme.WinBoLLThemeUtil.getThemeTypeID(getApplicationContext()));
         super.onCreate(savedInstanceState);
         initMainHandler();
         if (mBrowserFragment == null) {
