@@ -10,6 +10,7 @@ import android.util.JsonWriter;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libappbase.models.libs1520000.BaseBean;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class AESThemeBean extends BaseBean {
 
@@ -41,13 +42,28 @@ public class AESThemeBean extends BaseBean {
             return name;
         }
     }
-    
+
+	public static void fillThemeStyleIDList(ArrayList<Integer> themeStyleIDList) {
+		if (themeStyleIDList == null) {
+			themeStyleIDList = new ArrayList<Integer>();
+
+		} 
+		themeStyleIDList.clear();
+		themeStyleIDList.add(cc.winboll.studio.libaes.R.style.AESTheme);
+		themeStyleIDList.add(cc.winboll.studio.libaes.R.style.DepthAESTheme);
+		themeStyleIDList.add(cc.winboll.studio.libaes.R.style.SkyAESTheme);
+		themeStyleIDList.add(cc.winboll.studio.libaes.R.style.GoldenAESTheme);
+		themeStyleIDList.add(cc.winboll.studio.libaes.R.style.BearingAESTheme);
+		themeStyleIDList.add(cc.winboll.studio.libaes.R.style.MemorAESTheme);
+		themeStyleIDList.add(cc.winboll.studio.libaes.R.style.TaoAESTheme);
+	}
+
     // 保存当前主题
     int currentThemeStyleID = getThemeStyleID(ThemeType.AES);
-    
+
     public AESThemeBean() {
     }
-    
+
     public AESThemeBean(int currentThemeStyleID) {
         this.currentThemeStyleID = currentThemeStyleID;
     }
@@ -59,7 +75,7 @@ public class AESThemeBean extends BaseBean {
     public int getCurrentThemeTypeID() {
         return this.currentThemeStyleID;
     }
-    
+
     @Override
     public String getName() {
         return AESThemeBean.class.getName();
@@ -74,8 +90,7 @@ public class AESThemeBean extends BaseBean {
 
     @Override
     public boolean initObjectsFromJsonReader(JsonReader jsonReader, String name) throws IOException {
-        if(super.initObjectsFromJsonReader(jsonReader, name)) { return true; }
-        else{
+        if (super.initObjectsFromJsonReader(jsonReader, name)) { return true; } else {
             if (name.equals("currentThemeTypeID")) {
                 setCurrentThemeTypeID(jsonReader.nextInt());
             } else {
@@ -90,7 +105,7 @@ public class AESThemeBean extends BaseBean {
         jsonReader.beginObject();
         while (jsonReader.hasNext()) {
             String name = jsonReader.nextName();
-            if(!initObjectsFromJsonReader(jsonReader, name)) {
+            if (!initObjectsFromJsonReader(jsonReader, name)) {
                 jsonReader.skipValue();
             }
         }

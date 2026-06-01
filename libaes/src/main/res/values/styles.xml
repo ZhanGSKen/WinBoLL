@@ -86,9 +86,9 @@
     </style>
 
     <style name="TaoAESTheme" parent="AESTheme">
-        <item name="colorPrimary">#FFACACAC</item>
-        <item name="colorPrimaryDark">#FF898989</item>
-        <item name="colorAccent">#FFD8D8D8</item>
+        <item name="colorPrimary">#FF7E7E7E</item>
+        <item name="colorPrimaryDark">#FF000000</item>
+        <item name="colorAccent">#FFE2E2E2</item>
     </style>
 
     <style name="NormalDialogStyle" parent="Theme.AppCompat.Light.Dialog">

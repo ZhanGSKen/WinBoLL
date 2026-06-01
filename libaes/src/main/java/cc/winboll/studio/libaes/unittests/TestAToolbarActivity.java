@@ -14,10 +14,11 @@ import cc.winboll.studio.libaes.utils.AESThemeUtil;
 public class TestAToolbarActivity extends Activity {
 
     public static final String TAG = "TestAToolbarActivity";
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AESThemeUtil.applyAppTheme(this);
+        // 原生Activity 使用 applyTheme
+        AESThemeUtil.applyTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testatoolbar);
         Toolbar toolbar = findViewById(R.id.activitytestatoolbarAToolbar1);
@@ -26,3 +27,4 @@ public class TestAToolbarActivity extends Activity {
     }
 
 }
+

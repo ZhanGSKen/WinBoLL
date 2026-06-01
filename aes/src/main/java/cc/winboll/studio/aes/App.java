@@ -5,10 +5,11 @@ package cc.winboll.studio.aes;
  * @Date 2024/06/13 19:03:58
  * @Describe AES应用类
  */
-import android.view.Gravity;
+import cc.winboll.studio.libaes.utils.AESThemeUtil;
 import cc.winboll.studio.libaes.utils.WinBoLLActivityManager;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.ToastUtils;
+import java.util.ArrayList;
 
 
 public class App extends GlobalApplication {
@@ -18,6 +19,7 @@ public class App extends GlobalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+		AESThemeUtil.init(null);
 		WinBoLLActivityManager.init(this);
 
         // 初始化 Toast 框架
