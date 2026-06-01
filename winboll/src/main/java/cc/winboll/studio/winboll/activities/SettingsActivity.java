@@ -3,7 +3,6 @@ package cc.winboll.studio.winboll.activities;
 import android.os.Bundle;
 import android.view.View;
 import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.libaes.utils.AESThemeUtil;
 import cc.winboll.studio.winboll.R;
 import android.app.Activity;
 
@@ -29,7 +28,6 @@ public class SettingsActivity extends BaseWinBoLLActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AESThemeUtil.applyAppTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 		

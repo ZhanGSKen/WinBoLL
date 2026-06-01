@@ -40,7 +40,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import cc.winboll.studio.libaes.utils.AESThemeUtil;
 import cc.winboll.studio.libaes.utils.WinBoLLActivityManager;
+import java.util.ArrayList;
 
 public class App extends GlobalApplication {
 	
@@ -62,6 +64,17 @@ public class App extends GlobalApplication {
 		//setIsDebugging(false);
 		
 		WinBoLLActivityManager.init(this);
+
+        // 初始化 AES 主题工具（注入当前应用命名空间的主题ID列表，按 ThemeType.ordinal() 顺序）
+        ArrayList<Integer> themeStyleList = new ArrayList<Integer>();
+        themeStyleList.add(R.style.MyAppTheme);         // AES(0)
+        themeStyleList.add(R.style.MyDepthAppTheme);   // DEPTH(1)
+        themeStyleList.add(R.style.MySkyAppTheme);     // SKY(2)
+        themeStyleList.add(R.style.MyGoldenAppTheme);  // GOLDEN(3)
+        themeStyleList.add(R.style.MyBearingAppTheme); // BEARING(4)
+        themeStyleList.add(R.style.MyMemorAppTheme);   // MEMOR(5)
+        themeStyleList.add(R.style.MyTaoAppTheme);     // TAO(6)
+        AESThemeUtil.init(themeStyleList);
         
         // 初始化 Toast 框架
         ToastUtils.init(this);
