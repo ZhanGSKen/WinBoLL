@@ -2,6 +2,9 @@
 <resources>
 
     <style name="AESTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">#FF03AB4E</item>
+        <item name="colorPrimaryDark">#FF3DDC84</item>
+        <item name="colorAccent">#FF027C39</item>
         <item name="themeDebug">@style/DebugActivityTheme</item>
         <item name="aboutViewBackgroundColor">@color/mainWindowBackgroundColor</item>
         <item name="aboutViewTextColor">@color/mainWindowTextColor</item>
@@ -40,52 +43,52 @@
 
     <style name="AESAToolbar">
         <item name="attrAToolbarTitleTextColor">@color/colorTextColor</item>
-        <item name="attrAToolbarStartColor">@color/colorPrimaryDark</item>
-        <item name="attrAToolbarCenterColor">@color/colorPrimary</item>
-        <item name="attrAToolbarEndColor">@color/colorAccent</item>
+        <item name="attrAToolbarStartColor">?attr/colorPrimaryDark</item>
+        <item name="attrAToolbarCenterColor">?attr/colorPrimary</item>
+        <item name="attrAToolbarEndColor">?attr/colorAccent</item>
     </style>
 
     <style name="AESASupportToolbar">
         <item name="attrASupportToolbarTitleTextColor">@color/colorTextColor</item>
-        <item name="attrASupportToolbarStartColor">@color/colorPrimaryDark</item>
-        <item name="attrASupportToolbarCenterColor">@color/colorPrimary</item>
-        <item name="attrASupportToolbarEndColor">@color/colorAccent</item>
+        <item name="attrASupportToolbarStartColor">?attr/colorPrimaryDark</item>
+        <item name="attrASupportToolbarCenterColor">?attr/colorPrimary</item>
+        <item name="attrASupportToolbarEndColor">?attr/colorAccent</item>
     </style>
 
     <style name="DepthAESTheme" parent="AESTheme">
         <item name="colorPrimary">#FF0065EC</item>
-        <item name="colorPrimaryDark">#FF004DB4</item>
-        <item name="colorAccent">#FF4A97FF</item>
+        <item name="colorPrimaryDark">#FF4A97FF</item>
+        <item name="colorAccent">#FF004DB4</item>
     </style>
 
     <style name="SkyAESTheme" parent="AESTheme">
         <item name="colorPrimary">#FF00A6FF</item>
-        <item name="colorPrimaryDark">#FF007ABB</item>
-        <item name="colorAccent">#FF84D4FF</item>
+        <item name="colorPrimaryDark">#FF84D4FF</item>
+        <item name="colorAccent">#FF007ABB</item>
     </style>
 
     <style name="GoldenAESTheme" parent="AESTheme">
         <item name="colorPrimary">#FFF0CA11</item>
-        <item name="colorPrimaryDark">#FFD3AF00</item>
-        <item name="colorAccent">#FFFFE35C</item>
+        <item name="colorPrimaryDark">#FFFFE35C</item>
+        <item name="colorAccent">#FFD3AF00</item>
     </style>
 
     <style name="BearingAESTheme" parent="AESTheme">
         <item name="colorPrimary">#FF840FFF</item>
-        <item name="colorPrimaryDark">#FF6900D7</item>
-        <item name="colorAccent">#FFBA78FF</item>
+        <item name="colorPrimaryDark">#FFBA78FF</item>
+        <item name="colorAccent">#FF6900D7</item>
     </style>
 
     <style name="MemorAESTheme" parent="AESTheme">
         <item name="colorPrimary">#FFFF00F5</item>
-        <item name="colorPrimaryDark">#FFE500DC</item>
-        <item name="colorAccent">#FFFF76FA</item>
+        <item name="colorPrimaryDark">#FFFF76FA</item>
+        <item name="colorAccent">#FFE500DC</item>
     </style>
 
     <style name="TaoAESTheme" parent="AESTheme">
-        <item name="colorPrimary">#FFACACAC</item>
-        <item name="colorPrimaryDark">#FF898989</item>
-        <item name="colorAccent">#FFD8D8D8</item>
+        <item name="colorPrimary">#FF7E7E7E</item>
+        <item name="colorPrimaryDark">#FFE2E2E2</item>
+        <item name="colorAccent">#FF000000</item>
     </style>
 
     <style name="NormalDialogStyle" parent="Theme.AppCompat.Dialog">
