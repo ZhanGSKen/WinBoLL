@@ -230,7 +230,7 @@ public class MyTermuxActivity extends AppCompatActivity {
 
             TermuxButtonModel model = mButtonList.get(position);
             tv.setText(model.getButtonName() + "\n" + model.getExeCommand());
-            tv.setTextColor(getResources().getColor(android.R.color.white));
+            tv.setTextColor(getResources().getColor(android.R.color.black));
             return tv;
         }
     }

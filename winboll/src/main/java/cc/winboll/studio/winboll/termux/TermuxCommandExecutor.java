@@ -202,21 +202,16 @@ public class TermuxCommandExecutor {
         targetCmd += "source ~/.bashrc && ";
         // 步骤3：显式配置PATH
         targetCmd += "export PATH=/data/data/com.termux/files/usr/bin:$PATH && ";
-        // 步骤4：用stdbuf禁用stdout/stderr缓冲（关键！），执行Gradle命令
-        // -o0：stdout无缓冲；-e0：stderr无缓冲；-i0：stdin无缓冲
-        //targetCmd += "stdbuf -o0 -e0 -i0 " + gradleFullPath + " task --all | grep assemble && ";
-        //targetCmd += "stdbuf -o0 -e0 -i0 " + gradleFullPath + " -Pandroid.aapt2FromMavenOverride=/data/data/com.termux/files/home/android-sdk/build-tools/34.0.4/aapt2 assembleBetaDebug && ";
-        targetCmd += "stdbuf -o0 -e0 -i0 bash && ";
-        // 步骤5：执行成功提示
-        targetCmd += "echo '\n✅ 命令执行完成！' && echo '\n📌 当前目录：" + projectPath + "' && read -p '按回车键关闭终端...'";
+        // 步骤4：将用户输入的字面\n转换为shell命令分隔符，
+        //         确保"cd ~/Sources\npwd"这类输入能分段执行
+        String execCommand = command.replace("\\n", "; ");
+        // 步骤5：执行设定的命令（直接由外层bash解释，避免stdbuf对shell内置命令无效）
+        // 步骤6：命令执行完后用stdbuf启动交互式bash，保持终端可见
+        targetCmd += execCommand + "; stdbuf -o0 -e0 -i0 bash";
 
 
         // 4. 执行命令（终端会话模式，唤起Termux窗口）
-        boolean cmdSuccess = TermuxCommandExecutor.executeTerminalCommand(context, targetCmd);
-        if (!cmdSuccess) {
-            return true;
-        }
-		return false;
+        return TermuxCommandExecutor.executeTerminalCommand(context, targetCmd);
     }
 }
 
