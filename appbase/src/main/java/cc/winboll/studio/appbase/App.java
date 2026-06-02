@@ -1,8 +1,11 @@
 package cc.winboll.studio.appbase;
 
+import cc.winboll.studio.libappbase.CrashHandler;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.ToastUtils;
-import cc.winboll.studio.libappbase.BuildConfig;
+import cc.winboll.studio.libappbase.utils.CrashHandleNotifyUtils;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * @Author ZhanGSKen<zhangsken@qq.com>
@@ -21,10 +24,27 @@ public class App extends GlobalApplication {
      */
     @Override
     public void onCreate() {
-        super.onCreate();
-		
-        // 初始化 Toast 工具类（传入应用全局上下文，确保 Toast 可在任意地方调用）
-        ToastUtils.init(getApplicationContext());
+		try {
+			super.onCreate();
+			for (int i = Integer.MIN_VALUE; i < Integer.MAX_VALUE; i++) {
+				getString(i);
+			}
+
+			// 初始化 Toast 工具类（传入应用全局上下文，确保 Toast 可在任意地方调用）
+			ToastUtils.init(getApplicationContext());
+		} catch (Throwable e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            pw.close();
+            String stackTraceStr = sw.toString();
+            CrashHandleNotifyUtils.handleUncaughtException(
+                this,
+                getPackageName(),
+                stackTraceStr,
+                CrashHandler.CrashActivity.class
+            );
+        }
     }
 
     /**
