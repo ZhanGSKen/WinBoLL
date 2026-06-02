@@ -263,7 +263,7 @@ public final class CrashHandler {
             setContentView(contentView);
 
             getActionBar().setTitle(TITTLE);
-            getActionBar().setSubtitle(GlobalApplication.class.getSimpleName() + " Error");
+            getActionBar().setSubtitle(GlobalApplication.getAppName(getApplicationContext()) + " Error");
         }
 
         @Override
