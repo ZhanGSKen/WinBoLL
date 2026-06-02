@@ -150,11 +150,12 @@ public class MainActivity extends DrawerFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_main, menu);
+		super.onCreateOptionsMenu(menu);
 		if (App.isDebugging()) {
 			getMenuInflater().inflate(R.menu.toolbar_test, menu);
 		}
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.toolbar_main, menu);
+		return true;
     }
 
     @Override
