@@ -26,10 +26,7 @@ public class App extends GlobalApplication {
     public void onCreate() {
 		try {
 			super.onCreate();
-			for (int i = Integer.MIN_VALUE; i < Integer.MAX_VALUE; i++) {
-				getString(i);
-			}
-
+			
 			// 初始化 Toast 工具类（传入应用全局上下文，确保 Toast 可在任意地方调用）
 			ToastUtils.init(getApplicationContext());
 		} catch (Throwable e) {
