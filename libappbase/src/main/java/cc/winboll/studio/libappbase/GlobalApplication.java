@@ -6,11 +6,10 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-
+import android.util.Log;
+import cc.winboll.studio.libappbase.utils.CrashHandleNotifyUtils;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
-import cc.winboll.studio.libappbase.utils.CrashHandleNotifyUtils;
 
 /**
  * @Author ZhanGSKen&豆包大模型<zhangsken@qq.com>
@@ -132,6 +131,7 @@ public class GlobalApplication extends Application {
     public void onCreate() {
         try {
             super.onCreate();
+			
             // 初始化单例实例（确保在所有初始化操作前完成）
             sInstance = this;
 
@@ -152,7 +152,7 @@ public class GlobalApplication extends Application {
                 this,
                 getPackageName(),
                 stackTraceStr,
-                GlobalCrashActivity.class
+                CrashHandler.CrashActivity.class
             );
         }
     }
@@ -209,7 +209,7 @@ public class GlobalApplication extends Application {
      */
     public static String getAppName(Context context) {
         if (context == null) {
-            LogUtils.w(TAG, "getAppName: 上下文为空，返回 null");
+            Log.w(TAG, "getAppName: 上下文为空，返回 null");
             return null;
         }
         PackageManager packageManager = context.getPackageManager();
@@ -225,8 +225,7 @@ public class GlobalApplication extends Application {
             return appName;
         } catch (NameNotFoundException e) {
             // 包名不存在（理论上不会发生，捕获异常避免崩溃）
-            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-            //LogUtils.e(TAG, "获取应用名称失败：包名不存在", e);
+            Log.e(TAG, "获取应用名称失败：包名不存在", e);
             e.printStackTrace();
         }
         return null;
