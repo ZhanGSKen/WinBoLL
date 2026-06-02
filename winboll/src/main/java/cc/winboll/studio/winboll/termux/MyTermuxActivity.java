@@ -191,6 +191,14 @@ public class MyTermuxActivity extends AppCompatActivity {
             .show();
     }
 
+    private Bitmap loadButtonIcon(TermuxButtonModel model) {
+        String iconPath = model.getIconPath();
+        if (iconPath == null || iconPath.length() == 0) return null;
+        File iconFile = getIconFile(iconPath);
+        if (!iconFile.exists()) return null;
+        return BitmapFactory.decodeFile(iconFile.getAbsolutePath());
+    }
+
     private void createDesktopShortcut(TermuxButtonModel model) {
         Intent shortcutIntent = new Intent(this, MyTermuxActivity.class);
         shortcutIntent.setAction(ACTION_EXECUTE_SHORTCUT);
@@ -206,13 +214,20 @@ public class MyTermuxActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Icon icon;
+                Bitmap bmp = loadButtonIcon(model);
+                if (bmp != null) {
+                    icon = Icon.createWithBitmap(bmp);
+                } else {
+                    icon = Icon.createWithResource(this,
+                        android.R.drawable.ic_menu_manage);
+                }
                 String shortcutId = "termux_" + model.getButtonName();
                 android.content.pm.ShortcutInfo info =
                     new android.content.pm.ShortcutInfo.Builder(this, shortcutId)
                     .setShortLabel(model.getButtonName())
                     .setLongLabel(model.getButtonName())
-                    .setIcon(Icon.createWithResource(this,
-                        android.R.drawable.ic_menu_manage))
+                    .setIcon(icon)
                     .setIntent(shortcutIntent)
                     .build();
                 manager.requestPinShortcut(info, null);
@@ -228,9 +243,14 @@ public class MyTermuxActivity extends AppCompatActivity {
                 installIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
                 installIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
                     model.getButtonName());
-                installIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
-                    Intent.ShortcutIconResource.fromContext(this,
-                        android.R.drawable.ic_menu_manage));
+                Bitmap bmp = loadButtonIcon(model);
+                if (bmp != null) {
+                    installIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, bmp);
+                } else {
+                    installIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                        Intent.ShortcutIconResource.fromContext(this,
+                            android.R.drawable.ic_menu_manage));
+                }
                 installIntent.putExtra("duplicate", false);
                 sendBroadcast(installIntent);
             } catch (Exception e) {
