@@ -17,7 +17,7 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.winboll.R;
 import cc.winboll.studio.winboll.activities.AboutActivity;
 import cc.winboll.studio.winboll.activities.SettingsActivity;
-import cc.winboll.studio.winboll.applications.MyTermuxActivity;
+import cc.winboll.studio.winboll.termux.MyTermuxActivity;
 import cc.winboll.studio.winboll.fragments.BrowserFragment;
 import cc.winboll.studio.winboll.unittest.TermuxEnvTestActivity;
 import java.util.ArrayList;

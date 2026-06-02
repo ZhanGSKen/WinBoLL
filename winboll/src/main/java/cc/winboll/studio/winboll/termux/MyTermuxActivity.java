@@ -1,4 +1,4 @@
-package cc.winboll.studio.winboll.applications;
+package cc.winboll.studio.winboll.termux;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

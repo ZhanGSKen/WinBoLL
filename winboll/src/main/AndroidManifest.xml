@@ -330,7 +330,7 @@
 
         </activity>
 
-        <activity android:name="cc.winboll.studio.winboll.applications.MyTermuxActivity"
+        <activity android:name="cc.winboll.studio.winboll.termux.MyTermuxActivity"
             android:label="@string/my_termux_activity"
             android:exported="true"/>
 
