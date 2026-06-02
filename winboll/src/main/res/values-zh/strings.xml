@@ -1,3 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_create_shortcut">创建桌面快捷方式</string>
+    <string name="toast_shortcut_not_supported">系统不支持创建桌面快捷方式</string>
+    <string name="toast_shortcut_failed">创建桌面快捷方式失败</string>
+    <string name="toast_shortcut_not_found">未找到对应的按钮，请先打开MyTermuxActivity</string>
+    <string name="toast_auth_failed">指纹验证失败</string>
+    <string name="biometric_title">指纹验证</string>
+    <string name="biometric_description">名称：%1$s\n命令：%2$s</string>
+    <string name="biometric_start">开始指纹验证</string>
 </resources>

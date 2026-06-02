@@ -103,6 +103,9 @@ dependencies {
 	implementation 'com.termux:terminal-emulator:0.118.0'
 	implementation 'com.termux:terminal-view:0.118.0'
 	implementation 'com.termux:termux-shared:0.118.0'
+
+	// Biometric (指纹识别)
+	implementation 'androidx.biometric:biometric:1.1.0'
 	
 	// WinBoLL库 nexus.winboll.cc 地址
     //api 'cc.winboll.studio:libappbase:15.20.22'

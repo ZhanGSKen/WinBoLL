@@ -2,7 +2,17 @@ package cc.winboll.studio.winboll.termux;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ShortcutManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -25,6 +35,9 @@ import java.util.ArrayList;
 public class MyTermuxActivity extends AppCompatActivity {
 
     public static final String TAG = "MyTermuxActivity";
+    public static final String EXTRA_BUTTON_NAME = "extra_button_name";
+    public static final String ACTION_EXECUTE_SHORTCUT =
+        "cc.winboll.studio.winboll.action.EXECUTE_TERMUX_BUTTON";
 
     private Toolbar mToolbar;
     private ListView mListView;
@@ -41,6 +54,41 @@ public class MyTermuxActivity extends AppCompatActivity {
         initListView();
         initAddButton();
         refreshList();
+        handleShortcutIntent();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleShortcutIntent();
+    }
+
+    private void handleShortcutIntent() {
+        Intent intent = getIntent();
+        if (intent != null && ACTION_EXECUTE_SHORTCUT.equals(intent.getAction())) {
+            String buttonName = intent.getStringExtra(EXTRA_BUTTON_NAME);
+            if (buttonName != null && buttonName.length() > 0) {
+                TermuxButtonModel model = findButtonByName(buttonName);
+                if (model != null) {
+                    TermuxCommandExecutor.openTermuxBash(this,
+                        model.getButtonName(), model.getExeCommand(),
+                        model.getWorkDir(), true);
+                } else {
+                    Toast.makeText(this, R.string.toast_shortcut_not_found,
+                        Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private TermuxButtonModel findButtonByName(String name) {
+        for (int i = 0; i < mButtonList.size(); i++) {
+            if (name.equals(mButtonList.get(i).getButtonName())) {
+                return mButtonList.get(i);
+            }
+        }
+        return null;
     }
 
     private void initToolbar() {
@@ -68,7 +116,8 @@ public class MyTermuxActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TermuxButtonModel model = mButtonList.get(position);
                 TermuxCommandExecutor.openTermuxBash(MyTermuxActivity.this,
-                    model.getExeCommand(), model.getWorkDir());
+                    model.getButtonName(), model.getExeCommand(),
+                    model.getWorkDir(), true);
             }
         });
 
@@ -102,10 +151,11 @@ public class MyTermuxActivity extends AppCompatActivity {
 
     private void showContextMenu(final int position) {
         final TermuxButtonModel model = mButtonList.get(position);
-        String[] items = new String[]{
+        final String[] items = new String[]{
             getString(R.string.menu_execute),
             getString(R.string.menu_edit),
             getString(R.string.menu_delete),
+            getString(R.string.menu_create_shortcut),
             getString(R.string.menu_cancel)
         };
         new AlertDialog.Builder(this)
@@ -115,15 +165,68 @@ public class MyTermuxActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     if (which == 0) {
                         TermuxCommandExecutor.openTermuxBash(MyTermuxActivity.this,
-                            model.getExeCommand(), model.getWorkDir());
+                            model.getButtonName(), model.getExeCommand(),
+                            model.getWorkDir(), true);
                     } else if (which == 1) {
                         showButtonDialog(position, model);
                     } else if (which == 2) {
                         showDeleteConfirmDialog(position);
+                    } else if (which == 3) {
+                        createDesktopShortcut(model);
                     }
                 }
             })
             .show();
+    }
+
+    private void createDesktopShortcut(TermuxButtonModel model) {
+        Intent shortcutIntent = new Intent(this, MyTermuxActivity.class);
+        shortcutIntent.setAction(ACTION_EXECUTE_SHORTCUT);
+        shortcutIntent.putExtra(EXTRA_BUTTON_NAME, model.getButtonName());
+        shortcutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+            | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                ShortcutManager manager = getSystemService(ShortcutManager.class);
+                if (manager == null || !manager.isRequestPinShortcutSupported()) {
+                    Toast.makeText(this, R.string.toast_shortcut_not_supported,
+                        Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String shortcutId = "termux_" + model.getButtonName();
+                android.content.pm.ShortcutInfo info =
+                    new android.content.pm.ShortcutInfo.Builder(this, shortcutId)
+                    .setShortLabel(model.getButtonName())
+                    .setLongLabel(model.getButtonName())
+                    .setIcon(Icon.createWithResource(this,
+                        android.R.drawable.ic_menu_manage))
+                    .setIntent(shortcutIntent)
+                    .build();
+                manager.requestPinShortcut(info, null);
+            } catch (Exception e) {
+                LogUtils.e(TAG, "createDesktopShortcut error: " + e.getMessage());
+                Toast.makeText(this, R.string.toast_shortcut_failed,
+                    Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            try {
+                Intent installIntent =
+                    new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+                installIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+                installIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
+                    model.getButtonName());
+                installIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                    Intent.ShortcutIconResource.fromContext(this,
+                        android.R.drawable.ic_menu_manage));
+                installIntent.putExtra("duplicate", false);
+                sendBroadcast(installIntent);
+            } catch (Exception e) {
+                LogUtils.e(TAG, "createDesktopShortcut error: " + e.getMessage());
+                Toast.makeText(this, R.string.toast_shortcut_failed,
+                    Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void showDeleteConfirmDialog(final int position) {
@@ -229,8 +332,15 @@ public class MyTermuxActivity extends AppCompatActivity {
             }
 
             TermuxButtonModel model = mButtonList.get(position);
-            tv.setText(model.getButtonName() + "\n" + model.getExeCommand());
-            tv.setTextColor(getResources().getColor(android.R.color.black));
+            String name = model.getButtonName();
+            String cmd = model.getExeCommand();
+            String fullText = name + "\n" + cmd;
+            SpannableString sp = new SpannableString(fullText);
+            sp.setSpan(new StyleSpan(Typeface.BOLD), 0, name.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sp.setSpan(new ForegroundColorSpan(Color.BLUE), 0, name.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            tv.setText(sp);
             return tv;
         }
     }
