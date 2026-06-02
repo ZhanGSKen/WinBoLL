@@ -38,4 +38,8 @@
     <string name="biometric_title">指纹验证</string>
     <string name="biometric_description">名称：%1$s\n命令：%2$s</string>
     <string name="biometric_start">开始指纹验证</string>
+    <string name="label_icon">Icon</string>
+    <string name="btn_select_icon">Select Icon</string>
+    <string name="btn_clear_icon">Clear Icon</string>
+    <string name="toast_icon_copy_failed">Failed to import icon</string>
 </resources>

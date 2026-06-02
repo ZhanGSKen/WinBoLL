@@ -4,21 +4,26 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ShortcutManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +35,9 @@ import cc.winboll.studio.winboll.R;
 import cc.winboll.studio.winboll.models.TermuxButtonManager;
 import cc.winboll.studio.winboll.models.TermuxButtonModel;
 import cc.winboll.studio.winboll.termux.TermuxCommandExecutor;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class MyTermuxActivity extends AppCompatActivity {
@@ -44,6 +52,10 @@ public class MyTermuxActivity extends AppCompatActivity {
     private Button mBtnAdd;
     private ButtonAdapter mAdapter;
     private ArrayList<TermuxButtonModel> mButtonList;
+
+    private static final int REQUEST_PICK_ICON = 100;
+    private String mDialogIconPath = "";
+    private ImageView mDialogIconView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,8 +257,71 @@ public class MyTermuxActivity extends AppCompatActivity {
             .show();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_PICK_ICON && resultCode == RESULT_OK
+            && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            String fileName = copyIconToAppStorage(uri);
+            if (fileName != null) {
+                mDialogIconPath = fileName;
+                File iconFile = getIconFile(fileName);
+                if (iconFile.exists() && mDialogIconView != null) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(
+                        iconFile.getAbsolutePath());
+                    if (bitmap != null) {
+                        mDialogIconView.setImageBitmap(bitmap);
+                    }
+                }
+            } else {
+                Toast.makeText(this, R.string.toast_icon_copy_failed,
+                    Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private String copyIconToAppStorage(Uri uri) {
+        try {
+            File iconDir = new File(getFilesDir(), "termux_icons");
+            if (!iconDir.exists()) {
+                iconDir.mkdirs();
+            }
+            String fileName = System.currentTimeMillis() + ".png";
+            File destFile = new File(iconDir, fileName);
+            InputStream in = null;
+            FileOutputStream out = null;
+            try {
+                in = getContentResolver().openInputStream(uri);
+                out = new FileOutputStream(destFile);
+                byte[] buffer = new byte[8192];
+                int count;
+                while ((count = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, count);
+                }
+            } finally {
+                if (in != null) {
+                    try { in.close(); } catch (Exception ignored) {}
+                }
+                if (out != null) {
+                    try { out.close(); } catch (Exception ignored) {}
+                }
+            }
+            return fileName;
+        } catch (Exception e) {
+            LogUtils.e(TAG, "copyIconToAppStorage error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private File getIconFile(String iconPath) {
+        return new File(getFilesDir(), "termux_icons/" + iconPath);
+    }
+
     private void showButtonDialog(final int index, final TermuxButtonModel model) {
         final boolean isEdit = (model != null);
+        mDialogIconPath = (model != null && model.getIconPath() != null)
+            ? model.getIconPath() : "";
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -273,6 +348,60 @@ public class MyTermuxActivity extends AppCompatActivity {
         }
         layout.addView(etWorkDir);
 
+        // Icon section
+        final TextView tvIconLabel = new TextView(this);
+        tvIconLabel.setText(R.string.label_icon);
+        tvIconLabel.setTextSize(14);
+        tvIconLabel.setTextColor(Color.GRAY);
+        layout.addView(tvIconLabel);
+
+        LinearLayout iconRow = new LinearLayout(this);
+        iconRow.setOrientation(LinearLayout.HORIZONTAL);
+
+        final ImageView ivIcon = new ImageView(this);
+        LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(100, 100);
+        iconLp.setMargins(0, 8, 16, 8);
+        ivIcon.setLayoutParams(iconLp);
+        ivIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        if (mDialogIconPath.length() > 0) {
+            File iconFile = getIconFile(mDialogIconPath);
+            if (iconFile.exists()) {
+                ivIcon.setImageBitmap(BitmapFactory.decodeFile(
+                    iconFile.getAbsolutePath()));
+            }
+        }
+        iconRow.addView(ivIcon);
+        mDialogIconView = ivIcon;
+
+        LinearLayout iconBtnLayout = new LinearLayout(this);
+        iconBtnLayout.setOrientation(LinearLayout.VERTICAL);
+
+        Button btnSelectIcon = new Button(this);
+        btnSelectIcon.setText(R.string.btn_select_icon);
+        btnSelectIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent, REQUEST_PICK_ICON);
+            }
+        });
+        iconBtnLayout.addView(btnSelectIcon);
+
+        Button btnClearIcon = new Button(this);
+        btnClearIcon.setText(R.string.btn_clear_icon);
+        btnClearIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialogIconPath = "";
+                mDialogIconView.setImageDrawable(null);
+            }
+        });
+        iconBtnLayout.addView(btnClearIcon);
+
+        iconRow.addView(iconBtnLayout);
+        layout.addView(iconRow);
+
         int titleResId = isEdit ? R.string.dialog_edit_title : R.string.dialog_add_title;
         new AlertDialog.Builder(this)
             .setTitle(titleResId)
@@ -291,6 +420,7 @@ public class MyTermuxActivity extends AppCompatActivity {
                     newModel.setButtonName(name);
                     newModel.setExeCommand(command);
                     newModel.setWorkDir(workDir);
+                    newModel.setIconPath(mDialogIconPath);
                     if (isEdit) {
                         TermuxButtonManager.updateButton(MyTermuxActivity.this, mButtonList, index, newModel);
                     } else {
@@ -321,14 +451,32 @@ public class MyTermuxActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            ImageView ivIcon;
             TextView tv;
-            if (convertView == null) {
+
+            if (convertView instanceof LinearLayout) {
+                LinearLayout ll = (LinearLayout) convertView;
+                ivIcon = (ImageView) ll.getChildAt(0);
+                tv = (TextView) ll.getChildAt(1);
+            } else {
+                LinearLayout ll = new LinearLayout(MyTermuxActivity.this);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+                ll.setGravity(Gravity.CENTER_VERTICAL);
+                ll.setPadding(30, 16, 30, 16);
+
+                ivIcon = new ImageView(MyTermuxActivity.this);
+                ivIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                ivIcon.setVisibility(View.GONE);
+                ll.addView(ivIcon);
+
                 tv = new TextView(MyTermuxActivity.this);
-                tv.setPadding(30, 20, 30, 20);
                 tv.setTextSize(16);
                 tv.setMinHeight(80);
-            } else {
-                tv = (TextView) convertView;
+                tv.setGravity(Gravity.CENTER_VERTICAL);
+                tv.setPadding(16, 0, 0, 0);
+                ll.addView(tv);
+
+                convertView = ll;
             }
 
             TermuxButtonModel model = mButtonList.get(position);
@@ -341,7 +489,46 @@ public class MyTermuxActivity extends AppCompatActivity {
             sp.setSpan(new ForegroundColorSpan(Color.BLUE), 0, name.length(),
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             tv.setText(sp);
-            return tv;
+
+            String iconPath = model.getIconPath();
+            if (iconPath != null && iconPath.length() > 0) {
+                File iconFile = getIconFile(iconPath);
+                if (iconFile.exists()) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(
+                        iconFile.getAbsolutePath());
+                    if (bitmap != null) {
+                        float density = getResources()
+                            .getDisplayMetrics().density;
+                        int marginPx = (int) (5 * density + 0.5f);
+                        int estHeight = tv.getMinHeight();
+                        int iconWidth = estHeight * bitmap.getWidth()
+                            / bitmap.getHeight();
+                        iconWidth = Math.max(iconWidth, (int)(32*density));
+                        iconWidth = Math.min(iconWidth, (int)(120*density));
+                        ivIcon.setImageBitmap(bitmap);
+                        ivIcon.setScaleType(
+                            ImageView.ScaleType.FIT_CENTER);
+                        LinearLayout.LayoutParams lp =
+                            new LinearLayout.LayoutParams(iconWidth,
+                                LinearLayout.LayoutParams.MATCH_PARENT);
+                        lp.setMargins(marginPx, marginPx,
+                            marginPx, marginPx);
+                        ivIcon.setLayoutParams(lp);
+                        ivIcon.setVisibility(View.VISIBLE);
+                    } else {
+                        ivIcon.setImageDrawable(null);
+                        ivIcon.setVisibility(View.GONE);
+                    }
+                } else {
+                    ivIcon.setImageDrawable(null);
+                    ivIcon.setVisibility(View.GONE);
+                }
+            } else {
+                ivIcon.setImageDrawable(null);
+                ivIcon.setVisibility(View.GONE);
+            }
+
+            return convertView;
         }
     }
 }
