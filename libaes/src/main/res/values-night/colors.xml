@@ -3,15 +3,15 @@
 
     <color name="colorTextColor">#FFFFFFFF</color>
     <color name="colorPrimary">#FF03AB4E</color>
-    <color name="colorPrimaryDark">#FF027C39</color>
-    <color name="colorAccent">#FF3DDC84</color>
+    <color name="colorPrimaryDark">#FF3DDC84</color>
+    <color name="colorAccent">#FF027C39</color>
     <color name="colorText">#FFFFFB8D</color>
-    <color name="colorToastFrame">#FFA9A9A9</color>
+    <color name="colorToastFrame">#FF555555</color>
     <color name="colorToastShadow">#FF000000</color>
-    <color name="colorToastBackgroung">#FFFFFFFF</color>
-    <color name="colorAToolbarStartColor">#FF7D3F12</color>
-    <color name="colorAToolbarCenterColor">#FFCC6E2B</color>
-    <color name="colorAToolbarEndColor">#FFF4B98F</color>
+    <color name="colorToastBackgroung">#FF3A3A3A</color>
+    <color name="colorAToolbarStartColor">#FF5A3A1A</color>
+    <color name="colorAToolbarCenterColor">#FFA05A2A</color>
+    <color name="colorAToolbarEndColor">#FFD4A07A</color>
 
     <color name="colorACardShadow">@color/colorPrimaryDark</color>
     <color name="colorACardFrame">@color/colorPrimary</color>
@@ -24,7 +24,7 @@
     <color name="colorOHPCTSSecondaryProgress">@color/colorPrimary</color>
     <color name="colorOHPCTSProgress">@color/colorPrimaryDark</color>
 
-    <color name="toolbarBackgroundColor">#FF03AB4E</color>
+    <color name="toolbarBackgroundColor">#FF3DDC84</color>
     <color name="toolbarTextColor">#FFFFFFFF</color>
     <color name="mainWindowBackgroundColor">#FF2C2C2C</color>
     <color name="mainWindowTextColor">#FFFFFFFF</color>
