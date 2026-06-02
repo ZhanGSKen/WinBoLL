@@ -1,12 +1,27 @@
 package cc.winboll.studio.winboll.termux;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
-import cc.winboll.studio.libappbase.LogUtils; // 替换 Log 为 LogUtils（与 Activity 一致）
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.winboll.R;
 import com.termux.shared.termux.TermuxConstants;
 import com.termux.shared.shell.command.ExecutionCommand.Runner;
+import java.util.concurrent.Executor;
 
 /**
  * Termux 命令调用工具类（基于 RunCommandService 原型封装）
@@ -77,7 +92,12 @@ public class TermuxCommandExecutor {
             LogUtils.d(TAG, "结果输出目录：" + resultDir);
         }
 
-        // 7. 允许替换参数中的逗号替代字符
+        // 7. 强制创建新终端会话（而非复用已有会话），避免第二次点击直接弹出旧窗口
+        if (!isBackground) {
+            intent.putExtra("com.termux.RUN_COMMAND_SESSION_ACTION", 0);
+        }
+
+        // 8. 允许替换参数中的逗号替代字符
         intent.putExtra(TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE.EXTRA_REPLACE_COMMA_ALTERNATIVE_CHARS_IN_ARGUMENTS, true);
 
         // 8. 发送请求（区分 Android O 及以上的前台服务）
@@ -175,11 +195,23 @@ public class TermuxCommandExecutor {
         return tip;
     }
 
-	public static boolean openTermuxBash(Context context, String command) {
-		return openTermuxBash(context, command, "~");
-	}
+    private static String pendingTargetCmd;
+    private static String pendingDisplayCmd;
+    private static String pendingDisplayName;
 
-	public static boolean openTermuxBash(Context context, String command, String workDir) {
+    public static boolean openTermuxBash(Context context, String command) {
+        return openTermuxBash(context, null, command, "~", true);
+    }
+
+    public static boolean openTermuxBash(Context context, String command, String workDir) {
+        return openTermuxBash(context, null, command, workDir, true);
+    }
+
+    public static boolean openTermuxBash(Context context, String command, String workDir, boolean keepAlive) {
+        return openTermuxBash(context, null, command, workDir, keepAlive);
+    }
+
+    public static boolean openTermuxBash(Context context, String displayName, String command, String workDir, boolean keepAlive) {
         LogUtils.d(TAG, "openTermuxBash() 按钮点击，执行Gradle命令（实时输出）");
 
         // 1. 校验Termux是否安装
@@ -189,10 +221,10 @@ public class TermuxCommandExecutor {
         }
 
         // 2. 定义核心路径（确保路径与Termux中一致）
-		String projectPath = TERMUX_HOME_PATH;
-		if (workDir.startsWith("~") || workDir.startsWith(".")) {
-			projectPath = TERMUX_HOME_PATH + "/" + workDir.substring(1);
-		}
+        String projectPath = TERMUX_HOME_PATH;
+        if (workDir.startsWith("~") || workDir.startsWith(".")) {
+            projectPath = TERMUX_HOME_PATH + "/" + workDir.substring(1);
+        }
 
         // 3. 构造命令（核心：用stdbuf禁用缓冲，实现实时输出）
         String targetCmd = "";
@@ -202,21 +234,121 @@ public class TermuxCommandExecutor {
         targetCmd += "source ~/.bashrc && ";
         // 步骤3：显式配置PATH
         targetCmd += "export PATH=/data/data/com.termux/files/usr/bin:$PATH && ";
-        // 步骤4：用stdbuf禁用stdout/stderr缓冲（关键！），执行Gradle命令
-        // -o0：stdout无缓冲；-e0：stderr无缓冲；-i0：stdin无缓冲
-        //targetCmd += "stdbuf -o0 -e0 -i0 " + gradleFullPath + " task --all | grep assemble && ";
-        //targetCmd += "stdbuf -o0 -e0 -i0 " + gradleFullPath + " -Pandroid.aapt2FromMavenOverride=/data/data/com.termux/files/home/android-sdk/build-tools/34.0.4/aapt2 assembleBetaDebug && ";
-        targetCmd += "stdbuf -o0 -e0 -i0 bash && ";
-        // 步骤5：执行成功提示
-        targetCmd += "echo '\n✅ 命令执行完成！' && echo '\n📌 当前目录：" + projectPath + "' && read -p '按回车键关闭终端...'";
-
-
-        // 4. 执行命令（终端会话模式，唤起Termux窗口）
-        boolean cmdSuccess = TermuxCommandExecutor.executeTerminalCommand(context, targetCmd);
-        if (!cmdSuccess) {
-            return true;
+        // 步骤4：将用户输入的字面\n转换为shell命令分隔符，
+        //         确保"cd ~/Sources\npwd"这类输入能分段执行
+        String execCommand = command.replace("\\n", "; ");
+        // 步骤5：执行设定的命令（直接由外层bash解释，避免stdbuf对shell内置命令无效）
+        targetCmd += execCommand;
+        // 步骤6：需要保持终端可见时追加交互式bash
+        if (keepAlive) {
+            targetCmd += "; stdbuf -o0 -e0 -i0 bash";
         }
-		return false;
+
+        // 步骤7：指纹验证后执行命令
+        if (context instanceof FragmentActivity) {
+            pendingTargetCmd = targetCmd;
+            pendingDisplayCmd = execCommand;
+            pendingDisplayName = displayName;
+            showFingerprintAndExecute((FragmentActivity) context);
+            return true;
+        } else {
+            return TermuxCommandExecutor.executeTerminalCommand(context, targetCmd);
+        }
+    }
+
+    private static void showFingerprintAndExecute(final FragmentActivity activity) {
+        String displayName = pendingDisplayName != null
+            ? pendingDisplayName : "";
+        final StringBuilder sb = new StringBuilder();
+        if (pendingDisplayCmd != null) {
+            sb.append(pendingDisplayCmd);
+        }
+        final String cmdText = sb.toString();
+
+        SpannableString message = new SpannableString(
+            activity.getString(R.string.biometric_description,
+                displayName, cmdText));
+        int nameIdx = message.toString().indexOf(displayName);
+        if (nameIdx >= 0 && displayName.length() > 0) {
+            message.setSpan(new StyleSpan(Typeface.BOLD), nameIdx,
+                nameIdx + displayName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            message.setSpan(new ForegroundColorSpan(Color.BLUE), nameIdx,
+                nameIdx + displayName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        final AlertDialog dialog = new AlertDialog.Builder(activity)
+            .setTitle(R.string.biometric_title)
+            .setMessage(message)
+            .setPositiveButton(R.string.biometric_start,
+                new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startBiometricAuth(activity);
+                }
+            })
+            .setNegativeButton(R.string.dialog_cancel,
+                new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    clearPending();
+                }
+            })
+            .setCancelable(false)
+            .show();
+
+        TextView tv = (TextView) dialog.findViewById(android.R.id.message);
+        if (tv != null) {
+            tv.setText(message);
+        }
+    }
+
+    private static void startBiometricAuth(final FragmentActivity activity) {
+        Executor executor = ContextCompat.getMainExecutor(activity);
+        final BiometricPrompt biometricPrompt = new BiometricPrompt(activity,
+            executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationSucceeded(
+                    BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                executePendingCommand(activity);
+            }
+
+            @Override
+            public void onAuthenticationError(int errorCode,
+                    CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                clearPending();
+                Toast.makeText(activity, R.string.toast_auth_failed,
+                    Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+            }
+        });
+
+        BiometricPrompt.PromptInfo promptInfo =
+            new BiometricPrompt.PromptInfo.Builder()
+            .setTitle(activity.getString(R.string.biometric_title))
+            .setNegativeButtonText(activity.getString(R.string.dialog_cancel))
+            .setConfirmationRequired(false)
+            .build();
+
+        biometricPrompt.authenticate(promptInfo);
+    }
+
+    private static void executePendingCommand(Context context) {
+        if (pendingTargetCmd != null) {
+            String cmd = pendingTargetCmd;
+            clearPending();
+            executeTerminalCommand(context, cmd);
+        }
+    }
+
+    private static void clearPending() {
+        pendingTargetCmd = null;
+        pendingDisplayCmd = null;
     }
 }
 

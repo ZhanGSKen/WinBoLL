@@ -16,6 +16,7 @@ public class TermuxButtonModel extends BaseBean {
     String buttonName;
     String exeCommand;
     String workDir;
+    String iconPath;
 
     // 已修改：isCommit 改为规范过去式命名 isCommitted
     boolean isCommitted;
@@ -26,6 +27,7 @@ public class TermuxButtonModel extends BaseBean {
         this.buttonName = "";
         this.exeCommand = "";
         this.workDir = "";
+        this.iconPath = "";
         // 默认初始化
         this.isCommitted = false;
         this.commitTitle = "";
@@ -54,6 +56,14 @@ public class TermuxButtonModel extends BaseBean {
 
     public String getWorkDir() {
         return workDir;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
+    }
+
+    public String getIconPath() {
+        return iconPath;
     }
 
     // ========== 已修改 对应 isCommitted 完整 Get & Set ==========
@@ -92,6 +102,7 @@ public class TermuxButtonModel extends BaseBean {
         jsonWriter.name("buttonName").value(getButtonName());
         jsonWriter.name("exeCommand").value(getExeCommand());
         jsonWriter.name("workDir").value(getWorkDir());
+        jsonWriter.name("iconPath").value(getIconPath() != null ? getIconPath() : "");
 
         // JSON写入同步修改
         jsonWriter.name("isCommitted").value(isCommitted());
@@ -110,6 +121,8 @@ public class TermuxButtonModel extends BaseBean {
                 setExeCommand(jsonReader.nextString());
             } else if (name.equals("workDir")) {
                 setWorkDir(jsonReader.nextString());
+            } else if (name.equals("iconPath")) {
+                setIconPath(jsonReader.nextString());
             }
             // JSON解析字段同步修改
             else if (name.equals("isCommitted")) {
