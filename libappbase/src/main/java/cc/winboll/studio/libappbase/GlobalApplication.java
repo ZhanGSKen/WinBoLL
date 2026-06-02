@@ -7,6 +7,11 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import cc.winboll.studio.libappbase.utils.CrashHandleNotifyUtils;
+
 /**
  * @Author ZhanGSKen&豆包大模型<zhangsken@qq.com>
  * @Date 2025/11/11 19:56
@@ -125,17 +130,31 @@ public class GlobalApplication extends Application {
      */
     @Override
     public void onCreate() {
-        super.onCreate();
-        // 初始化单例实例（确保在所有初始化操作前完成）
-        sInstance = this;
+        try {
+            super.onCreate();
+            // 初始化单例实例（确保在所有初始化操作前完成）
+            sInstance = this;
 
-        restoreDebugStatus();
-        // 初始化基础组件（日志、崩溃处理、Toast）
-        initCoreComponents();
-        // 初始化服务器地址（从 SP 读取到内存，提高后续访问效率）
-        initWinbollHost();
+            restoreDebugStatus();
+            // 初始化基础组件（日志、崩溃处理、Toast）
+            initCoreComponents();
+            // 初始化服务器地址（从 SP 读取到内存，提高后续访问效率）
+            initWinbollHost();
 
-        LogUtils.d(TAG, "GlobalApplication 初始化完成，单例实例已创建");
+            LogUtils.d(TAG, "GlobalApplication 初始化完成，单例实例已创建");
+        } catch (Throwable e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            pw.close();
+            String stackTraceStr = sw.toString();
+            CrashHandleNotifyUtils.handleUncaughtException(
+                this,
+                getPackageName(),
+                stackTraceStr,
+                GlobalCrashActivity.class
+            );
+        }
     }
 
     /**
