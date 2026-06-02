@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -22,8 +21,12 @@ import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import cc.winboll.studio.libaes.utils.AESThemeUtil;
+import cc.winboll.studio.libaes.utils.WinBoLLActivityManager;
 import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.libappbase.GlobalCrashActivity;
 import cc.winboll.studio.libappbase.ToastUtils;
+import cc.winboll.studio.libappbase.utils.CrashHandleNotifyUtils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -33,58 +36,63 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import cc.winboll.studio.libaes.utils.AESThemeUtil;
-import cc.winboll.studio.libaes.utils.WinBoLLActivityManager;
-import java.util.ArrayList;
 
 public class App extends GlobalApplication {
-	
+
 	public static final String TAG = "App";
-	
+
 	public static final String COMPONENT_EN1 = "cc.winboll.studio.winboll.MainActivityEN1";
 	public static final String COMPONENT_CN1 = "cc.winboll.studio.winboll.MainActivityCN1";
 	public static final String COMPONENT_CN2 = "cc.winboll.studio.winboll.MainActivityCN2";
 	public static final String ACTION_SWITCHTO_EN1 = "cc.winboll.studio.winboll.App.ACTION_SWITCHTO_EN1";
 	public static final String ACTION_SWITCHTO_CN1 = "cc.winboll.studio.winboll.App.ACTION_SWITCHTO_CN1";
 	public static final String ACTION_SWITCHTO_CN2 = "cc.winboll.studio.winboll.App.ACTION_SWITCHTO_CN2";
-	
+
     private static Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
-	
+
     @Override
     public void onCreate() {
-        super.onCreate();
-		//setIsDebugging(BuildConfig.DEBUG);
-		//setIsDebugging(false);
-		
-		WinBoLLActivityManager.init(this);
+		try {
+			super.onCreate();
 
-        // 初始化 AES 主题工具（注入当前应用命名空间的主题ID列表，按 ThemeType.ordinal() 顺序）
-        ArrayList<Integer> themeStyleList = new ArrayList<Integer>();
-        themeStyleList.add(R.style.MyAppTheme);         // AES(0)
-        themeStyleList.add(R.style.MyDepthAppTheme);   // DEPTH(1)
-        themeStyleList.add(R.style.MySkyAppTheme);     // SKY(2)
-        themeStyleList.add(R.style.MyGoldenAppTheme);  // GOLDEN(3)
-        themeStyleList.add(R.style.MyBearingAppTheme); // BEARING(4)
-        themeStyleList.add(R.style.MyMemorAppTheme);   // MEMOR(5)
-        themeStyleList.add(R.style.MyTaoAppTheme);     // TAO(6)
-        AESThemeUtil.init(themeStyleList);
-        
-        // 初始化 Toast 框架
-        ToastUtils.init(this);
-        // 设置 Toast 布局样式
-        //ToastUtils.setView(R.layout.view_toast);
-        //ToastUtils.setStyle(new WhiteToastStyle());
-        //ToastUtils.setGravity(Gravity.BOTTOM, 0, 200);
-        
-        //CrashHandler.getInstance().registerGlobal(this);
-        //CrashHandler.getInstance().registerPart(this);
+			ToastUtils.init(this);
+
+			WinBoLLActivityManager.init(this);
+			
+			// 初始化 AES 主题工具（注入当前应用命名空间的主题ID列表，按 ThemeType.ordinal() 顺序）
+			ArrayList<Integer> themeStyleList = new ArrayList<Integer>();
+			themeStyleList.add(R.style.MyAppTheme);         // AES(0)
+			themeStyleList.add(R.style.MyDepthAppTheme);   // DEPTH(1)
+			themeStyleList.add(R.style.MySkyAppTheme);     // SKY(2)
+			themeStyleList.add(R.style.MyGoldenAppTheme);  // GOLDEN(3)
+			themeStyleList.add(R.style.MyBearingAppTheme); // BEARING(4)
+			themeStyleList.add(R.style.MyMemorAppTheme);   // MEMOR(5)
+			themeStyleList.add(R.style.MyTaoAppTheme);     // TAO(6)
+			AESThemeUtil.init(themeStyleList);
+
+        } catch (Throwable e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            pw.close();
+            String stackTraceStr = sw.toString();
+            CrashHandleNotifyUtils.handleUncaughtException(
+                this,
+                getPackageName(),
+                stackTraceStr,
+                GlobalCrashActivity.class
+            );
+        }
     }
 
 	@Override
@@ -92,8 +100,8 @@ public class App extends GlobalApplication {
 		super.onTerminate();
 		ToastUtils.release();
 	}
-	
-	
+
+
 
     public static void write(InputStream input, OutputStream output) throws IOException {
         byte[] buf = new byte[1024 * 8];
