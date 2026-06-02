@@ -7,9 +7,12 @@ package cc.winboll.studio.aes;
  */
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
 import cc.winboll.studio.libaes.utils.WinBoLLActivityManager;
+import cc.winboll.studio.libappbase.CrashHandler;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.ToastUtils;
-import java.util.ArrayList;
+import cc.winboll.studio.libappbase.utils.CrashHandleNotifyUtils;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 
 public class App extends GlobalApplication {
@@ -18,12 +21,25 @@ public class App extends GlobalApplication {
 
     @Override
     public void onCreate() {
-        super.onCreate();
-		AESThemeUtil.init(null);
-		WinBoLLActivityManager.init(this);
+		try {
+			super.onCreate();
+			ToastUtils.init(this);
+			WinBoLLActivityManager.init(this);
+			AESThemeUtil.init(null);
+		} catch (Throwable e) {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			pw.close();
+			String stackTraceStr = sw.toString();
+			CrashHandleNotifyUtils.handleUncaughtException(
+				this,
+				getPackageName(),
+				stackTraceStr,
+				CrashHandler.CrashActivity.class
+			);
+		}
 
-        // 初始化 Toast 框架
-        ToastUtils.init(this);
     }
 
 	@Override
