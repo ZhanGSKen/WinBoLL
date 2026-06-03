@@ -17,6 +17,7 @@
     <string name="menu_execute">执行</string>
     <string name="menu_edit">编辑</string>
     <string name="menu_delete">删除</string>
+    <string name="menu_create_shortcut">创建桌面快捷方式</string>
     <string name="menu_cancel">取消</string>
     <string name="dialog_delete_title">确认删除</string>
     <string name="dialog_delete_message">确定要删除</string>
@@ -30,4 +31,15 @@
     <string name="hint_work_dir">工作目录（默认 ~）</string>
     <string name="toast_deleted">已删除</string>
     <string name="toast_fields_required">按钮名称和执行命令不能为空</string>
+    <string name="toast_shortcut_not_supported">系统不支持创建桌面快捷方式</string>
+    <string name="toast_shortcut_failed">创建桌面快捷方式失败</string>
+    <string name="toast_shortcut_not_found">未找到对应的按钮，请先打开MyTermuxActivity</string>
+    <string name="toast_auth_failed">指纹验证失败</string>
+    <string name="biometric_title">指纹验证</string>
+    <string name="biometric_description">名称：%1$s\n命令：%2$s</string>
+    <string name="biometric_start">开始指纹验证</string>
+    <string name="label_icon">Icon</string>
+    <string name="btn_select_icon">Select Icon</string>
+    <string name="btn_clear_icon">Clear Icon</string>
+    <string name="toast_icon_copy_failed">Failed to import icon</string>
 </resources>

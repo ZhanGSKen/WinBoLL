@@ -17,7 +17,7 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.winboll.R;
 import cc.winboll.studio.winboll.activities.AboutActivity;
 import cc.winboll.studio.winboll.activities.SettingsActivity;
-import cc.winboll.studio.winboll.applications.MyTermuxActivity;
+import cc.winboll.studio.winboll.termux.MyTermuxActivity;
 import cc.winboll.studio.winboll.fragments.BrowserFragment;
 import cc.winboll.studio.winboll.unittest.TermuxEnvTestActivity;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class MainActivity extends DrawerFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(cc.winboll.studio.winboll.theme.WinBoLLThemeUtil.getThemeTypeID(this));
+        setTheme(cc.winboll.studio.winboll.theme.WinBoLLThemeUtil.getThemeTypeID(getApplicationContext()));
         super.onCreate(savedInstanceState);
         initMainHandler();
         if (mBrowserFragment == null) {
@@ -150,11 +150,12 @@ public class MainActivity extends DrawerFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_main, menu);
+		super.onCreateOptionsMenu(menu);
 		if (App.isDebugging()) {
 			getMenuInflater().inflate(R.menu.toolbar_test, menu);
 		}
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.toolbar_main, menu);
+		return true;
     }
 
     @Override

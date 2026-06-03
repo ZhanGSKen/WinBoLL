@@ -103,14 +103,17 @@ dependencies {
 	implementation 'com.termux:terminal-emulator:0.118.0'
 	implementation 'com.termux:terminal-view:0.118.0'
 	implementation 'com.termux:termux-shared:0.118.0'
+
+	// Biometric (指纹识别)
+	implementation 'androidx.biometric:biometric:1.1.0'
 	
 	// WinBoLL库 nexus.winboll.cc 地址
-    api 'cc.winboll.studio:libappbase:15.20.22'
-    api 'cc.winboll.studio:libaes:15.20.10'
+    api 'cc.winboll.studio:libappbase:15.20.25'
+    api 'cc.winboll.studio:libaes:15.20.14'
 	
 	// 备用库 jitpack.io 地址
-	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.21'
-	//api 'com.github.ZhanGSKen:libaes:aes-v15.20.9'
+	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.25'
+	//api 'com.github.ZhanGSKen:libaes:aes-v15.20.14'
 	
 	api fileTree(dir: 'libs', include: ['*.jar'])
 }

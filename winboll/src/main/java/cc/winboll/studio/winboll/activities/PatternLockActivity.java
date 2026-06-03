@@ -14,7 +14,6 @@ import android.os.Looper;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 import androidx.appcompat.widget.Toolbar;
-import cc.winboll.studio.libaes.utils.AESThemeUtil;
 import cc.winboll.studio.libaes.utils.WinBoLLActivityManager;
 import cc.winboll.studio.winboll.R;
 
@@ -57,7 +56,6 @@ public class PatternLockActivity extends BaseWinBoLLActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AESThemeUtil.applyAppTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pattern_lock);
 
