@@ -152,7 +152,7 @@ public class GlobalApplication extends Application {
                 this,
                 getPackageName(),
                 stackTraceStr,
-                CrashHandler.CrashActivity.class
+                CrashActivity.class
             );
         }
     }

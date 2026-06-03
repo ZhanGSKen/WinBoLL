@@ -1,6 +1,6 @@
 package cc.winboll.studio.appbase;
 
-import cc.winboll.studio.libappbase.CrashHandler;
+import cc.winboll.studio.libappbase.CrashActivity;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.ToastUtils;
 import cc.winboll.studio.libappbase.utils.CrashHandleNotifyUtils;
@@ -39,7 +39,7 @@ public class App extends GlobalApplication {
                 this,
                 getPackageName(),
                 stackTraceStr,
-                CrashHandler.CrashActivity.class
+                CrashActivity.class
             );
         }
     }
