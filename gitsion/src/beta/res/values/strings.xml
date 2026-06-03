@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Gitsion★</string>
+	<string name="app_description">一款支持真实/模拟定位的GPS中继工具，可后台常驻，实现位置数据转发、调试与仿真，适配开发测试使用。</string>
+
+</resources>

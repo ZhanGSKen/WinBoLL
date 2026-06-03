@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cc.winboll.studio.libgitsion">
+
+    <application>
+		<service
+			android:name=".service.GpsSubscribeReceiverService"
+			android:exported="true"
+			android:enabled="true">
+			<intent-filter>
+				<action android:name="cc.winboll.studio.libgitsion.action.RECEIVE" />
+			</intent-filter>
+		</service>
+		
+        <receiver android:name=".receiver.GpsSubscribeObserverReceiver">
+
+            <intent-filter>
+
+                <action android:name=".receiver.GpsSubscribeObserverReceiver"/>
+
+            </intent-filter>
+
+        </receiver>
+    </application>
+
+</manifest>

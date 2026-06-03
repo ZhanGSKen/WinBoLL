@@ -96,3 +96,8 @@
 // AutoNFC 项目编译设置
 //include ':autonfc'
 //rootProject.name = "autonfc"
+
+// Gitsion 项目编译设置
+//include ':gitsion'
+//include ':libgitsion'
+//rootProject.name = "gitsion"
