@@ -6,6 +6,10 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.util.Log;
+import cc.winboll.studio.libappbase.utils.CrashHandleNotifyUtils;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * @Author ZhanGSKen&豆包大模型<zhangsken@qq.com>
@@ -125,17 +129,32 @@ public class GlobalApplication extends Application {
      */
     @Override
     public void onCreate() {
-        super.onCreate();
-        // 初始化单例实例（确保在所有初始化操作前完成）
-        sInstance = this;
+        try {
+            super.onCreate();
+			
+            // 初始化单例实例（确保在所有初始化操作前完成）
+            sInstance = this;
 
-        restoreDebugStatus();
-        // 初始化基础组件（日志、崩溃处理、Toast）
-        initCoreComponents();
-        // 初始化服务器地址（从 SP 读取到内存，提高后续访问效率）
-        initWinbollHost();
+            restoreDebugStatus();
+            // 初始化基础组件（日志、崩溃处理、Toast）
+            initCoreComponents();
+            // 初始化服务器地址（从 SP 读取到内存，提高后续访问效率）
+            initWinbollHost();
 
-        LogUtils.d(TAG, "GlobalApplication 初始化完成，单例实例已创建");
+            LogUtils.d(TAG, "GlobalApplication 初始化完成，单例实例已创建");
+        } catch (Throwable e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            pw.close();
+            String stackTraceStr = sw.toString();
+            CrashHandleNotifyUtils.handleUncaughtException(
+                this,
+                getPackageName(),
+                stackTraceStr,
+                CrashActivity.class
+            );
+        }
     }
 
     /**
@@ -190,7 +209,7 @@ public class GlobalApplication extends Application {
      */
     public static String getAppName(Context context) {
         if (context == null) {
-            LogUtils.w(TAG, "getAppName: 上下文为空，返回 null");
+            Log.w(TAG, "getAppName: 上下文为空，返回 null");
             return null;
         }
         PackageManager packageManager = context.getPackageManager();
@@ -206,8 +225,7 @@ public class GlobalApplication extends Application {
             return appName;
         } catch (NameNotFoundException e) {
             // 包名不存在（理论上不会发生，捕获异常避免崩溃）
-            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
-            //LogUtils.e(TAG, "获取应用名称失败：包名不存在", e);
+            Log.e(TAG, "获取应用名称失败：包名不存在", e);
             e.printStackTrace();
         }
         return null;
