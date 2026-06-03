@@ -66,7 +66,7 @@ public final class GlobalCrashActivity extends Activity implements MenuItem.OnMe
             mCrashLog = getIntent().getStringExtra(CrashHandler.EXTRA_CRASH_LOG);
             final Intent intent = new Intent();
             intent.putExtra(CrashHandler.EXTRA_CRASH_LOG, mCrashLog);
-            CrashHandleNotifyUtils.handleUncaughtException(GlobalApplication.getInstance(), intent, CrashHandler.CrashActivity.class);
+            CrashHandleNotifyUtils.handleUncaughtException(GlobalApplication.getInstance(), intent, CrashActivity.class);
 
             StackTraceElement[] stackElements = Thread.currentThread().getStackTrace();
             StringBuilder sb = new StringBuilder("GlobalCrashActivity onCreate StackTrace");
