@@ -1,4 +1,4 @@
-# GPSRelaySentinel
+# Gitsion
 
 ---
 
@@ -6,7 +6,7 @@
 
 ### 项目介绍
 
-GPSRelaySentinel 是一款专业的 **GPS 定位中继守护工具**，支持真实系统 GPS 定位监听与模拟 GPS 坐标仿真双模式运行。应用后台常驻前台服务，实时接收系统 GPS 位置数据，内置订阅者步长阈值判断机制，可对多个 GPS 订阅视图进行定点推送管理。
+Gitsion 是一款专业的 **GPS 定位中继守护工具**，支持真实系统 GPS 定位监听与模拟 GPS 坐标仿真双模式运行。应用后台常驻前台服务，实时接收系统 GPS 位置数据，内置订阅者步长阈值判断机制，可对多个 GPS 订阅视图进行定点推送管理。
 
 #### 核心功能
 
@@ -35,8 +35,8 @@ GPSRelaySentinel 是一款专业的 **GPS 定位中继守护工具**，支持真
 
 | 模块 | 类型 | 说明 |
 |------|------|------|
-| `:gpsrelaysentinel` | application | 主应用模块（MainActivity、MainService、AboutActivity 等） |
-| `:libgpsrelaysentinel` | library | GPS 中继核心类库（GpsSubscribeManager、SubscribeLocationManager 等） |
+| `:gitsion` | application | 主应用模块（MainActivity、MainService、AboutActivity 等） |
+| `:libgitsion` | library | GPS 中继核心类库（GpsSubscribeManager、SubscribeLocationManager 等） |
 
 #### 核心依赖库
 
@@ -69,11 +69,11 @@ GPSRelaySentinel 是一款专业的 **GPS 定位中继守护工具**，支持真
 
 **阶段版编译（发布）**
 ```bash
-bash .winboll/bashPublishAPKAddTag.sh gpsrelaysentinel
+bash .winboll/bashPublishAPKAddTag.sh gitsion
 ```
 
 **版本管理**
-版本信息由 `gpsrelaysentinel/build.properties` 管理：
+版本信息由 `gitsion/build.properties` 管理：
 - `baseVersion` — 基础版本号
 - `stageCount` — 阶段构建次数
 - `publishVersion` — 发布版本号
@@ -90,9 +90,9 @@ bash .winboll/bashPublishAPKAddTag.sh gpsrelaysentinel
 #### 项目结构
 
 ```
-gpsrelaysentinel/
+gitsion/
 ├── src/main/
-│   ├── java/cc/winboll/studio/gpsrelaysentinel/
+│   ├── java/cc/winboll/studio/gitsion/
 │   │   ├── App.java              # Application 类，初始化与崩溃处理
 │   │   ├── MainActivity.java     # 主控制页面（GPS服务开关、模拟面板、订阅视图）
 │   │   ├── MainService.java      # GPS 定位核心前台服务
@@ -125,7 +125,7 @@ gpsrelaysentinel/
 
 ### Project Introduction
 
-GPSRelaySentinel is a professional **GPS relay and guardian tool**, supporting dual modes of real system GPS location monitoring and simulated GPS coordinate simulation. It runs as a foreground persistent background service, receives real-time system GPS location data, and builds-in subscriber step threshold judgment mechanism to manage fixed-point push for multiple GPS subscription views.
+gitsion is a professional **GPS relay and guardian tool**, supporting dual modes of real system GPS location monitoring and simulated GPS coordinate simulation. It runs as a foreground persistent background service, receives real-time system GPS location data, and builds-in subscriber step threshold judgment mechanism to manage fixed-point push for multiple GPS subscription views.
 
 #### Core Features
 
@@ -154,8 +154,8 @@ This project uses a multi-module Gradle structure:
 
 | Module | Type | Description |
 |--------|------|-------------|
-| `:gpsrelaysentinel` | application | Main application module (MainActivity, MainService, AboutActivity, etc.) |
-| `:libgpsrelaysentinel` | library | GPS relay core library (GpsSubscribeManager, SubscribeLocationManager, etc.) |
+| `:gitsion` | application | Main application module (MainActivity, MainService, AboutActivity, etc.) |
+| `:libgitsion` | library | GPS relay core library (GpsSubscribeManager, SubscribeLocationManager, etc.) |
 
 #### Core Dependencies
 
@@ -188,11 +188,11 @@ This project uses a multi-module Gradle structure:
 
 **Stage Build (Release)**
 ```bash
-bash .winboll/bashPublishAPKAddTag.sh gpsrelaysentinel
+bash .winboll/bashPublishAPKAddTag.sh gitsion
 ```
 
 **Version Management**
-Version info is managed by `gpsrelaysentinel/build.properties`:
+Version info is managed by `gitsion/build.properties`:
 - `baseVersion` — Base version number
 - `stageCount` — Stage build count
 - `publishVersion` — Release version number
@@ -209,9 +209,9 @@ The app requires the following permissions:
 #### Project Structure
 
 ```
-gpsrelaysentinel/
+gitsion/
 ├── src/main/
-│   ├── java/cc/winboll/studio/gpsrelaysentinel/
+│   ├── java/cc/winboll/studio/gitsion/
 │   │   ├── App.java              # Application class, initialization and crash handling
 │   │   ├── MainActivity.java     # Main control page (GPS service switch, simulation panel, subscription views)
 │   │   ├── MainService.java      # GPS location core foreground service
