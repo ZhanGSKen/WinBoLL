@@ -28,7 +28,7 @@ public final class GpsSubscribeObserverReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if(GpsSubscribeConst.ACTION_SUBSCRIBE_CALLBACK.equals(action)){
-            GpsSubscribeResult result = intent.getParcelableExtra("data");
+            GpsSubscribeResult result = intent.getParcelableExtra(GpsSubscribeConst.EXTRA_SUBSCRIBE_RESULT);
             if(listener != null && result != null){
                 listener.onResultBack(result);
             }

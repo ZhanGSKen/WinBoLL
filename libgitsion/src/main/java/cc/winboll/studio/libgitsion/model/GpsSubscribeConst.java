@@ -37,6 +37,11 @@ public final class GpsSubscribeConst {
     public static final String ACTION_SUBSCRIBE_REQUEST = "cc.winboll.studio.GPS_SUBSCRIBE_REQUEST";
     public static final String ACTION_SUBSCRIBE_CALLBACK = "cc.winboll.studio.GPS_SUBSCRIBE_CALLBACK";
 
+    //Intent Extra 键名
+    public static final String EXTRA_SUBSCRIBE_SID = "extra_subscribe_sid";
+    public static final String EXTRA_SUBSCRIBE_RESULT = "extra_subscribe_result";
+    public static final String EXTRA_LOCATION_POINT = "extra_location_point";
+
     //超时毫秒
     public static final long SUBSCRIBE_TIME_OUT = 5000;
 

@@ -17,7 +17,7 @@
 
             <intent-filter>
 
-                <action android:name=".receiver.GpsSubscribeObserverReceiver"/>
+                <action android:name="cc.winboll.studio.GPS_SUBSCRIBE_CALLBACK"/>
 
             </intent-filter>
 

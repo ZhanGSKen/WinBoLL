@@ -139,9 +139,10 @@ public final class GpsSubscribeControlView extends LinearLayout {
         mLocationManager.putSubscribeConfig(currentSubscribeSid, subscribeMsg);
         mLocationManager.clearPushCount(currentSubscribeSid);
 
-        //开启订阅自动启动专属接收服务
+        //开启订阅自动启动专属接收服务（携带SID）
         if(mBindReceiverServiceClazz != null){
             Intent startServiceIntent = new Intent(getContext(), mBindReceiverServiceClazz);
+            startServiceIntent.putExtra(GpsSubscribeConst.EXTRA_SUBSCRIBE_SID, currentSubscribeSid);
             getContext().startService(startServiceIntent);
         }
     }

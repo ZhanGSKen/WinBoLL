@@ -59,7 +59,7 @@ public final class GpsSubscribeManager {
             return;
         }
         Intent intent = new Intent(GpsSubscribeConst.ACTION_SUBSCRIBE_CALLBACK);
-        intent.putExtra("data",result);
+        intent.putExtra(GpsSubscribeConst.EXTRA_SUBSCRIBE_RESULT, result);
         appContext.sendBroadcast(intent);
     }
 

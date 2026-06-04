@@ -21,6 +21,7 @@ public final class GpsReceiverChildService1 extends GpsSubscribeReceiverService 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
     }
 }

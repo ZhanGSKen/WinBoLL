@@ -18,7 +18,9 @@ import androidx.core.app.NotificationCompat;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libgitsion.manager.GpsSubscribeManager;
 import cc.winboll.studio.libgitsion.manager.SubscribeLocationManager;
+import cc.winboll.studio.libgitsion.model.GpsSubscribeConst;
 import cc.winboll.studio.libgitsion.model.GpsSubscribeMsg;
+import cc.winboll.studio.libgitsion.model.GpsSubscribeResult;
 
 import java.util.Map;
 
@@ -85,6 +87,7 @@ public final class MainService extends Service {
      */
     private void initManager() {
         mSubscribeManager = GpsSubscribeManager.getInstance();
+        mSubscribeManager.initContext(this);
         mLocationRuleManager = SubscribeLocationManager.getInstance();
     }
 
@@ -189,20 +192,37 @@ public final class MainService extends Service {
         //更新前台通知文案
         updateForegroundNotification(locationInfo);
 
+        double currentLat = location.getLatitude();
+        double currentLng = location.getLongitude();
+        long currentTime = location.getTime();
+
         //遍历全部订阅者进行推送规则判断
         Map<String, GpsSubscribeMsg> subscribeAllMap = mSubscribeManager.getSubscribeMap();
         for (Map.Entry<String, GpsSubscribeMsg> entry : subscribeAllMap.entrySet()) {
             final String subscribeSid = entry.getKey();
             final GpsSubscribeMsg subscribeConfig = entry.getValue();
 
-            double currentLat = location.getLatitude();
-            double currentLng = location.getLongitude();
-
             //判断是否满足推送条件(全订阅/步长阈值)
             boolean allowPush = mLocationRuleManager.isNeedPush(subscribeSid, currentLat, currentLng);
             if (allowPush) {
                 //推送成功后刷新该订阅者基准定点坐标
                 mLocationRuleManager.updateSubscriberPoint(subscribeSid, currentLat, currentLng);
+                mLocationRuleManager.addPushCount(subscribeSid);
+
+                //发送结果广播给订阅者
+                GpsSubscribeResult result = new GpsSubscribeResult(
+                    subscribeSid,
+                    GpsSubscribeConst.RESULT_SUCCESS,
+                    "GPS定位推送",
+                    GpsSubscribeConst.GPS_STATE_LOCATED,
+                    0,
+                    System.currentTimeMillis(),
+                    currentLat,
+                    currentLng,
+                    currentTime
+                );
+                mSubscribeManager.sendSubscribeResult(result);
+                LogUtils.d(TAG, "推送GPS数据至订阅者 SID：" + subscribeSid);
             }
         }
     }
