@@ -20,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.gitsion.R;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.LogView;
+
 import cc.winboll.studio.libappbase.ToastUtils;
 
 /**
@@ -33,7 +33,7 @@ public final class MainActivity extends AppCompatActivity {
 
     //原有控件
     private Toolbar mToolbar;
-    private LogView mLogView;
+
     private Switch mSwitchService;
 
     //新增
@@ -81,7 +81,7 @@ public final class MainActivity extends AppCompatActivity {
     private void initView() {
         //原有
         mToolbar = findViewById(R.id.toolbar);
-        mLogView = findViewById(R.id.logview);
+
         mSwitchService = findViewById(R.id.switch_service);
 
         //新增
@@ -366,10 +366,6 @@ public final class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mLogView.start();
-    }
+
 }
 

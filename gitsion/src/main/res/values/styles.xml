@@ -17,6 +17,10 @@
         <item name="activityBackgroundColor">?attr/mainWindowBackgroundColor</item>
         <item name="activityTextColor">?attr/mainWindowTextColor</item>
         <item name="debugTextColor">@color/debugTextColor</item>
+        <item name="aboutViewBackgroundColor">?attr/mainWindowBackgroundColor</item>
+        <item name="aboutViewTextColor">?attr/mainWindowTextColor</item>
+        <item name="aboutViewTitleColor">?attr/mainWindowTextColor</item>
+        <item name="aboutViewDividerColor">?attr/mainWindowDarkTextColor</item>
     </style>
 
     <style name="DebugActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">

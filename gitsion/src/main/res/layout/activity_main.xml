@@ -180,19 +180,5 @@
 
 	</ScrollView>
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="200dp"
-		android:orientation="vertical"
-		android:id="@+id/container_log_show"
-		android:background="@drawable/border_gray">
-
-		<cc.winboll.studio.libappbase.LogView
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:id="@+id/logview"/>
-
-	</LinearLayout>
-
 </LinearLayout>
 
