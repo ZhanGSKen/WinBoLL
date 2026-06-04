@@ -158,19 +158,19 @@
 			android:gravity="center_horizontal"
 			android:padding="12dp">
 
-			<cc.winboll.studio.libgpsrelaysentinel.view.GpsSubscribeControlView
+			<cc.winboll.studio.libgitsion.view.GpsSubscribeControlView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp"
 				android:background="@drawable/border_gray"/>
 
-			<cc.winboll.studio.libgpsrelaysentinel.view.GpsSubscribeControlView
+			<cc.winboll.studio.libgitsion.view.GpsSubscribeControlView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp"
 				android:background="@drawable/border_gray"/>
 
-			<cc.winboll.studio.libgpsrelaysentinel.view.GpsSubscribeControlView
+			<cc.winboll.studio.libgitsion.view.GpsSubscribeControlView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp"

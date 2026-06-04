@@ -3,4 +3,12 @@
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#FF9800</color>
+
+    <color name="mainWindowBackgroundColor">#FFF5F5F5</color>
+    <color name="mainWindowTextColor">#FF000000</color>
+    <color name="mainWindowDarkBackgroundColor">#FFF5F5F5</color>
+    <color name="mainWindowDarkTextColor">#FF000000</color>
+    <color name="toolbarBackgroundColor">#FF009688</color>
+    <color name="toolbarTextColor">#FF000000</color>
+    <color name="debugTextColor">#FF808080</color>
 </resources>
