@@ -6,6 +6,11 @@
         android:title="About"
         android:icon="@android:drawable/ic_menu_info_details"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_gps_history"
+        android:title="GPS历史"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        app:showAsAction="ifRoom"/>
     <group android:id="@+id/group_debug">
         <item
             android:id="@+id/action_app_log"

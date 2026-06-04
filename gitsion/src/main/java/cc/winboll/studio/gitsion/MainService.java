@@ -196,6 +196,20 @@ public final class MainService extends Service {
         double currentLng = location.getLongitude();
         long currentTime = location.getTime();
 
+        //保存每一次系统原始定位数据到历史记录
+        GpsSubscribeResult rawRecord = new GpsSubscribeResult(
+            "",
+            GpsSubscribeConst.RESULT_SUCCESS,
+            "系统GPS定位",
+            GpsSubscribeConst.GPS_STATE_LOCATED,
+            0,
+            System.currentTimeMillis(),
+            currentLat,
+            currentLng,
+            currentTime
+        );
+        GpsHistoryManager.getInstance().addSystemRecord(rawRecord);
+
         //遍历全部订阅者进行推送规则判断
         Map<String, GpsSubscribeMsg> subscribeAllMap = mSubscribeManager.getSubscribeMap();
         for (Map.Entry<String, GpsSubscribeMsg> entry : subscribeAllMap.entrySet()) {
@@ -222,6 +236,7 @@ public final class MainService extends Service {
                     currentTime
                 );
                 mSubscribeManager.sendSubscribeResult(result);
+                GpsHistoryManager.getInstance().addSystemRecord(result);
                 LogUtils.d(TAG, "推送GPS数据至订阅者 SID：" + subscribeSid);
             }
         }

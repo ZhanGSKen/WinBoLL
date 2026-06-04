@@ -160,6 +160,10 @@ public final class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, AboutActivity.class));
             return true;
         }
+        if (item.getItemId() == R.id.action_gps_history) {
+            startActivity(new Intent(this, GpsHistoryActivity.class));
+            return true;
+        }
         if (item.getItemId() == R.id.action_app_log) {
             LogActivity.startLogActivity(this, false);
             return true;
@@ -227,6 +231,17 @@ public final class MainActivity extends AppCompatActivity {
 				@Override
 				public void onClick(View v) {
 					saveSimGpsData();
+					GpsHistoryManager.getInstance().addSimRecord(new cc.winboll.studio.libgitsion.model.GpsSubscribeResult(
+							"SIM",
+							cc.winboll.studio.libgitsion.model.GpsSubscribeConst.RESULT_SUCCESS,
+							"模拟GPS定位",
+							cc.winboll.studio.libgitsion.model.GpsSubscribeConst.GPS_STATE_LOCATED,
+							0,
+							System.currentTimeMillis(),
+							simLat,
+							simLng,
+							System.currentTimeMillis()
+						));
 					ToastUtils.show("已设置当前模拟GPS坐标");
 				}
 			});

@@ -57,6 +57,7 @@ public class App extends GlobalApplication {
 			ToastUtils.init(this);
 			WinBoLLActivityManager.init(this);
 			AESThemeUtil.init(null);
+			GpsHistoryManager.getInstance().init(this);
 		} catch (Throwable e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
