@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.gitsion.R;
+import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.libappbase.LogActivity;
 import cc.winboll.studio.libappbase.LogUtils;
 
 import cc.winboll.studio.libappbase.ToastUtils;
@@ -146,6 +148,9 @@ public final class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        if (GlobalApplication.isDebugging()) {
+            menu.setGroupVisible(R.id.group_debug, true);
+        }
         return true;
     }
 
@@ -153,6 +158,10 @@ public final class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_about) {
             startActivity(new Intent(this, AboutActivity.class));
+            return true;
+        }
+        if (item.getItemId() == R.id.action_app_log) {
+            LogActivity.startLogActivity(this, false);
             return true;
         }
         return super.onOptionsItemSelected(item);
