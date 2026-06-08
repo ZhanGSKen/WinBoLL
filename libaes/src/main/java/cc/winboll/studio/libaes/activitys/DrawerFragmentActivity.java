@@ -15,7 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,9 +22,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import cc.winboll.studio.libaes.DrawerMenuDataAdapter;
 import cc.winboll.studio.libaes.R;
+import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
 import cc.winboll.studio.libaes.interfaces.IWinBoLLActivity;
 import cc.winboll.studio.libaes.models.AESThemeBean;
 import cc.winboll.studio.libaes.models.DrawerMenuBean;
@@ -33,11 +32,9 @@ import cc.winboll.studio.libaes.utils.AESThemeUtil;
 import cc.winboll.studio.libaes.utils.DevelopUtils;
 import cc.winboll.studio.libaes.utils.WinBoLLActivityManager;
 import cc.winboll.studio.libaes.views.ADrawerMenuListView;
-import cc.winboll.studio.libaes.views.ADsBannerView;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import com.baoyz.widget.PullRefreshLayout;
-
 import java.util.ArrayList;
 
 public abstract class DrawerFragmentActivity extends AppCompatActivity implements IWinBoLLActivity, AdapterView.OnItemClickListener {
@@ -91,10 +88,10 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         WinBoLLActivityManager.getInstance().registeRemove(this);
         super.onDestroy();
         // 修复：释放广告资源，避免内存泄漏
-        ADsBannerView adsBannerView = findViewById(R.id.adsbanner);
-        if (adsBannerView != null) {
-            adsBannerView.releaseAdResources();
-        }
+//        ADsBannerView adsBannerView = findViewById(R.id.adsbanner);
+//        if (adsBannerView != null) {
+//            adsBannerView.releaseAdResources();
+//        }
     }
 
     @Override
@@ -151,10 +148,10 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     protected void onResume() {
         super.onResume();
 
-        ADsBannerView adsBannerView = findViewById(R.id.adsbanner);
-        if (adsBannerView != null) {
-            adsBannerView.resumeADs(DrawerFragmentActivity.this);
-        }
+//        ADsBannerView adsBannerView = findViewById(R.id.adsbanner);
+//        if (adsBannerView != null) {
+//            adsBannerView.resumeADs(DrawerFragmentActivity.this);
+//        }
     }
 
     void initRootView() {
