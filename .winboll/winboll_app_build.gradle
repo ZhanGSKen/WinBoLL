@@ -122,7 +122,6 @@ android {
                             // 如果正在调试，就拷贝到 WinBoLL 备份管理文件夹
                             // 
                             if(variant.flavorName == "beta"&&variant.buildType.name == "debug"){
-                                //File outBuildBckDir = new File(fWinBoLLStudioDir, "/${rootProject.name}/${variant.buildType.name}")
                                 File outBuildBckDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/${variant.buildType.name}")
                                 // 创建目标路径目录
                                 if(!outBuildBckDir.exists()) {
@@ -130,6 +129,7 @@ android {
                                     println "Output Folder Created.(WinBoLLStudio) : " + outBuildBckDir.getAbsolutePath()
                                 }
                                 if(outBuildBckDir.exists()) {
+                                    def targetApkFile = new File(outBuildBckDir, outputFileName)
                                     copy{
                                         from file.outputFile
                                         into outBuildBckDir
@@ -138,6 +138,14 @@ android {
                                         }
                                         println "Output APK (WinBoLLStudio): " + outBuildBckDir.getAbsolutePath() + "/${outputFileName}"
                                     }
+                                    // ========== 设置文件权限为775 ==========
+                                    if(targetApkFile.exists()){
+                                        exec {
+                                            commandLine 'chmod', '775', targetApkFile.absolutePath
+                                        }
+                                        println "Set file permission to 775 : ${targetApkFile.absolutePath}"
+                                    }
+
                                     // 检查编译标志位配置
                                     assert (winbollBuildProps['buildCount'] != null)
                                     assert (winbollBuildProps['libraryProject'] != null)
@@ -160,8 +168,7 @@ android {
                                         assert(libraryProjectBuildPropsFile.exists())
                                         java.nio.file.Path sourceFilePath = winbollBuildPropsFile.toPath();
                                         java.nio.file.Path targetFilePath = libraryProjectBuildPropsFile.toPath();
-                                        // 使用copyTo()方法复制文件，如果目标文件存在会被覆盖，可选参数可以选择不覆盖
-	                                    java.nio.file.Files.copy(sourceFilePath, targetFilePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                                        java.nio.file.Files.copy(sourceFilePath, targetFilePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 										
 										println "\n\n>>> Library Project build.properties saved.\n\n";
                                     }
@@ -172,16 +179,12 @@ android {
                             //
                             if(variant.flavorName == "stage"&&variant.buildType.name == "release"){
                                 // 发布 APK 文件
-                                //
-                                // 截取版本号的版本字段为短版本名
                                 String szVersionName = "${versionName}"
                                 String[] szlistTemp = szVersionName.split("-")
                                 String szShortVersionName = szlistTemp[0]
-                                //String szCommonTagAPKName = "${rootProject.name}_" + szShortVersionName + ".apk"
                                 String szCommonTagAPKName = project.rootDir.name + "_" + szShortVersionName + ".apk"
                                 println "CommonTagAPKName is : " + szCommonTagAPKName
                                 
-                                //File outTagDir = new File(fWinBoLLStudioDir, "/${rootProject.name}/tag/")
                                 File outTagDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/tag/")
                                 // 创建目标路径目录
                                 if(!outTagDir.exists()) {
@@ -192,12 +195,10 @@ android {
                                 if(outTagDir.exists()) {
                                     File targetAPK = new File(outTagDir, "${szCommonTagAPKName}")
                                     if(targetAPK.exists()) {
-                                        // 标签版本APK文件已经存在，构建拷贝任务停止
                                         assert (!targetAPK.exists())
-                                        // 可选择删除并继续输出APK文件
-                                        //delete targetAPK
                                     }
-                                    // 复制一个备份
+                                    // 复制完整版APK
+                                    def fullApkFile = new File(outTagDir, outputFileName)
                                     copy{
                                         from file.outputFile
                                         into outTagDir
@@ -206,7 +207,16 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${outputFileName}"
                                     }
-                                    // 复制一个并重命名为短版本名
+                                    // 设置权限775。
+                                    if(fullApkFile.exists()){
+                                        exec {
+                                            commandLine 'chmod', '775', fullApkFile.absolutePath
+                                        }
+                                        println "Set file permission to 775 : ${fullApkFile.absolutePath}"
+                                    }
+
+                                    // 复制短版本名APK
+                                    def shortApkFile = new File(outTagDir, szCommonTagAPKName)
                                     copy{
                                         from file.outputFile
                                         into outTagDir
@@ -215,6 +225,14 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${szCommonTagAPKName}"
                                     }
+                                    // 设置权限775。
+                                    if(shortApkFile.exists()){
+                                        exec {
+                                            commandLine 'chmod', '775', shortApkFile.absolutePath
+                                        }
+                                        println "Set file permission to 775 : ${shortApkFile.absolutePath}"
+                                    }
+
                                     // 检查编译标志位配置
                                     assert (winbollBuildProps['stageCount'] != null)
                                     assert (winbollBuildProps['publishVersion'] != null)
@@ -239,14 +257,11 @@ android {
                                     fos.close();
                                     
                                     if(winbollBuildProps['libraryProject'] != "") {
-                                        // 如果应用 build.properties 文件设置了类库模块项目文件名
-                                        // 就拷贝一份新的编译标志配置到类库项目文件夹
                                         File libraryProjectBuildPropsFile = new File("$RootProjectDir/" + winbollBuildProps['libraryProject'] + "/build.properties")
                                         assert(winbollBuildPropsFile.exists())
                                         assert(libraryProjectBuildPropsFile.exists())
                                         java.nio.file.Path sourceFilePath = winbollBuildPropsFile.toPath();
                                         java.nio.file.Path targetFilePath = libraryProjectBuildPropsFile.toPath();
-                                        // 使用copyTo()方法复制文件，如果目标文件存在会被覆盖，可选参数可以选择不覆盖
                                         java.nio.file.Files.copy(sourceFilePath, targetFilePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                                     }
                                     
@@ -263,17 +278,12 @@ android {
 							// 如果正在调试发布版，就只生成和输出APK文件，不处理 Git 仓库提交与更新问题。
 							//
 					        if(variant.flavorName == "stage"&&variant.buildType.name == "debug"){
-                                // 发布 APK 文件
-                                //
-                                // 截取版本号的版本字段为短版本名
                                 String szVersionName = "${versionName}"
                                 String[] szlistTemp = szVersionName.split("-")
                                 String szShortVersionName = szlistTemp[0]
-                                //String szCommonTagAPKName = "${rootProject.name}_" + szShortVersionName + ".apk"
                                 String szCommonTagAPKName = project.rootDir.name + "_" + szShortVersionName + ".apk"
                                 println "CommonTagAPKName is : " + szCommonTagAPKName
                                 
-                                //File outTagDir = new File(fWinBoLLStudioDir, "/${rootProject.name}/tag/")
                                 File outTagDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/${variant.buildType.name}/")
                                 // 创建目标路径目录
                                 if(!outTagDir.exists()) {
@@ -284,13 +294,11 @@ android {
                                 if(outTagDir.exists()) {
                                     File targetAPK = new File(outTagDir, "${szCommonTagAPKName}")
                                     if(targetAPK.exists()) {
-                                        // 标签版本APK文件已经存在，构建拷贝任务停止
 										println '如果是在调试 Stage 版应用包构建，请删除(注：在debug目录)现有的 Stage 应用包('+targetAPK.getAbsolutePath()+')。再编译一次。'
                                         assert (!targetAPK.exists())
-                                        // 可选择删除并继续输出APK文件
-                                        //delete targetAPK
                                     }
-                                    // 复制一个备份
+                                    // 复制完整版APK
+                                    def debugFullApk = new File(outTagDir, outputFileName)
                                     copy{
                                         from file.outputFile
                                         into outTagDir
@@ -299,7 +307,16 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${outputFileName}"
                                     }
-                                    // 复制一个并重命名为短版本名
+                                    // 权限设为775。
+                                    if(debugFullApk.exists()){
+                                        exec {
+                                            commandLine 'chmod', '775', debugFullApk.absolutePath
+                                        }
+                                        println "Set file permission to 775 : ${debugFullApk.absolutePath}"
+                                    }
+
+                                    // 复制短版本名APK
+                                    def debugShortApk = new File(outTagDir, szCommonTagAPKName)
                                     copy{
                                         from file.outputFile
                                         into outTagDir
@@ -308,8 +325,13 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${szCommonTagAPKName}"
                                     }
-                                    
-                                    //不保存编译标志配置
+                                    // 权限设为775
+                                    if(debugShortApk.exists()){
+                                        exec {
+                                            commandLine 'chmod', '775', debugShortApk.absolutePath
+                                        }
+                                        println "Set file permission to 775 : ${debugShortApk.absolutePath}"
+                                    }
                                 }
                             }
                             
@@ -327,6 +349,13 @@ android {
                                             String fileName -> "${commandAPKName}"
                                         }
                                         println "Output APK (Common): " + outCommonDir.getAbsolutePath() + "/${commandAPKName}"
+                                    }
+                                    // 额外输出文件设置775权限
+                                    if(apkFile.exists()){
+                                        exec {
+                                            commandLine 'chmod', '775', apkFile.absolutePath
+                                        }
+                                        println "Set file permission to 775 : ${apkFile.absolutePath}"
                                     }
                                 }
 						    }
