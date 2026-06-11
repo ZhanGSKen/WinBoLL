@@ -22,6 +22,8 @@ GRADLE_TASK_PUBLISH="assembleStageRelease"
 
 # aapt2本地覆盖参数
 AAPT2_OVERRIDE_ARG="-Pandroid.aapt2FromMavenOverride=/data/data/com.termux/files/usr/bin/aapt2"
+# 禁用Gradle守护进程
+GRADLE_NO_DAEMON="--no-daemon"
 
 # ==================== 函数定义 ====================
 # 检查Git源码是否已完全提交（无未提交变更）
@@ -151,14 +153,14 @@ if [[ $? -ne ${EXIT_CODE_SUCCESS} ]]; then
     exit ${EXIT_CODE_ERR_GIT_CHECK}
 fi
 
-# 4. 编译Stage Release版本APK（携带aapt2覆盖参数）
+# 4. 编译Stage Release版本APK（携带aapt2覆盖参数 + --no-daemon）
 echo "---------------------------------------------"
 echo "          步骤2：编译Stage Release APK"
 echo "---------------------------------------------"
 echo "[INFO] 开始执行Gradle任务：${GRADLE_TASK_PUBLISH}"
 # 调试用（注释正式任务，启用调试任务）
-# bash gradlew ${AAPT2_OVERRIDE_ARG} :${APP_NAME}:${GRADLE_TASK_DEBUG}
-bash gradlew ${AAPT2_OVERRIDE_ARG} :${APP_NAME}:${GRADLE_TASK_PUBLISH}
+# bash gradlew ${AAPT2_OVERRIDE_ARG} ${GRADLE_NO_DAEMON} :${APP_NAME}:${GRADLE_TASK_DEBUG}
+bash gradlew ${AAPT2_OVERRIDE_ARG} ${GRADLE_NO_DAEMON} :${APP_NAME}:${GRADLE_TASK_PUBLISH}
 
 if [[ $? -ne ${EXIT_CODE_SUCCESS} ]]; then
     echo "[ERROR] Gradle编译任务失败！"
