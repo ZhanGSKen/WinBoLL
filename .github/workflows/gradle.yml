@@ -13,12 +13,15 @@ on:
   pull_request:
     branches: [ "appbase" ]
 
+# 权限提升到全局，两个job共享，彻底规避语法报错
+permissions:
+  contents: read
+  dependency-graph: write
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
     - uses: actions/checkout@v4
@@ -33,7 +36,6 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
-    # CI环境禁用Gradle Daemon，避免进程异常锁定
     - name: Build with Gradle Wrapper
       run: ./gradlew build --no-daemon
 
@@ -51,9 +53,6 @@ jobs:
   dependency-submission:
 
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      dependency-graph: write
 
     steps:
     - uses: actions/checkout@v4
