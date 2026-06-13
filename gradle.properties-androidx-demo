@@ -19,3 +19,4 @@ android.useAndroidX=true
 android.enableJetifier=true
 # 保持与旧版Gradle插件的兼容
 android.disableAutomaticComponentCreation=true
+org.gradle.daemon=false
