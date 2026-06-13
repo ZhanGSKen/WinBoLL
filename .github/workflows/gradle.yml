@@ -13,11 +13,6 @@ on:
   pull_request:
     branches: [ "appbase" ]
 
-# 权限提升到全局，两个job共享，彻底规避语法报错
-permissions:
-  contents: read
-  dependency-graph: write
-
 jobs:
   build:
 
