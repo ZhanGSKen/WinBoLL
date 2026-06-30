@@ -18,14 +18,10 @@ def genVersionName(def versionName){
 }
 
 android {
- 	// 适配MIUI12
-     compileSdkVersion 30
- 	
-     compileOptions {
-         sourceCompatibility JavaVersion.VERSION_1_7
-         targetCompatibility JavaVersion.VERSION_1_7
-     }
- 
+	// 适配MIUI12
+	compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+	
     defaultConfig {
         applicationId "cc.winboll.studio.winboll"
         minSdkVersion 26
@@ -43,6 +39,7 @@ android {
 }
 
 dependencies {
+	api project(':libwinboll')
     api 'com.google.code.gson:gson:2.10.1'
 	
 	// 下拉控件
@@ -100,8 +97,8 @@ dependencies {
 	implementation 'androidx.biometric:biometric:1.1.0'
 	
 	// WinBoLL库 nexus.winboll.cc 地址
-    api 'cc.winboll.studio:libappbase:15.20.34'
-    api 'cc.winboll.studio:libaes:15.20.17'
+    api 'cc.winboll.studio:libappbase:15.20.33'
+    api 'cc.winboll.studio:libaes:15.20.16'
 	
 	// 备用库 jitpack.io 地址
 	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.33'

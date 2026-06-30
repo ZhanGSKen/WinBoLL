@@ -193,7 +193,9 @@ public class MainActivity extends DrawerFragmentActivity {
             } else if (nItemId == R.id.item_termux_env_test) {
                 Intent intent = new Intent(getApplicationContext(), TermuxEnvTestActivity.class);
                 WinBoLLActivityManager.getInstance().startWinBoLLActivity(getApplicationContext(), intent, AboutActivity.class);
-
+            } else if (nItemId == R.id.item_library_activity) {
+                Intent intent = new Intent(getApplicationContext(), cc.winboll.studio.libwinboll.WinBoLLLibraryActivity.class);
+                WinBoLLActivityManager.getInstance().startWinBoLLActivity(getApplicationContext(), intent, AboutActivity.class);
             } else {
                 return super.onOptionsItemSelected(item);
             }
