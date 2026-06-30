@@ -65,7 +65,7 @@ public class AboutActivity extends BaseWinBoLLActivity {
         appInfo.setAppName(getString(R.string.app_name));
         appInfo.setAppIcon(R.drawable.ic_winboll);
         appInfo.setAppDescription(getString(R.string.app_description));
-        appInfo.setAppGitName("AES");
+        appInfo.setAppGitName("WinBoLL");
         appInfo.setAppGitOwner("Studio");
         appInfo.setAppGitAPPBranch(branchName);
         appInfo.setAppGitAPPSubProjectFolder(branchName);

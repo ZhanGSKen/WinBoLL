@@ -56,10 +56,5 @@
 		
 	</LinearLayout>
 
-	<cc.winboll.studio.libaes.views.ADsBannerView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/adsbanner"/>
-
 </LinearLayout>
 

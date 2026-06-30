@@ -1,11 +1,7 @@
 package cc.winboll.studio.aes;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import cc.winboll.studio.libaes.views.ADsControlView;
 
 /**
  * @Author ZhanGSKen&豆包大模型<zhangsken@qq.com>
@@ -20,7 +16,7 @@ public class SettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        ADsControlView adsControlView = (ADsControlView) findViewById(R.id.ads_control_view);
+        //ADsControlView adsControlView = (ADsControlView) findViewById(R.id.ads_control_view);
 		
 //		adsControlView.setOnAdsModeSelectedListener(new ADsControlView.OnAdsModeSelectedListener() {
 //				@Override
