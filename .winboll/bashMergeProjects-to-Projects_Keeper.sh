@@ -72,7 +72,6 @@ libaes
 libappbase
 libdebugtemp
 libgpsrelaysentinel
-libwinboll
 local.properties-demo
 mymessagemanager
 positions
@@ -158,7 +157,7 @@ echo -e "## 对象列表结束
 
 ## 合并 APP 项目
 MERGE_APP_PROJECT_LIST=(
-DemoAPP
+WinBoLL
 )
 echo -e "#@@@ 开始合并应用型模块源码 @@@#
 ## 目标合并对象列表："
@@ -173,7 +172,6 @@ done
 
 ## 合并 LIB 项目
 MERGE_LIB_PROJECT_LIST=(
-WinBoLL
 APPBase
 AES
 )

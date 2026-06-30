@@ -72,7 +72,6 @@
 
 // WinBoLL 项目编译设置
 //include ':winboll'
-//include ':libwinboll'
 //rootProject.name = "winboll"
 
 // RegExpUtils 项目编译设置
