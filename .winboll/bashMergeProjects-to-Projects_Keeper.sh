@@ -1,5 +1,5 @@
 #!/system/bin/sh
-## 合并其他项目分支的模块源码到projects_keeper分支。
+## 合并其他项目分支的模块源码到projects-keeper分支。
 
 # ====================== 0. 进入目标目录 ======================
 TARGET_DIR="/sdcard/AppProjects/Projects_Keeper"
@@ -36,7 +36,7 @@ fi
 
 # ====================== 3. Git 分支检查 ======================
 CUR_BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null)
-TARGET_BRANCH="projects_keeper"
+TARGET_BRANCH="projects-keeper"
 
 if [ "$CUR_BRANCH" != "$TARGET_BRANCH" ]; then
     echo "错误：当前不在 $TARGET_BRANCH 分支！"
@@ -72,7 +72,6 @@ libaes
 libappbase
 libdebugtemp
 libgpsrelaysentinel
-libwinboll
 local.properties-demo
 mymessagemanager
 positions
@@ -158,7 +157,7 @@ echo -e "## 对象列表结束
 
 ## 合并 APP 项目
 MERGE_APP_PROJECT_LIST=(
-DemoAPP
+WinBoLL
 )
 echo -e "#@@@ 开始合并应用型模块源码 @@@#
 ## 目标合并对象列表："
@@ -173,7 +172,6 @@ done
 
 ## 合并 LIB 项目
 MERGE_LIB_PROJECT_LIST=(
-WinBoLL
 APPBase
 AES
 )
