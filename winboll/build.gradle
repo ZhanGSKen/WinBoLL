@@ -18,10 +18,14 @@ def genVersionName(def versionName){
 }
 
 android {
-	// 适配MIUI12
-	compileSdkVersion 30
-    buildToolsVersion "30.0.3"
-	
+ 	// 适配MIUI12
+     compileSdkVersion 30
+ 	
+     compileOptions {
+         sourceCompatibility JavaVersion.VERSION_1_7
+         targetCompatibility JavaVersion.VERSION_1_7
+     }
+ 
     defaultConfig {
         applicationId "cc.winboll.studio.winboll"
         minSdkVersion 26
