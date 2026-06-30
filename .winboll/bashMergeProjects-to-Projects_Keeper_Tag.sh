@@ -65,7 +65,6 @@ libaes
 libappbase
 libdebugtemp
 libgpsrelaysentinel
-libwinboll
 local.properties-demo
 mymessagemanager
 positions
@@ -98,7 +97,7 @@ check_diff
 echo -e "#@@@ 按时间获取最新标签合并模块源码 @@@#"
 
 # 应用型模块
-MERGE_APP_PROJECT_LIST=(DemoAPP)
+MERGE_APP_PROJECT_LIST=(WinBoLL)
 echo -e "---------- 应用型模块 ----------"
 for name in "${MERGE_APP_PROJECT_LIST[@]}";do
     low_name=$(echo "$name" | tr 'A-Z' 'a-z')
@@ -120,7 +119,7 @@ for name in "${MERGE_APP_PROJECT_LIST[@]}";do
 done
 
 # 类库模块
-MERGE_LIB_PROJECT_LIST=(WinBoLL APPBase AES)
+MERGE_LIB_PROJECT_LIST=(APPBase AES)
 echo -e "---------- 类库模块 ----------"
 for name in "${MERGE_LIB_PROJECT_LIST[@]}";do
     low_name=$(echo "$name" | tr 'A-Z' 'a-z')
