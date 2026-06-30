@@ -72,6 +72,7 @@ libaes
 libappbase
 libdebugtemp
 libgpsrelaysentinel
+libwinboll
 local.properties-demo
 mymessagemanager
 positions
@@ -81,13 +82,14 @@ winboll
 winboll.properties-demo
 )
 
-# ====================== 5. 获取当前目录真实文件列表 ======================
+# ====================== 5. 获取当前目录真实文件列表（已替换标准排序ls命令） ======================
 REAL_ITEMS=()
 while IFS= read -r line; do
     if [[ "$line" != "." && "$line" != ".." ]]; then
         REAL_ITEMS+=("$line")
     fi
-done < <(ls -a)
+# 替换为固定ASCII排序、单列、无色彩输出，匹配白名单顺序
+done < <(LC_COLLATE=C ls -a1 --color=none)
 
 # ====================== 6. 差异比对函数 ======================
 check_diff() {

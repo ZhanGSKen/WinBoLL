@@ -78,7 +78,8 @@ winboll.properties-demo
 REAL_ITEMS=()
 while IFS= read -r line; do
     [[ $line != "." && $line != ".." ]] && REAL_ITEMS+=("$line")
-done < <(ls -a)
+# 替换为固定ASCII排序、单列无颜色输出，解决排序错乱问题
+done < <(LC_COLLATE=C ls -a1 --color=none)
 
 check_diff(){
     local miss=() extra=()
