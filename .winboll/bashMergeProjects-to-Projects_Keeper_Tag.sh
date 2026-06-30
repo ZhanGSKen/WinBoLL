@@ -38,7 +38,7 @@ if [ "${NOW_BRANCH}" != "${TARGET_BRANCH}" ];then
     exit 1
 fi
 
-# 目录结构校验
+# 目录结构校验白名单（不含 . ..）
 MERGE_OBJECTS_LIST=(
 .git
 .gitignore
@@ -76,9 +76,13 @@ winboll.properties-demo
 )
 
 REAL_ITEMS=()
+# 标准排序ls输出，循环强制过滤 . 和 ..
 while IFS= read -r line; do
-    [[ $line != "." && $line != ".." ]] && REAL_ITEMS+=("$line")
-done < <(ls -a)
+    # 跳过虚拟目录 . 和 ..
+    if [[ "$line" != "." && "$line" != ".." ]]; then
+        REAL_ITEMS+=("$line")
+    fi
+done < <(LC_COLLATE=C ls -a1 --color=none)
 
 check_diff(){
     local miss=() extra=()
@@ -89,7 +93,17 @@ check_diff(){
         [[ ! " ${MERGE_OBJECTS_LIST[@]} " =~ " ${i} " ]] && extra+=("$i")
     done
     if [[ ${#miss[@]} -gt 0 || ${#extra[@]} -gt 0 ]];then
+        echo "========================================"
         echo "本地目录结构不一致，终止运行"
+        if [[ ${#miss[@]} -gt 0 ]]; then
+            echo -e "\n缺失条目："
+            for m in "${miss[@]}"; do echo "  $m"; done
+        fi
+        if [[ ${#extra[@]} -gt 0 ]]; then
+            echo -e "\n多余条目："
+            for e in "${extra[@]}"; do echo "  $e"; done
+        fi
+        echo "========================================"
         exit 1
     fi
 }

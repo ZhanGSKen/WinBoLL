@@ -72,6 +72,7 @@ libaes
 libappbase
 libdebugtemp
 libgpsrelaysentinel
+libwinboll
 local.properties-demo
 mymessagemanager
 positions
@@ -81,13 +82,14 @@ winboll
 winboll.properties-demo
 )
 
-# ====================== 5. 获取当前目录真实文件列表 ======================
+# ====================== 5. 获取当前目录真实文件列表（兼容过滤 . ..） ======================
 REAL_ITEMS=()
+# 使用固定排序ls，自动过滤 . 和 ..，不会进入比对数组
 while IFS= read -r line; do
     if [[ "$line" != "." && "$line" != ".." ]]; then
         REAL_ITEMS+=("$line")
     fi
-done < <(ls -a)
+done < <(LC_COLLATE=C ls -a1 --color=none)
 
 # ====================== 6. 差异比对函数 ======================
 check_diff() {
@@ -165,7 +167,7 @@ echo -e "#@@@ 开始合并应用型模块源码 @@@#
 for item in "${MERGE_APP_PROJECT_LIST[@]}"; do
     echo "正在合并 $item 项目 ..."
     item_lower=$(echo "$item" | tr 'A-Z' 'a-z')
-git checkout origin/$item_lower $item_lower
+    git checkout origin/$item_lower $item_lower
     git add .
     git commit -m "合并 $item 项目"
 done
@@ -181,7 +183,7 @@ echo -e "#@@@ 开始合并类库型模块源码 @@@#
 for item in "${MERGE_LIB_PROJECT_LIST[@]}"; do
     echo "正在合并 $item 项目 ..."
     item_lower=$(echo "$item" | tr 'A-Z' 'a-z')
-git checkout origin/$item_lower $item_lower lib$item_lower
+    git checkout origin/$item_lower $item_lower lib$item_lower
     git add .
     git commit -m "合并 $item 项目"
 done
