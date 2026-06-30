@@ -65,6 +65,7 @@ libaes
 libappbase
 libdebugtemp
 libgpsrelaysentinel
+libwinboll
 local.properties-demo
 mymessagemanager
 positions
