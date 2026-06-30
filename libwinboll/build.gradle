@@ -35,7 +35,7 @@ dependencies {
 	api 'com.jcraft:jsch:0.1.54'
 	
 	// 米盟
-	api 'com.miui.zeus:mimo-ad-sdk:5.3.+'//请使用最新版sdk
+	//api 'com.miui.zeus:mimo-ad-sdk:5.3.+'//请使用最新版sdk
      //注意：以下5个库必须要引入
     //implementation 'androidx.appcompat:appcompat:1.4.1'
     api 'androidx.recyclerview:recyclerview:1.0.0'
@@ -44,12 +44,12 @@ dependencies {
     //annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 	
 	// WinBoLL库 nexus.winboll.cc 地址
-    api 'cc.winboll.studio:libappbase:15.20.25'
-    api 'cc.winboll.studio:libaes:15.20.14'
+    api 'cc.winboll.studio:libappbase:15.20.33'
+    api 'cc.winboll.studio:libaes:15.20.16'
 	
 	// 备用库 jitpack.io 地址
-	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.25'
-	//api 'com.github.ZhanGSKen:libaes:aes-v15.20.14'
+	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.33'
+	//api 'com.github.ZhanGSKen:libaes:aes-v15.20.16'
 	
     api fileTree(dir: 'libs', include: ['*.jar'])
 }
