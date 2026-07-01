@@ -25,6 +25,7 @@ import cc.winboll.studio.libappbase.CrashActivity;
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.ToastUtils;
 import cc.winboll.studio.libappbase.utils.CrashHandleNotifyUtils;
+import cc.winboll.studio.libaes.utils.AESThemeUtil;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -52,6 +53,9 @@ public class App extends GlobalApplication {
     public void onCreate() {
         try {
 			super.onCreate();
+
+			// 初始化主题样式ID列表
+			AESThemeUtil.init(null);
 
 			// 初始化 Toast 工具类（传入应用全局上下文，确保 Toast 可在任意地方调用）
 			ToastUtils.init(getApplicationContext());
