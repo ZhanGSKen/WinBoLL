@@ -1,0 +1,3 @@
+// MyWinBoLL 项目编译设置
+include ':mywinboll'
+rootProject.name = "mywinboll"
