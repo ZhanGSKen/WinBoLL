@@ -11,10 +11,11 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/toolbar"/>
 
-    <cc.winboll.studio.libaes.views.ADsControlView
-		android:id="@+id/ads_control_view"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content" />
+<!-- <cc.winboll.studio.libaes.views.ADsControlView
+			android:id="@+id/ads_control_view"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" /> -->
+
 	
 </LinearLayout>
 
