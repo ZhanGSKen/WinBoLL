@@ -94,8 +94,8 @@ lint-results.html
 ## 忽略 AndroidIDE 临时文件夹
 .androidide
 
-## WinBoLL 基础应用(避免上传敏感配置)
+## MyWinBoLL 基础应用(避免上传敏感配置)
 /winboll.properties
 /local.properties
-/settings.gradle
-/gradle.properties
+#/settings.gradle
+#/gradle.properties

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 编辑菜单：点击后切换到编辑视图 -->
-    <item
-        android:id="@+id/menu_edit"
-        android:title="编辑"
-        android:orderInCategory="100"
-        android:showAsAction="never"/> <!-- 仅在菜单中显示，不显示在按钮栏 -->
-</menu>
