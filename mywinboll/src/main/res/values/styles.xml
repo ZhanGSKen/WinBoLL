@@ -1,6 +1,7 @@
 <resources>
 
     <style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="aSupportToolbar">@style/MyAESASupportToolbar</item>
         <item name="themeDebug">@style/MyDebugActivityTheme</item>
         <item name="aboutViewBackgroundColor">?attr/mainWindowBackgroundColor</item>
         <item name="aboutViewTextColor">?attr/mainWindowTextColor</item>
@@ -30,5 +31,7 @@
         <item name="colorTextBackgound">?attr/mainWindowBackgroundColor</item>
         <item name="toolbarTextColor">@color/toolbarTextColor</item>
     </style>
+
+    <style name="MyAESASupportToolbar" parent="AESASupportToolbar" />
 
 </resources>
