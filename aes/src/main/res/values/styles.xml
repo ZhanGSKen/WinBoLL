@@ -5,7 +5,7 @@
     </style>
 
     <style name="MyDebugActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/toolbarBackgroundColor</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
         <item name="colorTittle">@color/mainWindowTextColor</item>
         <item name="colorTittleBackgound">@color/toolbarBackgroundColor</item>
         <item name="colorText">@color/debugTextColor</item>
