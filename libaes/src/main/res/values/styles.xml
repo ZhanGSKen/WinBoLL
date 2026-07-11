@@ -25,7 +25,7 @@
         <item name="mainWindowTextColor">@color/mainWindowTextColor</item>
         <item name="mainWindowDarkBackgroundColor">@color/mainWindowBackgroundColor</item>
         <item name="mainWindowDarkTextColor">@color/mainWindowTextColor</item>
-        <item name="android:statusBarColor">@color/toolbarBackgroundColor</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
 
         <item name="aToolbar">@style/AESAToolbar</item>
         <item name="aSupportToolbar">@style/AESASupportToolbar</item>
