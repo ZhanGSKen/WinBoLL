@@ -9,6 +9,13 @@
 
 # Add any project specific keep options here:
 
+# JavaMail SMTP（邮件发送核心库，Release编译必须保留）
+-dontwarn javax.mail.**
+-keep class javax.mail.** { *; }
+-keep class javax.mail.internet.** { *; }
+-dontwarn com.sun.mail.**
+-keep class com.sun.mail.** { *; }
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
