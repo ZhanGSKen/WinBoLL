@@ -40,6 +40,8 @@
 
         <activity android:name=".AboutActivity"/>
 
+        <activity android:name=".SMTPSettingsActivity" android:exported="true"/>
+
     </application>
 
 </manifest>

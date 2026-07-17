@@ -183,6 +183,8 @@ public class MainActivity extends DrawerFragmentActivity {
         } else if (nItemId ==  R.id.item_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
+        } else if (nItemId == R.id.item_smtp_settings) {
+            WinBoLLActivityManager.getInstance().startWinBoLLActivity(this, SMTPSettingsActivity.class);
         } else if (nItemId ==  R.id.item_about) {
 //            Intent intent = new Intent(this, AboutActivity.class);
 //            startActivity(intent);

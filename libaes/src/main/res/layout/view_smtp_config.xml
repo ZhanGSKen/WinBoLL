@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/bg_container_border">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SMTP邮件配置"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="12dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SMTP服务器"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/et_smtp_server"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="smtp.qq.com"
+        android:inputType="textUri"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="端口"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/et_smtp_port"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="465"
+        android:inputType="number"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="发件人邮箱"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/et_smtp_sender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="your@qq.com"
+        android:inputType="textEmailAddress"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="授权码"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/et_smtp_auth_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="QQ邮箱授权码"
+        android:inputType="textPassword"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="默认收件人"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/et_smtp_recipient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="recipient@example.com"
+        android:inputType="textEmailAddress"/>
+
+    <Button
+        android:id="@+id/btn_smtp_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="保存配置"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/btn_smtp_test_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="发送测试邮件"
+        android:layout_marginTop="8dp"/>
+
+</LinearLayout>
