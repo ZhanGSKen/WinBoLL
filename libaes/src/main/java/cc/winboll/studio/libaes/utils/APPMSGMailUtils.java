@@ -33,6 +33,7 @@ public class APPMSGMailUtils {
     private static final String KEY_SMTP_SENDER = "smtp_sender";
     private static final String KEY_SMTP_AUTH_CODE = "smtp_auth_code";
     private static final String KEY_SMTP_RECIPIENT = "smtp_recipient";
+    private static final String KEY_SMTP_ENABLED = "smtp_enabled";
 
     private static final String DEFAULT_SMTP_SERVER = "smtp.qq.com";
     private static final String DEFAULT_SMTP_PORT = "465";
@@ -82,10 +83,30 @@ public class APPMSGMailUtils {
     }
 
     //
+    // SMTP邮件发送开关
+    //
+    public static void setEnabled(Context context, boolean enabled) {
+        SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(KEY_SMTP_ENABLED, enabled);
+        editor.apply();
+        LogUtils.d(TAG, "setEnabled: " + enabled);
+    }
+
+    public static boolean isEnabled(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
+        return sp.getBoolean(KEY_SMTP_ENABLED, false);
+    }
+
+    //
     // 发送邮件（异步，在后台线程执行）
     //
     public static void sendMail(final Context context, final String subject,
             final String content, final String recipients) {
+        if (!isEnabled(context)) {
+            LogUtils.d(TAG, "sendMail: SMTP邮件发送已禁用，跳过操作");
+            return;
+        }
         final String server = getServer(context);
         final String port = getPort(context);
         final String sender = getSender(context);
