@@ -120,6 +120,16 @@
 # JSch SSH组件
 -keep class com.jcraft.jsch.** { *; }
 
+# JavaMail SMTP（邮件发送核心库，Release编译必须保留）
+-dontwarn javax.mail.**
+-keep class javax.mail.** { *; }
+-keep class javax.mail.internet.** { *; }
+-dontwarn javax.activation.**
+-keep class javax.activation.** { *; }
+-dontwarn com.sun.mail.**
+-keep class com.sun.mail.** { *; }
+-keepclassmembers class * extends javax.mail.Authenticator { *; }
+
 # AndroidX 基础组件
 -keep class androidx.appcompat.** { *; }
 -keep interface androidx.appcompat.** { *; }
