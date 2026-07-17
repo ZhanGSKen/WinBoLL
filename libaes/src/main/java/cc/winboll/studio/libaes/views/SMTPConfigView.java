@@ -3,6 +3,8 @@ package cc.winboll.studio.libaes.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ public class SMTPConfigView extends LinearLayout {
     private EditText mEtSender;
     private EditText mEtAuthCode;
     private EditText mEtRecipient;
+    private CheckBox mCbEnabled;
 
     public SMTPConfigView(Context context) {
         super(context);
@@ -44,6 +47,14 @@ public class SMTPConfigView extends LinearLayout {
         mEtSender = (EditText) findViewById(R.id.et_smtp_sender);
         mEtAuthCode = (EditText) findViewById(R.id.et_smtp_auth_code);
         mEtRecipient = (EditText) findViewById(R.id.et_smtp_recipient);
+        mCbEnabled = (CheckBox) findViewById(R.id.cb_smtp_enabled);
+
+        mCbEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                APPMSGMailUtils.setEnabled(getContext(), isChecked);
+            }
+        });
 
         // 加载已保存的配置
         loadConfig();
@@ -80,6 +91,7 @@ public class SMTPConfigView extends LinearLayout {
         mEtSender.setText(APPMSGMailUtils.getSender(context));
         mEtAuthCode.setText(APPMSGMailUtils.getAuthCode(context));
         mEtRecipient.setText(APPMSGMailUtils.getRecipient(context));
+        mCbEnabled.setChecked(APPMSGMailUtils.isEnabled(context));
         LogUtils.d(TAG, "loadConfig: SMTP配置已加载");
     }
 
