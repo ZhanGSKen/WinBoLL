@@ -66,5 +66,9 @@ dependencies {
 	// 备用库 jitpack.io 地址
 	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.33'
 
+    // JavaMail SMTP (Android兼容版)
+    api 'com.sun.mail:android-mail:1.6.7'
+    api 'com.sun.mail:android-activation:1.6.7'
+
     api fileTree(dir: 'libs', include: ['*.jar'])
 }
