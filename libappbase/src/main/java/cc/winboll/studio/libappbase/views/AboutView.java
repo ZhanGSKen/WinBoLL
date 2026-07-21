@@ -19,6 +19,7 @@ import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.R;
 import cc.winboll.studio.libappbase.ToastUtils;
+import cc.winboll.studio.libappbase.common.ViewColorTable;
 import cc.winboll.studio.libappbase.dialogs.DebugHostDialog;
 import cc.winboll.studio.libappbase.models.APPInfo;
 
@@ -465,10 +466,10 @@ public class AboutView extends LinearLayout {
          */
         private android.graphics.drawable.Drawable create_item_background() {
             android.graphics.drawable.GradientDrawable drawable = new android.graphics.drawable.GradientDrawable();
-            drawable.setStroke(1, mItemContext.getResources().getColor(R.color.gray_300));
+            drawable.setStroke(1, ViewColorTable.DividerDarkLineColor);
             drawable.setCornerRadius(4);
             boolean isNightMode = (mItemContext.getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES;
-            drawable.setColor(isNightMode ? mItemContext.getResources().getColor(R.color.gray_800) : mItemContext.getResources().getColor(android.R.color.white));
+            drawable.setColor(isNightMode ? ViewColorTable.StatusBarDarkBgColor : ViewColorTable.CardSurfaceColor);
             return drawable;
         }
 
@@ -495,7 +496,7 @@ public class AboutView extends LinearLayout {
             tvTitle.setText(mTitle);
             tvTitle.setTextSize(16);
             boolean isNightMode = (mItemContext.getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES;
-            tvTitle.setTextColor(isNightMode ? mItemContext.getResources().getColor(R.color.gray_500) : mItemContext.getResources().getColor(R.color.gray_900));
+            tvTitle.setTextColor(isNightMode ? ViewColorTable.TextDisabledColor : ViewColorTable.TextPrimaryColor);
             llText.addView(tvTitle);
             // 内容
             TextView tvContent = new TextView(mItemContext);
@@ -524,7 +525,7 @@ public class AboutView extends LinearLayout {
 
         @Override
         protected int getContentTextColor() {
-            return mItemContext.getResources().getColor(R.color.blue_normal);
+            return ViewColorTable.TextLinkColor;
         }
 
         @Override
@@ -567,7 +568,7 @@ public class AboutView extends LinearLayout {
 
         @Override
         protected int getContentTextColor() {
-            return mItemContext.getResources().getColor(R.color.blue_normal);
+            return ViewColorTable.TextLinkColor;
         }
 
         @Override

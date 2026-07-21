@@ -14,6 +14,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import cc.winboll.studio.libappbase.common.ViewColorTable;
 
 public final class CrashActivity extends Activity implements MenuItem.OnMenuItemClickListener {
     private static final int MENUITEM_COPY = 0;
@@ -35,13 +36,13 @@ public final class CrashActivity extends Activity implements MenuItem.OnMenuItem
         contentView.setFillViewport(true);
 
         HorizontalScrollView hw = new HorizontalScrollView(this);
-        hw.setBackgroundColor(0xFFF5F5F5);
+        hw.setBackgroundColor(ViewColorTable.ListItemBgPressedColor);
 
         TextView message = new TextView(this);
         final int padding = dp2px(16);
         message.setPadding(padding, padding, padding, padding);
         message.setText(mLog);
-        message.setTextColor(0xFF000000);
+        message.setTextColor(ViewColorTable.TextPrimaryColor);
         message.setTextIsSelectable(true);
 
         hw.addView(message);
