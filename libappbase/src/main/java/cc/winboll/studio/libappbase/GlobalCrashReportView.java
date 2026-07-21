@@ -2,7 +2,6 @@ package cc.winboll.studio.libappbase;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -12,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 import cc.winboll.studio.libappbase.R;
+import cc.winboll.studio.libappbase.common.ViewColorTable;
 import android.content.res.Resources;
 
 /**
@@ -179,9 +179,9 @@ public class GlobalCrashReportView extends LinearLayout {
 		// 设置默认配色（使用 debugTextColor 属性）
 		Resources.Theme theme = mContext.getTheme();
 		mTitleColor = theme.getResources().getColor(android.R.color.holo_green_dark);
-		mTitleBackgroundColor = Color.GRAY;
+		mTitleBackgroundColor = ViewColorTable.SwitchTrackNormalColor;
 		mTextColor = obtainDebugTextColor(theme);
-		mTextBackgroundColor = Color.WHITE;
+		mTextBackgroundColor = ViewColorTable.CardSurfaceColor;
 		// 加载布局
 		inflateView();
 		// 初始化控件样式
@@ -196,11 +196,11 @@ public class GlobalCrashReportView extends LinearLayout {
 		if (themeResId != 0) {
 			int[] debugAttrs = new int[] { cc.winboll.studio.libappbase.R.attr.debugTextColor };
 			TypedArray debugTypedArray = theme.obtainStyledAttributes(themeResId, debugAttrs);
-			int color = debugTypedArray.getColor(0, Color.GRAY);
+			int color = debugTypedArray.getColor(0, ViewColorTable.TextSecondaryColor);
 			debugTypedArray.recycle();
 			return color;
 		}
-		return Color.GRAY;
+		return ViewColorTable.TextSecondaryColor;
 	}
 
 	/**
@@ -219,16 +219,16 @@ public class GlobalCrashReportView extends LinearLayout {
 		// 读取自定义属性值（无设置时使用默认值）
 		mTitleColor = typedArray.getColor(
 			R.styleable.GlobalCrashActivity_colorTittle,
-			Color.BLACK
+			ViewColorTable.TextPrimaryColor
 		);
 		mTitleBackgroundColor = typedArray.getColor(
 			R.styleable.GlobalCrashActivity_colorTittleBackgound, // 注：原拼写错误（Backgound→Background），保持与 attrs.xml 一致
-			Color.BLACK
+			ViewColorTable.TextPrimaryColor
 		);
 		mTextColor = obtainDebugTextColor(mContext.getTheme());
 		mTextBackgroundColor = typedArray.getColor(
 			R.styleable.GlobalCrashActivity_colorTextBackgound, // 注：原拼写错误，保持与 attrs.xml 一致
-			Color.WHITE
+			ViewColorTable.CardSurfaceColor
 		);
 
 		// 回收 TypedArray，避免内存泄漏

@@ -12,6 +12,6 @@
 		android:layout_height="wrap_content"
 		android:text="Main2Activity"
 		android:textSize="24sp"
-		android:textColor="@color/gray_900"/>
+		android:textColor="#212121"/>
 
 </LinearLayout>

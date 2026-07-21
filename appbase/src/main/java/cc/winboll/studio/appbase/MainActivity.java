@@ -1,8 +1,12 @@
 package cc.winboll.studio.appbase;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +15,7 @@ import android.view.View;
 import android.widget.Toolbar;
 import cc.winboll.studio.appbase.R;
 import cc.winboll.studio.appbase.model.TestBean;
+import cc.winboll.studio.appbase.develop.APPExcetionMailSettingsActivity;
 import cc.winboll.studio.libappbase.LogActivity;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.ToastUtils;
@@ -45,6 +50,7 @@ public class MainActivity extends Activity {
         setActionBar(mToolbar); // 将 Toolbar 替代系统默认 ActionBar
 		
 		initTestData();
+		setupShortcuts();
     }
 	
 	void initTestData() {
@@ -59,6 +65,36 @@ public class MainActivity extends Activity {
 	String getTestBeanRelativePath() {
 		return "/BaseBaen/"+TestBean.class.getName()+".json";
 	}
+
+    /**
+     * 注册桌面图标静态快捷方式
+     * 长按桌面图标后显示快捷菜单，点击可直接打开异常邮件接收设置页面
+     */
+    private void setupShortcuts() {
+        if (!"cc.winboll.studio.appbase.beta".equals(getPackageName())) {
+            return;
+        }
+
+        ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+        if (shortcutManager == null) {
+            return;
+        }
+
+        Intent intent = new Intent(this, APPExcetionMailSettingsActivity.class);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "exception_mail_settings")
+            .setShortLabel("邮件设置")
+            .setLongLabel("异常邮件接收设置")
+            .setIcon(Icon.createWithResource(this, R.drawable.ic_winboll))
+            .setIntent(intent)
+            .build();
+
+        shortcutManager.setDynamicShortcuts(
+            java.util.Arrays.asList(shortcut)
+        );
+    }
 
     /**
      * 创建菜单时回调（加载工具栏菜单）

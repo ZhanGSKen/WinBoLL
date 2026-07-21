@@ -73,6 +73,10 @@
 -dontwarn java.util.function.**
 
 # ============================== 第三方框架规则 ==============================
+# JavaMail（libaes SMTPConfigView依赖）
+-keep class javax.mail.** { *; }
+-dontwarn javax.mail.**
+
 # Retrofit + OkHttp
 -keep class retrofit2.** { *; }
 -keep interface retrofit2.** { *; }
