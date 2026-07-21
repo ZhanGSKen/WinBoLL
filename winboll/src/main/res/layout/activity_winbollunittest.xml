@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<android.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/toolbar"/>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1.0">
+
+		<LinearLayout
+			xmlns:app="http://schemas.android.com/apk/res-auto"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center">
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1.0"
+				android:gravity="center_horizontal">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Android 11（内部代号 Red Velvet Cake）是谷歌于2020年9月8日正式发布的移动端操作系统，核心升级聚焦隐私安全强化、通话与通知体验优化、5G与折叠屏适配三大方向，为用户和开发者提供更安全、灵活的使用与开发环境。\n\n一、核心升级：隐私安全（最关键变化）\n\nAndroid 11进一步收紧应用权限管控，从“被动授权”转向“主动保护用户数据”，核心变化包括：\n\n- 一次性权限：首次申请定位、麦克风、相机等敏感权限时，新增“仅本次允许”选项，应用退出后权限自动失效，避免长期授权泄露数据。\n- 后台位置权限限制：应用需先获得“前台定位权限”，才能申请“后台定位”，且用户可单独关闭后台定位（此前需完全关闭定位权限），减少后台偷跑定位的情况。\n- 存储权限细分：将原“存储”权限拆分为“媒体文件”和“所有文件”，普通应用仅能访问媒体文件，需访问其他文件（如文档）时需单独申请“所有文件访问权限”，降低存储数据泄露风险。\n\n二、体验优化：通知与通话\n\n- 通知分类管理：通知栏新增“对话”“提醒”“无声”三大分类，微信、短信等实时对话会单独归为“对话”分类，支持置顶、标记未读，重要信息更易查找。\n- 通话与通知优先级优化：来电、闹钟等重要提醒会以“浮动窗口”形式显示（非全屏遮挡），不打断当前操作（如看视频、玩游戏），用户可快速选择接听/挂断。\n- 通知历史记录：新增“通知历史”功能，可查看过去24小时内被清除的通知，避免误删重要信息。\n\n三、开发者与硬件适配\n\n- 5G网络优化：新增5G网络状态API，支持应用识别“5G高速”“5G低延迟”等场景，例如视频App可自动切换高清画质，游戏App可优化网络传输策略。\n- 折叠屏适配：提供“折叠状态监听”“多窗口模式增强”等API，帮助开发者适配折叠屏设备，避免屏幕折叠/展开时界面错乱。\n- Scoped Storage（分区存储）强制启用：要求应用适配“分区存储”机制（Android 10为可选），应用默认只能访问自身专属目录和公共媒体目录，无法随意读写手机存储，提升系统安全性。\n\n四、其他实用功能\n\n- 电源菜单集成控制：长按电源键时，可直接显示智能家居控制（如灯光、空调），无需单独打开智能家居App。\n- 无线调试：支持通过Wi-Fi连接电脑进行ADB调试，无需USB线，方便开发者测试设备。\n- 屏幕录制升级：系统自带屏幕录制功能支持录制声音（包括麦克风声音），并可选择是否显示触控操作。\n\n综上，Android 11的核心定位是“安全与体验的精细化升级”，通过隐私权限的层层收紧保护用户数据，同时针对5G、折叠屏等新硬件做了前瞻性适配，是Android系统向“更安全、更智能”迭代的重要版本。"/>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Edit TimeStamp: 20250915_180359_071"/>
+                
+                    
+				<HorizontalScrollView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content">
+
+					<LinearLayout
+						android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:gravity="right|center_vertical"
+						android:layout_width="wrap_content">
+
+						<CheckBox
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="Debug Mode"
+							android:layout_weight="1.0"
+							android:onClick="onSwitchDebugMode"
+							android:id="@+id/activitymainCheckBox1"/>
+
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="Test Application CrashReport"
+							android:textAllCaps="false"
+							android:onClick="onTestApplicationCrashReport"/>
+
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="PreviewGlobalCrashActivity"
+							android:textAllCaps="false"
+							android:onClick="onPreviewGlobalCrashActivity"/>
+
+					</LinearLayout>
+
+				</HorizontalScrollView>
+
+				<ScrollView
+					android:layout_width="match_parent"
+					android:layout_height="400dp">
+
+					<LinearLayout
+						android:orientation="vertical"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:gravity="right">
+
+						<LinearLayout
+							android:orientation="horizontal"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content">
+
+							<Button
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="StartCenter"
+								android:textAllCaps="false"
+								android:onClick="onStartCenter"/>
+
+							<Button
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="StopCenter"
+								android:textAllCaps="false"
+								android:onClick="onStopCenter"/>
+
+						</LinearLayout>
+
+						<HorizontalScrollView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content">
+
+							<LinearLayout
+								android:orientation="horizontal"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content">
+
+								<Button
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="SartTestDemoService"
+									android:textAllCaps="false"
+									android:onClick="onSartTestDemoService"/>
+
+								<Button
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="StopTestDemoService"
+									android:textAllCaps="false"
+									android:onClick="onStopTestDemoService"/>
+
+								<Button
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="StopTestDemoServiceNoSettings"
+									android:textAllCaps="false"
+									android:onClick="onStopTestDemoServiceNoSettings"/>
+
+							</LinearLayout>
+
+						</HorizontalScrollView>
+
+						<HorizontalScrollView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content">
+
+							<LinearLayout
+								android:orientation="horizontal"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content">
+
+								<Button
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="SartTestDemoBindService"
+									android:textAllCaps="false"
+									android:onClick="onSartTestDemoBindService"/>
+
+								<Button
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="StopTestDemoBindService"
+									android:textAllCaps="false"
+									android:onClick="onStopTestDemoBindService"/>
+
+								<Button
+									android:layout_width="wrap_content"
+									android:layout_height="wrap_content"
+									android:text="StopTestDemoBindServiceNoSettings"
+									android:textAllCaps="false"
+									android:onClick="onStopTestDemoBindServiceNoSettings"/>
+
+							</LinearLayout>
+
+						</HorizontalScrollView>
+
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="TestStopMainServiceWithoutSettingEnable"
+							android:textAllCaps="false"
+							android:onClick="onTestStopMainServiceWithoutSettingEnable"/>
+
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="TestUseComponentStartService"
+							android:textAllCaps="false"
+							android:onClick="onTestUseComponentStartService"/>
+
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="TestDemoServiceSOS"
+							android:textAllCaps="false"
+							android:onClick="onTestDemoServiceSOS"/>
+
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="TestOpenNewActivity"
+							android:textAllCaps="false"
+							android:onClick="onTestOpenNewActivity"/>
+
+					</LinearLayout>
+
+				</ScrollView>
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</ScrollView>
+</LinearLayout>
+
