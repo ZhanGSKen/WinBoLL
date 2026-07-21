@@ -1,7 +1,6 @@
 package cc.winboll.studio.libappbase.widget;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -13,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.R;
+import cc.winboll.studio.libappbase.common.ViewColorTable;
 
 /**
  * @Author ZhanGSKen&豆包大模型<zhangsken@qq.com>
@@ -105,7 +105,7 @@ public class LogTagSpinner extends Spinner {
 		setLayoutParams(layoutParams);
 
 		// 统一背景色（外部可通过 setBackground 手动覆盖）
-		setBackgroundColor(this.mContext.getColor(R.color.btn_gray_normal));
+		setBackgroundColor(ViewColorTable.SwitchTrackNormalColor);
 	}
 
 
@@ -156,10 +156,10 @@ public class LogTagSpinner extends Spinner {
 		//itemTv.setGravity(View.GRAVITY_CENTER_VERTICAL | View.GRAVITY_START);
 // 5. 文字颜色（使用主题属性 ?attr/toolbarTextColor）
 		TypedArray ta = mContext.obtainStyledAttributes(new int[] { R.attr.toolbarTextColor });
-		int toolbarTextColor = ta.getColor(0, mContext.getResources().getColor(R.color.white));
+		int toolbarTextColor = ta.getColor(0, ViewColorTable.ToolbarTitleTextColor);
 		ta.recycle();
 		itemTv.setTextColor(toolbarTextColor);
-		itemTv.setBackgroundColor(this.mContext.getResources().getColor(R.color.btn_gray_normal));
+		itemTv.setBackgroundColor(ViewColorTable.SwitchTrackNormalColor);
 		// 6. 文字溢出处理（最多 2 行，超出省略，避免长标签换行过多）
 		itemTv.setSingleLine(false);
 		itemTv.setMaxLines(2);

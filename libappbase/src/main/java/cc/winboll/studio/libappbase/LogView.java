@@ -28,6 +28,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.R;
+import cc.winboll.studio.libappbase.common.ViewColorTable;
 import cc.winboll.studio.libappbase.views.HorizontalListView;
 import cc.winboll.studio.libappbase.widget.LogTagSpinner;
 import java.text.Collator;
@@ -117,7 +118,7 @@ public class LogView extends RelativeLayout {
         // 获取Log Level spinner实例
         mLogLevelSpinner = findViewById(cc.winboll.studio.libappbase.R.id.viewlogSpinner1);
 
-		metTagSearch.setTextColor(mContext.getResources().getColor(R.color.white));
+		metTagSearch.setTextColor(ViewColorTable.EditTextContentColor);
         metTagSearch.addTextChangedListener(new TextWatcher() {
 
                 @Override
@@ -250,7 +251,7 @@ public class LogView extends RelativeLayout {
 		mSelectAllTAGCheckBox.setLayoutParams(layoutParams2);
 		//mSelectAllTAGCheckBox.setPadding(0,0,0,0);
 		TypedArray ta1 = mContext.obtainStyledAttributes(new int[] { R.attr.toolbarTextColor });
-		int toolbarTextColor1 = ta1.getColor(0, mContext.getResources().getColor(R.color.white));
+		int toolbarTextColor1 = ta1.getColor(0, ViewColorTable.ToolbarTitleTextColor);
 		ta1.recycle();
 		mSelectAllTAGCheckBox.setTextColor(toolbarTextColor1);
         mSelectAllTAGCheckBox.setOnClickListener(new View.OnClickListener(){
@@ -507,14 +508,14 @@ public class LogView extends RelativeLayout {
 			holder.tvText.setLayoutParams(layoutParams);
 			holder.tvText.setPadding(0,0,0,0);
 			TypedArray ta2 = mContext.obtainStyledAttributes(new int[] { R.attr.toolbarTextColor });
-			int toolbarTextColor2 = ta2.getColor(0, mContext.getResources().getColor(R.color.white));
+			int toolbarTextColor2 = ta2.getColor(0, ViewColorTable.ToolbarTitleTextColor);
 			ta2.recycle();
 			holder.tvText.setTextColor(toolbarTextColor2);
             holder.cbChecked.setChecked(item.isChecked());
 			holder.cbChecked.setLayoutParams(layoutParams);
 			holder.cbChecked.setPadding(0,0,0,0);
 			TypedArray ta3 = mContext.obtainStyledAttributes(new int[] { R.attr.toolbarTextColor });
-			int toolbarTextColor3 = ta3.getColor(0, mContext.getResources().getColor(R.color.white));
+			int toolbarTextColor3 = ta3.getColor(0, ViewColorTable.ToolbarTitleTextColor);
 			ta3.recycle();
 			holder.cbChecked.setTextColor(toolbarTextColor3);
             holder.cbChecked.setOnClickListener(new View.OnClickListener(){
