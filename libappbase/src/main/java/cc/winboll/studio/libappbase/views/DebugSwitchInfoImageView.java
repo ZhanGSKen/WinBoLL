@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
+import java.util.HashMap;
 import java.util.UUID;
 import cc.winboll.studio.libappbase.GlobalApplication;
 
@@ -24,11 +26,25 @@ public class DebugSwitchInfoImageView extends ImageView {
     // 连续点击计数
     private int mClickCount = 0;
     // 目标点击次数
-    private static final int TARGET_CLICK_COUNT = 7;
+    private static final int TARGET_CLICK_COUNT = 10;
 
     private static String mDebugToken = null;
     private static final String SP_DEBUG_TOKEN = "debug_token_prefs";
     private static final String KEY_DEBUG_TOKEN = "debug_token";
+
+    private static final HashMap<Integer, String> NUMBER_WORDS = new HashMap<Integer, String>();
+    static {
+        NUMBER_WORDS.put(1, "one");
+        NUMBER_WORDS.put(2, "two");
+        NUMBER_WORDS.put(3, "three");
+        NUMBER_WORDS.put(4, "four");
+        NUMBER_WORDS.put(5, "five");
+        NUMBER_WORDS.put(6, "six");
+        NUMBER_WORDS.put(7, "seven");
+        NUMBER_WORDS.put(8, "eight");
+        NUMBER_WORDS.put(9, "nine");
+        NUMBER_WORDS.put(10, "ten");
+    }
 
     public static String getDebugToken() {
         if (mDebugToken != null) {
@@ -116,6 +132,11 @@ public class DebugSwitchInfoImageView extends ImageView {
 				@Override
 				public void onClick(View v) {
 					mClickCount++;
+					String word = NUMBER_WORDS.get(mClickCount);
+					if (word == null) {
+						word = "One Piece!";
+					}
+					Toast.makeText(getContext(), word, Toast.LENGTH_SHORT).show();
 					if (mClickCount >= TARGET_CLICK_COUNT) {
 						mClickCount = 0;
 						showDebugTokenDialog();
