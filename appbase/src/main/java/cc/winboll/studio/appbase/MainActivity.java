@@ -71,6 +71,10 @@ public class MainActivity extends Activity {
      * 长按桌面图标后显示快捷菜单，点击可直接打开异常邮件接收设置页面
      */
     private void setupShortcuts() {
+        if (!"cc.winboll.studio.appbase.beta".equals(getPackageName())) {
+            return;
+        }
+
         ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
         if (shortcutManager == null) {
             return;
