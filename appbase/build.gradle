@@ -48,6 +48,10 @@ android {
 
 dependencies {
     api project(':libappbase')
-
+	
+	// WinBoLL库 nexus.winboll.cc 地址
+    //api 'cc.winboll.studio:libappbase:15.20.+'
+    api 'cc.winboll.studio:libaes:15.20.21'
+	
     api fileTree(dir: 'libs', include: ['*.jar'])
 }
