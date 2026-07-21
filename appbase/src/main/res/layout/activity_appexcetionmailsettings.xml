@@ -1,15 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:orientation="vertical"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:padding="16dp">
 
-	<TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="应用异常信息邮件接收账号设置："/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SMTP 邮件发送设置"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="16dp"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SMTP 服务器"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/et_smtp_server"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textUri"
+            android:hint="smtp.qq.com"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            android:textColorHint="#999999"
+            android:background="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SMTP 端口"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/et_smtp_port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="465"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            android:textColorHint="#999999"
+            android:background="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="发件人邮箱（QQ邮箱地址）"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/et_sender_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="123456@qq.com"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            android:textColorHint="#999999"
+            android:background="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="邮箱授权码（非QQ密码，在QQ邮箱设置中获取）"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/et_auth_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="请输入授权码"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            android:textColorHint="#999999"
+            android:background="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="收件人邮箱"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/et_recipient_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="123456@qq.com"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            android:textColorHint="#999999"
+            android:background="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp"/>
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="保存设置"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:background="#007AFF"
+            android:padding="14dp"
+            android:layout_marginBottom="12dp"/>
+
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="发送测试邮件"
+            android:textSize="16sp"
+            android:textColor="#007AFF"
+            android:background="#FFFFFF"
+            android:padding="14dp"/>
+
+    </LinearLayout>
+</ScrollView>
