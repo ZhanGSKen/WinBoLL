@@ -1,6 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/' } 
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
         maven { url 'https://dl.bintray.com/ppartisan/maven/' }
         maven { url "https://clojars.org/repo/" }
         maven { url "https://jitpack.io" }
@@ -14,9 +17,9 @@ buildscript {
 
         // Nexus Maven 库地址
         // "WinBoLL Release"
-        maven { url "https://nexus.zhangsken.cc/repository/maven-public/" }
+        maven { url "https://nexus.winboll.cc/repository/maven-public/" }
         // "WinBoLL Snapshot"
-        maven { url "https://nexus.zhangsken.cc/repository/maven-snapshots/" }
+        maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
     }
     dependencies {
 	    // 适配MIUI12
@@ -28,6 +31,9 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/' } 
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
         maven { url 'https://dl.bintray.com/ppartisan/maven/' }
         maven { url "https://clojars.org/repo/" }
         maven { url "https://jitpack.io" }
@@ -41,9 +47,9 @@ allprojects {
 		
         // Nexus Maven 库地址
         // "WinBoLL Release"
-        maven { url "https://nexus.zhangsken.cc/repository/maven-public/" }
+        maven { url "https://nexus.winboll.cc/repository/maven-public/" }
         // "WinBoLL Snapshot"
-        maven { url "https://nexus.zhangsken.cc/repository/maven-snapshots/" }
+        maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
     }
     ext {
         // 定义全局变量，常用于版本管理
@@ -89,7 +95,6 @@ allprojects {
     subprojects {
         tasks.withType(JavaCompile) {
             options.encoding = "UTF-8"
-            options.compilerArgs << '-Xlint:-options'
         }
 	}
 }
