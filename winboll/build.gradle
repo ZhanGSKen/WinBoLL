@@ -100,8 +100,8 @@ dependencies {
 	implementation 'androidx.biometric:biometric:1.1.0'
 	
 	// WinBoLL库 nexus.winboll.cc 地址
-    api 'cc.winboll.studio:libappbase:15.20.34'
-    api 'cc.winboll.studio:libaes:15.20.17'
+    api 'cc.winboll.studio:libappbase:15.21.+'
+    api 'cc.winboll.studio:libaes:15.21.+'
 	
 	// 备用库 jitpack.io 地址
 	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.33'
