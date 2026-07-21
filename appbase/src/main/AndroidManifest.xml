@@ -22,14 +22,16 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation">
 
             <intent-filter>
+
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
             </intent-filter>
 
         </activity>
-
-
 
         <activity
             android:name=".Main2Activity"
@@ -51,6 +53,9 @@
         <activity android:name="cc.winboll.studio.libappbase.activities.CrashCopyReceiverActivity"/>
 
         <activity android:name=".AboutActivity"/>
+
+        <activity android:name="cc.winboll.studio.appbase.develop.APPExcetionMailSettingsActivity"
+			android:exported="true"/>
 
     </application>
 
