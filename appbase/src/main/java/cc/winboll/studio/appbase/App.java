@@ -66,7 +66,9 @@ public class App extends GlobalApplication {
      * @param stackTraceStr 异常堆栈信息
      */
     private void sendExceptionMail(final String stackTraceStr) {
-        APPMSGMailUtils.sendMail();
+        String subject = "Exception Report - " + getPackageName();
+        String recipients = APPMSGMailUtils.getRecipient(this);
+        APPMSGMailUtils.sendMail(this, subject, stackTraceStr, recipients);
     }
 
     /**
