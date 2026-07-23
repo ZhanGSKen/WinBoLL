@@ -26,4 +26,6 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
+    api 'com.sun.mail:android-mail:1.6.7'
+    api 'com.sun.mail:android-activation:1.6.7'
 }

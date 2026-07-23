@@ -5,12 +5,16 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.se.omapi.Session;
 import android.widget.Toast;
 import cc.winboll.studio.libappbase.LogUtils;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
 import java.util.Properties;
+import javax.mail.Authenticator;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 /**
  * @Author 豆包&BigPickle&MiMo&ZhanGSKen<zhangsken@qq.com>
  * @Date 2026/07/23 17:36
@@ -175,7 +179,7 @@ public class APPMSGMailUtils {
 						LogUtils.d(TAG, "sendMail: 创建MimeMessage");
 						MimeMessage message = new MimeMessage(session);
 						message.setFrom(new InternetAddress(sender));
-						message.setRecipients(Message.RecipientType.TO,
+						message.setRecipients(javax.mail.Message.RecipientType.TO,
 											  InternetAddress.parse(recipients));
 						message.setSubject(subject);
 						message.setText(content);
