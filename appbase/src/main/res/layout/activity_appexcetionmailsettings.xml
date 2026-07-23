@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#FAFAFA">
 
-    <cc.winboll.studio.libaes.views.SMTPConfigView
+    <cc.winboll.studio.libappbase.views.SMTPConfigView
         android:id="@+id/smtp_config_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
