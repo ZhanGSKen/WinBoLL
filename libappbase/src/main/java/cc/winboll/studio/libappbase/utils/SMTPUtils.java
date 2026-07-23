@@ -47,7 +47,30 @@ public final class SMTPUtils {
             final String body,
             final String from,
             final String authCode) {
-        return sendMail(to, subject, body, from, authCode, false);
+        return sendMail(to, subject, body, from, authCode, false,
+                DEFAULT_SMTP_HOST, DEFAULT_SMTP_PORT);
+    }
+
+    /**
+     * 发送纯文本邮件（自定义SMTP服务器）
+     * @param to 收件人邮箱地址
+     * @param subject 邮件主题
+     * @param body 邮件正文（纯文本）
+     * @param from 发件人邮箱地址
+     * @param authCode 邮箱授权码
+     * @param host SMTP服务器地址
+     * @param port SMTP端口
+     * @return true=发送成功，false=发送失败
+     */
+    public static boolean sendTextMail(
+            final String to,
+            final String subject,
+            final String body,
+            final String from,
+            final String authCode,
+            final String host,
+            final int port) {
+        return sendMail(to, subject, body, from, authCode, false, host, port);
     }
 
     /**
@@ -65,7 +88,30 @@ public final class SMTPUtils {
             final String body,
             final String from,
             final String authCode) {
-        return sendMail(to, subject, body, from, authCode, true);
+        return sendMail(to, subject, body, from, authCode, true,
+                DEFAULT_SMTP_HOST, DEFAULT_SMTP_PORT);
+    }
+
+    /**
+     * 发送HTML邮件（自定义SMTP服务器）
+     * @param to 收件人邮箱地址
+     * @param subject 邮件主题
+     * @param body 邮件正文（HTML格式）
+     * @param from 发件人邮箱地址
+     * @param authCode 邮箱授权码
+     * @param host SMTP服务器地址
+     * @param port SMTP端口
+     * @return true=发送成功，false=发送失败
+     */
+    public static boolean sendHtmlMail(
+            final String to,
+            final String subject,
+            final String body,
+            final String from,
+            final String authCode,
+            final String host,
+            final int port) {
+        return sendMail(to, subject, body, from, authCode, true, host, port);
     }
 
     /**
@@ -84,9 +130,12 @@ public final class SMTPUtils {
             final String body,
             final String from,
             final String authCode,
-            final boolean isHtml) {
+            final boolean isHtml,
+            final String host,
+            final int port) {
 
-        LogUtils.d(TAG, "sendMail invoke, to=" + to + ", subject=" + subject + ", isHtml=" + isHtml);
+        LogUtils.d(TAG, "sendMail invoke, to=" + to + ", subject=" + subject
+                + ", isHtml=" + isHtml + ", host=" + host + ":" + port);
 
         // 参数校验
         if (to == null || to.isEmpty()) {
@@ -108,9 +157,9 @@ public final class SMTPUtils {
 
         try {
             // 1. 创建SSL连接
-            LogUtils.d(TAG, " connecting to " + DEFAULT_SMTP_HOST + ":" + DEFAULT_SMTP_PORT);
+            LogUtils.d(TAG, " connecting to " + host + ":" + port);
             SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-            socket = factory.createSocket(DEFAULT_SMTP_HOST, DEFAULT_SMTP_PORT);
+            socket = factory.createSocket(host, port);
             socket.setSoTimeout(10000);
 
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
