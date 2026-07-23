@@ -3,7 +3,7 @@ package cc.winboll.studio.appbase.develop;
 import android.app.Activity;
 import android.os.Bundle;
 import cc.winboll.studio.appbase.R;
-import cc.winboll.studio.libaes.views.SMTPConfigView;
+import cc.winboll.studio.libappbase.views.SMTPConfigView;
 
 /**
  * @Author 豆包&BigPickle&MiMo&ZhanGSKen<zhangsken@qq.com>
