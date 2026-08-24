@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="exception_mail_settings"
+        android:shortcutShortLabel="@string/shortcut_exception_mail_settings_short"
+        android:shortcutLongLabel="@string/shortcut_exception_mail_settings_long"
+        android:shortcutDisabledMessage="@string/shortcut_exception_mail_settings_disabled"
+        android:enabled="true"
+        android:icon="@drawable/ic_winboll_beta">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="cc.winboll.studio.appbase.beta"
+            android:targetClass="cc.winboll.studio.appbase.develop.APPExcetionMailSettingsActivity"/>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+</shortcuts>

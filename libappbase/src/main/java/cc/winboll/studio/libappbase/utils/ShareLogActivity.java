@@ -2,6 +2,9 @@ package cc.winboll.studio.libappbase.utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -21,6 +24,7 @@ public class ShareLogActivity extends Activity {
     public static final String TAG = "ShareLogActivity";
     public static final String EXTRA_CRASH_LOG_FILEPATH = "crash_log_filepath";
     public static final String EXTRA_CRASH_LOG_SUBJECT = "crash_log_subject";
+    public static final String EXTRA_CRASH_LOG_EMAIL_TO = "crash_log_email_to";
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -43,10 +47,40 @@ public class ShareLogActivity extends Activity {
         }
 
         final String subject = intent.getStringExtra(EXTRA_CRASH_LOG_SUBJECT);
-        handleShareCrashLog(crashLogFilePath, subject);
+        final String emailTo = intent.getStringExtra(EXTRA_CRASH_LOG_EMAIL_TO);
+        handleShareCrashLog(crashLogFilePath, subject, emailTo);
     }
 
-    private void handleShareCrashLog(final String crashLogFilePath, final String subject) {
+    private String getAppInfo() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("========== 应用信息 ==========\n");
+        try {
+            PackageInfo pkgInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            sb.append("应用包名: ").append(getPackageName()).append("\n");
+            sb.append("版本名称: ").append(pkgInfo.versionName).append("\n");
+            sb.append("版本号: ").append(pkgInfo.versionCode).append("\n");
+        } catch (PackageManager.NameNotFoundException e) {
+            sb.append("应用包名: ").append(getPackageName()).append("\n");
+            sb.append("版本信息: 获取失败\n");
+        }
+        sb.append("\n");
+        return sb.toString();
+    }
+
+    private String getDeviceInfo() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("========== 设备信息 ==========\n");
+        sb.append("设备制造商: ").append(Build.MANUFACTURER).append("\n");
+        sb.append("设备型号: ").append(Build.MODEL).append("\n");
+        sb.append("设备名称: ").append(Build.DEVICE).append("\n");
+        sb.append("Android版本: ").append(Build.VERSION.RELEASE).append("\n");
+        sb.append("Android API: ").append(Build.VERSION.SDK_INT).append("\n");
+        sb.append("系统指纹: ").append(Build.FINGERPRINT).append("\n");
+        sb.append("\n");
+        return sb.toString();
+    }
+
+    private void handleShareCrashLog(final String crashLogFilePath, final String subject, final String emailTo) {
         Log.d(TAG, "handleShareCrashLog crashLogFilePath = " + crashLogFilePath);
 
         final File crashLogFile = new File(crashLogFilePath);
@@ -67,16 +101,25 @@ public class ShareLogActivity extends Activity {
             }
             final String logContent = sb.toString();
 
-            final Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, logContent);
+            final StringBuilder emailContent = new StringBuilder();
+            emailContent.append(getAppInfo());
+            emailContent.append(getDeviceInfo());
+            emailContent.append("========== 崩溃日志 ==========\n");
+            emailContent.append(logContent);
+
+            final Intent shareIntent = new Intent(Intent.ACTION_SENDTO);
+            shareIntent.setData(android.net.Uri.parse("mailto:"));
+            shareIntent.putExtra(Intent.EXTRA_TEXT, emailContent.toString());
             if (subject != null && !subject.isEmpty()) {
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
             } else {
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, "崩溃日志");
             }
+            if (emailTo != null && !emailTo.isEmpty()) {
+                shareIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{emailTo});
+            }
 
-            startActivity(Intent.createChooser(shareIntent, "分享日志到"));
+            startActivity(Intent.createChooser(shareIntent, "发送日志到"));
             Log.d(TAG, "handleShareCrashLog 分享成功");
         } catch (Exception e) {
             Log.e(TAG, "handleShareCrashLog 异常", e);

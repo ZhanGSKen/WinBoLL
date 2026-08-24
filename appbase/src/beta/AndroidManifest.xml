@@ -10,6 +10,14 @@
         tools:replace="android:icon"
         android:icon="@drawable/ic_winboll_beta">
 
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
+        </activity>
+
     </application>
 
 </manifest>

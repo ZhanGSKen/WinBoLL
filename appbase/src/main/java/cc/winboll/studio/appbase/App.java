@@ -55,7 +55,9 @@ public class App extends GlobalApplication {
                 this,
                 getPackageName(),
                 stackTraceStr,
-                CrashActivity.class
+                CrashActivity.class,
+                "APPBase",
+                "studio@winboll.cc"
             );
         }
     }

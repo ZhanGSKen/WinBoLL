@@ -1,12 +1,8 @@
 package cc.winboll.studio.appbase;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -69,31 +65,11 @@ public class MainActivity extends Activity {
     /**
      * 注册桌面图标静态快捷方式
      * 长按桌面图标后显示快捷菜单，点击可直接打开异常邮件接收设置页面
+     * 静态快捷方式已通过 res/xml/shortcuts.xml 配置，此处无需动态注册
      */
     private void setupShortcuts() {
-        if (!"cc.winboll.studio.appbase.beta".equals(getPackageName())) {
-            return;
-        }
-
-        ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
-        if (shortcutManager == null) {
-            return;
-        }
-
-        Intent intent = new Intent(this, APPExcetionMailSettingsActivity.class);
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "exception_mail_settings")
-            .setShortLabel("邮件设置")
-            .setLongLabel("异常邮件接收设置")
-            .setIcon(Icon.createWithResource(this, R.drawable.ic_winboll))
-            .setIntent(intent)
-            .build();
-
-        shortcutManager.setDynamicShortcuts(
-            java.util.Arrays.asList(shortcut)
-        );
+        // 静态快捷方式仅在 beta 渠道生效，通过 AndroidManifest.xml 中的 meta-data 配置
+        // beta 渠道使用 res/xml/shortcuts.xml 定义快捷方式
     }
 
     /**

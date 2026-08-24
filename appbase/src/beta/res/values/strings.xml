@@ -2,5 +2,8 @@
 <resources>
 
     <string name="app_name">APPBase+</string>
+    <string name="shortcut_exception_mail_settings_short">邮件设置</string>
+    <string name="shortcut_exception_mail_settings_long">异常邮件接收设置</string>
+    <string name="shortcut_exception_mail_settings_disabled">快捷方式不可用</string>
 
 </resources>

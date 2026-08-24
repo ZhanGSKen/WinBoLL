@@ -67,11 +67,15 @@ public class CrashHandleNotifyUtils {
      * @param hostPackageName 宿主应用包名
      * @param errorLog 崩溃日志内容
      * @param reportCrashActivity 崩溃详情跳转Activity类
+     * @param appAPKName 应用APK名称（用于邮件标题）
+     * @param emailTo 邮件接收者地址
      */
     public static void handleUncaughtException(final android.app.Application hostApp,
                                                final String hostPackageName,
                                                final String errorLog,
-                                               final Class<?> reportCrashActivity) {
+                                               final Class<?> reportCrashActivity,
+                                               final String appAPKName,
+                                               final String emailTo) {
         LogUtils.d(TAG, "handleUncaughtException 进入方法");
         if (hostApp == null || TextUtils.isEmpty(hostPackageName) || TextUtils.isEmpty(errorLog)) {
             LogUtils.e(TAG, "handleUncaughtException 参数为空校验不通过");
@@ -87,7 +91,14 @@ public class CrashHandleNotifyUtils {
         sCrashLogCacheFilePath = crashLogFilePath;
         final Intent shareIntent = new Intent(hostApp, ShareLogActivity.class);
         shareIntent.putExtra(ShareLogActivity.EXTRA_CRASH_LOG_FILEPATH, crashLogFilePath);
-        shareIntent.putExtra(ShareLogActivity.EXTRA_CRASH_LOG_SUBJECT, "崩溃日志");
+        String subject = "崩溃日志";
+        if (appAPKName != null && !appAPKName.isEmpty()) {
+            subject = appAPKName + " - 崩溃日志";
+        }
+        shareIntent.putExtra(ShareLogActivity.EXTRA_CRASH_LOG_SUBJECT, subject);
+        if (emailTo != null && !emailTo.isEmpty()) {
+            shareIntent.putExtra(ShareLogActivity.EXTRA_CRASH_LOG_EMAIL_TO, emailTo);
+        }
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         final PendingIntent sharePendingIntent = createSharePendingIntent(hostApp, shareIntent);
         sendCrashNotification(hostApp, hostPackageName, hostAppName, errorLog, reportCrashActivity, sharePendingIntent);
@@ -109,7 +120,21 @@ public class CrashHandleNotifyUtils {
             LogUtils.w(TAG, "未携带宿主包名，默认使用应用自身包名");
         }
         final String errorLog = intent.getStringExtra(CrashHandler.EXTRA_CRASH_LOG);
-        handleUncaughtException(hostApp, hostPackageName, errorLog, reportCrashActivity);
+        handleUncaughtException(hostApp, hostPackageName, errorLog, reportCrashActivity, null, null);
+    }
+
+    /**
+     * 重载兼容方法：适配原有调用方式
+     * @param hostApp 宿主Application实例
+     * @param hostPackageName 宿主应用包名
+     * @param errorLog 崩溃日志内容
+     * @param reportCrashActivity 崩溃详情跳转Activity类
+     */
+    public static void handleUncaughtException(final android.app.Application hostApp,
+                                               final String hostPackageName,
+                                               final String errorLog,
+                                               final Class<?> reportCrashActivity) {
+        handleUncaughtException(hostApp, hostPackageName, errorLog, reportCrashActivity, null, null);
     }
 
     /**
@@ -355,7 +380,7 @@ public class CrashHandleNotifyUtils {
             .setWhen(System.currentTimeMillis())
             .setPriority(Notification.PRIORITY_DEFAULT);
         if (shareIntent != null) {
-            builder.addAction(android.R.drawable.ic_menu_send, "分享日志", shareIntent);
+            builder.addAction(android.R.drawable.ic_menu_send, "发送日志给开发组", shareIntent);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             return builder.build();
