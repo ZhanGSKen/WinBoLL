@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+    <string name="app_name">GPSRelaySentinel</string>
+    <string name="app_description">A GPS relay tool supporting real and simulated positioning, running in background for location forwarding, debugging and simulation.</string>
+
+</resources>

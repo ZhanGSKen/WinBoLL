@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" android:background="@drawable/bg_container_border">
+
+	<cc.winboll.studio.libaes.views.AToolbar
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/toolbar_height"
+		android:id="@+id/activityappsettingsAToolbar1"/>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1.0"
+		android:padding="4dp" android:background="@drawable/bg_container_border">
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:spacing="12dp" android:background="@drawable/bg_container_border">
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@drawable/bg_frame"
+				android:padding="12dp"
+				android:layout_marginBottom="8dp">
+
+				<TextView
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="用户视觉系统保护模式设置："
+					android:paddingLeft="5dp"
+					android:layout_marginBottom="8dp"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="2dp"
+					android:background="#999999"
+					android:layout_marginBottom="8dp"/>
+
+				<cc.winboll.studio.mymessagemanager.views.ConfirmSwitchView
+					android:layout_width="match_parent"
+					android:layout_height="48dp"
+					android:text="回收站短信保护式预览开关："
+					android:paddingLeft="5dp"
+					android:textSize="13sp"
+					android:id="@+id/activityappsettingsSwitch3"
+					android:gravity="center_vertical"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="2dp"
+					android:background="#BBBBBB"
+					android:layout_marginVertical="8dp"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical"
+					android:layout_marginLeft="5dp" android:background="@drawable/bg_container_border">
+
+					<TextView
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:text="拒绝显示的字符集:"
+						android:layout_weight="1.0"
+						android:textSize="12sp"/>
+
+					<Button
+						android:layout_width="wrap_content"
+						android:layout_height="40dp"
+						android:text="点击编辑"
+						android:onClick="onCharsetRefuseEditDialog"
+						android:paddingHorizontal="16dp"
+						android:textSize="13sp"/>
+
+				</LinearLayout>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="2dp"
+					android:background="#BBBBBB"
+					android:layout_marginVertical="8dp"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical"
+					android:layout_marginLeft="5dp"
+					android:layout_marginRight="5dp" android:background="@drawable/bg_container_border">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="替代字符:"
+						android:textSize="12sp"
+						android:layout_marginRight="8dp"/>
+
+					<EditText
+						android:layout_width="0dp"
+						android:ems="10"
+						android:layout_height="40dp"
+						android:id="@+id/activityappsettingsEditText4"
+						android:layout_weight="1.0"
+						android:paddingHorizontal="8dp"
+						android:background="@android:drawable/edit_text"
+						android:textSize="13sp"/>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@drawable/bg_frame"
+				android:padding="12dp"
+				android:layout_marginBottom="8dp">
+
+				<TextView
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="回收站模式设置："
+					android:paddingLeft="5dp"
+					android:layout_marginBottom="8dp"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="2dp"
+					android:background="#999999"
+					android:layout_marginBottom="8dp"/>
+
+				<RadioGroup
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:id="@+id/activityappsettingsRadioGroup1"
+					android:paddingLeft="5dp">
+
+					<RadioButton
+						android:layout_width="match_parent"
+						android:layout_height="48dp"
+						android:text="简洁模式（SMSRecycleActivity）"
+						android:id="@+id/activityappsettingsRadioButton1"
+						android:gravity="center_vertical"
+						android:textSize="14sp"
+						android:textColor="?android:attr/textColorPrimary"/>
+
+					<RadioButton
+						android:layout_width="match_parent"
+						android:layout_height="48dp"
+						android:text="自由模式（SMSRecycle2Activity）"
+						android:id="@+id/activityappsettingsRadioButton2"
+						android:gravity="center_vertical"
+						android:textSize="14sp"
+						android:textColor="?android:attr/textColorPrimary"/>
+
+				</RadioGroup>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@drawable/bg_frame"
+				android:padding="12dp"
+				android:layout_marginBottom="8dp">
+
+				<TextView
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="短信号码国家代码合并设置："
+					android:paddingLeft="5dp"
+					android:layout_marginBottom="8dp"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="2dp"
+					android:background="#999999"
+					android:layout_marginBottom="8dp"/>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="如+8612345678901与12345678901合并为12345678901."
+					android:textSize="12sp"
+					android:paddingLeft="5dp"
+					android:layout_marginBottom="10dp"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="2dp"
+					android:background="#BBBBBB"
+					android:layout_marginBottom="8dp"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical"
+					android:layout_marginLeft="5dp" android:background="@drawable/bg_container_border">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="当前国家代码为：+"
+						android:textSize="12sp"
+						android:layout_weight="1.0"/>
+
+					<EditText
+						android:layout_width="80dp"
+						android:ems="10"
+						android:layout_height="40dp"
+						android:inputType="number"
+						android:id="@+id/activityappsettingsEditText2"
+						android:paddingHorizontal="8dp"
+						android:background="@android:drawable/edit_text"
+						android:layout_marginHorizontal="8dp"
+						android:textSize="13sp"/>
+
+					<cc.winboll.studio.mymessagemanager.views.ConfirmSwitchView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:id="@+id/activityappsettingsSwitch1"/>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@drawable/bg_frame"
+				android:padding="12dp"
+				android:layout_marginBottom="8dp">
+
+				<TextView
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="TTS 语音设置："
+					android:paddingLeft="5dp"
+					android:layout_marginBottom="8dp"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="2dp"
+					android:background="#999999"
+					android:layout_marginBottom="8dp"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical"
+					android:layout_marginLeft="5dp"
+					android:layout_marginRight="5dp" android:background="@drawable/bg_container_border">
+
+					<TextView
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:text="@string/text_ttsplaydelaytimes"
+						android:layout_weight="1.0"
+						android:textSize="12sp"
+						android:paddingLeft="5dp"/>
+
+					<EditText
+						android:layout_width="50dp"
+						android:inputType="number"
+						android:layout_height="40dp"
+						android:ems="10"
+						android:id="@+id/activityappsettingsEditText1"
+						android:paddingHorizontal="8dp"
+						android:background="@android:drawable/edit_text"
+						android:gravity="center"
+						android:textSize="13sp"/>
+
+				</LinearLayout>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="2dp"
+					android:background="#BBBBBB"
+					android:layout_marginVertical="8dp"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="right"
+					android:layout_marginTop="10dp" android:background="@drawable/bg_container_border">
+
+					<Button
+						android:layout_width="wrap_content"
+						android:layout_height="40dp"
+						android:text="设置TTS悬浮窗口位置"
+						android:onClick="onTTSFloatSettingsActivity"
+						android:paddingHorizontal="16dp"
+						android:textSize="13sp"/>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@drawable/bg_frame"
+				android:padding="12dp"
+				android:layout_marginBottom="8dp"
+				android:gravity="right">
+
+				<TextView
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="应用权限设置 ："
+					android:paddingLeft="5dp"
+					android:layout_marginBottom="8dp"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="2dp"
+					android:background="#999999"
+					android:layout_marginBottom="8dp"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="40dp"
+					android:text="打开系统默认应用设置"
+					android:onClick="onOpenSystemDefaultAppSettings"
+					android:paddingHorizontal="16dp"
+					android:textSize="13sp"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="2dp"
+					android:background="#BBBBBB"
+					android:layout_marginVertical="8dp"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="40dp"
+					android:text="检查应用权限"
+					android:onClick="onCheckAndGetAppPermission"
+					android:paddingHorizontal="16dp"
+					android:textSize="13sp"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="2dp"
+					android:background="#BBBBBB"
+					android:layout_marginVertical="8dp"/>
+
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="40dp"
+					android:text="安装TTS语音支持"
+					android:onClick="onAddTTSSupport"
+					android:paddingHorizontal="16dp"
+					android:textSize="13sp"/>
+
+			</LinearLayout>
+
+			<cc.winboll.studio.libaes.views.ADsControlView
+				android:id="@+id/ads_control_view"
+				android:background="@drawable/bg_frame"
+				android:padding="10dp"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="8dp"/>
+
+		</LinearLayout>
+
+	</ScrollView>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/bg_frame"
+		android:padding="10dp"
+		android:layout_marginTop="8dp">
+
+		<cc.winboll.studio.libaes.views.AOHPCTCSeekBar
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/activityappsettingsAOHPCTCSeekBar1"
+			android:layout_marginBottom="8dp"/>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="2dp"
+			android:background="#BBBBBB"
+			android:layout_marginBottom="8dp"/>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:textSize="15sp"
+			android:id="@+id/activityappsettingsTextView1"
+			android:text="@string/msg_100applysettings"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+

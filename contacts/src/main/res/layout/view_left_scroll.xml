@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <!-- 内容区域 -->
+    <LinearLayout
+        android:id="@+id/content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="@color/white">
+        <!-- 这里放置你的列表项内容 -->
+    </LinearLayout>
+
+    <!-- 操作按钮 -->
+    <LinearLayout
+        android:id="@+id/action_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/lightgray">
+
+        <Button
+            android:id="@+id/edit_btn"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="编辑"
+            android:background="@color/blue" />
+        <Button
+            android:id="@+id/up_btn"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="△"
+            android:background="@color/green" />
+        <Button
+            android:id="@+id/down_btn"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="▽"
+            android:background="@color/green" />
+        <Button
+            android:id="@+id/delete_btn"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="删除"
+            android:background="@color/red" />
+    </LinearLayout>
+</LinearLayout>

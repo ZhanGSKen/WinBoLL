@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:id="@+id/llmain">
+
+	<cc.winboll.studio.libaes.views.ASupportToolbar
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/toolbar_height"
+		android:id="@+id/toolbar"
+		android:gravity="center_vertical"/>
+
+	<LinearLayout
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:background="#00000000"
+		android:layout_weight="1.0">
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="@drawable/activity_background"
+			android:layout_margin="0dp">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:orientation="vertical"
+				android:layout_weight="1.0">
+
+				<Switch
+					android:id="@+id/switch_service_control"
+					android:text="GPS服务开关"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="100dp"
+					android:layout_marginLeft="50dp"
+					android:layout_marginRight="50dp"
+					android:background="@drawable/shape_2px_border"
+					android:paddingLeft="10dp"/>
+
+				<Button
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp"
+					android:layout_marginLeft="50dp"
+					android:layout_marginRight="50dp"
+					android:onClick="onPositions"
+					android:text="位置与任务管理"
+					android:id="@+id/btn_manage_positions"
+					android:background="@drawable/btn_selector"
+					android:textColor="@drawable/btn_text_selector"
+					android:padding="12dp"/>
+
+				<ScrollView
+					android:id="@+id/scroll_idle_log"
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_marginTop="10dp"
+					android:layout_marginLeft="50dp"
+					android:layout_marginRight="50dp"
+					android:layout_weight="1.0"
+					android:background="@drawable/shape_log_border"
+					android:padding="8dp"
+					android:layout_marginBottom="80dp">
+
+					<TextView
+						android:id="@+id/tv_idle_log"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:textIsSelectable="true"
+						android:textColor="#FF000000"/>
+
+				</ScrollView>
+
+			</LinearLayout>
+
+			<cc.winboll.studio.libaes.views.ADsBannerView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/adsbanner"
+				android:layout_alignParentBottom="true"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>
+

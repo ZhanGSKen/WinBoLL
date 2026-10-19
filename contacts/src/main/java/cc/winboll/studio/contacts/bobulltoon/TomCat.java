@@ -1,0 +1,260 @@
+package cc.winboll.studio.contacts.bobulltoon;
+
+/**
+ * @Author ZhanGSKen<zhangsken@qq.com>
+ * @Date 2025/03/02 13:47:48
+ * @Describe 汤姆猫管家 ：使用 BoBullToon 项目，对通讯地址进行筛选判断的好朋友。
+ */
+import android.content.Context;
+import cc.winboll.studio.contacts.R;
+import cc.winboll.studio.contacts.dun.Rules;
+import cc.winboll.studio.libappbase.LogUtils;
+import cc.winboll.studio.libappbase.ToastUtils;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class TomCat {
+
+    public static final String TAG = "TomCat";
+
+    List<String> listPhoneBoBullToon = new ArrayList<String>();
+    String mszBoBullToon_URL;
+
+    static volatile TomCat _TomCat;
+    Context mContext;
+    TomCat(Context context) {
+        mContext = context;
+    }
+
+    public static synchronized TomCat getInstance(Context context) {
+        if (_TomCat == null) {
+            _TomCat = new TomCat(context);
+        }
+        return _TomCat;
+    }
+
+    public String getDefaultBobulltoonUrl() {
+        return mContext.getString(R.string.default_bobulltoon_url);
+    }
+
+    boolean downloadAndExtractZip(String zipUrl, String destinationFolder) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+            .url(zipUrl)
+            .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            if (!response.isSuccessful()) {
+                throw new IOException("Unexpected code " + response);
+            }
+
+            // 下载 ZIP 文件到临时位置
+            File tempZipFile = File.createTempFile("temp", ".zip");
+            try {
+                InputStream inputStream = response.body().byteStream();
+                FileOutputStream outputStream = new FileOutputStream(tempZipFile);
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, length);
+                }
+            } catch (Exception e) {
+                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+            }
+
+            // 解压 ZIP 文件到指定文件夹
+            try {
+                ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(tempZipFile.toPath()));
+                ZipEntry zipEntry;
+                while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+                    Path targetFilePath = Paths.get(destinationFolder, zipEntry.getName());
+                    if (zipEntry.isDirectory()) {
+                        Files.createDirectories(targetFilePath);
+                    } else {
+                        Files.createDirectories(targetFilePath.getParent());
+                        try (FileOutputStream fos = new FileOutputStream(targetFilePath.toFile())) {
+                            byte[] buffer = new byte[1024];
+                            int len;
+                            while ((len = zipInputStream.read(buffer)) > 0) {
+                                fos.write(buffer, 0, len);
+                            }
+                        }
+                    }
+                    zipInputStream.closeEntry();
+                }
+            } catch (Exception e) {
+                LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+            }
+
+            // 删除临时 ZIP 文件
+            tempZipFile.delete();
+            LogUtils.d(TAG, "已更新 BoBullToon 数据");
+            return true;
+        } catch (Exception e) {
+            ToastUtils.show(e.getMessage());
+            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+            return false;
+        }
+    }
+
+    public boolean downloadBoBullToon() {
+        String zipUrl = Rules.getInstance(mContext).getBoBullToonURL(); // 替换为实际的 ZIP 文件 URL
+        String destinationFolder = getWorkingFolder().getPath(); // 替换为实际的目标文件夹路径
+        try {
+            // 删除旧文件
+            File fOldFolder = new File(destinationFolder);
+            if (fOldFolder.exists()) {
+                deleteFolderRecursive(fOldFolder);
+                fOldFolder.mkdirs();
+                LogUtils.d(TAG, "已清空 BoBullToon 数据");
+            }
+
+            // 更新新文件
+            if (downloadAndExtractZip(zipUrl, destinationFolder)) {
+                LogUtils.d(TAG, "ZIP 文件下载并解压成功。");
+                return true;
+            }
+            return false;
+        } catch (IOException e) {
+            LogUtils.d(TAG, e, Thread.currentThread().getStackTrace());
+        }
+        return false;
+    }
+
+    // 递归删除文件夹及其内容的方法
+    public static void deleteFolderRecursive(File file) {
+        // 判断是否为文件夹
+        if (file.isDirectory()) {
+            // 列出文件夹中的所有文件和子文件夹
+            File[] files = file.listFiles();
+            if (files != null) {
+                // 遍历并递归删除每个文件和子文件夹
+                for (File f : files) {
+                    deleteFolderRecursive(f);
+                }
+            }
+        }
+        // 删除文件或空文件夹
+        file.delete();
+    }
+
+    File getWorkingFolder() {
+        return mContext.getExternalFilesDir(TAG);
+    }
+	
+	public File getBoBullToonDataFolder() {
+		File fCheckRoot = getWorkingFolder();
+		if (fCheckRoot == null || !fCheckRoot.exists()) {
+			return fCheckRoot;
+		}
+
+		// 递归查找符合条件的文件夹
+		File targetFolder = findTargetFolder(fCheckRoot);
+		return targetFolder != null ? targetFolder : fCheckRoot;
+	}
+
+	/**
+	 * 递归查找同时包含LICENSE和README.md文件的文件夹
+	 */
+	private File findTargetFolder(File currentFolder) {
+		// 检查当前文件夹是否符合条件
+		if (hasRequiredFiles(currentFolder)) {
+			return currentFolder;
+		}
+
+		// 查找子文件夹（Java 7不支持方法引用，用匿名内部类过滤）
+		File[] subFolders = currentFolder.listFiles(new FileFilter() {
+				@Override
+				public boolean accept(File file) {
+					return file.isDirectory(); // 仅保留子文件夹
+				}
+			});
+
+		if (subFolders != null) {
+			for (File subFolder : subFolders) {
+				File result = findTargetFolder(subFolder);
+				if (result != null) {
+					return result;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * 检查文件夹中是否同时存在LICENSE和README.md文件
+	 */
+	private boolean hasRequiredFiles(File folder) {
+		if (folder == null || !folder.isDirectory()) {
+			return false;
+		}
+
+		// 检查两个文件是否同时存在且均为文件（非文件夹）
+		File licenseFile = new File(folder, "LICENSE");
+		File readmeFile = new File(folder, "README.md");
+
+		return licenseFile.exists() && licenseFile.isFile()
+			&& readmeFile.exists() && readmeFile.isFile();
+	}
+
+	public void cleanBoBullToon() {
+		String destinationFolder = getWorkingFolder().getPath(); // 替换为实际的目标文件夹路径
+		// 删除旧文件
+		File fOldFolder = new File(destinationFolder);
+		if (fOldFolder.exists()) {
+			deleteFolderRecursive(fOldFolder);
+			fOldFolder.mkdirs();
+		}
+
+		ToastUtils.show("已清空 BoBullToon 数据!");
+		LogUtils.d(TAG, "已清空 BoBullToon 数据");
+	}
+
+    public boolean loadPhoneBoBullToon() {
+        listPhoneBoBullToon.clear();
+        File fBoBullToon = getBoBullToonDataFolder();
+        if (fBoBullToon.exists()) {
+            LogUtils.d(TAG, String.format("getBoBullToonDataFolder() %s", getWorkingFolder()));
+            for (File userFolder : fBoBullToon.listFiles()) {
+                if (userFolder.isDirectory()) {
+                    for (File recordFile : userFolder.listFiles()) {
+                        listPhoneBoBullToon.add(recordFile.getName());
+                    }
+                }
+            }
+
+            for (int i = 0; i < listPhoneBoBullToon.size(); i++) {
+                LogUtils.d(TAG, String.format("listPhoneBoBullToon add : %s", listPhoneBoBullToon.get(i)));
+            }
+            return true;
+        } else {
+            LogUtils.d(TAG, "fBoBullToon not exists。");
+        }
+        return false;
+    }
+
+    public boolean isPhoneBoBullToon(String phone) {
+        for (int i = 0; i < listPhoneBoBullToon.size(); i++) {
+            LogUtils.d(TAG, String.format("isPhoneBoBullToon(...) get(i) phone : %s", listPhoneBoBullToon.get(i)));
+            if (listPhoneBoBullToon.get(i).equals(phone)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}

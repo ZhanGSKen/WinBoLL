@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <!-- 滑块颜色：系统蓝色 -->
+    <solid android:color="@android:color/holo_blue_light" />
+    <!-- 滑块大小：20dp（适配小米机型触摸区域） -->
+    <size
+        android:width="20dp"
+        android:height="20dp" />
+    <!-- 白色边框：区分滑块与进度条 -->
+    <stroke
+        android:width="2dp"
+        android:color="@android:color/white" />
+</shape>
+

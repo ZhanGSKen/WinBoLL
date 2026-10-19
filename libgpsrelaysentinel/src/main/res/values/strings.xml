@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="lib_name">libdebugtemp</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="text_libraryactivity">LibraryActivity</string>
+
+</resources>

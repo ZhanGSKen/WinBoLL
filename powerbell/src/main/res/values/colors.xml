@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    <color name="colorPrimary">@color/colorShui</color>
+    <color name="colorPrimaryDark">@color/colorXinling</color>
+    <color name="colorAccent">@color/colorShui</color>
+    -->
+    <!-- 地球超人主题配置方案 -->
+    <!--
+    我们的大地神盖亚已经无法忍受世界的环境污染恐怕会毁了地球，
+    她把五个拥有巨大魔力的戒指给了五大洲的五个特殊中学生：
+    非洲的夸美，拥有土地的威力;
+    北美的辉乐，拥有火的威力;
+    苏联的琳卡，拥有风的威力;
+    亚洲的姬伊，拥有水的威力;
+    南美的玛狄，拥有心灵的威力。
+    五个中学生的威力联合起来，就能唤来最伟大的地球超人! 
+    地球超人!力量是你们的!
+    引用：(360百科) https://m.baike.so.com/doc/2093525-2214593.html
+    -->
+    <color name="colorTudi">#FF05CF00</color>
+    <color name="colorHuo">#FFC61414</color>
+    <color name="colorFeng">#FFDEDEDE</color>
+    <color name="colorShui">#FF009ADE</color>
+    <color name="colorShuiDark">#FF0072A4</color>
+    <color name="colorShuiAccent">#FF33C1FF</color>
+    <color name="colorXinling">#FFFCC500</color>
+    <!--<color name="colorPrimary">@color/colorShuiDark</color>
+    <color name="colorPrimaryDark">@color/colorFeng</color>
+    <color name="colorAccent">@color/colorShui</color>
+	-->
+    <color name="colorYellow">#FFBEBE48</color>
+    <color name="colorRed">#FFC85C5C</color>
+    <color name="colorBlue">#FF2677C7</color>
+    <color name="colorBlack">#FF000000</color>
+	<color name="colorText">@color/colorBlack</color>
+    <!-- 调试配置
+    <color name="colorYellow">#FF630066</color>
+    <color name="colorRed">#FF23244D</color>
+    <color name="colorBlue">#FF00E2F7</color>
+    <color name="colorBlack">#FF54FF00</color>
+    -->
+    <!-- 明色配置 
+    <color name="colorYellow">#FFFFBD00</color>
+    <color name="colorRed">#FFE00000</color>
+    <color name="colorBlue">#FF000DE5</color>
+    <color name="colorBlack">#FF000000</color>
+    -->
+    <!-- 原色配置 -->
+    <!--<color name="colorYellow">#FFFFFF00</color>
+    <color name="colorRed">#FFFF0000</color>
+    <color name="colorBlue">#FF000FFF</color>
+    <color name="colorBlack">#FF000000</color>
+	-->
+    <color name="colorPrimary">@color/colorShui</color>
+    <color name="colorPrimaryDark">@color/colorShuiDark</color>
+    <color name="colorAccent">@color/colorShuiAccent</color>
+    <color name="colorUsege">@color/colorRed</color>
+    <color name="colorCurrent">@color/colorBlue</color>
+    <color name="colorCharge">@color/colorYellow</color>
+
+    <!--CustomSlideToUnlockView控件配置-->
+    <color name="colorCustomSlideToUnlockViewWhite">#FFFFFFFF</color>
+
+	<!-- ============== 基础黑白（必含，适配文字/背景） ============== -->
+	<color name="white">#FFFFFF</color>          <!-- 纯白色（文字/背景） -->
+	<color name="black">#000000</color>          <!-- 近黑色（重要文字） -->
+
+	<!-- ============== 基础色系（按钮/强调色常用） ============== -->
+	<!-- 蓝色系（常用：确认/链接/主题色） -->
+	<color name="blue_light">#4A90E2</color>     <!-- 浅蓝（次要按钮） -->
+	<color name="blue_normal">#2196F3</color>    <!-- 标准蓝（主题/确认按钮） -->
+	<color name="blue_dark">#1976D2</color>      <!-- 深蓝（按压态/重要强调） -->
+	<!-- 绿色系（常用：成功/完成/安全提示） -->
+	<color name="green_light">#66BB6A</color>    <!-- 浅绿（次要成功态） -->
+	<color name="green_normal">#4CAF50</color>   <!-- 标准绿（成功按钮/提示） -->
+	<color name="green_dark">#388E3C</color>     <!-- 深绿（按压态/重要成功） -->
+	<!-- 红色系（常用：错误/警告/删除按钮） -->
+	<color name="red_light">#EF5350</color>      <!-- 浅红（次要错误提示） -->
+	<color name="red_normal">#F44336</color>     <!-- 标准红（删除/错误按钮） -->
+	<color name="red_dark">#D32F2F</color>       <!-- 深红（按压态/重要错误） -->
+	<!-- 黄色系（常用：警告/提醒/高亮） -->
+	<color name="yellow_light">#FFF59D</color>   <!-- 浅黄（次要提醒） -->
+	<color name="yellow_normal">#FFC107</color>  <!-- 标准黄（警告提示/高亮） -->
+	<color name="yellow_dark">#FFA000</color>    <!-- 深黄（重要警告） -->
+	<!-- 橙色系（常用：提醒/进度/活力色） -->
+	<color name="orange_normal">#FF9800</color>  <!-- 标准橙（提醒按钮/进度） -->
+	<!-- 紫色系（常用：特殊强调/个性按钮） -->
+	<color name="purple_normal">#9C27B0</color>  <!-- 标准紫（特殊功能按钮） -->
+
+	<!-- ============== 透明色（遮罩/背景叠加） ============== -->
+	<color name="transparent">#00000000</color>  <!-- 全透明 -->
+	<color name="black_transparent_50">#80000000</color> <!-- 50%透明黑（遮罩） -->
+
+
+
+	<!-- 1. 不透明灰色（常用深浅梯度，直接用） -->
+	<color name="gray_100">#F5F5F5</color> <!-- 极浅灰（接近白色，背景用） -->
+	<color name="gray_200">#EEEEEE</color> <!-- 浅灰（卡片/分割线背景） -->
+	<color name="gray_300">#E0E0E0</color> <!-- 中浅灰（边框/次要背景） -->
+	<color name="gray_400">#BDBDBD</color> <!-- 中灰（次要文字/图标） -->
+	<color name="gray_500">#9E9E9E</color> <!-- 标准中灰（常用辅助文字） -->
+	<color name="gray_600">#757575</color> <!-- 中深灰（常规辅助文字） -->
+	<color name="gray_700">#616161</color> <!-- 深灰（重要辅助文字） -->
+	<color name="gray_800">#424242</color> <!-- 极深灰（接近黑色，标题副文本） -->
+	<color name="gray_900">#212121</color> <!-- 近黑色（特殊场景用） -->
+
+	<!-- 2. 半透明灰色（带透明度，遮罩/蒙层用） -->
+	<color name="gray_transparent_30">#4D9E9E9E</color> <!-- 30%透明中灰（A=4D） -->
+	<color name="gray_transparent_50">#809E9E9E</color> <!-- 50%透明中灰（A=80） -->
+	<color name="gray_transparent_70">#B39E9E9E</color> <!-- 70%透明中灰（A=B3） -->
+
+	<color name="gray_light">#EEE</color>  <!-- 等价 #EEEEEE（浅灰） -->
+	<color name="gray_mid">#999</color>    <!-- 等价 #999999（中灰） -->
+	<color name="gray_dark">#666</color>   <!-- 等价 #666666（深灰） -->
+	<color name="gray_black">#333</color>  <!-- 等价 #333333（极深灰） -->
+
+	<!-- 50% 透明中灰（弹窗遮罩常用） -->
+	<color name="mask_gray">#809E9E9E</color>
+	<!-- 30% 透明深灰（背景叠加） -->
+	<color name="bg_overlay_gray">#4D424242</color>
+
+	<!-- 1. 常规灰色（按钮默认态，常用中灰） -->
+	<color name="btn_gray_normal">#9E9E9E</color>
+	<!-- 2. 按压深色（按钮点击态，加深一级，提升交互感） -->
+	<color name="btn_gray_pressed">#757575</color>
+	<!-- 3. 禁用灰色（按钮不可点击态，浅灰） -->
+	<color name="btn_gray_disabled">#E0E0E0</color>
+
+</resources>
