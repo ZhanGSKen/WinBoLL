@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ====================================== 兼容适配：其他必要目录（可选）====================================== -->
+    <!-- 应用内部缓存目录（适配少数依赖缓存的场景，如图片缓存）
+	路径：/data/user/0/${applicationId}/cache/
+	关联代码：getCacheDir() -->
+    <cache-path
+        name="cache_path"
+        path="." />
+	
+    <!-- ====================================== 核心适配：应用私有外部目录（必选）====================================== -->
+    <!-- 1. 裁剪临时文件目录（对应BackgroundSettingsActivity中onCreate的CropTemp目录）
+	路径：/storage/emulated/0/Android/data/${applicationId}/files/Pictures/CropTemp/
+	关联代码：_mSourceCropTempFile = new File(cropTempDir, _mSourceCropTempFileName) -->
+    <external-files-path
+        name="app_private_pictures"
+        path="Pictures/" /> <!-- 仅保留1次，覆盖Pictures下所有子目录（含CropTemp） -->
+
+    <!-- 2. 背景图片目录（对应BackgroundSourceUtils的背景存储目录）
+	路径：/storage/emulated/0/Android/data/${applicationId}/files/BackgroundPictureUtils/BackgroundSource/
+	关联代码：mfBackgroundDir = new File(mBackgroundSourceUtils.getBackgroundSourceDirPath()) -->
+    <external-files-path
+        name="background_source"
+        path="BackgroundPictureUtils/BackgroundSource/" />
+
+    <!-- 应用私有外部存储目录（适配BackgroundSourceUtils的目录） -->
+    <external-files-path
+        name="external_file_path"
+        path="BackgroundSourceUtils/" /> <!-- 对应fUtilsDir（BackgroundSourceUtils根目录） -->
+
+    <!-- 应用外部缓存目录（适配Android11+ 外部缓存场景，如第三方SDK依赖）
+	路径：/storage/emulated/0/Android/data/${applicationId}/cache/
+	关联代码：getExternalCacheDir() -->
+    <external-cache-path
+        name="external_cache_path"
+        path="." />
+
+    <!-- 3. 应用临时目录（对应App.getTempDirPath()，适配拍照临时文件）
+	路径：/storage/emulated/0/Android/data/${applicationId}/files/temp/
+	关联代码：mfPictureDir = new File(App.getTempDirPath())、mfTakePhoto = new File(mfPictureDir, "TakePhoto.jpg") -->
+    <external-files-path
+        name="app_temp"
+        path="temp/" />
+
+	<!-- 通用应用外部文件目录（适配分享/下载等通用场景，覆盖files下所有目录）
+	路径：/storage/emulated/0/Android/data/${applicationId}/files/
+	关联代码：getExternalFilesDir(null) -->
+    <external-files-path
+        name="external_file_path"
+        path="." />
+
+	<!-- 【核心添加】4. 应用内目录（getFilesDir()，对应别名 app_internal_files） -->
+	<!-- 用于映射 /data/user/0/包名/files/ 路径，解决裁剪临时文件路径匹配问题 -->
+	<files-path
+		name="app_internal_files"
+		path="." /> <!-- path="." 表示映射整个应用内目录 -->
+	<!-- 关键新增：系统公共图片目录 /Pictures/PowerBell（图片存储/裁剪目录） -->
+	<external-path
+		name="public_pictures_powerbell"
+		path="Pictures/PowerBell/" /> <!-- 路径：/storage/emulated/0/Pictures/PowerBell/ -->
+	<!-- 兜底：应用内部缓存目录 -->
+	<cache-path
+		name="cache_path"
+		path="BackgroundSourceUtils/" />
+</paths>

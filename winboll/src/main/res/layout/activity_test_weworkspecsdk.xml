@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:gravity="center_horizontal">
+
+    <Button
+        android:id="@+id/btn_init_sdk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="初始化企业微信SDK"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btn_get_corp_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="获取企业基本信息"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btn_check_auth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="检查用户授权状态"/>
+
+</LinearLayout>
+

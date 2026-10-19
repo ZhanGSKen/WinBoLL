@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 切换启动入口的快捷菜单 -->
+	<shortcut
+        android:shortcutId="close_appplus"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/close_appplus"
+        android:shortcutLongLabel="@string/close_appplus"
+        android:shortcutDisabledMessage="@string/appplus_close_disabled">
+        <intent
+            android:action="cc.winboll.studio.positions.App.ACTION_CLOSE_APPPLUS"
+            android:targetPackage="cc.winboll.studio.positions"
+            android:targetClass="cc.winboll.studio.positions.activities.ShortcutActionActivity"
+            android:data="close_appplus" />
+
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+</shortcuts>

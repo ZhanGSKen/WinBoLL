@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 按压状态：浅灰色背景 -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#E0E0E0" /> <!-- 按压深色 -->
+            <corners android:radius="8dp" /> <!-- 圆角适配小米UI风格 -->
+            <stroke android:width="1dp" android:color="#CCCCCC" /> <!-- 边框 -->
+        </shape>
+    </item>
+    <!-- 正常状态：白色背景 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" /> <!-- 正常白色 -->
+            <corners android:radius="8dp" />
+            <stroke android:width="1dp" android:color="#CCCCCC" />
+        </shape>
+    </item>
+</selector>
+

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 禁用状态：文字灰（系统默认禁用文字色） -->
+    <item android:state_enabled="false" android:color="#9E9E9E" />
+    <!-- 启用状态：复用系统默认按钮文字色（与普通按钮一致） -->
+    <item android:state_enabled="true" android:color="@android:color/black" />
+</selector>
+

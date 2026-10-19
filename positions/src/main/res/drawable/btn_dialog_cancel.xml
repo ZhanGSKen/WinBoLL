@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- 透明背景 -->
+    <solid android:color="#00000000" />
+    <!-- 灰色边框（与取消按钮文字同色） -->
+    <stroke
+        android:width="1dp"
+        android:color="#FF333333" />
+    <!-- 圆角（与弹窗一致，12dp） -->
+    <corners android:radius="12dp" />
+</shape>
+

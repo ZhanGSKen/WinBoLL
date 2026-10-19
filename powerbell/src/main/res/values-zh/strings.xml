@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_cn1">能源钟</string>
+    <string name="app_name_cn2">泡额呗额</string>
+    <string name="app_description">一个接收手机电量信息的应用，当电量值达到设定范围时会提醒用户。</string>
+    <string name="about_crashed">本应用崩溃了，作者水平有限，敬请谅解！</string>
+    <string name="item_main">主窗口</string>
+    <string name="item_about">关于</string>
+    <string name="item_settings">应用设置</string>
+    <string name="item_battery_report">应用耗电记录</string>
+    <string name="item_mainunittestactivity">开发调试窗口</string>
+    <string name="item_clearrecord">清理电量记录</string>
+    <string name="item_changepicture">更换背景图片</string>
+    <string name="item_devoloperoptionsview">开发调试窗口</string>
+    <string name="item_logview">日志窗口</string>
+    <string name="item_sourceview">源码窗口</string>
+    <string name="txt_aboveswitch">消息总开关</string>
+    <string name="txt_aboveswitchtips">当电量低于左边（放电状态）或高于右边（充电状态），就会发送一个提醒铃声。</string>
+    <string name="texthint_CustomSlideToCleanRecord">Slide Right To Clean Up APP Record.</string>
+    <string name="subtitle_activity_clearrecord">清理记录</string>
+    <string name="subtitle_activity_backgroundpicture">更换背景图片</string>
+    <string name="subtitle_activity_pixelpicker">背景像素拾取</string>
+    <string name="subtitle_activity_about">关于应用</string>
+	<string name="msg_AOHPCTCSeekBar_ClearRecord">&gt;&gt;&gt;向右滑动100%可以清理电量记录。&gt;&gt;&gt;</string>
+	<string name="msg_no_battery_record">无电池记录数据</string>
+</resources>

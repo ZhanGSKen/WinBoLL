@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="#1c1c1c">
+
+	<com.google.android.material.appbar.AppBarLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="?attr/actionBarSize"
+			app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+	</com.google.android.material.appbar.AppBarLayout>
+
+	<!-- 数据面板容器 -->
+	<LinearLayout
+		android:id="@+id/container_data_panel"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_horizontal">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="GPSRelaySentinel"
+			android:textColor="#888888"
+			android:padding="6dp"
+			android:background="@drawable/border_gray"
+			android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center_vertical"
+			android:layout_marginTop="8dp"
+			android:spacing="12dp">
+
+			<CheckBox
+				android:id="@+id/checkbox_sim_mode"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="模拟模式"
+				android:textColor="#999999"
+				android:padding="4dp"
+				android:background="@drawable/border_gray"
+				android:textSize="11sp"/>
+
+			<Switch
+				android:id="@+id/switch_service"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="GPS Service"
+				android:textColor="#999999"
+				android:padding="4dp"
+				android:background="@drawable/border_gray"
+				android:checked="false"/>
+
+			<Button
+				android:id="@+id/btn_send_last_gps"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="发送最后GPS"
+				android:textColor="#bbbbbb"
+				android:background="@drawable/border_gray"
+				android:textSize="12sp"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:layout_marginTop="16dp"
+			android:padding="12dp"
+			android:background="@drawable/border_gray">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="模拟移动GPS发送面板"
+				android:textColor="#999999"
+				android:textSize="12sp"/>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:layout_marginTop="8dp"
+				android:spacing="8dp">
+
+				<Spinner
+					android:id="@+id/spin_direction"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:background="@drawable/border_gray"/>
+
+				<EditText
+					android:id="@+id/et_sim_distance"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:hint="移动距离(米)"
+					android:inputType="numberDecimal"
+					android:text="10"
+					android:background="@drawable/border_gray"
+					android:textColor="#aaaaaa"
+					android:textColorHint="#666666"/>
+
+			</LinearLayout>
+
+			<TextView
+				android:id="@+id/tv_target_point_preview"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="目标坐标：等待计算..."
+				android:textColor="#999999"
+				android:background="@drawable/border_gray"
+				android:padding="6dp"
+				android:textSize="11sp"
+				android:layout_marginTop="8dp"/>
+
+			<Button
+				android:id="@+id/btn_sim_send_gps"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="发送模拟移动GPS"
+				android:textColor="#bbbbbb"
+				android:background="@drawable/border_gray"
+				android:layout_marginTop="10dp"/>
+
+		</LinearLayout>
+		
+	</LinearLayout>
+
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1.0">
+
+		<!-- 订阅面板容器 -->
+		<LinearLayout
+			android:id="@+id/container_subscribe_panel"
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+			android:padding="12dp">
+
+			<cc.winboll.studio.libgpsrelaysentinel.view.GpsSubscribeControlView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:background="@drawable/border_gray"/>
+
+			<cc.winboll.studio.libgpsrelaysentinel.view.GpsSubscribeControlView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:background="@drawable/border_gray"/>
+
+			<cc.winboll.studio.libgpsrelaysentinel.view.GpsSubscribeControlView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:background="@drawable/border_gray"/>
+
+		</LinearLayout>
+
+	</ScrollView>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="200dp"
+		android:orientation="vertical"
+		android:id="@+id/container_log_show"
+		android:background="@drawable/border_gray">
+
+		<cc.winboll.studio.libappbase.LogView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:id="@+id/logview"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+
