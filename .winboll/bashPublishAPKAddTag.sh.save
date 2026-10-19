@@ -1,0 +1,224 @@
+exit
+#!/usr/bin/bash
+# ==============================================================================
+# WinBoLL 应用发布脚本
+# 功能：检查Git源码状态 → 编译Stage Release包 → 添加WinBoLL标签 → 提交并推送源码
+# 依赖：build.properties、app_update_description.txt（项目根目录下）
+# 使用：./script_name.sh <APP_NAME>
+# 作者：豆包&ZhanGSKen<zhangsken@qq.com>
+# ==============================================================================
+
+# ==================== 常量定义 ====================
+# 脚本退出码
+EXIT_CODE_SUCCESS=0
+EXIT_CODE_ERR_NO_APP_NAME=2
+EXIT_CODE_ERR_WORK_DIR=1
+EXIT_CODE_ERR_GIT_CHECK=1
+EXIT_CODE_ERR_ADD_WINBOLL_TAG=1
+
+# Gradle 任务（正式发布）
+GRADLE_TASK_PUBLISH="assembleStageRelease"
+# Gradle 任务（调试用，注释备用）
+# GRADLE_TASK_DEBUG="assembleBetaDebug"
+
+# ==================== 函数定义 ====================
+# 检查Git源码是否已完全提交（无未提交变更）
+# 返回值：0=已完全提交，1=存在未提交变更
+function checkGitSources() {
+    # 配置Git安全目录（解决权限问题）
+    git config --global --add safe.directory "$(pwd)"
+    
+    # 检查是否有未提交的变更
+    if [[ -n $(git diff --stat) ]]; then
+        echo "[ERROR] Git源码存在未提交变更，请先提交所有修改！"
+        return 1
+    fi
+    
+    echo "[INFO] Git源码检查通过：所有变更已提交。"
+    return 0
+}
+
+# 询问是否添加GitHub Workflows标签（当前逻辑注释，保留扩展能力）
+# 返回值：1=用户选择是，0=用户选择否
+function askAddWorkflowsTag() {
+    read -p "是否添加GitHub Workflows标签？(Y/n) " answer
+    if [[ $answer =~ ^[Yy]$ ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+# 添加WinBoLL正式标签
+# 参数：$1=应用名称（项目根目录名）
+# 返回值：0=标签添加成功，1=标签已存在/添加失败
+function addWinBoLLTag() {
+    local app_name=$1
+    local build_prop_path="${app_name}/build.properties"
+    
+    # 从build.properties中提取publishVersion
+    local publish_version=$(grep -o "publishVersion=.*" "${build_prop_path}" | awk -F '=' '{print $2}')
+    if [[ -z ${publish_version} ]]; then
+        echo "[ERROR] 未从${build_prop_path}中提取到publishVersion配置！"
+        return 1
+    fi
+    echo "[INFO] 从${build_prop_path}读取到publishVersion：${publish_version}"
+    
+    # 构造WinBoLL标签（格式：<APP_NAME>-v<publishVersion>）
+    local tag="${app_name}-v${publish_version}"
+    echo "[INFO] 准备添加WinBoLL标签：${tag}"
+    
+    # 检查标签是否已存在
+    if [[ "$(git tag -l ${tag})" == "${tag}" ]]; then
+        echo "[ERROR] WinBoLL标签${tag}已存在！"
+        return 1
+    fi
+    
+    # 添加带注释的标签（注释来自app_update_description.txt）
+    git tag -a "${tag}" -F "${app_name}/app_update_description.txt"
+    echo "[INFO] WinBoLL标签${tag}添加成功！"
+    return 0
+}
+
+# 添加GitHub Workflows Beta标签（当前逻辑注释，保留扩展能力）
+# 参数：$1=应用名称（项目根目录名）
+# 返回值：0=标签添加成功，1=标签已存在/添加失败
+function addWorkflowsTag() {
+    local app_name=$1
+    local build_prop_path="${app_name}/build.properties"
+    
+    # 从build.properties中提取baseBetaVersion
+    local base_beta_version=$(grep -o "baseBetaVersion=.*" "${build_prop_path}" | awk -F '=' '{print $2}')
+    if [[ -z ${base_beta_version} ]]; then
+        echo "[ERROR] 未从${build_prop_path}中提取到baseBetaVersion配置！"
+        return 1
+    fi
+    echo "[INFO] 从${build_prop_path}读取到baseBetaVersion：${base_beta_version}"
+    
+    # 构造Workflows标签（格式：<APP_NAME>-v<baseBetaVersion>-beta）
+    local tag="${app_name}-v${base_beta_version}-beta"
+    echo "[INFO] 准备添加Workflows标签：${tag}"
+    
+    # 检查标签是否已存在
+    if [[ "$(git tag -l ${tag})" == "${tag}" ]]; then
+        echo "[ERROR] Workflows标签${tag}已存在！"
+        return 1
+    fi
+    
+    # 添加带注释的标签（注释来自app_update_description.txt）
+    git tag -a "${tag}" -F "${app_name}/app_update_description.txt"
+    echo "[INFO] Workflows标签${tag}添加成功！"
+    return 0
+}
+
+# ==================== 主流程开始 ====================
+echo "============================================="
+echo "          WinBoLL 应用发布脚本"
+echo "============================================="
+
+# 1. 检查应用名称参数是否指定
+if [ -z "$1" ]; then
+    echo "[ERROR] 未指定应用名称！使用方式：${0} <APP_NAME>"
+    exit ${EXIT_CODE_ERR_NO_APP_NAME}
+fi
+APP_NAME=$1
+echo "[INFO] 待发布应用名称：${APP_NAME}"
+
+# 2. 检查并切换到项目根目录（确保build.properties存在）
+echo "[INFO] 当前工作目录：$(pwd)"
+if [[ ! -e "${APP_NAME}/build.properties" ]]; then
+    echo "[WARNING] 当前目录不存在${APP_NAME}/build.properties，尝试切换到上级目录..."
+    cd ..
+    echo "[INFO] 切换后工作目录：$(pwd)"
+fi
+
+# 验证最终工作目录是否正确
+if [[ ! -e "${APP_NAME}/build.properties" ]]; then
+    echo "[ERROR] 工作目录错误！${APP_NAME}/build.properties 文件不存在。"
+    exit ${EXIT_CODE_ERR_WORK_DIR}
+fi
+echo "[INFO] 工作目录验证通过：${APP_NAME}/build.properties 存在。"
+
+# 3. 检查Git源码状态
+echo "---------------------------------------------"
+echo "          步骤1：检查Git源码状态"
+echo "---------------------------------------------"
+checkGitSources
+if [[ $? -ne ${EXIT_CODE_SUCCESS} ]]; then
+    echo "[ERROR] Git源码检查失败，脚本终止！"
+    exit ${EXIT_CODE_ERR_GIT_CHECK}
+fi
+
+# 4. 编译Stage Release版本APK
+echo "---------------------------------------------"
+echo "          步骤2：编译Stage Release APK"
+echo "---------------------------------------------"
+echo "[INFO] 开始执行Gradle任务：${GRADLE_TASK_PUBLISH}"
+# 调试用（注释正式任务，启用调试任务）
+# bash gradlew :${APP_NAME}:${GRADLE_TASK_DEBUG}
+bash gradlew :${APP_NAME}:${GRADLE_TASK_PUBLISH}
+
+if [[ $? -ne ${EXIT_CODE_SUCCESS} ]]; then
+    echo "[ERROR] Gradle编译任务失败！"
+    exit 1
+fi
+echo "[INFO] Stage Release APK编译成功！"
+
+# 5. 添加WinBoLL正式标签
+echo "---------------------------------------------"
+echo "          步骤3：添加WinBoLL标签"
+echo "---------------------------------------------"
+addWinBoLLTag ${APP_NAME}
+if [[ $? -ne ${EXIT_CODE_SUCCESS} ]]; then
+    echo "[ERROR] WinBoLL标签添加失败，脚本终止！"
+    exit ${EXIT_CODE_ERR_ADD_WINBOLL_TAG}
+fi
+
+# 6. （可选）添加GitHub Workflows标签（当前逻辑注释，保留扩展能力）
+# echo "---------------------------------------------"
+# echo "          步骤4：添加Workflows标签（可选）"
+# echo "---------------------------------------------"
+# echo "是否添加GitHub Workflows Beta标签？(Y/n) "
+# askAddWorkflowsTag
+# nAskAddWorkflowsTag=$?
+# if [[ ${nAskAddWorkflowsTag} -eq 1 ]]; then
+#     addWorkflowsTag ${APP_NAME}
+#     if [[ $? -ne ${EXIT_CODE_SUCCESS} ]]; then
+#         echo "[ERROR] Workflows标签添加失败，脚本终止！"
+#         exit 1
+#     fi
+# fi
+
+# 7. 清理更新描述文件
+echo "---------------------------------------------"
+echo "          步骤5：清理更新描述文件"
+echo "---------------------------------------------"
+echo "" > "${APP_NAME}/app_update_description.txt"
+echo "[INFO] 已清空${APP_NAME}/app_update_description.txt"
+
+# 8. 提交并推送源码与标签
+echo "---------------------------------------------"
+echo "          步骤6：提交并推送源码"
+echo "---------------------------------------------"
+git add .
+git commit -m "<${APP_NAME}> 开始新的Stage版本开发。"
+echo "[INFO] 源码提交成功，开始推送..."
+
+# 推送源码到远程仓库
+git push origin
+# 推送标签到远程仓库
+git push origin --tags
+
+if [[ $? -eq ${EXIT_CODE_SUCCESS} ]]; then
+    echo "[INFO] 源码与标签推送成功！"
+else
+    echo "[ERROR] 源码与标签推送失败！"
+    exit 1
+fi
+
+# ==================== 主流程结束 ====================
+echo "============================================="
+echo "          WinBoLL 应用发布完成！"
+echo "============================================="
+exit ${EXIT_CODE_SUCCESS}
+

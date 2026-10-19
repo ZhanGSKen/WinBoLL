@@ -1,0 +1,57 @@
+<resources>
+    <style name="MyAppTheme" parent="AESTheme">
+        <item name="themeDebug">@style/MyDebugActivityTheme</item>
+        <item name="aToolbar">@style/MyAESAToolbar</item>
+        <item name="aSupportToolbar">@style/MyAESASupportToolbar</item>
+    </style>
+
+    <style name="MyDepthAppTheme" parent="DepthAESTheme">
+        <item name="themeDebug">@style/MyDebugActivityTheme</item>
+        <item name="aToolbar">@style/MyAESAToolbar</item>
+        <item name="aSupportToolbar">@style/MyAESASupportToolbar</item>
+    </style>
+
+    <style name="MySkyAppTheme" parent="SkyAESTheme">
+        <item name="themeDebug">@style/MyDebugActivityTheme</item>
+        <item name="aToolbar">@style/MyAESAToolbar</item>
+        <item name="aSupportToolbar">@style/MyAESASupportToolbar</item>
+    </style>
+
+    <style name="MyGoldenAppTheme" parent="GoldenAESTheme">
+        <item name="themeDebug">@style/MyDebugActivityTheme</item>
+        <item name="aToolbar">@style/MyAESAToolbar</item>
+        <item name="aSupportToolbar">@style/MyAESASupportToolbar</item>
+    </style>
+
+    <style name="MyBearingAppTheme" parent="BearingAESTheme">
+        <item name="themeDebug">@style/MyDebugActivityTheme</item>
+        <item name="aToolbar">@style/MyAESAToolbar</item>
+        <item name="aSupportToolbar">@style/MyAESASupportToolbar</item>
+    </style>
+
+    <style name="MyMemorAppTheme" parent="MemorAESTheme">
+        <item name="themeDebug">@style/MyDebugActivityTheme</item>
+        <item name="aToolbar">@style/MyAESAToolbar</item>
+        <item name="aSupportToolbar">@style/MyAESASupportToolbar</item>
+    </style>
+
+    <style name="MyTaoAppTheme" parent="TaoAESTheme">
+        <item name="themeDebug">@style/MyDebugActivityTheme</item>
+        <item name="aToolbar">@style/MyAESAToolbar</item>
+        <item name="aSupportToolbar">@style/MyAESASupportToolbar</item>
+    </style>
+
+    <style name="MyAESAToolbar" parent="AESAToolbar" />
+
+    <style name="MyAESASupportToolbar" parent="AESASupportToolbar" />
+
+    <style name="MyDebugActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/toolbarBackgroundColor</item>
+        <item name="colorTittle">@color/mainWindowTextColor</item>
+        <item name="colorTittleBackgound">@color/toolbarBackgroundColor</item>
+        <item name="colorText">@color/debugTextColor</item>
+        <item name="colorTextBackgound">@color/mainWindowBackgroundColor</item>
+        <item name="debugTextColor">@color/debugTextColor</item>
+        <item name="toolbarTextColor">@color/toolbarTextColor</item>
+    </style>
+</resources>
