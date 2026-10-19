@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@android:color/white">
+
+    <!-- 标题 -->
+    <TextView
+        android:id="@+id/tv_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="用户须知"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 内容（用LinearLayout横向排列文本+链接，替代HTML <a>标签） -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp" android:background="@drawable/bg_container_border">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="小米广告SDK隐私政策: "
+            android:textSize="14sp" />
+
+        <!-- 可点击链接（用TextView承载，通过代码设置蓝色+下划线） -->
+        <TextView
+            android:id="@+id/tv_privacy_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="https://dev.mi.com/distribute/doc/details?pId=1688"
+            android:textSize="14sp"
+            android:textColor="@android:color/holo_blue_light" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="，点击链接查看完整政策"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- 按钮容器（水平排列） -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end" android:background="@drawable/bg_container_border">
+
+        <Button
+            android:id="@+id/btn_disagree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="拒绝"
+            android:textSize="14sp"
+            android:layout_marginRight="12dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp" />
+
+        <Button
+            android:id="@+id/btn_agree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="同意"
+            android:textSize="14sp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp" />
+    </LinearLayout>
+
+</LinearLayout>
+
