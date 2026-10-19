@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="lib_name">libappbase</string>
+    <string name="hello_world">Hello, world!</string>
+	<string name="shared_user_id">cc.winboll.studio</string>
+    <string name="shared_user_label">studio@winboll.cc</string>
+</resources>

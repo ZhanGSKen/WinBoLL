@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 全局主题属性 -->
+    <attr name="themeDebug" format="reference"/>
+
+    <!-- GlobalCrashActivity 样式属性 -->
+    <declare-styleable name="GlobalCrashActivity">
+        <attr name="colorTittle" format="color" />
+        <attr name="colorTittleBackgound" format="color" />
+        <attr name="colorText" format="color" />
+        <attr name="colorTextBackgound" format="color" />
+    </declare-styleable>
+
+    <!-- AboutView 样式属性 -->
+    <declare-styleable name="AboutViewStyle">
+        <attr name="aboutViewBackgroundColor" format="color" />
+        <attr name="aboutViewTextColor" format="color" />
+        <attr name="aboutViewTitleColor" format="color" />
+        <attr name="aboutViewDividerColor" format="color" />
+    </declare-styleable>
+
+    
+
+    <!-- DialogStyle 样式属性 -->
+    <declare-styleable name="DialogStyle">
+        <attr name="dialogBackgroundColor" format="color" />
+        <attr name="dialogTextColor" format="color" />
+    </declare-styleable>
+
+    <!-- 窗体/控件通用背景色属性 -->
+    <attr name="toolbarBackgroundColor" format="color"/>
+    <attr name="textViewBackgroundColor" format="color"/>
+    <attr name="editTextBackgroundColor" format="color"/>
+    <attr name="scrollViewBackgroundColor" format="color"/>
+
+    <!-- 窗体/控件通用文字色属性 -->
+    <attr name="toolbarTextColor" format="color"/>
+    <attr name="textViewTextColor" format="color"/>
+    <attr name="editTextTextColor" format="color"/>
+
+    <!-- ActivityStyle 样式属性 -->
+    <attr name="activityBackgroundColor" format="color"/>
+    <attr name="activityTextColor" format="color"/>
+
+    <!-- MainWindowStyle 主窗口样式属性 -->
+    <attr name="mainWindowBackgroundColor" format="color"/>
+    <attr name="mainWindowTextColor" format="color"/>
+
+    <!-- MainWindowDarkStyle 深色模式主窗口样式属性 -->
+    <attr name="mainWindowDarkBackgroundColor" format="color"/>
+    <attr name="mainWindowDarkTextColor" format="color"/>
+
+    <!-- DebugLogStyle 应用调试日志样式属性 -->
+    <attr name="debugTextColor" format="color"/>
+
+</resources>
