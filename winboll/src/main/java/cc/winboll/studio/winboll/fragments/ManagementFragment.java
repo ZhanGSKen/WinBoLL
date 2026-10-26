@@ -144,7 +144,7 @@ public class ManagementFragment extends Fragment implements View.OnClickListener
             mEtUrl.setText(initialUrl);
         } else {
             // 预加载默认页面（管理后台登录页）
-            String defaultUrl = "https://www-management.studio.winboll/user/login";
+            String defaultUrl = "https://www-management.studio.winboll/";
             mWinBoLLView.loadUrlSafe(defaultUrl);
             mEtUrl.setText(defaultUrl);
         }
@@ -160,8 +160,8 @@ public class ManagementFragment extends Fragment implements View.OnClickListener
                 // 根据消息标识处理不同逻辑
                 switch (msg.what) {
                     case MSG_HOMEPAGE:
-                        // 处理“跳转首页”消息：加载winboll.cc
-                        String homeUrl = "https://www.winboll.cc";
+                        // 处理“跳转首页”消息：加载 www-management.studio.winboll 主页
+                        String homeUrl = "https://www-management.studio.winboll/";
                         mWinBoLLView.loadUrlSafe(homeUrl);
                         mEtUrl.setText(homeUrl);
                         showToast("已跳转至首页");
