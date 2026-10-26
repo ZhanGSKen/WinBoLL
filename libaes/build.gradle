@@ -52,9 +52,6 @@ dependencies {
     //api 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
     //api 'androidx.fragment:fragment:1.1.0'
 	
-	// 米盟
-	//api 'com.miui.zeus:mimo-ad-sdk:5.3.+'//请使用最新版sdk
-     //注意：以下5个库必须要引入
     //implementation 'androidx.appcompat:appcompat:1.4.1'
     api 'androidx.recyclerview:recyclerview:1.0.0'
     api 'com.google.code.gson:gson:2.8.5'

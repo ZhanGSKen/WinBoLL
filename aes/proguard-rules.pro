@@ -60,7 +60,7 @@
 -dontwarn java.util.function.**
 
 # ============================== 第三方框架专项规则 ==============================
-# OkHttp 4.4.1（米盟广告请求依赖，完善Lambda兼容）
+# OkHttp 4.4.1（网络请求，完善 Lambda 兼容）
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
 -keep class okhttp3.internal.** { *; }
@@ -68,7 +68,7 @@
 -dontwarn okhttp3.internal.platform.**
 -dontwarn okio.**
 
-# Glide 4.9.0（米盟广告图片加载依赖）
+# Glide 4.9.0（图片加载）
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep public enum com.bumptech.glide.load.ImageHeaderParser$ImageType {
@@ -80,22 +80,14 @@
 }
 -dontwarn com.bumptech.glide.**
 
-# Gson 2.8.5（米盟广告数据序列化依赖）
+# Gson 2.8.5（JSON 数据序列化）
 -keep class com.google.gson.** { *; }
 -keep interface com.google.gson.** { *; }
 -keepclassmembers class * {
     @com.google.gson.annotations.SerializedName <fields>;
 }
 
-# 米盟 SDK（核心广告组件，完整保留避免加载失败）
--keep class com.miui.zeus.** { *; }
--keep interface com.miui.zeus.** { *; }
-# 保留米盟日志字段（便于广告加载失败排查）
--keepclassmembers class com.miui.zeus.mimo.sdk.** {
-    public static final java.lang.String TAG;
-}
-
-# RecyclerView 1.0.0（米盟广告布局渲染依赖）
+# RecyclerView 1.0.0（列表布局渲染）
 -keep class androidx.recyclerview.** { *; }
 -keep interface androidx.recyclerview.** { *; }
 -keepclassmembers class androidx.recyclerview.widget.RecyclerView$Adapter {

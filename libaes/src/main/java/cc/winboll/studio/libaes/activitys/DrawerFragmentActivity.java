@@ -87,11 +87,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     protected void onDestroy() {
         WinBoLLActivityManager.getInstance().registeRemove(this);
         super.onDestroy();
-        // 修复：释放广告资源，避免内存泄漏
-//        ADsBannerView adsBannerView = findViewById(R.id.adsbanner);
-//        if (adsBannerView != null) {
-//            adsBannerView.releaseAdResources();
-//        }
     }
 
     @Override
@@ -147,11 +142,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     @Override
     protected void onResume() {
         super.onResume();
-
-//        ADsBannerView adsBannerView = findViewById(R.id.adsbanner);
-//        if (adsBannerView != null) {
-//            adsBannerView.resumeADs(DrawerFragmentActivity.this);
-//        }
     }
 
     void initRootView() {

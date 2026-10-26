@@ -16,20 +16,6 @@ public class SettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        //ADsControlView adsControlView = (ADsControlView) findViewById(R.id.ads_control_view);
-		
-//		adsControlView.setOnAdsModeSelectedListener(new ADsControlView.OnAdsModeSelectedListener() {
-//				@Override
-//				public void onModeSelected(ADsMode selectedMode) {
-//					if (selectedMode == ADsMode.STANDALONE) {
-//						// 处理单机模式逻辑（如释放米盟资源）
-//						ToastUtils.show("STANDALONE");
-//					} else if (selectedMode == ADsMode.MIMO_SDK) {
-//						// 处理米盟SDK模式逻辑（如初始化SDK）
-//						ToastUtils.show("MIMO_SDK");
-//					}
-//				}
-//			});
     }
-	
+
 }
