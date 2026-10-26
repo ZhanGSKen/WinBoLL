@@ -128,7 +128,9 @@ public class MainActivity extends DrawerFragmentActivity {
     }
 
 	public static void sendMessage(Message msg) {
-		_mMainHandler.sendMessage(msg);
+		if (_mMainHandler != null && msg != null) {
+			_mMainHandler.sendMessage(msg);
+		}
 	}
 
     /**
@@ -179,8 +181,8 @@ public class MainActivity extends DrawerFragmentActivity {
 
 	void loadUrlLoadHistotyMenu(ArrayList<DrawerMenuBean> listDrawerMenu) {
 		listDrawerMenu.clear();
-		if (BrowserFragment._mUrlLoadHistory != null) {
-			for (String url : BrowserFragment._mUrlLoadHistory) {
+		if (mBrowserFragment != null && mBrowserFragment.getUrlLoadHistory() != null) {
+			for (String url : mBrowserFragment.getUrlLoadHistory()) {
 				listDrawerMenu.add(new DrawerMenuBean(R.drawable.ic_launcher, url));
 			}
 		}

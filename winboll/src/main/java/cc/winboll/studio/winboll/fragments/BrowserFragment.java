@@ -38,7 +38,12 @@ public class BrowserFragment extends Fragment implements View.OnClickListener, W
     private Button mBtnBack;
     private ProgressBar mProgressBar;
     private WinBoLLView mWinBoLLView;
-	public static ArrayList<String> _mUrlLoadHistory = new ArrayList<String>();
+	// URL 加载历史（实例变量，随 Fragment 实例独立保存，避免多实例共享与 recreate 清空）
+	private ArrayList<String> mUrlLoadHistory = new ArrayList<String>();
+	// 页面加载失败标记（失败页面不加入历史）
+	private boolean mLoadFailed = false;
+	// URL 历史最大条数（避免无限增长）
+	private static final int MAX_URL_HISTORY_SIZE = 20;
 
     // ------------------- 新增：Handler 消息定义（应用内通信） -------------------
     // 消息标识：跳转首页（winboll.cc）
@@ -69,8 +74,7 @@ public class BrowserFragment extends Fragment implements View.OnClickListener, W
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // 加载布局（Java 7 显式强转，无菱形语法）
         View view = inflater.inflate(R.layout.fragment_browser, container, false);
-		// 清理旧历史记录
-		_mUrlLoadHistory.clear();
+		// 历史为实例变量，随 Fragment 实例独立保存，重建视图时不清空
 
         // 初始化控件
         initViews(view);
@@ -163,13 +167,15 @@ public class BrowserFragment extends Fragment implements View.OnClickListener, W
                         showToast("已跳转至首页");
                         break;
 					case MSG_HISTORY_POSITION:
-						int position = (int)msg.obj;
-						if(-1 < position && position < _mUrlLoadHistory.size()) {
-							// 处理“跳转首页”消息：加载winboll.cc
-							String historyUrl = _mUrlLoadHistory.get(position);
+						// 安全强转：判空、判类型（避免 ClassCastException/NPE）
+						if (msg.obj == null || !(msg.obj instanceof Integer)) {
+							break;
+						}
+						int position = ((Integer) msg.obj).intValue();
+						if (mUrlLoadHistory != null && -1 < position && position < mUrlLoadHistory.size()) {
+							String historyUrl = mUrlLoadHistory.get(position);
 							mWinBoLLView.loadUrlSafe(historyUrl);
 							mEtUrl.setText(historyUrl);
-							//showToast("已跳转至" + historyUrl);
 						}
                         break;
                     case MSG_OPEN_URL:
@@ -259,23 +265,33 @@ public class BrowserFragment extends Fragment implements View.OnClickListener, W
     // ------------------- WinBoLLView.OnPageStatusListener 实现（Java 7 显式重写） -------------------
     @Override
     public void onPageStarted(String url) {
-        // 页面开始加载：更新输入框URL（Java 7 显式非空判断）
-        if (mEtUrl != null && url != null) {
+        // 每次新加载重置失败标记
+        mLoadFailed = false;
+        // 页面开始加载：输入框无焦点时才更新URL（避免打断用户输入）
+        if (mEtUrl != null && url != null && !mEtUrl.hasFocus()) {
             mEtUrl.setText(url);
         }
     }
 
     @Override
     public void onPageFinished(String url) {
-        // 页面加载完成：更新输入框URL
+        // 加载失败时不更新地址栏、不加入历史
+        if (mLoadFailed) {
+            mLoadFailed = false;
+            return;
+        }
         if (mEtUrl != null && url != null) {
-            mEtUrl.setText(url);
-			addUrlToHistory(url);
+            if (!mEtUrl.hasFocus()) {
+                mEtUrl.setText(url);
+            }
+            addUrlToHistory(url);
         }
     }
 
     @Override
     public void onPageError(String errorMsg) {
+        // 标记加载失败（失败页面不加入历史）
+        mLoadFailed = true;
         // 页面加载错误：显示错误提示
         showToast("加载失败：" + errorMsg);
     }
@@ -312,7 +328,7 @@ public class BrowserFragment extends Fragment implements View.OnClickListener, W
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // 彻底释放资源
+        // 兜底释放：正常路径下 onDestroyView 已销毁并置空，此处仅防异常路径重复进入
         if (mWinBoLLView != null) {
             mWinBoLLView.destroyWebView();
             mWinBoLLView = null;
@@ -338,6 +354,13 @@ public class BrowserFragment extends Fragment implements View.OnClickListener, W
 	}
 
 	/**
+	 * 获取 URL 加载历史（供 MainActivity 刷新抽屉菜单）
+	 */
+	public ArrayList<String> getUrlLoadHistory() {
+		return mUrlLoadHistory;
+	}
+
+	/**
 	 * 发送URL历史更新消息给MainActivity（当历史列表变化时调用）
 	 */
 	private void sendUrlHistoryUpdateMsg() {
@@ -346,14 +369,22 @@ public class BrowserFragment extends Fragment implements View.OnClickListener, W
 		MainActivity.sendMessage(msg);
 	}
 
-	// 调用时机示例（在BrowserFragment加载URL并更新历史列表后调用）
-	// 假设BrowserFragment中有添加URL到历史的方法：
+	/**
+	 * 添加 URL 到历史（去重 + 限制最大条数）
+	 */
 	private void addUrlToHistory(String url) {
-		if (_mUrlLoadHistory == null) {
-			_mUrlLoadHistory = new ArrayList<String>();
+		if (url == null || url.isEmpty()) {
+			return;
 		}
-		if (!_mUrlLoadHistory.contains(url)) {
-			_mUrlLoadHistory.add(0, url);
+		if (mUrlLoadHistory == null) {
+			mUrlLoadHistory = new ArrayList<String>();
+		}
+		if (!mUrlLoadHistory.contains(url)) {
+			mUrlLoadHistory.add(0, url);
+			// 限制历史条数，避免无限增长（内存与抽屉菜单开销）
+			while (mUrlLoadHistory.size() > MAX_URL_HISTORY_SIZE) {
+				mUrlLoadHistory.remove(mUrlLoadHistory.size() - 1);
+			}
 			// 关键：添加历史后发送更新消息，通知MainActivity刷新抽屉菜单
 			sendUrlHistoryUpdateMsg();
 		}
