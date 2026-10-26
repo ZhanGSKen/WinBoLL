@@ -7,6 +7,8 @@ package cc.winboll.studio.winboll.fragments;
  * 遵循 DrawerFragmentActivity 架构，通过 addFragment()/showFragment() 组装。
  */
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -31,8 +33,13 @@ import cc.winboll.studio.winboll.R;
 
 public class WWWBrowserFragment extends Fragment implements View.OnClickListener {
 
-    private static final String DEFAULT_HOME_URL = "https://www.studio.winboll.cc";
+    /** 默认主页（Settings 首页设置可覆盖） */
+    public static final String DEFAULT_HOME_URL = "https://www.studio.winboll.cc";
     private static final String ARG_INITIAL_URL = "initial_url";
+    /** 自定义首页 SharedPreferences 文件名（与 SettingsActivity 共用） */
+    public static final String PREFS_NAME = "winboll_prefs";
+    /** 自定义首页 URL 键 */
+    public static final String KEY_HOME_URL = "www_browser_home_url";
     // Fragment 标题（主窗口副标题使用，Fragment 的标题就是副标题）
     public static final String FRAGMENT_TITLE = "WWWBrowser";
 
@@ -68,8 +75,8 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
         initEvents();
         initWebView();
 
-        // 外部传入的初始 URL，无则使用默认主页
-        String initialUrl = DEFAULT_HOME_URL;
+        // 外部传入的初始 URL，无则使用主页（优先读取 Settings 里自定义的首页）
+        String initialUrl = getHomeUrl();
         if (getArguments() != null) {
             String arg = getArguments().getString(ARG_INITIAL_URL);
             if (arg != null && !arg.isEmpty()) {
@@ -79,6 +86,21 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
         mEtUrl.setText(initialUrl);
         loadUrl(initialUrl);
         return view;
+    }
+
+    /**
+     * 获取 WWWBrowser 首页地址：优先读取 Settings 保存的自定义首页，未设置时使用默认主页。
+     */
+    private String getHomeUrl() {
+        String url = DEFAULT_HOME_URL;
+        if (getActivity() != null) {
+            SharedPreferences prefs = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            String saved = prefs.getString(KEY_HOME_URL, "");
+            if (!TextUtils.isEmpty(saved)) {
+                url = saved;
+            }
+        }
+        return url;
     }
 
     /**
@@ -146,8 +168,9 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
                 mWebView.goForward();
             }
         } else if (id == R.id.btn_home) {
-            mEtUrl.setText(DEFAULT_HOME_URL);
-            loadUrl(DEFAULT_HOME_URL);
+            String homeUrl = getHomeUrl();
+            mEtUrl.setText(homeUrl);
+            loadUrl(homeUrl);
         }
     }
 

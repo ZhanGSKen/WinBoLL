@@ -5,13 +5,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.security.KeyChain;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
 import cc.winboll.studio.winboll.R;
+import cc.winboll.studio.winboll.fragments.WWWBrowserFragment;
 import cc.winboll.studio.winboll.utils.CertTrustUtils;
 
 /**
@@ -62,6 +65,45 @@ public class SettingsActivity extends BaseWinBoLLActivity {
             @Override
             public void onClick(View v) {
                 openCertPicker();
+            }
+        });
+
+        // WWWBrowser 自定义首页：读取已保存值回显，保存/恢复默认
+        final EditText etHomeUrl = (EditText) findViewById(R.id.et_home_url);
+        etHomeUrl.setText(getSharedPreferences(WWWBrowserFragment.PREFS_NAME, MODE_PRIVATE)
+                .getString(WWWBrowserFragment.KEY_HOME_URL, WWWBrowserFragment.DEFAULT_HOME_URL));
+
+        Button btnSaveHomeUrl = (Button) findViewById(R.id.btn_save_home_url);
+        btnSaveHomeUrl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = etHomeUrl.getText().toString().trim();
+                if (TextUtils.isEmpty(url)) {
+                    Toast.makeText(SettingsActivity.this, R.string.toast_home_url_empty, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                    Toast.makeText(SettingsActivity.this, R.string.toast_home_url_invalid, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                getSharedPreferences(WWWBrowserFragment.PREFS_NAME, MODE_PRIVATE)
+                        .edit()
+                        .putString(WWWBrowserFragment.KEY_HOME_URL, url)
+                        .apply();
+                Toast.makeText(SettingsActivity.this, R.string.toast_home_url_saved, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Button btnResetHomeUrl = (Button) findViewById(R.id.btn_reset_home_url);
+        btnResetHomeUrl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSharedPreferences(WWWBrowserFragment.PREFS_NAME, MODE_PRIVATE)
+                        .edit()
+                        .remove(WWWBrowserFragment.KEY_HOME_URL)
+                        .apply();
+                etHomeUrl.setText(WWWBrowserFragment.DEFAULT_HOME_URL);
+                Toast.makeText(SettingsActivity.this, R.string.toast_home_url_reset, Toast.LENGTH_SHORT).show();
             }
         });
     }

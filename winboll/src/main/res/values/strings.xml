@@ -51,4 +51,13 @@
     <string name="toast_cert_install_failed">发起证书安装失败</string>
     <string name="toast_cert_installed">证书已安装</string>
     <string name="toast_cert_install_not_finished">未完成证书安装</string>
+    <string name="settings_section_browser_home">浏览器首页</string>
+    <string name="settings_browser_home_hint">输入 WWWBrowser 首页网址</string>
+    <string name="settings_browser_home_save">保存</string>
+    <string name="settings_browser_home_reset">恢复默认</string>
+    <string name="settings_browser_home_desc">保存后，WWWBrowser 浏览器启动与点击主页按钮时打开此网址；恢复默认回到 https://www.studio.winboll.cc。</string>
+    <string name="toast_home_url_empty">首页网址不能为空</string>
+    <string name="toast_home_url_invalid">首页网址需以 http:// 或 https:// 开头</string>
+    <string name="toast_home_url_saved">首页已保存</string>
+    <string name="toast_home_url_reset">已恢复默认首页</string>
 </resources>
