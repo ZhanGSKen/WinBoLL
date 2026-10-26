@@ -17,6 +17,8 @@ buildscript {
 
         // Nexus Maven 库地址
         // "WinBoLL Release"
+        maven { url "https://nexus.studio.winboll.cc/repository/maven-releases/" }
+        // "WinBoLL Group"
         maven { url "https://nexus.studio.winboll.cc/repository/maven-public/" }
         // "WinBoLL Snapshot"
         maven { url "https://nexus.studio.winboll.cc/repository/maven-snapshots/" }
@@ -47,6 +49,8 @@ allprojects {
 		
         // Nexus Maven 库地址
         // "WinBoLL Release"
+        maven { url "https://nexus.studio.winboll.cc/repository/maven-releases/" }
+        // "WinBoLL Group"
         maven { url "https://nexus.studio.winboll.cc/repository/maven-public/" }
         // "WinBoLL Snapshot"
         maven { url "https://nexus.studio.winboll.cc/repository/maven-snapshots/" }

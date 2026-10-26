@@ -19,7 +19,7 @@ import cc.winboll.studio.winboll.R;
 import cc.winboll.studio.winboll.activities.AboutActivity;
 import cc.winboll.studio.winboll.activities.SettingsActivity;
 import cc.winboll.studio.winboll.termux.MyTermuxActivity;
-import cc.winboll.studio.winboll.fragments.BrowserFragment;
+import cc.winboll.studio.winboll.fragments.ManagementFragment;
 import cc.winboll.studio.winboll.fragments.SimpleBrowserFragment;
 import cc.winboll.studio.winboll.unittest.TermuxEnvTestActivity;
 import java.util.ArrayList;
@@ -29,14 +29,14 @@ public class MainActivity extends DrawerFragmentActivity {
 
     public static final String TAG = "MainActivity";
 
-    BrowserFragment mBrowserFragment;
+    ManagementFragment mManagementFragment;
     // 简易浏览器启动窗口 Fragment
     SimpleBrowserFragment mSimpleBrowserFragment;
 
     // ------------------- 新增：Handler 消息定义（接收URL历史更新消息） -------------------
     // 消息标识：URL加载历史更新（刷新抽屉菜单的历史列表）
     public static final int MSG_URLLOADHISTORY_UPDATE = 1002;
-    // 自定义Handler（接收应用内消息，如BrowserFragment发送的历史更新消息）
+    // 自定义Handler（接收应用内消息，如ManagementFragment发送的历史更新消息）
     private static Handler _mMainHandler;
 
     @Override
@@ -44,20 +44,20 @@ public class MainActivity extends DrawerFragmentActivity {
         setTheme(cc.winboll.studio.winboll.theme.WinBoLLThemeUtil.getThemeTypeID(getApplicationContext()));
         super.onCreate(savedInstanceState);
         initMainHandler();
-        if (mBrowserFragment == null) {
+        if (mManagementFragment == null) {
             String externalUrl = extractExternalUrl(getIntent());
             if (externalUrl != null) {
-                mBrowserFragment = BrowserFragment.newInstance(externalUrl);
+                mManagementFragment = ManagementFragment.newInstance(externalUrl);
             } else {
-                mBrowserFragment = BrowserFragment.newInstance();
+                mManagementFragment = ManagementFragment.newInstance();
             }
-            addFragment(mBrowserFragment);
+            addFragment(mManagementFragment);
         }
         // 组装简易浏览器启动窗口 Fragment（保持 DrawerFragmentActivity 架构不变）
         // 启动时不显示，由主菜单点击后懒加载切换
-        showFragment(mBrowserFragment);
+        showFragment(mManagementFragment);
         // 主窗口副标题跟随当前显示 Fragment 的标题
-        updateToolbarSubtitle(mBrowserFragment);
+        updateToolbarSubtitle(mManagementFragment);
     }
 
     /**
@@ -71,8 +71,8 @@ public class MainActivity extends DrawerFragmentActivity {
             showFragment(mSimpleBrowserFragment);
             updateToolbarSubtitle(mSimpleBrowserFragment);
         } else if (mSimpleBrowserFragment.isVisible()) {
-            showFragment(mBrowserFragment);
-            updateToolbarSubtitle(mBrowserFragment);
+            showFragment(mManagementFragment);
+            updateToolbarSubtitle(mManagementFragment);
         } else {
             showFragment(mSimpleBrowserFragment);
             updateToolbarSubtitle(mSimpleBrowserFragment);
@@ -86,8 +86,8 @@ public class MainActivity extends DrawerFragmentActivity {
         if (mToolbar == null) {
             return;
         }
-        if (fragment instanceof BrowserFragment) {
-            mToolbar.setSubtitle(((BrowserFragment) fragment).getFragmentTitle());
+        if (fragment instanceof ManagementFragment) {
+            mToolbar.setSubtitle(((ManagementFragment) fragment).getFragmentTitle());
         } else if (fragment instanceof SimpleBrowserFragment) {
             mToolbar.setSubtitle(((SimpleBrowserFragment) fragment).getFragmentTitle());
         } else {
@@ -109,11 +109,11 @@ public class MainActivity extends DrawerFragmentActivity {
 //    protected void onNewIntent(Intent intent) {
 //        super.onNewIntent(intent);
 //        String externalUrl = extractExternalUrl(intent);
-//        if (externalUrl != null && mBrowserFragment != null && mBrowserFragment.getBrowserHandler() != null) {
+//        if (externalUrl != null && mManagementFragment != null && mManagementFragment.getBrowserHandler() != null) {
 //            Message msg = Message.obtain();
-//            msg.what = BrowserFragment.MSG_OPEN_URL;
+//            msg.what = ManagementFragment.MSG_OPEN_URL;
 //            msg.obj = externalUrl;
-//            mBrowserFragment.getBrowserHandler().sendMessage(msg);
+//            mManagementFragment.getBrowserHandler().sendMessage(msg);
 //        }
 //    }
 
@@ -181,8 +181,8 @@ public class MainActivity extends DrawerFragmentActivity {
 
 	void loadUrlLoadHistotyMenu(ArrayList<DrawerMenuBean> listDrawerMenu) {
 		listDrawerMenu.clear();
-		if (mBrowserFragment != null && mBrowserFragment.getUrlLoadHistory() != null) {
-			for (String url : mBrowserFragment.getUrlLoadHistory()) {
+		if (mManagementFragment != null && mManagementFragment.getUrlLoadHistory() != null) {
+			for (String url : mManagementFragment.getUrlLoadHistory()) {
 				listDrawerMenu.add(new DrawerMenuBean(R.drawable.ic_launcher, url));
 			}
 		}
@@ -216,11 +216,11 @@ public class MainActivity extends DrawerFragmentActivity {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         super.onItemClick(parent, view, position, id);
-		if (mBrowserFragment != null && mBrowserFragment.getBrowserHandler() != null) {
+		if (mManagementFragment != null && mManagementFragment.getBrowserHandler() != null) {
 			Message msg = Message.obtain();
-			msg.what = BrowserFragment.MSG_HISTORY_POSITION;
+			msg.what = ManagementFragment.MSG_HISTORY_POSITION;
 			msg.obj = position;
-			mBrowserFragment.getBrowserHandler().sendMessage(msg);
+			mManagementFragment.getBrowserHandler().sendMessage(msg);
         }
     }
 
@@ -231,10 +231,10 @@ public class MainActivity extends DrawerFragmentActivity {
         } else {
             int nItemId = item.getItemId();
             if (nItemId == R.id.item_home) {
-                if (mBrowserFragment != null && mBrowserFragment.getBrowserHandler() != null) {
+                if (mManagementFragment != null && mManagementFragment.getBrowserHandler() != null) {
                     Message msg = Message.obtain();
-                    msg.what = BrowserFragment.MSG_HOMEPAGE;
-                    mBrowserFragment.getBrowserHandler().sendMessage(msg);
+                    msg.what = ManagementFragment.MSG_HOMEPAGE;
+                    mManagementFragment.getBrowserHandler().sendMessage(msg);
                 }
             } else if (nItemId == R.id.item_simple_browser) {
                 // 点击切换显示简易浏览器窗口
@@ -259,7 +259,7 @@ public class MainActivity extends DrawerFragmentActivity {
         return true;
     }
 
-    // ------------------- 新增：对外提供Handler（供其他组件发送消息，如BrowserFragment） -------------------
+    // ------------------- 新增：对外提供Handler（供其他组件发送消息，如ManagementFragment） -------------------
     public Handler getMainHandler() {
         return _mMainHandler;
     }

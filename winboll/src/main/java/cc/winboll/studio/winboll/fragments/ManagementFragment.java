@@ -24,10 +24,10 @@ import android.app.Activity;
 /**
  * @Author ZhanGSKen&豆包大模型<zhangsken@qq.com>
  * @Date 2025/11/27 11:09
- * @Describe 浏览器Fragment（Java 7 语法完整版，新增Handler消息接收）
+ * @Describe 管理后台Fragment（Java 7 语法完整版，新增Handler消息接收）
  * 适配Java 7特性，支持接收应用内消息（如MSG_HOMEPAGE跳转首页）
  */
-public class BrowserFragment extends Fragment implements View.OnClickListener, WinBoLLView.OnPageStatusListener {
+public class ManagementFragment extends Fragment implements View.OnClickListener, WinBoLLView.OnPageStatusListener {
 
     // 控件声明（Java 7 成员变量显式声明）
     private EditText mEtUrl;
@@ -56,13 +56,13 @@ public class BrowserFragment extends Fragment implements View.OnClickListener, W
     private Handler mBrowserHandler;
 
     // 单例创建方法（Java 7 显式工厂模式）
-    public static BrowserFragment newInstance() {
-        return new BrowserFragment();
+    public static ManagementFragment newInstance() {
+        return new ManagementFragment();
     }
 
     // 创建带初始URL的实例（供外部应用调用时使用）
-    public static BrowserFragment newInstance(String initialUrl) {
-        BrowserFragment fragment = new BrowserFragment();
+    public static ManagementFragment newInstance(String initialUrl) {
+        ManagementFragment fragment = new ManagementFragment();
         Bundle args = new Bundle();
         args.putString("initial_url", initialUrl);
         fragment.setArguments(args);
@@ -73,7 +73,7 @@ public class BrowserFragment extends Fragment implements View.OnClickListener, W
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // 加载布局（Java 7 显式强转，无菱形语法）
-        View view = inflater.inflate(R.layout.fragment_browser, container, false);
+        View view = inflater.inflate(R.layout.fragment_management, container, false);
 		// 历史为实例变量，随 Fragment 实例独立保存，重建视图时不清空
 
         // 初始化控件
@@ -143,8 +143,8 @@ public class BrowserFragment extends Fragment implements View.OnClickListener, W
             mWinBoLLView.loadUrlSafe(initialUrl);
             mEtUrl.setText(initialUrl);
         } else {
-            // 预加载默认页面（winboll.cc 首页）
-            String defaultUrl = "https://www.winboll.cc";
+            // 预加载默认页面（管理后台登录页）
+            String defaultUrl = "https://www-management.studio.winboll/user/login";
             mWinBoLLView.loadUrlSafe(defaultUrl);
             mEtUrl.setText(defaultUrl);
         }
@@ -340,11 +340,11 @@ public class BrowserFragment extends Fragment implements View.OnClickListener, W
         }
     }
 
-	// 在 BrowserFragment 中添加以下代码（Java 7 语法）
+	// 在 ManagementFragment 中添加以下代码（Java 7 语法）
 	/**
 	 * Fragment 标题（主窗口副标题使用，Fragment 的标题就是副标题）
 	 */
-	public static final String FRAGMENT_TITLE = "浏览器";
+	public static final String FRAGMENT_TITLE = "ManagementFragment";
 
 	/**
 	 * 获取 Fragment 标题
