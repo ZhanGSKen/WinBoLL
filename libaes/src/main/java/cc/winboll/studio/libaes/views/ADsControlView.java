@@ -1,26 +1,18 @@
 package cc.winboll.studio.libaes.views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.text.Html;
 import android.util.AttributeSet;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -30,16 +22,11 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.enums.ADsMode;
-import cc.winboll.studio.libaes.enums.PrivacyAgreeStatus;
 import cc.winboll.studio.libaes.utils.WebUtils;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.ToastUtils;
-import com.miui.zeus.mimo.sdk.MimoCustomController;
-import com.miui.zeus.mimo.sdk.MimoLocation;
-import com.miui.zeus.mimo.sdk.MimoSdk;
 import java.lang.reflect.Field;
 
 /**
@@ -47,6 +34,7 @@ import java.lang.reflect.Field;
  * @Date 2025/11/26 17:51
  * @LastEditTime 2026/01/08 11:00:00 HKT
  * @Describe 广告模式控制控件（Java 7 兼容，云宝物语模式）
+ * 米盟 SDK 已移除：不再包含米盟广告模式选项与 SDK 初始化逻辑
  * 核心修改：将PopupMenu锚点绑定到view_popmenu_anchor_point控件，菜单精准显示在锚点位置
  */
 public class ADsControlView extends LinearLayout {
@@ -57,7 +45,6 @@ public class ADsControlView extends LinearLayout {
     private static final String KEY_SELECTED_MODE = "selected_ads_mode";
     ADsMode mADsMode;
     private static final String PRIVACY_VALUE = "privacy_value";
-    PrivacyAgreeStatus mPrivacyAgreeStatus;
 
     // Handler消息标识
     private static final int MSG_UPDATE_MODE = 1001;
@@ -65,7 +52,6 @@ public class ADsControlView extends LinearLayout {
     // 控件引用
     private RadioGroup rgADsMode;
     private RadioButton rbStandalone;
-    private RadioButton rbMimoSDK;
     private RadioButton rbStoreQrcode;
     private RelativeLayout rlWinbollStore;
     private ImageView ivWinbollStoreQrcode;
@@ -102,29 +88,6 @@ public class ADsControlView extends LinearLayout {
         initView(context);
     }
 
-    public void setPrivacyAgreeStatus(PrivacyAgreeStatus privacyAgreeStatus) {
-        this.mPrivacyAgreeStatus = privacyAgreeStatus;
-        sharedPreferences.edit().putString(PRIVACY_VALUE, this.mPrivacyAgreeStatus.name()).apply();
-    }
-
-    public PrivacyAgreeStatus getPrivacyAgreeStatus() {
-        String privacyAgreeStatusStr = sharedPreferences.getString(PRIVACY_VALUE, PrivacyAgreeStatus.UN_SIGNED.name());
-        PrivacyAgreeStatus privacyAgreeStatus = PrivacyAgreeStatus.fromString(privacyAgreeStatusStr);
-        return privacyAgreeStatus;
-    }
-
-    public void setADsMode(ADsMode mADsMode) {
-        this.mADsMode = mADsMode;
-        sharedPreferences.edit().putString(KEY_SELECTED_MODE, this.mADsMode.name()).apply();
-        updateStoreQrcodeLayoutVisibility(mADsMode);
-    }
-
-    public ADsMode getADsMode() {
-        String savedModeStr = sharedPreferences.getString(KEY_SELECTED_MODE, ADsMode.STANDALONE.name());
-        mADsMode = ADsMode.fromValue(savedModeStr);
-        return mADsMode;
-    }
-
     /**
      * 初始化视图、SP、Handler
      */
@@ -140,7 +103,6 @@ public class ADsControlView extends LinearLayout {
         // 绑定控件
         rgADsMode = (RadioGroup) findViewById(R.id.rg_ads_mode);
         rbStandalone = (RadioButton) findViewById(R.id.rb_standalone);
-        rbMimoSDK = (RadioButton) findViewById(R.id.rb_mimo_sdk);
         rbStoreQrcode = (RadioButton) findViewById(R.id.rb_store_qrcode);
         rlWinbollStore = (RelativeLayout) findViewById(R.id.rl_winboll_store);
         ivWinbollStoreQrcode = (ImageView) findViewById(R.id.iv_winboll_store);
@@ -166,21 +128,6 @@ public class ADsControlView extends LinearLayout {
 					if (checkedId == R.id.rb_standalone) {
 						setADsMode(ADsMode.STANDALONE);
 						if (listener != null) listener.onModeSelected(ADsMode.STANDALONE);
-					} else if (checkedId == R.id.rb_mimo_sdk) {
-						handlePrivacyLogic((Activity) context, PrivacyAgreeStatus.UN_SIGNED, new OnPrivacyChangeListener() {
-								@Override
-								public void onAgreePrivacy() {
-									setADsMode(ADsMode.MIMO_SDK);
-									if (listener != null) listener.onModeSelected(ADsMode.MIMO_SDK);
-								}
-
-								@Override
-								public void onDisagreePrivacy() {
-									setADsMode(ADsMode.STANDALONE);
-									setSelectedMode(ADsMode.STANDALONE);
-									if (listener != null) listener.onModeSelected(ADsMode.STANDALONE);
-								}
-							});
 					} else if (checkedId == R.id.rb_store_qrcode) {
 						setADsMode(ADsMode.STORE_QRCODE);
 						if (listener != null) listener.onModeSelected(ADsMode.STORE_QRCODE);
@@ -279,199 +226,11 @@ public class ADsControlView extends LinearLayout {
     }
 
     /**
-     * 从ImageView中提取Bitmap（保留方法，无实际调用）
-     */
-    private Bitmap getBitmapFromImageView(ImageView imageView) {
-        Drawable drawable = imageView.getDrawable();
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        }
-        return null;
-    }
-
-    /**
-     * 压缩Bitmap（备用方法，无实际调用）
-     */
-    private Bitmap compressBitmapBySize(Bitmap src, int maxWidth, int maxHeight) {
-        if (src == null) return null;
-        int width = src.getWidth();
-        int height = src.getHeight();
-        float scale = Math.min((float) maxWidth / width, (float) maxHeight / height);
-        int newWidth = (int) (width * scale);
-        int newHeight = (int) (height * scale);
-        return Bitmap.createScaledBitmap(src, newWidth, newHeight, true);
-    }
-
-    /**
-     * 计算Bitmap采样率（备用方法，无实际调用）
-     */
-    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-        if (height > reqHeight || width > reqWidth) {
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-        return inSampleSize;
-    }
-
-    /**
-     * 从ImageView反射获取资源ID（备用方法，无实际调用）
-     */
-    private int getResIdFromImageView(ImageView imageView) {
-        try {
-            Field field = ImageView.class.getDeclaredField("mSrcResource");
-            field.setAccessible(true);
-            return field.getInt(imageView);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            LogUtils.e(TAG, "getResIdFromImageView: 反射失败", e);
-            return 0;
-        }
-    }
-
-    /**
      * 更新二维码布局显示状态
      */
     private void updateStoreQrcodeLayoutVisibility(ADsMode mode) {
         if (rlWinbollStore == null) return;
         rlWinbollStore.setVisibility(mode == ADsMode.STORE_QRCODE ? View.VISIBLE : View.GONE);
-    }
-
-    /**
-     * 清理SP中的隐私协议状态
-     */
-    public static void cleanPrivacyStatus(Context context) {
-        if (context == null) {
-            LogUtils.e(TAG, "cleanPrivacyStatus: Context is null");
-            return;
-        }
-        SharedPreferences sp = getPrivacySharedPreferences(context);
-        sp.edit().remove(PRIVACY_VALUE).apply();
-        LogUtils.i(TAG, "隐私协议状态清理成功");
-        ToastUtils.show("隐私协议状态已清理");
-    }
-
-    /**
-     * 获取隐私协议SP实例
-     */
-    private static SharedPreferences getPrivacySharedPreferences(Context context) {
-        Context appContext = context.getApplicationContext();
-        if (appContext != null) {
-            return appContext.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
-        }
-        return context.getSharedPreferences(PRIVACY_VALUE, Context.MODE_PRIVATE);
-    }
-
-    /**
-     * 处理隐私协议逻辑
-     */
-    private static void handlePrivacyLogic(final Activity activity, PrivacyAgreeStatus privacyAgreeStatus, final OnPrivacyChangeListener onPrivacyChangeListener) {
-        if (privacyAgreeStatus == PrivacyAgreeStatus.REJECTED) {
-            Toast.makeText(activity.getApplicationContext(), "已拒绝隐私协议，广告已处于不可用状态", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (privacyAgreeStatus == PrivacyAgreeStatus.AGREED) {
-            initMimoSdkStatic(activity.getApplicationContext());
-            return;
-        } else {
-            AlertDialog dialog = createPrivacyDialog(activity, onPrivacyChangeListener);
-            Window window = dialog.getWindow();
-            if (window != null) {
-                window.setGravity(Gravity.BOTTOM);
-                WindowManager m = activity.getWindowManager();
-                Display d = m.getDefaultDisplay();
-                WindowManager.LayoutParams p = window.getAttributes();
-                p.width = d.getWidth();
-                window.setAttributes(p);
-            }
-            dialog.show();
-        }
-    }
-
-    /**
-     * 初始化米盟SDK
-     */
-    private static void initMimoSdkStatic(Context appContext) {
-        if (appContext == null) return;
-        try {
-            MimoSdk.init(appContext, new MimoCustomController() {
-					@Override
-					public boolean isCanUseLocation() {
-						return true;
-					}
-
-					@Override
-					public MimoLocation getMimoLocation() {
-						return null;
-					}
-
-					@Override
-					public boolean isCanUseWifiState() {
-						return true;
-					}
-
-					@Override
-					public boolean alist() {
-						return true;
-					}
-				}, new MimoSdk.InitCallback() {
-					@Override
-					public void success() {
-						LogUtils.d(TAG, "米盟SDK初始化成功");
-					}
-
-					@Override
-					public void fail(int code, String msg) {
-						LogUtils.e(TAG, "米盟SDK初始化失败：" + code + ", " + msg);
-					}
-				});
-            MimoSdk.setDebugOn(true);
-        } catch (Exception e) {
-            LogUtils.e(TAG, "米盟SDK初始化异常", e);
-        }
-    }
-
-    /**
-     * 静态方法：更新SP中的模式
-     */
-    public static void updateAdsModeByStatic(Context context, ADsMode mode) {
-        if (context == null || mode == null) return;
-        SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
-        sp.edit().putString(KEY_SELECTED_MODE, mode.name()).apply();
-        InternalHandler.sendUpdateModeMessage(mode);
-    }
-
-    /**
-     * 静态方法：读取SP中的模式
-     */
-    public static ADsMode getAdsModeFromStatic(Context context) {
-        if (context == null) return ADsMode.STANDALONE;
-        SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
-        String savedModeStr = sp.getString(KEY_SELECTED_MODE, ADsMode.STANDALONE.name());
-        return ADsMode.fromValue(savedModeStr);
-    }
-
-    /**
-     * 注册控件实例
-     */
-    private static void registerControlView(ADsControlView view) {
-        synchronized (sControlViews) {
-            if (!sControlViews.contains(view)) {
-                sControlViews.add(view);
-            }
-        }
-    }
-
-    /**
-     * 移除控件实例
-     */
-    private static void unregisterControlView(ADsControlView view) {
-        synchronized (sControlViews) {
-            sControlViews.remove(view);
-        }
     }
 
     /**
@@ -482,8 +241,6 @@ public class ADsControlView extends LinearLayout {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             if (mode2 == ADsMode.STANDALONE) {
                 rbStandalone.setChecked(true);
-            } else if (mode2 == ADsMode.MIMO_SDK) {
-                rbMimoSDK.setChecked(true);
             } else if (mode2 == ADsMode.STORE_QRCODE) {
                 rbStoreQrcode.setChecked(true);
             }
@@ -503,9 +260,7 @@ public class ADsControlView extends LinearLayout {
      */
     public ADsMode getSelectedMode() {
         int checkedId = rgADsMode.getCheckedRadioButtonId();
-        if (checkedId == R.id.rb_mimo_sdk) {
-            return ADsMode.MIMO_SDK;
-        } else if (checkedId == R.id.rb_store_qrcode) {
+        if (checkedId == R.id.rb_store_qrcode) {
             return ADsMode.STORE_QRCODE;
         } else {
             return ADsMode.STANDALONE;
@@ -576,58 +331,85 @@ public class ADsControlView extends LinearLayout {
     }
 
     /**
-     * 隐私协议监听接口
+     * 静态方法：更新SP中的模式
      */
-    public interface OnPrivacyChangeListener {
-        void onAgreePrivacy();
-        void onDisagreePrivacy();
+    public static void updateAdsModeByStatic(Context context, ADsMode mode) {
+        if (context == null || mode == null) return;
+        SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
+        sp.edit().putString(KEY_SELECTED_MODE, mode.name()).apply();
+        InternalHandler.sendUpdateModeMessage(mode);
     }
 
     /**
-     * 创建隐私协议对话框
+     * 静态方法：读取SP中的模式
      */
-    private static AlertDialog createPrivacyDialog(final Activity activity, final OnPrivacyChangeListener onPrivacyChangeListener) {
-        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_privacy_agreement, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setView(dialogView).setCancelable(false);
-        final AlertDialog dialog = builder.create();
+    public static ADsMode getAdsModeFromStatic(Context context) {
+        if (context == null) return ADsMode.STANDALONE;
+        SharedPreferences sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
+        String savedModeStr = sp.getString(KEY_SELECTED_MODE, ADsMode.STANDALONE.name());
+        return ADsMode.fromValue(savedModeStr);
+    }
 
-        final TextView tvPrivacyUrl = (TextView) dialogView.findViewById(R.id.tv_privacy_url);
-        Button btnAgree = (Button) dialogView.findViewById(R.id.btn_agree);
-        Button btnDisagree = (Button) dialogView.findViewById(R.id.btn_disagree);
+    /**
+     * 注册控件实例
+     */
+    private static void registerControlView(ADsControlView view) {
+        synchronized (sControlViews) {
+            if (!sControlViews.contains(view)) {
+                sControlViews.add(view);
+            }
+        }
+    }
 
-        tvPrivacyUrl.setText(Html.fromHtml("<u>" + tvPrivacyUrl.getText().toString() + "</u>"));
-        tvPrivacyUrl.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					String url = tvPrivacyUrl.getText().toString().trim();
-					ToastUtils.show("隐私协议链接：" + url);
-				}
-			});
-        tvPrivacyUrl.setClickable(true);
-        tvPrivacyUrl.setFocusable(true);
+    /**
+     * 移除控件实例
+     */
+    private static void unregisterControlView(ADsControlView view) {
+        synchronized (sControlViews) {
+            sControlViews.remove(view);
+        }
+    }
 
-        btnAgree.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (onPrivacyChangeListener != null) {
-						onPrivacyChangeListener.onAgreePrivacy();
-					}
-					dialog.dismiss();
-				}
-			});
+    /**
+     * 清理SP中的隐私协议状态
+     */
+    public static void cleanPrivacyStatus(Context context) {
+        if (context == null) {
+            LogUtils.e(TAG, "cleanPrivacyStatus: Context is null");
+            return;
+        }
+        SharedPreferences sp = getPrivacySharedPreferences(context);
+        sp.edit().remove(PRIVACY_VALUE).apply();
+        LogUtils.i(TAG, "隐私协议状态清理成功");
+        ToastUtils.show("隐私协议状态已清理");
+    }
 
-        btnDisagree.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (onPrivacyChangeListener != null) {
-						onPrivacyChangeListener.onDisagreePrivacy();
-					}
-					dialog.dismiss();
-				}
-			});
+    /**
+     * 获取隐私协议SP实例
+     */
+    private static SharedPreferences getPrivacySharedPreferences(Context context) {
+        Context appContext = context.getApplicationContext();
+        if (appContext != null) {
+            return appContext.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
+        }
+        return context.getSharedPreferences(PRIVACY_VALUE, Context.MODE_PRIVATE);
+    }
 
-        return dialog;
+    /**
+     * 设置广告模式（保存到SP）
+     */
+    public void setADsMode(ADsMode mADsMode) {
+        this.mADsMode = mADsMode;
+        sharedPreferences.edit().putString(KEY_SELECTED_MODE, this.mADsMode.name()).apply();
+        updateStoreQrcodeLayoutVisibility(mADsMode);
+    }
+
+    /**
+     * 获取广告模式（从SP读取）
+     */
+    public ADsMode getADsMode() {
+        String savedModeStr = sharedPreferences.getString(KEY_SELECTED_MODE, ADsMode.STANDALONE.name());
+        mADsMode = ADsMode.fromValue(savedModeStr);
+        return mADsMode;
     }
 }
-

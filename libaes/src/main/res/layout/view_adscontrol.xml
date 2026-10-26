@@ -28,14 +28,6 @@
             android:layout_marginBottom="8dp"/>
 
         <RadioButton
-            android:id="@+id/rb_mimo_sdk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="米盟广告模式"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp"/>
-
-        <RadioButton
             android:id="@+id/rb_store_qrcode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
