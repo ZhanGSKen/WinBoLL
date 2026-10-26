@@ -42,4 +42,13 @@
     <string name="btn_select_icon">Select Icon</string>
     <string name="btn_clear_icon">Clear Icon</string>
     <string name="toast_icon_copy_failed">Failed to import icon</string>
+    <string name="settings_section_security">安全</string>
+    <string name="settings_install_cert">安装证书</string>
+    <string name="settings_install_cert_desc">从设备存储选择 CA 根证书（.crt/.cer/.pem）安装到系统，用于信任 WinBoLL 内部 HTTPS 服务。</string>
+    <string name="toast_cert_picker_failed">无法打开文件选择器</string>
+    <string name="toast_cert_canceled">已取消选择证书</string>
+    <string name="toast_cert_read_failed">读取证书失败，请选择有效的 CA 证书文件</string>
+    <string name="toast_cert_install_failed">发起证书安装失败</string>
+    <string name="toast_cert_installed">证书已安装</string>
+    <string name="toast_cert_install_not_finished">未完成证书安装</string>
 </resources>

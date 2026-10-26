@@ -22,6 +22,7 @@ import cc.winboll.studio.winboll.termux.MyTermuxActivity;
 import cc.winboll.studio.winboll.fragments.ManagementFragment;
 import cc.winboll.studio.winboll.fragments.WWWBrowserFragment;
 import cc.winboll.studio.winboll.unittest.TermuxEnvTestActivity;
+import cc.winboll.studio.winboll.utils.CertTrustUtils;
 import java.util.ArrayList;
 
 public class MainActivity extends DrawerFragmentActivity {
@@ -32,6 +33,9 @@ public class MainActivity extends DrawerFragmentActivity {
     ManagementFragment mManagementFragment;
     // 简易浏览器启动窗口 Fragment
     WWWBrowserFragment mWWWBrowserFragment;
+
+    // WinBoLL 根证书是否已安装并被信任；未安装时不启用"网站管理"菜单
+    boolean mCertTrusted = false;
 
     // ------------------- 新增：Handler 消息定义（接收URL历史更新消息） -------------------
     // 消息标识：URL加载历史更新（刷新抽屉菜单的历史列表）
@@ -58,6 +62,45 @@ public class MainActivity extends DrawerFragmentActivity {
         showFragment(mManagementFragment);
         // 主窗口副标题跟随当前显示 Fragment 的标题
         updateToolbarSubtitle(mManagementFragment);
+        // 启动时检测 WinBoLL 根证书是否已安装，决定是否启用"网站管理"菜单
+        refreshCertTrustedState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 从 Settings 安装证书返回后，重新检测并刷新菜单
+        refreshCertTrustedState();
+    }
+
+    /**
+     * 后台线程检测 WinBoLL 根证书是否已被信任，完成后回主线程刷新菜单。
+     */
+    private void refreshCertTrustedState() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final boolean trusted = CertTrustUtils.isWinBoLLRootTrusted();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCertTrusted = trusted;
+                        invalidateOptionsMenu();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        // 仅在已安装 WinBoLL 根证书时启用"网站管理"菜单
+        MenuItem manageItem = menu.findItem(R.id.item_website_manage);
+        if (manageItem != null) {
+            manageItem.setVisible(mCertTrusted);
+        }
+        return true;
     }
 
     /**
