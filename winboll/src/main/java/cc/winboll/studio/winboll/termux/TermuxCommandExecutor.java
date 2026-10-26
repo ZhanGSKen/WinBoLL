@@ -19,8 +19,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.winboll.R;
-import com.termux.shared.termux.TermuxConstants;
-import com.termux.shared.shell.command.ExecutionCommand.Runner;
 import java.util.concurrent.Executor;
 
 /**
@@ -36,8 +34,34 @@ public class TermuxCommandExecutor {
     private static final String TERMUX_PACKAGE_NAME = "com.termux";
     // Termux RunCommandService 完整类名（包名+类名）
     private static final String TERMUX_RUN_CMD_SERVICE_CLASS = "com.termux.app.RunCommandService";
-    private static final String TERMUX_RUN_CMD_ACTION = TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE.ACTION_RUN_COMMAND;
+    private static final String TERMUX_RUN_CMD_ACTION = RunCommand.ACTION_RUN_COMMAND;
 	private static final String TERMUX_HOME_PATH = "/data/data/com.termux/files/home";
+
+    /**
+     * Termux RUN_COMMAND Intent interface constants.
+     * The literal values are the stable, publicly documented contract of the
+     * standalone Termux app (https://github.com/termux/termux-app/wiki/RUN_COMMAND-Intent).
+     * They are inlined here on purpose so this app does NOT need to depend on the
+     * GPL-3.0 com.termux libraries: the terminal itself runs in the separate
+     * Termux app process and is only invoked through this Intent interface.
+     */
+    private static final class RunCommand {
+        static final String ACTION_RUN_COMMAND = "com.termux.RUN_COMMAND";
+        static final String EXTRA_COMMAND_PATH = "com.termux.RUN_COMMAND_PATH";
+        static final String EXTRA_ARGUMENTS = "com.termux.RUN_COMMAND_ARGUMENTS";
+        static final String EXTRA_WORKDIR = "com.termux.RUN_COMMAND_WORKDIR";
+        static final String EXTRA_BACKGROUND = "com.termux.RUN_COMMAND_BACKGROUND";
+        static final String EXTRA_RUNNER = "com.termux.RUN_COMMAND_RUNNER";
+        static final String EXTRA_RESULT_DIRECTORY = "com.termux.RUN_COMMAND_RESULT_DIRECTORY";
+        static final String EXTRA_RESULT_SINGLE_FILE = "com.termux.RUN_COMMAND_RESULT_SINGLE_FILE";
+        static final String EXTRA_RESULT_FILE_BASENAME = "com.termux.RUN_COMMAND_RESULT_FILE_BASENAME";
+        static final String EXTRA_REPLACE_COMMA_ALTERNATIVE_CHARS_IN_ARGUMENTS =
+            "com.termux.RUN_COMMAND_REPLACE_COMMA_ALTERNATIVE_CHARS_IN_ARGUMENTS";
+        static final String EXTRA_SESSION_ACTION = "com.termux.RUN_COMMAND_SESSION_ACTION";
+        // Runner name values (ExecutionCommand.Runner#getName()).
+        static final String RUNNER_APP_SHELL = "APP_SHELL";
+        static final String RUNNER_TERMINAL_SESSION = "TERMINAL_SESSION";
+    }
 
     /**
      * 执行 Termux 命令（核心方法）
@@ -68,37 +92,37 @@ public class TermuxCommandExecutor {
         intent.setPackage(TERMUX_PACKAGE_NAME); // 明确包名，避免歧义
 
         // 4. 设置核心命令参数（遵循 Termux RunCommandService 规范）
-        intent.putExtra(TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE.EXTRA_COMMAND_PATH, command);
+        intent.putExtra(RunCommand.EXTRA_COMMAND_PATH, command);
         if (args != null && args.length > 0) {
-            intent.putExtra(TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE.EXTRA_ARGUMENTS, args);
+            intent.putExtra(RunCommand.EXTRA_ARGUMENTS, args);
             LogUtils.d(TAG, "命令参数：" + String.join(",", args));
         }
         if (workDir != null && !workDir.isEmpty()) {
-            intent.putExtra(TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE.EXTRA_WORKDIR, workDir);
+            intent.putExtra(RunCommand.EXTRA_WORKDIR, workDir);
             LogUtils.d(TAG, "工作目录：" + workDir);
         }
 
         // 5. 设置执行模式（后台/终端会话）
-        intent.putExtra(TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE.EXTRA_BACKGROUND, isBackground);
-        String runner = isBackground ? Runner.APP_SHELL.getName() : Runner.TERMINAL_SESSION.getName();
-        intent.putExtra(TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE.EXTRA_RUNNER, runner);
+        intent.putExtra(RunCommand.EXTRA_BACKGROUND, isBackground);
+        String runner = isBackground ? RunCommand.RUNNER_APP_SHELL : RunCommand.RUNNER_TERMINAL_SESSION;
+        intent.putExtra(RunCommand.EXTRA_RUNNER, runner);
         LogUtils.d(TAG, "执行模式：" + (isBackground ? "后台" : "终端会话") + "，Runner：" + runner);
 
         // 6. 设置命令结果输出（可选，输出到文件）
         if (resultDir != null && !resultDir.isEmpty()) {
-            intent.putExtra(TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE.EXTRA_RESULT_DIRECTORY, resultDir);
-            intent.putExtra(TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE.EXTRA_RESULT_SINGLE_FILE, true);
-            intent.putExtra(TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE.EXTRA_RESULT_FILE_BASENAME, "authcenter_cmd_result");
+            intent.putExtra(RunCommand.EXTRA_RESULT_DIRECTORY, resultDir);
+            intent.putExtra(RunCommand.EXTRA_RESULT_SINGLE_FILE, true);
+            intent.putExtra(RunCommand.EXTRA_RESULT_FILE_BASENAME, "authcenter_cmd_result");
             LogUtils.d(TAG, "结果输出目录：" + resultDir);
         }
 
         // 7. 强制创建新终端会话（而非复用已有会话），避免第二次点击直接弹出旧窗口
         if (!isBackground) {
-            intent.putExtra("com.termux.RUN_COMMAND_SESSION_ACTION", 0);
+            intent.putExtra(RunCommand.EXTRA_SESSION_ACTION, 0);
         }
 
         // 8. 允许替换参数中的逗号替代字符
-        intent.putExtra(TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE.EXTRA_REPLACE_COMMA_ALTERNATIVE_CHARS_IN_ARGUMENTS, true);
+        intent.putExtra(RunCommand.EXTRA_REPLACE_COMMA_ALTERNATIVE_CHARS_IN_ARGUMENTS, true);
 
         // 8. 发送请求（区分 Android O 及以上的前台服务）
         try {

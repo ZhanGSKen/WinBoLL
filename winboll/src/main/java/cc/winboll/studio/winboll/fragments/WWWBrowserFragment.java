@@ -168,9 +168,7 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
                 mWebView.goForward();
             }
         } else if (id == R.id.btn_home) {
-            String homeUrl = getHomeUrl();
-            mEtUrl.setText(homeUrl);
-            loadUrl(homeUrl);
+            loadHomePage();
         }
     }
 
@@ -202,6 +200,19 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
             url = "https://" + url;
         }
         mWebView.loadUrl(url);
+    }
+
+    /**
+     * 加载首页：优先 Settings 自定义首页，未设置时使用默认主页。
+     * 供主窗口 HOME 菜单调用。
+     */
+    public void loadHomePage() {
+        if (mWebView == null || mEtUrl == null) {
+            return;
+        }
+        String homeUrl = getHomeUrl();
+        mEtUrl.setText(homeUrl);
+        loadUrl(homeUrl);
     }
 
     /**

@@ -17,6 +17,9 @@
         android:id="@+id/item_settings"
         android:title="Settings"/>
 	<item
+        android:id="@+id/item_open_source"
+        android:title="开源许可"/>
+	<item
         android:id="@+id/item_about"
         android:title="About"/>
 </menu>

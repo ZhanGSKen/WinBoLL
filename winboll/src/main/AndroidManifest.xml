@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="cc.winboll.studio.winboll"
-    android:sharedUserId="com.termux">
+    android:sharedUserId="cc.winboll">
 
     <!-- 拥有完全的网络访问权限 -->
     <uses-permission android:name="android.permission.INTERNET"/>

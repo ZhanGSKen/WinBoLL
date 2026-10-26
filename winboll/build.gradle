@@ -92,9 +92,9 @@ dependencies {
     implementation "io.noties.markwon:linkify:$markwonVersion"
     implementation "io.noties.markwon:recycler:$markwonVersion"
 	*/
-	implementation 'com.termux:terminal-emulator:0.118.0'
-	implementation 'com.termux:terminal-view:0.118.0'
-	implementation 'com.termux:termux-shared:0.118.0'
+	// Termux terminal is NOT bundled: it runs in a separate standalone Termux app
+	// and is only invoked through the RUN_COMMAND Intent interface (see
+	// TermuxCommandExecutor), so no com.termux GPL-3.0 libraries are linked here.
 
 	// Biometric (指纹识别)
 	implementation 'androidx.biometric:biometric:1.1.0'
