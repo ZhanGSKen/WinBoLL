@@ -304,7 +304,7 @@ public class AboutView extends LinearLayout {
         }
         // 添加通用功能项
         addFunctionView(new WebJumpFunctionItemView(mContext, "WinBoLL 主页", WINBOLL_OFFICIAL_HOME, R.drawable.ic_winboll));
-        addFunctionView(new EmailFunctionItemView(mContext, "联系邮箱", "WinBoLLStudio<studio@winboll.cc>", R.drawable.ic_winboll));
+        addFunctionView(new EmailFunctionItemView(mContext, "联系邮箱", EMAIL_ADDRESS, R.drawable.ic_winboll));
         if (!mszHomePage.isEmpty()) {
             addFunctionView(new WebJumpFunctionItemView(mContext, "应用APK下载地址", mszHomePage, R.drawable.ic_winboll));
         }
