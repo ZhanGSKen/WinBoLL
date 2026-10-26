@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 开源许可说明窗口 Fragment 布局 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainWindowBackgroundColor"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
+
+            <!-- 顶部说明 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="12dp"
+                android:paddingTop="14dp"
+                android:paddingRight="12dp"
+                android:text="本程序使用了下列开源软件组件，我们尊重并感谢所有开源项目的贡献。各组件的著作权归其各自权利人所有，并依据其对应的开源许可证授权使用。"
+                android:textColor="#FF424242"
+                android:textSize="13sp"
+                android:lineSpacingExtra="3dp" />
+
+            <!-- 分组一：随本程序分发的开源组件（卡片由代码动态填充） -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="12dp"
+                android:paddingTop="14dp"
+                android:paddingRight="12dp"
+                android:text="一、随本程序分发的开源组件"
+                android:textColor="#FF00796B"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/ll_license_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="4dp" />
+
+            <!-- LGPL 特别提示 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/bg_license_badge_lgpl"
+                android:padding="10dp"
+                android:text="特别提示：Pinyin4j 采用 LGPL-2.1 许可证。本程序以独立、未经修改的库形式引用它，并允许用户替换该库；如需其源代码，可访问下方对应链接。"
+                android:textColor="#FFE65100"
+                android:textSize="12sp"
+                android:lineSpacingExtra="2dp" />
+
+            <!-- 分组二：专有组件 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="12dp"
+                android:paddingTop="16dp"
+                android:paddingRight="12dp"
+                android:text="二、WinBoLL 自有专有组件"
+                android:textColor="#FF00796B"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/bg_license_card"
+                android:padding="12dp"
+                android:text="libappbase、libaes 为 WinBoLL 自有（专有）组件，保留所有权利，不属于开源组件。"
+                android:textColor="#FF616161"
+                android:textSize="12sp"
+                android:lineSpacingExtra="2dp" />
+
+            <!-- 分组三：终端组件说明 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="12dp"
+                android:paddingTop="16dp"
+                android:paddingRight="12dp"
+                android:text="三、终端功能说明"
+                android:textColor="#FF00796B"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_termux_notice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/bg_license_card"
+                android:padding="12dp"
+                android:text="本程序不包含也不集成 Termux 终端。终端功能由独立的 Termux 应用（GPL-3.0）提供，本程序仅通过 Android Intent（RUN_COMMAND 接口）将命令发送给该独立应用执行；GPL-3.0 的 Termux 代码不在本程序进程内运行、也不随本程序分发。Termux 源代码：https://github.com/termux/termux-app"
+                android:textColor="#FF616161"
+                android:textSize="12sp"
+                android:lineSpacingExtra="2dp"
+                android:autoLink="web" />
+
+            <!-- 底部免责声明 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="12dp"
+                android:paddingTop="18dp"
+                android:paddingRight="12dp"
+                android:text="本页面仅为开源许可的署名与提示，各组件的具体权利义务以其随附的原始许可证文本为准。"
+                android:textColor="#FF808080"
+                android:textSize="11sp"
+                android:lineSpacingExtra="2dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

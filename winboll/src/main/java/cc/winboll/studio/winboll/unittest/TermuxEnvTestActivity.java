@@ -78,7 +78,7 @@ public class TermuxEnvTestActivity extends BaseWinBoLLActivity {
         initMsg.append(getPackageName());
         initMsg.append("\n");
         initMsg.append("Termux应用包名：com.termux\n");
-        initMsg.append("sharedUserId：com.termux（需一致）\n");
+        initMsg.append("sharedUserId：cc.winboll（需一致）\n");
         initMsg.append("支持功能：目录读取、Gradle命令实时输出（唤起Termux窗口）\n");
         initMsg.append("-------------------------\n");
         tvMessage.setText(initMsg.toString());
@@ -136,7 +136,7 @@ public class TermuxEnvTestActivity extends BaseWinBoLLActivity {
             LogUtils.e(TAG, "initTermuxDirectory() 错误：Termux目录创建失败");
             tvMessage.append("警告：Termux目录创建失败！\n");
             tvMessage.append("请检查：\n");
-            tvMessage.append("1.AndroidManifest.xml中sharedUserId是否为com.termux\n");
+            tvMessage.append("1.AndroidManifest.xml中sharedUserId是否为cc.winboll\n");
             tvMessage.append("2.设备是否已root（部分机型需root才能跨包写私有目录）\n");
         }
     }
@@ -378,7 +378,7 @@ public class TermuxEnvTestActivity extends BaseWinBoLLActivity {
         }
         if (!termuxHomeDir.canRead()) {
             LogUtils.e(TAG, "readTermuxHomeFileList() 错误：无目录读取权限");
-            return "错误：无目录读取权限（需满足：1.sharedUserId=com.termux 2.设备root）";
+            return "错误：无目录读取权限（需满足：1.sharedUserId=cc.winboll 2.设备root）";
         }
 
         // 获取文件列表

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- LGPL 弱著佐权许可证标签：浅橙底、醒目（需保留声明并允许替换） -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#FFFFF3E0" />
+    <stroke
+        android:width="1dp"
+        android:color="#FFFFB74D" />
+    <corners android:radius="4dp" />
+</shape>
