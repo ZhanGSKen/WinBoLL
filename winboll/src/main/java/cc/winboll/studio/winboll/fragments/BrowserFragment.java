@@ -326,6 +326,18 @@ public class BrowserFragment extends Fragment implements View.OnClickListener, W
 
 	// 在 BrowserFragment 中添加以下代码（Java 7 语法）
 	/**
+	 * Fragment 标题（主窗口副标题使用，Fragment 的标题就是副标题）
+	 */
+	public static final String FRAGMENT_TITLE = "浏览器";
+
+	/**
+	 * 获取 Fragment 标题
+	 */
+	public String getFragmentTitle() {
+		return FRAGMENT_TITLE;
+	}
+
+	/**
 	 * 发送URL历史更新消息给MainActivity（当历史列表变化时调用）
 	 */
 	private void sendUrlHistoryUpdateMsg() {

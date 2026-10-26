@@ -5,6 +5,9 @@
         android:id="@+id/item_home"
         android:title="HOME"/>
 	<item
+        android:id="@+id/item_simple_browser"
+        android:title="SimpleBrowser"/>
+	<item
         android:id="@+id/item_mytermux"
         android:title="MyTermuxActivity"/>
 	<item

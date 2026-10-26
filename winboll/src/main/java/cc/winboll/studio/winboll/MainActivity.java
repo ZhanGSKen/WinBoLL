@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import androidx.fragment.app.Fragment;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
 import cc.winboll.studio.libaes.models.DrawerMenuBean;
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
@@ -19,6 +20,7 @@ import cc.winboll.studio.winboll.activities.AboutActivity;
 import cc.winboll.studio.winboll.activities.SettingsActivity;
 import cc.winboll.studio.winboll.termux.MyTermuxActivity;
 import cc.winboll.studio.winboll.fragments.BrowserFragment;
+import cc.winboll.studio.winboll.fragments.SimpleBrowserFragment;
 import cc.winboll.studio.winboll.unittest.TermuxEnvTestActivity;
 import java.util.ArrayList;
 
@@ -28,6 +30,8 @@ public class MainActivity extends DrawerFragmentActivity {
     public static final String TAG = "MainActivity";
 
     BrowserFragment mBrowserFragment;
+    // 简易浏览器启动窗口 Fragment
+    SimpleBrowserFragment mSimpleBrowserFragment;
 
     // ------------------- 新增：Handler 消息定义（接收URL历史更新消息） -------------------
     // 消息标识：URL加载历史更新（刷新抽屉菜单的历史列表）
@@ -49,7 +53,56 @@ public class MainActivity extends DrawerFragmentActivity {
             }
             addFragment(mBrowserFragment);
         }
+        // 组装简易浏览器启动窗口 Fragment（保持 DrawerFragmentActivity 架构不变）
+        // 启动时不显示，由主菜单点击后懒加载切换
         showFragment(mBrowserFragment);
+        // 主窗口副标题跟随当前显示 Fragment 的标题
+        updateToolbarSubtitle(mBrowserFragment);
+    }
+
+    /**
+     * 切换显示简易浏览器窗口 Fragment（首次点击时懒加载 addFragment）。
+     * 已在简易窗口时再次点击，则切回完整浏览器。
+     */
+    private void toggleSimpleBrowser() {
+        if (mSimpleBrowserFragment == null) {
+            mSimpleBrowserFragment = SimpleBrowserFragment.newInstance();
+            addFragment(mSimpleBrowserFragment);
+            showFragment(mSimpleBrowserFragment);
+            updateToolbarSubtitle(mSimpleBrowserFragment);
+        } else if (mSimpleBrowserFragment.isVisible()) {
+            showFragment(mBrowserFragment);
+            updateToolbarSubtitle(mBrowserFragment);
+        } else {
+            showFragment(mSimpleBrowserFragment);
+            updateToolbarSubtitle(mSimpleBrowserFragment);
+        }
+    }
+
+    /**
+     * 主窗口副标题跟随当前显示的 Fragment 标题（Fragment 的标题就是副标题）。
+     */
+    private void updateToolbarSubtitle(Fragment fragment) {
+        if (mToolbar == null) {
+            return;
+        }
+        if (fragment instanceof BrowserFragment) {
+            mToolbar.setSubtitle(((BrowserFragment) fragment).getFragmentTitle());
+        } else if (fragment instanceof SimpleBrowserFragment) {
+            mToolbar.setSubtitle(((SimpleBrowserFragment) fragment).getFragmentTitle());
+        } else {
+            mToolbar.setSubtitle(null);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // 简易浏览器窗口显示时，优先由其处理 WebView 页面后退
+        if (mSimpleBrowserFragment != null && mSimpleBrowserFragment.isVisible()
+                && mSimpleBrowserFragment.handleBackPressed()) {
+            return;
+        }
+        super.onBackPressed();
     }
 
 //    @Override
@@ -181,6 +234,9 @@ public class MainActivity extends DrawerFragmentActivity {
                     msg.what = BrowserFragment.MSG_HOMEPAGE;
                     mBrowserFragment.getBrowserHandler().sendMessage(msg);
                 }
+            } else if (nItemId == R.id.item_simple_browser) {
+                // 点击切换显示简易浏览器窗口
+                toggleSimpleBrowser();
             } else if (nItemId == R.id.item_settings) {
                 WinBoLLActivityManager.getInstance().startWinBoLLActivity(getApplicationContext(), SettingsActivity.class);
             } else if (nItemId == R.id.item_about) {
