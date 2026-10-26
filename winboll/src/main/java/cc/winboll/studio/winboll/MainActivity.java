@@ -20,7 +20,7 @@ import cc.winboll.studio.winboll.activities.AboutActivity;
 import cc.winboll.studio.winboll.activities.SettingsActivity;
 import cc.winboll.studio.winboll.termux.MyTermuxActivity;
 import cc.winboll.studio.winboll.fragments.ManagementFragment;
-import cc.winboll.studio.winboll.fragments.SimpleBrowserFragment;
+import cc.winboll.studio.winboll.fragments.WWWBrowserFragment;
 import cc.winboll.studio.winboll.unittest.TermuxEnvTestActivity;
 import java.util.ArrayList;
 
@@ -31,7 +31,7 @@ public class MainActivity extends DrawerFragmentActivity {
 
     ManagementFragment mManagementFragment;
     // 简易浏览器启动窗口 Fragment
-    SimpleBrowserFragment mSimpleBrowserFragment;
+    WWWBrowserFragment mWWWBrowserFragment;
 
     // ------------------- 新增：Handler 消息定义（接收URL历史更新消息） -------------------
     // 消息标识：URL加载历史更新（刷新抽屉菜单的历史列表）
@@ -61,22 +61,29 @@ public class MainActivity extends DrawerFragmentActivity {
     }
 
     /**
-     * 切换显示简易浏览器窗口 Fragment（首次点击时懒加载 addFragment）。
-     * 已在简易窗口时再次点击，则切回完整浏览器。
+     * 显示 WWWBrowser 窗口 Fragment（首次点击时懒加载 addFragment）。
+     * 再次点击仍停留在 WWWBrowser 窗口，不切换回完整浏览器；
+     * 需要回到 ManagementFragment 时通过"网站管理"菜单切换。
      */
-    private void toggleSimpleBrowser() {
-        if (mSimpleBrowserFragment == null) {
-            mSimpleBrowserFragment = SimpleBrowserFragment.newInstance();
-            addFragment(mSimpleBrowserFragment);
-            showFragment(mSimpleBrowserFragment);
-            updateToolbarSubtitle(mSimpleBrowserFragment);
-        } else if (mSimpleBrowserFragment.isVisible()) {
-            showFragment(mManagementFragment);
-            updateToolbarSubtitle(mManagementFragment);
-        } else {
-            showFragment(mSimpleBrowserFragment);
-            updateToolbarSubtitle(mSimpleBrowserFragment);
+    private void showWWWBrowser() {
+        if (mWWWBrowserFragment == null) {
+            mWWWBrowserFragment = WWWBrowserFragment.newInstance();
+            addFragment(mWWWBrowserFragment);
         }
+        showFragment(mWWWBrowserFragment);
+        updateToolbarSubtitle(mWWWBrowserFragment);
+    }
+
+    /**
+     * 显示网站管理（ManagementFragment）窗口，副标题跟随其标题。
+     */
+    private void showWebsiteManage() {
+        if (mManagementFragment == null) {
+            mManagementFragment = ManagementFragment.newInstance();
+            addFragment(mManagementFragment);
+        }
+        showFragment(mManagementFragment);
+        updateToolbarSubtitle(mManagementFragment);
     }
 
     /**
@@ -88,8 +95,8 @@ public class MainActivity extends DrawerFragmentActivity {
         }
         if (fragment instanceof ManagementFragment) {
             mToolbar.setSubtitle(((ManagementFragment) fragment).getFragmentTitle());
-        } else if (fragment instanceof SimpleBrowserFragment) {
-            mToolbar.setSubtitle(((SimpleBrowserFragment) fragment).getFragmentTitle());
+        } else if (fragment instanceof WWWBrowserFragment) {
+            mToolbar.setSubtitle(((WWWBrowserFragment) fragment).getFragmentTitle());
         } else {
             mToolbar.setSubtitle(null);
         }
@@ -98,8 +105,8 @@ public class MainActivity extends DrawerFragmentActivity {
     @Override
     public void onBackPressed() {
         // 简易浏览器窗口显示时，优先由其处理 WebView 页面后退
-        if (mSimpleBrowserFragment != null && mSimpleBrowserFragment.isVisible()
-                && mSimpleBrowserFragment.handleBackPressed()) {
+        if (mWWWBrowserFragment != null && mWWWBrowserFragment.isVisible()
+                && mWWWBrowserFragment.handleBackPressed()) {
             return;
         }
         super.onBackPressed();
@@ -236,9 +243,12 @@ public class MainActivity extends DrawerFragmentActivity {
                     msg.what = ManagementFragment.MSG_HOMEPAGE;
                     mManagementFragment.getBrowserHandler().sendMessage(msg);
                 }
-            } else if (nItemId == R.id.item_simple_browser) {
-                // 点击切换显示简易浏览器窗口
-                toggleSimpleBrowser();
+            } else if (nItemId == R.id.item_www_browser) {
+                // 点击显示 WWWBrowser 窗口（再次点击仍停留，不切回）
+                showWWWBrowser();
+            } else if (nItemId == R.id.item_website_manage) {
+                // 点击显示网站管理（ManagementFragment）
+                showWebsiteManage();
             } else if (nItemId == R.id.item_settings) {
                 WinBoLLActivityManager.getInstance().startWinBoLLActivity(getApplicationContext(), SettingsActivity.class);
             } else if (nItemId == R.id.item_about) {

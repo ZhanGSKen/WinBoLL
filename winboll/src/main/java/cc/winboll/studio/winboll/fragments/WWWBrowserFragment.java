@@ -2,7 +2,7 @@ package cc.winboll.studio.winboll.fragments;
 
 /**
  * @Author ZhanGSKen&豆包大模型<zhangsken@qq.com>
- * @Describe 简易浏览器启动窗口 Fragment（Java 7 语法）。
+ * @Describe WWWBrowser 浏览器启动窗口 Fragment（Java 7 语法）。
  * 由原 MainActivity 简易浏览器窗口改造为 Fragment，
  * 遵循 DrawerFragmentActivity 架构，通过 addFragment()/showFragment() 组装。
  */
@@ -29,12 +29,12 @@ import androidx.fragment.app.Fragment;
 
 import cc.winboll.studio.winboll.R;
 
-public class SimpleBrowserFragment extends Fragment implements View.OnClickListener {
+public class WWWBrowserFragment extends Fragment implements View.OnClickListener {
 
-    private static final String DEFAULT_HOME_URL = "https://www.baidu.com";
+    private static final String DEFAULT_HOME_URL = "https://www.studio.winboll.cc";
     private static final String ARG_INITIAL_URL = "initial_url";
     // Fragment 标题（主窗口副标题使用，Fragment 的标题就是副标题）
-    public static final String FRAGMENT_TITLE = "简易浏览器";
+    public static final String FRAGMENT_TITLE = "WWWBrowser";
 
     private WebView mWebView;
     private EditText mEtUrl;
@@ -45,13 +45,13 @@ public class SimpleBrowserFragment extends Fragment implements View.OnClickListe
     private Button mBtnLoad;
 
     // 工厂方法（Java 7 显式工厂模式）
-    public static SimpleBrowserFragment newInstance() {
-        return new SimpleBrowserFragment();
+    public static WWWBrowserFragment newInstance() {
+        return new WWWBrowserFragment();
     }
 
     // 创建带初始URL的实例（供外部应用 ACTION_VIEW 传入时使用）
-    public static SimpleBrowserFragment newInstance(String initialUrl) {
-        SimpleBrowserFragment fragment = new SimpleBrowserFragment();
+    public static WWWBrowserFragment newInstance(String initialUrl) {
+        WWWBrowserFragment fragment = new WWWBrowserFragment();
         Bundle args = new Bundle();
         args.putString(ARG_INITIAL_URL, initialUrl);
         fragment.setArguments(args);
@@ -61,8 +61,8 @@ public class SimpleBrowserFragment extends Fragment implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // 加载简易浏览器窗口布局（Java 7 显式强转）
-        View view = inflater.inflate(R.layout.fragment_simple_browser, container, false);
+        // 加载 WWWBrowser 窗口布局（Java 7 显式强转）
+        View view = inflater.inflate(R.layout.fragment_www_browser, container, false);
 
         initViews(view);
         initEvents();

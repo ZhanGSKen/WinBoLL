@@ -5,8 +5,11 @@
         android:id="@+id/item_home"
         android:title="HOME"/>
 	<item
-        android:id="@+id/item_simple_browser"
-        android:title="SimpleBrowser"/>
+        android:id="@+id/item_www_browser"
+        android:title="WWWBrowser"/>
+	<item
+        android:id="@+id/item_website_manage"
+        android:title="网站管理"/>
 	<item
         android:id="@+id/item_mytermux"
         android:title="MyTermuxActivity"/>
