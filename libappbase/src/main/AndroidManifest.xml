@@ -33,8 +33,6 @@
 
         <activity android:name="cc.winboll.studio.libappbase.activities.NfcRsaLoginActivity"/>
 
-        <activity android:name="cc.winboll.studio.libappbase.activities.FTPBackupsActivity"/>
-
         <activity
             android:name=".utils.ShareLogActivity"
             android:label="ShareLogActivity"
