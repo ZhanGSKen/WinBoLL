@@ -9,15 +9,15 @@ WinBoLL 手机源码计划，旨在通过核心项目 WinBoLL 构建手机端与
 #### **仓库类型：功能说明**
 ☆ 基础项目分支 WinBoLL：手机端安卓应用开发基础模板。
 ☆ 应用项目分支 APPBase、AES、PowerBell、Positions**：安卓应用单一管理系列项目。
-☆ 源码汇总管理 OriginMaster**：各类分支源码合并存档，不适宜作为开发库使用。
+☆ 源码汇总管理 Projects_Keeper**：各类分支源码合并存档，不适宜作为开发库使用。
 
 ### 3. 源码合并管理推送路线图
 ⚠️ **注意**：仅仅展示不同应用模块源码的综合管理路线。分支合并操作时，必须具备 Git 管理经验。
 
-★ WinBoLL → APPBase → OriginMaster
-★ WinBoLL → AES → OriginMaster
-★ WinBoLL → PowerBell → OriginMaster
-★ WinBoLL → Positions → OriginMaster
+★ WinBoLL → APPBase → Projects_Keeper
+★ WinBoLL → AES → Projects_Keeper
+★ WinBoLL → PowerBell → Projects_Keeper
+★ WinBoLL → Positions → Projects_Keeper
 
 ## 二、WinBoLL 项目核心信息
 
@@ -104,6 +104,37 @@ $bash gradlew assembleStageRelease
 ### ☆ Beta 渠道：
 #### V<应用开发环境编号><应用功能变更号><应用调试阶段号>-beta<调试编译计数>_<调试编译时间(分钟+秒钟)> （示例： APPBase_15.9.6-beta8_5413 ）
 
-#### 设置统一版本号，实现应用数据管理阶段性调整的坚实框架。
-#### 以版本号versionCode 1520000为开发起点，15.20基线产品可实现的产品阶段编号为1520000到1520999之间。
-#### 其中版本号000~999是应用数据管理架构的型号。与产品versionName “15.20.<产品编号>”其中的<产品编号>无关。
+## 九、编译日志存放说明
+
+### 1. 日志存放位置
+☆ 编译日志统一保存在项目根目录 `编译日志` 文件夹（`C:\0WINBOT\WinBoLL项目开发\编译日志\`）中。
+
+### 2. 日志文件命名与内容
+☆ 每次编译执行时，将 Gradle 编译过程的控制台输出保存为一个 `.log` 文件（如 `build_beta_debug_after.log`）。日志内容包含编译任务进度、APK 输出路径、构建结果（BUILD SUCCESSFUL / FAILED）及告警信息。
+
+### 3. 使用方法
+☆ 执行编译命令时，将输出重定向到该文件夹，以便归档与排查。示例（Windows PowerShell，项目源码目录为 WinBoLL源码）：
+```powershell
+Set-Location "C:\0WINBOT\WinBoLL项目开发\WinBoLL源码"
+.\gradlew.bat assembleBetaDebug --no-daemon 2>&1 | Tee-Object -FilePath "C:\0WINBOT\WinBoLL项目开发\编译日志\build_beta_debug_<日期>.log"
+```
+
+### 4. 注意事项
+☆ 建议以日期或版本号为日志文件命名（如 `build_beta_debug_15.21.1.log`），便于按版本归档。
+☆ 编译日志仅作记录与排查用途，可随时删除，不影响项目源码与编译。
+☆ 本文件夹不推送到 git 仓库（已在项目根目录 `.gitignore` 中忽略）。
+
+## 十、临时文件夹存放说明
+
+### 1. 存放位置
+☆ 项目根目录 `临时文件` 文件夹（`C:\0WINBOT\WinBoLL项目开发\临时文件\`）。
+
+### 2. 用途
+☆ 存放项目开发过程中产生的临时文件，如源码修改前的备份（`*.bak`）、草稿脚本等。当前已存放：`gradlew.bat.bak`、`winboll.properties.bak`、`winboll_app_build.gradle.bak`。
+
+### 3. 使用方法
+☆ 产生新的临时/备份文件时，统一放入该文件夹，保持项目源码目录整洁。
+
+### 4. 注意事项
+☆ 临时文件仅作本地备份与过渡用途，可随时清理。
+☆ 本文件夹不推送到 git 仓库（已在项目根目录 `.gitignore` 中忽略）。

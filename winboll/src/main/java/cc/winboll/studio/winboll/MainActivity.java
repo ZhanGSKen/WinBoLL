@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import androidx.fragment.app.Fragment;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
 import cc.winboll.studio.libaes.models.DrawerMenuBean;
 import cc.winboll.studio.libaes.utils.AESThemeUtil;
@@ -18,8 +19,11 @@ import cc.winboll.studio.winboll.R;
 import cc.winboll.studio.winboll.activities.AboutActivity;
 import cc.winboll.studio.winboll.activities.SettingsActivity;
 import cc.winboll.studio.winboll.termux.MyTermuxActivity;
-import cc.winboll.studio.winboll.fragments.BrowserFragment;
+import cc.winboll.studio.winboll.fragments.ManagementFragment;
+import cc.winboll.studio.winboll.fragments.OpenSourceLicenseFragment;
+import cc.winboll.studio.winboll.fragments.WWWBrowserFragment;
 import cc.winboll.studio.winboll.unittest.TermuxEnvTestActivity;
+import cc.winboll.studio.winboll.utils.CertTrustUtils;
 import java.util.ArrayList;
 
 public class MainActivity extends DrawerFragmentActivity {
@@ -27,12 +31,20 @@ public class MainActivity extends DrawerFragmentActivity {
 
     public static final String TAG = "MainActivity";
 
-    BrowserFragment mBrowserFragment;
+    // 网站管理窗口 Fragment（启动时不创建，点击"网站管理/HOME"菜单时懒加载）
+    ManagementFragment mManagementFragment;
+    // 浏览器启动窗口 Fragment（启动时默认创建并显示）
+    WWWBrowserFragment mWWWBrowserFragment;
+    // 开源许可说明窗口 Fragment（启动时不创建，点击"开源许可"菜单时懒加载）
+    OpenSourceLicenseFragment mOpenSourceLicenseFragment;
+
+    // WinBoLL 根证书是否已安装并被信任；未安装时不启用"网站管理"菜单
+    boolean mCertTrusted = false;
 
     // ------------------- 新增：Handler 消息定义（接收URL历史更新消息） -------------------
     // 消息标识：URL加载历史更新（刷新抽屉菜单的历史列表）
     public static final int MSG_URLLOADHISTORY_UPDATE = 1002;
-    // 自定义Handler（接收应用内消息，如BrowserFragment发送的历史更新消息）
+    // 自定义Handler（接收应用内消息，如ManagementFragment发送的历史更新消息）
     private static Handler _mMainHandler;
 
     @Override
@@ -40,27 +52,138 @@ public class MainActivity extends DrawerFragmentActivity {
         setTheme(cc.winboll.studio.winboll.theme.WinBoLLThemeUtil.getThemeTypeID(getApplicationContext()));
         super.onCreate(savedInstanceState);
         initMainHandler();
-        if (mBrowserFragment == null) {
+        // 启动默认窗口为 WWWBrowser（浏览器窗口）。外部 ACTION_VIEW 传入的 URL 由 WWWBrowser 打开，
+        // 无外部 URL 时加载 Settings 配置的自定义首页。
+        if (mWWWBrowserFragment == null) {
             String externalUrl = extractExternalUrl(getIntent());
             if (externalUrl != null) {
-                mBrowserFragment = BrowserFragment.newInstance(externalUrl);
+                mWWWBrowserFragment = WWWBrowserFragment.newInstance(externalUrl);
             } else {
-                mBrowserFragment = BrowserFragment.newInstance();
+                mWWWBrowserFragment = WWWBrowserFragment.newInstance();
             }
-            addFragment(mBrowserFragment);
+            addFragment(mWWWBrowserFragment);
         }
-        showFragment(mBrowserFragment);
+        showFragment(mWWWBrowserFragment);
+        // 主窗口副标题跟随当前显示 Fragment 的标题
+        updateToolbarSubtitle(mWWWBrowserFragment);
+        // 其他窗口（网站管理 ManagementFragment）启动时不创建，点击对应菜单时才懒加载
+        // 启动时检测 WinBoLL 根证书是否已安装，决定是否启用"网站管理"菜单
+        refreshCertTrustedState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 从 Settings 安装证书返回后，重新检测并刷新菜单
+        refreshCertTrustedState();
+    }
+
+    /**
+     * 后台线程检测 WinBoLL 根证书是否已被信任，完成后回主线程刷新菜单。
+     */
+    private void refreshCertTrustedState() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final boolean trusted = CertTrustUtils.isWinBoLLRootTrusted();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCertTrusted = trusted;
+                        invalidateOptionsMenu();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        // 仅在已安装 WinBoLL 根证书时启用"网站管理"菜单
+        MenuItem manageItem = menu.findItem(R.id.item_website_manage);
+        if (manageItem != null) {
+            manageItem.setVisible(mCertTrusted);
+        }
+        return true;
+    }
+
+    /**
+     * 显示 WWWBrowser 窗口 Fragment（启动时已创建，点击菜单直接切换显示）。
+     * 再次点击仍停留在 WWWBrowser 窗口；需要 ManagementFragment 时通过"网站管理/HOME"菜单切换。
+     */
+    private void showWWWBrowser() {
+        if (mWWWBrowserFragment == null) {
+            mWWWBrowserFragment = WWWBrowserFragment.newInstance();
+            addFragment(mWWWBrowserFragment);
+        }
+        showFragment(mWWWBrowserFragment);
+        updateToolbarSubtitle(mWWWBrowserFragment);
+    }
+
+    /**
+     * 显示网站管理（ManagementFragment）窗口，副标题跟随其标题。
+     * 启动时不创建，首次点击菜单时懒加载（Fragment 创建时自动加载首页）。
+     */
+    private void showWebsiteManage() {
+        if (mManagementFragment == null) {
+            mManagementFragment = ManagementFragment.newInstance();
+            addFragment(mManagementFragment);
+        }
+        showFragment(mManagementFragment);
+        updateToolbarSubtitle(mManagementFragment);
+    }
+
+    /**
+     * 显示开源许可说明（OpenSourceLicenseFragment）窗口，副标题跟随其标题。
+     * 启动时不创建，首次点击菜单时懒加载。
+     */
+    private void showOpenSourceLicense() {
+        if (mOpenSourceLicenseFragment == null) {
+            mOpenSourceLicenseFragment = OpenSourceLicenseFragment.newInstance();
+            addFragment(mOpenSourceLicenseFragment);
+        }
+        showFragment(mOpenSourceLicenseFragment);
+        updateToolbarSubtitle(mOpenSourceLicenseFragment);
+    }
+
+    /**
+     * 主窗口副标题跟随当前显示的 Fragment 标题（Fragment 的标题就是副标题）。
+     */
+    private void updateToolbarSubtitle(Fragment fragment) {
+        if (mToolbar == null) {
+            return;
+        }
+        if (fragment instanceof ManagementFragment) {
+            mToolbar.setSubtitle(((ManagementFragment) fragment).getFragmentTitle());
+        } else if (fragment instanceof WWWBrowserFragment) {
+            mToolbar.setSubtitle(((WWWBrowserFragment) fragment).getFragmentTitle());
+        } else if (fragment instanceof OpenSourceLicenseFragment) {
+            mToolbar.setSubtitle(((OpenSourceLicenseFragment) fragment).getFragmentTitle());
+        } else {
+            mToolbar.setSubtitle(null);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // 简易浏览器窗口显示时，优先由其处理 WebView 页面后退
+        if (mWWWBrowserFragment != null && mWWWBrowserFragment.isVisible()
+                && mWWWBrowserFragment.handleBackPressed()) {
+            return;
+        }
+        super.onBackPressed();
     }
 
 //    @Override
 //    protected void onNewIntent(Intent intent) {
 //        super.onNewIntent(intent);
 //        String externalUrl = extractExternalUrl(intent);
-//        if (externalUrl != null && mBrowserFragment != null && mBrowserFragment.getBrowserHandler() != null) {
+//        if (externalUrl != null && mManagementFragment != null && mManagementFragment.getBrowserHandler() != null) {
 //            Message msg = Message.obtain();
-//            msg.what = BrowserFragment.MSG_OPEN_URL;
+//            msg.what = ManagementFragment.MSG_OPEN_URL;
 //            msg.obj = externalUrl;
-//            mBrowserFragment.getBrowserHandler().sendMessage(msg);
+//            mManagementFragment.getBrowserHandler().sendMessage(msg);
 //        }
 //    }
 
@@ -75,7 +198,9 @@ public class MainActivity extends DrawerFragmentActivity {
     }
 
 	public static void sendMessage(Message msg) {
-		_mMainHandler.sendMessage(msg);
+		if (_mMainHandler != null && msg != null) {
+			_mMainHandler.sendMessage(msg);
+		}
 	}
 
     /**
@@ -126,8 +251,8 @@ public class MainActivity extends DrawerFragmentActivity {
 
 	void loadUrlLoadHistotyMenu(ArrayList<DrawerMenuBean> listDrawerMenu) {
 		listDrawerMenu.clear();
-		if (BrowserFragment._mUrlLoadHistory != null) {
-			for (String url : BrowserFragment._mUrlLoadHistory) {
+		if (mManagementFragment != null && mManagementFragment.getUrlLoadHistory() != null) {
+			for (String url : mManagementFragment.getUrlLoadHistory()) {
 				listDrawerMenu.add(new DrawerMenuBean(R.drawable.ic_launcher, url));
 			}
 		}
@@ -161,11 +286,13 @@ public class MainActivity extends DrawerFragmentActivity {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         super.onItemClick(parent, view, position, id);
-		if (mBrowserFragment != null && mBrowserFragment.getBrowserHandler() != null) {
+		if (mManagementFragment != null && mManagementFragment.getBrowserHandler() != null) {
+			// 历史项属于网站管理窗口，先切换显示该窗口再打开对应历史 URL
+			showWebsiteManage();
 			Message msg = Message.obtain();
-			msg.what = BrowserFragment.MSG_HISTORY_POSITION;
+			msg.what = ManagementFragment.MSG_HISTORY_POSITION;
 			msg.obj = position;
-			mBrowserFragment.getBrowserHandler().sendMessage(msg);
+			mManagementFragment.getBrowserHandler().sendMessage(msg);
         }
     }
 
@@ -176,13 +303,22 @@ public class MainActivity extends DrawerFragmentActivity {
         } else {
             int nItemId = item.getItemId();
             if (nItemId == R.id.item_home) {
-                if (mBrowserFragment != null && mBrowserFragment.getBrowserHandler() != null) {
-                    Message msg = Message.obtain();
-                    msg.what = BrowserFragment.MSG_HOMEPAGE;
-                    mBrowserFragment.getBrowserHandler().sendMessage(msg);
+                // HOME：切换到 WWWBrowser 窗口并打开其默认主页（Settings 自定义首页）
+                showWWWBrowser();
+                if (mWWWBrowserFragment != null) {
+                    mWWWBrowserFragment.loadHomePage();
                 }
+            } else if (nItemId == R.id.item_www_browser) {
+                // 点击显示 WWWBrowser 窗口（再次点击仍停留，不切回）
+                showWWWBrowser();
+            } else if (nItemId == R.id.item_website_manage) {
+                // 点击显示网站管理（ManagementFragment）
+                showWebsiteManage();
             } else if (nItemId == R.id.item_settings) {
                 WinBoLLActivityManager.getInstance().startWinBoLLActivity(getApplicationContext(), SettingsActivity.class);
+            } else if (nItemId == R.id.item_open_source) {
+                // 点击显示开源许可说明窗口
+                showOpenSourceLicense();
             } else if (nItemId == R.id.item_about) {
                 Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
                 WinBoLLActivityManager.getInstance().startWinBoLLActivity(getApplicationContext(), intent, AboutActivity.class);
@@ -201,7 +337,7 @@ public class MainActivity extends DrawerFragmentActivity {
         return true;
     }
 
-    // ------------------- 新增：对外提供Handler（供其他组件发送消息，如BrowserFragment） -------------------
+    // ------------------- 新增：对外提供Handler（供其他组件发送消息，如ManagementFragment） -------------------
     public Handler getMainHandler() {
         return _mMainHandler;
     }

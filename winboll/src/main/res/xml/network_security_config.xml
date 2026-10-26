@@ -9,6 +9,8 @@
     <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <certificates src="system" />
+            <!-- 信任用户手动安装的证书（如 WinBoLL 根 CA，由用户在系统设置中安装，可随时卸载） -->
+            <certificates src="user" />
         </trust-anchors>
     </base-config>
     <!-- 允许特定域名的明文请求（仅本地127.0.0.1） -->

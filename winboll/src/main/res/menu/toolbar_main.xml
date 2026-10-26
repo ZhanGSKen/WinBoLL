@@ -5,11 +5,20 @@
         android:id="@+id/item_home"
         android:title="HOME"/>
 	<item
+        android:id="@+id/item_www_browser"
+        android:title="WWWBrowser"/>
+	<item
+        android:id="@+id/item_website_manage"
+        android:title="网站管理"/>
+	<item
         android:id="@+id/item_mytermux"
         android:title="MyTermuxActivity"/>
 	<item
         android:id="@+id/item_settings"
         android:title="Settings"/>
+	<item
+        android:id="@+id/item_open_source"
+        android:title="开源许可"/>
 	<item
         android:id="@+id/item_about"
         android:title="About"/>

@@ -138,14 +138,6 @@ android {
                                         }
                                         println "Output APK (WinBoLLStudio): " + outBuildBckDir.getAbsolutePath() + "/${outputFileName}"
                                     }
-                                    // ========== 设置文件权限为775 ==========
-                                    if(targetApkFile.exists()){
-                                        exec {
-                                            commandLine 'chmod', '775', targetApkFile.absolutePath
-                                        }
-                                        println "Set file permission to 775 : ${targetApkFile.absolutePath}"
-                                    }
-
                                     // 检查编译标志位配置
                                     assert (winbollBuildProps['buildCount'] != null)
                                     assert (winbollBuildProps['libraryProject'] != null)
@@ -207,14 +199,6 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${outputFileName}"
                                     }
-                                    // 设置权限775。
-                                    if(fullApkFile.exists()){
-                                        exec {
-                                            commandLine 'chmod', '775', fullApkFile.absolutePath
-                                        }
-                                        println "Set file permission to 775 : ${fullApkFile.absolutePath}"
-                                    }
-
                                     // 复制短版本名APK
                                     def shortApkFile = new File(outTagDir, szCommonTagAPKName)
                                     copy{
@@ -225,14 +209,6 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${szCommonTagAPKName}"
                                     }
-                                    // 设置权限775。
-                                    if(shortApkFile.exists()){
-                                        exec {
-                                            commandLine 'chmod', '775', shortApkFile.absolutePath
-                                        }
-                                        println "Set file permission to 775 : ${shortApkFile.absolutePath}"
-                                    }
-
                                     // 检查编译标志位配置
                                     assert (winbollBuildProps['stageCount'] != null)
                                     assert (winbollBuildProps['publishVersion'] != null)
@@ -307,14 +283,6 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${outputFileName}"
                                     }
-                                    // 权限设为775。
-                                    if(debugFullApk.exists()){
-                                        exec {
-                                            commandLine 'chmod', '775', debugFullApk.absolutePath
-                                        }
-                                        println "Set file permission to 775 : ${debugFullApk.absolutePath}"
-                                    }
-
                                     // 复制短版本名APK
                                     def debugShortApk = new File(outTagDir, szCommonTagAPKName)
                                     copy{
@@ -324,13 +292,6 @@ android {
                                             String fileName -> "${szCommonTagAPKName}"
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${szCommonTagAPKName}"
-                                    }
-                                    // 权限设为775
-                                    if(debugShortApk.exists()){
-                                        exec {
-                                            commandLine 'chmod', '775', debugShortApk.absolutePath
-                                        }
-                                        println "Set file permission to 775 : ${debugShortApk.absolutePath}"
                                     }
                                 }
                             }
@@ -350,13 +311,6 @@ android {
                                         }
                                         println "Output APK (Common): " + outCommonDir.getAbsolutePath() + "/${commandAPKName}"
                                     }
-                                    // 额外输出文件设置775权限
-                                    if(apkFile.exists()){
-                                        exec {
-                                            commandLine 'chmod', '775', apkFile.absolutePath
-                                        }
-                                        println "Set file permission to 775 : ${apkFile.absolutePath}"
-                                    }
                                 }
 						    }
                             
@@ -368,4 +322,3 @@ android {
         
     } // End of (android.applicationVariants.all { variant ->)
 }
-

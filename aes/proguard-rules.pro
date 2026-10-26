@@ -87,15 +87,9 @@
     @com.google.gson.annotations.SerializedName <fields>;
 }
 
-# 米盟 SDK（核心广告组件，完整保留避免加载失败）
--keep class com.miui.zeus.** { *; }
--keep interface com.miui.zeus.** { *; }
-# 保留米盟日志字段（便于广告加载失败排查）
--keepclassmembers class com.miui.zeus.mimo.sdk.** {
-    public static final java.lang.String TAG;
-}
+# 米盟 SDK 已移除
 
-# RecyclerView 1.0.0（米盟广告布局渲染依赖）
+# RecyclerView 1.0.0
 -keep class androidx.recyclerview.** { *; }
 -keep interface androidx.recyclerview.** { *; }
 -keepclassmembers class androidx.recyclerview.widget.RecyclerView$Adapter {

@@ -42,4 +42,22 @@
     <string name="btn_select_icon">Select Icon</string>
     <string name="btn_clear_icon">Clear Icon</string>
     <string name="toast_icon_copy_failed">Failed to import icon</string>
+    <string name="settings_section_security">安全</string>
+    <string name="settings_install_cert">安装证书</string>
+    <string name="settings_install_cert_desc">从设备存储选择 CA 根证书（.crt/.cer/.pem）安装到系统，用于信任 WinBoLL 内部 HTTPS 服务。</string>
+    <string name="toast_cert_picker_failed">无法打开文件选择器</string>
+    <string name="toast_cert_canceled">已取消选择证书</string>
+    <string name="toast_cert_read_failed">读取证书失败，请选择有效的 CA 证书文件</string>
+    <string name="toast_cert_install_failed">发起证书安装失败</string>
+    <string name="toast_cert_installed">证书已安装</string>
+    <string name="toast_cert_install_not_finished">未完成证书安装</string>
+    <string name="settings_section_browser_home">浏览器首页</string>
+    <string name="settings_browser_home_hint">输入 WWWBrowser 首页网址</string>
+    <string name="settings_browser_home_save">保存</string>
+    <string name="settings_browser_home_reset">恢复默认</string>
+    <string name="settings_browser_home_desc">保存后，WWWBrowser 浏览器启动与点击主页按钮时打开此网址；恢复默认回到 https://www.studio.winboll.cc。</string>
+    <string name="toast_home_url_empty">首页网址不能为空</string>
+    <string name="toast_home_url_invalid">首页网址需以 http:// 或 https:// 开头</string>
+    <string name="toast_home_url_saved">首页已保存</string>
+    <string name="toast_home_url_reset">已恢复默认首页</string>
 </resources>

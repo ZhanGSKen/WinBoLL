@@ -7,8 +7,7 @@ package cc.winboll.studio.libaes.enums;
  */
 public enum ADsMode {
     STANDALONE("单机模式"),  // 单机模式（默认）
-    MIMO_SDK("米盟广告SDK支持模式"),  // 米盟广告SDK模式
-    STORE_QRCODE("云宝物语模式");  // 米盟广告SDK模式
+    STORE_QRCODE("云宝物语模式");  // 云宝物语模式
 
     private final String modeName;
 

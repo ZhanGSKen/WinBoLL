@@ -92,9 +92,9 @@ dependencies {
     implementation "io.noties.markwon:linkify:$markwonVersion"
     implementation "io.noties.markwon:recycler:$markwonVersion"
 	*/
-	implementation 'com.termux:terminal-emulator:0.118.0'
-	implementation 'com.termux:terminal-view:0.118.0'
-	implementation 'com.termux:termux-shared:0.118.0'
+	// Termux terminal is NOT bundled: it runs in a separate standalone Termux app
+	// and is only invoked through the RUN_COMMAND Intent interface (see
+	// TermuxCommandExecutor), so no com.termux GPL-3.0 libraries are linked here.
 
 	// Biometric (指纹识别)
 	implementation 'androidx.biometric:biometric:1.1.0'
@@ -104,8 +104,8 @@ dependencies {
     api 'cc.winboll.studio:libaes:15.21.+'
 	
 	// 备用库 jitpack.io 地址
-	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.33'
-	//api 'com.github.ZhanGSKen:libaes:aes-v15.20.16'
+	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.21.+'
+	//api 'com.github.ZhanGSKen:libaes:aes-v15.21.+'
 	
 	api fileTree(dir: 'libs', include: ['*.jar'])
 }

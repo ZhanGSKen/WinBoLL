@@ -39,10 +39,7 @@ android {
         }
     }
 	
-	// 米盟 SDK
-    packagingOptions {
-         doNotStrip "*/*/libmimo_1011.so"
-    }
+	// 米盟 SDK 已移除
 }
 
 dependencies {
