@@ -8,6 +8,9 @@
     <!-- 拥有完全的网络访问权限 -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- 前台媒体播放服务（网页音频后台播放通知栏） -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
     <!-- 发送持久广播 -->
     <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
 
@@ -48,6 +51,18 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="http"/>
                 <data android:scheme="https"/>
+            </intent-filter>
+
+            <!-- 注册为音乐播放器：可作为音频文件的打开方式（音乐播放器列表） -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.MUSIC_PLAYER"/>
+                <data android:scheme="file"/>
+                <data android:scheme="content"/>
+                <data android:scheme="http"/>
+                <data android:scheme="https"/>
+                <data android:mimeType="audio/*"/>
             </intent-filter>
 
         </activity>
@@ -179,6 +194,21 @@
             android:exported="true"/>
 
         <service android:name=".services.AssistantService"/>
+
+        <!-- 注册为音乐播放器：MediaBrowserService + MediaSession，
+             网页音频播放时展示常驻媒体控制通知栏（播放/暂停/停止） -->
+        <service
+            android:name=".services.MediaPlaybackService"
+            android:exported="true"
+            android:permission="android.permission.BIND_MEDIA_BROWSER">
+
+            <intent-filter>
+
+                <action android:name="android.media.browse.MediaBrowserService"/>
+
+            </intent-filter>
+
+        </service>
 
         <receiver
             android:name="cc.winboll.studio.appbase.receivers.MainReceiver"
