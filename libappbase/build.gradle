@@ -26,4 +26,9 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
+    api 'com.google.code.gson:gson:2.10.1'
+    api 'com.squareup.okhttp3:okhttp:4.4.1'
+    api 'com.jcraft:jsch:0.1.55'
+    api 'com.sun.mail:android-mail:1.6.7'
+    api 'com.sun.mail:android-activation:1.6.7'
 }
