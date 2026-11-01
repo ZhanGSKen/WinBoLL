@@ -32,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import cc.winboll.studio.winboll.R;
+import cc.winboll.studio.winboll.media.MidiBridge;
 import cc.winboll.studio.winboll.services.MediaPlaybackService;
 
 public class WWWBrowserFragment extends Fragment implements View.OnClickListener,
@@ -249,6 +250,10 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
         initWebView();
 
         // Register as the media playback controller and start audio state polling.
+        MidiBridge.init(getActivity());
+        // action:home without a usable url falls back to the browser home
+        // (spec §3.1) — feed it the same home the UI uses.
+        MidiBridge.setDefaultHomeUrl(getHomeUrl());
         MediaPlaybackService.setPlaybackController(this);
         startAudioPoll();
 
@@ -345,10 +350,30 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
         // Allow audio to start without a direct user gesture so that the
         // notification play button can resume background web page audio.
         ws.setMediaPlaybackRequiresUserGesture(false);
+        // MIDI bridge (spec v1.2 §5): bind the WebView for native -> web control
+        // dispatch. The interface must be registered BEFORE the first loadUrl so
+        // it is bound when the page's window object is created (injecting in
+        // onPageStarted races fast/cached loads and stays invisible). Per-page
+        // whitelist add/remove below keeps it off non-whitelisted pages.
+        MidiBridge.attach(mWebView);
+        mWebView.addJavascriptInterface(MidiBridge.getJavascriptInterface(),
+            MidiBridge.JS_INTERFACE_NAME);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                // MIDI bridge (spec §5/§8): inject the native bridge only for
+                // whitelisted URL hosts, remove it elsewhere. Also resets the
+                // per-page protocol engagement flag.
+                MidiBridge.onPageStarted(url);
+                if (MidiBridge.isWhitelistedUrl(url)) {
+                    view.addJavascriptInterface(MidiBridge.getJavascriptInterface(),
+                        MidiBridge.JS_INTERFACE_NAME);
+                    android.util.Log.d("MidiBridge", "bridge injected for " + url);
+                } else {
+                    view.removeJavascriptInterface(MidiBridge.JS_INTERFACE_NAME);
+                    android.util.Log.d("MidiBridge", "bridge removed (non-whitelist) " + url);
+                }
                 // Inject as early as possible so AudioContext instances created by
                 // page scripts are wrapped for playback state probing.
                 injectAudioPatch();
@@ -359,6 +384,9 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
                 super.onPageFinished(view, url);
                 // Re-inject (idempotent) for pages whose scripts ran before the patch.
                 injectAudioPatch();
+                // Diagnostic: report bridge visibility to the console (WBWebConsole).
+                view.evaluateJavascript(
+                    "(function(){try{console.log('WB-BRIDGE-CHECK '+(typeof window.WinBollMedia));}catch(e){}})()", null);
             }
         });
         mWebView.setWebChromeClient(new WebChromeClient() {
@@ -393,6 +421,12 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
      */
     private void pollAudioState() {
         if (mWebView == null) {
+            return;
+        }
+        // MIDI bridge engaged (protocol page) or cover-hosted: the bridge and
+        // the native engine own the session state. The heuristic probe must not
+        // fight them (spec v1.2 §6 routing).
+        if (MidiBridge.isProtocolEngaged() || MidiBridge.isHosting()) {
             return;
         }
         // Belt and braces: keep the patch installed even if early injection raced
@@ -438,9 +472,15 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
     }
 
     // ------------------- MediaPlaybackService.PlaybackController -------------------
+    // Routing (spec v1.2 §6): cover-hosted playback drives the native MIDI
+    // engine directly; protocol pages receive __midiControl commands; other
+    // pages fall back to the heuristic injected-JS suspend/resume patch.
 
     @Override
     public void onPlayRequested() {
+        if (MidiBridge.onMediaPlayCommand()) {
+            return;
+        }
         if (mWebView != null) {
             mWebView.evaluateJavascript(JS_AUDIO_PLAY_ALL, null);
         }
@@ -448,6 +488,9 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onPauseRequested() {
+        if (MidiBridge.onMediaPauseCommand()) {
+            return;
+        }
         if (mWebView != null) {
             mWebView.evaluateJavascript(JS_AUDIO_PAUSE_ALL, null);
         }
@@ -455,9 +498,29 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onStopRequested() {
+        if (MidiBridge.onMediaStopCommand()) {
+            return;
+        }
         if (mWebView != null) {
             mWebView.evaluateJavascript(JS_AUDIO_STOP_ALL, null);
         }
+    }
+
+    @Override
+    public void onSeekRequested(long positionMs) {
+        // Protocol/hosted only: the heuristic channel has no position concept.
+        MidiBridge.onMediaSeekCommand(positionMs);
+    }
+
+    @Override
+    public void onSkipToNextRequested() {
+        // Skip exists only in hosted mode (spec §6).
+        MidiBridge.onMediaSkipCommand(true);
+    }
+
+    @Override
+    public void onSkipToPreviousRequested() {
+        MidiBridge.onMediaSkipCommand(false);
     }
 
     @Override
@@ -565,6 +628,41 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
     }
 
     // 生命周期管理：销毁 WebView，避免内存泄漏
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // MIDI bridge spec §8: the page is visible again — flush any control
+        // command that was queued while hidden.
+        MidiBridge.setPageVisible(true);
+    }
+
+    /**
+     * Drawer navigation switches fragments with show/hide instead of replace,
+     * so page visibility must also be tracked here (spec §8 dispatch gate).
+     */
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        MidiBridge.setPageVisible(!hidden);
+        if (hidden) {
+            // Same §4.3-③ nudge as onPause: leaving a playing protocol page
+            // steers the session toward cover hosting.
+            MidiBridge.nudgeHostRequest();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // MIDI bridge spec §8: page hidden — non-hosted control commands queue.
+        MidiBridge.setPageVisible(false);
+        // MIDI bridge spec §4.3-③: app going to the background while a protocol
+        // page is playing triggers the browser-initiated hosting negotiation
+        // (the page's own visibilitychange is unreliable in WebView).
+        MidiBridge.nudgeHostRequest();
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -572,7 +670,12 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
         mAudioPollRunning = false;
         mAudioPollHandler.removeCallbacksAndMessages(null);
         MediaPlaybackService.setPlaybackController(null);
-        if (mLastAudioPlaying && getActivity() != null) {
+        // MIDI bridge: unbind the WebView. Hosted playback keeps running in the
+        // foreground service (spec §4.2 D-2), so only the heuristic path tears
+        // the notification down with the page.
+        boolean hosting = MidiBridge.isHosting();
+        MidiBridge.detach(mWebView);
+        if (!hosting && mLastAudioPlaying && getActivity() != null) {
             // Page audio dies with the WebView: dismiss the media notification.
             mLastAudioPlaying = false;
             MediaPlaybackService.stopService(getActivity().getApplicationContext());

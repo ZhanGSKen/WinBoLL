@@ -4,10 +4,15 @@ package cc.winboll.studio.winboll.services;
  * @Author ZhanGSKen&豆包大模型<zhangsken@qq.com>
  * @Describe Foreground media playback service for web page audio (Java 7 syntax).
  * Registers the app as a music player via MediaBrowserService + MediaSession,
- * and shows a persistent media notification with Play/Pause/Stop controls while
- * the WWWBrowser WebView is playing audio.
+ * and shows a persistent media notification with transport controls while the
+ * WWWBrowser WebView (or the hosted native MIDI engine) is playing audio.
  * Zero external dependencies: uses framework android.media.session.MediaSession
  * and Notification.MediaStyle only (no androidx.media / support libs).
+ *
+ * MIDI bridge spec v1.2 (§6): the session carries real position/duration/rate
+ * and handles seek (+ next/previous while hosted). Callbacks route to the
+ * WebView owner (protocol pages -> __midiControl, heuristic pages -> injected
+ * JS) or straight to the native engine in cover-hosting mode.
  */
 
 import android.app.Notification;
@@ -29,6 +34,7 @@ import java.util.List;
 
 import cc.winboll.studio.winboll.MainActivity;
 import cc.winboll.studio.winboll.R;
+import cc.winboll.studio.winboll.media.MidiBridge;
 
 public class MediaPlaybackService extends MediaBrowserService {
 
@@ -43,6 +49,17 @@ public class MediaPlaybackService extends MediaBrowserService {
     // Intent extras
     public static final String EXTRA_PLAYING = "playing";
     public static final String EXTRA_TITLE = "title";
+    public static final String EXTRA_ARTIST = "artist";
+    public static final String EXTRA_STATE = "state";
+    public static final String EXTRA_POSITION = "position";
+    public static final String EXTRA_DURATION = "duration";
+    public static final String EXTRA_RATE = "rate";
+    public static final String EXTRA_HOSTED = "hosted";
+
+    // Playback states (aligned with PlaybackState constants).
+    public static final int PLAY_STATE_STOPPED = 1;
+    public static final int PLAY_STATE_PAUSED = 2;
+    public static final int PLAY_STATE_PLAYING = 3;
 
     // MediaSession / notification identifiers
     public static final String MEDIA_SESSION_TAG = "WinBoLLWebAudio";
@@ -57,6 +74,12 @@ public class MediaPlaybackService extends MediaBrowserService {
         void onPauseRequested();
 
         void onStopRequested();
+
+        void onSeekRequested(long positionMs);
+
+        void onSkipToNextRequested();
+
+        void onSkipToPreviousRequested();
     }
 
     private static volatile PlaybackController sController;
@@ -67,18 +90,26 @@ public class MediaPlaybackService extends MediaBrowserService {
     }
 
     /**
-     * Push playback state from the WebView poller into the service.
-     * Starts the service in foreground when playing; updates notification otherwise.
+     * Push a full playback snapshot into the service (MIDI bridge spec §6).
+     * Starts the service in foreground when playing; updates or dismisses the
+     * notification otherwise.
      */
-    public static void pushState(Context context, boolean playing, String title) {
+    public static void pushState(Context context, int playState, long positionMs,
+                                 long durationMs, float rate, String title, String artist,
+                                 boolean hosted) {
         if (context == null) {
             return;
         }
         Intent intent = new Intent(context, MediaPlaybackService.class);
         intent.setAction(ACTION_STATE_CHANGED);
-        intent.putExtra(EXTRA_PLAYING, playing);
+        intent.putExtra(EXTRA_STATE, playState);
+        intent.putExtra(EXTRA_POSITION, positionMs);
+        intent.putExtra(EXTRA_DURATION, durationMs);
+        intent.putExtra(EXTRA_RATE, rate);
         intent.putExtra(EXTRA_TITLE, title);
-        if (playing) {
+        intent.putExtra(EXTRA_ARTIST, artist);
+        intent.putExtra(EXTRA_HOSTED, hosted);
+        if (playState == PLAY_STATE_PLAYING) {
             // Must use startForegroundService: app may be in background when audio starts.
             context.startForegroundService(intent);
         } else {
@@ -88,6 +119,15 @@ public class MediaPlaybackService extends MediaBrowserService {
                 // Background start blocked and service not running: nothing to update.
             }
         }
+    }
+
+    /**
+     * Legacy boolean snapshot used by the heuristic web-audio poller.
+     * false maps to PAUSED (bar stays with a play button, as before).
+     */
+    public static void pushState(Context context, boolean playing, String title) {
+        pushState(context, playing ? PLAY_STATE_PLAYING : PLAY_STATE_PAUSED,
+            0, 0, 1.0f, title, "WinBoLL+ WWWBrowser", false);
     }
 
     /** Stop playback service and remove the notification. */
@@ -105,17 +145,23 @@ public class MediaPlaybackService extends MediaBrowserService {
     }
 
     private MediaSession mSession;
-    private boolean mPlaying = false;
+    private int mPlayState = PLAY_STATE_STOPPED;
+    private boolean mHosted = false;
+    private long mPositionMs = 0;
+    private long mDurationMs = 0;
+    private float mRate = 1.0f;
     // True once this service instance has served actual playback. Used to avoid
     // resurrecting the notification after an explicit stop: the WebView poller
     // may deliver one final "stopped" update which would restart a fresh service
     // instance; a never-playing instance dismisses itself silently.
     private boolean mEverPlaying = false;
     private String mTitle = "WinBoLL+ 网页音频";
+    private String mArtist = "WinBoLL+ WWWBrowser";
 
     @Override
     public void onCreate() {
         super.onCreate();
+        MidiBridge.init(this);
         createNotificationChannel();
         mSession = new MediaSession(this, MEDIA_SESSION_TAG);
         mSession.setCallback(new MediaSession.Callback() {
@@ -132,6 +178,21 @@ public class MediaPlaybackService extends MediaBrowserService {
             @Override
             public void onStop() {
                 dispatchStop();
+            }
+
+            @Override
+            public void onSeekTo(long pos) {
+                dispatchSeek(pos);
+            }
+
+            @Override
+            public void onSkipToNext() {
+                dispatchSkip(true);
+            }
+
+            @Override
+            public void onSkipToPrevious() {
+                dispatchSkip(false);
             }
         });
         // Open the browser UI when the notification body is tapped.
@@ -151,6 +212,22 @@ public class MediaPlaybackService extends MediaBrowserService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent != null ? intent.getAction() : null;
+        if (action == null) {
+            // Sticky restart after process death: restore hosted MIDI playback
+            // from the persisted snapshot (bridge spec §3.1 recovery), or stop.
+            if (MidiBridge.restoreHostedPlayback(this)) {
+                mHosted = true;
+                mEverPlaying = true;
+                mPlayState = PLAY_STATE_PLAYING;
+                mTitle = "WinBoLL MIDI 播放器";
+                mArtist = "WinBoLL MIDI 播放器";
+                startForeground(NOTIFICATION_ID, buildNotification());
+                updatePlaybackState();
+                return START_STICKY;
+            }
+            stopSelf();
+            return START_NOT_STICKY;
+        }
         if (ACTION_PLAY.equals(action)) {
             dispatchPlay();
         } else if (ACTION_PAUSE.equals(action)) {
@@ -159,51 +236,77 @@ public class MediaPlaybackService extends MediaBrowserService {
             dispatchStop();
         } else if (ACTION_STATE_CHANGED.equals(action)) {
             if (intent != null) {
-                mPlaying = intent.getBooleanExtra(EXTRA_PLAYING, false);
+                if (intent.hasExtra(EXTRA_STATE)) {
+                    mPlayState = intent.getIntExtra(EXTRA_STATE, PLAY_STATE_STOPPED);
+                } else {
+                    mPlayState = intent.getBooleanExtra(EXTRA_PLAYING, false)
+                        ? PLAY_STATE_PLAYING : PLAY_STATE_PAUSED;
+                }
+                mPositionMs = intent.getLongExtra(EXTRA_POSITION, 0);
+                mDurationMs = intent.getLongExtra(EXTRA_DURATION, 0);
+                mRate = intent.getFloatExtra(EXTRA_RATE, 1.0f);
+                mHosted = intent.getBooleanExtra(EXTRA_HOSTED, false);
                 String title = intent.getStringExtra(EXTRA_TITLE);
                 if (title != null && title.length() > 0) {
                     mTitle = title;
                 }
+                String artist = intent.getStringExtra(EXTRA_ARTIST);
+                if (artist != null && artist.length() > 0) {
+                    mArtist = artist;
+                }
             }
-            if (mPlaying) {
+            if (mPlayState == PLAY_STATE_PLAYING) {
                 mEverPlaying = true;
                 startForeground(NOTIFICATION_ID, buildNotification());
             } else if (!mEverPlaying) {
-                // Fresh instance receiving only "stopped" (post-stop poll update):
-                // dismiss silently instead of resurrecting the paused notification.
+                // Fresh instance receiving only a non-playing update (post-stop
+                // poll update): dismiss instead of resurrecting a notification.
                 stopSelf();
                 return START_NOT_STICKY;
-            } else {
+            } else if (mPlayState == PLAY_STATE_PAUSED) {
                 // Paused: keep the bar visible (play button) while service alive;
                 // actual dismissal happens on explicit stop.
                 NotificationManager nm = getNotificationManager();
                 if (nm != null) {
                     nm.notify(NOTIFICATION_ID, buildNotification());
                 }
+            } else {
+                // Stopped (bridge spec §6): deactivate the session and dismiss.
+                updatePlaybackState();
+                if (mSession != null) {
+                    mSession.setActive(false);
+                }
+                stopForeground(true);
+                stopSelf();
+                return START_NOT_STICKY;
             }
             updatePlaybackState();
         }
         return START_STICKY;
     }
 
-    /** Media button / notification play: resume web page audio. */
+    /** Media button / notification play: resume audio (engine or web page). */
     private void dispatchPlay() {
-        mPlaying = true;
+        mPlayState = PLAY_STATE_PLAYING;
         mEverPlaying = true;
         PlaybackController controller = sController;
         if (controller != null) {
             controller.onPlayRequested();
+        } else {
+            MidiBridge.onMediaPlayCommand();
         }
         startForeground(NOTIFICATION_ID, buildNotification());
         updatePlaybackState();
     }
 
-    /** Media button / notification pause: suspend web page audio (bar stays). */
+    /** Media button / notification pause: suspend audio (bar stays). */
     private void dispatchPause() {
-        mPlaying = false;
+        mPlayState = PLAY_STATE_PAUSED;
         PlaybackController controller = sController;
         if (controller != null) {
             controller.onPauseRequested();
+        } else {
+            MidiBridge.onMediaPauseCommand();
         }
         NotificationManager nm = getNotificationManager();
         if (nm != null) {
@@ -212,32 +315,83 @@ public class MediaPlaybackService extends MediaBrowserService {
         updatePlaybackState();
     }
 
-    /** Media button / notification stop: stop web page audio and dismiss the bar. */
+    /** Media button / notification stop: stop audio and dismiss the bar. */
     private void dispatchStop() {
-        mPlaying = false;
+        mPlayState = PLAY_STATE_STOPPED;
         PlaybackController controller = sController;
         if (controller != null) {
             controller.onStopRequested();
+        } else {
+            MidiBridge.onMediaStopCommand();
         }
         updatePlaybackState();
         stopForeground(true);
         stopSelf();
     }
 
+    /** Seek from the system media controls (bridge spec §6 ACTION_SEEK_TO). */
+    private void dispatchSeek(long positionMs) {
+        mPositionMs = Math.max(0, positionMs);
+        PlaybackController controller = sController;
+        if (controller != null) {
+            controller.onSeekRequested(mPositionMs);
+        } else {
+            MidiBridge.onMediaSeekCommand(mPositionMs);
+        }
+        updatePlaybackState();
+    }
+
+    /** Skip to next/previous track (hosted mode only, bridge spec §6). */
+    private void dispatchSkip(boolean next) {
+        PlaybackController controller = sController;
+        boolean handled = false;
+        if (controller != null) {
+            if (next) {
+                controller.onSkipToNextRequested();
+            } else {
+                controller.onSkipToPreviousRequested();
+            }
+            handled = true;
+        } else {
+            handled = MidiBridge.onMediaSkipCommand(next);
+        }
+        if (handled) {
+            updatePlaybackState();
+        }
+    }
+
     private void updatePlaybackState() {
         if (mSession == null) {
             return;
         }
-        int state = mPlaying ? PlaybackState.STATE_PLAYING : PlaybackState.STATE_PAUSED;
-        long actions = PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_STOP;
+        int state;
+        if (mPlayState == PLAY_STATE_PLAYING) {
+            state = PlaybackState.STATE_PLAYING;
+        } else if (mPlayState == PLAY_STATE_PAUSED) {
+            state = PlaybackState.STATE_PAUSED;
+        } else {
+            state = PlaybackState.STATE_STOPPED;
+        }
+        long actions = PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PAUSE
+            | PlaybackState.ACTION_STOP | PlaybackState.ACTION_SEEK_TO;
+        if (mHosted) {
+            actions |= PlaybackState.ACTION_SKIP_TO_NEXT
+                | PlaybackState.ACTION_SKIP_TO_PREVIOUS;
+        }
         mSession.setPlaybackState(new PlaybackState.Builder()
-            .setState(state, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f)
+            .setState(state, mPositionMs, mRate)
             .setActions(actions)
             .build());
-        mSession.setMetadata(new MediaMetadata.Builder()
+        MediaMetadata.Builder meta = new MediaMetadata.Builder()
             .putString(MediaMetadata.METADATA_KEY_TITLE, mTitle)
-            .putString(MediaMetadata.METADATA_KEY_ARTIST, "WinBoLL+ WWWBrowser")
-            .build());
+            .putString(MediaMetadata.METADATA_KEY_ARTIST, mArtist);
+        if (mDurationMs > 0) {
+            meta.putLong(MediaMetadata.METADATA_KEY_DURATION, mDurationMs);
+        }
+        mSession.setMetadata(meta.build());
+        // Bridge spec §6: non-hosted sessions deactivate on stop (bar removed);
+        // hosted sessions stay active while the native engine owns playback.
+        mSession.setActive(mPlayState != PLAY_STATE_STOPPED || mHosted);
     }
 
     private Notification buildNotification() {
@@ -266,17 +420,24 @@ public class MediaPlaybackService extends MediaBrowserService {
         Notification.Action stopAction = new Notification.Action.Builder(
             android.R.drawable.ic_media_previous, "停止", stopPi).build();
 
+        String contentText;
+        if (mPlayState == PLAY_STATE_PLAYING) {
+            contentText = mHosted ? "MIDI 播放托管中（原生合成）" : "网页音频播放中（后台持续播放）";
+        } else {
+            contentText = "播放已暂停";
+        }
+
         Notification.Builder builder = new Notification.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_winboll_logo)
             .setContentTitle(mTitle)
-            .setContentText(mPlaying ? "网页音频播放中（后台持续播放）" : "网页音频已暂停")
+            .setContentText(contentText)
             .setContentIntent(contentPi)
-            .setOngoing(mPlaying)
+            .setOngoing(mPlayState == PLAY_STATE_PLAYING)
             .setShowWhen(false)
             .setStyle(new Notification.MediaStyle()
                 .setMediaSession(mSession.getSessionToken())
                 .setShowActionsInCompactView(0, 1))
-            .addAction(mPlaying ? pauseAction : playAction)
+            .addAction(mPlayState == PLAY_STATE_PLAYING ? pauseAction : playAction)
             .addAction(stopAction);
         return builder.build();
     }
@@ -305,13 +466,13 @@ public class MediaPlaybackService extends MediaBrowserService {
     @Override
     public BrowserRoot onGetRoot(String clientPackageName, int clientUid, Bundle rootHints) {
         // Accept any media browser client; playback control is limited to
-        // play/pause/stop of the current web page audio via MediaSession.
+        // transport controls of the current audio via MediaSession.
         return new BrowserRoot(MEDIA_BROWSER_ROOT_ID, null);
     }
 
     @Override
     public void onLoadChildren(String parentId, Result<List<android.media.browse.MediaBrowser.MediaItem>> result) {
-        // No browsable media tree: this player controls live web page audio only.
+        // No browsable media tree: this player controls live playback only.
         result.sendResult(Collections.<android.media.browse.MediaBrowser.MediaItem>emptyList());
     }
 
