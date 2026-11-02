@@ -17,6 +17,7 @@ import android.media.PlaybackParams;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Base64;
 import android.util.Log;
 
 import java.io.File;
@@ -26,6 +27,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
+
+import cc.winboll.studio.winboll.utils.HttpAuthHelper;
 
 public class HostedMidiPlayer {
 
@@ -464,6 +467,18 @@ public class HostedMidiPlayer {
                 conn.setConnectTimeout(15000);
                 conn.setReadTimeout(30000);
                 conn.setInstanceFollowRedirects(false);
+                // HTTP Auth (spec §3.1: native engine pulls tracks[].url; on
+                // auth-protected deployments those URLs live inside the same
+                // protection space as the browsed page). Reuse the credentials
+                // HttpAuthHelper kept from the WebView session. Scoped per hop
+                // host so redirects never leak Authorization cross-host.
+                String[] cred = HttpAuthHelper.getCredentialsForHost(
+                    mAppContext, url.getHost());
+                if (cred != null) {
+                    String token = Base64.encodeToString(
+                        (cred[0] + ":" + cred[1]).getBytes("UTF-8"), Base64.NO_WRAP);
+                    conn.setRequestProperty("Authorization", "Basic " + token);
+                }
                 code = conn.getResponseCode();
                 if (code == 301 || code == 302 || code == 303
                         || code == 307 || code == 308) {

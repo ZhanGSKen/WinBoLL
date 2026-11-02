@@ -115,6 +115,15 @@ public class WinBoLLView extends WebView {
 						mStatusListener.onPageError(errorMsg);
 					}
 				}
+
+				@Override
+				public void onReceivedHttpAuthRequest(WebView view,
+													  android.webkit.HttpAuthHandler handler,
+													  String host, String realm) {
+					// HTTP Auth（Basic/Digest）网页验证：弹窗输入凭据并保持登录状态。
+					cc.winboll.studio.winboll.utils.HttpAuthHelper.handle(
+						getContext(), view, handler, host, realm);
+				}
 			});
 
 		// 监听页面加载进度

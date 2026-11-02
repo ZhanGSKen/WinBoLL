@@ -50,6 +50,7 @@ public final class MidiBridge {
     private static final String[] HOST_WHITELIST = {
         "www.winboll.cc",
         "winboll.cc",
+        "develop.winboll.cc", // develop/test site (HTTP Auth test station)
         "management-develop.winboll.cc",
         "management-develop.studio.winboll",
         "develop.studio.winboll",

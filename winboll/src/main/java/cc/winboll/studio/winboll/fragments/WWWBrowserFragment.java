@@ -388,6 +388,15 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
                 view.evaluateJavascript(
                     "(function(){try{console.log('WB-BRIDGE-CHECK '+(typeof window.WinBollMedia));}catch(e){}})()", null);
             }
+
+            @Override
+            public void onReceivedHttpAuthRequest(WebView view,
+                                                  android.webkit.HttpAuthHandler handler,
+                                                  String host, String realm) {
+                // HTTP Auth（Basic/Digest）网页验证：弹窗输入凭据并保持登录状态。
+                cc.winboll.studio.winboll.utils.HttpAuthHelper.handle(
+                    getActivity(), view, handler, host, realm);
+            }
         });
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
