@@ -43,6 +43,15 @@ public final class MidiBridge {
     private static final int MAX_POST_STATE_CHARS = 16384;
 
     /**
+     * How long a host request waits for the trailing playlist message before
+     * giving up (spec §4.3-②: the page sends host first and pushPlaylist()
+     * right after, so the playlist may still be in flight when the host
+     * message is processed — observed 2026-11-03 as "hosting aborted: no
+     * playlist entry" racing the 9KB playlist parse).
+     */
+    private static final long HOST_PLAYLIST_WAIT_MS = 2000;
+
+    /**
      * URL host whitelist for bridge injection (spec §8: www.winboll.cc,
      * winboll.cc and the intranet management domains mirroring the web-side
      * ALLOWED_MANAGER_DOMAINS config).
@@ -110,6 +119,15 @@ public final class MidiBridge {
     // the cover-hosting takeover (spec §4.3-③) and lands on the native engine.
     private static volatile String sQueuedCmd = null;
     private static volatile long sQueuedCmdPos = -1;
+
+    /** Pending host request waiting for the trailing playlist (spec §4.3-②). */
+    private static boolean sHostPendingRetry = false;
+    private static String sHostPendingTrackId;
+    private static String sHostPendingTitle;
+    private static long sHostPendingStartMs;
+    private static float sHostPendingRate = 1.0f;
+    private static boolean sHostPendingLoop;
+    private static boolean sHostPendingPaused;
 
     /** Spec §9 idiom: a host negotiation that gets no ACK within 3s falls
      *  back to non-hosted mode — the queued command is delivered anyway. */
@@ -545,10 +563,10 @@ public final class MidiBridge {
             // of auto-playing under the user.
             startHostedPlayback(trackId, title, sHostWebPositionMs, sHostWebRate, sHostWebLoop,
                 sHostWebState != STATE_PLAYING);
-            // A hidden-page command queued ahead of the takeover now lands on
-            // the native engine (spec §8: hosted mode is driven natively).
-            drainQueuedCommandToEngine();
         } else {
+            // A pending deferred takeover is cancelled by this unhost/query.
+            sHostPendingRetry = false;
+            sMain.removeCallbacks(sHostPendingTimeout);
             if (!sHosting) {
                 // Host-query (spec §4.3-C): not hosting -> normal non-hosted session.
                 return;
@@ -616,6 +634,13 @@ public final class MidiBridge {
             prefs().edit().putString(KEY_PLAYLIST_JSON, save.toString()).apply();
         } catch (Exception e) {
             Log.w(TAG, "playlist persist failed: " + e.getMessage());
+        }
+        // A host request deferred for this playlist now completes (§4.3-②).
+        if (sHostPendingRetry) {
+            sHostPendingRetry = false;
+            Log.d(TAG, "host retry: playlist arrived");
+            startHostedPlayback(sHostPendingTrackId, sHostPendingTitle, sHostPendingStartMs,
+                sHostPendingRate, sHostPendingLoop, sHostPendingPaused);
         }
     }
 
@@ -822,13 +847,51 @@ public final class MidiBridge {
 
     // ------------------- hosted engine (spec §4) -------------------
 
+    /** Timeout for a host request that never saw its trailing playlist. */
+    private static final Runnable sHostPendingTimeout = new Runnable() {
+        @Override
+        public void run() {
+            if (!sHostPendingRetry) {
+                return;
+            }
+            sHostPendingRetry = false;
+            Log.w(TAG, "hosting aborted: playlist never arrived");
+            sHosting = false;
+            saveHostPrefs(false, STATE_STOPPED, "", "", 0, 1.0f, false);
+            sendControlUnhost(sHostWebState, sHostWebPositionMs,
+                sHostPendingTrackId != null ? sHostPendingTrackId : "",
+                sHostPendingTitle != null ? sHostPendingTitle : "",
+                sHostPendingRate, sHostPendingLoop);
+        }
+    };
+
     private static void startHostedPlayback(String trackId, String title, long startPosMs,
                                             float rate, boolean loop, boolean startPaused) {
         HostedMidiPlayer.Track track = findTrack(trackId, title);
         if (track == null) {
-            // No usable playlist entry: unwind hosting gracefully so the web
-            // synthesizer resumes (spec §9 hosting capability fallback).
+            // Spec §4.3-② pushes the playlist right after the host message, so
+            // when no playlist has landed yet the entry may simply still be in
+            // flight: defer and let handlePlaylist retry (avoids the abort race
+            // seen on 2026-11-03 AVD matrix), instead of unwinding. A repeat
+            // call inside the wait window (e.g. skip track) just refreshes the
+            // pending snapshot.
+            if (sTracks.isEmpty()) {
+                Log.d(TAG, "host deferred: playlist not yet received for " + trackId);
+                sHostPendingRetry = true;
+                sHostPendingTrackId = trackId;
+                sHostPendingTitle = title;
+                sHostPendingStartMs = startPosMs;
+                sHostPendingRate = rate;
+                sHostPendingLoop = loop;
+                sHostPendingPaused = startPaused;
+                sMain.removeCallbacks(sHostPendingTimeout);
+                sMain.postDelayed(sHostPendingTimeout, HOST_PLAYLIST_WAIT_MS);
+                return;
+            }
+            // Playlist is present but has no usable entry: unwind hosting
+            // gracefully so the web synthesizer resumes (spec §9 fallback).
             Log.w(TAG, "hosting aborted: no playlist entry for " + trackId);
+            sHostPendingRetry = false;
             sHosting = false;
             saveHostPrefs(false, STATE_STOPPED, "", "", 0, 1.0f, false);
             sendControlUnhost(sHostWebState, sHostWebPositionMs,
@@ -836,11 +899,16 @@ public final class MidiBridge {
                 rate, loop);
             return;
         }
+        sHostPendingRetry = false;
+        sMain.removeCallbacks(sHostPendingTimeout);
         if (sEngine == null) {
             sEngine = new HostedMidiPlayer(appContext(), sEngineListener);
         }
         sEngine.playTrack(track, startPosMs, rate, loop, startPaused);
         startPositionTick();
+        // A hidden-page command queued ahead of the takeover now lands on
+        // the native engine (spec §8: hosted mode is driven natively).
+        drainQueuedCommandToEngine();
     }
 
     private static void stopHostedPlayback() {
