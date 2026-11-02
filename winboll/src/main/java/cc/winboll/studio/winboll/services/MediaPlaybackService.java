@@ -23,7 +23,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.service.media.MediaBrowserService;
 import android.media.MediaMetadata;
 import android.media.session.MediaSession;
@@ -160,6 +162,48 @@ public class MediaPlaybackService extends MediaBrowserService {
     private String mTitle = "WinBoLL+ 网页音频";
     private String mArtist = "WinBoLL+ WWWBrowser";
 
+    // --- Seekbar drag smoothing (bridge spec §6 ACTION_SEEK_TO) ---
+    // The system seekbar fires onSeekTo continuously while the thumb is being
+    // dragged. Running a real seek (engine prepare / web JS reschedule) per
+    // tick is heavy and each resulting state push used to rebuild the whole
+    // notification, which resets the SystemUI thumb mid-drag (jerky scrubbing).
+    // Instead: track the thumb position instantly and coalesce the real seek
+    // to one dispatch after the drag settles (SEEK_SETTLE_MS of quiet).
+    private static final long SEEK_SETTLE_MS = 180;
+    private final Handler mMainHandler = new Handler(Looper.getMainLooper());
+    private long mPendingSeekPos = -1;
+    private boolean mSeekPending = false;
+    private final Runnable mSeekDispatch = new Runnable() {
+        @Override
+        public void run() {
+            mSeekPending = false;
+            mScrubbing = false;
+            long pos = mPendingSeekPos;
+            mPendingSeekPos = -1;
+            PlaybackController controller = sController;
+            if (controller != null) {
+                controller.onSeekRequested(pos);
+            } else {
+                MidiBridge.onMediaSeekCommand(pos);
+            }
+        }
+    };
+    // While a drag is in progress, ignore position overwrites from heartbeat
+    // state pushes so the thumb does not fight the finger.
+    private volatile boolean mScrubbing = false;
+
+    // Notification rebuild dedup: only re-post when visible content changes
+    // (play/pause icon, title, hosted text). Position-only updates go through
+    // PlaybackState alone (the session moves the seekbar smoothly by itself).
+    private int mPostedState = 0;
+    private String mPostedTitle = null;
+    private boolean mPostedHosted = false;
+    private String mPostedText = null;
+    // Metadata rebuild dedup (see updatePlaybackState).
+    private String mMetaTitle = null;
+    private String mMetaArtist = null;
+    private long mMetaDuration = -1;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -224,6 +268,7 @@ public class MediaPlaybackService extends MediaBrowserService {
                 mTitle = "WinBoLL MIDI 播放器";
                 mArtist = "WinBoLL MIDI 播放器";
                 startForeground(NOTIFICATION_ID, buildNotification());
+                markNotificationPosted();
                 updatePlaybackState();
                 return START_STICKY;
             }
@@ -248,7 +293,12 @@ public class MediaPlaybackService extends MediaBrowserService {
                     mPlayState = intent.getBooleanExtra(EXTRA_PLAYING, false)
                         ? PLAY_STATE_PLAYING : PLAY_STATE_PAUSED;
                 }
-                mPositionMs = intent.getLongExtra(EXTRA_POSITION, 0);
+                // While the user is scrubbing the notification seekbar, do not
+                // let heartbeat/poll positions overwrite the thumb location.
+                long newPos = intent.getLongExtra(EXTRA_POSITION, 0);
+                if (!mScrubbing) {
+                    mPositionMs = newPos;
+                }
                 mDurationMs = intent.getLongExtra(EXTRA_DURATION, 0);
                 mRate = intent.getFloatExtra(EXTRA_RATE, 1.0f);
                 mHosted = intent.getBooleanExtra(EXTRA_HOSTED, false);
@@ -263,7 +313,7 @@ public class MediaPlaybackService extends MediaBrowserService {
             }
             if (mPlayState == PLAY_STATE_PLAYING) {
                 mEverPlaying = true;
-                startForeground(NOTIFICATION_ID, buildNotification());
+                postNotificationIfChanged(true);
             } else if (!mEverPlaying) {
                 // Fresh instance receiving only a non-playing update (post-stop
                 // poll update): dismiss instead of resurrecting a notification.
@@ -272,10 +322,7 @@ public class MediaPlaybackService extends MediaBrowserService {
             } else if (mPlayState == PLAY_STATE_PAUSED) {
                 // Paused: keep the bar visible (play button) while service alive;
                 // actual dismissal happens on explicit stop.
-                NotificationManager nm = getNotificationManager();
-                if (nm != null) {
-                    nm.notify(NOTIFICATION_ID, buildNotification());
-                }
+                postNotificationIfChanged(false);
             } else {
                 // Stopped (bridge spec §6): deactivate the session and dismiss.
                 updatePlaybackState();
@@ -302,6 +349,7 @@ public class MediaPlaybackService extends MediaBrowserService {
             MidiBridge.onMediaPlayCommand();
         }
         startForeground(NOTIFICATION_ID, buildNotification());
+        markNotificationPosted();
         updatePlaybackState();
     }
 
@@ -318,6 +366,7 @@ public class MediaPlaybackService extends MediaBrowserService {
         if (nm != null) {
             nm.notify(NOTIFICATION_ID, buildNotification());
         }
+        markNotificationPosted();
         updatePlaybackState();
     }
 
@@ -337,14 +386,15 @@ public class MediaPlaybackService extends MediaBrowserService {
 
     /** Seek from the system media controls (bridge spec §6 ACTION_SEEK_TO). */
     private void dispatchSeek(long positionMs) {
+        // Thumb tracking: update the session position instantly (smooth drag)
+        // but only dispatch the real seek after the drag settles.
+        mScrubbing = true;
         mPositionMs = Math.max(0, positionMs);
-        PlaybackController controller = sController;
-        if (controller != null) {
-            controller.onSeekRequested(mPositionMs);
-        } else {
-            MidiBridge.onMediaSeekCommand(mPositionMs);
-        }
         updatePlaybackState();
+        mPendingSeekPos = mPositionMs;
+        mSeekPending = true;
+        mMainHandler.removeCallbacks(mSeekDispatch);
+        mMainHandler.postDelayed(mSeekDispatch, SEEK_SETTLE_MS);
     }
 
     /** Skip to next/previous track (hosted mode only, bridge spec §6). */
@@ -385,16 +435,66 @@ public class MediaPlaybackService extends MediaBrowserService {
             .setState(state, mPositionMs, mRate)
             .setActions(actions)
             .build());
-        MediaMetadata.Builder meta = new MediaMetadata.Builder()
-            .putString(MediaMetadata.METADATA_KEY_TITLE, mTitle)
-            .putString(MediaMetadata.METADATA_KEY_ARTIST, mArtist);
-        if (mDurationMs > 0) {
-            meta.putLong(MediaMetadata.METADATA_KEY_DURATION, mDurationMs);
+        // Metadata rebinds the SystemUI media view; only push when it changed
+        // so scrub-time PlaybackState updates stay cheap and smooth.
+        if (!strEq(mTitle, mMetaTitle) || !strEq(mArtist, mMetaArtist)
+                || mDurationMs != mMetaDuration) {
+            mMetaTitle = mTitle;
+            mMetaArtist = mArtist;
+            mMetaDuration = mDurationMs;
+            MediaMetadata.Builder meta = new MediaMetadata.Builder()
+                .putString(MediaMetadata.METADATA_KEY_TITLE, mTitle)
+                .putString(MediaMetadata.METADATA_KEY_ARTIST, mArtist);
+            if (mDurationMs > 0) {
+                meta.putLong(MediaMetadata.METADATA_KEY_DURATION, mDurationMs);
+            }
+            mSession.setMetadata(meta.build());
         }
-        mSession.setMetadata(meta.build());
         // Bridge spec §6: non-hosted sessions deactivate on stop (bar removed);
         // hosted sessions stay active while the native engine owns playback.
         mSession.setActive(mPlayState != PLAY_STATE_STOPPED || mHosted);
+    }
+
+    /**
+     * Re-post the notification only when its visible content changed
+     * (play/pause icon, title, hosted text). Position-only updates — heartbeat
+     * pushes and seekbar scrubbing — must NOT rebuild the notification: each
+     * rebuild makes SystemUI re-anchor the seekbar thumb and the drag stutters.
+     */
+    private void postNotificationIfChanged(boolean foreground) {
+        String text = mPlayState == PLAY_STATE_PLAYING
+            ? (mHosted ? "MIDI 播放托管中（原生合成）" : "网页音频播放中（后台持续播放）")
+            : "播放已暂停";
+        if (mPlayState == mPostedState && mHosted == mPostedHosted
+                && strEq(mTitle, mPostedTitle) && strEq(text, mPostedText)) {
+            return;
+        }
+        mPostedState = mPlayState;
+        mPostedHosted = mHosted;
+        mPostedTitle = mTitle;
+        mPostedText = text;
+        if (foreground && mPlayState == PLAY_STATE_PLAYING) {
+            startForeground(NOTIFICATION_ID, buildNotification());
+        } else {
+            NotificationManager nm = getNotificationManager();
+            if (nm != null) {
+                nm.notify(NOTIFICATION_ID, buildNotification());
+            }
+        }
+    }
+
+    /** Sync the dedup cache after a direct (unconditional) notification post. */
+    private void markNotificationPosted() {
+        mPostedState = mPlayState;
+        mPostedHosted = mHosted;
+        mPostedTitle = mTitle;
+        mPostedText = mPlayState == PLAY_STATE_PLAYING
+            ? (mHosted ? "MIDI 播放托管中（原生合成）" : "网页音频播放中（后台持续播放）")
+            : "播放已暂停";
+    }
+
+    private static boolean strEq(String a, String b) {
+        return a == null ? b == null : a.equals(b);
     }
 
     private Notification buildNotification() {
