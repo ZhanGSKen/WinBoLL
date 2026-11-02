@@ -452,14 +452,35 @@ public class HostedMidiPlayer {
         InputStream in = null;
         FileOutputStream out = null;
         try {
-            URL url = new URL(urlStr);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(15000);
-            conn.setReadTimeout(30000);
-            conn.setInstanceFollowRedirects(true);
-            int code = conn.getResponseCode();
-            if (code != HttpURLConnection.HTTP_OK) {
-                Log.w(TAG, "download HTTP " + code + " for " + urlStr);
+            // Manual redirect following: HttpURLConnection never crosses
+            // protocols on its own (http -> https 301 is dropped), and the
+            // real sites redirect plain-http asset URLs to https. Follow up
+            // to 5 hops ourselves via the Location header.
+            String current = urlStr;
+            int code = -1;
+            for (int hop = 0; hop < 5; hop++) {
+                URL url = new URL(current);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(15000);
+                conn.setReadTimeout(30000);
+                conn.setInstanceFollowRedirects(false);
+                code = conn.getResponseCode();
+                if (code == 301 || code == 302 || code == 303
+                        || code == 307 || code == 308) {
+                    String loc = conn.getHeaderField("Location");
+                    conn.disconnect();
+                    conn = null;
+                    if (loc == null || loc.length() == 0) {
+                        Log.w(TAG, "download redirect without Location for " + current);
+                        return null;
+                    }
+                    current = new URL(url, loc).toString();
+                    continue;
+                }
+                break;
+            }
+            if (conn == null || code != HttpURLConnection.HTTP_OK) {
+                Log.w(TAG, "download HTTP " + code + " for " + current);
                 return null;
             }
             in = conn.getInputStream();
