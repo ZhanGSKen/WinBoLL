@@ -345,7 +345,8 @@ public final class MidiBridge {
         } else if ("pause".equals(cmd)) {
             engine.pause();
         } else if ("stop".equals(cmd)) {
-            engine.stop();
+            // Stop also cancels the just-forced takeover (see onMediaStopCommand).
+            stopHostedAndUnhost();
         } else if ("seek".equals(cmd)) {
             engine.seekTo(Math.max(0, pos));
         } else if ("next".equals(cmd)) {
@@ -745,12 +746,11 @@ public final class MidiBridge {
 
     public static boolean onMediaStopCommand() {
         if (sHosting) {
-            HostedMidiPlayer engine = sEngine;
-            if (engine != null) {
-                engine.stop();
-            }
-            saveHostPrefs(true, STATE_STOPPED, sWebTrackId, sWebTitle,
-                0, sHostWebRate, sHostWebLoop);
+            // Notification ✕ / stop ends the hosted session as well: cancel
+            // hosting and hand control back to the page via cmd:unhost (D-6)
+            // with a stopped state so the page drops the cover and shows its
+            // player stopped.
+            stopHostedAndUnhost();
             return true;
         }
         if (sEngaged) {
@@ -849,6 +849,33 @@ public final class MidiBridge {
             engine.release();
             sEngine = null;
         }
+    }
+
+    /**
+     * Stop ends the hosted session too (notification ✕): stop the native
+     * engine, cancel hosting and send cmd:unhost to the page with a stopped
+     * state (spec D-6), so the page drops the cover and restores its own
+     * player in the stopped state.
+     */
+    private static void stopHostedAndUnhost() {
+        HostedMidiPlayer engine = sEngine;
+        String trackId = sWebTrackId;
+        String title = sWebTitle;
+        float rate = sHostWebRate;
+        boolean loop = sHostWebLoop;
+        if (engine != null) {
+            HostedMidiPlayer.Track track = engine.getTrack();
+            if (track != null) {
+                trackId = track.id;
+                title = track.title;
+            }
+            rate = engine.getRate();
+            loop = engine.isLooping();
+        }
+        sHosting = false;
+        stopHostedPlayback();
+        saveHostPrefs(false, STATE_STOPPED, "", "", 0, 1.0f, false);
+        sendControlUnhost(STATE_STOPPED, 0, trackId, title, rate, loop);
     }
 
     private static final HostedMidiPlayer.Listener sEngineListener =
