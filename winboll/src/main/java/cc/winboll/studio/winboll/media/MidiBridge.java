@@ -348,6 +348,10 @@ public final class MidiBridge {
             engine.stop();
         } else if ("seek".equals(cmd)) {
             engine.seekTo(Math.max(0, pos));
+        } else if ("next".equals(cmd)) {
+            onMediaSkipCommand(true);
+        } else if ("prev".equals(cmd)) {
+            onMediaSkipCommand(false);
         }
     }
 
@@ -780,26 +784,39 @@ public final class MidiBridge {
         return false;
     }
 
-    /** Skip actions only exist while hosting (spec §6). */
+    /**
+     * Skip to next/previous track. Hosted mode switches playlist entries on the
+     * native engine (spec §6); non-hosted mode forwards next/prev to the page
+     * (spec §9: unknown cmds are ignorable, so this is forward-compatible).
+     */
     public static boolean onMediaSkipCommand(boolean next) {
-        if (!sHosting) {
-            return false;
-        }
-        synchronized (sTracks) {
-            if (sTracks.isEmpty()) {
-                return false;
+        if (sHosting) {
+            synchronized (sTracks) {
+                if (sTracks.isEmpty()) {
+                    return false;
+                }
+                int idx = currentTrackIndex();
+                int target = next ? idx + 1 : idx - 1;
+                if (target < 0) {
+                    target = sTracks.size() - 1;
+                } else if (target >= sTracks.size()) {
+                    target = 0;
+                }
+                HostedMidiPlayer.Track t = sTracks.get(target);
+                startHostedPlayback(t.id, t.title, 0, sHostWebRate, sHostWebLoop, false);
             }
-            int idx = currentTrackIndex();
-            int target = next ? idx + 1 : idx - 1;
-            if (target < 0) {
-                target = sTracks.size() - 1;
-            } else if (target >= sTracks.size()) {
-                target = 0;
-            }
-            HostedMidiPlayer.Track t = sTracks.get(target);
-            startHostedPlayback(t.id, t.title, 0, sHostWebRate, sHostWebLoop, false);
+            return true;
         }
-        return true;
+        if (sEngaged) {
+            String cmd = next ? "next" : "prev";
+            if (sPageVisible) {
+                sendControlSimple(cmd, -1);
+            } else {
+                queueHiddenCommand(cmd, -1);
+            }
+            return true;
+        }
+        return false;
     }
 
     // ------------------- hosted engine (spec §4) -------------------

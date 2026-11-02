@@ -45,6 +45,8 @@ public class MediaPlaybackService extends MediaBrowserService {
     public static final String ACTION_PLAY = "cc.winboll.studio.winboll.action.MEDIA_PLAY";
     public static final String ACTION_PAUSE = "cc.winboll.studio.winboll.action.MEDIA_PAUSE";
     public static final String ACTION_STOP = "cc.winboll.studio.winboll.action.MEDIA_STOP";
+    public static final String ACTION_PREV = "cc.winboll.studio.winboll.action.MEDIA_PREV";
+    public static final String ACTION_NEXT = "cc.winboll.studio.winboll.action.MEDIA_NEXT";
 
     // Intent extras
     public static final String EXTRA_PLAYING = "playing";
@@ -234,6 +236,10 @@ public class MediaPlaybackService extends MediaBrowserService {
             dispatchPause();
         } else if (ACTION_STOP.equals(action)) {
             dispatchStop();
+        } else if (ACTION_PREV.equals(action)) {
+            dispatchSkip(false);
+        } else if (ACTION_NEXT.equals(action)) {
+            dispatchSkip(true);
         } else if (ACTION_STATE_CHANGED.equals(action)) {
             if (intent != null) {
                 if (intent.hasExtra(EXTRA_STATE)) {
@@ -373,11 +379,8 @@ public class MediaPlaybackService extends MediaBrowserService {
             state = PlaybackState.STATE_STOPPED;
         }
         long actions = PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PAUSE
-            | PlaybackState.ACTION_STOP | PlaybackState.ACTION_SEEK_TO;
-        if (mHosted) {
-            actions |= PlaybackState.ACTION_SKIP_TO_NEXT
-                | PlaybackState.ACTION_SKIP_TO_PREVIOUS;
-        }
+            | PlaybackState.ACTION_STOP | PlaybackState.ACTION_SEEK_TO
+            | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS;
         mSession.setPlaybackState(new PlaybackState.Builder()
             .setState(state, mPositionMs, mRate)
             .setActions(actions)
@@ -412,13 +415,23 @@ public class MediaPlaybackService extends MediaBrowserService {
             new Intent(this, MediaPlaybackService.class).setAction(ACTION_PAUSE), flags);
         PendingIntent stopPi = PendingIntent.getService(this, 4,
             new Intent(this, MediaPlaybackService.class).setAction(ACTION_STOP), flags);
+        PendingIntent prevPi = PendingIntent.getService(this, 5,
+            new Intent(this, MediaPlaybackService.class).setAction(ACTION_PREV), flags);
+        PendingIntent nextPi = PendingIntent.getService(this, 6,
+            new Intent(this, MediaPlaybackService.class).setAction(ACTION_NEXT), flags);
 
+        // Toolbar order: previous / play-pause / next / stop. The stop action
+        // must NOT reuse the skip-previous glyph (it read as a track button).
+        Notification.Action prevAction = new Notification.Action.Builder(
+            android.R.drawable.ic_media_previous, "上一曲", prevPi).build();
         Notification.Action playAction = new Notification.Action.Builder(
             android.R.drawable.ic_media_play, "播放", playPi).build();
         Notification.Action pauseAction = new Notification.Action.Builder(
             android.R.drawable.ic_media_pause, "暂停", pausePi).build();
+        Notification.Action nextAction = new Notification.Action.Builder(
+            android.R.drawable.ic_media_next, "下一曲", nextPi).build();
         Notification.Action stopAction = new Notification.Action.Builder(
-            android.R.drawable.ic_media_previous, "停止", stopPi).build();
+            android.R.drawable.ic_menu_close_clear_cancel, "停止", stopPi).build();
 
         String contentText;
         if (mPlayState == PLAY_STATE_PLAYING) {
@@ -436,8 +449,10 @@ public class MediaPlaybackService extends MediaBrowserService {
             .setShowWhen(false)
             .setStyle(new Notification.MediaStyle()
                 .setMediaSession(mSession.getSessionToken())
-                .setShowActionsInCompactView(0, 1))
+                .setShowActionsInCompactView(0, 1, 2))
+            .addAction(prevAction)
             .addAction(mPlayState == PLAY_STATE_PLAYING ? pauseAction : playAction)
+            .addAction(nextAction)
             .addAction(stopAction);
         return builder.build();
     }
