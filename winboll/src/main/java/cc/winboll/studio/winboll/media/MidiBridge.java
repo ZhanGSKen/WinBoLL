@@ -52,22 +52,17 @@ public final class MidiBridge {
     private static final long HOST_PLAYLIST_WAIT_MS = 2000;
 
     /**
-     * URL host whitelist for bridge injection (spec §8: www.winboll.cc,
-     * winboll.cc and the intranet management domains mirroring the web-side
-     * ALLOWED_MANAGER_DOMAINS config).
+     * URL host whitelist for bridge injection (spec §8). Only the two domain
+     * families are allowed, each via one wildcard entry, plus the loopback
+     * dev hosts. Entries starting with "*." cover the bare suffix domain and
+     * any subdomain depth (e.g. "*.winboll.cc" covers winboll.cc itself plus
+     * www, develop, management-xx and debug subdomains at any depth).
      */
     private static final String[] HOST_WHITELIST = {
-        "www.winboll.cc",
-        "winboll.cc",
-        "develop.winboll.cc", // develop/test site (HTTP Auth test station)
-        "management-develop.winboll.cc",
-        "management-develop.studio.winboll",
-        "develop.studio.winboll",
-        "debug.studio.winboll", // debug test site (192.168.123.222)
-        "debug.winboll.cc", // debug test site (HTTP Auth, same creds as develop)
-        "localhost",
-        "127.0.0.1",
-        "10.0.2.2" // emulator alias for the host loopback (dev instances)
+        "*.winboll.cc", // winboll.cc and all its subdomains
+        "*.studio.winboll", // studio.winboll and all its subdomains
+        "localhost", // local dev instances
+        "127.0.0.1"
     };
 
     private static final String PREFS_NAME = "winboll_media_bridge";
@@ -154,7 +149,20 @@ public final class MidiBridge {
         }
         String h = host.toLowerCase();
         for (int i = 0; i < HOST_WHITELIST.length; i++) {
-            if (HOST_WHITELIST[i].equals(h)) {
+            String entry = HOST_WHITELIST[i];
+            if (entry.startsWith("*.")) {
+                // Wildcard entry: "*.winboll.cc" matches the bare domain
+                // "winboll.cc" itself and any subdomain depth
+                // ("x.winboll.cc", "x.y.winboll.cc", ...).
+                String base = entry.substring(2); // "winboll.cc"
+                if (h.equals(base)) {
+                    return true;
+                }
+                String suffix = entry.substring(1); // ".winboll.cc"
+                if (h.endsWith(suffix) && h.length() > suffix.length()) {
+                    return true;
+                }
+            } else if (entry.equals(h)) {
                 return true;
             }
         }
