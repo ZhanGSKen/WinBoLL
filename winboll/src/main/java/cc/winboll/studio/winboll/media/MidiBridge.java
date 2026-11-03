@@ -63,6 +63,8 @@ public final class MidiBridge {
         "management-develop.winboll.cc",
         "management-develop.studio.winboll",
         "develop.studio.winboll",
+        "debug.studio.winboll", // debug test site (192.168.123.222)
+        "debug.winboll.cc", // debug test site (HTTP Auth, same creds as develop)
         "localhost",
         "127.0.0.1",
         "10.0.2.2" // emulator alias for the host loopback (dev instances)
@@ -420,6 +422,7 @@ public final class MidiBridge {
                         String liveUrl = wv.getUrl();
                         if (liveUrl != null && liveUrl.length() > 0
                             && !isWhitelistedUrl(liveUrl)) {
+                            Log.d(TAG, "postState dropped: non-whitelist " + liveUrl);
                             return;
                         }
                     }
