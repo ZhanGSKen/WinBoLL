@@ -362,6 +362,13 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
             @Override
             public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                // Keep the address bar in sync with every navigation (link
+                // clicks, redirects, back/forward). Skip while the user is
+                // editing the field so typing is never clobbered (same guard
+                // as ManagementFragment.onPageStarted).
+                if (mEtUrl != null && url != null && !mEtUrl.hasFocus()) {
+                    mEtUrl.setText(url);
+                }
                 // MIDI bridge (spec §5/§8): inject the native bridge only for
                 // whitelisted URL hosts, remove it elsewhere. Also resets the
                 // per-page protocol engagement flag.
@@ -387,11 +394,27 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                // Sync the bar with the FINAL URL: after a redirect chain the
+                // committed URL differs from the onPageStarted URL.
+                String finalUrl = view.getUrl();
+                if (mEtUrl != null && finalUrl != null && !mEtUrl.hasFocus()) {
+                    mEtUrl.setText(finalUrl);
+                }
                 // Re-inject (idempotent) for pages whose scripts ran before the patch.
                 injectAudioPatch();
                 // Diagnostic: report bridge visibility to the console (WBWebConsole).
                 view.evaluateJavascript(
                     "(function(){try{console.log('WB-BRIDGE-CHECK '+(typeof window.WinBollMedia));}catch(e){}})()", null);
+            }
+
+            @Override
+            public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+                super.doUpdateVisitedHistory(view, url, isReload);
+                // Same-document navigations (hash / history.pushState) never
+                // fire onPageStarted; this callback keeps the bar accurate.
+                if (mEtUrl != null && url != null && !mEtUrl.hasFocus()) {
+                    mEtUrl.setText(url);
+                }
             }
 
             @Override
@@ -572,6 +595,9 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
         }
         loadUrl(url);
         hideSoftKeyboard();
+        // Editing is done: release focus so the navigation callbacks can
+        // replace this text with the normalized/final URL of the page.
+        mEtUrl.clearFocus();
     }
 
     /**
