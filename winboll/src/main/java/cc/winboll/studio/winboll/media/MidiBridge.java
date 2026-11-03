@@ -457,6 +457,7 @@ public final class MidiBridge {
 
     /** State report (spec §3.1). Ignored while hosting (web is silenced, §4.2). */
     private static void handleState(JSONObject p) {
+        Log.i(TAG, "handleState" + (sHosting ? " (dropped)" : "") + " " + p.toString());
         if (sHosting) {
             return;
         }
@@ -580,17 +581,29 @@ public final class MidiBridge {
             float rate = sWebRate;
             boolean loop = sWebLoop;
             HostedMidiPlayer.Track track = null;
-            if (engine != null) {
+            if (engine != null && !engine.isPreparing()) {
                 state = engine.getState();
                 pos = engine.getPositionMs();
                 rate = engine.getRate();
                 loop = engine.isLooping();
                 track = engine.getTrack();
+            } else {
+                // No meaningful native position yet (takeover still
+                // downloading/preparing, or the engine never started):
+                // hand playback back with the web's own host-time snapshot
+                // instead of a stopped/0 reset -- same semantics as the
+                // pending-timeout and onError unwind paths.
+                state = sHostWebState;
+                pos = sHostWebPositionMs;
+                rate = sHostWebRate;
+                loop = sHostWebLoop;
             }
             if (track != null) {
                 trackId = track.id;
                 title = track.title;
             }
+            Log.i(TAG, "unhost snapshot: rawState=" + state + " pos=" + pos
+                + " trackId=" + trackId + " title=" + title + " rate=" + rate + " loop=" + loop);
             sHosting = false;
             stopHostedPlayback();
             saveHostPrefs(false, STATE_STOPPED, "", "", 0, 1.0f, false);
@@ -673,6 +686,7 @@ public final class MidiBridge {
             c.put("title", title != null ? title : "");
             c.put("rate", rate);
             c.put("loop", loop);
+            Log.i(TAG, "sendControlUnhost " + c.toString());
             dispatchControl(c);
         } catch (Exception e) {
             Log.w(TAG, "unhost send failed: " + e.getMessage());
@@ -708,9 +722,20 @@ public final class MidiBridge {
                     }
                     // The page-side handler accepts a JSON object as well as a
                     // string, so the object literal is passed directly (spec §5).
+                    // Diagnostic wrapper reports whether the page handler ran.
+                    Log.i(TAG, "dispatchControl " + json);
                     wv.evaluateJavascript(
-                        "window.__midiDispatchControl&&window.__midiDispatchControl("
-                            + json + ")", null);
+                        "(function(){try{"
+                            + "if(window.__midiDispatchControl){"
+                            + "window.__midiDispatchControl(" + json + ");return 'HANDLED';}"
+                            + "return 'NO_HANDLER';"
+                            + "}catch(e){return 'ERR:'+e;}})()",
+                        new android.webkit.ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                Log.i(TAG, "dispatchControl result=" + value);
+                            }
+                        });
                 }
             });
         } catch (Exception e) {
@@ -791,6 +816,8 @@ public final class MidiBridge {
     }
 
     public static boolean onMediaSeekCommand(long positionMs) {
+        Log.i(TAG, "onMediaSeekCommand pos=" + positionMs + " hosting=" + sHosting
+            + " engaged=" + sEngaged);
         if (sHosting) {
             HostedMidiPlayer engine = sEngine;
             if (engine != null) {

@@ -370,10 +370,15 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
                     view.addJavascriptInterface(MidiBridge.getJavascriptInterface(),
                         MidiBridge.JS_INTERFACE_NAME);
                     android.util.Log.d("MidiBridge", "bridge injected for " + url);
-                } else {
-                    view.removeJavascriptInterface(MidiBridge.JS_INTERFACE_NAME);
-                    android.util.Log.d("MidiBridge", "bridge removed (non-whitelist) " + url);
                 }
+                // Do NOT removeJavascriptInterface on non-whitelisted pages:
+                // observed on the API 29/36 AVDs, a remove followed by a later
+                // re-add leaves the binding dead for the next page context,
+                // which silently killed the up-channel after any error/foreign
+                // URL navigation (handlePostState never fired). Message-time
+                // enforcement in MidiBridge.handlePostState (live-URL whitelist
+                // check) is the authoritative gate and already rejects
+                // non-whitelisted senders, so removal is not required.
                 // Inject as early as possible so AudioContext instances created by
                 // page scripts are wrapped for playback state probing.
                 injectAudioPatch();

@@ -185,6 +185,18 @@ public class HostedMidiPlayer {
     /** Seek within the current track (playing continues after seek). */
     public void seekTo(long positionMs) {
         long clamped = Math.max(0, positionMs);
+        // Same guard as onPrepared's pending-seek clamp: seeking at/past the
+        // tail makes MediaPlayer fire onCompletion immediately, which wraps
+        // the engine to ~0 (looping) or pushes STOPPED (tears the media
+        // session down) -- either way the unhost handoff position looks
+        // like a progress reset to the page. Keep the target 250ms inside
+        // the real end.
+        long dur = getDurationMs();
+        if (dur > 0 && clamped > dur - 250) {
+            clamped = Math.max(0, dur - 250);
+        }
+        Log.i(TAG, "seekTo " + positionMs + " clamped=" + clamped
+            + " state=" + mState + " hasPlayer=" + (mPlayer != null));
         if (mPlayer != null && (mState == STATE_PLAYING || mState == STATE_PAUSED)) {
             try {
                 mPlayer.seekTo((int) clamped);
@@ -340,6 +352,7 @@ public class HostedMidiPlayer {
                     if (mReleased || mp != mPlayer) {
                         return;
                     }
+                    Log.i(TAG, "onCompletion state=" + mState + " loop=" + mLoop);
                     // A completion without active playback (e.g. seek past the
                     // end while parked paused by mPausePending) is not a real
                     // track end and must not report STOPPED.

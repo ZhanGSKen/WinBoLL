@@ -27,6 +27,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.service.media.MediaBrowserService;
+import android.util.Log;
 import android.media.MediaMetadata;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
@@ -180,6 +181,7 @@ public class MediaPlaybackService extends MediaBrowserService {
             mScrubbing = false;
             long pos = mPendingSeekPos;
             mPendingSeekPos = -1;
+            Log.i(TAG, "seekDispatch settled pos=" + pos);
             PlaybackController controller = sController;
             if (controller != null) {
                 controller.onSeekRequested(pos);
@@ -386,6 +388,7 @@ public class MediaPlaybackService extends MediaBrowserService {
 
     /** Seek from the system media controls (bridge spec §6 ACTION_SEEK_TO). */
     private void dispatchSeek(long positionMs) {
+        Log.i(TAG, "dispatchSeek " + positionMs);
         // Thumb tracking: update the session position instantly (smooth drag)
         // but only dispatch the real seek after the drag settles.
         mScrubbing = true;
