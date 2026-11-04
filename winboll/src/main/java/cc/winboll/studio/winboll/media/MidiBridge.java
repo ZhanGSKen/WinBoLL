@@ -67,6 +67,7 @@ public final class MidiBridge {
 
     private static final String PREFS_NAME = "winboll_media_bridge";
     private static final String KEY_PLAYLIST_JSON = "playlist_json";
+    private static final String KEY_HOSTING_ENABLED = "hosting_enabled";
     private static final String KEY_HOSTED = "hosted";
     private static final String KEY_HOST_STATE = "host_state";
     private static final String KEY_HOST_TRACK_ID = "host_track_id";
@@ -259,6 +260,58 @@ public final class MidiBridge {
         return sHosting;
     }
 
+    // ------------------- hosting settings switch (Settings page) -------------------
+
+    /**
+     * Settings-page switch state: whether cover hosting is enabled at all.
+     * Defaults to false (hosting disabled) per product decision 2026-11-04:
+     * fresh installs / untouched settings run without hosted playback.
+     */
+    public static boolean isHostingEnabled(Context context) {
+        return context.getApplicationContext()
+            .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getBoolean(KEY_HOSTING_ENABLED, false);
+    }
+
+    /** Persist the Settings-page hosting switch state. */
+    public static void setHostingEnabled(Context context, boolean enabled) {
+        context.getApplicationContext()
+            .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putBoolean(KEY_HOSTING_ENABLED, enabled)
+            .apply();
+    }
+
+    /** Internal gate used by the host-request paths (defaults disabled). */
+    private static boolean hostingEnabled() {
+        if (sAppContext == null) {
+            return false;
+        }
+        return prefs().getBoolean(KEY_HOSTING_ENABLED, false);
+    }
+
+    /**
+     * Settings switch turned off while a hosted session (or a pending
+     * takeover) is active: drop the pending takeover and gracefully hand
+     * playback back to the web player, using the same unhost handoff as the
+     * cover button (so the web resumes at the exact position). No-op when
+     * nothing is hosted. Safe to call from any thread.
+     */
+    public static void cancelHostingForSetting() {
+        sMain.post(new Runnable() {
+            @Override
+            public void run() {
+                sHostPendingRetry = false;
+                sMain.removeCallbacks(sHostPendingTimeout);
+                if (!sHosting) {
+                    return;
+                }
+                Log.i(TAG, "cancelHostingForSetting: handing playback back to web");
+                performUnhost();
+            }
+        });
+    }
+
     /**
      * Browser-initiated hosting nudge (spec §4.3-③). The WebView does not
      * dispatch document visibilitychange reliably when the app goes to the
@@ -280,6 +333,12 @@ public final class MidiBridge {
     public static void nudgeHostRequest(boolean force) {
         Log.d(TAG, "nudgeHostRequest force=" + force + " engaged=" + sEngaged
             + " hosting=" + sHosting + " webState=" + sWebState);
+        if (!hostingEnabled()) {
+            // Settings switch off: never steer the page toward a takeover;
+            // playback stays on the web player.
+            Log.d(TAG, "nudgeHostRequest skipped: hosting disabled by settings");
+            return;
+        }
         if (!sEngaged || sHosting) {
             return;
         }
@@ -554,6 +613,12 @@ public final class MidiBridge {
         boolean want = p.optBoolean("hosted", false);
         Log.d(TAG, "handleHost want=" + want + " hosting=" + sHosting);
         if (want) {
+            if (!hostingEnabled()) {
+                // Settings switch off: no ACK and no takeover -- the page
+                // falls back to its local player (spec §9 no-ACK fallback).
+                Log.i(TAG, "handleHost ignored: hosting disabled by settings");
+                return;
+            }
             sHostWebState = parseState(p.optString("state"));
             sHostWebPositionMs = Math.max(0, p.optLong("positionMs", 0));
             double rate = p.optDouble("rate", 0);
@@ -584,42 +649,52 @@ public final class MidiBridge {
                 return;
             }
             // Unhost request (cover button) or re-browse query while hosting.
-            HostedMidiPlayer engine = sEngine;
-            int state = STATE_STOPPED;
-            long pos = 0;
-            String trackId = sWebTrackId;
-            String title = sWebTitle;
-            float rate = sWebRate;
-            boolean loop = sWebLoop;
-            HostedMidiPlayer.Track track = null;
-            if (engine != null && !engine.isPreparing()) {
-                state = engine.getState();
-                pos = engine.getPositionMs();
-                rate = engine.getRate();
-                loop = engine.isLooping();
-                track = engine.getTrack();
-            } else {
-                // No meaningful native position yet (takeover still
-                // downloading/preparing, or the engine never started):
-                // hand playback back with the web's own host-time snapshot
-                // instead of a stopped/0 reset -- same semantics as the
-                // pending-timeout and onError unwind paths.
-                state = sHostWebState;
-                pos = sHostWebPositionMs;
-                rate = sHostWebRate;
-                loop = sHostWebLoop;
-            }
-            if (track != null) {
-                trackId = track.id;
-                title = track.title;
-            }
-            Log.i(TAG, "unhost snapshot: rawState=" + state + " pos=" + pos
-                + " trackId=" + trackId + " title=" + title + " rate=" + rate + " loop=" + loop);
-            sHosting = false;
-            stopHostedPlayback();
-            saveHostPrefs(false, STATE_STOPPED, "", "", 0, 1.0f, false);
-            sendControlUnhost(state, pos, trackId, title, rate, loop);
+            performUnhost();
         }
+    }
+
+    /**
+     * Graceful unhost while hosting: snapshot the native engine (or the
+     * host-time web snapshot while the engine has not started yet), stop the
+     * engine and hand playback back to the web player via cmd:unhost
+     * (spec D-6). Shared by the cover-button unhost and the Settings switch.
+     */
+    private static void performUnhost() {
+        HostedMidiPlayer engine = sEngine;
+        int state = STATE_STOPPED;
+        long pos = 0;
+        String trackId = sWebTrackId;
+        String title = sWebTitle;
+        float rate = sWebRate;
+        boolean loop = sWebLoop;
+        HostedMidiPlayer.Track track = null;
+        if (engine != null && !engine.isPreparing()) {
+            state = engine.getState();
+            pos = engine.getPositionMs();
+            rate = engine.getRate();
+            loop = engine.isLooping();
+            track = engine.getTrack();
+        } else {
+            // No meaningful native position yet (takeover still
+            // downloading/preparing, or the engine never started):
+            // hand playback back with the web's own host-time snapshot
+            // instead of a stopped/0 reset -- same semantics as the
+            // pending-timeout and onError unwind paths.
+            state = sHostWebState;
+            pos = sHostWebPositionMs;
+            rate = sHostWebRate;
+            loop = sHostWebLoop;
+        }
+        if (track != null) {
+            trackId = track.id;
+            title = track.title;
+        }
+        Log.i(TAG, "unhost snapshot: rawState=" + state + " pos=" + pos
+            + " trackId=" + trackId + " title=" + title + " rate=" + rate + " loop=" + loop);
+        sHosting = false;
+        stopHostedPlayback();
+        saveHostPrefs(false, STATE_STOPPED, "", "", 0, 1.0f, false);
+        sendControlUnhost(state, pos, trackId, title, rate, loop);
     }
 
     /** Playlist message (spec §3.1): cache and persist for recovery. */
@@ -1105,6 +1180,10 @@ public final class MidiBridge {
      * service should stay alive for the restored engine.
      */
     public static boolean restoreHostedPlayback(Context context) {
+        if (!isHostingEnabled(context)) {
+            // Settings switch off: never resurrect a hosted session.
+            return false;
+        }
         SharedPreferences p = prefs();
         if (!p.getBoolean(KEY_HOSTED, false)) {
             return false;
