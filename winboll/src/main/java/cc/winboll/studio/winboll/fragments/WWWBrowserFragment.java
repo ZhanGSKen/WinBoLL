@@ -627,6 +627,14 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
     }
 
     /**
+     * 导航到指定 URL（推送通知点击跳转等场景）。
+     * 地址栏由 onPageStarted 回调同步，此处无需手动改写。
+     */
+    public void navigateTo(String url) {
+        loadUrl(url);
+    }
+
+    /**
      * 供宿主 Activity 处理返回键：WebView 可后退则后退并返回 true
      */
     public boolean handleBackPressed() {

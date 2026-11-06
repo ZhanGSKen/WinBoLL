@@ -22,6 +22,8 @@ import cc.winboll.studio.winboll.termux.MyTermuxActivity;
 import cc.winboll.studio.winboll.fragments.ManagementFragment;
 import cc.winboll.studio.winboll.fragments.OpenSourceLicenseFragment;
 import cc.winboll.studio.winboll.fragments.WWWBrowserFragment;
+import cc.winboll.studio.winboll.push.PushNotifier;
+import cc.winboll.studio.winboll.services.PushService;
 import cc.winboll.studio.winboll.unittest.TermuxEnvTestActivity;
 import cc.winboll.studio.winboll.utils.CertTrustUtils;
 import java.util.ArrayList;
@@ -55,9 +57,13 @@ public class MainActivity extends DrawerFragmentActivity {
         // 启动默认窗口为 WWWBrowser（浏览器窗口）。外部 ACTION_VIEW 传入的 URL 由 WWWBrowser 打开，
         // 无外部 URL 时加载 Settings 配置的自定义首页。
         if (mWWWBrowserFragment == null) {
-            String externalUrl = extractExternalUrl(getIntent());
-            if (externalUrl != null) {
-                mWWWBrowserFragment = WWWBrowserFragment.newInstance(externalUrl);
+            // 推送通知跳转的 URL 优先于外部 ACTION_VIEW 传入的 URL
+            String initialUrl = extractPushUrl(getIntent());
+            if (initialUrl == null) {
+                initialUrl = extractExternalUrl(getIntent());
+            }
+            if (initialUrl != null) {
+                mWWWBrowserFragment = WWWBrowserFragment.newInstance(initialUrl);
             } else {
                 mWWWBrowserFragment = WWWBrowserFragment.newInstance();
             }
@@ -69,6 +75,21 @@ public class MainActivity extends DrawerFragmentActivity {
         // 其他窗口（网站管理 ManagementFragment）启动时不创建，点击对应菜单时才懒加载
         // 启动时检测 WinBoLL 根证书是否已安装，决定是否启用"网站管理"菜单
         refreshCertTrustedState();
+        // 启动消息推送前台服务（自建 WSS 通道，收通知帧发系统通知）
+        PushService.start(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        // 仅处理推送通知跳转；ACTION_VIEW 外部链接刻意只在 onCreate 生效（见下方 extractExternalUrl）。
+        if (intent != null && PushNotifier.ACTION_PUSH_OPEN.equals(intent.getAction())) {
+            String url = intent.getStringExtra(PushNotifier.EXTRA_PUSH_URL);
+            if (url != null && mWWWBrowserFragment != null) {
+                mWWWBrowserFragment.navigateTo(url);
+                showFragment(mWWWBrowserFragment);
+            }
+        }
     }
 
     @Override
@@ -76,6 +97,8 @@ public class MainActivity extends DrawerFragmentActivity {
         super.onResume();
         // 从 Settings 安装证书返回后，重新检测并刷新菜单
         refreshCertTrustedState();
+        // 回前台立即检查推送连接并重连（不必等退避结束，推送文档 §五）
+        PushService.reconnect(this);
     }
 
     /**
@@ -193,6 +216,14 @@ public class MainActivity extends DrawerFragmentActivity {
             if (uri != null) {
                 return uri.toString();
             }
+        }
+        return null;
+    }
+
+    /** 提取推送通知点击携带的目标 URL（应用内 WebView 打开）。 */
+    private String extractPushUrl(Intent intent) {
+        if (intent != null && PushNotifier.ACTION_PUSH_OPEN.equals(intent.getAction())) {
+            return intent.getStringExtra(PushNotifier.EXTRA_PUSH_URL);
         }
         return null;
     }
