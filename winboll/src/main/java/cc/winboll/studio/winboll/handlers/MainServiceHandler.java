@@ -15,6 +15,7 @@ public class MainServiceHandler extends Handler {
     public static final int MSG_REMINDTHREAD = 0;
 
     WeakReference<MainService> serviceWeakReference;
+    @SuppressWarnings("deprecation")
     public MainServiceHandler(MainService service) {
         serviceWeakReference = new WeakReference<MainService>(service);
     }

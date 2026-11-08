@@ -199,6 +199,7 @@ public class MyTermuxActivity extends AppCompatActivity {
         return BitmapFactory.decodeFile(iconFile.getAbsolutePath());
     }
 
+    @SuppressWarnings("deprecation")
     private void createDesktopShortcut(TermuxButtonModel model) {
         Intent shortcutIntent = new Intent(this, MyTermuxActivity.class);
         shortcutIntent.setAction(ACTION_EXECUTE_SHORTCUT);
@@ -338,6 +339,7 @@ public class MyTermuxActivity extends AppCompatActivity {
         return new File(getFilesDir(), "termux_icons/" + iconPath);
     }
 
+    @SuppressWarnings("deprecation")
     private void showButtonDialog(final int index, final TermuxButtonModel model) {
         final boolean isEdit = (model != null);
         mDialogIconPath = (model != null && model.getIconPath() != null)

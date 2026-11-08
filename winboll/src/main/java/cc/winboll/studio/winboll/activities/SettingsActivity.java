@@ -8,13 +8,16 @@ import android.security.KeyChain;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
 import cc.winboll.studio.winboll.R;
 import cc.winboll.studio.winboll.fragments.WWWBrowserFragment;
+import cc.winboll.studio.winboll.media.MidiBridge;
 import cc.winboll.studio.winboll.utils.CertTrustUtils;
 
 /**
@@ -106,12 +109,32 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                 Toast.makeText(SettingsActivity.this, R.string.toast_home_url_reset, Toast.LENGTH_SHORT).show();
             }
         });
+
+        // MIDI hosted playback switch: persist immediately; turning it off
+        // while a hosted session is active hands playback back to the web
+        // player at once (no takeover is accepted while disabled).
+        Switch swHostedPlayback = (Switch) findViewById(R.id.switch_hosted_playback);
+        swHostedPlayback.setChecked(MidiBridge.isHostingEnabled(this));
+        swHostedPlayback.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                MidiBridge.setHostingEnabled(SettingsActivity.this, isChecked);
+                if (!isChecked) {
+                    MidiBridge.cancelHostingForSetting();
+                }
+                Toast.makeText(SettingsActivity.this,
+                        isChecked ? R.string.toast_hosted_playback_enabled
+                                : R.string.toast_hosted_playback_disabled,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
      * 打开系统文件选择器，让用户选择 CA 证书文件（.crt/.cer/.pem）。
      * MIME 用 *&#47;* 以保证文件管理器能列出证书文件。
      */
+    @SuppressWarnings("deprecation")
     private void openCertPicker() {
         try {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -152,6 +175,7 @@ public class SettingsActivity extends BaseWinBoLLActivity {
     /**
      * 调起系统 KeyChain 证书安装界面，EXTRA_CERTIFICATE 必须为 DER 编码。
      */
+    @SuppressWarnings("deprecation")
     private void launchSystemInstall(byte[] der) {
         try {
             Intent intent = KeyChain.createInstallIntent();

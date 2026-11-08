@@ -13,6 +13,7 @@ public class ServiceUtils {
 
     public static final String TAG = ServiceUtils.class.getSimpleName();
 
+    @SuppressWarnings("deprecation")
     public static boolean isServiceAlive(Context context, String szServiceName) {
         // 获取Activity管理者对象
         ActivityManager manager = (ActivityManager) context
