@@ -129,3 +129,22 @@
 -dontusemixedcaseclassnames
 -keepattributes SourceFile,LineNumberTable
 
+# ============================== 可选集成缺失类屏蔽（R8 诊断 2026-11-09） ==============================
+# 以下均为第三方库的可选集成路径，对应依赖未引入（Android 端不使用），
+# 按 R8 生成的 build/outputs/mapping/betaRelease/missing_rules.txt 屏蔽警告：
+# - JSch：jzlib 压缩（仅 zlib 压缩会话使用）、GSSAPI/Kerberos 认证（org.ietf.jgss）
+# - fastjson：java.awt 桌面序列化、Joda-Time、JavaMoney/Moneta、Springfox/Swagger 集成
+# - libaes APPMSGMailUtils 的 javax.mail 发件路径（WinBoLL 不打包 JavaMail，该功能不可用且未被调用）
+-dontwarn com.jcraft.jzlib.**
+-dontwarn java.awt.**
+-dontwarn javax.mail.**
+-dontwarn javax.money.**
+-dontwarn org.javamoney.**
+-dontwarn org.ietf.jgss.**
+-dontwarn org.joda.time.**
+-dontwarn springfox.**
+# fastjson 1.2.76 内置 JAX-RS/Jersey 死 service 注册引用的接口类（同上不在 classpath），
+# 对应 META-INF/services 文件已在 packagingOptions 排除出 APK，此处屏蔽 R8 合并 jar 阶段的警告
+-dontwarn javax.ws.rs.**
+-dontwarn org.glassfish.**
+
