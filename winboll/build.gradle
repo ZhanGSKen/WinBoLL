@@ -35,7 +35,7 @@ android {
         // After updating versionName, manually set stageCount=0
         // in the .winboll/winbollBuildProps.properties file.
         // The combined versionName under the Gradle build is "${versionName}.0"
-        versionName "15.21"
+        versionName "15.22"
         if(true) {
             versionName = genVersionName("${versionName}")
         }
