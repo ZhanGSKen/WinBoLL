@@ -175,6 +175,7 @@ public class GlobalCrashReportView extends LinearLayout {
 	/**
 	 * 初始化默认配置（无自定义属性时使用）
 	 */
+	@SuppressWarnings("deprecation")
 	private void initDefaultConfig() {
 		// 设置默认配色（使用 debugTextColor 属性）
 		Resources.Theme theme = mContext.getTheme();

@@ -62,6 +62,7 @@ public class LogActivity extends Activity {
      * @param context 上下文（Activity/Fragment），用于启动 Activity
      * @param newTask 是否在新窗口中启动
      */
+    @SuppressWarnings("deprecation")
     public static void startLogActivity(Context context, boolean newTask) {
         Intent intent = new Intent(context, LogActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

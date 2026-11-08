@@ -236,6 +236,7 @@ public class LogTagSpinner extends Spinner {
 	 * 外部扩展：动态修改文字颜色
 	 * @param textColorRes 文字颜色资源 ID（如 R.color.red）
 	 */
+	@SuppressWarnings("deprecation")
 	public void updateTextColor(int textColorRes) {
 		int textColor = this.mContext.getResources().getColor(textColorRes);
 		// 刷新选中项颜色

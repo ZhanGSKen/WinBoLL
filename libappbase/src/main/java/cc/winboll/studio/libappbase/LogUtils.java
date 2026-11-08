@@ -5,7 +5,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import cc.winboll.studio.libappbase.GlobalApplication;
-import dalvik.system.DexFile;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -205,13 +204,14 @@ public class LogUtils {
         LogUtilsClassTAGBean.saveBeanList(_mContext, list, LogUtilsClassTAGBean.class);
     }
 
+    @SuppressWarnings("deprecation")
     private static void addClassTAGList() {
         try {
             final String packageNamePrefix = "cc.winboll.studio";
             final List<String> classNames = new ArrayList<String>();
             final String apkPath = _mContext.getPackageCodePath();
 
-            final DexFile dexfile = new DexFile(apkPath);
+            final dalvik.system.DexFile dexfile = new dalvik.system.DexFile(apkPath);
             Enumeration<String> entries = dexfile.entries();
 
             while (entries.hasMoreElements()) {

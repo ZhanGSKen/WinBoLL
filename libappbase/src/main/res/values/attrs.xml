@@ -26,6 +26,14 @@
         <attr name="aboutViewDividerColor" format="color" />
     </declare-styleable>
 
+    <!-- GlobalCrashActivity 样式属性（原 values-night/attrs.xml，属性声明不允许随夜间模式变化，合并至此） -->
+    <declare-styleable name="GlobalCrashActivity">
+        <attr name="colorTittle" format="color" />
+        <attr name="colorTittleBackgound" format="color" />
+        <attr name="colorText" format="color" />
+        <attr name="colorTextBackgound" format="color" />
+    </declare-styleable>
+
     
 
     <!-- DialogStyle 样式属性 -->

@@ -165,6 +165,7 @@ public abstract class BaseBean<T extends BaseBean> {
 	 * @throws IOException JSON 解析失败时抛出
 	 * @param <T> 泛型约束，限定为 BaseBean 子类
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T extends BaseBean> T parseStringToBean(String szBean, Class<T> clazz) throws IOException {
 		StringReader stringReader = new StringReader(szBean);
 		JsonReader jsonReader = new JsonReader(stringReader);
@@ -190,6 +191,7 @@ public abstract class BaseBean<T extends BaseBean> {
 	 * @return true：解析成功；false：解析失败
 	 * @param <T> 泛型约束，限定为 BaseBean 子类
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T extends BaseBean> boolean parseStringToBeanList(String szBeanList, ArrayList<T> beanList, Class<T> clazz) {
 		try {
 			// 初始化目标列表（为空则创建，非空则清空）

@@ -213,6 +213,7 @@ public class ApkSignUtils {
      * @param context 上下文
      * @return 签名Base64，失败返回null
      */
+    @SuppressWarnings("deprecation")
     private static String getSignFromPackageManager(Context context) {
         try {
             // 获取当前应用包信息（包含签名）

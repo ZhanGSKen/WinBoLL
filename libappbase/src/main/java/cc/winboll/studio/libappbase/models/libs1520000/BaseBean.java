@@ -146,6 +146,7 @@ public abstract class BaseBean<T extends BaseBean> {
      * @return 解析完成实体
      * @throws IOException 解析IO异常
      */
+    @SuppressWarnings("unchecked")
     public static <T extends BaseBean> T parseStringToBean(final String szBean, final Class<T> clazz) throws IOException {
         LogUtils.d(TAG, "进入字符串解析实体方法，目标Class：" + clazz.getSimpleName());
         final StringReader stringReader = new StringReader(szBean);
@@ -169,6 +170,7 @@ public abstract class BaseBean<T extends BaseBean> {
      * @param <T> 实体泛型
      * @return 解析结果
      */
+    @SuppressWarnings("unchecked")
     public static <T extends BaseBean> boolean parseStringToBeanList(final String szBeanList, ArrayList<T> beanList, final Class<T> clazz) {
         LogUtils.d(TAG, "进入列表字符串解析方法");
         try {

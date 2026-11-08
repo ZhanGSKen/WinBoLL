@@ -351,6 +351,7 @@ public class LogView extends RelativeLayout {
         volatile boolean isHandling;
         volatile boolean isAddNewLog;
 
+        @SuppressWarnings("deprecation")
         public LogViewHandler() {
             setIsHandling(false);
             setIsAddNewLog(false);

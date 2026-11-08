@@ -96,6 +96,7 @@ public class LogViewThread extends Thread {
          * 构造函数
          * @param path 监听的目录路径（此处为日志缓存目录）
          */
+        @SuppressWarnings("deprecation")
         public LogListener(String path) {
             // 父类构造：监听指定目录的所有事件（通过位掩码 ALL_EVENTS 指定）
             super(path);

@@ -89,6 +89,7 @@ public final class CrashHandler {
     /**
      * 执行崩溃信息收集、日志写入、跳转崩溃页面
      */
+    @SuppressWarnings("deprecation")
     private static void tryUncaughtException(final Thread thread,
 											 final Throwable throwable,
 											 final String crashDir,
