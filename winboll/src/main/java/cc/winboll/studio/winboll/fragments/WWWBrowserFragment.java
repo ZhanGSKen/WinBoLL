@@ -213,6 +213,7 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
     // Audio state polling (runs on main thread; continues while app is backgrounded
     // so the media notification stays in sync with the page audio).
     private static final long AUDIO_POLL_INTERVAL_MS = 800;
+    @SuppressWarnings("deprecation")
     private final Handler mAudioPollHandler = new Handler();
     private boolean mLastAudioPlaying = false;
     private int mStoppedProbes = 0;
@@ -341,6 +342,7 @@ public class WWWBrowserFragment extends Fragment implements View.OnClickListener
     /**
      * 初始化 WebView
      */
+    @SuppressWarnings("deprecation")
     private void initWebView() {
         WebSettings ws = mWebView.getSettings();
         ws.setJavaScriptEnabled(true);

@@ -134,6 +134,7 @@ public class SettingsActivity extends BaseWinBoLLActivity {
      * 打开系统文件选择器，让用户选择 CA 证书文件（.crt/.cer/.pem）。
      * MIME 用 *&#47;* 以保证文件管理器能列出证书文件。
      */
+    @SuppressWarnings("deprecation")
     private void openCertPicker() {
         try {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -174,6 +175,7 @@ public class SettingsActivity extends BaseWinBoLLActivity {
     /**
      * 调起系统 KeyChain 证书安装界面，EXTRA_CERTIFICATE 必须为 DER 编码。
      */
+    @SuppressWarnings("deprecation")
     private void launchSystemInstall(byte[] der) {
         try {
             Intent intent = KeyChain.createInstallIntent();

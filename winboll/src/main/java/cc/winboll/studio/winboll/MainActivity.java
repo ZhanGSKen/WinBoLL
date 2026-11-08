@@ -237,6 +237,7 @@ public class MainActivity extends DrawerFragmentActivity {
     /**
      * 初始化Handler（接收MSG_URLLOADHISTORY_UPDATE消息，刷新抽屉历史菜单）
      */
+    @SuppressWarnings("deprecation")
     private void initMainHandler() {
 		// 清理旧数据
 		if (_mMainHandler != null) {

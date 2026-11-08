@@ -197,6 +197,7 @@ public class YunUtils {
     }
 
     // 发送 POST 请求（JSON 数据）
+    @SuppressWarnings("deprecation")
     public void sendPostRequest(String url, String data, OnResponseListener listener) {
         RequestBody requestBody = RequestBody.create(
             MediaType.parse("application/json; charset=utf-8"), // 关键头信息

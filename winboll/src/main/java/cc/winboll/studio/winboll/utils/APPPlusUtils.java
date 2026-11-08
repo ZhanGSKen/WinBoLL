@@ -61,6 +61,7 @@ public class APPPlusUtils {
      * @param iconRes 快捷方式图标资源ID
      * @return 是否创建成功
      */
+    @SuppressWarnings("deprecation")
     private static boolean createComponentShortcut(Context context, ComponentName component, String name, int iconRes) {
         if (context == null || component == null || name == null || iconRes == 0) {
             LogUtils.d(TAG, "快捷方式创建失败：参数为空");

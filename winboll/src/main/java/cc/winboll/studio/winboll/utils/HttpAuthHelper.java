@@ -377,6 +377,7 @@ public class HttpAuthHelper {
     }
 
     /** 同步 WebView 自带 HttpAuth 凭据库，保持跨页面一致。 */
+    @SuppressWarnings("deprecation")
     private static void syncWebViewStore(WebView view, String host, String realm,
                                          String user, String pass) {
         if (view != null) {

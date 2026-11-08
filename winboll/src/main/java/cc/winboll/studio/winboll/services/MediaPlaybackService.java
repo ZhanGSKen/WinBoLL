@@ -207,6 +207,7 @@ public class MediaPlaybackService extends MediaBrowserService {
     private long mMetaDuration = -1;
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onCreate() {
         super.onCreate();
         MidiBridge.init(this);
@@ -500,6 +501,7 @@ public class MediaPlaybackService extends MediaBrowserService {
         return a == null ? b == null : a.equals(b);
     }
 
+    @SuppressWarnings("deprecation")
     private Notification buildNotification() {
         int flags = PendingIntent.FLAG_UPDATE_CURRENT;
         if (Build.VERSION.SDK_INT >= 23) {
