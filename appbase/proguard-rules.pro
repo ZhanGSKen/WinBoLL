@@ -73,6 +73,16 @@
 -dontwarn java.util.function.**
 
 # ============================== 第三方框架规则 ==============================
+# JavaMail（libappbase api 依赖 android-mail/android-activation）
+# Provider/mailcap 通过 META-INF 配置按类名反射加载（SMTPTransport 等），
+# 被 R8 改名/删除后 release 包发邮件会 ClassNotFoundException。
+-keep class javax.mail.** { *; }
+-dontwarn javax.mail.**
+-keep class com.sun.mail.** { *; }
+-dontwarn com.sun.mail.**
+-keep class javax.activation.** { *; }
+-dontwarn javax.activation.**
+
 # Retrofit + OkHttp
 -keep class retrofit2.** { *; }
 -keep interface retrofit2.** { *; }
