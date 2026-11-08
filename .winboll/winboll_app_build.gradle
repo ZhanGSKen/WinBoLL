@@ -1,6 +1,83 @@
 // WinBoLL app signing configuration
 //
 
+// ===== BaseVersion.flag version gate =====
+// Before creating/writing a module's build.properties, compare its baseVersion
+// value with the version set in BaseVersion.flag (project root):
+//   equal   -> skip the gate, follow the original rules
+//   less    -> the written build.properties gets stageCount=0, buildCount=0,
+//              baseVersion=<flag>, publishVersion=<flag>.0, baseBetaVersion=<flag>.1
+//              (other properties unchanged), then it is copied to every module
+//              folder enabled in settings.gradle
+//   greater -> assert and abort the build
+def winbollCompareVersions = { String a, String b ->
+    def pa = (a ?: "0").split("\\.").collect { it.isInteger() ? it.toInteger() : 0 }
+    def pb = (b ?: "0").split("\\.").collect { it.isInteger() ? it.toInteger() : 0 }
+    int n = Math.max(pa.size(), pb.size())
+    for (int i = 0; i < n; i++) {
+        int va = i < pa.size() ? pa[i] : 0
+        int vb = i < pb.size() ? pb[i] : 0
+        if (va != vb) return va < vb ? -1 : 1
+    }
+    return 0
+}
+
+def winbollCopyBuildPropsToAllModules = {
+    File settingsFile = new File("${RootProjectDir}/settings.gradle")
+    if (!settingsFile.exists()) {
+        println ">>> BaseVersion gate: settings.gradle not found, skip build.properties copy."
+        return
+    }
+    settingsFile.eachLine { String line ->
+        // Strip trailing comments so only real include statements are parsed
+        String code = line.split("//", 2)[0]
+        String trimmed = code.trim()
+        if (!trimmed.startsWith("include")) return
+        if (trimmed.startsWith("includeBuild")) return
+        def matcher = (code =~ /['"]:([^'"]+)['"]/)
+        while (matcher.find()) {
+            String moduleName = matcher.group(1)
+            File moduleDir = new File("${RootProjectDir}/${moduleName}")
+            if (moduleDir.isDirectory()) {
+                File targetFile = new File(moduleDir, "build.properties")
+                if (targetFile.canonicalFile == winbollBuildPropsFile.canonicalFile) {
+                    // The source build.properties itself, nothing to copy.
+                } else {
+                    java.nio.file.Files.copy(winbollBuildPropsFile.toPath(), targetFile.toPath(),
+                            java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+                    println ">>> BaseVersion gate: build.properties copied to module folder: " + moduleName
+                }
+            }
+        }
+    }
+}
+
+// Returns 'equal' or 'adjusted'; asserts and aborts when baseVersion > BaseVersion.flag.
+def winbollBaseVersionFlagCheck = {
+    File flagFile = new File("${RootProjectDir}/BaseVersion.flag")
+    if (!flagFile.exists()) {
+        println ">>> BaseVersion gate: BaseVersion.flag not found, gate skipped."
+        return 'equal'
+    }
+    String flagVersion = flagFile.text.trim()
+    assert !flagVersion.isEmpty() : ">>> BaseVersion gate ERROR: BaseVersion.flag is empty! Build aborted."
+    String baseVersion = winbollBuildProps['baseVersion']
+    int cmp = winbollCompareVersions(baseVersion, flagVersion)
+    println ">>> BaseVersion gate: build.properties baseVersion=" + baseVersion + " BaseVersion.flag=" + flagVersion
+    if (cmp == 0) {
+        println ">>> BaseVersion gate: equal, skip."
+        return 'equal'
+    }
+    assert cmp < 0 : ">>> BaseVersion gate ERROR: baseVersion " + baseVersion + " is greater than BaseVersion.flag " + flagVersion + " ! Update BaseVersion.flag first. Build aborted."
+    winbollBuildProps.setProperty("stageCount", "0")
+    winbollBuildProps.setProperty("buildCount", "0")
+    winbollBuildProps.setProperty("baseVersion", flagVersion)
+    winbollBuildProps.setProperty("publishVersion", flagVersion + ".0")
+    winbollBuildProps.setProperty("baseBetaVersion", flagVersion + ".1")
+    println ">>> BaseVersion gate: baseVersion " + baseVersion + " < BaseVersion.flag " + flagVersion + ", build.properties adjusted (stageCount=0, buildCount=0, baseVersion=" + flagVersion + ", publishVersion=" + flagVersion + ".0, baseBetaVersion=" + flagVersion + ".1)."
+    return 'adjusted'
+}
+
 android {
 	def winbollProps = new Properties()
     def winbollPropsFile = rootProject.file("${winbollFilePath}")
@@ -122,6 +199,8 @@ android {
                             // If debugging, copy to the WinBoLL backup management folder
                             //
                             if(variant.flavorName == "beta"&&variant.buildType.name == "debug"){
+                                // BaseVersion.flag gate: check before creating build.properties
+                                def betaDebugGateResult = winbollBaseVersionFlagCheck()
                                 File outBuildBckDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/${variant.buildType.name}")
                                 // Create target directory
                                 if(!outBuildBckDir.exists()) {
@@ -138,13 +217,15 @@ android {
                                         }
                                         println "Output APK (WinBoLLStudio): " + outBuildBckDir.getAbsolutePath() + "/${outputFileName}"
                                     }
-                                    // Check build flag configuration
-                                    assert (winbollBuildProps['buildCount'] != null)
-                                    assert (winbollBuildProps['libraryProject'] != null)
-                                    // Increment build count
-                                    int buildCount = Integer.parseInt(winbollBuildProps['buildCount']) + 1;
-                                    // Set build count
-                                    winbollBuildProps.setProperty("buildCount", Integer.toString(buildCount));
+                                    if(betaDebugGateResult == 'equal') {
+                                        // Check build flag configuration
+                                        assert (winbollBuildProps['buildCount'] != null)
+                                        assert (winbollBuildProps['libraryProject'] != null)
+                                        // Increment build count
+                                        int buildCount = Integer.parseInt(winbollBuildProps['buildCount']) + 1;
+                                        // Set build count
+                                        winbollBuildProps.setProperty("buildCount", Integer.toString(buildCount));
+                                    }
 
                                     // Save build flag configuration
                                     FileOutputStream fos = new FileOutputStream(winbollBuildPropsFile)
@@ -152,7 +233,11 @@ android {
                                     fos.close();
 									println "\n\n>>> Project build.properties saved.\n\n";
 
-                                    if(winbollBuildProps['libraryProject'] != "") {
+                                    if(betaDebugGateResult == 'adjusted') {
+                                        // BaseVersion.flag gate: the adjusted build.properties is copied
+                                        // to every module folder enabled in settings.gradle
+                                        winbollCopyBuildPropsToAllModules()
+                                    } else if(winbollBuildProps['libraryProject'] != "") {
                                         // If the app build.properties file defines a library module project name,
                                         // copy the new build flag configuration to the library project folder
                                         File libraryProjectBuildPropsFile = new File("$RootProjectDir/" + winbollBuildProps['libraryProject'] + "/build.properties")
@@ -170,6 +255,8 @@ android {
                             // If publishing, copy to the WinBoLL tag management folder and run Git repository management tasks.
                             //
                             if(variant.flavorName == "stage"&&variant.buildType.name == "release"){
+                                // BaseVersion.flag gate: check before creating build.properties
+                                def stageReleaseGateResult = winbollBaseVersionFlagCheck()
                                 // Publish the APK file
                                 String szVersionName = "${versionName}"
                                 String[] szlistTemp = szVersionName.split("-")
@@ -209,30 +296,36 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${szCommonTagAPKName}"
                                     }
-                                    // Check build flag configuration
-                                    assert (winbollBuildProps['stageCount'] != null)
-                                    assert (winbollBuildProps['publishVersion'] != null)
-                                    assert (winbollBuildProps['buildCount'] != null)
-                                    assert (winbollBuildProps['baseVersion'] != null)
-                                    assert (winbollBuildProps['baseBetaVersion'] != null)
-                                    assert (winbollBuildProps['libraryProject'] != null)
+                                    if(stageReleaseGateResult == 'equal') {
+                                        // Check build flag configuration
+                                        assert (winbollBuildProps['stageCount'] != null)
+                                        assert (winbollBuildProps['publishVersion'] != null)
+                                        assert (winbollBuildProps['buildCount'] != null)
+                                        assert (winbollBuildProps['baseVersion'] != null)
+                                        assert (winbollBuildProps['baseBetaVersion'] != null)
+                                        assert (winbollBuildProps['libraryProject'] != null)
 
-                                    // Set the default library version name
-                                    winbollBuildProps.setProperty("publishVersion", "${versionName}");
-                                    // Increment Stage publish count
-                                    int stageCount = Integer.parseInt(winbollBuildProps['stageCount']) + 1;
-                                    winbollBuildProps.setProperty("stageCount", Integer.toString(stageCount));
-                                    // Set the default library beta version name
-                                    winbollBuildProps.setProperty("baseBetaVersion", winbollBuildProps['baseVersion'] + "." + Integer.toString(stageCount));
-                                    // Reset build count
-                                    winbollBuildProps.setProperty("buildCount", "0");
+                                        // Set the default library version name
+                                        winbollBuildProps.setProperty("publishVersion", "${versionName}");
+                                        // Increment Stage publish count
+                                        int stageCount = Integer.parseInt(winbollBuildProps['stageCount']) + 1;
+                                        winbollBuildProps.setProperty("stageCount", Integer.toString(stageCount));
+                                        // Set the default library beta version name
+                                        winbollBuildProps.setProperty("baseBetaVersion", winbollBuildProps['baseVersion'] + "." + Integer.toString(stageCount));
+                                        // Reset build count
+                                        winbollBuildProps.setProperty("buildCount", "0");
+                                    }
 
                                     // Save build flag configuration
                                     FileOutputStream fos = new FileOutputStream(winbollBuildPropsFile)
                                     winbollBuildProps.store(fos, "${winbollBuildPropsDesc}");
                                     fos.close();
 
-                                    if(winbollBuildProps['libraryProject'] != "") {
+                                    if(stageReleaseGateResult == 'adjusted') {
+                                        // BaseVersion.flag gate: the adjusted build.properties is copied
+                                        // to every module folder enabled in settings.gradle
+                                        winbollCopyBuildPropsToAllModules()
+                                    } else if(winbollBuildProps['libraryProject'] != "") {
                                         File libraryProjectBuildPropsFile = new File("$RootProjectDir/" + winbollBuildProps['libraryProject'] + "/build.properties")
                                         assert(winbollBuildPropsFile.exists())
                                         assert(libraryProjectBuildPropsFile.exists())
