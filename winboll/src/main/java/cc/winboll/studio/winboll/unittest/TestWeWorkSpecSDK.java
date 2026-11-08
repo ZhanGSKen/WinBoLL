@@ -91,6 +91,7 @@ public class TestWeWorkSpecSDK extends AppCompatActivity implements IWinBoLLActi
     /**
      * 初始化主线程Handler（处理SDK异步回调，安全更新UI）
      */
+    @SuppressWarnings("deprecation")
     private void initHandler() {
         mWeWorkHandler = new Handler() {
             @Override

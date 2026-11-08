@@ -1,4 +1,4 @@
-// WinBoLL 应用签名配置
+// WinBoLL app signing configuration
 //
 
 android {
@@ -7,8 +7,8 @@ android {
     if(winbollPropsFile.exists()) {
         winbollProps.load(new FileInputStream(winbollPropsFile))
 	}
-    
-    // 读取秘钥配置文件
+
+    // Load keystore configuration file
     //
     def keyProps = new Properties()
     def keyPropsFile = rootProject.file("${keyPropsFilePath}")
@@ -18,8 +18,8 @@ android {
     if(keyPropsFile.exists()) {
 		keyProps.load(new FileInputStream(keyPropsFile))
 	}
-    
-    // 配置签名
+
+    // Configure signing
     signingConfigs {
 		if(keyPropsFile.exists()) {
             winboll {
@@ -41,19 +41,19 @@ android {
 			if(keyPropsFile.exists()) {
 			    signingConfig signingConfigs.winboll
 			}
-			
-            minifyEnabled true // 开启混淆（核心开关）
-            shrinkResources true // 可选：移除无用资源（进一步减小体积）
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), // 官方默认规则（优化版）
-                          'proguard-rules.pro' // 自定义规则文件
+
+            minifyEnabled true // Enable obfuscation (main switch)
+            shrinkResources true // Optional: remove unused resources (further size reduction)
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), // Official default rules (optimized)
+                          'proguard-rules.pro' // Custom rules file
          }
-		 
+
     }
-    
+
     flavorDimensions "WinBoLLApp"
     productFlavors {
         beta {
-            // 检查编译标志位配置
+            // Check build flag configuration
             assert (winbollBuildProps['buildCount'] != null)
             dimension "WinBoLLApp"
             applicationIdSuffix ".beta"
@@ -64,30 +64,30 @@ android {
             dimension "WinBoLLApp"
         }
     }
-	
+
 	compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
 
-    // 应用包输出配置
+    // APK output configuration
     //
     android.applicationVariants.all { variant ->
         //
-        // GitHub 应用包输出配置
-        // 1. 配置 Beta Release 版应用包输出
-        // 注意 ：GitHub 打包使用 android.yml 的 "bash ./gradlew assembleBetaRelease" 命令
+        // GitHub APK output configuration
+        // 1. Configure Beta Release APK output
+        // Note: GitHub packaging uses the "bash ./gradlew assembleBetaRelease" command in android.yml
         //
         if(variant.flavorName == "beta" && variant.buildType.name == "release") {
-            /* 后期管理预留代码 */
-            /* 暂时没有需要的 GitHub 应用包输出配置 */
-            /* GitHub 部分代码忽略 */
+            /* Reserved for future management */
+            /* No GitHub APK output configuration needed for now */
+            /* Ignore the GitHub section */
         }
-        
+
         //
-        // WinBoLL 应用包输出配置
-        // 1. 配置 Stage Release 版应用包输出
-        // 2. 配置 Beta Debug 版应用包输出
+        // WinBoLL APK output configuration
+        // 1. Configure Stage Release APK output
+        // 2. Configure Beta Debug APK output
 	    //
         if((variant.flavorName == "beta" && variant.buildType.name == "debug")
         || (variant.flavorName == "beta" && variant.buildType.name == "release")
@@ -98,32 +98,32 @@ android {
             def outputPath="${project.projectDir.absolutePath}/build/outputs/apk/${variant.buildType.name}"
             //def outputFileName="${rootProject.name}_${versionName}.apk"
             def outputFileName=project.rootDir.name + "_${versionName}.apk"
-            
-            // 创建 WinBoLL Studio 发布接口文件夹
+
+            // Create the WinBoLL Studio publish interface folder
             File fWinBoLLStudioDir = file("/sdcard/WinBoLLStudio/APKs");
-			// 如果配置了APK接口文件夹路径，就设置应用APK输出文件夹为接口文件夹。
+			// If the APK interface folder path is configured, use it as the APK output folder.
 			if(winbollProps != null && winbollProps['APKOutputPath'] != null ) {
                 fWinBoLLStudioDir = file(winbollProps['APKOutputPath']);
 			}
-			
+
             if(!fWinBoLLStudioDir.exists()) {
                 println "[ WinBoLLStudio ] : " + fWinBoLLStudioDir.getAbsolutePath() + " Folder does not exist."
                 println '[ WinBoLLStudio ] : The APKOutputPath property is not defined in winboll.properties, please configure APK output folder first.'
 			} else {
-                /// WINBOLL 主机的 APK 发布和源码管理操作 ///
+                /// APK publishing and source management operations of the WINBOLL host ///
                 variant.getAssembleProvider().get().doFirst {
-                    /* 后期管理预留代码 */
+                    /* Reserved for future management */
                 } //doFirst {
-                
-                // 编译输出后处理文件部分
+
+                // Post-build output file handling
                 //
                 variant.getAssembleProvider().get().doLast {
                         variant.outputs.forEach{ file->
-                            // 如果正在调试，就拷贝到 WinBoLL 备份管理文件夹
-                            // 
+                            // If debugging, copy to the WinBoLL backup management folder
+                            //
                             if(variant.flavorName == "beta"&&variant.buildType.name == "debug"){
                                 File outBuildBckDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/${variant.buildType.name}")
-                                // 创建目标路径目录
+                                // Create target directory
                                 if(!outBuildBckDir.exists()) {
                                     outBuildBckDir.mkdirs();
                                     println "Output Folder Created.(WinBoLLStudio) : " + outBuildBckDir.getAbsolutePath()
@@ -138,58 +138,58 @@ android {
                                         }
                                         println "Output APK (WinBoLLStudio): " + outBuildBckDir.getAbsolutePath() + "/${outputFileName}"
                                     }
-                                    // 检查编译标志位配置
+                                    // Check build flag configuration
                                     assert (winbollBuildProps['buildCount'] != null)
                                     assert (winbollBuildProps['libraryProject'] != null)
-                                    //构建计数增加
+                                    // Increment build count
                                     int buildCount = Integer.parseInt(winbollBuildProps['buildCount']) + 1;
-                                    // 设置编译计数
+                                    // Set build count
                                     winbollBuildProps.setProperty("buildCount", Integer.toString(buildCount));
-                                    
-                                    //保存编译标志配置
+
+                                    // Save build flag configuration
                                     FileOutputStream fos = new FileOutputStream(winbollBuildPropsFile)
                                     winbollBuildProps.store(fos, "${winbollBuildPropsDesc}");
                                     fos.close();
 									println "\n\n>>> Project build.properties saved.\n\n";
-                                    
+
                                     if(winbollBuildProps['libraryProject'] != "") {
-                                        // 如果应用 build.properties 文件设置了类库模块项目文件名
-                                        // 就拷贝一份新的编译标志配置到类库项目文件夹
+                                        // If the app build.properties file defines a library module project name,
+                                        // copy the new build flag configuration to the library project folder
                                         File libraryProjectBuildPropsFile = new File("$RootProjectDir/" + winbollBuildProps['libraryProject'] + "/build.properties")
                                         assert(winbollBuildPropsFile.exists())
                                         assert(libraryProjectBuildPropsFile.exists())
                                         java.nio.file.Path sourceFilePath = winbollBuildPropsFile.toPath();
                                         java.nio.file.Path targetFilePath = libraryProjectBuildPropsFile.toPath();
                                         java.nio.file.Files.copy(sourceFilePath, targetFilePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-										
+
 										println "\n\n>>> Library Project build.properties saved.\n\n";
                                     }
                                 }
                             }
-                            
-                            // 如果正在发布，就拷贝到 WinBoLL 标签管理文件夹，和处理 Git 仓库管理任务。
+
+                            // If publishing, copy to the WinBoLL tag management folder and run Git repository management tasks.
                             //
                             if(variant.flavorName == "stage"&&variant.buildType.name == "release"){
-                                // 发布 APK 文件
+                                // Publish the APK file
                                 String szVersionName = "${versionName}"
                                 String[] szlistTemp = szVersionName.split("-")
                                 String szShortVersionName = szlistTemp[0]
                                 String szCommonTagAPKName = project.rootDir.name + "_" + szShortVersionName + ".apk"
                                 println "CommonTagAPKName is : " + szCommonTagAPKName
-                                
+
                                 File outTagDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/tag/")
-                                // 创建目标路径目录
+                                // Create target directory
                                 if(!outTagDir.exists()) {
                                     outTagDir.mkdirs();
                                     println "Output Folder Created.(Tags) : " + outTagDir.getAbsolutePath()
                                 }
-                                
+
                                 if(outTagDir.exists()) {
                                     File targetAPK = new File(outTagDir, "${szCommonTagAPKName}")
                                     if(targetAPK.exists()) {
                                         assert (!targetAPK.exists())
                                     }
-                                    // 复制完整版APK
+                                    // Copy the full-version APK
                                     def fullApkFile = new File(outTagDir, outputFileName)
                                     copy{
                                         from file.outputFile
@@ -199,7 +199,7 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${outputFileName}"
                                     }
-                                    // 复制短版本名APK
+                                    // Copy the short-version-name APK
                                     def shortApkFile = new File(outTagDir, szCommonTagAPKName)
                                     copy{
                                         from file.outputFile
@@ -209,29 +209,29 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${szCommonTagAPKName}"
                                     }
-                                    // 检查编译标志位配置
+                                    // Check build flag configuration
                                     assert (winbollBuildProps['stageCount'] != null)
                                     assert (winbollBuildProps['publishVersion'] != null)
                                     assert (winbollBuildProps['buildCount'] != null)
                                     assert (winbollBuildProps['baseVersion'] != null)
                                     assert (winbollBuildProps['baseBetaVersion'] != null)
                                     assert (winbollBuildProps['libraryProject'] != null)
-                                    
-                                    // 设置类库的默认版本名
+
+                                    // Set the default library version name
                                     winbollBuildProps.setProperty("publishVersion", "${versionName}");
-                                    // Stage 发布计数增加
+                                    // Increment Stage publish count
                                     int stageCount = Integer.parseInt(winbollBuildProps['stageCount']) + 1;
                                     winbollBuildProps.setProperty("stageCount", Integer.toString(stageCount));
-                                    // 设置类库的默认Beta版本名
+                                    // Set the default library beta version name
                                     winbollBuildProps.setProperty("baseBetaVersion", winbollBuildProps['baseVersion'] + "." + Integer.toString(stageCount));
-                                    // 构建计数重置
+                                    // Reset build count
                                     winbollBuildProps.setProperty("buildCount", "0");
-                                    
-                                    //保存编译标志配置
+
+                                    // Save build flag configuration
                                     FileOutputStream fos = new FileOutputStream(winbollBuildPropsFile)
                                     winbollBuildProps.store(fos, "${winbollBuildPropsDesc}");
                                     fos.close();
-                                    
+
                                     if(winbollBuildProps['libraryProject'] != "") {
                                         File libraryProjectBuildPropsFile = new File("$RootProjectDir/" + winbollBuildProps['libraryProject'] + "/build.properties")
                                         assert(winbollBuildPropsFile.exists())
@@ -240,18 +240,19 @@ android {
                                         java.nio.file.Path targetFilePath = libraryProjectBuildPropsFile.toPath();
                                         java.nio.file.Files.copy(sourceFilePath, targetFilePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                                     }
-                                    
-                                    // 提交新的编译标志配置
+
+                                    // Commit the new build flag configuration
 									println 'exec bashCommitAppPublishBuildFlagInfoFilePath ...'
                                     def resultCommitBuildFlag = exec {
                                         commandLine 'bash', '--', "${RootProjectDir}/${bashCommitAppPublishBuildFlagInfoFilePath}", "${RootProjectDir}", "${versionName}", variant.buildType.name , rootProject.name
                                     }
-                                    // 检查bash命令的返回值（假设非零表示失败）
+                                    // Check the bash exit value (non-zero means failure)
                                     assert(resultCommitBuildFlag.getExitValue() == 0)
                                 }
                             } //  if(variant.buildType.name == "release"){
-							
-							// 如果正在调试发布版，就只生成和输出APK文件，不处理 Git 仓库提交与更新问题。
+
+							// If debugging the release build, only generate and output the APK file;
+							// do not handle Git repository commit/update tasks.
 							//
 					        if(variant.flavorName == "stage"&&variant.buildType.name == "debug"){
                                 String szVersionName = "${versionName}"
@@ -259,21 +260,21 @@ android {
                                 String szShortVersionName = szlistTemp[0]
                                 String szCommonTagAPKName = project.rootDir.name + "_" + szShortVersionName + ".apk"
                                 println "CommonTagAPKName is : " + szCommonTagAPKName
-                                
+
                                 File outTagDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/${variant.buildType.name}/")
-                                // 创建目标路径目录
+                                // Create target directory
                                 if(!outTagDir.exists()) {
                                     outTagDir.mkdirs();
                                     println "Output Folder Created.(Tags) : " + outTagDir.getAbsolutePath()
                                 }
-                                
+
                                 if(outTagDir.exists()) {
                                     File targetAPK = new File(outTagDir, "${szCommonTagAPKName}")
                                     if(targetAPK.exists()) {
-										println '如果是在调试 Stage 版应用包构建，请删除(注：在debug目录)现有的 Stage 应用包('+targetAPK.getAbsolutePath()+')。再编译一次。'
+										println 'If debugging the Stage app build, please delete the existing Stage APK (in the debug folder): ' + targetAPK.getAbsolutePath() + ' and build again.'
                                         assert (!targetAPK.exists())
                                     }
-                                    // 复制完整版APK
+                                    // Copy the full-version APK
                                     def debugFullApk = new File(outTagDir, outputFileName)
                                     copy{
                                         from file.outputFile
@@ -283,7 +284,7 @@ android {
                                         }
                                         println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${outputFileName}"
                                     }
-                                    // 复制短版本名APK
+                                    // Copy the short-version-name APK
                                     def debugShortApk = new File(outTagDir, szCommonTagAPKName)
                                     copy{
                                         from file.outputFile
@@ -295,8 +296,8 @@ android {
                                     }
                                 }
                             }
-                            
-                            // 如果配置了APK额外输出路径，就复制一份拷贝到额外路径。
+
+                            // If an extra APK output path is configured, copy the APK there as well.
                             //
 							if(winbollProps != null && winbollProps['ExtraAPKOutputPath'] != null ) {
                                 File apkFile = new File(winbollProps['ExtraAPKOutputPath'])
@@ -313,12 +314,12 @@ android {
                                     }
                                 }
 						    }
-                            
-                        
+
+
                     }
 	            }// End of (variant.getAssembleProvider().get().doLast {)
-            }/// WINBOLL 主机的 APK 发布和源码管理操作结束 ///
+            }/// APK publishing and source management operations of the WINBOLL host end ///
         }
-        
+
     } // End of (android.applicationVariants.all { variant ->)
 }

@@ -258,6 +258,7 @@ public class App extends GlobalApplication {
                 }
             }
 
+            @SuppressWarnings("deprecation")
             private String buildLog(Throwable throwable) {
                 String time = DATE_FORMAT.format(new Date());
 

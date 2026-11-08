@@ -151,6 +151,7 @@ public class ManagementFragment extends Fragment implements View.OnClickListener
     }
 
     // ------------------- 新增：初始化Handler（接收应用内消息） -------------------
+    @SuppressWarnings("deprecation")
     private void initHandler() {
         // Java 7 匿名内部类实现Handler（主线程中创建，用于更新UI）
         mBrowserHandler = new Handler() {

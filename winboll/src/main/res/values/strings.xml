@@ -55,9 +55,14 @@
     <string name="settings_browser_home_hint">输入 WWWBrowser 首页网址</string>
     <string name="settings_browser_home_save">保存</string>
     <string name="settings_browser_home_reset">恢复默认</string>
-    <string name="settings_browser_home_desc">保存后，WWWBrowser 浏览器启动与点击主页按钮时打开此网址；恢复默认回到 https://www.studio.winboll.cc。</string>
+    <string name="settings_browser_home_desc">保存后，WWWBrowser 浏览器启动与点击主页按钮时打开此网址；恢复默认回到 https://www.winboll.cc/。</string>
     <string name="toast_home_url_empty">首页网址不能为空</string>
     <string name="toast_home_url_invalid">首页网址需以 http:// 或 https:// 开头</string>
     <string name="toast_home_url_saved">首页已保存</string>
     <string name="toast_home_url_reset">已恢复默认首页</string>
+    <string name="settings_section_hosted_playback">托管播放</string>
+    <string name="settings_hosted_playback_label">启用托管播放</string>
+    <string name="settings_hosted_playback_desc">默认停用。启用后，网页 MIDI 播放可切换为应用托管播放（通知栏控制、后台续播）；停用后不接管网页播放，网页本地播放。</string>
+    <string name="toast_hosted_playback_enabled">托管播放已启用</string>
+    <string name="toast_hosted_playback_disabled">托管播放已停用</string>
 </resources>
