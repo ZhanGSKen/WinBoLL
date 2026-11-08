@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public/' } 
+        maven { url 'https://maven.aliyun.com/repository/public/' }
         maven { url 'https://maven.aliyun.com/repository/google/' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
         maven { url 'https://dl.bintray.com/ppartisan/maven/' }
@@ -9,13 +9,13 @@ buildscript {
         maven { url "https://jitpack.io" }
         mavenCentral()
         google()
-		
+
         mavenLocal {
-            // 设置本地Maven仓库路径
+            // Set local Maven repository path
             url 'file:///sdcard/.m2/repository/'
         }
 
-        // Nexus Maven 库地址
+        // Nexus Maven repository URLs
         // "WinBoLL Release"
         maven { url "https://nexus.winboll.cc/repository/maven-releases/" }
         // "WinBoLL Group"
@@ -24,8 +24,8 @@ buildscript {
         maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
     }
     dependencies {
-	    // 适配MIUI12
-        classpath 'com.android.tools.build:gradle:7.2.1' // 对应 compileSdkVersion 32
+	    // Compatible with MIUI12
+        classpath 'com.android.tools.build:gradle:7.2.1' // matches compileSdkVersion 32
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -33,7 +33,7 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public/' } 
+        maven { url 'https://maven.aliyun.com/repository/public/' }
         maven { url 'https://maven.aliyun.com/repository/google/' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
         maven { url 'https://dl.bintray.com/ppartisan/maven/' }
@@ -41,13 +41,13 @@ allprojects {
         maven { url "https://jitpack.io" }
         mavenCentral()
         google()
-		
+
         mavenLocal {
-            // 设置本地Maven仓库路径
+            // Set local Maven repository path
             url 'file:///sdcard/.m2/repository/'
         }
-		
-        // Nexus Maven 库地址
+
+        // Nexus Maven repository URLs
         // "WinBoLL Release"
         maven { url "https://nexus.winboll.cc/repository/maven-releases/" }
         // "WinBoLL Group"
@@ -56,20 +56,20 @@ allprojects {
         maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
     }
     ext {
-        // 定义全局变量，常用于版本管理
-        // 变量在子模块的build.gradle中直接以： $NAME 的形式调用
-        // 定义版本管理文件
+        // Global variables commonly used for version management.
+        // Sub-module build.gradle files reference them directly as $NAME.
+        // Version management file definitions
         RootProjectDir = "${rootProject.projectDir}".replace("\\", "/")
         bashCheckGitCommitStatusFilePath = ".winboll/bashCheckGitCommitStatus.sh"
         bashCommitAppPublishBuildFlagInfoFilePath = ".winboll/bashCommitAppPublishBuildFlagInfo.sh"
-        
+
         winbollFilePath = "winboll.properties"
         keyPropsFilePath = "appkey.keystore"
-        // 定义 lint 输出文件
+        // Lint report output files
         lintXmlReportFilePath = "build/reports/lint-results.xml"
         lintHTMLReportFilePath = "build/reports/lint-results.html"
-        
-        // 检查编译配置文件
+
+        // Check the build configuration file
         subProjectPath = "$RootProjectDir/$project.name"
         println "Sub project path: $subProjectPath"
         winbollBuildPropsDesc="Created by .winboll/winboll_app_build.gradle"
@@ -77,28 +77,30 @@ allprojects {
         winbollBuildPropsFilePath = winbollBuildPropsFile.getAbsolutePath();
         assert(winbollBuildPropsFile.exists())
         winbollBuildProps = new Properties()
-        // 读取编译标志位配置文件
+        // Load the build flag configuration file
         winbollBuildProps.load(new FileInputStream(winbollBuildPropsFile))
-        // 读取编译标志位配置文件
+        // Load the build flag configuration file
         assert (winbollBuildProps['stageCount'] != null)
         assert (winbollBuildProps['baseVersion'] != null)
         assert (winbollBuildProps['publishVersion'] != null)
 	    assert (winbollBuildProps['buildCount'] != null)
     }
-    
+
     afterEvaluate {
         task cleanLintFile() {
             dependsOn tasks.findAll { task -> task.name.startsWith('lint') }
             doFirst {
-                // 这里是将在Lint任务开始前执行的代码
+                // Code here runs before the lint tasks start
                 println "Lint task will run after this setup."
             }
 	    }
     }
-    
+
     subprojects {
         tasks.withType(JavaCompile) {
             options.encoding = "UTF-8"
+            // Silence obsolete source/target option warnings; the Java 7 target is intentional.
+            options.compilerArgs << '-Xlint:-options'
         }
 	}
 }

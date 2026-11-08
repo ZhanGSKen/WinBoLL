@@ -1,20 +1,20 @@
-// 本机和 WinBoLL Maven 仓库传输配置。
+// Local machine to WinBoLL Maven repository publishing configuration.
 //
 
 def getDefaultVersion(){
-    // 检查编译标志位配置
+    // Check build flag configuration
     assert (winbollBuildProps['publishVersion'] != null)
-    // 返回编译版本号
+    // Return build version
     return winbollBuildProps['publishVersion']
 }
 
-def siteUrl = 'https://winboll.cc/?page=studio/details.php&app=${rootProject.name}' // 项目主页
-def gitUrl = 'https://gitea.winboll.cc/WinBoLL/${rootProject.name}' // 项目的git地址
-def DefaultGroupId = 'cc.winboll.studio' // 类库所有者groupId
-def DefaultVersion = getDefaultVersion() // 版本号
-def DeveloperId='zhangsken' // 开发者账号
-def DeveloperName='ZhanGSKen' // 开发者名称
-def DeveloperEMail='zhangsken@188.com' // 开发者邮箱地址
+def siteUrl = 'https://winboll.cc/?page=studio/details.php&app=${rootProject.name}' // Project home page
+def gitUrl = 'https://gitea.winboll.cc/WinBoLL/${rootProject.name}' // Project Git URL
+def DefaultGroupId = 'cc.winboll.studio' // Library owner groupId
+def DefaultVersion = getDefaultVersion() // Version
+def DeveloperId='zhangsken' // Developer account
+def DeveloperName='ZhanGSKen' // Developer name
+def DeveloperEMail='zhangsken@188.com' // Developer email
 def LicenseName='The Apache Software License, Version 2.0'
 def LicenseUrl='http://www.apache.org/licenses/LICENSE-2.0.txt'
 
@@ -27,23 +27,23 @@ afterEvaluate {
                 properties.load(file("${RootProjectDir}/${winbollFilePath}").newDataInputStream())
                 def NexusUserName = properties.getProperty("Nexus.name")
                 def NexusPassword = properties.getProperty("Nexus.password")
-                // WinBoLL Release 仓库
+                // WinBoLL Release repository
                 maven{
-                    //仓库的名字和地址
+                    // Repository name and URL
                     name = "WinBoLLRelease"
                     url="https://nexus.winboll.cc/repository/maven-releases/"
-                    // 仓库用户名密码
+                    // Repository credentials
                     credentials {
                         username = NexusUserName
                         password = NexusPassword
                     }
                 }
-                // WinBoLL Snapshot 仓库
+                // WinBoLL Snapshot repository
                 maven{
-                    //仓库的名字和地址
+                    // Repository name and URL
                     name = "WinBoLLSnapshot"
                     url="https://nexus.winboll.cc/repository/maven-snapshots/"
-                    // 仓库用户名密码
+                    // Repository credentials
                     credentials {
                         username = NexusUserName
                         password = NexusPassword
@@ -52,27 +52,27 @@ afterEvaluate {
             }
         }
         publications {
-            // Local Maven 仓库传输任务
+            // Local Maven repository publish task
             //
             release(MavenPublication) {
                 groupId = DefaultGroupId
                 artifactId = project.name
                 version = DefaultVersion
-    
+
                 //from components.java
-                // 必须有这个 否则不会上传AAR包
+                // Required; otherwise the AAR will not be uploaded
                 afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
-                // 上传source，这样使用方可以看到方法注释
+                // Upload sources so consumers can see method comments
                 //artifact generateSourcesJar
-                //要上传的aar路径
+                // AAR path to upload
                 //artifact "$buildDir/outputs/aar/${project.getName()}-release.aar"
                 //artifact "$buildDir/outputs/aar/${project.getName()}-debug.aar"
-                
-                //对pom进行的操作
+
+                // Operations on the POM
                 pom.withXml{
                     Node pomNode = asNode()
                     pomNode.dependencies.'*'.findAll() {
-                        //将所有的默认依赖移除
+                        // Remove all default dependencies
                         //it.parent().remove(it)
                     }
                 }
@@ -80,19 +80,19 @@ afterEvaluate {
                     name = artifactId
                     url = siteUrl
                     licenses {
-                        license { //证书说明
-                           name=LicenseName // 开源协议名称
-                           url=LicenseUrl // 协议地址
+                        license { // License info
+                           name=LicenseName // License name
+                           url=LicenseUrl // License URL
                         }
                     }
                     developers {
                         developer {
-                            id=DeveloperId // 开发者账号
-                            name=DeveloperName // 开发者名称
-                            email=DeveloperEMail // 开发者邮箱地址
+                            id=DeveloperId // Developer account
+                            name=DeveloperName // Developer name
+                            email=DeveloperEMail // Developer email
                         }
                     }
-                    //软件配置管理
+                    // Source code management
                     scm {
                         connection=gitUrl
                         developerConnection=gitUrl
@@ -100,31 +100,31 @@ afterEvaluate {
                     }
                 }
             }
-            
-            // WinBoLL Maven Release 仓库传输任务
+
+            // WinBoLL Maven Release repository publish task
             //
             releaseWinBoLL(MavenPublication) {
-                // 需要使用的变体，假设有free和pay两个变体，可以选择一个
+                // Variant to use; e.g. with free and pay variants, pick one
                 //from components.free
-                
-                groupId = DefaultGroupId // 文件的groupId
-                artifactId = project.name //文件的名字
-                version = DefaultVersion //版本号
-    
+
+                groupId = DefaultGroupId // groupId of the artifact
+                artifactId = project.name // Artifact name
+                version = DefaultVersion // Version
+
                 //from components.java
-                // 必须有这个 否则不会上传AAR包
+                // Required; otherwise the AAR will not be uploaded
                 afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
-                // 上传source，这样使用方可以看到方法注释
+                // Upload sources so consumers can see method comments
                 //artifact generateSourcesJar
-                //要上传的aar路径
+                // AAR path to upload
                 //artifact "$buildDir/outputs/aar/${project.getName()}-release.aar"
                 //artifact "$buildDir/outputs/aar/${project.getName()}-debug.aar"
-                
-                //对pom进行的操作
+
+                // Operations on the POM
                 pom.withXml{
                     Node pomNode = asNode()
                     pomNode.dependencies.'*'.findAll() {
-                        //将所有的默认依赖移除
+                        // Remove all default dependencies
                         //it.parent().remove(it)
                     }
                 }
@@ -132,52 +132,52 @@ afterEvaluate {
                     name = artifactId
                     url = siteUrl
                     licenses {
-                        license { //证书说明
-                           name=LicenseName // 开源协议名称
-                           url=LicenseUrl // 协议地址
+                        license { // License info
+                           name=LicenseName // License name
+                           url=LicenseUrl // License URL
                         }
                     }
                     developers {
                         developer {
-                            id=DeveloperId // 开发者账号
-                            name=DeveloperName // 开发者名称
-                            email=DeveloperEMail // 开发者邮箱地址
+                            id=DeveloperId // Developer account
+                            name=DeveloperName // Developer name
+                            email=DeveloperEMail // Developer email
                         }
                     }
-                    //软件配置管理
+                    // Source code management
                     scm {
                         connection=gitUrl
                         developerConnection=gitUrl
                         url=siteUrl
                     }
                 }
-                
-            } // 创建名为 release 的任务结束
-            
-            // WinBoLL Maven Snapshot 仓库传输任务
+
+            } // End of the release task creation
+
+            // WinBoLL Maven Snapshot repository publish task
             //
             snapshotWinBoLL(MavenPublication) {
-                // 需要使用的变体，假设有free和pay两个变体，可以选择一个
+                // Variant to use; e.g. with free and pay variants, pick one
                 //from components.free
-                
-                groupId = DefaultGroupId // 文件的groupId
-                artifactId = project.name //文件的名字
-                version = DefaultVersion + "-SNAPSHOT" //版本号
-    
+
+                groupId = DefaultGroupId // groupId of the artifact
+                artifactId = project.name // Artifact name
+                version = DefaultVersion + "-SNAPSHOT" // Version
+
                 //from components.java
-                // 必须有这个 否则不会上传AAR包
+                // Required; otherwise the AAR will not be uploaded
                 afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
-                // 上传source，这样使用方可以看到方法注释
+                // Upload sources so consumers can see method comments
                 //artifact generateSourcesJar
-                //要上传的aar路径
+                // AAR path to upload
                 //artifact "$buildDir/outputs/aar/${project.getName()}-release.aar"
                 //artifact "$buildDir/outputs/aar/${project.getName()}-debug.aar"
-                
-                //对pom进行的操作
+
+                // Operations on the POM
                 pom.withXml{
                     Node pomNode = asNode()
                     pomNode.dependencies.'*'.findAll() {
-                        //将所有的默认依赖移除
+                        // Remove all default dependencies
                         //it.parent().remove(it)
                     }
                 }
@@ -185,27 +185,27 @@ afterEvaluate {
                     name = artifactId
                     url = siteUrl
                     licenses {
-                        license { //证书说明
-                           name=LicenseName // 开源协议名称
-                           url=LicenseUrl // 协议地址
+                        license { // License info
+                           name=LicenseName // License name
+                           url=LicenseUrl // License URL
                         }
                     }
                     developers {
                         developer {
-                            id=DeveloperId // 开发者账号
-                            name=DeveloperName // 开发者名称
-                            email=DeveloperEMail // 开发者邮箱地址
+                            id=DeveloperId // Developer account
+                            name=DeveloperName // Developer name
+                            email=DeveloperEMail // Developer email
                         }
                     }
-                    //软件配置管理
+                    // Source code management
                     scm {
                         connection=gitUrl
                         developerConnection=gitUrl
                         url=siteUrl
                     }
                 }
-            } // 创建名为 snapshot 的任务结束
+            } // End of the snapshot task creation
         }
-        
+
     }
 }
