@@ -157,6 +157,7 @@ public class AboutView extends LinearLayout {
         return input;
     }
 
+    @SuppressWarnings("deprecation")
     android.os.Handler mHandler = new android.os.Handler() {
         @Override
         public void handleMessage(Message msg) {

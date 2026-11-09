@@ -318,7 +318,7 @@ public class FTPUtils {
      * @param remoteDir SFTP服务器目录路径（如/ftp/apk/，结尾带/或不带均可）
      * @return 成功返回原生Vector<ChannelSftp.LsEntry>，失败返回空Vector
      */
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public Vector listDir(String remoteDir) {
         Vector fileList = new Vector();
         // 前置校验

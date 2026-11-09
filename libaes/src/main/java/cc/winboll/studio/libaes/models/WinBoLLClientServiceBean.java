@@ -10,6 +10,7 @@ import android.util.JsonWriter;
 import cc.winboll.studio.libappbase.models.libs1520000.BaseBean;
 import java.io.IOException;
 
+@SuppressWarnings("rawtypes")
 public class WinBoLLClientServiceBean extends BaseBean {
 
     public static final String TAG = "WinBoLLClientServiceBean";

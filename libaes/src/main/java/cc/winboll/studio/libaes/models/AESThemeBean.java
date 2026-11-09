@@ -12,6 +12,7 @@ import cc.winboll.studio.libappbase.models.libs1520000.BaseBean;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@SuppressWarnings("rawtypes")
 public class AESThemeBean extends BaseBean {
 
     public static final String TAG = "AESThemeBean";

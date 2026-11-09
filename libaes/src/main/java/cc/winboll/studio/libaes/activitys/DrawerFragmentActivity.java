@@ -49,6 +49,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     DrawerLayout mDrawerLayout;
     PullRefreshLayout mPullRefreshLayout;
     ADrawerMenuListView mADrawerMenuListView;
+    @SuppressWarnings("rawtypes")
     DrawerMenuDataAdapter mDrawerMenuDataAdapter;
     boolean mIsDrawerOpened = false;
     boolean mIsDrawerOpening = false;
@@ -105,6 +106,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void startActivityForResult(Intent intent, int requestCode, Bundle options) {
         super.startActivityForResult(intent, requestCode, options);
     }
@@ -157,6 +159,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         }
     }
 
+    @SuppressWarnings("deprecation")
     void initMainRootView() {
         mDrawerLayout = findViewById(R.id.activitydrawerfragmentDrawerLayout1);
         mADrawerMenuListView = findViewById(R.id.activitydrawerfragmentDrawerMenuListView1);

@@ -116,6 +116,7 @@ public class MainActivity extends DrawerFragmentActivity {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean onOptionsItemSelected(MenuItem item) {
         int nItemId = item.getItemId();
         if (item.getItemId() == R.id.item_testactivitymanager) {

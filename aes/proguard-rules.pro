@@ -111,6 +111,9 @@
 
 # JSch SSH组件
 -keep class com.jcraft.jsch.** { *; }
+# JSch 可选集成（jzlib 压缩、GSSAPI/Kerberos 认证，运行时按需加载，本项目未打包）
+-dontwarn com.jcraft.jzlib.**
+-dontwarn org.ietf.jgss.**
 
 # JavaMail SMTP（邮件发送核心库，Release编译必须保留）
 -dontwarn javax.mail.**

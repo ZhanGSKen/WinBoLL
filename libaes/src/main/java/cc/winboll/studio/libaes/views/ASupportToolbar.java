@@ -45,6 +45,7 @@ public class ASupportToolbar extends Toolbar {
         notifyColorChange();
     }
 
+    @SuppressWarnings("deprecation")
     void notifyColorChange() {
         // 工具栏描边
         int nStroke = 5;
