@@ -59,11 +59,10 @@ dependencies {
     //annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 	
 	// WinBoLL库 nexus.winboll.cc 地址
-    //api 'cc.winboll.studio:libappbase:15.21.+'
-    api 'com.github.ZhanGSKen:libappbase:appbase-v15.21.+'
+    api 'cc.winboll.studio:libappbase:15.22.+'
 	
 	// 备用库 jitpack.io 地址
-	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.33'
+	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.22.+'
 
     // JavaMail SMTP (Android兼容版)
     api 'com.sun.mail:android-mail:1.6.7'
