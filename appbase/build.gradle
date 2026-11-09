@@ -30,10 +30,10 @@ android {
 		//-  versionCode  类型：int 整型
 		//- Java int 最大值：2147483647
         versionCode 1520000
-        // versionName 更新后需要手动设置 
+        // versionName 更新后需要手动设置
         // .winboll/winbollBuildProps.properties 文件的 stageCount=0
         // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
-        versionName "15.21"
+        versionName "15.22"
         if(true) {
             versionName = genVersionName("${versionName}")
         }
