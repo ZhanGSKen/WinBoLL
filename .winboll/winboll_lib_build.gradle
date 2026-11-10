@@ -71,9 +71,30 @@ afterEvaluate {
                 // Operations on the POM
                 pom.withXml{
                     Node pomNode = asNode()
-                    pomNode.dependencies.'*'.findAll() {
-                        // Remove all default dependencies
-                        //it.parent().remove(it)
+                    // artifact()-based publication does not generate <dependencies>;
+                    // inject api/implementation deps so library consumers resolve the
+                    // supertype chain transitively (e.g. androidx.appcompat methods
+                    // inherited by subclasses of DrawerFragmentActivity).
+                    // Versions are read from each module's own build.gradle declarations;
+                    // never hardcode dependency versions in this script.
+                    def depEntries = []
+                    ['api': 'compile', 'implementation': 'runtime'].each { cfgName, scope ->
+                        def cfg = project.configurations.findByName(cfgName)
+                        cfg?.dependencies?.each { dep ->
+                            if (dep.group != null && dep.version != null) {
+                                depEntries << [group: dep.group, name: dep.name, version: dep.version, scope: scope]
+                            }
+                        }
+                    }
+                    if (!depEntries.isEmpty()) {
+                        def depsNode = pomNode.appendNode('dependencies')
+                        depEntries.each { e ->
+                            def depNode = depsNode.appendNode('dependency')
+                            depNode.appendNode('groupId', e.group)
+                            depNode.appendNode('artifactId', e.name)
+                            depNode.appendNode('version', e.version)
+                            depNode.appendNode('scope', e.scope)
+                        }
                     }
                 }
                 pom {
@@ -123,9 +144,30 @@ afterEvaluate {
                 // Operations on the POM
                 pom.withXml{
                     Node pomNode = asNode()
-                    pomNode.dependencies.'*'.findAll() {
-                        // Remove all default dependencies
-                        //it.parent().remove(it)
+                    // artifact()-based publication does not generate <dependencies>;
+                    // inject api/implementation deps so library consumers resolve the
+                    // supertype chain transitively (e.g. androidx.appcompat methods
+                    // inherited by subclasses of DrawerFragmentActivity).
+                    // Versions are read from each module's own build.gradle declarations;
+                    // never hardcode dependency versions in this script.
+                    def depEntries = []
+                    ['api': 'compile', 'implementation': 'runtime'].each { cfgName, scope ->
+                        def cfg = project.configurations.findByName(cfgName)
+                        cfg?.dependencies?.each { dep ->
+                            if (dep.group != null && dep.version != null) {
+                                depEntries << [group: dep.group, name: dep.name, version: dep.version, scope: scope]
+                            }
+                        }
+                    }
+                    if (!depEntries.isEmpty()) {
+                        def depsNode = pomNode.appendNode('dependencies')
+                        depEntries.each { e ->
+                            def depNode = depsNode.appendNode('dependency')
+                            depNode.appendNode('groupId', e.group)
+                            depNode.appendNode('artifactId', e.name)
+                            depNode.appendNode('version', e.version)
+                            depNode.appendNode('scope', e.scope)
+                        }
                     }
                 }
                 pom {
@@ -176,9 +218,30 @@ afterEvaluate {
                 // Operations on the POM
                 pom.withXml{
                     Node pomNode = asNode()
-                    pomNode.dependencies.'*'.findAll() {
-                        // Remove all default dependencies
-                        //it.parent().remove(it)
+                    // artifact()-based publication does not generate <dependencies>;
+                    // inject api/implementation deps so library consumers resolve the
+                    // supertype chain transitively (e.g. androidx.appcompat methods
+                    // inherited by subclasses of DrawerFragmentActivity).
+                    // Versions are read from each module's own build.gradle declarations;
+                    // never hardcode dependency versions in this script.
+                    def depEntries = []
+                    ['api': 'compile', 'implementation': 'runtime'].each { cfgName, scope ->
+                        def cfg = project.configurations.findByName(cfgName)
+                        cfg?.dependencies?.each { dep ->
+                            if (dep.group != null && dep.version != null) {
+                                depEntries << [group: dep.group, name: dep.name, version: dep.version, scope: scope]
+                            }
+                        }
+                    }
+                    if (!depEntries.isEmpty()) {
+                        def depsNode = pomNode.appendNode('dependencies')
+                        depEntries.each { e ->
+                            def depNode = depsNode.appendNode('dependency')
+                            depNode.appendNode('groupId', e.group)
+                            depNode.appendNode('artifactId', e.name)
+                            depNode.appendNode('version', e.version)
+                            depNode.appendNode('scope', e.scope)
+                        }
                     }
                 }
                 pom {
