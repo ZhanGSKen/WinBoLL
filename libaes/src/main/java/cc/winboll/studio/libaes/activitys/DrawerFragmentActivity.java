@@ -43,9 +43,9 @@ import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import com.baoyz.widget.PullRefreshLayout;
 import java.util.ArrayList;
+import androidx.appcompat.app.ActionBarDrawerToggle.Delegate;
 import android.app.ActivityManager.TaskDescription;
 import android.app.Application.ActivityLifecycleCallbacks;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
 import android.app.VoiceInteractor;
@@ -63,13 +63,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources.Theme;
-import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -91,17 +87,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.accessibility.AccessibilityEvent;
-import androidx.core.app.ComponentActivity.ExtraData;
 import androidx.core.app.SharedElementCallback;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider.Factory;
 import androidx.lifecycle.ViewModelStore;
-import androidx.loader.app.LoaderManager;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.concurrent.Executor;
 
@@ -133,253 +126,171 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     abstract protected ActivityType initActivityType();
 
     // =========================================================================================
-    // AppCompatActivity public/protected overrides
-    // -----------------------------------------------------------------------------------------
-    // DrawerFragmentActivity is the single extension point for drawer based activities, so every
-    // public/protected member declared by AppCompatActivity (appcompat 1.3.0) is overridden here
-    // and forwarded to super. Subclasses may extend any of them in one place instead of touching
-    // the AndroidX parent class. Methods without business logic stay pure forwards on purpose.
+    // AppCompatActivity chain overrides (declared APIs only; deprecated APIs are not overridden)
     // =========================================================================================
 
+    // -----------------------------------------------------------------------------------------
+    // AppCompatActivity  (public/protected forwards, deprecated APIs excluded)
+    // -----------------------------------------------------------------------------------------
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(newBase);
+    public void addContentView(View p0, android.view.ViewGroup.LayoutParams p1) {
+        super.addContentView(p0, p1);
     }
-
     @Override
-    public void setTheme(int resid) {
-        super.setTheme(resid);
+    protected void attachBaseContext(Context p0) {
+        super.attachBaseContext(p0);
     }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onNightModeChanged(int mode) {
-        super.onNightModeChanged(mode);
-    }
-
-    @Override
-    public ActionBar getSupportActionBar() {
-        return super.getSupportActionBar();
-    }
-
-    @Override
-    public void setSupportActionBar(Toolbar toolbar) {
-        super.setSupportActionBar(toolbar);
-    }
-
-    @Override
-    public MenuInflater getMenuInflater() {
-        return super.getMenuInflater();
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-    }
-
-    @Override
-    public void setContentView(View view) {
-        super.setContentView(view);
-    }
-
-    @Override
-    public void setContentView(View view, ViewGroup.LayoutParams params) {
-        super.setContentView(view, params);
-    }
-
-    @Override
-    public void addContentView(View view, ViewGroup.LayoutParams params) {
-        super.addContentView(view, params);
-    }
-
-    @Override
-    public <T extends View> T findViewById(int id) {
-        return super.findViewById(id);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    protected void onTitleChanged(CharSequence title, int color) {
-        super.onTitleChanged(title, color);
-    }
-
-    @Override
-    public boolean supportRequestWindowFeature(int featureId) {
-        return super.supportRequestWindowFeature(featureId);
-    }
-
-    @Override
-    public void supportInvalidateOptionsMenu() {
-        super.supportInvalidateOptionsMenu();
-    }
-
-    @Override
-    public void invalidateOptionsMenu() {
-        super.invalidateOptionsMenu();
-    }
-
-    @Override
-    public void onSupportActionModeStarted(ActionMode mode) {
-        super.onSupportActionModeStarted(mode);
-    }
-
-    @Override
-    public void onSupportActionModeFinished(ActionMode mode) {
-        super.onSupportActionModeFinished(mode);
-    }
-
-    @Override
-    public ActionMode onWindowStartingSupportActionMode(ActionMode.Callback callback) {
-        return super.onWindowStartingSupportActionMode(callback);
-    }
-
-    @Override
-    public ActionMode startSupportActionMode(ActionMode.Callback callback) {
-        return super.startSupportActionMode(callback);
-    }
-
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void setSupportProgressBarVisibility(boolean visible) {
-        super.setSupportProgressBarVisibility(visible);
-    }
-
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void setSupportProgressBarIndeterminateVisibility(boolean visible) {
-        super.setSupportProgressBarIndeterminateVisibility(visible);
-    }
-
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void setSupportProgressBarIndeterminate(boolean indeterminate) {
-        super.setSupportProgressBarIndeterminate(indeterminate);
-    }
-
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void setSupportProgress(int progress) {
-        super.setSupportProgress(progress);
-    }
-
-    @Override
-    public void onCreateSupportNavigateUpTaskStack(TaskStackBuilder builder) {
-        super.onCreateSupportNavigateUpTaskStack(builder);
-    }
-
-    @Override
-    public void onPrepareSupportNavigateUpTaskStack(TaskStackBuilder builder) {
-        super.onPrepareSupportNavigateUpTaskStack(builder);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        return super.onSupportNavigateUp();
-    }
-
-    @Override
-    public Intent getSupportParentActivityIntent() {
-        return super.getSupportParentActivityIntent();
-    }
-
-    @Override
-    public boolean supportShouldUpRecreateTask(Intent targetIntent) {
-        return super.supportShouldUpRecreateTask(targetIntent);
-    }
-
-    @Override
-    public void supportNavigateUpTo(Intent upIntent) {
-        super.supportNavigateUpTo(upIntent);
-    }
-
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onContentChanged() {
-        super.onContentChanged();
-    }
-
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onSupportContentChanged() {
-        super.onSupportContentChanged();
-    }
-
-    @Override
-    public ActionBarDrawerToggle.Delegate getDrawerToggleDelegate() {
-        return super.getDrawerToggleDelegate();
-    }
-
-    @Override
-    public boolean onMenuOpened(int featureId, Menu menu) {
-        return super.onMenuOpened(featureId, menu);
-    }
-
-    @Override
-    public void onPanelClosed(int featureId, Menu menu) {
-        super.onPanelClosed(featureId, menu);
-    }
-
-    @Override
-    public AppCompatDelegate getDelegate() {
-        return super.getDelegate();
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        return super.dispatchKeyEvent(event);
-    }
-
-    @Override
-    public Resources getResources() {
-        return super.getResources();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void openOptionsMenu() {
-        super.openOptionsMenu();
-    }
-
     @Override
     public void closeOptionsMenu() {
         super.closeOptionsMenu();
     }
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent p0) {
+        return super.dispatchKeyEvent(p0);
+    }
+    @Override
+    public AppCompatDelegate getDelegate() {
+        return super.getDelegate();
+    }
+    @Override
+    public Delegate getDrawerToggleDelegate() {
+        return super.getDrawerToggleDelegate();
+    }
+    @Override
+    public MenuInflater getMenuInflater() {
+        return super.getMenuInflater();
+    }
+    @Override
+    public Resources getResources() {
+        return super.getResources();
+    }
+    @Override
+    public ActionBar getSupportActionBar() {
+        return super.getSupportActionBar();
+    }
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        return super.getSupportParentActivityIntent();
+    }
+    @Override
+    public void invalidateOptionsMenu() {
+        super.invalidateOptionsMenu();
+    }
+    @Override
+    public void onConfigurationChanged(Configuration p0) {
+        super.onConfigurationChanged(p0);
+    }
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+    }
+    @Override
+    public void onCreateSupportNavigateUpTaskStack(TaskStackBuilder p0) {
+        super.onCreateSupportNavigateUpTaskStack(p0);
+    }
+    @Override
+    public boolean onKeyDown(int p0, KeyEvent p1) {
+        return super.onKeyDown(p0, p1);
+    }
+    @Override
+    public boolean onMenuOpened(int p0, Menu p1) {
+        return super.onMenuOpened(p0, p1);
+    }
+    @Override
+    protected void onNightModeChanged(int p0) {
+        super.onNightModeChanged(p0);
+    }
+    @Override
+    public void onPanelClosed(int p0, Menu p1) {
+        super.onPanelClosed(p0, p1);
+    }
+    @Override
+    protected void onPostCreate(Bundle p0) {
+        super.onPostCreate(p0);
+    }
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
+    @Override
+    public void onPrepareSupportNavigateUpTaskStack(TaskStackBuilder p0) {
+        super.onPrepareSupportNavigateUpTaskStack(p0);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+    @Override
+    public void onSupportActionModeFinished(ActionMode p0) {
+        super.onSupportActionModeFinished(p0);
+    }
+    @Override
+    public void onSupportActionModeStarted(ActionMode p0) {
+        super.onSupportActionModeStarted(p0);
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        return super.onSupportNavigateUp();
+    }
+    @Override
+    protected void onTitleChanged(CharSequence p0, int p1) {
+        super.onTitleChanged(p0, p1);
+    }
+    @Override
+    public ActionMode onWindowStartingSupportActionMode(androidx.appcompat.view.ActionMode.Callback p0) {
+        return super.onWindowStartingSupportActionMode(p0);
+    }
+    @Override
+    public void openOptionsMenu() {
+        super.openOptionsMenu();
+    }
+    @Override
+    public void setContentView(int p0) {
+        super.setContentView(p0);
+    }
+    @Override
+    public void setContentView(View p0) {
+        super.setContentView(p0);
+    }
+    @Override
+    public void setContentView(View p0, android.view.ViewGroup.LayoutParams p1) {
+        super.setContentView(p0, p1);
+    }
+    @Override
+    public void setSupportActionBar(Toolbar p0) {
+        super.setSupportActionBar(p0);
+    }
+    @Override
+    public void setTheme(int p0) {
+        super.setTheme(p0);
+    }
+    @Override
+    public ActionMode startSupportActionMode(androidx.appcompat.view.ActionMode.Callback p0) {
+        return super.startSupportActionMode(p0);
+    }
+    @Override
+    public void supportInvalidateOptionsMenu() {
+        super.supportInvalidateOptionsMenu();
+    }
+    @Override
+    public void supportNavigateUpTo(Intent p0) {
+        super.supportNavigateUpTo(p0);
+    }
+    @Override
+    public boolean supportRequestWindowFeature(int p0) {
+        return super.supportRequestWindowFeature(p0);
+    }
+    @Override
+    public boolean supportShouldUpRecreateTask(Intent p0) {
+        return super.supportShouldUpRecreateTask(p0);
+    }
 
     // -----------------------------------------------------------------------------------------
-    // FragmentActivity  (public/protected forwards)
+    // FragmentActivity  (public/protected forwards, deprecated APIs excluded)
     // -----------------------------------------------------------------------------------------
     @Override
     public void dump(String p0, FileDescriptor p1, PrintWriter p2, String[] p3) {
@@ -389,21 +300,9 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public FragmentManager getSupportFragmentManager() {
         return super.getSupportFragmentManager();
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public LoaderManager getSupportLoaderManager() {
-        return super.getSupportLoaderManager();
-    }
     @Override
     protected void onActivityResult(int p0, int p1, Intent p2) {
         super.onActivityResult(p0, p1, p2);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onAttachFragment(Fragment p0) {
-        super.onAttachFragment(p0);
     }
     @Override
     public boolean onCreatePanelMenu(int p0, Menu p1) {
@@ -437,12 +336,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public void onPictureInPictureModeChanged(boolean p0) {
         super.onPictureInPictureModeChanged(p0);
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    protected boolean onPrepareOptionsPanel(View p0, Menu p1) {
-        return super.onPrepareOptionsPanel(p0, p1);
-    }
     @Override
     public boolean onPreparePanel(int p0, View p1, Menu p2) {
         return super.onPreparePanel(p0, p1, p2);
@@ -475,12 +368,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public void startActivityFromFragment(Fragment p0, Intent p1, int p2, Bundle p3) {
         super.startActivityFromFragment(p0, p1, p2, p3);
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startIntentSenderFromFragment(Fragment p0, IntentSender p1, int p2, Intent p3, int p4, int p5, int p6, Bundle p7) throws android.content.IntentSender.SendIntentException {
-        super.startIntentSenderFromFragment(p0, p1, p2, p3, p4, p5, p6, p7);
-    }
     @Override
     public void supportFinishAfterTransition() {
         super.supportFinishAfterTransition();
@@ -495,17 +382,11 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     }
 
     // -----------------------------------------------------------------------------------------
-    // ComponentActivity (androidx.activity)  (public/protected forwards)
+    // ComponentActivity (androidx.activity)  (public/protected forwards, deprecated APIs excluded)
     // -----------------------------------------------------------------------------------------
     @Override
     public Factory getDefaultViewModelProviderFactory() {
         return super.getDefaultViewModelProviderFactory();
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public Object getLastCustomNonConfigurationInstance() {
-        return super.getLastCustomNonConfigurationInstance();
     }
     @Override
     public Lifecycle getLifecycle() {
@@ -519,12 +400,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public void onBackPressed() {
         super.onBackPressed();
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        return super.onRetainCustomNonConfigurationInstance();
-    }
     @Override
     protected void onSaveInstanceState(Bundle p0) {
         super.onSaveInstanceState(p0);
@@ -537,49 +412,13 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public void reportFullyDrawn() {
         super.reportFullyDrawn();
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startActivityForResult(Intent p0, int p1) {
-        super.startActivityForResult(p0, p1);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startActivityForResult(Intent p0, int p1, Bundle p2) {
-        super.startActivityForResult(p0, p1, p2);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startIntentSenderForResult(IntentSender p0, int p1, Intent p2, int p3, int p4, int p5) throws android.content.IntentSender.SendIntentException {
-        super.startIntentSenderForResult(p0, p1, p2, p3, p4, p5);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startIntentSenderForResult(IntentSender p0, int p1, Intent p2, int p3, int p4, int p5, Bundle p6) throws android.content.IntentSender.SendIntentException {
-        super.startIntentSenderForResult(p0, p1, p2, p3, p4, p5, p6);
-    }
 
     // -----------------------------------------------------------------------------------------
-    // ComponentActivity (androidx.core.app)  (public/protected forwards)
+    // ComponentActivity (androidx.core.app)  (public/protected forwards, deprecated APIs excluded)
     // -----------------------------------------------------------------------------------------
     @Override
     public boolean dispatchKeyShortcutEvent(KeyEvent p0) {
         return super.dispatchKeyShortcutEvent(p0);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public <T extends androidx.core.app.ComponentActivity.ExtraData> T getExtraData(Class<T> p0) {
-        return super.getExtraData(p0);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void putExtraData(ExtraData p0) {
-        super.putExtraData(p0);
     }
     @Override
     public boolean superDispatchKeyEvent(KeyEvent p0) {
@@ -587,7 +426,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     }
 
     // -----------------------------------------------------------------------------------------
-    // android.app.Activity  (public/protected forwards)
+    // android.app.Activity  (public/protected forwards, deprecated APIs excluded)
     // -----------------------------------------------------------------------------------------
     @Override
     public void closeContextMenu() {
@@ -613,12 +452,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public boolean dispatchTrackballEvent(MotionEvent p0) {
         return super.dispatchTrackballEvent(p0);
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void enterPictureInPictureMode() {
-        super.enterPictureInPictureMode();
-    }
     @Override
     public boolean enterPictureInPictureMode(PictureInPictureParams p0) {
         return super.enterPictureInPictureMode(p0);
@@ -631,12 +464,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public void finishActivity(int p0) {
         super.finishActivity(p0);
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void finishActivityFromChild(Activity p0, int p1) {
-        super.finishActivityFromChild(p0, p1);
-    }
     @Override
     public void finishAffinity() {
         super.finishAffinity();
@@ -648,12 +475,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     @Override
     public void finishAndRemoveTask() {
         super.finishAndRemoveTask();
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void finishFromChild(Activity p0) {
-        super.finishFromChild(p0);
     }
     @Override
     public android.app.ActionBar getActionBar() {
@@ -687,12 +508,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public View getCurrentFocus() {
         return super.getCurrentFocus();
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public android.app.FragmentManager getFragmentManager() {
-        return super.getFragmentManager();
-    }
     @Override
     public Intent getIntent() {
         return super.getIntent();
@@ -704,12 +519,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     @Override
     public LayoutInflater getLayoutInflater() {
         return super.getLayoutInflater();
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public android.app.LoaderManager getLoaderManager() {
-        return super.getLoaderManager();
     }
     @Override
     public String getLocalClassName() {
@@ -811,12 +620,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public boolean navigateUpTo(Intent p0) {
         return super.navigateUpTo(p0);
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean navigateUpToFromChild(Activity p0, Intent p1) {
-        return super.navigateUpToFromChild(p0, p1);
-    }
     @Override
     public void onActionModeFinished(android.view.ActionMode p0) {
         super.onActionModeFinished(p0);
@@ -832,12 +635,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     @Override
     protected void onApplyThemeResource(Theme p0, int p1, boolean p2) {
         super.onApplyThemeResource(p0, p1, p2);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onAttachFragment(android.app.Fragment p0) {
-        super.onAttachFragment(p0);
     }
     @Override
     public void onAttachedToWindow() {
@@ -867,18 +664,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public CharSequence onCreateDescription() {
         return super.onCreateDescription();
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    protected Dialog onCreateDialog(int p0) {
-        return super.onCreateDialog(p0);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    protected Dialog onCreateDialog(int p0, Bundle p1) {
-        return super.onCreateDialog(p0, p1);
-    }
     @Override
     public void onCreateNavigateUpTaskStack(android.app.TaskStackBuilder p0) {
         super.onCreateNavigateUpTaskStack(p0);
@@ -886,12 +671,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     @Override
     public View onCreatePanelView(int p0) {
         return super.onCreatePanelView(p0);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean onCreateThumbnail(Bitmap p0, Canvas p1) {
-        return super.onCreateThumbnail(p0, p1);
     }
     @Override
     public void onDetachedFromWindow() {
@@ -941,12 +720,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public boolean onNavigateUp() {
         return super.onNavigateUp();
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean onNavigateUpFromChild(Activity p0) {
-        return super.onNavigateUpFromChild(p0);
-    }
     @Override
     public void onOptionsMenuClosed(Menu p0) {
         super.onOptionsMenuClosed(p0);
@@ -966,18 +739,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     @Override
     public void onPostCreate(Bundle p0, PersistableBundle p1) {
         super.onPostCreate(p0, p1);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    protected void onPrepareDialog(int p0, Dialog p1) {
-        super.onPrepareDialog(p0, p1);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    protected void onPrepareDialog(int p0, Dialog p1, Bundle p2) {
-        super.onPrepareDialog(p0, p1, p2);
     }
     @Override
     public void onPrepareNavigateUpTaskStack(android.app.TaskStackBuilder p0) {
@@ -1051,12 +812,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onVisibleBehindCanceled() {
-        super.onVisibleBehindCanceled();
-    }
     @Override
     public void onWindowAttributesChanged(LayoutParams p0) {
         super.onWindowAttributesChanged(p0);
@@ -1104,12 +859,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     @Override
     public DragAndDropPermissions requestDragAndDropPermissions(DragEvent p0) {
         return super.requestDragAndDropPermissions(p0);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean requestVisibleBehind(boolean p0) {
-        return super.requestVisibleBehind(p0);
     }
     @Override
     public void setActionBar(android.widget.Toolbar p0) {
@@ -1171,12 +920,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public void setTitle(CharSequence p0) {
         super.setTitle(p0);
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void setTitleColor(int p0) {
-        super.setTitleColor(p0);
-    }
     @Override
     public boolean setTranslucent(boolean p0) {
         return super.setTranslucent(p0);
@@ -1233,30 +976,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public void startActivity(Intent p0, Bundle p1) {
         super.startActivity(p0, p1);
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startActivityFromChild(Activity p0, Intent p1, int p2) {
-        super.startActivityFromChild(p0, p1, p2);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startActivityFromChild(Activity p0, Intent p1, int p2, Bundle p3) {
-        super.startActivityFromChild(p0, p1, p2, p3);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startActivityFromFragment(android.app.Fragment p0, Intent p1, int p2) {
-        super.startActivityFromFragment(p0, p1, p2);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startActivityFromFragment(android.app.Fragment p0, Intent p1, int p2, Bundle p3) {
-        super.startActivityFromFragment(p0, p1, p2, p3);
-    }
     @Override
     public boolean startActivityIfNeeded(Intent p0, int p1) {
         return super.startActivityIfNeeded(p0, p1);
@@ -1273,18 +992,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public void startIntentSender(IntentSender p0, Intent p1, int p2, int p3, int p4, Bundle p5) throws android.content.IntentSender.SendIntentException {
         super.startIntentSender(p0, p1, p2, p3, p4, p5);
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startIntentSenderFromChild(Activity p0, IntentSender p1, int p2, Intent p3, int p4, int p5, int p6) throws android.content.IntentSender.SendIntentException {
-        super.startIntentSenderFromChild(p0, p1, p2, p3, p4, p5, p6);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startIntentSenderFromChild(Activity p0, IntentSender p1, int p2, Intent p3, int p4, int p5, int p6, Bundle p7) throws android.content.IntentSender.SendIntentException {
-        super.startIntentSenderFromChild(p0, p1, p2, p3, p4, p5, p6, p7);
-    }
     @Override
     public void startLocalVoiceInteraction(Bundle p0) {
         super.startLocalVoiceInteraction(p0);
@@ -1292,12 +999,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     @Override
     public void startLockTask() {
         super.startLockTask();
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void startManagingCursor(Cursor p0) {
-        super.startManagingCursor(p0);
     }
     @Override
     public boolean startNextMatchingActivity(Intent p0) {
@@ -1323,12 +1024,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public void stopLockTask() {
         super.stopLockTask();
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void stopManagingCursor(Cursor p0) {
-        super.stopManagingCursor(p0);
-    }
     @Override
     public void takeKeyEvents(boolean p0) {
         super.takeKeyEvents(p0);
@@ -1347,7 +1042,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     }
 
     // -----------------------------------------------------------------------------------------
-    // ContextThemeWrapper  (public/protected forwards)
+    // ContextThemeWrapper  (public/protected forwards, deprecated APIs excluded)
     // -----------------------------------------------------------------------------------------
     @Override
     public void applyOverrideConfiguration(Configuration p0) {
@@ -1367,7 +1062,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     }
 
     // -----------------------------------------------------------------------------------------
-    // ContextWrapper  (public/protected forwards)
+    // ContextWrapper  (public/protected forwards, deprecated APIs excluded)
     // -----------------------------------------------------------------------------------------
     @Override
     public boolean bindIsolatedService(Intent p0, int p1, String p2, Executor p3, ServiceConnection p4) {
@@ -1416,12 +1111,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     @Override
     public int checkUriPermission(Uri p0, String p1, String p2, int p3, int p4, int p5) {
         return super.checkUriPermission(p0, p1, p2, p3, p4, p5);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void clearWallpaper() throws java.io.IOException {
-        super.clearWallpaper();
     }
     @Override
     public Context createAttributionContext(String p0) {
@@ -1623,24 +1312,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public String getSystemServiceName(Class<?> p0) {
         return super.getSystemServiceName(p0);
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public Drawable getWallpaper() {
-        return super.getWallpaper();
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public int getWallpaperDesiredMinimumHeight() {
-        return super.getWallpaperDesiredMinimumHeight();
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public int getWallpaperDesiredMinimumWidth() {
-        return super.getWallpaperDesiredMinimumWidth();
-    }
     @Override
     public void grantUriPermission(String p0, Uri p1, int p2) {
         super.grantUriPermission(p0, p1, p2);
@@ -1677,12 +1348,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public SQLiteDatabase openOrCreateDatabase(String p0, int p1, CursorFactory p2, DatabaseErrorHandler p3) {
         return super.openOrCreateDatabase(p0, p1, p2, p3);
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public Drawable peekWallpaper() {
-        return super.peekWallpaper();
-    }
     @Override
     public Intent registerReceiver(BroadcastReceiver p0, IntentFilter p1) {
         return super.registerReceiver(p0, p1);
@@ -1698,18 +1363,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     @Override
     public Intent registerReceiver(BroadcastReceiver p0, IntentFilter p1, String p2, Handler p3, int p4) {
         return super.registerReceiver(p0, p1, p2, p3, p4);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void removeStickyBroadcast(Intent p0) {
-        super.removeStickyBroadcast(p0);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void removeStickyBroadcastAsUser(Intent p0, UserHandle p1) {
-        super.removeStickyBroadcastAsUser(p0, p1);
     }
     @Override
     public void revokeUriPermission(Uri p0, int p1) {
@@ -1755,42 +1408,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     public void sendOrderedBroadcastAsUser(Intent p0, UserHandle p1, String p2, BroadcastReceiver p3, Handler p4, int p5, String p6, Bundle p7) {
         super.sendOrderedBroadcastAsUser(p0, p1, p2, p3, p4, p5, p6, p7);
     }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void sendStickyBroadcast(Intent p0) {
-        super.sendStickyBroadcast(p0);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void sendStickyBroadcastAsUser(Intent p0, UserHandle p1) {
-        super.sendStickyBroadcastAsUser(p0, p1);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void sendStickyOrderedBroadcast(Intent p0, BroadcastReceiver p1, Handler p2, int p3, String p4, Bundle p5) {
-        super.sendStickyOrderedBroadcast(p0, p1, p2, p3, p4, p5);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void sendStickyOrderedBroadcastAsUser(Intent p0, UserHandle p1, BroadcastReceiver p2, Handler p3, int p4, String p5, Bundle p6) {
-        super.sendStickyOrderedBroadcastAsUser(p0, p1, p2, p3, p4, p5, p6);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void setWallpaper(Bitmap p0) throws java.io.IOException {
-        super.setWallpaper(p0);
-    }
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    @Override
-    public void setWallpaper(InputStream p0) throws java.io.IOException {
-        super.setWallpaper(p0);
-    }
     @Override
     public ComponentName startForegroundService(Intent p0) {
         return super.startForegroundService(p0);
@@ -1821,7 +1438,7 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     }
 
     // -----------------------------------------------------------------------------------------
-    // Context  (public/protected forwards)
+    // Context  (public/protected forwards, deprecated APIs excluded)
     // -----------------------------------------------------------------------------------------
     @Override
     public void registerComponentCallbacks(ComponentCallbacks p0) {
