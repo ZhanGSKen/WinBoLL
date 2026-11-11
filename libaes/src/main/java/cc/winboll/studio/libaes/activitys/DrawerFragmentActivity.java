@@ -8,23 +8,30 @@ package cc.winboll.studio.libaes.activitys;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.TaskStackBuilder;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import cc.winboll.studio.libaes.DrawerMenuDataAdapter;
 import cc.winboll.studio.libaes.R;
-import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
 import cc.winboll.studio.libaes.interfaces.IWinBoLLActivity;
 import cc.winboll.studio.libaes.models.AESThemeBean;
 import cc.winboll.studio.libaes.models.DrawerMenuBean;
@@ -44,6 +51,9 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     static final String SHAREDPREFERENCES_NAME = "SHAREDPREFERENCES_NAME";
     static final String DRAWER_THEME_TYPE = "DRAWER_THEME_TYPE";
 
+    // Fragments are hosted in this container (see activity_drawerfragment.xml)
+    private static final int FRAGMENT_CONTAINER_ID = R.id.activitydrawerfragmentFrameLayout1;
+
     ActivityType mActivityType;
     ActionBarDrawerToggle mActionBarDrawerToggle;
     DrawerLayout mDrawerLayout;
@@ -51,9 +61,8 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     ADrawerMenuListView mADrawerMenuListView;
     @SuppressWarnings("rawtypes")
     DrawerMenuDataAdapter mDrawerMenuDataAdapter;
+    // Last known drawer open state, maintained by ActionBarDrawerToggle callbacks
     boolean mIsDrawerOpened = false;
-    boolean mIsDrawerOpening = false;
-    boolean mIsDrawerClosing = false;
 
     protected Toolbar mToolbar;
     public enum ActivityType { Main, Secondary }
@@ -61,6 +70,256 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     protected ArrayList<DrawerMenuBean> malDrawerMenuItem;
 
     abstract protected ActivityType initActivityType();
+
+    // =========================================================================================
+    // AppCompatActivity public/protected overrides
+    // -----------------------------------------------------------------------------------------
+    // DrawerFragmentActivity is the single extension point for drawer based activities, so every
+    // public/protected member declared by AppCompatActivity (appcompat 1.3.0) is overridden here
+    // and forwarded to super. Subclasses may extend any of them in one place instead of touching
+    // the AndroidX parent class. Methods without business logic stay pure forwards on purpose.
+    // =========================================================================================
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(newBase);
+    }
+
+    @Override
+    public void setTheme(int resid) {
+        super.setTheme(resid);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onNightModeChanged(int mode) {
+        super.onNightModeChanged(mode);
+    }
+
+    @Override
+    public ActionBar getSupportActionBar() {
+        return super.getSupportActionBar();
+    }
+
+    @Override
+    public void setSupportActionBar(Toolbar toolbar) {
+        super.setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public MenuInflater getMenuInflater() {
+        return super.getMenuInflater();
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+    }
+
+    @Override
+    public void setContentView(View view) {
+        super.setContentView(view);
+    }
+
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        super.setContentView(view, params);
+    }
+
+    @Override
+    public void addContentView(View view, ViewGroup.LayoutParams params) {
+        super.addContentView(view, params);
+    }
+
+    @Override
+    public <T extends View> T findViewById(int id) {
+        return super.findViewById(id);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onTitleChanged(CharSequence title, int color) {
+        super.onTitleChanged(title, color);
+    }
+
+    @Override
+    public boolean supportRequestWindowFeature(int featureId) {
+        return super.supportRequestWindowFeature(featureId);
+    }
+
+    @Override
+    public void supportInvalidateOptionsMenu() {
+        super.supportInvalidateOptionsMenu();
+    }
+
+    @Override
+    public void invalidateOptionsMenu() {
+        super.invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onSupportActionModeStarted(ActionMode mode) {
+        super.onSupportActionModeStarted(mode);
+    }
+
+    @Override
+    public void onSupportActionModeFinished(ActionMode mode) {
+        super.onSupportActionModeFinished(mode);
+    }
+
+    @Override
+    public ActionMode onWindowStartingSupportActionMode(ActionMode.Callback callback) {
+        return super.onWindowStartingSupportActionMode(callback);
+    }
+
+    @Override
+    public ActionMode startSupportActionMode(ActionMode.Callback callback) {
+        return super.startSupportActionMode(callback);
+    }
+
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    @Override
+    public void setSupportProgressBarVisibility(boolean visible) {
+        super.setSupportProgressBarVisibility(visible);
+    }
+
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    @Override
+    public void setSupportProgressBarIndeterminateVisibility(boolean visible) {
+        super.setSupportProgressBarIndeterminateVisibility(visible);
+    }
+
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    @Override
+    public void setSupportProgressBarIndeterminate(boolean indeterminate) {
+        super.setSupportProgressBarIndeterminate(indeterminate);
+    }
+
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    @Override
+    public void setSupportProgress(int progress) {
+        super.setSupportProgress(progress);
+    }
+
+    @Override
+    public void onCreateSupportNavigateUpTaskStack(TaskStackBuilder builder) {
+        super.onCreateSupportNavigateUpTaskStack(builder);
+    }
+
+    @Override
+    public void onPrepareSupportNavigateUpTaskStack(TaskStackBuilder builder) {
+        super.onPrepareSupportNavigateUpTaskStack(builder);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        return super.getSupportParentActivityIntent();
+    }
+
+    @Override
+    public boolean supportShouldUpRecreateTask(Intent targetIntent) {
+        return super.supportShouldUpRecreateTask(targetIntent);
+    }
+
+    @Override
+    public void supportNavigateUpTo(Intent upIntent) {
+        super.supportNavigateUpTo(upIntent);
+    }
+
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+    }
+
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onSupportContentChanged() {
+        super.onSupportContentChanged();
+    }
+
+    @Override
+    public ActionBarDrawerToggle.Delegate getDrawerToggleDelegate() {
+        return super.getDrawerToggleDelegate();
+    }
+
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        return super.onMenuOpened(featureId, menu);
+    }
+
+    @Override
+    public void onPanelClosed(int featureId, Menu menu) {
+        super.onPanelClosed(featureId, menu);
+    }
+
+    @Override
+    public AppCompatDelegate getDelegate() {
+        return super.getDelegate();
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public Resources getResources() {
+        return super.getResources();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void openOptionsMenu() {
+        super.openOptionsMenu();
+    }
+
+    @Override
+    public void closeOptionsMenu() {
+        super.closeOptionsMenu();
+    }
+
+    // =========================================================================================
+    // Business overrides
+    // =========================================================================================
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,39 +350,8 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     }
 
     @Override
-    public MenuInflater getMenuInflater() {
-        return super.getMenuInflater();
-    }
-
-    @Override
-    public void recreate() {
-        super.recreate();
-    }
-
-    @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public void startActivityForResult(Intent intent, int requestCode, Bundle options) {
-        super.startActivityForResult(intent, requestCode, options);
-    }
-
-    @Override
-    public SharedPreferences getSharedPreferences(String name, int mode) {
-        return super.getSharedPreferences(name, mode);
-    }
-
-    @Override
-    public Context getApplicationContext() {
-        return super.getApplicationContext();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -141,11 +369,6 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     void initRootView() {
         setContentView(R.layout.activity_drawerfragment);
 
@@ -159,20 +382,23 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         }
     }
 
-    @SuppressWarnings("deprecation")
     void initMainRootView() {
         mDrawerLayout = findViewById(R.id.activitydrawerfragmentDrawerLayout1);
         mADrawerMenuListView = findViewById(R.id.activitydrawerfragmentDrawerMenuListView1);
         mPullRefreshLayout = findViewById(R.id.activitydrawerfragmentPullRefreshLayout1);
 
-        mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-				@Override
-				public void onRefresh() {
-					reinitDrawerMenuItemList(malDrawerMenuItem);
-					mDrawerMenuDataAdapter.notifyDataSetChanged();
-					mPullRefreshLayout.setRefreshing(false);
-				}
-			});
+        if (mPullRefreshLayout != null) {
+            mPullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if (malDrawerMenuItem != null) {
+                        reinitDrawerMenuItemList(malDrawerMenuItem);
+                    }
+                    notifyDrawerMenuDataChanged();
+                    mPullRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
 
         malDrawerMenuItem = new ArrayList<DrawerMenuBean>();
 
@@ -183,110 +409,188 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
                 holder.setText(R.id.listviewdrawermenuTextView1, obj.getIconName());
             }
         };
-        mADrawerMenuListView.setAdapter(mDrawerMenuDataAdapter);
-        mADrawerMenuListView.setOnItemClickListener(this);
+        if (mADrawerMenuListView != null) {
+            mADrawerMenuListView.setAdapter(mDrawerMenuDataAdapter);
+            mADrawerMenuListView.setOnItemClickListener(this);
+        }
 
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.lib_name, R.string.lib_name) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                mIsDrawerOpened = true;
-                mIsDrawerOpening = false;
-            }
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        if (mDrawerLayout != null) {
+            // ActionBarDrawerToggle owns the hamburger click and the arrow animation,
+            // so no custom navigation click listener is needed (it would disable the animation).
+            mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.lib_name, R.string.lib_name) {
+                @Override
+                public void onDrawerOpened(View drawerView) {
+                    super.onDrawerOpened(drawerView);
+                    mIsDrawerOpened = true;
+                }
 
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                mIsDrawerOpened = false;
-                mIsDrawerClosing = false;
-            }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                super.onDrawerSlide(drawerView, slideOffset);
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                super.onDrawerStateChanged(newState);
-            }
-        };
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mActionBarDrawerToggle.syncState();
-        mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
-
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (mIsDrawerOpened || mIsDrawerOpening) {
-						mIsDrawerClosing = true;
-						mIsDrawerOpening = false;
-						mDrawerLayout.closeDrawer(mPullRefreshLayout);
-						return;
-					}
-					if (!mIsDrawerOpened || mIsDrawerClosing) {
-						mIsDrawerOpening = true;
-						mIsDrawerClosing = false;
-						mDrawerLayout.openDrawer(mPullRefreshLayout);
-						return;
-					}
-				}
-			});
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    super.onDrawerClosed(drawerView);
+                    mIsDrawerOpened = false;
+                }
+            };
+            mActionBarDrawerToggle.syncState();
+            mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
+        }
 
         initDrawerMenuItemList(malDrawerMenuItem);
     }
 
     void initSecondaryRootView() {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					finish();
-				}
-			});
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
+    // ===================================== Fragment 管理 =====================================
+
+    /**
+     * Remove the given fragment from the container.
+     * @return the fragment count reported after commit (informational only)
+     */
     public <T extends Fragment> int removeFragment(T fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.remove(fragment);
-        fragmentTransaction.commit();
+        if (fragment != null && fragment.isAdded()) {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.remove(fragment);
+            fragmentTransaction.commit();
+        }
         return fragmentManager.getFragments().size() - 1;
     }
 
+    /**
+     * Add the given fragment into the container. Does nothing when already added.
+     * @return the fragment count reported after commit (informational only)
+     */
     public <T extends Fragment> int addFragment(T fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.activitydrawerfragmentFrameLayout1, fragment);
-        fragmentTransaction.commit();
+        if (fragment != null && !fragment.isAdded()) {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(FRAGMENT_CONTAINER_ID, fragment);
+            fragmentTransaction.commit();
+        }
         return fragmentManager.getFragments().size() - 1;
     }
 
+    /**
+     * Show the given fragment and hide all others.
+     * The fragment must have been added first (see {@link #addFragment(Fragment)} or
+     * {@link #switchFragment(Fragment)}); a pending add is not added again here.
+     */
     public <T extends Fragment> void showFragment(T fragment) {
+        if (fragment == null) {
+            LogUtils.w(TAG, "showFragment: null fragment ignored.");
+            return;
+        }
         FragmentManager fragmentManager = getSupportFragmentManager();
+        ArrayList<Fragment> fragments = new ArrayList<Fragment>(fragmentManager.getFragments());
+        boolean found = false;
+
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        for (int i = 0; i < fragmentManager.getFragments().size(); i++) {
-            if (fragmentManager.getFragments().get(i).equals(fragment)) {
-                fragmentTransaction.show(fragmentManager.getFragments().get(i));
+        for (Fragment item : fragments) {
+            if (item.equals(fragment)) {
+                fragmentTransaction.show(item);
+                found = true;
             } else {
-                fragmentTransaction.hide(fragmentManager.getFragments().get(i));
+                fragmentTransaction.hide(item);
+            }
+        }
+        fragmentTransaction.commit();
+        if (found) {
+            LogUtils.d(TAG, "showFragment: " + fragment.getClass().getSimpleName());
+        } else {
+            LogUtils.w(TAG, "showFragment: " + fragment.getClass().getSimpleName()
+                    + " is not attached yet, call addFragment() first.");
+        }
+    }
+
+    /**
+     * Show the fragment at the given position inside the FragmentManager list and hide others.
+     */
+    public void showFragment(int nPosition) {
+        ArrayList<Fragment> fragments = new ArrayList<Fragment>(getSupportFragmentManager().getFragments());
+        if (nPosition < 0 || nPosition >= fragments.size()) {
+            LogUtils.w(TAG, "showFragment: position " + nPosition + " out of range, size=" + fragments.size());
+            return;
+        }
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        for (int i = 0; i < fragments.size(); i++) {
+            if (i == nPosition) {
+                fragmentTransaction.show(fragments.get(i));
+            } else {
+                fragmentTransaction.hide(fragments.get(i));
             }
         }
         fragmentTransaction.commit();
     }
 
-    public void showFragment(int nPosition) {
+    /**
+     * Convenience one-shot API: attach the fragment if needed and show it in a single
+     * transaction, then notify {@link #onFragmentShown(Fragment)}.
+     * Use this instead of calling addFragment() followed by showFragment().
+     */
+    protected <T extends Fragment> void switchFragment(T fragment) {
+        if (fragment == null) {
+            LogUtils.w(TAG, "switchFragment: null fragment ignored.");
+            return;
+        }
         FragmentManager fragmentManager = getSupportFragmentManager();
+        ArrayList<Fragment> fragments = new ArrayList<Fragment>(fragmentManager.getFragments());
+        boolean attached = false;
+
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        for (int i = 0; i < fragmentManager.getFragments().size(); i++) {
-            if (i == nPosition) {
-                fragmentTransaction.show(fragmentManager.getFragments().get(i));
+        for (Fragment item : fragments) {
+            if (item.equals(fragment)) {
+                fragmentTransaction.show(item);
+                attached = true;
             } else {
-                fragmentTransaction.hide(fragmentManager.getFragments().get(i));
+                fragmentTransaction.hide(item);
             }
         }
+        if (!attached) {
+            // Not attached yet: add and show it inside the same transaction (no double add)
+            fragmentTransaction.add(FRAGMENT_CONTAINER_ID, fragment);
+        }
         fragmentTransaction.commit();
+        onFragmentShown(fragment);
+    }
+
+    /**
+     * Hook invoked after {@link #switchFragment(Fragment)} has shown a fragment.
+     * Subclasses may override to update the toolbar title/subtitle.
+     */
+    protected void onFragmentShown(Fragment fragment) {
+    }
+
+    // ===================================== 抽屉菜单 =====================================
+
+    /** @return true when the drawer is currently open (Main type only). */
+    public boolean isDrawerOpen() {
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);
+    }
+
+    /** Open the drawer when available (Main type only). */
+    public void openDrawer() {
+        if (mDrawerLayout != null && mPullRefreshLayout != null) {
+            mDrawerLayout.openDrawer(mPullRefreshLayout);
+        }
+    }
+
+    /** Close the drawer when available (Main type only). */
+    public void closeDrawer() {
+        if (mDrawerLayout != null && mPullRefreshLayout != null) {
+            mDrawerLayout.closeDrawer(mPullRefreshLayout);
+        }
     }
 
     protected void initDrawerMenuItemList(ArrayList<DrawerMenuBean> listDrawerMenu) {
@@ -298,12 +602,14 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
     }
 
     public void notifyDrawerMenuDataChanged() {
-        mDrawerMenuDataAdapter.notifyDataSetChanged();
+        if (mDrawerMenuDataAdapter != null) {
+            mDrawerMenuDataAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mDrawerLayout.closeDrawer(mPullRefreshLayout);
+        closeDrawer();
     }
 
     @Override
@@ -320,10 +626,4 @@ public abstract class DrawerFragmentActivity extends AppCompatActivity implement
         }
         return super.onCreateOptionsMenu(menu);
     }
-
-    @Override
-    protected void onActivityResult(int who, int targetFragment, Intent requestCode) {
-        super.onActivityResult(who, targetFragment, requestCode);
-    }
 }
-
