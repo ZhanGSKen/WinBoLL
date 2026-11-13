@@ -131,14 +131,37 @@ public class SettingsActivity extends BaseWinBoLLActivity {
             }
         });
 
+        // Model 2 gain presets (+6/+10/+14 dB). Persisted in millibels; the
+        // native player reads it back from the effect and logs the effective
+        // value, because devices clamp the request silently.
+        final RadioGroup rgPlaybackGain = (RadioGroup) findViewById(R.id.rg_hosted_playback_gain);
+        int gainMb = MidiBridge.getPlaybackGainMb(this);
+        rgPlaybackGain.check(gainMb == MidiBridge.GAIN_PRESET_6_DB ? R.id.rb_gain_6
+                : gainMb == MidiBridge.GAIN_PRESET_14_DB ? R.id.rb_gain_14
+                : R.id.rb_gain_10);
+        rgPlaybackGain.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int gain = checkedId == R.id.rb_gain_6 ? MidiBridge.GAIN_PRESET_6_DB
+                        : checkedId == R.id.rb_gain_14 ? MidiBridge.GAIN_PRESET_14_DB
+                        : MidiBridge.GAIN_PRESET_10_DB;
+                MidiBridge.setPlaybackGainMb(SettingsActivity.this, gain);
+                Toast.makeText(SettingsActivity.this,
+                        getString(R.string.toast_playback_gain, gain / 100),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // Hosted playback model selector: model 1 keeps the framework synth
         // output as-is, model 2 adds a LoudnessEnhancer gain on the native
         // engine's audio session. Persisted at once; applied when the next
         // track is prepared (current playback is left untouched).
         RadioGroup rgPlaybackModel = (RadioGroup) findViewById(R.id.rg_hosted_playback_model);
-        rgPlaybackModel.check(MidiBridge.getPlaybackModel(this) == MidiBridge.PLAYBACK_MODEL_ENHANCED
+        int playbackModel = MidiBridge.getPlaybackModel(this);
+        rgPlaybackModel.check(playbackModel == MidiBridge.PLAYBACK_MODEL_ENHANCED
                 ? R.id.rb_model_enhanced
                 : R.id.rb_model_classic);
+        applyGainGroupState(rgPlaybackGain, playbackModel);
         rgPlaybackModel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -146,6 +169,7 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                         ? MidiBridge.PLAYBACK_MODEL_ENHANCED
                         : MidiBridge.PLAYBACK_MODEL_CLASSIC;
                 MidiBridge.setPlaybackModel(SettingsActivity.this, model);
+                applyGainGroupState(rgPlaybackGain, model);
                 Toast.makeText(SettingsActivity.this,
                         model == MidiBridge.PLAYBACK_MODEL_ENHANCED
                                 ? R.string.toast_playback_model_enhanced
@@ -153,6 +177,19 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     * Gain presets only affect model 2, so the group is greyed out and not
+     * clickable while model 1 is selected.
+     */
+    private void applyGainGroupState(RadioGroup group, int model) {
+        boolean enabled = model == MidiBridge.PLAYBACK_MODEL_ENHANCED;
+        group.setEnabled(enabled);
+        group.setAlpha(enabled ? 1.0f : 0.5f);
+        for (int i = 0; i < group.getChildCount(); i++) {
+            group.getChildAt(i).setEnabled(enabled);
+        }
     }
 
     /**

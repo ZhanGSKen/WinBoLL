@@ -41,13 +41,12 @@ public class HostedMidiPlayer {
     public static final int STATE_PLAYING = 3;
 
     /**
-     * Model 2 target gain in mB (+10 dB). Sonivox mixes the .mid stream
+     * Model 2 target gain comes from the Settings page (MidiBridge,
+     * playback_gain_mb, presets +6/+10/+14 dB). Sonivox mixes the .mid stream
      * noticeably quieter than the web synthesizer, which is what makes hosted
-     * playback feel low; the gain is deliberately modest so velocity dynamics
-     * survive and peaks do not clip.
+     * playback feel low; the request is logged together with the gain the
+     * effect actually accepted, because devices clamp it silently.
      */
-    private static final int ENHANCED_GAIN_MB = 1000;
-
     /** One playable entry of the bridge playlist. */
     public static class Track {
         public final String id;
@@ -453,15 +452,37 @@ public class HostedMidiPlayer {
         }
         try {
             int sessionId = mp.getAudioSessionId();
+            int gainMb = MidiBridge.getPlaybackGainMb(mAppContext);
             LoudnessEnhancer enhancer = new LoudnessEnhancer(sessionId);
-            enhancer.setTargetGain(ENHANCED_GAIN_MB);
+            enhancer.setTargetGain(gainMb);
             enhancer.setEnabled(true);
             mEnhancer = enhancer;
-            Log.i(TAG, "playback model 2: LoudnessEnhancer +10 dB, session=" + sessionId);
+            // Read back what the effect accepted: some HALs clamp the request
+            // silently, and only the read-back value tells the real level.
+            int effectiveMb = readBackGainMb(enhancer, gainMb);
+            Log.i(TAG, "playback model 2: LoudnessEnhancer requested " + gainMb
+                    + " mB, effective " + effectiveMb + " mB, session=" + sessionId);
+            if (effectiveMb != gainMb) {
+                Log.w(TAG, "playback model 2: device clamped gain " + gainMb
+                        + " mB -> " + effectiveMb + " mB");
+            }
         } catch (Throwable t) {
             // Unsupported effect or disabled by policy: keep model 1 behaviour.
             Log.w(TAG, "playback model 2 unavailable, fallback to model 1: " + t);
             releaseEnhancer();
+        }
+    }
+
+    /**
+     * Read the gain the effect actually holds. Falls back to the requested
+     * value when the implementation cannot report it, so logging still works.
+     */
+    private int readBackGainMb(LoudnessEnhancer enhancer, int requestedMb) {
+        try {
+            return (int) enhancer.getTargetGain();
+        } catch (Throwable t) {
+            Log.w(TAG, "playback model 2: gain read-back unavailable: " + t);
+            return requestedMb;
         }
     }
 

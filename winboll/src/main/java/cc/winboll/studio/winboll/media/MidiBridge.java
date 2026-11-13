@@ -69,6 +69,7 @@ public final class MidiBridge {
     private static final String KEY_PLAYLIST_JSON = "playlist_json";
     private static final String KEY_HOSTING_ENABLED = "hosting_enabled";
     private static final String KEY_PLAYBACK_MODEL = "playback_model";
+    private static final String KEY_PLAYBACK_GAIN_MB = "playback_gain_mb";
     private static final String KEY_HOSTED = "hosted";
     private static final String KEY_HOST_STATE = "host_state";
     private static final String KEY_HOST_TRACK_ID = "host_track_id";
@@ -287,6 +288,46 @@ public final class MidiBridge {
             .putInt(KEY_PLAYBACK_MODEL,
                 model == PLAYBACK_MODEL_ENHANCED ? PLAYBACK_MODEL_ENHANCED : PLAYBACK_MODEL_CLASSIC)
             .apply();
+    }
+
+    /** Model 2 gain presets in millibels (100 mB = 1 dB). */
+    public static final int GAIN_PRESET_6_DB = 600;
+    public static final int GAIN_PRESET_10_DB = 1000;
+    public static final int GAIN_PRESET_14_DB = 1400;
+
+    /** Default model 2 gain: the value model 2 first shipped with (+10 dB). */
+    public static final int PLAYBACK_GAIN_MB_DEFAULT = GAIN_PRESET_10_DB;
+
+    /** Accepted gain window in mB; anything outside falls back to the default. */
+    private static final int PLAYBACK_GAIN_MB_MIN = 0;
+    private static final int PLAYBACK_GAIN_MB_MAX = 2000;
+
+    /**
+     * Settings-page model 2 gain in millibels. Only model 2 uses it; the audio
+     * effect may clamp it further, and HostedMidiPlayer logs the effective
+     * value read back from the effect so the real level is never guessed.
+     */
+    public static int getPlaybackGainMb(Context context) {
+        return normalizeGainMb(context.getApplicationContext()
+            .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getInt(KEY_PLAYBACK_GAIN_MB, PLAYBACK_GAIN_MB_DEFAULT));
+    }
+
+    /** Persist the Settings-page model 2 gain in millibels. */
+    public static void setPlaybackGainMb(Context context, int gainMb) {
+        context.getApplicationContext()
+            .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putInt(KEY_PLAYBACK_GAIN_MB, normalizeGainMb(gainMb))
+            .apply();
+    }
+
+    /** Clamp a stored/handed-in gain to the accepted window (default on garbage). */
+    private static int normalizeGainMb(int gainMb) {
+        if (gainMb < PLAYBACK_GAIN_MB_MIN || gainMb > PLAYBACK_GAIN_MB_MAX) {
+            return PLAYBACK_GAIN_MB_DEFAULT;
+        }
+        return gainMb;
     }
 
     /**
