@@ -70,6 +70,10 @@ public final class MidiBridge {
     private static final String KEY_HOSTING_ENABLED = "hosting_enabled";
     private static final String KEY_PLAYBACK_MODEL = "playback_model";
     private static final String KEY_PLAYBACK_GAIN_MB = "playback_gain_mb";
+    private static final String KEY_DYNAMIC_GAIN_MB = "dynamic_gain_mb";
+    private static final String KEY_DYNAMIC_COMP_THRESHOLD_MB = "dynamic_comp_threshold_mb";
+    private static final String KEY_DYNAMIC_COMP_RATIO_X10 = "dynamic_comp_ratio_x10";
+    private static final String KEY_DYNAMIC_LIMIT_THRESHOLD_MB = "dynamic_limiter_threshold_mb";
     private static final String KEY_HOSTED = "hosted";
     private static final String KEY_HOST_STATE = "host_state";
     private static final String KEY_HOST_TRACK_ID = "host_track_id";
@@ -269,6 +273,9 @@ public final class MidiBridge {
     /** Hosted playback model 2: same engine plus a LoudnessEnhancer gain
      *  attached to the player's audio session (louder output). */
     public static final int PLAYBACK_MODEL_ENHANCED = 2;
+    /** Hosted playback model 3: same engine plus DynamicsProcessing
+     *  (single-band compressor + limiter). API 28 and above only. */
+    public static final int PLAYBACK_MODEL_DYNAMIC = 3;
 
     /**
      * Settings-page hosted playback model. Defaults to model 1 (classic):
@@ -280,14 +287,21 @@ public final class MidiBridge {
             .getInt(KEY_PLAYBACK_MODEL, PLAYBACK_MODEL_CLASSIC);
     }
 
-    /** Persist the Settings-page hosted playback model (1 or 2). */
+    /** Persist the Settings-page hosted playback model (1, 2 or 3). */
     public static void setPlaybackModel(Context context, int model) {
         context.getApplicationContext()
             .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .edit()
-            .putInt(KEY_PLAYBACK_MODEL,
-                model == PLAYBACK_MODEL_ENHANCED ? PLAYBACK_MODEL_ENHANCED : PLAYBACK_MODEL_CLASSIC)
+            .putInt(KEY_PLAYBACK_MODEL, normalizePlaybackModel(model))
             .apply();
+    }
+
+    /** Only models 1/2/3 exist; anything else degrades to model 1. */
+    private static int normalizePlaybackModel(int model) {
+        if (model == PLAYBACK_MODEL_ENHANCED || model == PLAYBACK_MODEL_DYNAMIC) {
+            return model;
+        }
+        return PLAYBACK_MODEL_CLASSIC;
     }
 
     /** Model 2 gain presets in millibels (100 mB = 1 dB). */
@@ -328,6 +342,119 @@ public final class MidiBridge {
             return PLAYBACK_GAIN_MB_DEFAULT;
         }
         return gainMb;
+    }
+
+    // ------------------- model 3 (DynamicsProcessing) presets -------------------
+
+    /** Model 3 post (make-up) gain presets in mB. */
+    public static final int DYNAMIC_GAIN_6_DB = 600;
+    public static final int DYNAMIC_GAIN_10_DB = 1000;
+    public static final int DYNAMIC_GAIN_14_DB = 1400;
+    public static final int DYNAMIC_GAIN_MB_DEFAULT = DYNAMIC_GAIN_10_DB;
+
+    /** Model 3 compressor threshold presets in mB (dBFS). */
+    public static final int DYNAMIC_COMP_THRESHOLD_10_DB = -1000;
+    public static final int DYNAMIC_COMP_THRESHOLD_20_DB = -2000;
+    public static final int DYNAMIC_COMP_THRESHOLD_30_DB = -3000;
+    public static final int DYNAMIC_COMP_THRESHOLD_MB_DEFAULT = DYNAMIC_COMP_THRESHOLD_20_DB;
+
+    /** Model 3 compressor ratio presets, stored as ratio x 10. */
+    public static final int DYNAMIC_COMP_RATIO_15 = 15;
+    public static final int DYNAMIC_COMP_RATIO_20 = 20;
+    public static final int DYNAMIC_COMP_RATIO_30 = 30;
+    public static final int DYNAMIC_COMP_RATIO_DEFAULT = DYNAMIC_COMP_RATIO_20;
+
+    /** Model 3 limiter threshold presets in mB (dBFS). */
+    public static final int DYNAMIC_LIMIT_1_DB = -100;
+    public static final int DYNAMIC_LIMIT_3_DB = -300;
+    public static final int DYNAMIC_LIMIT_6_DB = -600;
+    public static final int DYNAMIC_LIMIT_MB_DEFAULT = DYNAMIC_LIMIT_3_DB;
+
+    private static final int[] DYNAMIC_GAIN_MB_ALLOWED = {
+        DYNAMIC_GAIN_6_DB, DYNAMIC_GAIN_10_DB, DYNAMIC_GAIN_14_DB
+    };
+    private static final int[] DYNAMIC_COMP_THRESHOLD_MB_ALLOWED = {
+        DYNAMIC_COMP_THRESHOLD_10_DB, DYNAMIC_COMP_THRESHOLD_20_DB, DYNAMIC_COMP_THRESHOLD_30_DB
+    };
+    private static final int[] DYNAMIC_COMP_RATIO_ALLOWED = {
+        DYNAMIC_COMP_RATIO_15, DYNAMIC_COMP_RATIO_20, DYNAMIC_COMP_RATIO_30
+    };
+    private static final int[] DYNAMIC_LIMIT_MB_ALLOWED = {
+        DYNAMIC_LIMIT_1_DB, DYNAMIC_LIMIT_3_DB, DYNAMIC_LIMIT_6_DB
+    };
+
+    /** Model 3 post gain in millibels (only model 3 reads it). */
+    public static int getDynamicGainMb(Context context) {
+        return getPresetInt(context, KEY_DYNAMIC_GAIN_MB, DYNAMIC_GAIN_MB_DEFAULT,
+            DYNAMIC_GAIN_MB_ALLOWED);
+    }
+
+    public static void setDynamicGainMb(Context context, int value) {
+        putPresetInt(context, KEY_DYNAMIC_GAIN_MB, value, DYNAMIC_GAIN_MB_DEFAULT,
+            DYNAMIC_GAIN_MB_ALLOWED);
+    }
+
+    /** Model 3 compressor threshold in millibels (negative, dBFS). */
+    public static int getDynamicCompThresholdMb(Context context) {
+        return getPresetInt(context, KEY_DYNAMIC_COMP_THRESHOLD_MB,
+            DYNAMIC_COMP_THRESHOLD_MB_DEFAULT, DYNAMIC_COMP_THRESHOLD_MB_ALLOWED);
+    }
+
+    public static void setDynamicCompThresholdMb(Context context, int value) {
+        putPresetInt(context, KEY_DYNAMIC_COMP_THRESHOLD_MB, value,
+            DYNAMIC_COMP_THRESHOLD_MB_DEFAULT, DYNAMIC_COMP_THRESHOLD_MB_ALLOWED);
+    }
+
+    /** Model 3 compressor ratio x 10 (15 = 1.5:1, 20 = 2:1, 30 = 3:1). */
+    public static int getDynamicCompRatioX10(Context context) {
+        return getPresetInt(context, KEY_DYNAMIC_COMP_RATIO_X10, DYNAMIC_COMP_RATIO_DEFAULT,
+            DYNAMIC_COMP_RATIO_ALLOWED);
+    }
+
+    public static void setDynamicCompRatioX10(Context context, int value) {
+        putPresetInt(context, KEY_DYNAMIC_COMP_RATIO_X10, value, DYNAMIC_COMP_RATIO_DEFAULT,
+            DYNAMIC_COMP_RATIO_ALLOWED);
+    }
+
+    /** Model 3 limiter threshold in millibels (negative, dBFS). */
+    public static int getDynamicLimiterThresholdMb(Context context) {
+        return getPresetInt(context, KEY_DYNAMIC_LIMIT_THRESHOLD_MB, DYNAMIC_LIMIT_MB_DEFAULT,
+            DYNAMIC_LIMIT_MB_ALLOWED);
+    }
+
+    public static void setDynamicLimiterThresholdMb(Context context, int value) {
+        putPresetInt(context, KEY_DYNAMIC_LIMIT_THRESHOLD_MB, value, DYNAMIC_LIMIT_MB_DEFAULT,
+            DYNAMIC_LIMIT_MB_ALLOWED);
+    }
+
+    /** Read a stored preset, falling back to the default when it is not allowed. */
+    private static int getPresetInt(Context context, String key, int defaultValue, int[] allowed) {
+        int value = context.getApplicationContext()
+            .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getInt(key, defaultValue);
+        for (int i = 0; i < allowed.length; i++) {
+            if (allowed[i] == value) {
+                return value;
+            }
+        }
+        return defaultValue;
+    }
+
+    /** Persist a preset, clamping to the default when it is not allowed. */
+    private static void putPresetInt(Context context, String key, int value, int defaultValue,
+            int[] allowed) {
+        int store = defaultValue;
+        for (int i = 0; i < allowed.length; i++) {
+            if (allowed[i] == value) {
+                store = value;
+                break;
+            }
+        }
+        context.getApplicationContext()
+            .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putInt(key, store)
+            .apply();
     }
 
     /**

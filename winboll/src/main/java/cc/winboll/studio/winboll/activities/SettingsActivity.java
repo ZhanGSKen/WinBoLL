@@ -152,43 +152,133 @@ public class SettingsActivity extends BaseWinBoLLActivity {
             }
         });
 
+        // Model 3 (DynamicsProcessing) presets: post gain, compressor
+        // threshold/ratio and limiter threshold. Timings stay fixed in the
+        // player; the values are persisted in millibels / ratio x 10.
+        final RadioGroup rgDynGain = (RadioGroup) findViewById(R.id.rg_dynamic_gain);
+        final RadioGroup rgDynComp = (RadioGroup) findViewById(R.id.rg_dynamic_comp);
+        final RadioGroup rgDynRatio = (RadioGroup) findViewById(R.id.rg_dynamic_ratio);
+        final RadioGroup rgDynLimit = (RadioGroup) findViewById(R.id.rg_dynamic_limit);
+
+        int dynGainMb = MidiBridge.getDynamicGainMb(this);
+        rgDynGain.check(dynGainMb == MidiBridge.DYNAMIC_GAIN_6_DB ? R.id.rb_dyn_gain_6
+                : dynGainMb == MidiBridge.DYNAMIC_GAIN_14_DB ? R.id.rb_dyn_gain_14
+                : R.id.rb_dyn_gain_10);
+        rgDynGain.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int gain = checkedId == R.id.rb_dyn_gain_6 ? MidiBridge.DYNAMIC_GAIN_6_DB
+                        : checkedId == R.id.rb_dyn_gain_14 ? MidiBridge.DYNAMIC_GAIN_14_DB
+                        : MidiBridge.DYNAMIC_GAIN_10_DB;
+                MidiBridge.setDynamicGainMb(SettingsActivity.this, gain);
+                showDynamicSavedToast();
+            }
+        });
+
+        int dynCompMb = MidiBridge.getDynamicCompThresholdMb(this);
+        rgDynComp.check(dynCompMb == MidiBridge.DYNAMIC_COMP_THRESHOLD_10_DB ? R.id.rb_dyn_comp_10
+                : dynCompMb == MidiBridge.DYNAMIC_COMP_THRESHOLD_30_DB ? R.id.rb_dyn_comp_30
+                : R.id.rb_dyn_comp_20);
+        rgDynComp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int threshold = checkedId == R.id.rb_dyn_comp_10
+                        ? MidiBridge.DYNAMIC_COMP_THRESHOLD_10_DB
+                        : checkedId == R.id.rb_dyn_comp_30
+                        ? MidiBridge.DYNAMIC_COMP_THRESHOLD_30_DB
+                        : MidiBridge.DYNAMIC_COMP_THRESHOLD_20_DB;
+                MidiBridge.setDynamicCompThresholdMb(SettingsActivity.this, threshold);
+                showDynamicSavedToast();
+            }
+        });
+
+        int dynRatio = MidiBridge.getDynamicCompRatioX10(this);
+        rgDynRatio.check(dynRatio == MidiBridge.DYNAMIC_COMP_RATIO_15 ? R.id.rb_dyn_ratio_15
+                : dynRatio == MidiBridge.DYNAMIC_COMP_RATIO_30 ? R.id.rb_dyn_ratio_30
+                : R.id.rb_dyn_ratio_20);
+        rgDynRatio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int ratio = checkedId == R.id.rb_dyn_ratio_15 ? MidiBridge.DYNAMIC_COMP_RATIO_15
+                        : checkedId == R.id.rb_dyn_ratio_30 ? MidiBridge.DYNAMIC_COMP_RATIO_30
+                        : MidiBridge.DYNAMIC_COMP_RATIO_20;
+                MidiBridge.setDynamicCompRatioX10(SettingsActivity.this, ratio);
+                showDynamicSavedToast();
+            }
+        });
+
+        int dynLimitMb = MidiBridge.getDynamicLimiterThresholdMb(this);
+        rgDynLimit.check(dynLimitMb == MidiBridge.DYNAMIC_LIMIT_1_DB ? R.id.rb_dyn_limit_1
+                : dynLimitMb == MidiBridge.DYNAMIC_LIMIT_6_DB ? R.id.rb_dyn_limit_6
+                : R.id.rb_dyn_limit_3);
+        rgDynLimit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int limit = checkedId == R.id.rb_dyn_limit_1 ? MidiBridge.DYNAMIC_LIMIT_1_DB
+                        : checkedId == R.id.rb_dyn_limit_6 ? MidiBridge.DYNAMIC_LIMIT_6_DB
+                        : MidiBridge.DYNAMIC_LIMIT_3_DB;
+                MidiBridge.setDynamicLimiterThresholdMb(SettingsActivity.this, limit);
+                showDynamicSavedToast();
+            }
+        });
+
         // Hosted playback model selector: model 1 keeps the framework synth
-        // output as-is, model 2 adds a LoudnessEnhancer gain on the native
-        // engine's audio session. Persisted at once; applied when the next
-        // track is prepared (current playback is left untouched).
+        // output as-is, model 2 adds a LoudnessEnhancer gain, model 3 adds a
+        // DynamicsProcessing (compressor + limiter). Persisted at once; applied
+        // when the next track is prepared (current playback is left untouched).
         RadioGroup rgPlaybackModel = (RadioGroup) findViewById(R.id.rg_hosted_playback_model);
         int playbackModel = MidiBridge.getPlaybackModel(this);
         rgPlaybackModel.check(playbackModel == MidiBridge.PLAYBACK_MODEL_ENHANCED
                 ? R.id.rb_model_enhanced
+                : playbackModel == MidiBridge.PLAYBACK_MODEL_DYNAMIC
+                ? R.id.rb_model_dynamic
                 : R.id.rb_model_classic);
-        applyGainGroupState(rgPlaybackGain, playbackModel);
+        applyModelGroupState(playbackModel == MidiBridge.PLAYBACK_MODEL_ENHANCED, rgPlaybackGain);
+        applyModelGroupState(playbackModel == MidiBridge.PLAYBACK_MODEL_DYNAMIC,
+                rgDynGain, rgDynComp, rgDynRatio, rgDynLimit);
         rgPlaybackModel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 int model = checkedId == R.id.rb_model_enhanced
                         ? MidiBridge.PLAYBACK_MODEL_ENHANCED
+                        : checkedId == R.id.rb_model_dynamic
+                        ? MidiBridge.PLAYBACK_MODEL_DYNAMIC
                         : MidiBridge.PLAYBACK_MODEL_CLASSIC;
                 MidiBridge.setPlaybackModel(SettingsActivity.this, model);
-                applyGainGroupState(rgPlaybackGain, model);
-                Toast.makeText(SettingsActivity.this,
-                        model == MidiBridge.PLAYBACK_MODEL_ENHANCED
-                                ? R.string.toast_playback_model_enhanced
-                                : R.string.toast_playback_model_classic,
-                        Toast.LENGTH_SHORT).show();
+                applyModelGroupState(model == MidiBridge.PLAYBACK_MODEL_ENHANCED, rgPlaybackGain);
+                applyModelGroupState(model == MidiBridge.PLAYBACK_MODEL_DYNAMIC,
+                        rgDynGain, rgDynComp, rgDynRatio, rgDynLimit);
+                int toastRes = model == MidiBridge.PLAYBACK_MODEL_ENHANCED
+                        ? R.string.toast_playback_model_enhanced
+                        : model == MidiBridge.PLAYBACK_MODEL_DYNAMIC
+                        ? R.string.toast_playback_model_dynamic
+                        : R.string.toast_playback_model_classic;
+                Toast.makeText(SettingsActivity.this, toastRes, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    /** Model 3 parameter change feedback (applies to the next prepared track). */
+    private void showDynamicSavedToast() {
+        Toast.makeText(SettingsActivity.this, R.string.toast_dynamic_param, Toast.LENGTH_SHORT)
+                .show();
+    }
+
     /**
-     * Gain presets only affect model 2, so the group is greyed out and not
-     * clickable while model 1 is selected.
+     * Parameter groups belong to one model only, so they are greyed out and
+     * not clickable unless that model is selected.
      */
-    private void applyGainGroupState(RadioGroup group, int model) {
-        boolean enabled = model == MidiBridge.PLAYBACK_MODEL_ENHANCED;
-        group.setEnabled(enabled);
-        group.setAlpha(enabled ? 1.0f : 0.5f);
-        for (int i = 0; i < group.getChildCount(); i++) {
-            group.getChildAt(i).setEnabled(enabled);
+    private void applyModelGroupState(boolean enabled, RadioGroup... groups) {
+        for (int g = 0; g < groups.length; g++) {
+            RadioGroup group = groups[g];
+            if (group == null) {
+                continue;
+            }
+            group.setEnabled(enabled);
+            group.setAlpha(enabled ? 1.0f : 0.5f);
+            for (int i = 0; i < group.getChildCount(); i++) {
+                group.getChildAt(i).setEnabled(enabled);
+            }
         }
     }
 

@@ -14,6 +14,7 @@ import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
+import android.media.audiofx.DynamicsProcessing;
 import android.media.audiofx.LoudnessEnhancer;
 import android.os.Build;
 import android.os.Handler;
@@ -47,6 +48,19 @@ public class HostedMidiPlayer {
      * playback feel low; the request is logged together with the gain the
      * effect actually accepted, because devices clamp it silently.
      */
+
+    // Model 3 (DynamicsProcessing) timings are fixed; only the stage levels
+    // below are exposed as Settings-page presets.
+    private static final float DYNAMIC_COMP_BAND_CUTOFF_HZ = 20000f;
+    private static final float DYNAMIC_COMP_ATTACK_MS = 20f;
+    private static final float DYNAMIC_COMP_RELEASE_MS = 200f;
+    private static final float DYNAMIC_COMP_KNEE_DB = 6f;
+    private static final float DYNAMIC_COMP_NOISE_GATE_DB = -60f;
+    private static final float DYNAMIC_COMP_EXPANDER_RATIO = 1f;
+    private static final float DYNAMIC_LIMITER_ATTACK_MS = 5f;
+    private static final float DYNAMIC_LIMITER_RELEASE_MS = 50f;
+    private static final float DYNAMIC_LIMITER_RATIO = 50f;
+
     /** One playable entry of the bridge playlist. */
     public static class Track {
         public final String id;
@@ -84,6 +98,8 @@ public class HostedMidiPlayer {
     private MediaPlayer mPlayer;
     /** Model 2 gain stage; null under model 1 or when the effect is unsupported. */
     private LoudnessEnhancer mEnhancer;
+    /** Model 3 compressor/limiter stage; null unless model 3 is active. */
+    private DynamicsProcessing mProcessor;
     private Track mTrack;
     private int mState = STATE_STOPPED;
     private float mRate = 1.0f;
@@ -424,6 +440,7 @@ public class HostedMidiPlayer {
 
     private void releasePlayer() {
         releaseEnhancer();
+        releaseProcessor();
         if (mPlayer != null) {
             try {
                 mPlayer.stop();
@@ -438,18 +455,26 @@ public class HostedMidiPlayer {
     /**
      * Apply the Settings-page playback model to the freshly prepared player.
      * Model 1 keeps the framework synth output untouched; model 2 attaches a
-     * LoudnessEnhancer to the player's audio session so hosted playback is
-     * louder (the built-in Sonivox mix is quieter than the web synthesizer).
-     * Devices without the effect degrade to model 1 silently.
+     * LoudnessEnhancer to the player's audio session; model 3 attaches a
+     * DynamicsProcessing (single-band compressor + limiter) instead. Both
+     * louder models degrade to model 1 when their effect is unavailable.
      */
     private void applyPlaybackModel(MediaPlayer mp) {
         releaseEnhancer();
+        releaseProcessor();
         if (mp == null) {
             return;
         }
-        if (MidiBridge.getPlaybackModel(mAppContext) != MidiBridge.PLAYBACK_MODEL_ENHANCED) {
-            return;
+        int model = MidiBridge.getPlaybackModel(mAppContext);
+        if (model == MidiBridge.PLAYBACK_MODEL_ENHANCED) {
+            applyEnhancer(mp);
+        } else if (model == MidiBridge.PLAYBACK_MODEL_DYNAMIC) {
+            applyDynamic(mp);
         }
+    }
+
+    /** Model 2: LoudnessEnhancer target gain on the player's audio session. */
+    private void applyEnhancer(MediaPlayer mp) {
         try {
             int sessionId = mp.getAudioSessionId();
             int gainMb = MidiBridge.getPlaybackGainMb(mAppContext);
@@ -471,6 +496,90 @@ public class HostedMidiPlayer {
             Log.w(TAG, "playback model 2 unavailable, fallback to model 1: " + t);
             releaseEnhancer();
         }
+    }
+
+    /**
+     * Model 3: DynamicsProcessing with one compressor band and a limiter. The
+     * stage levels come from the Settings page (post gain, compressor
+     * threshold/ratio, limiter threshold); the timings are fixed. Requires
+     * API 28, older devices fall back to model 1.
+     */
+    private void applyDynamic(MediaPlayer mp) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            Log.w(TAG, "playback model 3 needs API 28+, fallback to model 1");
+            return;
+        }
+        try {
+            int sessionId = mp.getAudioSessionId();
+            float gainDb = MidiBridge.getDynamicGainMb(mAppContext) / 100f;
+            float compThresholdDb = MidiBridge.getDynamicCompThresholdMb(mAppContext) / 100f;
+            float compRatio = MidiBridge.getDynamicCompRatioX10(mAppContext) / 10f;
+            float limiterThresholdDb = MidiBridge.getDynamicLimiterThresholdMb(mAppContext) / 100f;
+
+            // Not every engine implements both variants: some HALs accept only
+            // VARIANT_FAVOR_FREQUENCY_RESOLUTION and reject the other outright.
+            int variant = DynamicsProcessing.VARIANT_FAVOR_TIME_RESOLUTION;
+            DynamicsProcessing processor;
+            try {
+                processor = new DynamicsProcessing(0, sessionId,
+                        buildDynamicConfig(variant, gainDb, compThresholdDb, compRatio,
+                                limiterThresholdDb));
+            } catch (IllegalArgumentException e) {
+                Log.w(TAG, "playback model 3: variant " + variant
+                        + " rejected, retry with variant "
+                        + DynamicsProcessing.VARIANT_FAVOR_FREQUENCY_RESOLUTION);
+                variant = DynamicsProcessing.VARIANT_FAVOR_FREQUENCY_RESOLUTION;
+                processor = new DynamicsProcessing(0, sessionId,
+                        buildDynamicConfig(variant, gainDb, compThresholdDb, compRatio,
+                                limiterThresholdDb));
+            }
+            processor.setEnabled(true);
+            mProcessor = processor;
+
+            // Read back the levels the engine actually holds, same reasoning as
+            // model 2: the real output level is never guessed.
+            DynamicsProcessing.Config applied = processor.getConfig();
+            float appliedComp = applied.getChannelByChannelIndex(0).getMbc().getBand(0).getThreshold();
+            float appliedLimit = applied.getChannelByChannelIndex(0).getLimiter().getThreshold();
+            float appliedGain = applied.getChannelByChannelIndex(0).getLimiter().getPostGain();
+            Log.i(TAG, "playback model 3: DynamicsProcessing comp " + appliedComp + " dB @ "
+                    + compRatio + ":1, limiter " + appliedLimit + " dB, post gain " + appliedGain
+                    + " dB, variant=" + variant + ", session=" + sessionId);
+        } catch (Throwable t) {
+            Log.w(TAG, "playback model 3 unavailable, fallback to model 1", t);
+            releaseProcessor();
+        }
+    }
+
+    /**
+     * Build the stereo DynamicsProcessing config: one compressor band plus a
+     * limiter whose postGain carries the model 3 post gain. The config can only
+     * be handed to the effect at construction time.
+     */
+    private DynamicsProcessing.Config buildDynamicConfig(int variant, float gainDb,
+            float compThresholdDb, float compRatio, float limiterThresholdDb) {
+        DynamicsProcessing.MbcBand band = new DynamicsProcessing.MbcBand(
+                true, DYNAMIC_COMP_BAND_CUTOFF_HZ,
+                DYNAMIC_COMP_ATTACK_MS, DYNAMIC_COMP_RELEASE_MS,
+                compRatio, compThresholdDb, DYNAMIC_COMP_KNEE_DB,
+                DYNAMIC_COMP_NOISE_GATE_DB, DYNAMIC_COMP_EXPANDER_RATIO,
+                0f, 0f);
+        DynamicsProcessing.Mbc mbc = new DynamicsProcessing.Mbc(true, true, 1);
+        mbc.setBand(0, band);
+        DynamicsProcessing.Limiter limiter = new DynamicsProcessing.Limiter(
+                true, true, 0,
+                DYNAMIC_LIMITER_ATTACK_MS, DYNAMIC_LIMITER_RELEASE_MS,
+                DYNAMIC_LIMITER_RATIO, limiterThresholdDb, gainDb);
+        return new DynamicsProcessing.Config.Builder(
+                variant,
+                2,          // stereo
+                false, 0,   // preEQ off
+                true, 1,    // one compressor band
+                false, 0,   // postEQ off
+                true)       // limiter on
+                .setMbcAllChannelsTo(mbc)
+                .setLimiterAllChannelsTo(limiter)
+                .build();
     }
 
     /**
@@ -501,6 +610,23 @@ public class HostedMidiPlayer {
             // Already released.
         }
         mEnhancer = null;
+    }
+
+    private void releaseProcessor() {
+        if (mProcessor == null) {
+            return;
+        }
+        try {
+            mProcessor.setEnabled(false);
+        } catch (Throwable ignored) {
+            // Released session or unsupported device: nothing to disable.
+        }
+        try {
+            mProcessor.release();
+        } catch (Throwable ignored) {
+            // Already released.
+        }
+        mProcessor = null;
     }
 
     private void notifyState() {
