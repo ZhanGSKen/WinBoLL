@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -125,6 +127,29 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                 Toast.makeText(SettingsActivity.this,
                         isChecked ? R.string.toast_hosted_playback_enabled
                                 : R.string.toast_hosted_playback_disabled,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Hosted playback model selector: model 1 keeps the framework synth
+        // output as-is, model 2 adds a LoudnessEnhancer gain on the native
+        // engine's audio session. Persisted at once; applied when the next
+        // track is prepared (current playback is left untouched).
+        RadioGroup rgPlaybackModel = (RadioGroup) findViewById(R.id.rg_hosted_playback_model);
+        rgPlaybackModel.check(MidiBridge.getPlaybackModel(this) == MidiBridge.PLAYBACK_MODEL_ENHANCED
+                ? R.id.rb_model_enhanced
+                : R.id.rb_model_classic);
+        rgPlaybackModel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int model = checkedId == R.id.rb_model_enhanced
+                        ? MidiBridge.PLAYBACK_MODEL_ENHANCED
+                        : MidiBridge.PLAYBACK_MODEL_CLASSIC;
+                MidiBridge.setPlaybackModel(SettingsActivity.this, model);
+                Toast.makeText(SettingsActivity.this,
+                        model == MidiBridge.PLAYBACK_MODEL_ENHANCED
+                                ? R.string.toast_playback_model_enhanced
+                                : R.string.toast_playback_model_classic,
                         Toast.LENGTH_SHORT).show();
             }
         });

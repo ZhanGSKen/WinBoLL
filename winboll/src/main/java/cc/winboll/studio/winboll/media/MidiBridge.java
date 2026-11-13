@@ -68,6 +68,7 @@ public final class MidiBridge {
     private static final String PREFS_NAME = "winboll_media_bridge";
     private static final String KEY_PLAYLIST_JSON = "playlist_json";
     private static final String KEY_HOSTING_ENABLED = "hosting_enabled";
+    private static final String KEY_PLAYBACK_MODEL = "playback_model";
     private static final String KEY_HOSTED = "hosted";
     private static final String KEY_HOST_STATE = "host_state";
     private static final String KEY_HOST_TRACK_ID = "host_track_id";
@@ -261,6 +262,32 @@ public final class MidiBridge {
     }
 
     // ------------------- hosting settings switch (Settings page) -------------------
+
+    /** Hosted playback model 1: framework MediaPlayer + Sonivox as-is (default). */
+    public static final int PLAYBACK_MODEL_CLASSIC = 1;
+    /** Hosted playback model 2: same engine plus a LoudnessEnhancer gain
+     *  attached to the player's audio session (louder output). */
+    public static final int PLAYBACK_MODEL_ENHANCED = 2;
+
+    /**
+     * Settings-page hosted playback model. Defaults to model 1 (classic):
+     * untouched settings / fresh installs keep the pre-existing output level.
+     */
+    public static int getPlaybackModel(Context context) {
+        return context.getApplicationContext()
+            .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getInt(KEY_PLAYBACK_MODEL, PLAYBACK_MODEL_CLASSIC);
+    }
+
+    /** Persist the Settings-page hosted playback model (1 or 2). */
+    public static void setPlaybackModel(Context context, int model) {
+        context.getApplicationContext()
+            .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putInt(KEY_PLAYBACK_MODEL,
+                model == PLAYBACK_MODEL_ENHANCED ? PLAYBACK_MODEL_ENHANCED : PLAYBACK_MODEL_CLASSIC)
+            .apply();
+    }
 
     /**
      * Settings-page switch state: whether cover hosting is enabled at all.

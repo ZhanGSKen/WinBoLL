@@ -11,6 +11,20 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/toolbar"/>
 
+	<!-- The whole settings body scrolls: tall sections (cert install,
+	     hosted playback radio group) must never be clipped on small screens. -->
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:fillViewport="true"
+		android:scrollbars="vertical">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
 	<TextView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -142,5 +156,54 @@
 		android:paddingTop="8dp"
 		android:text="@string/settings_hosted_playback_desc"
 		android:textSize="13sp"/>
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingLeft="16dp"
+		android:paddingRight="16dp"
+		android:paddingTop="16dp"
+		android:text="@string/settings_hosted_playback_model_label"
+		android:textStyle="bold"
+		android:textSize="16sp"/>
+
+	<RadioGroup
+		android:id="@+id/rg_hosted_playback_model"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:paddingLeft="8dp"
+		android:paddingRight="16dp"
+		android:paddingTop="4dp">
+
+		<RadioButton
+			android:id="@+id/rb_model_classic"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/settings_hosted_playback_model_classic"
+			android:textSize="16sp"/>
+
+		<RadioButton
+			android:id="@+id/rb_model_enhanced"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/settings_hosted_playback_model_enhanced"
+			android:textSize="16sp"/>
+
+	</RadioGroup>
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingLeft="16dp"
+		android:paddingRight="16dp"
+		android:paddingTop="8dp"
+		android:paddingBottom="16dp"
+		android:text="@string/settings_hosted_playback_model_desc"
+		android:textSize="13sp"/>
+
+		</LinearLayout>
+
+	</ScrollView>
 
 </LinearLayout>

@@ -14,6 +14,7 @@ import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
+import android.media.audiofx.LoudnessEnhancer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,6 +39,14 @@ public class HostedMidiPlayer {
     public static final int STATE_STOPPED = 1;
     public static final int STATE_PAUSED = 2;
     public static final int STATE_PLAYING = 3;
+
+    /**
+     * Model 2 target gain in mB (+10 dB). Sonivox mixes the .mid stream
+     * noticeably quieter than the web synthesizer, which is what makes hosted
+     * playback feel low; the gain is deliberately modest so velocity dynamics
+     * survive and peaks do not clip.
+     */
+    private static final int ENHANCED_GAIN_MB = 1000;
 
     /** One playable entry of the bridge playlist. */
     public static class Track {
@@ -74,6 +83,8 @@ public class HostedMidiPlayer {
     private final Handler mMain = new Handler(Looper.getMainLooper());
 
     private MediaPlayer mPlayer;
+    /** Model 2 gain stage; null under model 1 or when the effect is unsupported. */
+    private LoudnessEnhancer mEnhancer;
     private Track mTrack;
     private int mState = STATE_STOPPED;
     private float mRate = 1.0f;
@@ -300,6 +311,7 @@ public class HostedMidiPlayer {
                         return;
                     }
                     mPreparing = false;
+                    applyPlaybackModel(mp);
                     if (mPendingSeekMs > 0) {
                         // Clamp: the web clock position can exceed the engine
                         // track length; seeking past the end makes MediaPlayer
@@ -412,6 +424,7 @@ public class HostedMidiPlayer {
     }
 
     private void releasePlayer() {
+        releaseEnhancer();
         if (mPlayer != null) {
             try {
                 mPlayer.stop();
@@ -421,6 +434,52 @@ public class HostedMidiPlayer {
             mPlayer.release();
             mPlayer = null;
         }
+    }
+
+    /**
+     * Apply the Settings-page playback model to the freshly prepared player.
+     * Model 1 keeps the framework synth output untouched; model 2 attaches a
+     * LoudnessEnhancer to the player's audio session so hosted playback is
+     * louder (the built-in Sonivox mix is quieter than the web synthesizer).
+     * Devices without the effect degrade to model 1 silently.
+     */
+    private void applyPlaybackModel(MediaPlayer mp) {
+        releaseEnhancer();
+        if (mp == null) {
+            return;
+        }
+        if (MidiBridge.getPlaybackModel(mAppContext) != MidiBridge.PLAYBACK_MODEL_ENHANCED) {
+            return;
+        }
+        try {
+            int sessionId = mp.getAudioSessionId();
+            LoudnessEnhancer enhancer = new LoudnessEnhancer(sessionId);
+            enhancer.setTargetGain(ENHANCED_GAIN_MB);
+            enhancer.setEnabled(true);
+            mEnhancer = enhancer;
+            Log.i(TAG, "playback model 2: LoudnessEnhancer +10 dB, session=" + sessionId);
+        } catch (Throwable t) {
+            // Unsupported effect or disabled by policy: keep model 1 behaviour.
+            Log.w(TAG, "playback model 2 unavailable, fallback to model 1: " + t);
+            releaseEnhancer();
+        }
+    }
+
+    private void releaseEnhancer() {
+        if (mEnhancer == null) {
+            return;
+        }
+        try {
+            mEnhancer.setEnabled(false);
+        } catch (Throwable ignored) {
+            // Released session or unsupported device: nothing to disable.
+        }
+        try {
+            mEnhancer.release();
+        } catch (Throwable ignored) {
+            // Already released.
+        }
+        mEnhancer = null;
     }
 
     private void notifyState() {

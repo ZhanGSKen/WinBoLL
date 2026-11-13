@@ -65,4 +65,10 @@
     <string name="settings_hosted_playback_desc">默认停用。启用后，网页 MIDI 播放可切换为应用托管播放（通知栏控制、后台续播）；停用后不接管网页播放，网页本地播放。</string>
     <string name="toast_hosted_playback_enabled">托管播放已启用</string>
     <string name="toast_hosted_playback_disabled">托管播放已停用</string>
+    <string name="settings_hosted_playback_model_label">托管播放模型</string>
+    <string name="settings_hosted_playback_model_classic">模型一：原生合成（默认）</string>
+    <string name="settings_hosted_playback_model_enhanced">模型二：原生合成 + 增益（+10 dB）</string>
+    <string name="settings_hosted_playback_model_desc">模型一：framework MediaPlayer + Sonivox 原始输出，音量只由系统媒体音量决定。模型二：在同一条音频会话上叠加 LoudnessEnhancer 增益（+10 dB），缓解托管播放音量偏小；设备不支持该音频效果时自动按模型一回退。选择在下一首或下次托管接管时生效，不影响正在播放的曲目。</string>
+    <string name="toast_playback_model_classic">已选择模型一（原生合成）</string>
+    <string name="toast_playback_model_enhanced">已选择模型二（原生合成 + 增益）</string>
 </resources>
