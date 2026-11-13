@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
@@ -41,6 +42,10 @@ public class SettingsActivity extends BaseWinBoLLActivity {
     private static final int REQ_PICK_CERT = 0x1001;
     /** 调起系统证书安装 */
     private static final int REQ_INSTALL_CERT = 0x1002;
+
+    /** Collapsible panel arrow glyphs: right-pointing closed, down-pointing open. */
+    private static final String PANEL_ARROW_COLLAPSED = "\u25B8";
+    private static final String PANEL_ARROW_EXPANDED = "\u25BE";
 
 	@Override
 	public String getTag() {
@@ -254,6 +259,37 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                         ? R.string.toast_playback_model_dynamic
                         : R.string.toast_playback_model_classic;
                 Toast.makeText(SettingsActivity.this, toastRes, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        setupPlaybackPanels();
+    }
+
+    /** The three model parameter panels start collapsed; tapping a header toggles. */
+    private void setupPlaybackPanels() {
+        setupCollapsiblePanel(R.id.ll_hosted_playback_classic_header,
+                R.id.ll_hosted_playback_classic_body, R.id.tv_hosted_playback_classic_arrow);
+        setupCollapsiblePanel(R.id.ll_hosted_playback_gain_header,
+                R.id.ll_hosted_playback_gain_body, R.id.tv_hosted_playback_gain_arrow);
+        setupCollapsiblePanel(R.id.ll_hosted_playback_dynamic_header,
+                R.id.ll_hosted_playback_dynamic_body, R.id.tv_hosted_playback_dynamic_arrow);
+    }
+
+    private void setupCollapsiblePanel(int headerId, int bodyId, int arrowId) {
+        final View header = findViewById(headerId);
+        final View body = findViewById(bodyId);
+        final TextView arrow = (TextView) findViewById(arrowId);
+        if (header == null || body == null || arrow == null) {
+            return;
+        }
+        body.setVisibility(View.GONE);
+        arrow.setText(PANEL_ARROW_COLLAPSED);
+        header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean expand = body.getVisibility() != View.VISIBLE;
+                body.setVisibility(expand ? View.VISIBLE : View.GONE);
+                arrow.setText(expand ? PANEL_ARROW_EXPANDED : PANEL_ARROW_COLLAPSED);
             }
         });
     }

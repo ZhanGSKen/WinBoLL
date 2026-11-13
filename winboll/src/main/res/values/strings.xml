@@ -70,13 +70,15 @@
     <string name="settings_hosted_playback_model_enhanced">模型二：原生合成 + 增益</string>
     <string name="settings_hosted_playback_model_dynamic">模型三：原生合成 + 压限增益</string>
     <string name="settings_hosted_playback_model_desc">模型一：framework MediaPlayer + Sonivox 原始输出，音量只由系统媒体音量决定。模型二：在同一条音频会话上叠加 LoudnessEnhancer 增益（档位可调），缓解托管播放音量偏小。模型三：叠加 DynamicsProcessing（单段压缩 + 限幅 + 后级增益，参数可调，需 Android 9 / API 28 以上）。设备不支持对应音频效果时自动按模型一回退。选择在下一首或下次托管接管时生效，不影响正在播放的曲目。</string>
-    <string name="settings_hosted_playback_gain_label">模型二增益档位</string>
+    <string name="settings_hosted_playback_classic_label">模型一参数：无额外参数</string>
+    <string name="settings_classic_desc">模型一直接使用 framework MediaPlayer + Sonivox 的原始输出，没有增益、压缩或限幅环节，音量只由系统媒体音量决定。托管播放偏小时可切到模型二或模型三。</string>
+    <string name="settings_hosted_playback_gain_label">模型二参数：增益档位</string>
     <string name="settings_hosted_playback_gain_6">+6 dB（保守，动态保留最好）</string>
     <string name="settings_hosted_playback_gain_10">+10 dB（默认）</string>
     <string name="settings_hosted_playback_gain_14">+14 dB（更响，可能压掉强弱层次）</string>
     <string name="settings_hosted_playback_gain_desc">仅模型二生效。增益提交后应用会回读设备实际生效值并写入日志（playback model 2: ... effective ... mB）；设备钳位时日志会另行提示，效果不可用时按原声回退。</string>
     <string name="toast_playback_gain">模型二增益：+%1$d dB</string>
-    <string name="settings_hosted_playback_dynamic_label">模型三压限参数</string>
+    <string name="settings_hosted_playback_dynamic_label">模型三参数：压限设置</string>
     <string name="settings_dynamic_gain_label">后级增益</string>
     <string name="settings_dynamic_gain_6">+6 dB</string>
     <string name="settings_dynamic_gain_10">+10 dB（默认）</string>
