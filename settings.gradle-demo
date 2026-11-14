@@ -1,97 +1,98 @@
-// AutoInstaller project build settings
+// AutoInstaller 项目编译设置
 //include ':autoinstaller'
 //rootProject.name = "autoinstaller"
 
-// MJ project build settings
+// MJ 项目编译设置
 //include ':mj'
 //rootProject.name = "mj"
 
-// PowerBell project build settings
+// PowerBell 项目编译设置
 //include ':powerbell'
 //rootProject.name = "powerbell"
 
-// APPBase project build settings
+// APPBase 项目编译设置
 //include ':appbase'
 //include ':libappbase'
 //rootProject.name = "appbase"
 
-// APPUtils project build settings
+// APPUtils 项目编译设置
 //include ':apputils'
 //include ':libapputils'
 //rootProject.name = "apputils"
 
-// JC project build settings
+// JC 项目编译设置
 //include ':jc'
 //include ':libjc'
 //rootProject.name = "jc"
 
-// AES project build settings
+// AES 项目编译设置
 //include ':aes'
 //include ':libaes'
 //rootProject.name = "aes"
 
-// Contacts project build settings
+// Contacts 项目编译设置
 //include ':contacts'
 //rootProject.name = "contacts"
 
-// MyMessageManager project build settings
+// MyMessageManager 项目编译设置
 //include ':mymessagemanager'
 //rootProject.name = "mymessagemanager"
 
-// TimeStamp project build settings
+// TimeStamp 项目编译设置
 //include ':timestamp'
 //rootProject.name = "timestamp"
 
-// AndroidDemo project build settings
+// AndroidDemo 项目编译设置
 //include ':androiddemo'
 //rootProject.name = "androiddemo"
 
-// AndroidXDemo project build settings
+// AndroidXDemo 项目编译设置
 //include ':androidxdemo'
 //rootProject.name = "androidxdemo"
 
-// Ollama project build settings
+// Ollama 项目编译设置
 //include ':ollama'
 //rootProject.name = "ollama"
 
-// NumTable project build settings
+// NumTable 项目编译设置
 //include ':numtable'
 //rootProject.name = "numtable"
 
-// MidiPlayer project build settings
+// MidiPlayer 项目编译设置
 //include ':midiplayer'
 //rootProject.name = "midiplayer"
 
-// WebPageSources project build settings
+// WebPageSources 项目编译设置
 //include ':webpagesources'
 //rootProject.name = "webpagesources"
 
-// Positions project build settings
+// Positions 项目编译设置
 //include ':positions'
 //rootProject.name = "positions"
 
-// WinBoLL project build settings
+// WinBoLL 项目编译设置
 //include ':winboll'
+//include ':libwinboll'
 //rootProject.name = "winboll"
 
-// RegExpUtils project build settings
+// RegExpUtils 项目编译设置
 //include ':regexputils'
 //rootProject.name = "regexputils"
 
-// GPSRelaySentinel project build settings
+// GPSRelaySentinel 项目编译设置
 //include ':gpsrelaysentinel'
 //include ':libgpsrelaysentinel'
 //rootProject.name = "gpsrelaysentinel"
 
-// Gallery project build settings
+// Gallery 项目编译设置
 //include ':gallery'
 //rootProject.name = "gallery"
 
-// DebugTemp project build settings
+// DebugTemp 项目编译设置
 //include ':debugtemp'
 //include ':libdebugtemp'
 //rootProject.name = "debugtemp"
 
-// AutoNFC project build settings
+// AutoNFC 项目编译设置
 //include ':autonfc'
 //rootProject.name = "autonfc"

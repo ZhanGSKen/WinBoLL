@@ -17,5 +17,6 @@ org.gradle.jvmargs=-Xmx2048m
 android.useAndroidX=false
 # Automatically convert third-party libraries to use AndroidX
 android.enableJetifier=false
-# Maintain compatibility with older Gradle plugins
+# 保持与旧版Gradle插件的兼容
 android.disableAutomaticComponentCreation=true
+org.gradle.daemon=false

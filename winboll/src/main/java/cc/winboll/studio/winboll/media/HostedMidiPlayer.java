@@ -14,9 +14,6 @@ import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
-import android.media.audiofx.DynamicsProcessing;
-import android.media.audiofx.EnvironmentalReverb;
-import android.media.audiofx.LoudnessEnhancer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,33 +38,6 @@ public class HostedMidiPlayer {
     public static final int STATE_STOPPED = 1;
     public static final int STATE_PAUSED = 2;
     public static final int STATE_PLAYING = 3;
-
-    /**
-     * Model 2 target gain comes from the Settings page (MidiBridge,
-     * playback_gain_mb, presets +6/+10/+14 dB). Sonivox mixes the .mid stream
-     * noticeably quieter than the web synthesizer, which is what makes hosted
-     * playback feel low; the request is logged together with the gain the
-     * effect actually accepted, because devices clamp it silently.
-     */
-
-    // Model 3 (DynamicsProcessing) timings are fixed; only the stage levels
-    // below are exposed as Settings-page presets.
-    private static final float DYNAMIC_COMP_BAND_CUTOFF_HZ = 20000f;
-    private static final float DYNAMIC_COMP_ATTACK_MS = 20f;
-    private static final float DYNAMIC_COMP_RELEASE_MS = 200f;
-    private static final float DYNAMIC_COMP_KNEE_DB = 6f;
-    private static final float DYNAMIC_COMP_NOISE_GATE_DB = -60f;
-    private static final float DYNAMIC_COMP_EXPANDER_RATIO = 1f;
-    private static final float DYNAMIC_LIMITER_ATTACK_MS = 5f;
-    private static final float DYNAMIC_LIMITER_RELEASE_MS = 50f;
-    private static final float DYNAMIC_LIMITER_RATIO = 50f;
-    /**
-     * Delay between the last parameter change and the model 3 effect rebuild.
-     * Model 3 cannot change its config in place, so every change costs a fresh
-     * instance and a short gap in the effect chain; coalescing a slider drag into
-     * one rebuild keeps that gap out of the audible path.
-     */
-    private static final long LIVE_REAPPLY_DEBOUNCE_MS = 300L;
 
     /** One playable entry of the bridge playlist. */
     public static class Track {
@@ -104,13 +74,6 @@ public class HostedMidiPlayer {
     private final Handler mMain = new Handler(Looper.getMainLooper());
 
     private MediaPlayer mPlayer;
-    /** Model 2 gain stage; null under model 1 or when the effect is unsupported. */
-    private LoudnessEnhancer mEnhancer;
-    /** Model 3 compressor/limiter stage; null unless model 3 is active. */
-    private DynamicsProcessing mProcessor;
-    /** Reverb stage, independent of the playback model; null when reverb is off
-     *  or the device does not implement it. */
-    private EnvironmentalReverb mReverb;
     private Track mTrack;
     private int mState = STATE_STOPPED;
     private float mRate = 1.0f;
@@ -129,13 +92,6 @@ public class HostedMidiPlayer {
      *  as terminal), so MidiBridge suppresses state pushes while preparing. */
     private boolean mPreparing = false;
     private boolean mReleased = false;
-    /** Debounced model 3 rebuild, posted by reapplyPlaybackSettings(). */
-    private final Runnable mPendingReapply = new Runnable() {
-        @Override
-        public void run() {
-            applyPlaybackSettingsNow();
-        }
-    };
 
     public HostedMidiPlayer(Context context, Listener listener) {
         mAppContext = context.getApplicationContext();
@@ -319,7 +275,6 @@ public class HostedMidiPlayer {
     /** Release all resources. The player cannot be reused afterwards. */
     public void release() {
         mReleased = true;
-        mMain.removeCallbacks(mPendingReapply);
         stopInternal(true);
     }
 
@@ -345,7 +300,6 @@ public class HostedMidiPlayer {
                         return;
                     }
                     mPreparing = false;
-                    applyPlaybackModel(mp);
                     if (mPendingSeekMs > 0) {
                         // Clamp: the web clock position can exceed the engine
                         // track length; seeking past the end makes MediaPlayer
@@ -435,44 +389,15 @@ public class HostedMidiPlayer {
     }
 
     private void applyRate() {
-        applyPlaybackParams(mPlayer);
-    }
-
-    /**
-     * Push playback speed and pitch onto the player. Pitch comes from the
-     * Settings page as a percentage offset (0 = untouched). Not every engine
-     * supports pitch: when the request is rejected the speed is re-applied
-     * alone so tempo control keeps working, and the rejection is logged.
-     */
-    private void applyPlaybackParams(MediaPlayer mp) {
-        if (mp == null || Build.VERSION.SDK_INT < 23) {
+        if (mPlayer == null || Build.VERSION.SDK_INT < 23) {
             return;
         }
-        float pitch = 1.0f + MidiBridge.getPitchPercent(mAppContext) / 100f;
         try {
-            mp.setPlaybackParams(new PlaybackParams().setSpeed(mRate).setPitch(pitch));
-            logPlaybackParams(mp, pitch);
-        } catch (IllegalArgumentException e) {
-            Log.w(TAG, "playback pitch " + pitch + " unsupported, speed only: " + e);
-            try {
-                mp.setPlaybackParams(new PlaybackParams().setSpeed(mRate));
-            } catch (Throwable ignored) {
-                // Best-effort: rate is a reference parameter only.
-            }
+            mPlayer.setPlaybackParams(new PlaybackParams().setSpeed(mRate));
         } catch (IllegalStateException e) {
             // Best-effort (spec D-5): rate is a reference parameter only.
-        }
-    }
-
-    /** Log the speed/pitch the engine actually holds after a request. */
-    private void logPlaybackParams(MediaPlayer mp, float requestedPitch) {
-        try {
-            PlaybackParams applied = mp.getPlaybackParams();
-            Log.i(TAG, "playback params requested pitch " + requestedPitch + ", speed " + mRate
-                    + "; effective pitch " + applied.getPitch() + ", speed "
-                    + applied.getSpeed());
-        } catch (Throwable t) {
-            Log.w(TAG, "playback params read-back unavailable: " + t);
+        } catch (IllegalArgumentException e) {
+            // Device synth may not support rate changes; ignore.
         }
     }
 
@@ -487,9 +412,6 @@ public class HostedMidiPlayer {
     }
 
     private void releasePlayer() {
-        releaseEnhancer();
-        releaseProcessor();
-        releaseReverb();
         if (mPlayer != null) {
             try {
                 mPlayer.stop();
@@ -499,365 +421,6 @@ public class HostedMidiPlayer {
             mPlayer.release();
             mPlayer = null;
         }
-    }
-
-    /**
-     * Apply the Settings-page playback model to the freshly prepared player.
-     * Model 1 keeps the framework synth output untouched; model 2 attaches a
-     * LoudnessEnhancer to the player's audio session; model 3 attaches a
-     * DynamicsProcessing (single-band compressor + limiter) instead. Both
-     * louder models degrade to model 1 when their effect is unavailable.
-     */
-    private void applyPlaybackModel(MediaPlayer mp) {
-        releaseEnhancer();
-        releaseProcessor();
-        if (mp == null) {
-            return;
-        }
-        int model = MidiBridge.getPlaybackModel(mAppContext);
-        if (model == MidiBridge.PLAYBACK_MODEL_ENHANCED) {
-            applyEnhancer(mp);
-        } else if (model == MidiBridge.PLAYBACK_MODEL_DYNAMIC) {
-            applyDynamic(mp);
-        }
-        applyReverb(mp);
-    }
-
-    /**
-     * Reverb stage: selectively attach an EnvironmentalReverb to the player's
-     * audio session. The gain models and reverb are different dimensions, so
-     * this layer survives model switches and is controlled by its own slider
-     * group. Devices without the effect log a warning and keep playing dry.
-     */
-    private void applyReverb(MediaPlayer mp) {
-        int preset = MidiBridge.getReverbPreset(mAppContext);
-        if (preset == 0) {
-            releaseReverb();
-            return;
-        }
-        if (mp == null) {
-            return;
-        }
-        try {
-            if (mReverb != null) {
-                // All reverb parameters are settable at runtime, so a value
-                // change never needs a new instance.
-                applyReverbParams(mReverb, "playback reverb (live): ");
-                return;
-            }
-            mReverb = attachReverb(mp.getAudioSessionId(), "playback reverb: ");
-        } catch (Throwable t) {
-            Log.w(TAG, "playback reverb unavailable: " + t);
-            releaseReverb();
-        }
-    }
-
-    /** Create the reverb effect with the current Settings values and log it. */
-    private EnvironmentalReverb attachReverb(int sessionId, String logPrefix) {
-        EnvironmentalReverb reverb = new EnvironmentalReverb(0, sessionId);
-        applyReverbParams(reverb, logPrefix);
-        reverb.setEnabled(true);
-        return reverb;
-    }
-
-    /** Push the Settings values onto an existing reverb instance, then log. */
-    private void applyReverbParams(EnvironmentalReverb reverb, String logPrefix) {
-        int decayMs = MidiBridge.getReverbDecayMs(mAppContext);
-        short levelMb = (short) MidiBridge.getReverbLevelMb(mAppContext);
-        short reflectionsMb = (short) MidiBridge.getReverbReflectionsMb(mAppContext);
-
-        reverb.setDecayTime(decayMs);
-        reverb.setReverbLevel(levelMb);
-        reverb.setReflectionsLevel(reflectionsMb);
-        // Fixed scene values: a medium-sized room body so the three exposed
-        // parameters are the ones that shape the tail.
-        reverb.setRoomLevel((short) -4000);
-        reverb.setRoomHFLevel((short) -3000);
-        reverb.setDecayHFRatio((short) 600);
-        reverb.setReflectionsDelay(20);
-        reverb.setReverbDelay(30);
-        reverb.setDiffusion((short) 900);
-        reverb.setDensity((short) 800);
-
-        // Read back what the engine accepted: values can be clamped silently.
-        int appliedDecay = reverb.getDecayTime();
-        short appliedLevel = reverb.getReverbLevel();
-        short appliedReflections = reverb.getReflectionsLevel();
-        Log.i(TAG, logPrefix + "EnvironmentalReverb preset="
-                + MidiBridge.getReverbPreset(mAppContext) + ", decay " + appliedDecay
-                + " ms, reverb " + appliedLevel + " mB, reflections " + appliedReflections
-                + " mB, session=" + (mPlayer == null ? -1 : mPlayer.getAudioSessionId()));
-        if (appliedDecay != decayMs || appliedLevel != levelMb
-                || appliedReflections != reflectionsMb) {
-            Log.w(TAG, logPrefix + "device clamped reverb decay " + decayMs + "->"
-                    + appliedDecay + ", reverb " + levelMb + "->" + appliedLevel
-                    + ", reflections " + reflectionsMb + "->" + appliedReflections);
-        }
-    }
-
-    /** Model 2: LoudnessEnhancer target gain on the player's audio session. */
-    private void applyEnhancer(MediaPlayer mp) {
-        try {
-            int sessionId = mp.getAudioSessionId();
-            int gainMb = MidiBridge.getPlaybackGainMb(mAppContext);
-            LoudnessEnhancer enhancer = new LoudnessEnhancer(sessionId);
-            enhancer.setTargetGain(gainMb);
-            enhancer.setEnabled(true);
-            mEnhancer = enhancer;
-            logEnhancerGain(enhancer, gainMb, sessionId, "playback model 2: ");
-        } catch (Throwable t) {
-            // Unsupported effect or disabled by policy: keep model 1 behaviour.
-            Log.w(TAG, "playback model 2 unavailable, fallback to model 1: " + t);
-            releaseEnhancer();
-        }
-    }
-
-    /** Read back and log the gain the LoudnessEnhancer actually holds. */
-    private void logEnhancerGain(LoudnessEnhancer enhancer, int gainMb, int sessionId, String prefix) {
-        // Read back what the effect accepted: some HALs clamp the request
-        // silently, and only the read-back value tells the real level.
-        int effectiveMb = readBackGainMb(enhancer, gainMb);
-        Log.i(TAG, prefix + "LoudnessEnhancer requested " + gainMb
-                + " mB, effective " + effectiveMb + " mB, session=" + sessionId);
-        if (effectiveMb != gainMb) {
-            Log.w(TAG, prefix + "device clamped gain " + gainMb
-                    + " mB -> " + effectiveMb + " mB");
-        }
-    }
-
-    /**
-     * Model 3: DynamicsProcessing with one compressor band and a limiter. The
-     * stage levels come from the Settings page (post gain, compressor
-     * threshold/ratio, limiter threshold); the timings are fixed. Requires
-     * API 28, older devices fall back to model 1.
-     */
-    private void applyDynamic(MediaPlayer mp) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            Log.w(TAG, "playback model 3 needs API 28+, fallback to model 1");
-            return;
-        }
-        try {
-            mProcessor = attachDynamic(mp.getAudioSessionId(), "playback model 3: ");
-        } catch (Throwable t) {
-            Log.w(TAG, "playback model 3 unavailable, fallback to model 1", t);
-            releaseProcessor();
-        }
-    }
-
-    /**
-     * Build, apply and log a DynamicsProcessing with the current Settings
-     * values. The config can only be handed to the effect at construction time
-     * (the platform class exposes no runtime setConfig), so a parameter change
-     * means a fresh instance on the same audio session.
-     */
-    private DynamicsProcessing attachDynamic(int sessionId, String logPrefix) {
-        float gainDb = MidiBridge.getDynamicGainMb(mAppContext) / 100f;
-        float compThresholdDb = MidiBridge.getDynamicCompThresholdMb(mAppContext) / 100f;
-        float compRatio = MidiBridge.getDynamicCompRatioX10(mAppContext) / 10f;
-        float limiterThresholdDb = MidiBridge.getDynamicLimiterThresholdMb(mAppContext) / 100f;
-
-        // Not every engine implements both variants: some HALs accept only
-        // VARIANT_FAVOR_FREQUENCY_RESOLUTION and reject the other outright.
-        int variant = DynamicsProcessing.VARIANT_FAVOR_TIME_RESOLUTION;
-        DynamicsProcessing processor;
-        try {
-            processor = new DynamicsProcessing(0, sessionId,
-                    buildDynamicConfig(variant, gainDb, compThresholdDb, compRatio,
-                            limiterThresholdDb));
-        } catch (IllegalArgumentException e) {
-            Log.w(TAG, logPrefix + "variant " + variant
-                    + " rejected, retry with variant "
-                    + DynamicsProcessing.VARIANT_FAVOR_FREQUENCY_RESOLUTION);
-            variant = DynamicsProcessing.VARIANT_FAVOR_FREQUENCY_RESOLUTION;
-            processor = new DynamicsProcessing(0, sessionId,
-                    buildDynamicConfig(variant, gainDb, compThresholdDb, compRatio,
-                            limiterThresholdDb));
-        }
-        processor.setEnabled(true);
-
-        // Read back the levels the engine actually holds, same reasoning as
-        // model 2: the real output level is never guessed.
-        DynamicsProcessing.Config applied = processor.getConfig();
-        float appliedComp = applied.getChannelByChannelIndex(0).getMbc().getBand(0).getThreshold();
-        float appliedLimit = applied.getChannelByChannelIndex(0).getLimiter().getThreshold();
-        float appliedGain = applied.getChannelByChannelIndex(0).getLimiter().getPostGain();
-        Log.i(TAG, logPrefix + "DynamicsProcessing comp " + appliedComp + " dB @ "
-                + compRatio + ":1, limiter " + appliedLimit + " dB, post gain " + appliedGain
-                + " dB, variant=" + variant + ", session=" + sessionId);
-        return processor;
-    }
-
-    /**
-     * Push only the in-place stages (reverb and pitch) onto the loaded track.
-     * Used by the panels that never touch the playback model, so a reverb or
-     * pitch change does not queue a model 3 rebuild.
-     */
-    public void reapplyEffectsOnly() {
-        if (mReleased || mPlayer == null) {
-            return;
-        }
-        applyReverb(mPlayer);
-        applyPlaybackParams(mPlayer);
-    }
-
-    /**
-     * Push the current Settings values onto the already loaded track, so a
-     * parameter change or model switch is audible at once instead of waiting
-     * for the next prepared track. Main thread only; no-op when nothing is
-     * loaded (the next prepare reads the preferences anyway). Model 2 applies in
-     * place immediately; model 3 is coalesced into a single rebuild
-     * {@link #LIVE_REAPPLY_DEBOUNCE_MS} after the last change.
-     */
-    public void reapplyPlaybackSettings() {
-        if (mReleased || mPlayer == null) {
-            return;
-        }
-        // Reverb and pitch are in-place stages: no rebuild, so they are pushed
-        // straight away on every change.
-        applyReverb(mPlayer);
-        applyPlaybackParams(mPlayer);
-        if (MidiBridge.getPlaybackModel(mAppContext) == MidiBridge.PLAYBACK_MODEL_DYNAMIC) {
-            // Model 3 needs a fresh instance per change; wait until the drag
-            // settles so only one rebuild (one chain gap) is heard.
-            mMain.removeCallbacks(mPendingReapply);
-            mMain.postDelayed(mPendingReapply, LIVE_REAPPLY_DEBOUNCE_MS);
-            Log.i(TAG, "playback model 3: reapply delayed " + LIVE_REAPPLY_DEBOUNCE_MS + " ms");
-            return;
-        }
-        mMain.removeCallbacks(mPendingReapply);
-        applyPlaybackSettingsNow();
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    void applyPlaybackSettingsNow() {
-        if (mReleased || mPlayer == null) {
-            return;
-        }
-        int model = MidiBridge.getPlaybackModel(mAppContext);
-        try {
-            if (model == MidiBridge.PLAYBACK_MODEL_ENHANCED) {
-                if (mEnhancer != null) {
-                    int gainMb = MidiBridge.getPlaybackGainMb(mAppContext);
-                    mEnhancer.setTargetGain(gainMb);
-                    logEnhancerGain(mEnhancer, gainMb, mPlayer.getAudioSessionId(),
-                            "playback model 2 (live): ");
-                } else {
-                    releaseProcessor();
-                    applyEnhancer(mPlayer);
-                }
-            } else if (model == MidiBridge.PLAYBACK_MODEL_DYNAMIC) {
-                if (mProcessor != null) {
-                    // Re-create the effect: the platform class has no setConfig.
-                    int sessionId = mPlayer.getAudioSessionId();
-                    releaseProcessor();
-                    mProcessor = attachDynamic(sessionId, "playback model 3 (live): ");
-                } else {
-                    releaseEnhancer();
-                    applyDynamic(mPlayer);
-                }
-            } else {
-                releaseEnhancer();
-                releaseProcessor();
-            }
-        } catch (Throwable t) {
-            Log.w(TAG, "live playback settings failed: " + t);
-        }
-    }
-
-    /**
-     * Build the stereo DynamicsProcessing config: one compressor band plus a
-     * limiter whose postGain carries the model 3 post gain. The config can only
-     * be handed to the effect at construction time.
-     */
-    private DynamicsProcessing.Config buildDynamicConfig(int variant, float gainDb,
-            float compThresholdDb, float compRatio, float limiterThresholdDb) {
-        DynamicsProcessing.MbcBand band = new DynamicsProcessing.MbcBand(
-                true, DYNAMIC_COMP_BAND_CUTOFF_HZ,
-                DYNAMIC_COMP_ATTACK_MS, DYNAMIC_COMP_RELEASE_MS,
-                compRatio, compThresholdDb, DYNAMIC_COMP_KNEE_DB,
-                DYNAMIC_COMP_NOISE_GATE_DB, DYNAMIC_COMP_EXPANDER_RATIO,
-                0f, 0f);
-        DynamicsProcessing.Mbc mbc = new DynamicsProcessing.Mbc(true, true, 1);
-        mbc.setBand(0, band);
-        DynamicsProcessing.Limiter limiter = new DynamicsProcessing.Limiter(
-                true, true, 0,
-                DYNAMIC_LIMITER_ATTACK_MS, DYNAMIC_LIMITER_RELEASE_MS,
-                DYNAMIC_LIMITER_RATIO, limiterThresholdDb, gainDb);
-        return new DynamicsProcessing.Config.Builder(
-                variant,
-                2,          // stereo
-                false, 0,   // preEQ off
-                true, 1,    // one compressor band
-                false, 0,   // postEQ off
-                true)       // limiter on
-                .setMbcAllChannelsTo(mbc)
-                .setLimiterAllChannelsTo(limiter)
-                .build();
-    }
-
-    /**
-     * Read the gain the effect actually holds. Falls back to the requested
-     * value when the implementation cannot report it, so logging still works.
-     */
-    private int readBackGainMb(LoudnessEnhancer enhancer, int requestedMb) {
-        try {
-            return (int) enhancer.getTargetGain();
-        } catch (Throwable t) {
-            Log.w(TAG, "playback model 2: gain read-back unavailable: " + t);
-            return requestedMb;
-        }
-    }
-
-    private void releaseEnhancer() {
-        if (mEnhancer == null) {
-            return;
-        }
-        try {
-            mEnhancer.setEnabled(false);
-        } catch (Throwable ignored) {
-            // Released session or unsupported device: nothing to disable.
-        }
-        try {
-            mEnhancer.release();
-        } catch (Throwable ignored) {
-            // Already released.
-        }
-        mEnhancer = null;
-    }
-
-    private void releaseProcessor() {
-        if (mProcessor == null) {
-            return;
-        }
-        try {
-            mProcessor.setEnabled(false);
-        } catch (Throwable ignored) {
-            // Released session or unsupported device: nothing to disable.
-        }
-        try {
-            mProcessor.release();
-        } catch (Throwable ignored) {
-            // Already released.
-        }
-        mProcessor = null;
-    }
-
-    private void releaseReverb() {
-        if (mReverb == null) {
-            return;
-        }
-        Log.i(TAG, "playback reverb released (preset off or unreachable)");
-        try {
-            mReverb.setEnabled(false);
-        } catch (Throwable ignored) {
-            // Released session or unsupported device: nothing to disable.
-        }
-        try {
-            mReverb.release();
-        } catch (Throwable ignored) {
-            // Already released.
-        }
-        mReverb = null;
     }
 
     private void notifyState() {
