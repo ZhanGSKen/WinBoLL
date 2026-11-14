@@ -9,7 +9,7 @@
 
 ## WinBoLL Extra APK file Output Path
 #ExtraAPKOutputPath=/sdcard/AppProjects/app.apk
-#ExtraAPKOutputPath=C\:\\0WINBOT\\WinBoLL-Project-Development\\APP-WINBOT\\app.apk
+#ExtraAPKOutputPath=C\:\\0WINBOT\\WinBoLL-Project-Development\\APP-WINBOT-WinBoLL\\winboll-app.apk
 
 ## WinBoLL Nexus UserName
 #Nexus.name=nexustestuser1
