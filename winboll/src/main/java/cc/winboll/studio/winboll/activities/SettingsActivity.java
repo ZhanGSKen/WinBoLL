@@ -148,6 +148,7 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                     @Override
                     public void persist(int value) {
                         MidiBridge.setPlaybackGainMb(SettingsActivity.this, value);
+                        MidiBridge.reapplyPlaybackSettings();
                         Toast.makeText(SettingsActivity.this,
                                 getString(R.string.toast_playback_gain, value / 100),
                                 Toast.LENGTH_SHORT).show();
@@ -231,6 +232,7 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                     applySliderValue(sbGain, (TextView) findViewById(R.id.tv_gain_value),
                             MidiBridge.PLAYBACK_GAIN_MB_DEFAULT, MidiBridge.PLAYBACK_GAIN_MB_MIN,
                             MidiBridge.PLAYBACK_GAIN_MB_STEP, SLIDER_DB_PLUS);
+                    MidiBridge.reapplyPlaybackSettings();
                     Toast.makeText(SettingsActivity.this, R.string.toast_reset_gain,
                             Toast.LENGTH_SHORT).show();
                 }
@@ -263,6 +265,7 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                             MidiBridge.DYNAMIC_LIMIT_MB_DEFAULT,
                             MidiBridge.DYNAMIC_LIMIT_MB_MIN, MidiBridge.DYNAMIC_LIMIT_MB_STEP,
                             SLIDER_DB_SIGNED);
+                    MidiBridge.reapplyPlaybackSettings();
                     Toast.makeText(SettingsActivity.this, R.string.toast_reset_dynamic,
                             Toast.LENGTH_SHORT).show();
                 }
@@ -271,8 +274,8 @@ public class SettingsActivity extends BaseWinBoLLActivity {
 
         // Hosted playback model selector: model 1 keeps the framework synth
         // output as-is, model 2 adds a LoudnessEnhancer gain, model 3 adds a
-        // DynamicsProcessing (compressor + limiter). Persisted at once; applied
-        // when the next track is prepared (current playback is left untouched).
+        // DynamicsProcessing (compressor + limiter). Persisted at once and
+        // re-applied to the running track so the switch is audible immediately.
         RadioGroup rgPlaybackModel = (RadioGroup) findViewById(R.id.rg_hosted_playback_model);
         int playbackModel = MidiBridge.getPlaybackModel(this);
         rgPlaybackModel.check(playbackModel == MidiBridge.PLAYBACK_MODEL_ENHANCED
@@ -293,6 +296,7 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                         ? MidiBridge.PLAYBACK_MODEL_DYNAMIC
                         : MidiBridge.PLAYBACK_MODEL_CLASSIC;
                 MidiBridge.setPlaybackModel(SettingsActivity.this, model);
+                MidiBridge.reapplyPlaybackSettings();
                 applyModelGroupState(model == MidiBridge.PLAYBACK_MODEL_ENHANCED, sbGain,
                         btnResetGain);
                 applyModelGroupState(model == MidiBridge.PLAYBACK_MODEL_DYNAMIC,
@@ -402,6 +406,9 @@ public class SettingsActivity extends BaseWinBoLLActivity {
 
     /** Model 3 parameter change feedback (applies to the next prepared track). */
     private void showDynamicSavedToast() {
+        // Re-create the model 3 effect on the live track so the new level is
+        // audible at once; nothing happens when no hosted track is loaded.
+        MidiBridge.reapplyPlaybackSettings();
         Toast.makeText(SettingsActivity.this, R.string.toast_dynamic_param, Toast.LENGTH_SHORT)
                 .show();
     }

@@ -60,6 +60,13 @@ public class HostedMidiPlayer {
     private static final float DYNAMIC_LIMITER_ATTACK_MS = 5f;
     private static final float DYNAMIC_LIMITER_RELEASE_MS = 50f;
     private static final float DYNAMIC_LIMITER_RATIO = 50f;
+    /**
+     * Delay between the last parameter change and the model 3 effect rebuild.
+     * Model 3 cannot change its config in place, so every change costs a fresh
+     * instance and a short gap in the effect chain; coalescing a slider drag into
+     * one rebuild keeps that gap out of the audible path.
+     */
+    private static final long LIVE_REAPPLY_DEBOUNCE_MS = 300L;
 
     /** One playable entry of the bridge playlist. */
     public static class Track {
@@ -118,6 +125,13 @@ public class HostedMidiPlayer {
      *  as terminal), so MidiBridge suppresses state pushes while preparing. */
     private boolean mPreparing = false;
     private boolean mReleased = false;
+    /** Debounced model 3 rebuild, posted by reapplyPlaybackSettings(). */
+    private final Runnable mPendingReapply = new Runnable() {
+        @Override
+        public void run() {
+            applyPlaybackSettingsNow();
+        }
+    };
 
     public HostedMidiPlayer(Context context, Listener listener) {
         mAppContext = context.getApplicationContext();
@@ -301,6 +315,7 @@ public class HostedMidiPlayer {
     /** Release all resources. The player cannot be reused afterwards. */
     public void release() {
         mReleased = true;
+        mMain.removeCallbacks(mPendingReapply);
         stopInternal(true);
     }
 
@@ -482,19 +497,24 @@ public class HostedMidiPlayer {
             enhancer.setTargetGain(gainMb);
             enhancer.setEnabled(true);
             mEnhancer = enhancer;
-            // Read back what the effect accepted: some HALs clamp the request
-            // silently, and only the read-back value tells the real level.
-            int effectiveMb = readBackGainMb(enhancer, gainMb);
-            Log.i(TAG, "playback model 2: LoudnessEnhancer requested " + gainMb
-                    + " mB, effective " + effectiveMb + " mB, session=" + sessionId);
-            if (effectiveMb != gainMb) {
-                Log.w(TAG, "playback model 2: device clamped gain " + gainMb
-                        + " mB -> " + effectiveMb + " mB");
-            }
+            logEnhancerGain(enhancer, gainMb, sessionId, "playback model 2: ");
         } catch (Throwable t) {
             // Unsupported effect or disabled by policy: keep model 1 behaviour.
             Log.w(TAG, "playback model 2 unavailable, fallback to model 1: " + t);
             releaseEnhancer();
+        }
+    }
+
+    /** Read back and log the gain the LoudnessEnhancer actually holds. */
+    private void logEnhancerGain(LoudnessEnhancer enhancer, int gainMb, int sessionId, String prefix) {
+        // Read back what the effect accepted: some HALs clamp the request
+        // silently, and only the read-back value tells the real level.
+        int effectiveMb = readBackGainMb(enhancer, gainMb);
+        Log.i(TAG, prefix + "LoudnessEnhancer requested " + gainMb
+                + " mB, effective " + effectiveMb + " mB, session=" + sessionId);
+        if (effectiveMb != gainMb) {
+            Log.w(TAG, prefix + "device clamped gain " + gainMb
+                    + " mB -> " + effectiveMb + " mB");
         }
     }
 
@@ -510,44 +530,113 @@ public class HostedMidiPlayer {
             return;
         }
         try {
-            int sessionId = mp.getAudioSessionId();
-            float gainDb = MidiBridge.getDynamicGainMb(mAppContext) / 100f;
-            float compThresholdDb = MidiBridge.getDynamicCompThresholdMb(mAppContext) / 100f;
-            float compRatio = MidiBridge.getDynamicCompRatioX10(mAppContext) / 10f;
-            float limiterThresholdDb = MidiBridge.getDynamicLimiterThresholdMb(mAppContext) / 100f;
-
-            // Not every engine implements both variants: some HALs accept only
-            // VARIANT_FAVOR_FREQUENCY_RESOLUTION and reject the other outright.
-            int variant = DynamicsProcessing.VARIANT_FAVOR_TIME_RESOLUTION;
-            DynamicsProcessing processor;
-            try {
-                processor = new DynamicsProcessing(0, sessionId,
-                        buildDynamicConfig(variant, gainDb, compThresholdDb, compRatio,
-                                limiterThresholdDb));
-            } catch (IllegalArgumentException e) {
-                Log.w(TAG, "playback model 3: variant " + variant
-                        + " rejected, retry with variant "
-                        + DynamicsProcessing.VARIANT_FAVOR_FREQUENCY_RESOLUTION);
-                variant = DynamicsProcessing.VARIANT_FAVOR_FREQUENCY_RESOLUTION;
-                processor = new DynamicsProcessing(0, sessionId,
-                        buildDynamicConfig(variant, gainDb, compThresholdDb, compRatio,
-                                limiterThresholdDb));
-            }
-            processor.setEnabled(true);
-            mProcessor = processor;
-
-            // Read back the levels the engine actually holds, same reasoning as
-            // model 2: the real output level is never guessed.
-            DynamicsProcessing.Config applied = processor.getConfig();
-            float appliedComp = applied.getChannelByChannelIndex(0).getMbc().getBand(0).getThreshold();
-            float appliedLimit = applied.getChannelByChannelIndex(0).getLimiter().getThreshold();
-            float appliedGain = applied.getChannelByChannelIndex(0).getLimiter().getPostGain();
-            Log.i(TAG, "playback model 3: DynamicsProcessing comp " + appliedComp + " dB @ "
-                    + compRatio + ":1, limiter " + appliedLimit + " dB, post gain " + appliedGain
-                    + " dB, variant=" + variant + ", session=" + sessionId);
+            mProcessor = attachDynamic(mp.getAudioSessionId(), "playback model 3: ");
         } catch (Throwable t) {
             Log.w(TAG, "playback model 3 unavailable, fallback to model 1", t);
             releaseProcessor();
+        }
+    }
+
+    /**
+     * Build, apply and log a DynamicsProcessing with the current Settings
+     * values. The config can only be handed to the effect at construction time
+     * (the platform class exposes no runtime setConfig), so a parameter change
+     * means a fresh instance on the same audio session.
+     */
+    private DynamicsProcessing attachDynamic(int sessionId, String logPrefix) {
+        float gainDb = MidiBridge.getDynamicGainMb(mAppContext) / 100f;
+        float compThresholdDb = MidiBridge.getDynamicCompThresholdMb(mAppContext) / 100f;
+        float compRatio = MidiBridge.getDynamicCompRatioX10(mAppContext) / 10f;
+        float limiterThresholdDb = MidiBridge.getDynamicLimiterThresholdMb(mAppContext) / 100f;
+
+        // Not every engine implements both variants: some HALs accept only
+        // VARIANT_FAVOR_FREQUENCY_RESOLUTION and reject the other outright.
+        int variant = DynamicsProcessing.VARIANT_FAVOR_TIME_RESOLUTION;
+        DynamicsProcessing processor;
+        try {
+            processor = new DynamicsProcessing(0, sessionId,
+                    buildDynamicConfig(variant, gainDb, compThresholdDb, compRatio,
+                            limiterThresholdDb));
+        } catch (IllegalArgumentException e) {
+            Log.w(TAG, logPrefix + "variant " + variant
+                    + " rejected, retry with variant "
+                    + DynamicsProcessing.VARIANT_FAVOR_FREQUENCY_RESOLUTION);
+            variant = DynamicsProcessing.VARIANT_FAVOR_FREQUENCY_RESOLUTION;
+            processor = new DynamicsProcessing(0, sessionId,
+                    buildDynamicConfig(variant, gainDb, compThresholdDb, compRatio,
+                            limiterThresholdDb));
+        }
+        processor.setEnabled(true);
+
+        // Read back the levels the engine actually holds, same reasoning as
+        // model 2: the real output level is never guessed.
+        DynamicsProcessing.Config applied = processor.getConfig();
+        float appliedComp = applied.getChannelByChannelIndex(0).getMbc().getBand(0).getThreshold();
+        float appliedLimit = applied.getChannelByChannelIndex(0).getLimiter().getThreshold();
+        float appliedGain = applied.getChannelByChannelIndex(0).getLimiter().getPostGain();
+        Log.i(TAG, logPrefix + "DynamicsProcessing comp " + appliedComp + " dB @ "
+                + compRatio + ":1, limiter " + appliedLimit + " dB, post gain " + appliedGain
+                + " dB, variant=" + variant + ", session=" + sessionId);
+        return processor;
+    }
+
+    /**
+     * Push the current Settings values onto the already loaded track, so a
+     * parameter change or model switch is audible at once instead of waiting
+     * for the next prepared track. Main thread only; no-op when nothing is
+     * loaded (the next prepare reads the preferences anyway). Model 2 applies in
+     * place immediately; model 3 is coalesced into a single rebuild
+     * {@link #LIVE_REAPPLY_DEBOUNCE_MS} after the last change.
+     */
+    public void reapplyPlaybackSettings() {
+        if (mReleased || mPlayer == null) {
+            return;
+        }
+        if (MidiBridge.getPlaybackModel(mAppContext) == MidiBridge.PLAYBACK_MODEL_DYNAMIC) {
+            // Model 3 needs a fresh instance per change; wait until the drag
+            // settles so only one rebuild (one chain gap) is heard.
+            mMain.removeCallbacks(mPendingReapply);
+            mMain.postDelayed(mPendingReapply, LIVE_REAPPLY_DEBOUNCE_MS);
+            Log.i(TAG, "playback model 3: reapply delayed " + LIVE_REAPPLY_DEBOUNCE_MS + " ms");
+            return;
+        }
+        mMain.removeCallbacks(mPendingReapply);
+        applyPlaybackSettingsNow();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    void applyPlaybackSettingsNow() {
+        if (mReleased || mPlayer == null) {
+            return;
+        }
+        int model = MidiBridge.getPlaybackModel(mAppContext);
+        try {
+            if (model == MidiBridge.PLAYBACK_MODEL_ENHANCED) {
+                if (mEnhancer != null) {
+                    int gainMb = MidiBridge.getPlaybackGainMb(mAppContext);
+                    mEnhancer.setTargetGain(gainMb);
+                    logEnhancerGain(mEnhancer, gainMb, mPlayer.getAudioSessionId(),
+                            "playback model 2 (live): ");
+                } else {
+                    releaseProcessor();
+                    applyEnhancer(mPlayer);
+                }
+            } else if (model == MidiBridge.PLAYBACK_MODEL_DYNAMIC) {
+                if (mProcessor != null) {
+                    // Re-create the effect: the platform class has no setConfig.
+                    int sessionId = mPlayer.getAudioSessionId();
+                    releaseProcessor();
+                    mProcessor = attachDynamic(sessionId, "playback model 3 (live): ");
+                } else {
+                    releaseEnhancer();
+                    applyDynamic(mPlayer);
+                }
+            } else {
+                releaseEnhancer();
+                releaseProcessor();
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "live playback settings failed: " + t);
         }
     }
 

@@ -400,6 +400,19 @@ public final class MidiBridge {
             DYNAMIC_LIMIT_MB_MIN, DYNAMIC_LIMIT_MB_MAX);
     }
 
+    /**
+     * Re-apply the persisted playback model and parameters to the hosted track
+     * that is already loaded, so the Settings page change is audible at once
+     * instead of only on the next prepared track. Does nothing when no hosted
+     * track is loaded (the next prepare reads the preferences anyway).
+     */
+    public static void reapplyPlaybackSettings() {
+        HostedMidiPlayer engine = sEngine;
+        if (engine != null) {
+            engine.reapplyPlaybackSettings();
+        }
+    }
+
     /** Read a stored value, falling back to the default when it is out of range. */
     private static int getPresetInt(Context context, String key, int defaultValue, int min,
             int max) {
