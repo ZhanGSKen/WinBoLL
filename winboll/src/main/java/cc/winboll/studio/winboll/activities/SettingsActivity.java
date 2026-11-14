@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.security.KeyChain;
 import android.text.TextUtils;
 import android.view.View;
@@ -332,35 +333,24 @@ public class SettingsActivity extends BaseWinBoLLActivity {
 
         // The preset slider is a shortcut: picking a scene rewrites the three
         // adjustable parameters, which stay the actual source of truth.
-        bindSeekBar(sbReverbPreset, R.id.tv_reverb_preset_value, MidiBridge.getReverbPreset(this),
+        bindLiveSeekBar(sbReverbPreset, R.id.tv_reverb_preset_value,
+                MidiBridge.getReverbPreset(this),
                 MidiBridge.REVERB_PRESET_MIN, MidiBridge.REVERB_PRESET_MAX,
                 MidiBridge.REVERB_PRESET_STEP, SLIDER_PRESET,
                 new ParamSink() {
                     @Override
                     public void persist(int value) {
-                        MidiBridge.setReverbPreset(SettingsActivity.this, value);
-                        int[] scene = MidiBridge.reverbPresetValues(value);
-                        MidiBridge.setReverbDecayMs(SettingsActivity.this, scene[0]);
-                        MidiBridge.setReverbLevelMb(SettingsActivity.this, scene[1]);
-                        MidiBridge.setReverbReflectionsMb(SettingsActivity.this, scene[2]);
-                        applySliderValue(sbReverbDecay, tvReverbDecay, scene[0],
-                                MidiBridge.REVERB_DECAY_MS_MIN, MidiBridge.REVERB_DECAY_MS_STEP,
-                                SLIDER_MS);
-                        applySliderValue(sbReverbLevel, tvReverbLevel, scene[1],
-                                MidiBridge.REVERB_LEVEL_MB_MIN, MidiBridge.REVERB_LEVEL_MB_STEP,
-                                SLIDER_DB_SIGNED);
-                        applySliderValue(sbReverbReflections, tvReverbReflections, scene[2],
-                                MidiBridge.REVERB_REFLECTIONS_MB_MIN,
-                                MidiBridge.REVERB_REFLECTIONS_MB_STEP, SLIDER_DB_SIGNED);
-                        applyModelGroupState(value > 0, sbReverbDecay, sbReverbLevel,
-                                sbReverbReflections);
-                        MidiBridge.reapplyEffectsOnly();
-                        Toast.makeText(SettingsActivity.this,
-                                R.string.toast_reverb_param, Toast.LENGTH_SHORT).show();
+                        applyReverbPreset(value, true);
+                    }
+                },
+                new LiveSink() {
+                    @Override
+                    public void apply(int value) {
+                        applyReverbPreset(value, false);
                     }
                 });
 
-        bindSeekBar(sbReverbDecay, R.id.tv_reverb_decay_value,
+        bindLiveSeekBar(sbReverbDecay, R.id.tv_reverb_decay_value,
                 MidiBridge.getReverbDecayMs(this),
                 MidiBridge.REVERB_DECAY_MS_MIN, MidiBridge.REVERB_DECAY_MS_MAX,
                 MidiBridge.REVERB_DECAY_MS_STEP, SLIDER_MS,
@@ -370,9 +360,16 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                         MidiBridge.setReverbDecayMs(SettingsActivity.this, value);
                         persistReverbLive();
                     }
+                },
+                new LiveSink() {
+                    @Override
+                    public void apply(int value) {
+                        MidiBridge.setReverbDecayMs(SettingsActivity.this, value);
+                        MidiBridge.reapplyEffectsOnly();
+                    }
                 });
 
-        bindSeekBar(sbReverbLevel, R.id.tv_reverb_level_value,
+        bindLiveSeekBar(sbReverbLevel, R.id.tv_reverb_level_value,
                 MidiBridge.getReverbLevelMb(this),
                 MidiBridge.REVERB_LEVEL_MB_MIN, MidiBridge.REVERB_LEVEL_MB_MAX,
                 MidiBridge.REVERB_LEVEL_MB_STEP, SLIDER_DB_SIGNED,
@@ -382,9 +379,16 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                         MidiBridge.setReverbLevelMb(SettingsActivity.this, value);
                         persistReverbLive();
                     }
+                },
+                new LiveSink() {
+                    @Override
+                    public void apply(int value) {
+                        MidiBridge.setReverbLevelMb(SettingsActivity.this, value);
+                        MidiBridge.reapplyEffectsOnly();
+                    }
                 });
 
-        bindSeekBar(sbReverbReflections, R.id.tv_reverb_reflections_value,
+        bindLiveSeekBar(sbReverbReflections, R.id.tv_reverb_reflections_value,
                 MidiBridge.getReverbReflectionsMb(this),
                 MidiBridge.REVERB_REFLECTIONS_MB_MIN, MidiBridge.REVERB_REFLECTIONS_MB_MAX,
                 MidiBridge.REVERB_REFLECTIONS_MB_STEP, SLIDER_DB_SIGNED,
@@ -393,6 +397,13 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                     public void persist(int value) {
                         MidiBridge.setReverbReflectionsMb(SettingsActivity.this, value);
                         persistReverbLive();
+                    }
+                },
+                new LiveSink() {
+                    @Override
+                    public void apply(int value) {
+                        MidiBridge.setReverbReflectionsMb(SettingsActivity.this, value);
+                        MidiBridge.reapplyEffectsOnly();
                     }
                 });
 
@@ -436,7 +447,7 @@ public class SettingsActivity extends BaseWinBoLLActivity {
 
         final SeekBar sbPitch = (SeekBar) findViewById(R.id.sb_pitch);
         final Button btnResetPitch = (Button) findViewById(R.id.btn_reset_pitch);
-        bindSeekBar(sbPitch, R.id.tv_pitch_value, MidiBridge.getPitchPercent(this),
+        bindLiveSeekBar(sbPitch, R.id.tv_pitch_value, MidiBridge.getPitchPercent(this),
                 MidiBridge.PITCH_PERCENT_MIN, MidiBridge.PITCH_PERCENT_MAX,
                 MidiBridge.PITCH_PERCENT_STEP, SLIDER_PERCENT,
                 new ParamSink() {
@@ -446,6 +457,13 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                         MidiBridge.reapplyEffectsOnly();
                         Toast.makeText(SettingsActivity.this, R.string.toast_pitch_param,
                                 Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new LiveSink() {
+                    @Override
+                    public void apply(int value) {
+                        MidiBridge.setPitchPercent(SettingsActivity.this, value);
+                        MidiBridge.reapplyEffectsOnly();
                     }
                 });
 
@@ -474,9 +492,89 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                 .show();
     }
 
+    /**
+     * Preset scene write: scene -> the three adjustable parameters -> their
+     * sliders -> in-place apply. Used both while dragging (silent) and on
+     * release (with the confirming toast).
+     */
+    private void applyReverbPreset(int value, boolean announce) {
+        MidiBridge.setReverbPreset(this, value);
+        int[] scene = MidiBridge.reverbPresetValues(value);
+        MidiBridge.setReverbDecayMs(this, scene[0]);
+        MidiBridge.setReverbLevelMb(this, scene[1]);
+        MidiBridge.setReverbReflectionsMb(this, scene[2]);
+        SeekBar decayBar = (SeekBar) findViewById(R.id.sb_reverb_decay);
+        SeekBar levelBar = (SeekBar) findViewById(R.id.sb_reverb_level);
+        SeekBar reflectionsBar = (SeekBar) findViewById(R.id.sb_reverb_reflections);
+        applySliderValue(decayBar, (TextView) findViewById(R.id.tv_reverb_decay_value), scene[0],
+                MidiBridge.REVERB_DECAY_MS_MIN, MidiBridge.REVERB_DECAY_MS_STEP, SLIDER_MS);
+        applySliderValue(levelBar, (TextView) findViewById(R.id.tv_reverb_level_value), scene[1],
+                MidiBridge.REVERB_LEVEL_MB_MIN, MidiBridge.REVERB_LEVEL_MB_STEP, SLIDER_DB_SIGNED);
+        applySliderValue(reflectionsBar,
+                (TextView) findViewById(R.id.tv_reverb_reflections_value), scene[2],
+                MidiBridge.REVERB_REFLECTIONS_MB_MIN,
+                MidiBridge.REVERB_REFLECTIONS_MB_STEP, SLIDER_DB_SIGNED);
+        applyModelGroupState(value > 0, decayBar, levelBar, reflectionsBar);
+        MidiBridge.reapplyEffectsOnly();
+        if (announce) {
+            Toast.makeText(this, R.string.toast_reverb_param, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     /** Slider writes its value through this once the user lifts the finger. */
     private interface ParamSink {
         void persist(int value);
+    }
+
+    /** Preview sink: pushes a value onto the running track while dragging. */
+    private interface LiveSink {
+        void apply(int value);
+    }
+
+    /** Minimum gap between two live applies so a drag cannot flood the audio HAL. */
+    private static final long LIVE_APPLY_INTERVAL_MS = 120L;
+
+    /**
+     * Slider that is heard while being dragged: the label follows every step,
+     * the live sink is fed at most once per {@link #LIVE_APPLY_INTERVAL_MS}, and
+     * the preference (plus the confirming toast) is written on release.
+     */
+    private void bindLiveSeekBar(final SeekBar bar, int valueViewId, int value, final int min,
+            int max, final int step, final int kind, final ParamSink sink,
+            final LiveSink live) {
+        final TextView valueView = (TextView) findViewById(valueViewId);
+        if (bar == null || valueView == null) {
+            return;
+        }
+        bar.setMax((max - min) / step);
+        applySliderValue(bar, valueView, value, min, step, kind);
+        final long[] lastApply = new long[] {0L};
+        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int settled = min + progress * step;
+                valueView.setText(formatSliderValue(kind, settled));
+                if (!fromUser) {
+                    return;
+                }
+                long now = SystemClock.elapsedRealtime();
+                if (now - lastApply[0] < LIVE_APPLY_INTERVAL_MS) {
+                    return;
+                }
+                lastApply[0] = now;
+                live.apply(settled);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                lastApply[0] = 0L;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                sink.persist(min + seekBar.getProgress() * step);
+            }
+        });
     }
 
     /** Text formats: model 2 gain is signed-positive, thresholds signed, ratio x10. */
