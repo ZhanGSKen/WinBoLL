@@ -251,6 +251,16 @@
 				android:paddingBottom="8dp"
 				android:text="@string/settings_classic_desc"
 				android:textSize="13sp"/>
+
+			<Button
+				android:id="@+id/btn_reset_classic"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="end"
+				android:layout_marginRight="16dp"
+				android:layout_marginBottom="8dp"
+				android:text="@string/settings_reset_classic"
+				android:textSize="13sp"/>
 		</LinearLayout>
 	</LinearLayout>
 
@@ -335,6 +345,16 @@
 				android:paddingRight="16dp"
 				android:paddingTop="4dp"
 				android:text="@string/settings_hosted_playback_gain_desc"
+				android:textSize="13sp"/>
+
+			<Button
+				android:id="@+id/btn_reset_gain"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="end"
+				android:layout_marginRight="16dp"
+				android:layout_marginBottom="8dp"
+				android:text="@string/settings_reset_gain"
 				android:textSize="13sp"/>
 		</LinearLayout>
 	</LinearLayout>
@@ -510,6 +530,16 @@
 				android:paddingRight="16dp"
 				android:paddingTop="4dp"
 				android:text="@string/settings_dynamic_desc"
+				android:textSize="13sp"/>
+
+			<Button
+				android:id="@+id/btn_reset_dynamic"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="end"
+				android:layout_marginRight="16dp"
+				android:layout_marginBottom="8dp"
+				android:text="@string/settings_reset_dynamic"
 				android:textSize="13sp"/>
 		</LinearLayout>
 	</LinearLayout>

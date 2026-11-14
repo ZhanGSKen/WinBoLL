@@ -208,6 +208,67 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                     }
                 });
 
+        // Per-model reset buttons: model 1 has no parameters, model 2 restores
+        // the +10 dB default, model 3 restores +10 / -20 dB @ 2:1 / -3 dB.
+        final Button btnResetClassic = (Button) findViewById(R.id.btn_reset_classic);
+        final Button btnResetGain = (Button) findViewById(R.id.btn_reset_gain);
+        final Button btnResetDynamic = (Button) findViewById(R.id.btn_reset_dynamic);
+        if (btnResetClassic != null) {
+            btnResetClassic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(SettingsActivity.this, R.string.toast_reset_classic,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        if (btnResetGain != null) {
+            btnResetGain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MidiBridge.setPlaybackGainMb(SettingsActivity.this,
+                            MidiBridge.PLAYBACK_GAIN_MB_DEFAULT);
+                    applySliderValue(sbGain, (TextView) findViewById(R.id.tv_gain_value),
+                            MidiBridge.PLAYBACK_GAIN_MB_DEFAULT, MidiBridge.PLAYBACK_GAIN_MB_MIN,
+                            MidiBridge.PLAYBACK_GAIN_MB_STEP, SLIDER_DB_PLUS);
+                    Toast.makeText(SettingsActivity.this, R.string.toast_reset_gain,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        if (btnResetDynamic != null) {
+            btnResetDynamic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MidiBridge.setDynamicGainMb(SettingsActivity.this,
+                            MidiBridge.DYNAMIC_GAIN_MB_DEFAULT);
+                    MidiBridge.setDynamicCompThresholdMb(SettingsActivity.this,
+                            MidiBridge.DYNAMIC_COMP_THRESHOLD_MB_DEFAULT);
+                    MidiBridge.setDynamicCompRatioX10(SettingsActivity.this,
+                            MidiBridge.DYNAMIC_COMP_RATIO_DEFAULT);
+                    MidiBridge.setDynamicLimiterThresholdMb(SettingsActivity.this,
+                            MidiBridge.DYNAMIC_LIMIT_MB_DEFAULT);
+                    applySliderValue(sbDynGain, (TextView) findViewById(R.id.tv_dyn_gain_value),
+                            MidiBridge.DYNAMIC_GAIN_MB_DEFAULT, MidiBridge.DYNAMIC_GAIN_MB_MIN,
+                            MidiBridge.DYNAMIC_GAIN_MB_STEP, SLIDER_DB_PLUS);
+                    applySliderValue(sbDynComp, (TextView) findViewById(R.id.tv_dyn_comp_value),
+                            MidiBridge.DYNAMIC_COMP_THRESHOLD_MB_DEFAULT,
+                            MidiBridge.DYNAMIC_COMP_THRESHOLD_MB_MIN,
+                            MidiBridge.DYNAMIC_COMP_THRESHOLD_MB_STEP, SLIDER_DB_SIGNED);
+                    applySliderValue(sbDynRatio, (TextView) findViewById(R.id.tv_dyn_ratio_value),
+                            MidiBridge.DYNAMIC_COMP_RATIO_DEFAULT,
+                            MidiBridge.DYNAMIC_COMP_RATIO_X10_MIN,
+                            MidiBridge.DYNAMIC_COMP_RATIO_X10_STEP, SLIDER_RATIO);
+                    applySliderValue(sbDynLimit, (TextView) findViewById(R.id.tv_dyn_limit_value),
+                            MidiBridge.DYNAMIC_LIMIT_MB_DEFAULT,
+                            MidiBridge.DYNAMIC_LIMIT_MB_MIN, MidiBridge.DYNAMIC_LIMIT_MB_STEP,
+                            SLIDER_DB_SIGNED);
+                    Toast.makeText(SettingsActivity.this, R.string.toast_reset_dynamic,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
         // Hosted playback model selector: model 1 keeps the framework synth
         // output as-is, model 2 adds a LoudnessEnhancer gain, model 3 adds a
         // DynamicsProcessing (compressor + limiter). Persisted at once; applied
@@ -219,9 +280,10 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                 : playbackModel == MidiBridge.PLAYBACK_MODEL_DYNAMIC
                 ? R.id.rb_model_dynamic
                 : R.id.rb_model_classic);
-        applyModelGroupState(playbackModel == MidiBridge.PLAYBACK_MODEL_ENHANCED, sbGain);
+        applyModelGroupState(playbackModel == MidiBridge.PLAYBACK_MODEL_ENHANCED, sbGain,
+                btnResetGain);
         applyModelGroupState(playbackModel == MidiBridge.PLAYBACK_MODEL_DYNAMIC,
-                sbDynGain, sbDynComp, sbDynRatio, sbDynLimit);
+                sbDynGain, sbDynComp, sbDynRatio, sbDynLimit, btnResetDynamic);
         rgPlaybackModel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -231,9 +293,10 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                         ? MidiBridge.PLAYBACK_MODEL_DYNAMIC
                         : MidiBridge.PLAYBACK_MODEL_CLASSIC;
                 MidiBridge.setPlaybackModel(SettingsActivity.this, model);
-                applyModelGroupState(model == MidiBridge.PLAYBACK_MODEL_ENHANCED, sbGain);
+                applyModelGroupState(model == MidiBridge.PLAYBACK_MODEL_ENHANCED, sbGain,
+                        btnResetGain);
                 applyModelGroupState(model == MidiBridge.PLAYBACK_MODEL_DYNAMIC,
-                        sbDynGain, sbDynComp, sbDynRatio, sbDynLimit);
+                        sbDynGain, sbDynComp, sbDynRatio, sbDynLimit, btnResetDynamic);
                 int toastRes = model == MidiBridge.PLAYBACK_MODEL_ENHANCED
                         ? R.string.toast_playback_model_enhanced
                         : model == MidiBridge.PLAYBACK_MODEL_DYNAMIC
@@ -267,8 +330,7 @@ public class SettingsActivity extends BaseWinBoLLActivity {
             return;
         }
         bar.setMax((max - min) / step);
-        bar.setProgress(Math.max(0, Math.min(bar.getMax(), (value - min) / step)));
-        valueView.setText(formatSliderValue(kind, value));
+        applySliderValue(bar, valueView, value, min, step, kind);
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -286,6 +348,16 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                 sink.persist(settled);
             }
         });
+    }
+
+    /** Move a slider (and its value label) to an absolute parameter value. */
+    private void applySliderValue(SeekBar bar, TextView valueView, int value, int min, int step,
+            int kind) {
+        if (bar == null || valueView == null) {
+            return;
+        }
+        bar.setProgress(Math.max(0, Math.min(bar.getMax(), (value - min) / step)));
+        valueView.setText(formatSliderValue(kind, value));
     }
 
     /** Render a slider value for its parameter kind (millibels / ratio x10). */
