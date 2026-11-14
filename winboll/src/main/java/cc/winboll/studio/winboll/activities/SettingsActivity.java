@@ -310,7 +310,168 @@ public class SettingsActivity extends BaseWinBoLLActivity {
             }
         });
 
+        setupReverbAndPitch();
         setupPlaybackPanels();
+    }
+
+    /**
+     * Reverb and pitch panels. Both stages live on the hosted audio session
+     * next to the playback model, and both apply in place: the values are
+     * pushed onto the running track at once, without rebuilding the effect.
+     */
+    private void setupReverbAndPitch() {
+        final SeekBar sbReverbPreset = (SeekBar) findViewById(R.id.sb_reverb_preset);
+        final SeekBar sbReverbDecay = (SeekBar) findViewById(R.id.sb_reverb_decay);
+        final SeekBar sbReverbLevel = (SeekBar) findViewById(R.id.sb_reverb_level);
+        final SeekBar sbReverbReflections = (SeekBar) findViewById(R.id.sb_reverb_reflections);
+        final Button btnResetReverb = (Button) findViewById(R.id.btn_reset_reverb);
+        final TextView tvReverbDecay = (TextView) findViewById(R.id.tv_reverb_decay_value);
+        final TextView tvReverbLevel = (TextView) findViewById(R.id.tv_reverb_level_value);
+        final TextView tvReverbReflections =
+                (TextView) findViewById(R.id.tv_reverb_reflections_value);
+
+        // The preset slider is a shortcut: picking a scene rewrites the three
+        // adjustable parameters, which stay the actual source of truth.
+        bindSeekBar(sbReverbPreset, R.id.tv_reverb_preset_value, MidiBridge.getReverbPreset(this),
+                MidiBridge.REVERB_PRESET_MIN, MidiBridge.REVERB_PRESET_MAX,
+                MidiBridge.REVERB_PRESET_STEP, SLIDER_PRESET,
+                new ParamSink() {
+                    @Override
+                    public void persist(int value) {
+                        MidiBridge.setReverbPreset(SettingsActivity.this, value);
+                        int[] scene = MidiBridge.reverbPresetValues(value);
+                        MidiBridge.setReverbDecayMs(SettingsActivity.this, scene[0]);
+                        MidiBridge.setReverbLevelMb(SettingsActivity.this, scene[1]);
+                        MidiBridge.setReverbReflectionsMb(SettingsActivity.this, scene[2]);
+                        applySliderValue(sbReverbDecay, tvReverbDecay, scene[0],
+                                MidiBridge.REVERB_DECAY_MS_MIN, MidiBridge.REVERB_DECAY_MS_STEP,
+                                SLIDER_MS);
+                        applySliderValue(sbReverbLevel, tvReverbLevel, scene[1],
+                                MidiBridge.REVERB_LEVEL_MB_MIN, MidiBridge.REVERB_LEVEL_MB_STEP,
+                                SLIDER_DB_SIGNED);
+                        applySliderValue(sbReverbReflections, tvReverbReflections, scene[2],
+                                MidiBridge.REVERB_REFLECTIONS_MB_MIN,
+                                MidiBridge.REVERB_REFLECTIONS_MB_STEP, SLIDER_DB_SIGNED);
+                        applyModelGroupState(value > 0, sbReverbDecay, sbReverbLevel,
+                                sbReverbReflections);
+                        MidiBridge.reapplyEffectsOnly();
+                        Toast.makeText(SettingsActivity.this,
+                                R.string.toast_reverb_param, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        bindSeekBar(sbReverbDecay, R.id.tv_reverb_decay_value,
+                MidiBridge.getReverbDecayMs(this),
+                MidiBridge.REVERB_DECAY_MS_MIN, MidiBridge.REVERB_DECAY_MS_MAX,
+                MidiBridge.REVERB_DECAY_MS_STEP, SLIDER_MS,
+                new ParamSink() {
+                    @Override
+                    public void persist(int value) {
+                        MidiBridge.setReverbDecayMs(SettingsActivity.this, value);
+                        persistReverbLive();
+                    }
+                });
+
+        bindSeekBar(sbReverbLevel, R.id.tv_reverb_level_value,
+                MidiBridge.getReverbLevelMb(this),
+                MidiBridge.REVERB_LEVEL_MB_MIN, MidiBridge.REVERB_LEVEL_MB_MAX,
+                MidiBridge.REVERB_LEVEL_MB_STEP, SLIDER_DB_SIGNED,
+                new ParamSink() {
+                    @Override
+                    public void persist(int value) {
+                        MidiBridge.setReverbLevelMb(SettingsActivity.this, value);
+                        persistReverbLive();
+                    }
+                });
+
+        bindSeekBar(sbReverbReflections, R.id.tv_reverb_reflections_value,
+                MidiBridge.getReverbReflectionsMb(this),
+                MidiBridge.REVERB_REFLECTIONS_MB_MIN, MidiBridge.REVERB_REFLECTIONS_MB_MAX,
+                MidiBridge.REVERB_REFLECTIONS_MB_STEP, SLIDER_DB_SIGNED,
+                new ParamSink() {
+                    @Override
+                    public void persist(int value) {
+                        MidiBridge.setReverbReflectionsMb(SettingsActivity.this, value);
+                        persistReverbLive();
+                    }
+                });
+
+        applyModelGroupState(MidiBridge.getReverbPreset(this) > 0, sbReverbDecay,
+                sbReverbLevel, sbReverbReflections);
+
+        if (btnResetReverb != null) {
+            btnResetReverb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MidiBridge.setReverbPreset(SettingsActivity.this,
+                            MidiBridge.REVERB_PRESET_DEFAULT);
+                    MidiBridge.setReverbDecayMs(SettingsActivity.this,
+                            MidiBridge.REVERB_DECAY_MS_DEFAULT);
+                    MidiBridge.setReverbLevelMb(SettingsActivity.this,
+                            MidiBridge.REVERB_LEVEL_MB_DEFAULT);
+                    MidiBridge.setReverbReflectionsMb(SettingsActivity.this,
+                            MidiBridge.REVERB_REFLECTIONS_MB_DEFAULT);
+                    applySliderValue(sbReverbPreset,
+                            (TextView) findViewById(R.id.tv_reverb_preset_value),
+                            MidiBridge.REVERB_PRESET_DEFAULT, MidiBridge.REVERB_PRESET_MIN,
+                            MidiBridge.REVERB_PRESET_STEP, SLIDER_PRESET);
+                    applySliderValue(sbReverbDecay, tvReverbDecay,
+                            MidiBridge.REVERB_DECAY_MS_DEFAULT, MidiBridge.REVERB_DECAY_MS_MIN,
+                            MidiBridge.REVERB_DECAY_MS_STEP, SLIDER_MS);
+                    applySliderValue(sbReverbLevel, tvReverbLevel,
+                            MidiBridge.REVERB_LEVEL_MB_DEFAULT, MidiBridge.REVERB_LEVEL_MB_MIN,
+                            MidiBridge.REVERB_LEVEL_MB_STEP, SLIDER_DB_SIGNED);
+                    applySliderValue(sbReverbReflections, tvReverbReflections,
+                            MidiBridge.REVERB_REFLECTIONS_MB_DEFAULT,
+                            MidiBridge.REVERB_REFLECTIONS_MB_MIN,
+                            MidiBridge.REVERB_REFLECTIONS_MB_STEP, SLIDER_DB_SIGNED);
+                    applyModelGroupState(false, sbReverbDecay, sbReverbLevel,
+                            sbReverbReflections);
+                    MidiBridge.reapplyEffectsOnly();
+                    Toast.makeText(SettingsActivity.this, R.string.toast_reset_reverb,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        final SeekBar sbPitch = (SeekBar) findViewById(R.id.sb_pitch);
+        final Button btnResetPitch = (Button) findViewById(R.id.btn_reset_pitch);
+        bindSeekBar(sbPitch, R.id.tv_pitch_value, MidiBridge.getPitchPercent(this),
+                MidiBridge.PITCH_PERCENT_MIN, MidiBridge.PITCH_PERCENT_MAX,
+                MidiBridge.PITCH_PERCENT_STEP, SLIDER_PERCENT,
+                new ParamSink() {
+                    @Override
+                    public void persist(int value) {
+                        MidiBridge.setPitchPercent(SettingsActivity.this, value);
+                        MidiBridge.reapplyEffectsOnly();
+                        Toast.makeText(SettingsActivity.this, R.string.toast_pitch_param,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        if (btnResetPitch != null) {
+            btnResetPitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MidiBridge.setPitchPercent(SettingsActivity.this,
+                            MidiBridge.PITCH_PERCENT_DEFAULT);
+                    applySliderValue(sbPitch, (TextView) findViewById(R.id.tv_pitch_value),
+                            MidiBridge.PITCH_PERCENT_DEFAULT,
+                            MidiBridge.PITCH_PERCENT_MIN, MidiBridge.PITCH_PERCENT_STEP,
+                            SLIDER_PERCENT);
+                    MidiBridge.reapplyEffectsOnly();
+                    Toast.makeText(SettingsActivity.this, R.string.toast_reset_pitch,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    /** Reverb parameter feedback: apply in place on the running track. */
+    private void persistReverbLive() {
+        MidiBridge.reapplyEffectsOnly();
+        Toast.makeText(SettingsActivity.this, R.string.toast_reverb_param, Toast.LENGTH_SHORT)
+                .show();
     }
 
     /** Slider writes its value through this once the user lifts the finger. */
@@ -322,6 +483,12 @@ public class SettingsActivity extends BaseWinBoLLActivity {
     private static final int SLIDER_DB_PLUS = 0;
     private static final int SLIDER_DB_SIGNED = 1;
     private static final int SLIDER_RATIO = 2;
+    /** Reverb preset name from the string array. */
+    private static final int SLIDER_PRESET = 3;
+    /** Millisecond value (reverb decay time). */
+    private static final int SLIDER_MS = 4;
+    /** Percentage offset (pitch). */
+    private static final int SLIDER_PERCENT = 5;
 
     /**
      * Wire a preset slider to its value label: the label tracks every progress
@@ -364,7 +531,7 @@ public class SettingsActivity extends BaseWinBoLLActivity {
         valueView.setText(formatSliderValue(kind, value));
     }
 
-    /** Render a slider value for its parameter kind (millibels / ratio x10). */
+    /** Render a slider value for its parameter kind (millibels / ratio / preset / ms / %). */
     private String formatSliderValue(int kind, int value) {
         if (kind == SLIDER_DB_PLUS) {
             return getString(R.string.settings_gain_value_format, value / 100);
@@ -372,10 +539,20 @@ public class SettingsActivity extends BaseWinBoLLActivity {
         if (kind == SLIDER_DB_SIGNED) {
             return getString(R.string.settings_dynamic_db_value_format, value / 100);
         }
+        if (kind == SLIDER_PRESET) {
+            String[] names = getResources().getStringArray(R.array.settings_reverb_presets);
+            return value >= 0 && value < names.length ? names[value] : String.valueOf(value);
+        }
+        if (kind == SLIDER_MS) {
+            return getString(R.string.settings_ms_value_format, value);
+        }
+        if (kind == SLIDER_PERCENT) {
+            return getString(R.string.settings_percent_value_format, value);
+        }
         return getString(R.string.settings_dynamic_ratio_value_format, value / 10, value % 10);
     }
 
-    /** The three model parameter panels start collapsed; tapping a header toggles. */
+    /** The model parameter panels start collapsed; tapping a header toggles. */
     private void setupPlaybackPanels() {
         setupCollapsiblePanel(R.id.ll_hosted_playback_classic_header,
                 R.id.ll_hosted_playback_classic_body, R.id.tv_hosted_playback_classic_arrow);
@@ -383,6 +560,10 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                 R.id.ll_hosted_playback_gain_body, R.id.tv_hosted_playback_gain_arrow);
         setupCollapsiblePanel(R.id.ll_hosted_playback_dynamic_header,
                 R.id.ll_hosted_playback_dynamic_body, R.id.tv_hosted_playback_dynamic_arrow);
+        setupCollapsiblePanel(R.id.ll_hosted_playback_reverb_header,
+                R.id.ll_hosted_playback_reverb_body, R.id.tv_hosted_playback_reverb_arrow);
+        setupCollapsiblePanel(R.id.ll_hosted_playback_pitch_header,
+                R.id.ll_hosted_playback_pitch_body, R.id.tv_hosted_playback_pitch_arrow);
     }
 
     private void setupCollapsiblePanel(int headerId, int bodyId, int arrowId) {

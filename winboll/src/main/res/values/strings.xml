@@ -92,6 +92,32 @@
     <string name="toast_reset_dynamic">模型三参数已恢复默认并生效</string>
     <string name="settings_dynamic_desc">仅模型三生效。后级增益 0 ~ +30 dB；压缩阈值 -60 ~ -1 dB，越低压得越多；压缩比 1.0 ~ 20.0 : 1；限幅阈值 -60 ~ 0 dB。压缩先把超过阈值的峰值按比例收进来，限幅再兜住最高点，后级增益补回响度，所以比单纯加增益更不容易削顶。松手约 0.3 秒后重建效果并作用到正在播放的曲目（连续拖动只在停手后重建一次），应用会回读引擎实际值并写入日志（playback model 3: ...），设备不支持时按模型一回退。</string>
     <string name="toast_dynamic_param">模型三参数已保存并生效</string>
+    <string name="settings_hosted_playback_reverb_label">混响（Reverb）</string>
+    <string name="settings_reverb_preset_label">混响档位</string>
+    <string name="settings_reverb_decay_label">尾音时长</string>
+    <string name="settings_reverb_level_label">混响量</string>
+    <string name="settings_reverb_reflections_label">早期反射</string>
+    <string name="settings_reverb_desc">挂在当前托管播放会话上的 EnvironmentalReverb，与三种播放模型互不影响，可以叠加使用。档位只是快捷场景（关闭 / 小房间 … 板式），选中后会把下面三个参数填成该场景的值；三个参数都能在运行中即时生效，不需要重建效果。设备未实现该效果时按干声继续播放，并在日志写 playback reverb unavailable。</string>
+    <string name="settings_reset_reverb">恢复默认（关闭混响）</string>
+    <string name="toast_reverb_param">混响参数已保存并生效</string>
+    <string name="toast_reset_reverb">混响已关闭并恢复默认参数</string>
+    <string name="settings_ms_value_format">%1$d ms</string>
+    <string name="settings_percent_value_format">%1$d%%</string>
+    <string name="settings_hosted_playback_pitch_label">音调（Pitch）</string>
+    <string name="settings_pitch_label">音调偏移</string>
+    <string name="settings_pitch_desc">使用 MediaPlayer 的 PlaybackParams 调整音高，范围 -20% ~ +20%，0 为不改变；音高与倍速相互独立，变速时仍保持所设音调。部分设备的合成器不支持音高调整，此时只保留变速效果，并在日志写 playback pitch ... unsupported。松手即生效。</string>
+    <string name="settings_reset_pitch">恢复默认（0%）</string>
+    <string name="toast_pitch_param">音调已保存并生效</string>
+    <string name="toast_reset_pitch">音调已恢复默认</string>
+    <string-array name="settings_reverb_presets">
+        <item>关闭</item>
+        <item>小房间</item>
+        <item>中房间</item>
+        <item>大房间</item>
+        <item>中厅</item>
+        <item>大厅</item>
+        <item>板式</item>
+    </string-array>
     <string name="toast_playback_model_classic">已选择模型一（原生合成）</string>
     <string name="toast_playback_model_enhanced">已选择模型二（原生合成 + 增益）</string>
     <string name="toast_playback_model_dynamic">已选择模型三（原生合成 + 压限增益）</string>

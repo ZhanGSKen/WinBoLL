@@ -544,6 +544,286 @@
 		</LinearLayout>
 	</LinearLayout>
 
+	<!-- Reverb: collapsible, collapsed by default. Independent of the model. -->
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+
+		<LinearLayout
+			android:id="@+id/ll_hosted_playback_reverb_header"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="?android:attr/selectableItemBackground"
+			android:clickable="true"
+			android:focusable="true"
+			android:gravity="center_vertical"
+			android:orientation="horizontal"
+			android:paddingLeft="32dp"
+			android:paddingRight="16dp"
+			android:paddingTop="12dp"
+			android:paddingBottom="8dp">
+
+			<TextView
+				android:id="@+id/tv_hosted_playback_reverb_label"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="@string/settings_hosted_playback_reverb_label"
+				android:textSize="14sp"
+				android:textStyle="bold"/>
+
+			<TextView
+				android:id="@+id/tv_hosted_playback_reverb_arrow"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="▸"
+				android:textSize="14sp"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/ll_hosted_playback_reverb_body"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:visibility="gone">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingLeft="32dp"
+				android:paddingRight="16dp"
+				android:paddingTop="4dp">
+
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="@string/settings_reverb_preset_label"
+					android:textSize="14sp"/>
+
+				<TextView
+					android:id="@+id/tv_reverb_preset_value"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="14sp"/>
+			</LinearLayout>
+
+			<SeekBar
+				android:id="@+id/sb_reverb_preset"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"/>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingLeft="32dp"
+				android:paddingRight="16dp"
+				android:paddingTop="8dp">
+
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="@string/settings_reverb_decay_label"
+					android:textSize="14sp"/>
+
+				<TextView
+					android:id="@+id/tv_reverb_decay_value"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="14sp"/>
+			</LinearLayout>
+
+			<SeekBar
+				android:id="@+id/sb_reverb_decay"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"/>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingLeft="32dp"
+				android:paddingRight="16dp"
+				android:paddingTop="8dp">
+
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="@string/settings_reverb_level_label"
+					android:textSize="14sp"/>
+
+				<TextView
+					android:id="@+id/tv_reverb_level_value"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="14sp"/>
+			</LinearLayout>
+
+			<SeekBar
+				android:id="@+id/sb_reverb_level"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"/>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingLeft="32dp"
+				android:paddingRight="16dp"
+				android:paddingTop="8dp">
+
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="@string/settings_reverb_reflections_label"
+					android:textSize="14sp"/>
+
+				<TextView
+					android:id="@+id/tv_reverb_reflections_value"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="14sp"/>
+			</LinearLayout>
+
+			<SeekBar
+				android:id="@+id/sb_reverb_reflections"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="32dp"
+				android:paddingRight="16dp"
+				android:paddingTop="4dp"
+				android:text="@string/settings_reverb_desc"
+				android:textSize="13sp"/>
+
+			<Button
+				android:id="@+id/btn_reset_reverb"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="end"
+				android:layout_marginRight="16dp"
+				android:layout_marginBottom="8dp"
+				android:text="@string/settings_reset_reverb"
+				android:textSize="13sp"/>
+		</LinearLayout>
+	</LinearLayout>
+
+	<!-- Pitch: collapsible, collapsed by default. -->
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+
+		<LinearLayout
+			android:id="@+id/ll_hosted_playback_pitch_header"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="?android:attr/selectableItemBackground"
+			android:clickable="true"
+			android:focusable="true"
+			android:gravity="center_vertical"
+			android:orientation="horizontal"
+			android:paddingLeft="32dp"
+			android:paddingRight="16dp"
+			android:paddingTop="12dp"
+			android:paddingBottom="8dp">
+
+			<TextView
+				android:id="@+id/tv_hosted_playback_pitch_label"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="@string/settings_hosted_playback_pitch_label"
+				android:textSize="14sp"
+				android:textStyle="bold"/>
+
+			<TextView
+				android:id="@+id/tv_hosted_playback_pitch_arrow"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="▸"
+				android:textSize="14sp"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/ll_hosted_playback_pitch_body"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:visibility="gone">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingLeft="32dp"
+				android:paddingRight="16dp"
+				android:paddingTop="4dp">
+
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="@string/settings_pitch_label"
+					android:textSize="14sp"/>
+
+				<TextView
+					android:id="@+id/tv_pitch_value"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="14sp"/>
+			</LinearLayout>
+
+			<SeekBar
+				android:id="@+id/sb_pitch"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="32dp"
+				android:paddingRight="16dp"
+				android:paddingTop="4dp"
+				android:text="@string/settings_pitch_desc"
+				android:textSize="13sp"/>
+
+			<Button
+				android:id="@+id/btn_reset_pitch"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="end"
+				android:layout_marginRight="16dp"
+				android:layout_marginBottom="8dp"
+				android:text="@string/settings_reset_pitch"
+				android:textSize="13sp"/>
+		</LinearLayout>
+	</LinearLayout>
+
 	<TextView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

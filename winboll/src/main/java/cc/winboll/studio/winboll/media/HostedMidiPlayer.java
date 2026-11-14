@@ -15,6 +15,7 @@ import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
 import android.media.audiofx.DynamicsProcessing;
+import android.media.audiofx.EnvironmentalReverb;
 import android.media.audiofx.LoudnessEnhancer;
 import android.os.Build;
 import android.os.Handler;
@@ -107,6 +108,9 @@ public class HostedMidiPlayer {
     private LoudnessEnhancer mEnhancer;
     /** Model 3 compressor/limiter stage; null unless model 3 is active. */
     private DynamicsProcessing mProcessor;
+    /** Reverb stage, independent of the playback model; null when reverb is off
+     *  or the device does not implement it. */
+    private EnvironmentalReverb mReverb;
     private Track mTrack;
     private int mState = STATE_STOPPED;
     private float mRate = 1.0f;
@@ -431,15 +435,44 @@ public class HostedMidiPlayer {
     }
 
     private void applyRate() {
-        if (mPlayer == null || Build.VERSION.SDK_INT < 23) {
+        applyPlaybackParams(mPlayer);
+    }
+
+    /**
+     * Push playback speed and pitch onto the player. Pitch comes from the
+     * Settings page as a percentage offset (0 = untouched). Not every engine
+     * supports pitch: when the request is rejected the speed is re-applied
+     * alone so tempo control keeps working, and the rejection is logged.
+     */
+    private void applyPlaybackParams(MediaPlayer mp) {
+        if (mp == null || Build.VERSION.SDK_INT < 23) {
             return;
         }
+        float pitch = 1.0f + MidiBridge.getPitchPercent(mAppContext) / 100f;
         try {
-            mPlayer.setPlaybackParams(new PlaybackParams().setSpeed(mRate));
+            mp.setPlaybackParams(new PlaybackParams().setSpeed(mRate).setPitch(pitch));
+            logPlaybackParams(mp, pitch);
+        } catch (IllegalArgumentException e) {
+            Log.w(TAG, "playback pitch " + pitch + " unsupported, speed only: " + e);
+            try {
+                mp.setPlaybackParams(new PlaybackParams().setSpeed(mRate));
+            } catch (Throwable ignored) {
+                // Best-effort: rate is a reference parameter only.
+            }
         } catch (IllegalStateException e) {
             // Best-effort (spec D-5): rate is a reference parameter only.
-        } catch (IllegalArgumentException e) {
-            // Device synth may not support rate changes; ignore.
+        }
+    }
+
+    /** Log the speed/pitch the engine actually holds after a request. */
+    private void logPlaybackParams(MediaPlayer mp, float requestedPitch) {
+        try {
+            PlaybackParams applied = mp.getPlaybackParams();
+            Log.i(TAG, "playback params requested pitch " + requestedPitch + ", speed " + mRate
+                    + "; effective pitch " + applied.getPitch() + ", speed "
+                    + applied.getSpeed());
+        } catch (Throwable t) {
+            Log.w(TAG, "playback params read-back unavailable: " + t);
         }
     }
 
@@ -456,6 +489,7 @@ public class HostedMidiPlayer {
     private void releasePlayer() {
         releaseEnhancer();
         releaseProcessor();
+        releaseReverb();
         if (mPlayer != null) {
             try {
                 mPlayer.stop();
@@ -485,6 +519,79 @@ public class HostedMidiPlayer {
             applyEnhancer(mp);
         } else if (model == MidiBridge.PLAYBACK_MODEL_DYNAMIC) {
             applyDynamic(mp);
+        }
+        applyReverb(mp);
+    }
+
+    /**
+     * Reverb stage: selectively attach an EnvironmentalReverb to the player's
+     * audio session. The gain models and reverb are different dimensions, so
+     * this layer survives model switches and is controlled by its own slider
+     * group. Devices without the effect log a warning and keep playing dry.
+     */
+    private void applyReverb(MediaPlayer mp) {
+        int preset = MidiBridge.getReverbPreset(mAppContext);
+        if (preset == 0) {
+            releaseReverb();
+            return;
+        }
+        if (mp == null) {
+            return;
+        }
+        try {
+            if (mReverb != null) {
+                // All reverb parameters are settable at runtime, so a value
+                // change never needs a new instance.
+                applyReverbParams(mReverb, "playback reverb (live): ");
+                return;
+            }
+            mReverb = attachReverb(mp.getAudioSessionId(), "playback reverb: ");
+        } catch (Throwable t) {
+            Log.w(TAG, "playback reverb unavailable: " + t);
+            releaseReverb();
+        }
+    }
+
+    /** Create the reverb effect with the current Settings values and log it. */
+    private EnvironmentalReverb attachReverb(int sessionId, String logPrefix) {
+        EnvironmentalReverb reverb = new EnvironmentalReverb(0, sessionId);
+        applyReverbParams(reverb, logPrefix);
+        reverb.setEnabled(true);
+        return reverb;
+    }
+
+    /** Push the Settings values onto an existing reverb instance, then log. */
+    private void applyReverbParams(EnvironmentalReverb reverb, String logPrefix) {
+        int decayMs = MidiBridge.getReverbDecayMs(mAppContext);
+        short levelMb = (short) MidiBridge.getReverbLevelMb(mAppContext);
+        short reflectionsMb = (short) MidiBridge.getReverbReflectionsMb(mAppContext);
+
+        reverb.setDecayTime(decayMs);
+        reverb.setReverbLevel(levelMb);
+        reverb.setReflectionsLevel(reflectionsMb);
+        // Fixed scene values: a medium-sized room body so the three exposed
+        // parameters are the ones that shape the tail.
+        reverb.setRoomLevel((short) -4000);
+        reverb.setRoomHFLevel((short) -3000);
+        reverb.setDecayHFRatio((short) 600);
+        reverb.setReflectionsDelay(20);
+        reverb.setReverbDelay(30);
+        reverb.setDiffusion((short) 900);
+        reverb.setDensity((short) 800);
+
+        // Read back what the engine accepted: values can be clamped silently.
+        int appliedDecay = reverb.getDecayTime();
+        short appliedLevel = reverb.getReverbLevel();
+        short appliedReflections = reverb.getReflectionsLevel();
+        Log.i(TAG, logPrefix + "EnvironmentalReverb preset="
+                + MidiBridge.getReverbPreset(mAppContext) + ", decay " + appliedDecay
+                + " ms, reverb " + appliedLevel + " mB, reflections " + appliedReflections
+                + " mB, session=" + (mPlayer == null ? -1 : mPlayer.getAudioSessionId()));
+        if (appliedDecay != decayMs || appliedLevel != levelMb
+                || appliedReflections != reflectionsMb) {
+            Log.w(TAG, logPrefix + "device clamped reverb decay " + decayMs + "->"
+                    + appliedDecay + ", reverb " + levelMb + "->" + appliedLevel
+                    + ", reflections " + reflectionsMb + "->" + appliedReflections);
         }
     }
 
@@ -581,6 +688,19 @@ public class HostedMidiPlayer {
     }
 
     /**
+     * Push only the in-place stages (reverb and pitch) onto the loaded track.
+     * Used by the panels that never touch the playback model, so a reverb or
+     * pitch change does not queue a model 3 rebuild.
+     */
+    public void reapplyEffectsOnly() {
+        if (mReleased || mPlayer == null) {
+            return;
+        }
+        applyReverb(mPlayer);
+        applyPlaybackParams(mPlayer);
+    }
+
+    /**
      * Push the current Settings values onto the already loaded track, so a
      * parameter change or model switch is audible at once instead of waiting
      * for the next prepared track. Main thread only; no-op when nothing is
@@ -592,6 +712,10 @@ public class HostedMidiPlayer {
         if (mReleased || mPlayer == null) {
             return;
         }
+        // Reverb and pitch are in-place stages: no rebuild, so they are pushed
+        // straight away on every change.
+        applyReverb(mPlayer);
+        applyPlaybackParams(mPlayer);
         if (MidiBridge.getPlaybackModel(mAppContext) == MidiBridge.PLAYBACK_MODEL_DYNAMIC) {
             // Model 3 needs a fresh instance per change; wait until the drag
             // settles so only one rebuild (one chain gap) is heard.
@@ -716,6 +840,24 @@ public class HostedMidiPlayer {
             // Already released.
         }
         mProcessor = null;
+    }
+
+    private void releaseReverb() {
+        if (mReverb == null) {
+            return;
+        }
+        Log.i(TAG, "playback reverb released (preset off or unreachable)");
+        try {
+            mReverb.setEnabled(false);
+        } catch (Throwable ignored) {
+            // Released session or unsupported device: nothing to disable.
+        }
+        try {
+            mReverb.release();
+        } catch (Throwable ignored) {
+            // Already released.
+        }
+        mReverb = null;
     }
 
     private void notifyState() {

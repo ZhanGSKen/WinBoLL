@@ -74,6 +74,11 @@ public final class MidiBridge {
     private static final String KEY_DYNAMIC_COMP_THRESHOLD_MB = "dynamic_comp_threshold_mb";
     private static final String KEY_DYNAMIC_COMP_RATIO_X10 = "dynamic_comp_ratio_x10";
     private static final String KEY_DYNAMIC_LIMIT_THRESHOLD_MB = "dynamic_limiter_threshold_mb";
+    private static final String KEY_REVERB_PRESET = "reverb_preset";
+    private static final String KEY_REVERB_DECAY_MS = "reverb_decay_ms";
+    private static final String KEY_REVERB_LEVEL_MB = "reverb_level_mb";
+    private static final String KEY_REVERB_REFLECTIONS_MB = "reverb_reflections_mb";
+    private static final String KEY_PITCH_PERCENT = "pitch_percent";
     private static final String KEY_HOSTED = "hosted";
     private static final String KEY_HOST_STATE = "host_state";
     private static final String KEY_HOST_TRACK_ID = "host_track_id";
@@ -400,6 +405,121 @@ public final class MidiBridge {
             DYNAMIC_LIMIT_MB_MIN, DYNAMIC_LIMIT_MB_MAX);
     }
 
+    // ------------------- reverb (EnvironmentalReverb) ranges -------------------
+
+    /**
+     * Reverb preset slider: 0 = off, 1..6 map onto the platform preset reverb
+     * scenes (small room .. plate). Picking a preset rewrites the three
+     * adjustable parameters with that scene's values.
+     */
+    public static final int REVERB_PRESET_MIN = 0;
+    public static final int REVERB_PRESET_MAX = 6;
+    public static final int REVERB_PRESET_STEP = 1;
+    public static final int REVERB_PRESET_DEFAULT = 0;
+
+    /** Reverb decay time (60 dB decay), 100..20000 ms, step 100 ms. */
+    public static final int REVERB_DECAY_MS_MIN = 100;
+    public static final int REVERB_DECAY_MS_MAX = 20000;
+    public static final int REVERB_DECAY_MS_STEP = 100;
+    public static final int REVERB_DECAY_MS_DEFAULT = 2000;
+
+    /** Total reverb level, -90..+20 dB, step 1 dB (platform range -9000..2000 mB). */
+    public static final int REVERB_LEVEL_MB_MIN = -9000;
+    public static final int REVERB_LEVEL_MB_MAX = 2000;
+    public static final int REVERB_LEVEL_MB_STEP = 100;
+    public static final int REVERB_LEVEL_MB_DEFAULT = -1500;
+
+    /** Early reflection level, -90..+10 dB, step 1 dB (-9000..1000 mB). */
+    public static final int REVERB_REFLECTIONS_MB_MIN = -9000;
+    public static final int REVERB_REFLECTIONS_MB_MAX = 1000;
+    public static final int REVERB_REFLECTIONS_MB_STEP = 100;
+    public static final int REVERB_REFLECTIONS_MB_DEFAULT = -3000;
+
+    /** Reverb preset slider value (0 = off). */
+    public static int getReverbPreset(Context context) {
+        return getPresetInt(context, KEY_REVERB_PRESET, REVERB_PRESET_DEFAULT,
+            REVERB_PRESET_MIN, REVERB_PRESET_MAX);
+    }
+
+    public static void setReverbPreset(Context context, int value) {
+        putPresetInt(context, KEY_REVERB_PRESET, value, REVERB_PRESET_DEFAULT,
+            REVERB_PRESET_MIN, REVERB_PRESET_MAX);
+    }
+
+    public static int getReverbDecayMs(Context context) {
+        return getPresetInt(context, KEY_REVERB_DECAY_MS, REVERB_DECAY_MS_DEFAULT,
+            REVERB_DECAY_MS_MIN, REVERB_DECAY_MS_MAX);
+    }
+
+    public static void setReverbDecayMs(Context context, int value) {
+        putPresetInt(context, KEY_REVERB_DECAY_MS, value, REVERB_DECAY_MS_DEFAULT,
+            REVERB_DECAY_MS_MIN, REVERB_DECAY_MS_MAX);
+    }
+
+    public static int getReverbLevelMb(Context context) {
+        return getPresetInt(context, KEY_REVERB_LEVEL_MB, REVERB_LEVEL_MB_DEFAULT,
+            REVERB_LEVEL_MB_MIN, REVERB_LEVEL_MB_MAX);
+    }
+
+    public static void setReverbLevelMb(Context context, int value) {
+        putPresetInt(context, KEY_REVERB_LEVEL_MB, value, REVERB_LEVEL_MB_DEFAULT,
+            REVERB_LEVEL_MB_MIN, REVERB_LEVEL_MB_MAX);
+    }
+
+    public static int getReverbReflectionsMb(Context context) {
+        return getPresetInt(context, KEY_REVERB_REFLECTIONS_MB,
+            REVERB_REFLECTIONS_MB_DEFAULT, REVERB_REFLECTIONS_MB_MIN,
+            REVERB_REFLECTIONS_MB_MAX);
+    }
+
+    public static void setReverbReflectionsMb(Context context, int value) {
+        putPresetInt(context, KEY_REVERB_REFLECTIONS_MB, value, REVERB_REFLECTIONS_MB_DEFAULT,
+            REVERB_REFLECTIONS_MB_MIN, REVERB_REFLECTIONS_MB_MAX);
+    }
+
+    /**
+     * Values for a reverb preset index: { decay time ms, reverb level mB,
+     * early reflections level mB }. Index 0 returns the defaults because "off"
+     * carries no parameters.
+     */
+    public static int[] reverbPresetValues(int preset) {
+        switch (preset) {
+            case 1:  // small room
+                return new int[] {500, -3000, -5000};
+            case 2:  // medium room
+                return new int[] {1200, -2200, -4000};
+            case 3:  // large room
+                return new int[] {2500, -1600, -3000};
+            case 4:  // medium hall
+                return new int[] {5000, -1200, -2500};
+            case 5:  // large hall
+                return new int[] {9000, -900, -2000};
+            case 6:  // plate
+                return new int[] {1800, -800, -1500};
+            default:
+                return new int[] {REVERB_DECAY_MS_DEFAULT, REVERB_LEVEL_MB_DEFAULT,
+                        REVERB_REFLECTIONS_MB_DEFAULT};
+        }
+    }
+
+    // ------------------- pitch (PlaybackParams) range -------------------
+
+    /** Pitch offset in percent: -20..+20 %, step 1 % (0 = untouched). */
+    public static final int PITCH_PERCENT_MIN = -20;
+    public static final int PITCH_PERCENT_MAX = 20;
+    public static final int PITCH_PERCENT_STEP = 1;
+    public static final int PITCH_PERCENT_DEFAULT = 0;
+
+    public static int getPitchPercent(Context context) {
+        return getPresetInt(context, KEY_PITCH_PERCENT, PITCH_PERCENT_DEFAULT,
+            PITCH_PERCENT_MIN, PITCH_PERCENT_MAX);
+    }
+
+    public static void setPitchPercent(Context context, int value) {
+        putPresetInt(context, KEY_PITCH_PERCENT, value, PITCH_PERCENT_DEFAULT,
+            PITCH_PERCENT_MIN, PITCH_PERCENT_MAX);
+    }
+
     /**
      * Re-apply the persisted playback model and parameters to the hosted track
      * that is already loaded, so the Settings page change is audible at once
@@ -410,6 +530,18 @@ public final class MidiBridge {
         HostedMidiPlayer engine = sEngine;
         if (engine != null) {
             engine.reapplyPlaybackSettings();
+        }
+    }
+
+    /**
+     * Re-apply only the in-place stages (reverb, pitch) on the loaded track.
+     * Reverb and pitch are independent of the playback model, so this avoids
+     * triggering a model 3 effect rebuild.
+     */
+    public static void reapplyEffectsOnly() {
+        HostedMidiPlayer engine = sEngine;
+        if (engine != null) {
+            engine.reapplyEffectsOnly();
         }
     }
 
