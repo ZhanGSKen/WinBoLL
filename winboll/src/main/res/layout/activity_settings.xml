@@ -298,37 +298,35 @@
 			android:orientation="vertical"
 			android:visibility="gone">
 
-			<RadioGroup
-				android:id="@+id/rg_hosted_playback_gain"
+			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="vertical"
-				android:paddingLeft="24dp"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingLeft="32dp"
 				android:paddingRight="16dp"
 				android:paddingTop="4dp">
 
-				<RadioButton
-					android:id="@+id/rb_gain_6"
-					android:layout_width="match_parent"
+				<TextView
+					android:layout_width="0dp"
 					android:layout_height="wrap_content"
-					android:text="@string/settings_hosted_playback_gain_6"
+					android:layout_weight="1"
+					android:text="@string/settings_gain_label"
 					android:textSize="14sp"/>
 
-				<RadioButton
-					android:id="@+id/rb_gain_10"
-					android:layout_width="match_parent"
+				<TextView
+					android:id="@+id/tv_gain_value"
+					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="@string/settings_hosted_playback_gain_10"
 					android:textSize="14sp"/>
+			</LinearLayout>
 
-				<RadioButton
-					android:id="@+id/rb_gain_14"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_hosted_playback_gain_14"
-					android:textSize="14sp"/>
-
-			</RadioGroup>
+			<SeekBar
+				android:id="@+id/sb_gain"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"/>
 
 			<TextView
 				android:layout_width="match_parent"
@@ -385,165 +383,125 @@
 			android:orientation="vertical"
 			android:visibility="gone">
 
-			<TextView
+			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
 				android:paddingLeft="32dp"
 				android:paddingRight="16dp"
-				android:paddingTop="8dp"
-				android:text="@string/settings_dynamic_gain_label"
-				android:textSize="14sp"/>
+				android:paddingTop="8dp">
 
-			<RadioGroup
-				android:id="@+id/rg_dynamic_gain"
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="@string/settings_dynamic_gain_label"
+					android:textSize="14sp"/>
+
+				<TextView
+					android:id="@+id/tv_dyn_gain_value"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="14sp"/>
+			</LinearLayout>
+
+			<SeekBar
+				android:id="@+id/sb_dyn_gain"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="vertical"
-				android:paddingLeft="24dp"
-				android:paddingRight="16dp">
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"/>
 
-				<RadioButton
-					android:id="@+id/rb_dyn_gain_6"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_dynamic_gain_6"
-					android:textSize="14sp"/>
-
-				<RadioButton
-					android:id="@+id/rb_dyn_gain_10"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_dynamic_gain_10"
-					android:textSize="14sp"/>
-
-				<RadioButton
-					android:id="@+id/rb_dyn_gain_14"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_dynamic_gain_14"
-					android:textSize="14sp"/>
-
-			</RadioGroup>
-
-			<TextView
+			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
 				android:paddingLeft="32dp"
 				android:paddingRight="16dp"
-				android:paddingTop="8dp"
-				android:text="@string/settings_dynamic_comp_label"
-				android:textSize="14sp"/>
+				android:paddingTop="8dp">
 
-			<RadioGroup
-				android:id="@+id/rg_dynamic_comp"
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="@string/settings_dynamic_comp_label"
+					android:textSize="14sp"/>
+
+				<TextView
+					android:id="@+id/tv_dyn_comp_value"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="14sp"/>
+			</LinearLayout>
+
+			<SeekBar
+				android:id="@+id/sb_dyn_comp"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="vertical"
-				android:paddingLeft="24dp"
-				android:paddingRight="16dp">
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"/>
 
-				<RadioButton
-					android:id="@+id/rb_dyn_comp_10"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_dynamic_comp_10"
-					android:textSize="14sp"/>
-
-				<RadioButton
-					android:id="@+id/rb_dyn_comp_20"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_dynamic_comp_20"
-					android:textSize="14sp"/>
-
-				<RadioButton
-					android:id="@+id/rb_dyn_comp_30"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_dynamic_comp_30"
-					android:textSize="14sp"/>
-
-			</RadioGroup>
-
-			<TextView
+			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
 				android:paddingLeft="32dp"
 				android:paddingRight="16dp"
-				android:paddingTop="8dp"
-				android:text="@string/settings_dynamic_ratio_label"
-				android:textSize="14sp"/>
+				android:paddingTop="8dp">
 
-			<RadioGroup
-				android:id="@+id/rg_dynamic_ratio"
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="@string/settings_dynamic_ratio_label"
+					android:textSize="14sp"/>
+
+				<TextView
+					android:id="@+id/tv_dyn_ratio_value"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="14sp"/>
+			</LinearLayout>
+
+			<SeekBar
+				android:id="@+id/sb_dyn_ratio"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="vertical"
-				android:paddingLeft="24dp"
-				android:paddingRight="16dp">
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"/>
 
-				<RadioButton
-					android:id="@+id/rb_dyn_ratio_15"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_dynamic_ratio_15"
-					android:textSize="14sp"/>
-
-				<RadioButton
-					android:id="@+id/rb_dyn_ratio_20"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_dynamic_ratio_20"
-					android:textSize="14sp"/>
-
-				<RadioButton
-					android:id="@+id/rb_dyn_ratio_30"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_dynamic_ratio_30"
-					android:textSize="14sp"/>
-
-			</RadioGroup>
-
-			<TextView
+			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
 				android:paddingLeft="32dp"
 				android:paddingRight="16dp"
-				android:paddingTop="8dp"
-				android:text="@string/settings_dynamic_limit_label"
-				android:textSize="14sp"/>
+				android:paddingTop="8dp">
 
-			<RadioGroup
-				android:id="@+id/rg_dynamic_limit"
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="@string/settings_dynamic_limit_label"
+					android:textSize="14sp"/>
+
+				<TextView
+					android:id="@+id/tv_dyn_limit_value"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="14sp"/>
+			</LinearLayout>
+
+			<SeekBar
+				android:id="@+id/sb_dyn_limit"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="vertical"
-				android:paddingLeft="24dp"
-				android:paddingRight="16dp">
-
-				<RadioButton
-					android:id="@+id/rb_dyn_limit_1"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_dynamic_limit_1"
-					android:textSize="14sp"/>
-
-				<RadioButton
-					android:id="@+id/rb_dyn_limit_3"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_dynamic_limit_3"
-					android:textSize="14sp"/>
-
-				<RadioButton
-					android:id="@+id/rb_dyn_limit_6"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@string/settings_dynamic_limit_6"
-					android:textSize="14sp"/>
-
-			</RadioGroup>
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"/>
 
 			<TextView
 				android:layout_width="match_parent"

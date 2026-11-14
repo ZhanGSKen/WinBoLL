@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -136,96 +137,76 @@ public class SettingsActivity extends BaseWinBoLLActivity {
             }
         });
 
-        // Model 2 gain presets (+6/+10/+14 dB). Persisted in millibels; the
-        // native player reads it back from the effect and logs the effective
-        // value, because devices clamp the request silently.
-        final RadioGroup rgPlaybackGain = (RadioGroup) findViewById(R.id.rg_hosted_playback_gain);
-        int gainMb = MidiBridge.getPlaybackGainMb(this);
-        rgPlaybackGain.check(gainMb == MidiBridge.GAIN_PRESET_6_DB ? R.id.rb_gain_6
-                : gainMb == MidiBridge.GAIN_PRESET_14_DB ? R.id.rb_gain_14
-                : R.id.rb_gain_10);
-        rgPlaybackGain.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int gain = checkedId == R.id.rb_gain_6 ? MidiBridge.GAIN_PRESET_6_DB
-                        : checkedId == R.id.rb_gain_14 ? MidiBridge.GAIN_PRESET_14_DB
-                        : MidiBridge.GAIN_PRESET_10_DB;
-                MidiBridge.setPlaybackGainMb(SettingsActivity.this, gain);
-                Toast.makeText(SettingsActivity.this,
-                        getString(R.string.toast_playback_gain, gain / 100),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        // Model 2 gain slider: 0..+20 dB in 1 dB steps. Persisted in millibels;
+        // the native player reads the gain back from the effect and logs the
+        // effective value, because devices clamp the request silently.
+        final SeekBar sbGain = (SeekBar) findViewById(R.id.sb_gain);
+        bindSeekBar(sbGain, R.id.tv_gain_value, MidiBridge.getPlaybackGainMb(this),
+                MidiBridge.PLAYBACK_GAIN_MB_MIN, MidiBridge.PLAYBACK_GAIN_MB_MAX,
+                MidiBridge.PLAYBACK_GAIN_MB_STEP, SLIDER_DB_PLUS,
+                new ParamSink() {
+                    @Override
+                    public void persist(int value) {
+                        MidiBridge.setPlaybackGainMb(SettingsActivity.this, value);
+                        Toast.makeText(SettingsActivity.this,
+                                getString(R.string.toast_playback_gain, value / 100),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-        // Model 3 (DynamicsProcessing) presets: post gain, compressor
+        // Model 3 (DynamicsProcessing) sliders: post gain, compressor
         // threshold/ratio and limiter threshold. Timings stay fixed in the
         // player; the values are persisted in millibels / ratio x 10.
-        final RadioGroup rgDynGain = (RadioGroup) findViewById(R.id.rg_dynamic_gain);
-        final RadioGroup rgDynComp = (RadioGroup) findViewById(R.id.rg_dynamic_comp);
-        final RadioGroup rgDynRatio = (RadioGroup) findViewById(R.id.rg_dynamic_ratio);
-        final RadioGroup rgDynLimit = (RadioGroup) findViewById(R.id.rg_dynamic_limit);
+        final SeekBar sbDynGain = (SeekBar) findViewById(R.id.sb_dyn_gain);
+        bindSeekBar(sbDynGain, R.id.tv_dyn_gain_value, MidiBridge.getDynamicGainMb(this),
+                MidiBridge.DYNAMIC_GAIN_MB_MIN, MidiBridge.DYNAMIC_GAIN_MB_MAX,
+                MidiBridge.DYNAMIC_GAIN_MB_STEP, SLIDER_DB_PLUS,
+                new ParamSink() {
+                    @Override
+                    public void persist(int value) {
+                        MidiBridge.setDynamicGainMb(SettingsActivity.this, value);
+                        showDynamicSavedToast();
+                    }
+                });
 
-        int dynGainMb = MidiBridge.getDynamicGainMb(this);
-        rgDynGain.check(dynGainMb == MidiBridge.DYNAMIC_GAIN_6_DB ? R.id.rb_dyn_gain_6
-                : dynGainMb == MidiBridge.DYNAMIC_GAIN_14_DB ? R.id.rb_dyn_gain_14
-                : R.id.rb_dyn_gain_10);
-        rgDynGain.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int gain = checkedId == R.id.rb_dyn_gain_6 ? MidiBridge.DYNAMIC_GAIN_6_DB
-                        : checkedId == R.id.rb_dyn_gain_14 ? MidiBridge.DYNAMIC_GAIN_14_DB
-                        : MidiBridge.DYNAMIC_GAIN_10_DB;
-                MidiBridge.setDynamicGainMb(SettingsActivity.this, gain);
-                showDynamicSavedToast();
-            }
-        });
+        final SeekBar sbDynComp = (SeekBar) findViewById(R.id.sb_dyn_comp);
+        bindSeekBar(sbDynComp, R.id.tv_dyn_comp_value,
+                MidiBridge.getDynamicCompThresholdMb(this),
+                MidiBridge.DYNAMIC_COMP_THRESHOLD_MB_MIN, MidiBridge.DYNAMIC_COMP_THRESHOLD_MB_MAX,
+                MidiBridge.DYNAMIC_COMP_THRESHOLD_MB_STEP, SLIDER_DB_SIGNED,
+                new ParamSink() {
+                    @Override
+                    public void persist(int value) {
+                        MidiBridge.setDynamicCompThresholdMb(SettingsActivity.this, value);
+                        showDynamicSavedToast();
+                    }
+                });
 
-        int dynCompMb = MidiBridge.getDynamicCompThresholdMb(this);
-        rgDynComp.check(dynCompMb == MidiBridge.DYNAMIC_COMP_THRESHOLD_10_DB ? R.id.rb_dyn_comp_10
-                : dynCompMb == MidiBridge.DYNAMIC_COMP_THRESHOLD_30_DB ? R.id.rb_dyn_comp_30
-                : R.id.rb_dyn_comp_20);
-        rgDynComp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int threshold = checkedId == R.id.rb_dyn_comp_10
-                        ? MidiBridge.DYNAMIC_COMP_THRESHOLD_10_DB
-                        : checkedId == R.id.rb_dyn_comp_30
-                        ? MidiBridge.DYNAMIC_COMP_THRESHOLD_30_DB
-                        : MidiBridge.DYNAMIC_COMP_THRESHOLD_20_DB;
-                MidiBridge.setDynamicCompThresholdMb(SettingsActivity.this, threshold);
-                showDynamicSavedToast();
-            }
-        });
+        final SeekBar sbDynRatio = (SeekBar) findViewById(R.id.sb_dyn_ratio);
+        bindSeekBar(sbDynRatio, R.id.tv_dyn_ratio_value,
+                MidiBridge.getDynamicCompRatioX10(this),
+                MidiBridge.DYNAMIC_COMP_RATIO_X10_MIN, MidiBridge.DYNAMIC_COMP_RATIO_X10_MAX,
+                MidiBridge.DYNAMIC_COMP_RATIO_X10_STEP, SLIDER_RATIO,
+                new ParamSink() {
+                    @Override
+                    public void persist(int value) {
+                        MidiBridge.setDynamicCompRatioX10(SettingsActivity.this, value);
+                        showDynamicSavedToast();
+                    }
+                });
 
-        int dynRatio = MidiBridge.getDynamicCompRatioX10(this);
-        rgDynRatio.check(dynRatio == MidiBridge.DYNAMIC_COMP_RATIO_15 ? R.id.rb_dyn_ratio_15
-                : dynRatio == MidiBridge.DYNAMIC_COMP_RATIO_30 ? R.id.rb_dyn_ratio_30
-                : R.id.rb_dyn_ratio_20);
-        rgDynRatio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int ratio = checkedId == R.id.rb_dyn_ratio_15 ? MidiBridge.DYNAMIC_COMP_RATIO_15
-                        : checkedId == R.id.rb_dyn_ratio_30 ? MidiBridge.DYNAMIC_COMP_RATIO_30
-                        : MidiBridge.DYNAMIC_COMP_RATIO_20;
-                MidiBridge.setDynamicCompRatioX10(SettingsActivity.this, ratio);
-                showDynamicSavedToast();
-            }
-        });
-
-        int dynLimitMb = MidiBridge.getDynamicLimiterThresholdMb(this);
-        rgDynLimit.check(dynLimitMb == MidiBridge.DYNAMIC_LIMIT_1_DB ? R.id.rb_dyn_limit_1
-                : dynLimitMb == MidiBridge.DYNAMIC_LIMIT_6_DB ? R.id.rb_dyn_limit_6
-                : R.id.rb_dyn_limit_3);
-        rgDynLimit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int limit = checkedId == R.id.rb_dyn_limit_1 ? MidiBridge.DYNAMIC_LIMIT_1_DB
-                        : checkedId == R.id.rb_dyn_limit_6 ? MidiBridge.DYNAMIC_LIMIT_6_DB
-                        : MidiBridge.DYNAMIC_LIMIT_3_DB;
-                MidiBridge.setDynamicLimiterThresholdMb(SettingsActivity.this, limit);
-                showDynamicSavedToast();
-            }
-        });
+        final SeekBar sbDynLimit = (SeekBar) findViewById(R.id.sb_dyn_limit);
+        bindSeekBar(sbDynLimit, R.id.tv_dyn_limit_value,
+                MidiBridge.getDynamicLimiterThresholdMb(this),
+                MidiBridge.DYNAMIC_LIMIT_MB_MIN, MidiBridge.DYNAMIC_LIMIT_MB_MAX,
+                MidiBridge.DYNAMIC_LIMIT_MB_STEP, SLIDER_DB_SIGNED,
+                new ParamSink() {
+                    @Override
+                    public void persist(int value) {
+                        MidiBridge.setDynamicLimiterThresholdMb(SettingsActivity.this, value);
+                        showDynamicSavedToast();
+                    }
+                });
 
         // Hosted playback model selector: model 1 keeps the framework synth
         // output as-is, model 2 adds a LoudnessEnhancer gain, model 3 adds a
@@ -238,9 +219,9 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                 : playbackModel == MidiBridge.PLAYBACK_MODEL_DYNAMIC
                 ? R.id.rb_model_dynamic
                 : R.id.rb_model_classic);
-        applyModelGroupState(playbackModel == MidiBridge.PLAYBACK_MODEL_ENHANCED, rgPlaybackGain);
+        applyModelGroupState(playbackModel == MidiBridge.PLAYBACK_MODEL_ENHANCED, sbGain);
         applyModelGroupState(playbackModel == MidiBridge.PLAYBACK_MODEL_DYNAMIC,
-                rgDynGain, rgDynComp, rgDynRatio, rgDynLimit);
+                sbDynGain, sbDynComp, sbDynRatio, sbDynLimit);
         rgPlaybackModel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -250,9 +231,9 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                         ? MidiBridge.PLAYBACK_MODEL_DYNAMIC
                         : MidiBridge.PLAYBACK_MODEL_CLASSIC;
                 MidiBridge.setPlaybackModel(SettingsActivity.this, model);
-                applyModelGroupState(model == MidiBridge.PLAYBACK_MODEL_ENHANCED, rgPlaybackGain);
+                applyModelGroupState(model == MidiBridge.PLAYBACK_MODEL_ENHANCED, sbGain);
                 applyModelGroupState(model == MidiBridge.PLAYBACK_MODEL_DYNAMIC,
-                        rgDynGain, rgDynComp, rgDynRatio, rgDynLimit);
+                        sbDynGain, sbDynComp, sbDynRatio, sbDynLimit);
                 int toastRes = model == MidiBridge.PLAYBACK_MODEL_ENHANCED
                         ? R.string.toast_playback_model_enhanced
                         : model == MidiBridge.PLAYBACK_MODEL_DYNAMIC
@@ -263,6 +244,59 @@ public class SettingsActivity extends BaseWinBoLLActivity {
         });
 
         setupPlaybackPanels();
+    }
+
+    /** Slider writes its value through this once the user lifts the finger. */
+    private interface ParamSink {
+        void persist(int value);
+    }
+
+    /** Text formats: model 2 gain is signed-positive, thresholds signed, ratio x10. */
+    private static final int SLIDER_DB_PLUS = 0;
+    private static final int SLIDER_DB_SIGNED = 1;
+    private static final int SLIDER_RATIO = 2;
+
+    /**
+     * Wire a preset slider to its value label: the label tracks every progress
+     * change, the preference is written once when the finger is lifted.
+     */
+    private void bindSeekBar(final SeekBar bar, int valueViewId, int value, final int min,
+            int max, final int step, final int kind, final ParamSink sink) {
+        final TextView valueView = (TextView) findViewById(valueViewId);
+        if (bar == null || valueView == null) {
+            return;
+        }
+        bar.setMax((max - min) / step);
+        bar.setProgress(Math.max(0, Math.min(bar.getMax(), (value - min) / step)));
+        valueView.setText(formatSliderValue(kind, value));
+        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                valueView.setText(formatSliderValue(kind, min + progress * step));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Nothing to do until the value settles.
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int settled = min + seekBar.getProgress() * step;
+                sink.persist(settled);
+            }
+        });
+    }
+
+    /** Render a slider value for its parameter kind (millibels / ratio x10). */
+    private String formatSliderValue(int kind, int value) {
+        if (kind == SLIDER_DB_PLUS) {
+            return getString(R.string.settings_gain_value_format, value / 100);
+        }
+        if (kind == SLIDER_DB_SIGNED) {
+            return getString(R.string.settings_dynamic_db_value_format, value / 100);
+        }
+        return getString(R.string.settings_dynamic_ratio_value_format, value / 10, value % 10);
     }
 
     /** The three model parameter panels start collapsed; tapping a header toggles. */
@@ -301,20 +335,17 @@ public class SettingsActivity extends BaseWinBoLLActivity {
     }
 
     /**
-     * Parameter groups belong to one model only, so they are greyed out and
-     * not clickable unless that model is selected.
+     * Parameter sliders belong to one model only, so they are greyed out and
+     * not draggable unless that model is selected.
      */
-    private void applyModelGroupState(boolean enabled, RadioGroup... groups) {
-        for (int g = 0; g < groups.length; g++) {
-            RadioGroup group = groups[g];
-            if (group == null) {
+    private void applyModelGroupState(boolean enabled, View... controls) {
+        for (int i = 0; i < controls.length; i++) {
+            View control = controls[i];
+            if (control == null) {
                 continue;
             }
-            group.setEnabled(enabled);
-            group.setAlpha(enabled ? 1.0f : 0.5f);
-            for (int i = 0; i < group.getChildCount(); i++) {
-                group.getChildAt(i).setEnabled(enabled);
-            }
+            control.setEnabled(enabled);
+            control.setAlpha(enabled ? 1.0f : 0.5f);
         }
     }
 
