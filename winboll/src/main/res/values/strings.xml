@@ -105,8 +105,8 @@
     <string name="settings_percent_value_format">%1$d%%</string>
     <string name="settings_hosted_playback_pitch_label">音调（Pitch）</string>
     <string name="settings_pitch_label">音调偏移</string>
-    <string name="settings_pitch_desc">使用 MediaPlayer 的 PlaybackParams 调整音高，范围 -20% ~ +20%，0 为不改变；音高与倍速相互独立，变速时仍保持所设音调。部分设备的合成器不支持音高调整，此时只保留变速效果，并在日志写 playback pitch ... unsupported。松手即生效。</string>
-    <string name="settings_reset_pitch">恢复默认（0%）</string>
+    <string name="settings_pitch_desc" formatted="false">使用 MediaPlayer 的 PlaybackParams 调整音高，范围 -20% ~ +20%，0 为不改变；音高与倍速相互独立，变速时仍保持所设音调。部分设备的合成器不支持音高调整，此时只保留变速效果，并在日志写 playback pitch ... unsupported。拖动过程中即生效。</string>
+    <string name="settings_reset_pitch" formatted="false">恢复默认（0%）</string>
     <string name="toast_pitch_param">音调已保存并生效</string>
     <string name="toast_reset_pitch">音调已恢复默认</string>
     <string-array name="settings_reverb_presets">
