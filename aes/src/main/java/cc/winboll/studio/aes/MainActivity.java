@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 import cc.winboll.studio.aes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
+import cc.winboll.studio.libaes.dialogs.AColorPickerDialog;
 import cc.winboll.studio.libaes.dialogs.LocalFileSelectDialog;
 import cc.winboll.studio.libaes.dialogs.StoragePathDialog;
 import cc.winboll.studio.libaes.interfaces.IWinBoLLActivity;
@@ -26,8 +27,8 @@ import cc.winboll.studio.libaes.unittests.TestAToolbarActivity;
 import cc.winboll.studio.libaes.unittests.TestDrawerFragmentActivity;
 import cc.winboll.studio.libaes.unittests.TestViewPageFragment;
 import cc.winboll.studio.libaes.utils.WinBoLLActivityManager;
+import cc.winboll.studio.libaes.views.AColorChangedListener;
 import cc.winboll.studio.libappbase.LogUtils;
-import com.a4455jkjh.colorpicker.ColorPickerDialog;
 import java.util.ArrayList;
 
 public class MainActivity extends DrawerFragmentActivity {
@@ -134,8 +135,8 @@ public class MainActivity extends DrawerFragmentActivity {
             startActivity(intent);
 
         } else if (nItemId == R.id.item_colordialog) {
-            ColorPickerDialog dlg = new ColorPickerDialog(this, getResources().getColor(R.color.colorPrimary));
-            dlg.setOnColorChangedListener(new com.a4455jkjh.colorpicker.view.OnColorChangedListener() {
+            AColorPickerDialog dlg = new AColorPickerDialog(this, getResources().getColor(R.color.colorPrimary));
+            dlg.setOnColorChangedListener(new AColorChangedListener() {
 
                     @Override
                     public void beforeColorChanged() {
