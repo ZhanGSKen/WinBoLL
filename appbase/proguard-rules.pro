@@ -73,7 +73,7 @@
 -dontwarn java.util.function.**
 
 # ============================== 第三方框架规则 ==============================
-# JavaMail（libaes SMTPConfigView依赖）
+# JavaMail（APPBase 邮件/SMTP 依赖：android-mail + android-activation 1.6.7）
 # javax.mail API 之外，还必须保留 com.sun.mail 实现与 javax.activation：
 # Provider/mailcap 通过 META-INF 配置按类名反射加载（SMTPTransport 等），
 # 被 R8 改名/删除后 release 包发邮件会 ClassNotFoundException。
@@ -83,48 +83,6 @@
 -dontwarn com.sun.mail.**
 -keep class javax.activation.** { *; }
 -dontwarn javax.activation.**
-
-# Retrofit + OkHttp
--keep class retrofit2.** { *; }
--keep interface retrofit2.** { *; }
--keep class okhttp3.** { *; }
--keep interface okhttp3.** { *; }
--keep class okio.** { *; }
--keepclasseswithmembers class * {
-    @retrofit2.http.* <methods>;
-}
-
-# Glide 4.x
--keep public class * implements com.bumptech.glide.module.GlideModule
--keep public class * extends com.bumptech.glide.module.AppGlideModule
--keep public enum com.bumptech.glide.load.ImageHeaderParser$ImageType {
-    **[] $VALUES;
-    public *;
-}
--dontwarn com.bumptech.glide.load.resource.bitmap.VideoDecoder
-
-# GreenDAO 3.x
--keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
-    public static java.lang.String TABLENAME;
-}
--keep class **$Properties
-# 实体类包名（按实际调整）
-#-keep class cc.winboll.studio.appbase.model.** { *; }
-
-# ButterKnife 8.x
--keep class butterknife.** { *; }
--dontwarn butterknife.internal.**
--keep class **$$ViewBinder { *; }
--keepclasseswithmembernames class * {
-    @butterknife.BindView <fields>;
-    @butterknife.OnClick <methods>;
-}
-
-# EventBus 3.x
--keepclassmembers class ** {
-    @org.greenrobot.eventbus.Subscribe <methods>;
-}
--keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
 # ============================== 优化与调试 ==============================
 -optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
