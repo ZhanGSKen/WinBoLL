@@ -119,11 +119,11 @@ public class MainActivity extends DrawerFragmentActivity {
     @SuppressWarnings("deprecation")
     public boolean onOptionsItemSelected(MenuItem item) {
         int nItemId = item.getItemId();
-        if (item.getItemId() == R.id.item_testactivitymanager) {
+        if (nItemId == R.id.item_testactivitymanager) {
             WinBoLLActivityManager.getInstance().startWinBoLLActivity(this, TestActivityManagerActivity.class);
-			//ToastUtils.show("item_testactivitymanager");
-        } else 
-        if (nItemId == R.id.item_atoast) {
+        } else if (nItemId == R.id.item_log) {
+            WinBoLLActivityManager.getInstance().startLogActivity(this);
+        } else if (nItemId == R.id.item_atoast) {
             Toast.makeText(getApplication(), "item_testatoast", Toast.LENGTH_SHORT).show();
         } else if (nItemId == R.id.item_atoolbar) {
             Intent intent = new Intent(this, TestAToolbarActivity.class);

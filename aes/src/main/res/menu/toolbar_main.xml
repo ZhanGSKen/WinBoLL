@@ -1,44 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item
-		android:id="@+id/item_testactivitymanager"
-		android:title="TestActivityManager"/>
-    <item
-        android:id="@+id/item_log"
-        android:title="LogActivity"/>
-    <item
-        android:id="@+id/item_colordialog"
-        android:title="ColorDialog"/>
-    <item
-        android:id="@+id/item_dialogstoragepath"
-        android:title="StoragePathDialog"/>
 
-    <item
-        android:id="@+id/item_localfileselectdialog"
-        android:title="LocalFileSelectDialog"/>
+    <!-- Activity 类测试 -->
+    <item android:title="Activity 测试">
+        <menu>
+            <item
+                android:id="@+id/item_testactivitymanager"
+                android:title="TestActivityManager"/>
+            <item
+                android:id="@+id/item_log"
+                android:title="LogActivity"/>
+            <item
+                android:id="@+id/item_secondarylibraryactivity"
+                android:title="Test SecondaryLibraryActivity"/>
+            <item
+                android:id="@+id/item_drawerfragmentactivity"
+                android:title="Test DrawerFragmentActivity"/>
+        </menu>
+    </item>
 
-    <item
-        android:id="@+id/item_atoolbar"
-        android:title="Test AToolbar"/>
-    <item
-        android:id="@+id/item_asupporttoolbar"
-        android:title="Test ASupportToolbar"/>
-    <item
-        android:id="@+id/item_atoast"
-        android:title="Test AToast"/>
-    <item
-        android:id="@+id/item_secondarylibraryactivity"
-        android:title="Test SecondaryLibraryActivity"/>
-    <item
-        android:id="@+id/item_drawerfragmentactivity"
-        android:title="Test DrawerFragmentActivity"/>
-    <item
-        android:id="@+id/item_settings"
-        android:title="Settings"/>
-    <item
-        android:id="@+id/item_smtp_settings"
-        android:title="SMTP设置"/>
-	<item
-        android:id="@+id/item_about"
-        android:title="About"/>
+    <!-- Toolbar 类测试 -->
+    <item android:title="Toolbar 测试">
+        <menu>
+            <item
+                android:id="@+id/item_atoolbar"
+                android:title="Test AToolbar"/>
+            <item
+                android:id="@+id/item_asupporttoolbar"
+                android:title="Test ASupportToolbar"/>
+        </menu>
+    </item>
+
+    <!-- Dialog 类测试 -->
+    <item android:title="Dialog 测试">
+        <menu>
+            <item
+                android:id="@+id/item_colordialog"
+                android:title="ColorDialog"/>
+            <item
+                android:id="@+id/item_dialogstoragepath"
+                android:title="StoragePathDialog"/>
+            <item
+                android:id="@+id/item_localfileselectdialog"
+                android:title="LocalFileSelectDialog"/>
+        </menu>
+    </item>
+
+    <!-- Toast 类测试 -->
+    <item android:title="Toast 测试">
+        <menu>
+            <item
+                android:id="@+id/item_atoast"
+                android:title="Test AToast"/>
+        </menu>
+    </item>
+
+    <!-- 设置与应用信息 -->
+    <item android:title="设置与关于">
+        <menu>
+            <item
+                android:id="@+id/item_settings"
+                android:title="Settings"/>
+            <item
+                android:id="@+id/item_smtp_settings"
+                android:title="SMTP设置"/>
+            <item
+                android:id="@+id/item_about"
+                android:title="About"/>
+        </menu>
+    </item>
+
 </menu>
