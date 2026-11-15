@@ -39,6 +39,11 @@ public class OpenSourceLicenseFragment extends Fragment implements View.OnClickL
     // 组件数据：名称、许可证、说明、源码地址
     private static final LicenseItem[] LICENSE_ITEMS = new LicenseItem[] {
         new LicenseItem(
+            "WinBoLL 本项目",
+            "Apache-2.0",
+            "本程序源码（含自有库 libappbase / libaes，源码同在本项目远程仓库）依据仓库根 LICENSE 的 Apache-2.0 授权分发。",
+            "https://gitea.winboll.cc/Studio/WinBoLL"),
+        new LicenseItem(
             "AndroidX / Jetpack",
             "Apache-2.0",
             "Google Android Jetpack 组件库（AppCompat、RecyclerView、Preference、ViewPager、Biometric、DrawerLayout 等）。",
@@ -70,8 +75,8 @@ public class OpenSourceLicenseFragment extends Fragment implements View.OnClickL
             "https://github.com/jhy/jsoup"),
         new LicenseItem(
             "Glide",
-            "BSD-3-Clause",
-            "图片加载与缓存库（com.github.bumptech.glide:glide:4.9.0，部分子组件为 MIT / Apache-2.0）。",
+            "BSD-2-Clause",
+            "图片加载与缓存库（com.github.bumptech.glide:glide:4.9.0，含 annotations / disklrucache / gifdecoder 子组件）。依据构件 POM 声明为 Simplified BSD（BSD-2-Clause）与 Apache-2.0 双许可。",
             "https://github.com/bumptech/glide"),
         new LicenseItem(
             "PullRefreshLayout",
@@ -83,11 +88,6 @@ public class OpenSourceLicenseFragment extends Fragment implements View.OnClickL
             "MIT",
             "关于页面快速构建库（io.github.medyo:android-about-page:2.0.0）。",
             "https://github.com/medyo/android-about-page"),
-        new LicenseItem(
-            "Pinyin4j",
-            "LGPL-2.1",
-            "汉字转拼音库（com.github.open-android:pinyin4j:2.5.0）。以独立、未经修改的库形式引用，允许替换。",
-            "https://github.com/open-android/pinyin4j"),
         new LicenseItem(
             "ZXing",
             "Apache-2.0",
@@ -103,6 +103,21 @@ public class OpenSourceLicenseFragment extends Fragment implements View.OnClickL
             "Apache-2.0",
             "Google Java 核心工具库（com.google.guava:guava:24.1-jre）。",
             "https://github.com/google/guava"),
+        new LicenseItem(
+            "Guava 传递注解依赖",
+            "Apache-2.0",
+            "Guava 运行期携带的注解类（com.google.code.findbugs:jsr305:1.3.9、com.google.errorprone:error_prone_annotations:2.1.3、com.google.j2objc:j2objc-annotations:1.1、org.codehaus.mojo:animal-sniffer-annotations:1.14 为 Apache-2.0 / MIT；org.checkerframework:checker-compat-qual:2.0.0 为 MIT 与 GPL-2.0+Classpath Exception 双许可，本项目按 MIT 处理）。",
+            "https://github.com/google/guava"),
+        new LicenseItem(
+            "Okio",
+            "Apache-2.0",
+            "OkHttp 的 I/O 底层依赖（com.squareup.okio:okio:2.4.3）。",
+            "https://github.com/square/okio"),
+        new LicenseItem(
+            "Kotlin Standard Library",
+            "Apache-2.0",
+            "OkHttp 4.x 运行期依赖（org.jetbrains.kotlin:kotlin-stdlib:1.3.61）。",
+            "https://github.com/JetBrains/kotlin"),
     };
 
     private LinearLayout mListContainer;
@@ -191,7 +206,7 @@ public class OpenSourceLicenseFragment extends Fragment implements View.OnClickL
         if (getActivity() == null) {
             return;
         }
-        String text = readAssetText(licenseAsset(item.license));
+        String text = readAssetText(licenseAsset(item));
 
         ScrollView scrollView = new ScrollView(getActivity());
         TextView tv = new TextView(getActivity());
@@ -213,6 +228,17 @@ public class OpenSourceLicenseFragment extends Fragment implements View.OnClickL
     }
 
     /**
+     * 组件记录到 assets 内 LICENSE 全文文件的映射。
+     * 本项目自身的 Apache-2.0 全文（含版权持有者声明）单独放在 assets/LICENSE.txt。
+     */
+    private String licenseAsset(LicenseItem item) {
+        if (item != null && item.name != null && item.name.indexOf("本项目") >= 0) {
+            return "LICENSE.txt";
+        }
+        return licenseAsset(item == null ? null : item.license);
+    }
+
+    /**
      * 许可证类型到 assets 内 LICENSE 全文文件的映射。
      */
     private String licenseAsset(String license) {
@@ -220,6 +246,8 @@ public class OpenSourceLicenseFragment extends Fragment implements View.OnClickL
             return "open_source_licenses/MIT.txt";
         } else if ("BSD-3-Clause".equals(license)) {
             return "open_source_licenses/BSD-3-Clause.txt";
+        } else if ("BSD-2-Clause".equals(license)) {
+            return "open_source_licenses/BSD-2-Clause.txt";
         } else if (license != null && license.startsWith("LGPL")) {
             return "open_source_licenses/LGPL-2.1.txt";
         }

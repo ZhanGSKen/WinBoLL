@@ -42,8 +42,9 @@ android {
     }
 
     packagingOptions {
-        exclude 'META-INF/NOTICE.md'
-        exclude 'META-INF/LICENSE.md'
+        // Do NOT exclude META-INF/NOTICE.md or META-INF/LICENSE.md: Apache/MIT/BSD/EPL
+        // licenses require shipping the license text and NOTICE of every distributed
+        // component. Stripping them by file name would remove upstream attribution.
         // fastjson 1.2.76 内置的 JAX-RS/Jersey 可选集成 service 注册文件，
         // 对应实现类不在 classpath，属死服务注册，排除以消除 R8 "missing service class" 警告
         exclude 'META-INF/services/javax.ws.rs.ext.MessageBodyReader'
@@ -54,6 +55,16 @@ android {
 }
 
 dependencies {
+    // License compliance (2026-11-15): the two artifacts below are pulled transitively
+    // by cc.winboll.studio:libappbase / libaes but are never referenced by this app or
+    // by their own code. They are excluded so that the APK ships no LGPL/EPL code:
+    //  - com.github.open-android:pinyin4j bundles com.hp.hpl.sparta (LGPL-2.1)
+    //  - com.sun.mail:android-mail / android-activation are under EPL-2.0
+    configurations.all {
+        exclude group: 'com.github.open-android', module: 'pinyin4j'
+        exclude group: 'com.sun.mail'
+    }
+
     api 'com.google.code.gson:gson:2.10.1'
 
 	// Pull-to-refresh widget

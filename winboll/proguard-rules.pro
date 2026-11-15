@@ -108,9 +108,6 @@
 # Jsoup HTML解析
 -keep class org.jsoup.** { *; }
 
-# Pinyin4j 拼音搜索
--keep class net.sourceforge.pinyin4j.** { *; }
-
 # JSch SSH组件
 -keep class com.jcraft.jsch.** { *; }
 
@@ -134,10 +131,13 @@
 # 按 R8 生成的 build/outputs/mapping/betaRelease/missing_rules.txt 屏蔽警告：
 # - JSch：jzlib 压缩（仅 zlib 压缩会话使用）、GSSAPI/Kerberos 认证（org.ietf.jgss）
 # - fastjson：java.awt 桌面序列化、Joda-Time、JavaMoney/Moneta、Springfox/Swagger 集成
-# - libaes APPMSGMailUtils 的 javax.mail 发件路径（WinBoLL 不打包 JavaMail，该功能不可用且未被调用）
+# - libaes APPMSGMailUtils 的 javax.mail 发件路径：JavaMail (EPL-2.0) 已在
+#   winboll/build.gradle 通过 configurations 排除，本 App 不打包也不调用该路径，
+#   因此这里只屏蔽 R8 对缺失类的告警（License compliance, 2026-11-15）。
 -dontwarn com.jcraft.jzlib.**
 -dontwarn java.awt.**
 -dontwarn javax.mail.**
+-dontwarn com.sun.mail.**
 -dontwarn javax.money.**
 -dontwarn org.javamoney.**
 -dontwarn org.ietf.jgss.**

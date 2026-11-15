@@ -24,7 +24,8 @@ public class TestWeWorkSpecSDK extends AppCompatActivity implements IWinBoLLActi
 
     // ------------------- 企业微信SDK配置常量（需替换为实际项目参数） -------------------
     // 企业微信 CorpID（从企业微信管理后台获取）
-    private static final String CORP_ID = "wwb37c73f34c722852";
+    // Never commit a real CorpID into tracked source: fill in locally when testing.
+    private static final String CORP_ID = "your_corp_id_here";
     // 应用 AgentID（从企业微信应用管理后台获取）
     private static final String AGENT_ID = "your_agent_id_here";
     // 应用 Secret（从企业微信应用管理后台获取，注意保密）

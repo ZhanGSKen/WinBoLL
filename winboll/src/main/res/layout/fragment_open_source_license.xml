@@ -48,17 +48,17 @@
                 android:orientation="vertical"
                 android:paddingTop="4dp" />
 
-            <!-- LGPL 特别提示 -->
+            <!-- 合规提示（2026-11-15 依赖排查结论） -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/bg_license_badge_lgpl"
+                android:background="@drawable/bg_license_card"
                 android:padding="10dp"
-                android:text="特别提示：Pinyin4j 采用 LGPL-2.1 许可证。本程序以独立、未经修改的库形式引用它，并允许用户替换该库；如需其源代码，可访问下方对应链接。"
-                android:textColor="#FFE65100"
+                android:text="合规提示：本程序不含 GPL / AGPL / LGPL / EPL 组件。此前被自有库传递引入、但本程序从未使用的 LGPL-2.1 组件（pinyin4j 内含的 Sparta XML 解析器）与 EPL-2.0 组件（JavaMail）已在构建配置中排除，不随本程序分发。"
+                android:textColor="#FF616161"
                 android:textSize="12sp"
                 android:lineSpacingExtra="2dp" />
 
@@ -69,7 +69,7 @@
                 android:paddingLeft="12dp"
                 android:paddingTop="16dp"
                 android:paddingRight="12dp"
-                android:text="二、WinBoLL 自有专有组件"
+                android:text="二、WinBoLL 自有组件"
                 android:textColor="#FF00796B"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -82,7 +82,7 @@
                 android:layout_marginRight="10dp"
                 android:background="@drawable/bg_license_card"
                 android:padding="12dp"
-                android:text="libappbase、libaes 为 WinBoLL 自有（专有）组件，保留所有权利，不属于开源组件。"
+                android:text="libappbase、libaes 为 WinBoLL 自有组件（源码同在本项目远程仓库，不属于第三方开源依赖），授权随本项目仓库 LICENSE（Apache-2.0）执行。"
                 android:textColor="#FF616161"
                 android:textSize="12sp"
                 android:lineSpacingExtra="2dp" />
