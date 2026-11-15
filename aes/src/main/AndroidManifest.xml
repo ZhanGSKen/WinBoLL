@@ -40,7 +40,10 @@
 
         <activity android:name=".AboutActivity"/>
 
-        <activity android:name=".SMTPSettingsActivity" android:exported="true"/>
+        <activity android:name=".OpenSourceLicenseActivity"/>
+
+        <!-- SMTP 配置页仅由本应用菜单进入，不对其他应用导出 -->
+        <activity android:name=".SMTPSettingsActivity" android:exported="false"/>
 
     </application>
 

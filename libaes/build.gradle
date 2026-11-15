@@ -30,9 +30,10 @@ android {
 dependencies {
     // 下拉控件
     api 'com.baoyz.pullrefreshlayout:library:1.2.0'
-    // 拼音搜索
-    // https://mvnrepository.com/artifact/com.github.open-android/pinyin4j
-    api 'com.github.open-android:pinyin4j:2.5.0'
+    // 拼音搜索：已移除 pinyin4j 2.5.0
+    // 原因见《开源许可证合规检查报告.md》P0：该构件源码为 GPL-2.0-or-later
+    // （POM 标 BSD、社区文档称 LGPL-2.1，三处冲突），且本项目源码对 pinyin4j 零引用；
+    // 后续若需拼音能力，改用 Apache-2.0 的 com.github.promeg:tinypinyin。
     // SSH
     api 'com.jcraft:jsch:0.1.55'
     // Html 解析
