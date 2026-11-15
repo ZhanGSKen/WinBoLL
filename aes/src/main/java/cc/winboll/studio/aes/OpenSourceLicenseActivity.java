@@ -222,7 +222,8 @@ public class OpenSourceLicenseActivity extends BaseWinBoLLActivity {
                 "https://github.com/google/gson",
                 "com.google.code.gson:gson:2.8.5"));
         list.add(new LicenseEntry("Glide",
-                "com.github.bumptech.glide:glide:4.9.0", "BSD-3-Clause", "BSD-3-Clause.txt",
+                "com.github.bumptech.glide:glide:4.9.0",
+                "BSD-2-Clause（third_party 另含 Apache-2.0 / MIT）", "Glide-LICENSE.txt",
                 "https://github.com/bumptech/glide",
                 "com.github.bumptech.glide:glide:4.9.0\n"
                 + "com.github.bumptech.glide:annotations:4.9.0\n"
@@ -240,7 +241,8 @@ public class OpenSourceLicenseActivity extends BaseWinBoLLActivity {
                 "https://github.com/journeyapps/zxing-android-embedded",
                 "com.journeyapps:zxing-android-embedded:3.6.0"));
         list.add(new LicenseEntry("JSch",
-                "com.jcraft:jsch:0.1.55", "BSD-3-Clause", "BSD-3-Clause.txt",
+                "com.jcraft:jsch:0.1.55", "BSD-3-Clause（JCraft Revised BSD 三条款式）",
+                "BSD-3-Clause.txt",
                 "http://www.jcraft.com/jsch/",
                 "com.jcraft:jsch:0.1.55"));
         list.add(new LicenseEntry("PullRefreshLayout",
@@ -252,7 +254,8 @@ public class OpenSourceLicenseActivity extends BaseWinBoLLActivity {
                 "https://github.com/medyo/android-about-page",
                 "io.github.medyo:android-about-page:2.0.0"));
         list.add(new LicenseEntry("JavaMail for Android（android-mail / android-activation）",
-                "com.sun.mail:android-mail:1.6.7", "EPL-2.0", "EPL-2.0.txt",
+                "com.sun.mail:android-mail:1.6.7",
+                "EPL-2.0（父 POM 三选一，本项目选 EPL-2.0）", "EPL-2.0.txt",
                 "https://javaee.github.io/javamail/",
                 "com.sun.mail:android-mail:1.6.7\n"
                 + "com.sun.mail:android-activation:1.6.7"));
