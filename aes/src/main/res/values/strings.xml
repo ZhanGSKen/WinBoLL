@@ -3,5 +3,7 @@
 
     <string name="app_name">AES</string>
     <string name="app_description">WinBoLL AndroidX 可视化元素类库。</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_placeholder">设置项正在开发中，后续版本提供。</string>
 
 </resources>
