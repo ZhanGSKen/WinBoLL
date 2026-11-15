@@ -1,6 +1,8 @@
 package cc.winboll.studio.aes;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,11 +77,21 @@ public class OpenSourceLicenseActivity extends BaseWinBoLLActivity {
             View itemView = inflater.inflate(R.layout.item_open_source_license, mListLayout, false);
             TextView nameView = itemView.findViewById(R.id.item_name);
             TextView coordinateView = itemView.findViewById(R.id.item_coordinate);
+            TextView componentsView = itemView.findViewById(R.id.item_components);
             TextView licenseView = itemView.findViewById(R.id.item_license);
+            TextView sourceView = itemView.findViewById(R.id.item_source_url);
             TextView viewLicenseView = itemView.findViewById(R.id.item_view_license);
             nameView.setText(entry.name);
             coordinateView.setText(entry.coordinate);
+            componentsView.setText(getString(R.string.open_source_license_components) + entry.components);
             licenseView.setText(entry.license);
+            sourceView.setText(getString(R.string.open_source_license_source) + entry.sourceUrl);
+            sourceView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openSourceUrl(entry.sourceUrl);
+                    }
+                });
             viewLicenseView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -87,6 +99,17 @@ public class OpenSourceLicenseActivity extends BaseWinBoLLActivity {
                     }
                 });
             mListLayout.addView(itemView);
+        }
+    }
+
+    /** Open the component source page in an external browser. */
+    private void openSourceUrl(String url) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
+        } catch (Exception e) {
+            LogUtils.e(TAG, "openSourceUrl() | no activity for url: " + e);
+            Toast.makeText(getApplication(), url, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -140,43 +163,100 @@ public class OpenSourceLicenseActivity extends BaseWinBoLLActivity {
         ArrayList<LicenseEntry> list = new ArrayList<LicenseEntry>();
         list.add(new LicenseEntry("AndroidX（AppCompat / RecyclerView / Lifecycle 等）",
                 "androidx.*:1.0.0 – 1.5.0", "Apache-2.0", "Apache-2.0.txt",
-                "https://developer.android.com/jetpack/androidx"));
+                "https://developer.android.com/jetpack/androidx",
+                "androidx.activity:activity:1.2.3\n"
+                + "androidx.annotation:annotation:1.2.0\n"
+                + "androidx.annotation:annotation-experimental:1.0.0\n"
+                + "androidx.appcompat:appcompat:1.3.0\n"
+                + "androidx.appcompat:appcompat-resources:1.3.0\n"
+                + "androidx.arch.core:core-common:2.1.0\n"
+                + "androidx.arch.core:core-runtime:2.1.0\n"
+                + "androidx.asynclayoutinflater:asynclayoutinflater:1.0.0\n"
+                + "androidx.collection:collection:1.1.0\n"
+                + "androidx.coordinatorlayout:coordinatorlayout:1.0.0\n"
+                + "androidx.core:core:1.5.0\n"
+                + "androidx.cursoradapter:cursoradapter:1.0.0\n"
+                + "androidx.customview:customview:1.0.0\n"
+                + "androidx.documentfile:documentfile:1.0.0\n"
+                + "androidx.drawerlayout:drawerlayout:1.0.0\n"
+                + "androidx.fragment:fragment:1.3.4\n"
+                + "androidx.interpolator:interpolator:1.0.0\n"
+                + "androidx.legacy:legacy-support-core-ui:1.0.0\n"
+                + "androidx.legacy:legacy-support-core-utils:1.0.0\n"
+                + "androidx.legacy:legacy-support-v4:1.0.0\n"
+                + "androidx.lifecycle:lifecycle-common:2.3.1\n"
+                + "androidx.lifecycle:lifecycle-livedata:2.0.0\n"
+                + "androidx.lifecycle:lifecycle-livedata-core:2.3.1\n"
+                + "androidx.lifecycle:lifecycle-runtime:2.3.1\n"
+                + "androidx.lifecycle:lifecycle-viewmodel:2.3.1\n"
+                + "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1\n"
+                + "androidx.loader:loader:1.0.0\n"
+                + "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0\n"
+                + "androidx.media:media:1.0.0\n"
+                + "androidx.print:print:1.0.0\n"
+                + "androidx.recyclerview:recyclerview:1.0.0\n"
+                + "androidx.savedstate:savedstate:1.1.0\n"
+                + "androidx.slidingpanelayout:slidingpanelayout:1.0.0\n"
+                + "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0\n"
+                + "androidx.tracing:tracing:1.0.0\n"
+                + "androidx.vectordrawable:vectordrawable:1.1.0\n"
+                + "androidx.vectordrawable:vectordrawable-animated:1.1.0\n"
+                + "androidx.versionedparcelable:versionedparcelable:1.1.1\n"
+                + "androidx.viewpager:viewpager:1.0.0"));
         list.add(new LicenseEntry("Kotlin Stdlib",
                 "org.jetbrains.kotlin:kotlin-stdlib:1.3.61", "Apache-2.0", "Apache-2.0.txt",
-                "https://kotlinlang.org/"));
+                "https://kotlinlang.org/",
+                "org.jetbrains.kotlin:kotlin-stdlib:1.3.61\n"
+                + "org.jetbrains.kotlin:kotlin-stdlib-common:1.3.61\n"
+                + "org.jetbrains:annotations:13.0"));
         list.add(new LicenseEntry("OkHttp",
                 "com.squareup.okhttp3:okhttp:4.4.1", "Apache-2.0", "Apache-2.0.txt",
-                "https://github.com/square/okhttp"));
+                "https://github.com/square/okhttp",
+                "com.squareup.okhttp3:okhttp:4.4.1"));
         list.add(new LicenseEntry("Okio",
                 "com.squareup.okio:okio:2.4.3", "Apache-2.0", "Apache-2.0.txt",
-                "https://github.com/square/okio"));
+                "https://github.com/square/okio",
+                "com.squareup.okio:okio:2.4.3"));
         list.add(new LicenseEntry("Gson",
                 "com.google.code.gson:gson:2.8.5", "Apache-2.0", "Apache-2.0.txt",
-                "https://github.com/google/gson"));
+                "https://github.com/google/gson",
+                "com.google.code.gson:gson:2.8.5"));
         list.add(new LicenseEntry("Glide",
                 "com.github.bumptech.glide:glide:4.9.0", "BSD-3-Clause", "BSD-3-Clause.txt",
-                "https://github.com/bumptech/glide"));
+                "https://github.com/bumptech/glide",
+                "com.github.bumptech.glide:glide:4.9.0\n"
+                + "com.github.bumptech.glide:annotations:4.9.0\n"
+                + "com.github.bumptech.glide:disklrucache:4.9.0\n"
+                + "com.github.bumptech.glide:gifdecoder:4.9.0"));
         list.add(new LicenseEntry("jsoup",
-                "org.jsoup:jsoup:1.13.1", "MIT", "MIT.txt", "https://jsoup.org/"));
+                "org.jsoup:jsoup:1.13.1", "MIT", "MIT.txt", "https://jsoup.org/",
+                "org.jsoup:jsoup:1.13.1"));
         list.add(new LicenseEntry("ZXing Core",
                 "com.google.zxing:core:3.4.1", "Apache-2.0", "Apache-2.0.txt",
-                "https://github.com/zxing/zxing"));
+                "https://github.com/zxing/zxing",
+                "com.google.zxing:core:3.4.1"));
         list.add(new LicenseEntry("ZXing Android Embedded",
                 "com.journeyapps:zxing-android-embedded:3.6.0", "Apache-2.0", "Apache-2.0.txt",
-                "https://github.com/journeyapps/zxing-android-embedded"));
+                "https://github.com/journeyapps/zxing-android-embedded",
+                "com.journeyapps:zxing-android-embedded:3.6.0"));
         list.add(new LicenseEntry("JSch",
                 "com.jcraft:jsch:0.1.55", "BSD-3-Clause", "BSD-3-Clause.txt",
-                "http://www.jcraft.com/jsch/"));
+                "http://www.jcraft.com/jsch/",
+                "com.jcraft:jsch:0.1.55"));
         list.add(new LicenseEntry("PullRefreshLayout",
                 "com.baoyz.pullrefreshlayout:library:1.2.0", "MIT", "MIT.txt",
-                "https://github.com/baoyongzhang/android-PullRefreshLayout"));
+                "https://github.com/baoyongzhang/android-PullRefreshLayout",
+                "com.baoyz.pullrefreshlayout:library:1.2.0"));
         list.add(new LicenseEntry("Android About Page",
                 "io.github.medyo:android-about-page:2.0.0", "MIT", "MIT.txt",
-                "https://github.com/medyo/android-about-page"));
+                "https://github.com/medyo/android-about-page",
+                "io.github.medyo:android-about-page:2.0.0"));
         list.add(new LicenseEntry("JavaMail for Android（android-mail / android-activation）",
                 "com.sun.mail:android-mail:1.6.7", "EPL-2.0", "EPL-2.0.txt",
-                "https://javaee.github.io/javamail/"));
-        // 自有模块（libappbase、libaes）不是第三方开源组件，不在本列表列举
+                "https://javaee.github.io/javamail/",
+                "com.sun.mail:android-mail:1.6.7\n"
+                + "com.sun.mail:android-activation:1.6.7"));
+        // Own modules (libappbase, libaes) are not third-party components and stay out of this list
         return list;
     }
 
@@ -187,13 +267,16 @@ public class OpenSourceLicenseActivity extends BaseWinBoLLActivity {
         final String license;
         final String licenseFile;
         final String sourceUrl;
+        final String components;
 
-        LicenseEntry(String name, String coordinate, String license, String licenseFile, String sourceUrl) {
+        LicenseEntry(String name, String coordinate, String license, String licenseFile,
+                     String sourceUrl, String components) {
             this.name = name;
             this.coordinate = coordinate;
             this.license = license;
             this.licenseFile = licenseFile;
             this.sourceUrl = sourceUrl;
+            this.components = components;
         }
     }
 }
