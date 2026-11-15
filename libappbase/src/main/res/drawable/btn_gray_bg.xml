@@ -3,12 +3,12 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 状态 1：按压时（手指按住）→ 深灰色 -->
-    <item android:color="@color/btn_gray_pressed" android:state_pressed="true"/>
+    <item android:color="#757575" android:state_pressed="true"/>
 
     <!-- 状态 2：禁用时（setEnabled(false)）→ 浅灰色 -->
-    <item android:color="@color/btn_gray_disabled" android:state_enabled="false"/>
+    <item android:color="#E0E0E0" android:state_enabled="false"/>
 
     <!-- 状态 3：默认态（正常可点击）→ 常规灰色 -->
-    <item android:color="@color/btn_gray_normal"/>
+    <item android:color="#9E9E9E"/>
 
 </selector>

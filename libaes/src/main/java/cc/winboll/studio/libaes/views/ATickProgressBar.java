@@ -27,6 +27,7 @@ public class ATickProgressBar extends ProgressBar {
         setProgress(50);
     }
 
+    @SuppressWarnings("deprecation")
     public int stepOnTick(int nStepDistantce) {
         if (mnProgress < 100) {
             int nProgressOld = mnProgress;

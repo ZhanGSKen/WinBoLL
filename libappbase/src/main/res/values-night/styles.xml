@@ -12,8 +12,8 @@
         
         <item name="dialogBackgroundColor">?attr/mainWindowDarkBackgroundColor</item>
         <item name="dialogTextColor">?attr/mainWindowDarkTextColor</item>
-        <item name="toolbarBackgroundColor">@color/toolbarBackgroundColor</item>
-        <item name="toolbarTextColor">@color/toolbarTextColor</item>
+        <item name="toolbarBackgroundColor">#FF00B322</item>
+        <item name="toolbarTextColor">#FF000000</item>
         <item name="textViewBackgroundColor">?attr/mainWindowDarkBackgroundColor</item>
         <item name="textViewTextColor">?attr/mainWindowDarkTextColor</item>
         <item name="editTextBackgroundColor">?attr/mainWindowDarkBackgroundColor</item>
@@ -21,21 +21,21 @@
         <item name="scrollViewBackgroundColor">?attr/mainWindowDarkBackgroundColor</item>
         <item name="activityBackgroundColor">?attr/mainWindowDarkBackgroundColor</item>
         <item name="activityTextColor">?attr/mainWindowDarkTextColor</item>
-        <item name="mainWindowBackgroundColor">@color/mainWindowBackgroundColor</item>
-        <item name="mainWindowTextColor">@color/mainWindowTextColor</item>
-        <item name="mainWindowDarkBackgroundColor">@color/mainWindowBackgroundColor</item>
-        <item name="mainWindowDarkTextColor">@color/mainWindowTextColor</item>
+        <item name="mainWindowBackgroundColor">#FFF5F5F5</item>
+        <item name="mainWindowTextColor">#FF000000</item>
+        <item name="mainWindowDarkBackgroundColor">#FFF5F5F5</item>
+        <item name="mainWindowDarkTextColor">#FF000000</item>
     </style>
 
     <!-- DebugActivityTheme 深色模式样式 -->
     <style name="DebugActivityTheme" parent="@android:style/Theme.DeviceDefault.NoActionBar">
-        <item name="android:statusBarColor">@color/toolbarBackgroundColor</item>
+        <item name="android:statusBarColor">#FF00B322</item>
         <item name="colorTittle">?attr/mainWindowDarkTextColor</item>
-        <item name="colorTittleBackgound">@color/toolbarBackgroundColor</item>
+        <item name="colorTittleBackgound">#FF00B322</item>
         <item name="colorText">?attr/debugTextColor</item>
         <item name="colorTextBackgound">?attr/mainWindowDarkBackgroundColor</item>
-        <item name="debugTextColor">@color/debugTextColor</item>
-        <item name="toolbarTextColor">@color/toolbarTextColor</item>
+        <item name="debugTextColor">#FF808080</item>
+        <item name="toolbarTextColor">#FF000000</item>
         
 	</style>
 

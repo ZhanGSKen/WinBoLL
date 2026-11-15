@@ -6,4 +6,6 @@
     <string name="app_debug">Click here is switch to APP DEBUG</string>
 	<string name="gitea_home">GITEA HOME</string>
     <string name="app_update">APP UPDATE</string>
+    <string name="open_source_licenses">开源许可</string>
+    <string name="open_source_licenses_empty">未找到许可证文件（assets/open_source_licenses）。</string>
 </resources>

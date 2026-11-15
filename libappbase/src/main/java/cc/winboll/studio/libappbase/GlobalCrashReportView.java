@@ -1,8 +1,24 @@
+/*
+ * Copyright 2026 WinBoLL Studio
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package cc.winboll.studio.libappbase;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -12,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 import cc.winboll.studio.libappbase.R;
+import cc.winboll.studio.libappbase.common.ViewColorTable;
 import android.content.res.Resources;
 
 /**
@@ -175,13 +192,14 @@ public class GlobalCrashReportView extends LinearLayout {
 	/**
 	 * 初始化默认配置（无自定义属性时使用）
 	 */
+	@SuppressWarnings("deprecation")
 	private void initDefaultConfig() {
 		// 设置默认配色（使用 debugTextColor 属性）
 		Resources.Theme theme = mContext.getTheme();
 		mTitleColor = theme.getResources().getColor(android.R.color.holo_green_dark);
-		mTitleBackgroundColor = Color.GRAY;
+		mTitleBackgroundColor = ViewColorTable.SwitchTrackNormalColor;
 		mTextColor = obtainDebugTextColor(theme);
-		mTextBackgroundColor = Color.WHITE;
+		mTextBackgroundColor = ViewColorTable.CardSurfaceColor;
 		// 加载布局
 		inflateView();
 		// 初始化控件样式
@@ -196,11 +214,11 @@ public class GlobalCrashReportView extends LinearLayout {
 		if (themeResId != 0) {
 			int[] debugAttrs = new int[] { cc.winboll.studio.libappbase.R.attr.debugTextColor };
 			TypedArray debugTypedArray = theme.obtainStyledAttributes(themeResId, debugAttrs);
-			int color = debugTypedArray.getColor(0, Color.GRAY);
+			int color = debugTypedArray.getColor(0, ViewColorTable.TextSecondaryColor);
 			debugTypedArray.recycle();
 			return color;
 		}
-		return Color.GRAY;
+		return ViewColorTable.TextSecondaryColor;
 	}
 
 	/**
@@ -219,16 +237,16 @@ public class GlobalCrashReportView extends LinearLayout {
 		// 读取自定义属性值（无设置时使用默认值）
 		mTitleColor = typedArray.getColor(
 			R.styleable.GlobalCrashActivity_colorTittle,
-			Color.BLACK
+			ViewColorTable.TextPrimaryColor
 		);
 		mTitleBackgroundColor = typedArray.getColor(
 			R.styleable.GlobalCrashActivity_colorTittleBackgound, // 注：原拼写错误（Backgound→Background），保持与 attrs.xml 一致
-			Color.BLACK
+			ViewColorTable.TextPrimaryColor
 		);
 		mTextColor = obtainDebugTextColor(mContext.getTheme());
 		mTextBackgroundColor = typedArray.getColor(
 			R.styleable.GlobalCrashActivity_colorTextBackgound, // 注：原拼写错误，保持与 attrs.xml 一致
-			Color.WHITE
+			ViewColorTable.CardSurfaceColor
 		);
 
 		// 回收 TypedArray，避免内存泄漏

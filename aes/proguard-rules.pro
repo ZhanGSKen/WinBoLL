@@ -60,7 +60,7 @@
 -dontwarn java.util.function.**
 
 # ============================== 第三方框架专项规则 ==============================
-# OkHttp 4.4.1（米盟广告请求依赖，完善Lambda兼容）
+# OkHttp 4.4.1（网络请求，完善 Lambda 兼容）
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
 -keep class okhttp3.internal.** { *; }
@@ -68,7 +68,7 @@
 -dontwarn okhttp3.internal.platform.**
 -dontwarn okio.**
 
-# Glide 4.9.0（米盟广告图片加载依赖）
+# Glide 4.9.0（图片加载）
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep public enum com.bumptech.glide.load.ImageHeaderParser$ImageType {
@@ -80,16 +80,14 @@
 }
 -dontwarn com.bumptech.glide.**
 
-# Gson 2.8.5（米盟广告数据序列化依赖）
+# Gson 2.8.5（JSON 数据序列化）
 -keep class com.google.gson.** { *; }
 -keep interface com.google.gson.** { *; }
 -keepclassmembers class * {
     @com.google.gson.annotations.SerializedName <fields>;
 }
 
-# 米盟 SDK 已移除
-
-# RecyclerView 1.0.0
+# RecyclerView 1.0.0（列表布局渲染）
 -keep class androidx.recyclerview.** { *; }
 -keep interface androidx.recyclerview.** { *; }
 -keepclassmembers class androidx.recyclerview.widget.RecyclerView$Adapter {
@@ -113,6 +111,19 @@
 
 # JSch SSH组件
 -keep class com.jcraft.jsch.** { *; }
+# JSch 可选集成（jzlib 压缩、GSSAPI/Kerberos 认证，运行时按需加载，本项目未打包）
+-dontwarn com.jcraft.jzlib.**
+-dontwarn org.ietf.jgss.**
+
+# JavaMail SMTP（邮件发送核心库，Release编译必须保留）
+-dontwarn javax.mail.**
+-keep class javax.mail.** { *; }
+-keep class javax.mail.internet.** { *; }
+-dontwarn javax.activation.**
+-keep class javax.activation.** { *; }
+-dontwarn com.sun.mail.**
+-keep class com.sun.mail.** { *; }
+-keepclassmembers class * extends javax.mail.Authenticator { *; }
 
 # AndroidX 基础组件
 -keep class androidx.appcompat.** { *; }

@@ -47,6 +47,7 @@ public class AToolbar extends Toolbar {
         super(context, attrs, defStyleAttr);
     }
 
+    @SuppressWarnings("deprecation")
     void notifyColorChange() {
         // 工具栏描边
         int nStroke = 5;

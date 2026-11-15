@@ -30,10 +30,10 @@ android {
 		//-  versionCode  类型：int 整型
 		//- Java int 最大值：2147483647
         versionCode 1520000
-        // versionName 更新后需要手动设置 
+        // versionName 更新后需要手动设置
         // .winboll/winbollBuildProps.properties 文件的 stageCount=0
         // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
-        versionName "15.20"
+        versionName "15.22"
         if(true) {
             versionName = genVersionName("${versionName}")
         }
@@ -44,10 +44,20 @@ android {
          sourceCompatibility JavaVersion.VERSION_1_7
          targetCompatibility JavaVersion.VERSION_1_7
      }
+     packagingOptions {
+         exclude 'META-INF/LICENSE.md'
+         exclude 'META-INF/LICENSE.txt'
+         exclude 'META-INF/NOTICE.md'
+         exclude 'META-INF/NOTICE.txt'
+     }
 }
 
 dependencies {
     api project(':libappbase')
-
+	
+    // JavaMail SMTP (Android兼容版)
+    api 'com.sun.mail:android-mail:1.6.7'
+    api 'com.sun.mail:android-activation:1.6.7'
+	
     api fileTree(dir: 'libs', include: ['*.jar'])
 }

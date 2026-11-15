@@ -36,6 +36,7 @@ public class ScreenUtil {
 
     // 获取屏幕分辨率宽度和高度
     //
+    @SuppressWarnings("deprecation")
     public static ScreenSize getScreenSize(Context mContext) {
         WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
@@ -45,6 +46,7 @@ public class ScreenUtil {
 
     // 获取屏幕宽度
     //
+    @SuppressWarnings("deprecation")
     public static int getScreenWidth(Context mContext) {
         WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
@@ -54,6 +56,7 @@ public class ScreenUtil {
 
     // 获取屏幕高度
     //
+    @SuppressWarnings("deprecation")
     public static int getScreenHeight(Context mContext) {
         WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();

@@ -61,6 +61,7 @@ public class TestViewPageFragment extends Fragment implements ViewPager.OnPageCh
     }
 
     //初始化view，即显示的图片
+    @SuppressWarnings("deprecation")
     void initView() {
         adapter = new ImagePagerAdapter(views);
         viewPager = mView.findViewById(R.id.fragmentviewpageViewPager1);

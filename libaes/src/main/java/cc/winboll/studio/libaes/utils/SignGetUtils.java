@@ -1,4 +1,4 @@
-package cc.winboll.studio.libappbase.utils;
+package cc.winboll.studio.libaes.utils;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -20,6 +20,7 @@ public class SignGetUtils {
     /**
      * 一键获取当前应用签名指纹（直接调用，看日志复制结果）
      */
+    @SuppressWarnings("deprecation")
     public static void getCurrentAppSign(Context context) {
         if (context == null) {
             LogUtils.e(TAG, "context不能为空");

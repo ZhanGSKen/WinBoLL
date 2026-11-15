@@ -1,3 +1,20 @@
+/*
+ * Copyright 2026 WinBoLL Studio
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package cc.winboll.studio.libappbase;
 
 import android.content.Context;
@@ -5,7 +22,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import cc.winboll.studio.libappbase.GlobalApplication;
-import dalvik.system.DexFile;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -205,13 +221,14 @@ public class LogUtils {
         LogUtilsClassTAGBean.saveBeanList(_mContext, list, LogUtilsClassTAGBean.class);
     }
 
+    @SuppressWarnings("deprecation")
     private static void addClassTAGList() {
         try {
             final String packageNamePrefix = "cc.winboll.studio";
             final List<String> classNames = new ArrayList<String>();
             final String apkPath = _mContext.getPackageCodePath();
 
-            final DexFile dexfile = new DexFile(apkPath);
+            final dalvik.system.DexFile dexfile = new dalvik.system.DexFile(apkPath);
             Enumeration<String> entries = dexfile.entries();
 
             while (entries.hasMoreElements()) {

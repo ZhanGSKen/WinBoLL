@@ -9,6 +9,6 @@
         <item name="colorTittleBackgound">?attr/toolbarBackgroundColor</item>
         <item name="colorText">?attr/debugTextColor</item>
         <item name="colorTextBackgound">?attr/mainWindowDarkBackgroundColor</item>
-        <item name="toolbarTextColor">@color/toolbarTextColor</item>
+        <item name="toolbarTextColor">#FF000000</item>
 	</style>
 </resources>

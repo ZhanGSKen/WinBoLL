@@ -33,16 +33,26 @@ android {
         // versionName 更新后需要手动设置 
         // 项目模块目录的 build.gradle 文件的 stageCount=0
         // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
-        versionName "15.20" 
+        versionName "15.22"
         if(true) {
             versionName = genVersionName("${versionName}")
         }
     }
+
+    // 不再剔除 META-INF 许可文本：android-mail 的 EPL-2.0 全文与 Jakarta Mail 通知
+    // 只以 META-INF/LICENSE.md、META-INF/NOTICE.md 形式随包，剔除等于删除许可声明
+    // （见《开源许可证合规检查报告.md》P1-2）。各依赖的许可证全文另随附于
+    // libaes/src/main/assets/open_source_licenses/。
+    // android-mail 与 android-activation 各带一份同名许可文件，取第一份即可。
+    packagingOptions {
+        resources {
+            pickFirsts += ['META-INF/LICENSE.md', 'META-INF/NOTICE.md']
+        }
+    }
 	
-	// 米盟 SDK 已移除
 }
 
 dependencies {
-	api project(':libaes')
+    api project(':libaes')
     api fileTree(dir: 'libs', include: ['*.jar'])
 }

@@ -1,4 +1,4 @@
-package cc.winboll.studio.libappbase.utils;
+package cc.winboll.studio.libaes.utils;
 
 import android.content.Context;
 import android.os.Handler;
@@ -7,7 +7,7 @@ import android.util.Base64;
 
 import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.models.SignCheckResponse;
+import cc.winboll.studio.libaes.models.SignCheckResponse;
 
 import com.google.gson.Gson;
 

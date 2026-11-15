@@ -1,4 +1,4 @@
-package cc.winboll.studio.libappbase.utils;
+package cc.winboll.studio.libaes.utils;
 
 import android.content.Context;
 import android.os.Environment;
@@ -16,7 +16,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.models.SFTPAuthModel;
+import cc.winboll.studio.libaes.models.SFTPAuthModel;
 
 /**
  * 文件备份工具类（单例模式）

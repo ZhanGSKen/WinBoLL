@@ -1,8 +1,30 @@
+/*
+ * Copyright 2026 WinBoLL Studio
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package cc.winboll.studio.appbase;
 
+import cc.winboll.studio.libappbase.CrashActivity;
 import cc.winboll.studio.libappbase.GlobalApplication;
+import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.ToastUtils;
-import cc.winboll.studio.libappbase.BuildConfig;
+import cc.winboll.studio.libappbase.utils.APPMSGMailUtils;
+import cc.winboll.studio.libappbase.utils.CrashHandleNotifyUtils;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * @Author ZhanGSKen<zhangsken@qq.com>
@@ -15,16 +37,55 @@ public class App extends GlobalApplication {
     /** 当前应用类的日志 TAG（用于调试输出，标识日志来源） */
     public static final String TAG = "App";
 
+    /** SMTP配置 SharedPreferences 名称 */
+    private static final String PREF_NAME = "smtp_config";
+
     /**
      * 应用创建时回调（全局初始化入口）
      * 在应用进程启动时执行，仅调用一次，用于初始化全局工具类、第三方库等
      */
     @Override
     public void onCreate() {
-        super.onCreate();
-		
-        // 初始化 Toast 工具类（传入应用全局上下文，确保 Toast 可在任意地方调用）
-        ToastUtils.init(getApplicationContext());
+		try {
+			super.onCreate();
+
+			// 初始化 Toast 工具类（传入应用全局上下文，确保 Toast 可在任意地方调用）
+			ToastUtils.init(getApplicationContext());
+
+			// 调试异常捕获
+			final String errorMsg = "初始化异常捕获调试信息，这个是调试异常捕获的测试数据。";
+			LogUtils.e(TAG, errorMsg);
+			throw new IllegalArgumentException(errorMsg);
+
+		} catch (Throwable e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            pw.close();
+            String stackTraceStr = sw.toString();
+
+			// 发送异常信息邮箱。
+            sendExceptionMail(stackTraceStr);
+
+			// 前台通知栏提醒。
+            CrashHandleNotifyUtils.handleUncaughtException(
+                this,
+                getPackageName(),
+                stackTraceStr,
+                CrashActivity.class
+            );
+        }
+    }
+
+    /**
+     * 发送异常报告邮件
+     * 读取SMTP配置，若配置完整则在子线程发送异常堆栈邮件
+     * @param stackTraceStr 异常堆栈信息
+     */
+    private void sendExceptionMail(final String stackTraceStr) {
+        String subject = "Exception Report - " + getPackageName();
+        String recipients = APPMSGMailUtils.getRecipient(this);
+        APPMSGMailUtils.sendMail(this, subject, stackTraceStr, recipients);
     }
 
     /**
@@ -39,4 +100,3 @@ public class App extends GlobalApplication {
         ToastUtils.release();
     }
 }
-

@@ -9,13 +9,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libaes.activitys.DrawerFragmentActivity;
 import cc.winboll.studio.libaes.models.AESThemeBean;
-
 import java.util.ArrayList;
 
 public class AESThemeUtil {
@@ -33,7 +30,8 @@ public class AESThemeUtil {
      * 初始化主题样式ID集合
      */
     public static void init(ArrayList<Integer> themeStyleIDList) {
-		if(themeStyleIDList == null) {
+
+		if (themeStyleIDList == null) {
 			themeStyleIDList = new ArrayList<Integer>();
 			AESThemeBean.fillThemeStyleIDList(themeStyleIDList);
 		}
@@ -45,7 +43,7 @@ public class AESThemeUtil {
      * 获取当前主题样式ID
      */
     public static int getThemeTypeID(Context context) {
-        AESThemeBean bean = AESThemeBean.loadBean(context, AESThemeBean.class);
+		AESThemeBean bean = AESThemeBean.loadBean(context, AESThemeBean.class);
         return bean == null ? getThemeStyleID(AESThemeBean.ThemeType.AES) : bean.getCurrentThemeTypeID();
     }
 

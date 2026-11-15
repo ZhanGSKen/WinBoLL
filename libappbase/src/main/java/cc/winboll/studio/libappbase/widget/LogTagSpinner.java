@@ -1,7 +1,23 @@
+/*
+ * Copyright 2026 WinBoLL Studio
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package cc.winboll.studio.libappbase.widget;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -13,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.R;
+import cc.winboll.studio.libappbase.common.ViewColorTable;
 
 /**
  * @Author ZhanGSKen&豆包大模型<zhangsken@qq.com>
@@ -105,7 +122,7 @@ public class LogTagSpinner extends Spinner {
 		setLayoutParams(layoutParams);
 
 		// 统一背景色（外部可通过 setBackground 手动覆盖）
-		setBackgroundColor(this.mContext.getColor(R.color.btn_gray_normal));
+		setBackgroundColor(ViewColorTable.SwitchTrackNormalColor);
 	}
 
 
@@ -156,10 +173,10 @@ public class LogTagSpinner extends Spinner {
 		//itemTv.setGravity(View.GRAVITY_CENTER_VERTICAL | View.GRAVITY_START);
 // 5. 文字颜色（使用主题属性 ?attr/toolbarTextColor）
 		TypedArray ta = mContext.obtainStyledAttributes(new int[] { R.attr.toolbarTextColor });
-		int toolbarTextColor = ta.getColor(0, mContext.getResources().getColor(R.color.white));
+		int toolbarTextColor = ta.getColor(0, ViewColorTable.ToolbarTitleTextColor);
 		ta.recycle();
 		itemTv.setTextColor(toolbarTextColor);
-		itemTv.setBackgroundColor(this.mContext.getResources().getColor(R.color.btn_gray_normal));
+		itemTv.setBackgroundColor(ViewColorTable.SwitchTrackNormalColor);
 		// 6. 文字溢出处理（最多 2 行，超出省略，避免长标签换行过多）
 		itemTv.setSingleLine(false);
 		itemTv.setMaxLines(2);
@@ -236,6 +253,7 @@ public class LogTagSpinner extends Spinner {
 	 * 外部扩展：动态修改文字颜色
 	 * @param textColorRes 文字颜色资源 ID（如 R.color.red）
 	 */
+	@SuppressWarnings("deprecation")
 	public void updateTextColor(int textColorRes) {
 		int textColor = this.mContext.getResources().getColor(textColorRes);
 		// 刷新选中项颜色

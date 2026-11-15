@@ -1,4 +1,4 @@
-package cc.winboll.studio.libappbase.models;
+package cc.winboll.studio.libaes.models;
 
 /**
  * SFTP登录验证信息实体类

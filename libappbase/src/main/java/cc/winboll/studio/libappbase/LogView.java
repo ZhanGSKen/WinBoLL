@@ -1,3 +1,20 @@
+/*
+ * Copyright 2026 WinBoLL Studio
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package cc.winboll.studio.libappbase;
 
 /**
@@ -28,6 +45,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.R;
+import cc.winboll.studio.libappbase.common.ViewColorTable;
 import cc.winboll.studio.libappbase.views.HorizontalListView;
 import cc.winboll.studio.libappbase.widget.LogTagSpinner;
 import java.text.Collator;
@@ -117,7 +135,7 @@ public class LogView extends RelativeLayout {
         // 获取Log Level spinner实例
         mLogLevelSpinner = findViewById(cc.winboll.studio.libappbase.R.id.viewlogSpinner1);
 
-		metTagSearch.setTextColor(mContext.getResources().getColor(R.color.white));
+		metTagSearch.setTextColor(ViewColorTable.EditTextContentColor);
         metTagSearch.addTextChangedListener(new TextWatcher() {
 
                 @Override
@@ -250,7 +268,7 @@ public class LogView extends RelativeLayout {
 		mSelectAllTAGCheckBox.setLayoutParams(layoutParams2);
 		//mSelectAllTAGCheckBox.setPadding(0,0,0,0);
 		TypedArray ta1 = mContext.obtainStyledAttributes(new int[] { R.attr.toolbarTextColor });
-		int toolbarTextColor1 = ta1.getColor(0, mContext.getResources().getColor(R.color.white));
+		int toolbarTextColor1 = ta1.getColor(0, ViewColorTable.ToolbarTitleTextColor);
 		ta1.recycle();
 		mSelectAllTAGCheckBox.setTextColor(toolbarTextColor1);
         mSelectAllTAGCheckBox.setOnClickListener(new View.OnClickListener(){
@@ -350,6 +368,7 @@ public class LogView extends RelativeLayout {
         volatile boolean isHandling;
         volatile boolean isAddNewLog;
 
+        @SuppressWarnings("deprecation")
         public LogViewHandler() {
             setIsHandling(false);
             setIsAddNewLog(false);
@@ -507,14 +526,14 @@ public class LogView extends RelativeLayout {
 			holder.tvText.setLayoutParams(layoutParams);
 			holder.tvText.setPadding(0,0,0,0);
 			TypedArray ta2 = mContext.obtainStyledAttributes(new int[] { R.attr.toolbarTextColor });
-			int toolbarTextColor2 = ta2.getColor(0, mContext.getResources().getColor(R.color.white));
+			int toolbarTextColor2 = ta2.getColor(0, ViewColorTable.ToolbarTitleTextColor);
 			ta2.recycle();
 			holder.tvText.setTextColor(toolbarTextColor2);
             holder.cbChecked.setChecked(item.isChecked());
 			holder.cbChecked.setLayoutParams(layoutParams);
 			holder.cbChecked.setPadding(0,0,0,0);
 			TypedArray ta3 = mContext.obtainStyledAttributes(new int[] { R.attr.toolbarTextColor });
-			int toolbarTextColor3 = ta3.getColor(0, mContext.getResources().getColor(R.color.white));
+			int toolbarTextColor3 = ta3.getColor(0, ViewColorTable.ToolbarTitleTextColor);
 			ta3.recycle();
 			holder.cbChecked.setTextColor(toolbarTextColor3);
             holder.cbChecked.setOnClickListener(new View.OnClickListener(){

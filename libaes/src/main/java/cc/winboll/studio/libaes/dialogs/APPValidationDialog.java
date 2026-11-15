@@ -1,4 +1,4 @@
-package cc.winboll.studio.libappbase.dialogs;
+package cc.winboll.studio.libaes.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -8,9 +8,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import cc.winboll.studio.libappbase.LogUtils;
-import cc.winboll.studio.libappbase.R;
+import cc.winboll.studio.libaes.R;
 import cc.winboll.studio.libappbase.ToastUtils;
-import cc.winboll.studio.libappbase.utils.APPUtils;
+import cc.winboll.studio.libaes.utils.APPUtils;
 import cc.winboll.studio.libappbase.utils.ApkSignUtils;
 
 /**
@@ -38,7 +38,7 @@ public class APPValidationDialog extends Dialog {
 
     // ===================================== 构造方法 =====================================
     public APPValidationDialog(Context context, String appName, String versionName) {
-        super(context, R.style.DialogStyle);
+        super(context, R.style.NormalDialogStyle);
         this.mContext = context;
         this.appName = appName;
         this.versionName = versionName;

@@ -1,3 +1,20 @@
+/*
+ * Copyright 2026 WinBoLL Studio
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package cc.winboll.studio.libappbase.views;
 
 import android.app.AlertDialog;
@@ -19,6 +36,7 @@ import cc.winboll.studio.libappbase.GlobalApplication;
 import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.libappbase.R;
 import cc.winboll.studio.libappbase.ToastUtils;
+import cc.winboll.studio.libappbase.common.ViewColorTable;
 import cc.winboll.studio.libappbase.dialogs.DebugHostDialog;
 import cc.winboll.studio.libappbase.models.APPInfo;
 
@@ -303,7 +321,7 @@ public class AboutView extends LinearLayout {
         }
         // 添加通用功能项
         addFunctionView(new WebJumpFunctionItemView(mContext, "WinBoLL 主页", WINBOLL_OFFICIAL_HOME, R.drawable.ic_winboll));
-        addFunctionView(new EmailFunctionItemView(mContext, "联系邮箱", "WinBoLLStudio<studio@winboll.cc>", R.drawable.ic_winboll));
+        addFunctionView(new EmailFunctionItemView(mContext, "联系邮箱", EMAIL_ADDRESS, R.drawable.ic_winboll));
         if (!mszHomePage.isEmpty()) {
             addFunctionView(new WebJumpFunctionItemView(mContext, "应用APK下载地址", mszHomePage, R.drawable.ic_winboll));
         }
@@ -465,10 +483,10 @@ public class AboutView extends LinearLayout {
          */
         private android.graphics.drawable.Drawable create_item_background() {
             android.graphics.drawable.GradientDrawable drawable = new android.graphics.drawable.GradientDrawable();
-            drawable.setStroke(1, mItemContext.getResources().getColor(R.color.gray_300));
+            drawable.setStroke(1, ViewColorTable.DividerDarkLineColor);
             drawable.setCornerRadius(4);
             boolean isNightMode = (mItemContext.getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES;
-            drawable.setColor(isNightMode ? mItemContext.getResources().getColor(R.color.gray_800) : mItemContext.getResources().getColor(android.R.color.white));
+            drawable.setColor(isNightMode ? ViewColorTable.StatusBarDarkBgColor : ViewColorTable.CardSurfaceColor);
             return drawable;
         }
 
@@ -495,7 +513,7 @@ public class AboutView extends LinearLayout {
             tvTitle.setText(mTitle);
             tvTitle.setTextSize(16);
             boolean isNightMode = (mItemContext.getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES;
-            tvTitle.setTextColor(isNightMode ? mItemContext.getResources().getColor(R.color.gray_500) : mItemContext.getResources().getColor(R.color.gray_900));
+            tvTitle.setTextColor(isNightMode ? ViewColorTable.TextDisabledColor : ViewColorTable.TextPrimaryColor);
             llText.addView(tvTitle);
             // 内容
             TextView tvContent = new TextView(mItemContext);
@@ -524,7 +542,7 @@ public class AboutView extends LinearLayout {
 
         @Override
         protected int getContentTextColor() {
-            return mItemContext.getResources().getColor(R.color.blue_normal);
+            return ViewColorTable.TextLinkColor;
         }
 
         @Override
@@ -567,7 +585,7 @@ public class AboutView extends LinearLayout {
 
         @Override
         protected int getContentTextColor() {
-            return mItemContext.getResources().getColor(R.color.blue_normal);
+            return ViewColorTable.TextLinkColor;
         }
 
         @Override

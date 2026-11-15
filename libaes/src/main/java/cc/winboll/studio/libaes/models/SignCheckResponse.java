@@ -1,4 +1,4 @@
-package cc.winboll.studio.libappbase.models;
+package cc.winboll.studio.libaes.models;
 
 /**
  * @Author 豆包&ZhanGSKen<zhangsken@qq.com>

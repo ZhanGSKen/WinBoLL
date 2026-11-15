@@ -1,3 +1,20 @@
+/*
+ * Copyright 2026 WinBoLL Studio
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package cc.winboll.studio.libappbase.models.libs1520000;
 
 import android.content.Context;
@@ -146,6 +163,7 @@ public abstract class BaseBean<T extends BaseBean> {
      * @return 解析完成实体
      * @throws IOException 解析IO异常
      */
+    @SuppressWarnings("unchecked")
     public static <T extends BaseBean> T parseStringToBean(final String szBean, final Class<T> clazz) throws IOException {
         LogUtils.d(TAG, "进入字符串解析实体方法，目标Class：" + clazz.getSimpleName());
         final StringReader stringReader = new StringReader(szBean);
@@ -169,6 +187,7 @@ public abstract class BaseBean<T extends BaseBean> {
      * @param <T> 实体泛型
      * @return 解析结果
      */
+    @SuppressWarnings("unchecked")
     public static <T extends BaseBean> boolean parseStringToBeanList(final String szBeanList, ArrayList<T> beanList, final Class<T> clazz) {
         LogUtils.d(TAG, "进入列表字符串解析方法");
         try {

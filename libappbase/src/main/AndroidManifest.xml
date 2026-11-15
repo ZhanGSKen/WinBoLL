@@ -8,7 +8,7 @@
         android:networkSecurityConfig="@xml/network_security_config">
 
         <activity
-            android:name=".CrashHandler$CrashActivity"
+            android:name=".CrashActivity"
             android:label="CrashActivity"
             android:launchMode="singleInstance"
             android:process=":CrashActivity"/>
@@ -32,8 +32,6 @@
         </activity>
 
         <activity android:name="cc.winboll.studio.libappbase.activities.NfcRsaLoginActivity"/>
-
-        <activity android:name="cc.winboll.studio.libappbase.activities.FTPBackupsActivity"/>
 
         <activity
             android:name=".utils.ShareLogActivity"

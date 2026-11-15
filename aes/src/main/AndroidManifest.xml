@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="cc.winboll.studio.aes">
 
     <!-- 对正在运行的应用重新排序 -->
@@ -39,6 +40,22 @@
         <activity android:name=".SettingsActivity"/>
 
         <activity android:name=".AboutActivity"/>
+
+        <activity android:name=".OpenSourceLicenseActivity"/>
+
+        <!-- SMTP 配置页仅由本应用菜单进入，不对其他应用导出 -->
+        <activity android:name=".SMTPSettingsActivity" android:exported="false"/>
+
+        <!-- libappbase (external AAR) declares these two as exported; keep them in-app only -->
+        <activity
+            android:name="cc.winboll.studio.libappbase.LogActivity"
+            android:exported="false"
+            tools:replace="android:exported"/>
+
+        <activity
+            android:name="cc.winboll.studio.libappbase.utils.ShareLogActivity"
+            android:exported="false"
+            tools:replace="android:exported"/>
 
     </application>
 

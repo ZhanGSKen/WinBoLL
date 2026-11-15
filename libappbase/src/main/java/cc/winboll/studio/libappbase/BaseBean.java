@@ -1,3 +1,20 @@
+/*
+ * Copyright 2026 WinBoLL Studio
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package cc.winboll.studio.libappbase;
 
 import android.content.Context;
@@ -165,6 +182,7 @@ public abstract class BaseBean<T extends BaseBean> {
 	 * @throws IOException JSON 解析失败时抛出
 	 * @param <T> 泛型约束，限定为 BaseBean 子类
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T extends BaseBean> T parseStringToBean(String szBean, Class<T> clazz) throws IOException {
 		StringReader stringReader = new StringReader(szBean);
 		JsonReader jsonReader = new JsonReader(stringReader);
@@ -190,6 +208,7 @@ public abstract class BaseBean<T extends BaseBean> {
 	 * @return true：解析成功；false：解析失败
 	 * @param <T> 泛型约束，限定为 BaseBean 子类
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T extends BaseBean> boolean parseStringToBeanList(String szBeanList, ArrayList<T> beanList, Class<T> clazz) {
 		try {
 			// 初始化目标列表（为空则创建，非空则清空）

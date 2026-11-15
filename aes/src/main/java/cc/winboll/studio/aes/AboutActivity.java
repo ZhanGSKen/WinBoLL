@@ -1,7 +1,9 @@
 package cc.winboll.studio.aes;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import cc.winboll.studio.aes.R;
 import cc.winboll.studio.libaes.utils.WinBoLLActivityManager;
@@ -35,6 +37,20 @@ public class AboutActivity extends BaseWinBoLLActivity {
 
 		AboutView aboutView = findViewById(R.id.aboutview);
 		aboutView.setAPPInfo(genDefaultAppInfo());
+
+		// 开源许可入口放在介绍页底部，不再单独占一个菜单项
+		TextView licenseButton = findViewById(R.id.about_license_button);
+		if (licenseButton != null) {
+			licenseButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						LogUtils.d(TAG, "about_license_button 点击，打开开源许可页");
+						startActivity(new Intent(AboutActivity.this, OpenSourceLicenseActivity.class));
+					}
+				});
+		} else {
+			LogUtils.e(TAG, "开源许可入口未找到");
+		}
     }
 
 	private void initToolbar() {
@@ -65,7 +81,7 @@ public class AboutActivity extends BaseWinBoLLActivity {
         appInfo.setAppName(getString(R.string.app_name));
         appInfo.setAppIcon(R.drawable.ic_winboll);
         appInfo.setAppDescription(getString(R.string.app_description));
-        appInfo.setAppGitName("AES");
+        appInfo.setAppGitName("WinBoLL");
         appInfo.setAppGitOwner("Studio");
         appInfo.setAppGitAPPBranch(branchName);
         appInfo.setAppGitAPPSubProjectFolder(branchName);
