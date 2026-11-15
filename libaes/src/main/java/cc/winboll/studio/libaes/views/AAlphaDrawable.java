@@ -39,7 +39,12 @@ class AAlphaDrawable extends Drawable {
         }
     }
 
+    /**
+     * Drawable.getOpacity() is deprecated since API 29; the override is kept
+     * because the platform still calls it for backward compatibility.
+     */
     @Override
+    @SuppressWarnings("deprecation")
     public int getOpacity() {
         return PixelFormat.TRANSLUCENT;
     }
