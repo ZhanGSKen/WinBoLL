@@ -32,6 +32,17 @@ The project maintains the following source code repositories:
 
 * https://github.com/eclipse-ee4j/mail
 
+## Source Code Availability
+
+The Jakarta Mail components distributed with this application
+(com.sun.mail:android-mail:1.6.7 and com.sun.mail:android-activation:1.6.7)
+are unmodified upstream binaries. Their Source Code is available under the
+Eclipse Public License 2.0 (EPL-2.0) at the repository above.
+
+You may obtain the corresponding Source Code from that repository, or by
+written request to studio@winboll.cc. This statement applies for as long as
+this application is distributed.
+
 ## Third-party Content
 
 This project leverages the following third party content.

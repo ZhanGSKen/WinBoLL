@@ -23,6 +23,17 @@ were changed. APPBase elects the Eclipse Public License 2.0 (EPL-2.0) for
 distribution. The full license text is in EPL-2.0.txt, the upstream notice
 is in JavaMail-NOTICE.md.
 
+Source code availability
+------------------------
+The Jakarta Mail components listed above are unmodified upstream binaries.
+Their Source Code is available under the Eclipse Public License 2.0 at:
+
+    https://github.com/eclipse-ee4j/mail
+
+You may obtain the corresponding Source Code from that repository, or by
+written request to studio@winboll.cc. This statement applies for as long as
+this application is distributed.
+
 Files
 -----
 EPL-2.0.txt           Eclipse Public License 2.0 full text
