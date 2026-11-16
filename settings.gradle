@@ -34,4 +34,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "ClaudeCodeAndroid"
-include ':app'
+include ':claudecode'

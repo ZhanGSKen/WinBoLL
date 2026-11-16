@@ -21,7 +21,7 @@
 ```
 ClaudeCodeAndroid/
 ├── AGENTS.md                       # 本文档
-├── app/                            # 安卓模块
+├── claudecode/                     # 安卓模块
 │   └── src/main/java/cc/winboll/studio/claudecodeandroid/
 │       ├── AppSettings.java        # 地址 / token / 默认工作目录
 │       ├── ViewColorTable.java     # 全局颜色常量
@@ -52,7 +52,7 @@ cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid
 java -jar gradle\wrapper\gradle-wrapper.jar assembleDebug
 ```
 
-产物：`app\build\outputs\apk\debug\app-debug.apk`
+产物：`claudecode\build\outputs\apk\debug\claudecode-debug.apk`
 
 > 中文路径下 `gradlew.bat` 会因 cmd 编码报错，统一走 `java -jar gradle\wrapper\gradle-wrapper.jar <任务>`。
 
