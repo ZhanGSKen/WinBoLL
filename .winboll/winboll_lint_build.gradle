@@ -1,0 +1,51 @@
+android {
+    lintOptions {
+        // true -- silence lint analysis progress
+        //quiet true
+        // true -- stop the Gradle build on error
+        abortOnError false
+        // true -- report errors only
+        //ignoreWarnings true
+        // true -- use full/absolute paths for files with errors (default true)
+        //absolutePaths true
+        // true -- check all issues, including ones disabled by default
+        checkAllWarnings true
+        // true -- treat all warnings as errors
+        //warningsAsErrors true
+        // Disable specific issue checks
+        //disable 'ExpiredTargetSdkVersion','HardcodedText','UnknownNullness','ButtonStyle','GradleDependency','UnusedResources'
+        // Enable specific issue checks
+        //enable 'RtlHardcoded','RtlCompat', 'RtlEnabled'
+        // Check only specific issues
+        //check 'NewApi', 'InlinedApi'
+        // true -- omit source line numbers in error output
+        //noLines true
+        // true -- show all error occurrences without truncation
+        showAll true
+        // Fall back to default lint settings
+        //lintConfig file("default-lint.xml")
+        // true -- generate a TXT report (default false)
+        //textReport true
+        // Redirect output; can be a file or 'stdout'
+        //textOutput 'stdout'
+        // true -- generate an XML report
+        xmlReport true
+        // XML report file (default lint-results.xml)
+        xmlOutput file("${lintXmlReportFilePath}")
+        // true -- generate an HTML report (with issue explanations, source locations, etc.)
+        htmlReport true
+        // Optional HTML report path (build default is lint-results.html)
+        htmlOutput file("${lintHTMLReportFilePath}")
+        // true -- run crash-generating lint checks on all release builds;
+        // the build stops if any crash issue is found
+        checkReleaseBuilds true
+        // On release builds (even without a lint target), specified issues are treated as fatal crashes
+        //fatal 'NewApi', 'InlineApi'
+        // Treat specified issues as errors
+        //error 'Wakelock', 'TextViewEdits'
+        // Treat specified issues as warnings
+        //warning 'ResourceAsColor'
+        // Ignore specified issues (same as disabling checks)
+        //ignore 'TypographyQuotes'
+    }
+}

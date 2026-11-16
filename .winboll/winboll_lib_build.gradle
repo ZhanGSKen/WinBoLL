@@ -1,0 +1,274 @@
+// Local machine to WinBoLL Maven repository publishing configuration.
+//
+
+def getDefaultVersion(){
+    // Check build flag configuration
+    assert (winbollBuildProps['publishVersion'] != null)
+    // Return build version
+    return winbollBuildProps['publishVersion']
+}
+
+def siteUrl = 'https://winboll.cc/?page=studio/details.php&app=${rootProject.name}' // Project home page
+def gitUrl = 'https://gitea.winboll.cc/WinBoLL/${rootProject.name}' // Project Git URL
+def DefaultGroupId = 'cc.winboll.studio' // Library owner groupId
+def DefaultVersion = getDefaultVersion() // Version
+def DeveloperId='zhangsken' // Developer account
+def DeveloperName='ZhanGSKen' // Developer name
+def DeveloperEMail='zhangsken@188.com' // Developer email
+def LicenseName='The Apache Software License, Version 2.0'
+def LicenseUrl='http://www.apache.org/licenses/LICENSE-2.0.txt'
+
+Properties properties = new Properties()
+
+afterEvaluate {
+    publishing {
+        repositories {
+            if(file("${RootProjectDir}/${winbollFilePath}").exists()) {
+                properties.load(file("${RootProjectDir}/${winbollFilePath}").newDataInputStream())
+                def NexusUserName = properties.getProperty("Nexus.name")
+                def NexusPassword = properties.getProperty("Nexus.password")
+                // WinBoLL Release repository
+                maven{
+                    // Repository name and URL
+                    name = "WinBoLLRelease"
+                    url="https://nexus.winboll.cc/repository/maven-releases/"
+                    // Repository credentials
+                    credentials {
+                        username = NexusUserName
+                        password = NexusPassword
+                    }
+                }
+                // WinBoLL Snapshot repository
+                maven{
+                    // Repository name and URL
+                    name = "WinBoLLSnapshot"
+                    url="https://nexus.winboll.cc/repository/maven-snapshots/"
+                    // Repository credentials
+                    credentials {
+                        username = NexusUserName
+                        password = NexusPassword
+                    }
+                }
+            }
+        }
+        publications {
+            // Local Maven repository publish task
+            //
+            release(MavenPublication) {
+                groupId = DefaultGroupId
+                artifactId = project.name
+                version = DefaultVersion
+
+                //from components.java
+                // Required; otherwise the AAR will not be uploaded
+                afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
+                // Upload sources so consumers can see method comments
+                //artifact generateSourcesJar
+                // AAR path to upload
+                //artifact "$buildDir/outputs/aar/${project.getName()}-release.aar"
+                //artifact "$buildDir/outputs/aar/${project.getName()}-debug.aar"
+
+                // Operations on the POM
+                pom.withXml{
+                    Node pomNode = asNode()
+                    // artifact()-based publication does not generate <dependencies>;
+                    // inject api/implementation deps so library consumers resolve the
+                    // supertype chain transitively (e.g. androidx.appcompat methods
+                    // inherited by subclasses of DrawerFragmentActivity).
+                    // Versions are read from each module's own build.gradle declarations;
+                    // never hardcode dependency versions in this script.
+                    def depEntries = []
+                    ['api': 'compile', 'implementation': 'runtime'].each { cfgName, scope ->
+                        def cfg = project.configurations.findByName(cfgName)
+                        cfg?.dependencies?.each { dep ->
+                            if (dep.group != null && dep.version != null) {
+                                depEntries << [group: dep.group, name: dep.name, version: dep.version, scope: scope]
+                            }
+                        }
+                    }
+                    if (!depEntries.isEmpty()) {
+                        def depsNode = pomNode.appendNode('dependencies')
+                        depEntries.each { e ->
+                            def depNode = depsNode.appendNode('dependency')
+                            depNode.appendNode('groupId', e.group)
+                            depNode.appendNode('artifactId', e.name)
+                            depNode.appendNode('version', e.version)
+                            depNode.appendNode('scope', e.scope)
+                        }
+                    }
+                }
+                pom {
+                    name = artifactId
+                    url = siteUrl
+                    licenses {
+                        license { // License info
+                           name=LicenseName // License name
+                           url=LicenseUrl // License URL
+                        }
+                    }
+                    developers {
+                        developer {
+                            id=DeveloperId // Developer account
+                            name=DeveloperName // Developer name
+                            email=DeveloperEMail // Developer email
+                        }
+                    }
+                    // Source code management
+                    scm {
+                        connection=gitUrl
+                        developerConnection=gitUrl
+                        url=siteUrl
+                    }
+                }
+            }
+
+            // WinBoLL Maven Release repository publish task
+            //
+            releaseWinBoLL(MavenPublication) {
+                // Variant to use; e.g. with free and pay variants, pick one
+                //from components.free
+
+                groupId = DefaultGroupId // groupId of the artifact
+                artifactId = project.name // Artifact name
+                version = DefaultVersion // Version
+
+                //from components.java
+                // Required; otherwise the AAR will not be uploaded
+                afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
+                // Upload sources so consumers can see method comments
+                //artifact generateSourcesJar
+                // AAR path to upload
+                //artifact "$buildDir/outputs/aar/${project.getName()}-release.aar"
+                //artifact "$buildDir/outputs/aar/${project.getName()}-debug.aar"
+
+                // Operations on the POM
+                pom.withXml{
+                    Node pomNode = asNode()
+                    // artifact()-based publication does not generate <dependencies>;
+                    // inject api/implementation deps so library consumers resolve the
+                    // supertype chain transitively (e.g. androidx.appcompat methods
+                    // inherited by subclasses of DrawerFragmentActivity).
+                    // Versions are read from each module's own build.gradle declarations;
+                    // never hardcode dependency versions in this script.
+                    def depEntries = []
+                    ['api': 'compile', 'implementation': 'runtime'].each { cfgName, scope ->
+                        def cfg = project.configurations.findByName(cfgName)
+                        cfg?.dependencies?.each { dep ->
+                            if (dep.group != null && dep.version != null) {
+                                depEntries << [group: dep.group, name: dep.name, version: dep.version, scope: scope]
+                            }
+                        }
+                    }
+                    if (!depEntries.isEmpty()) {
+                        def depsNode = pomNode.appendNode('dependencies')
+                        depEntries.each { e ->
+                            def depNode = depsNode.appendNode('dependency')
+                            depNode.appendNode('groupId', e.group)
+                            depNode.appendNode('artifactId', e.name)
+                            depNode.appendNode('version', e.version)
+                            depNode.appendNode('scope', e.scope)
+                        }
+                    }
+                }
+                pom {
+                    name = artifactId
+                    url = siteUrl
+                    licenses {
+                        license { // License info
+                           name=LicenseName // License name
+                           url=LicenseUrl // License URL
+                        }
+                    }
+                    developers {
+                        developer {
+                            id=DeveloperId // Developer account
+                            name=DeveloperName // Developer name
+                            email=DeveloperEMail // Developer email
+                        }
+                    }
+                    // Source code management
+                    scm {
+                        connection=gitUrl
+                        developerConnection=gitUrl
+                        url=siteUrl
+                    }
+                }
+
+            } // End of the release task creation
+
+            // WinBoLL Maven Snapshot repository publish task
+            //
+            snapshotWinBoLL(MavenPublication) {
+                // Variant to use; e.g. with free and pay variants, pick one
+                //from components.free
+
+                groupId = DefaultGroupId // groupId of the artifact
+                artifactId = project.name // Artifact name
+                version = DefaultVersion + "-SNAPSHOT" // Version
+
+                //from components.java
+                // Required; otherwise the AAR will not be uploaded
+                afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
+                // Upload sources so consumers can see method comments
+                //artifact generateSourcesJar
+                // AAR path to upload
+                //artifact "$buildDir/outputs/aar/${project.getName()}-release.aar"
+                //artifact "$buildDir/outputs/aar/${project.getName()}-debug.aar"
+
+                // Operations on the POM
+                pom.withXml{
+                    Node pomNode = asNode()
+                    // artifact()-based publication does not generate <dependencies>;
+                    // inject api/implementation deps so library consumers resolve the
+                    // supertype chain transitively (e.g. androidx.appcompat methods
+                    // inherited by subclasses of DrawerFragmentActivity).
+                    // Versions are read from each module's own build.gradle declarations;
+                    // never hardcode dependency versions in this script.
+                    def depEntries = []
+                    ['api': 'compile', 'implementation': 'runtime'].each { cfgName, scope ->
+                        def cfg = project.configurations.findByName(cfgName)
+                        cfg?.dependencies?.each { dep ->
+                            if (dep.group != null && dep.version != null) {
+                                depEntries << [group: dep.group, name: dep.name, version: dep.version, scope: scope]
+                            }
+                        }
+                    }
+                    if (!depEntries.isEmpty()) {
+                        def depsNode = pomNode.appendNode('dependencies')
+                        depEntries.each { e ->
+                            def depNode = depsNode.appendNode('dependency')
+                            depNode.appendNode('groupId', e.group)
+                            depNode.appendNode('artifactId', e.name)
+                            depNode.appendNode('version', e.version)
+                            depNode.appendNode('scope', e.scope)
+                        }
+                    }
+                }
+                pom {
+                    name = artifactId
+                    url = siteUrl
+                    licenses {
+                        license { // License info
+                           name=LicenseName // License name
+                           url=LicenseUrl // License URL
+                        }
+                    }
+                    developers {
+                        developer {
+                            id=DeveloperId // Developer account
+                            name=DeveloperName // Developer name
+                            email=DeveloperEMail // Developer email
+                        }
+                    }
+                    // Source code management
+                    scm {
+                        connection=gitUrl
+                        developerConnection=gitUrl
+                        url=siteUrl
+                    }
+                }
+            } // End of the snapshot task creation
+        }
+
+    }
+}

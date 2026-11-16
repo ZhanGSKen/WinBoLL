@@ -1,0 +1,418 @@
+// WinBoLL app signing configuration
+//
+
+// ===== BaseVersion.flag version gate =====
+// Before creating/writing a module's build.properties, compare its baseVersion
+// value with the version set in BaseVersion.flag (project root):
+//   equal   -> skip the gate, follow the original rules
+//   less    -> the written build.properties gets stageCount=0, buildCount=0,
+//              baseVersion=<flag>, publishVersion=<flag>.0, baseBetaVersion=<flag>.1
+//              (other properties unchanged), then it is copied to every module
+//              folder enabled in settings.gradle
+//   greater -> assert and abort the build
+def winbollCompareVersions = { String a, String b ->
+    def pa = (a ?: "0").split("\\.").collect { it.isInteger() ? it.toInteger() : 0 }
+    def pb = (b ?: "0").split("\\.").collect { it.isInteger() ? it.toInteger() : 0 }
+    int n = Math.max(pa.size(), pb.size())
+    for (int i = 0; i < n; i++) {
+        int va = i < pa.size() ? pa[i] : 0
+        int vb = i < pb.size() ? pb[i] : 0
+        if (va != vb) return va < vb ? -1 : 1
+    }
+    return 0
+}
+
+def winbollCopyBuildPropsToAllModules = {
+    File settingsFile = new File("${RootProjectDir}/settings.gradle")
+    if (!settingsFile.exists()) {
+        println ">>> BaseVersion gate: settings.gradle not found, skip build.properties copy."
+        return
+    }
+    settingsFile.eachLine { String line ->
+        // Strip trailing comments so only real include statements are parsed
+        String code = line.split("//", 2)[0]
+        String trimmed = code.trim()
+        if (!trimmed.startsWith("include")) return
+        if (trimmed.startsWith("includeBuild")) return
+        def matcher = (code =~ /['"]:([^'"]+)['"]/)
+        while (matcher.find()) {
+            String moduleName = matcher.group(1)
+            File moduleDir = new File("${RootProjectDir}/${moduleName}")
+            if (moduleDir.isDirectory()) {
+                File targetFile = new File(moduleDir, "build.properties")
+                if (targetFile.canonicalFile == winbollBuildPropsFile.canonicalFile) {
+                    // The source build.properties itself, nothing to copy.
+                } else {
+                    java.nio.file.Files.copy(winbollBuildPropsFile.toPath(), targetFile.toPath(),
+                            java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+                    println ">>> BaseVersion gate: build.properties copied to module folder: " + moduleName
+                }
+            }
+        }
+    }
+}
+
+// Returns 'equal' or 'adjusted'; asserts and aborts when baseVersion > BaseVersion.flag.
+def winbollBaseVersionFlagCheck = {
+    File flagFile = new File("${RootProjectDir}/BaseVersion.flag")
+    if (!flagFile.exists()) {
+        println ">>> BaseVersion gate: BaseVersion.flag not found, gate skipped."
+        return 'equal'
+    }
+    String flagVersion = flagFile.text.trim()
+    assert !flagVersion.isEmpty() : ">>> BaseVersion gate ERROR: BaseVersion.flag is empty! Build aborted."
+    String baseVersion = winbollBuildProps['baseVersion']
+    int cmp = winbollCompareVersions(baseVersion, flagVersion)
+    println ">>> BaseVersion gate: build.properties baseVersion=" + baseVersion + " BaseVersion.flag=" + flagVersion
+    if (cmp == 0) {
+        println ">>> BaseVersion gate: equal, skip."
+        return 'equal'
+    }
+    assert cmp < 0 : ">>> BaseVersion gate ERROR: baseVersion " + baseVersion + " is greater than BaseVersion.flag " + flagVersion + " ! Update BaseVersion.flag first. Build aborted."
+    winbollBuildProps.setProperty("stageCount", "0")
+    winbollBuildProps.setProperty("buildCount", "0")
+    winbollBuildProps.setProperty("baseVersion", flagVersion)
+    winbollBuildProps.setProperty("publishVersion", flagVersion + ".0")
+    winbollBuildProps.setProperty("baseBetaVersion", flagVersion + ".1")
+    println ">>> BaseVersion gate: baseVersion " + baseVersion + " < BaseVersion.flag " + flagVersion + ", build.properties adjusted (stageCount=0, buildCount=0, baseVersion=" + flagVersion + ", publishVersion=" + flagVersion + ".0, baseBetaVersion=" + flagVersion + ".1)."
+    return 'adjusted'
+}
+
+android {
+	def winbollProps = new Properties()
+    def winbollPropsFile = rootProject.file("${winbollFilePath}")
+    if(winbollPropsFile.exists()) {
+        winbollProps.load(new FileInputStream(winbollPropsFile))
+	}
+
+    // Load keystore configuration file
+    //
+    def keyProps = new Properties()
+    def keyPropsFile = rootProject.file("${keyPropsFilePath}")
+    //println 'Test keystore path'
+    //println 'KeyProsFile :' + Boolean.toString(keyPropsFile.exists())
+    //assert(false)
+    if(keyPropsFile.exists()) {
+		keyProps.load(new FileInputStream(keyPropsFile))
+	}
+
+    // Configure signing
+    signingConfigs {
+		if(keyPropsFile.exists()) {
+            winboll {
+                assert(keyProps['keyAlias'] != null && keyProps['keyPassword'] != null && keyProps['storeFile'] != null && keyProps['storePassword'] != null)
+                keyAlias keyProps['keyAlias']
+                keyPassword keyProps['keyPassword']
+                storeFile keyProps['storeFile'] ? file(keyProps['storeFile']) : null
+                storePassword keyProps['storePassword']
+            }
+		}
+    }
+    buildTypes {
+        debug {
+			if(keyPropsFile.exists()) {
+			    signingConfig signingConfigs.winboll
+		    }
+         }
+        release {
+			if(keyPropsFile.exists()) {
+			    signingConfig signingConfigs.winboll
+			}
+
+            minifyEnabled true // Enable obfuscation (main switch)
+            shrinkResources true // Optional: remove unused resources (further size reduction)
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), // Official default rules (optimized)
+                          'proguard-rules.pro' // Custom rules file
+         }
+
+    }
+
+    flavorDimensions "WinBoLLApp"
+    productFlavors {
+        beta {
+            // Check build flag configuration
+            assert (winbollBuildProps['buildCount'] != null)
+            dimension "WinBoLLApp"
+            applicationIdSuffix ".beta"
+            LocalDateTime localDateTimeNow = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
+            versionNameSuffix "-beta" + winbollBuildProps['buildCount'] + "_" + localDateTimeNow.format('mmss')
+        }
+        stage {
+            dimension "WinBoLLApp"
+        }
+    }
+
+	compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    // APK output configuration
+    //
+    android.applicationVariants.all { variant ->
+        //
+        // GitHub APK output configuration
+        // 1. Configure Beta Release APK output
+        // Note: GitHub packaging uses the "bash ./gradlew assembleBetaRelease" command in android.yml
+        //
+        if(variant.flavorName == "beta" && variant.buildType.name == "release") {
+            /* Reserved for future management */
+            /* No GitHub APK output configuration needed for now */
+            /* Ignore the GitHub section */
+        }
+
+        //
+        // WinBoLL APK output configuration
+        // 1. Configure Stage Release APK output
+        // 2. Configure Beta Debug APK output
+	    //
+        if((variant.flavorName == "beta" && variant.buildType.name == "debug")
+        || (variant.flavorName == "beta" && variant.buildType.name == "release")
+        || (variant.flavorName == "stage" && variant.buildType.name == "debug")
+        || (variant.flavorName == "stage" && variant.buildType.name == "release")) {
+            println "Project root directory: " + project.rootDir.toString()
+            println "Project root directory name : " + project.rootDir.name
+            def outputPath="${project.projectDir.absolutePath}/build/outputs/apk/${variant.buildType.name}"
+            //def outputFileName="${rootProject.name}_${versionName}.apk"
+            def outputFileName=project.rootDir.name + "_${versionName}.apk"
+
+            // Create the WinBoLL Studio publish interface folder
+            File fWinBoLLStudioDir = file("/sdcard/WinBoLLStudio/APKs");
+			// If the APK interface folder path is configured, use it as the APK output folder.
+			if(winbollProps != null && winbollProps['APKOutputPath'] != null ) {
+                fWinBoLLStudioDir = file(winbollProps['APKOutputPath']);
+			}
+
+            if(!fWinBoLLStudioDir.exists()) {
+                println "[ WinBoLLStudio ] : " + fWinBoLLStudioDir.getAbsolutePath() + " Folder does not exist."
+                println '[ WinBoLLStudio ] : The APKOutputPath property is not defined in winboll.properties, please configure APK output folder first.'
+			} else {
+                /// APK publishing and source management operations of the WINBOLL host ///
+                variant.getAssembleProvider().get().doFirst {
+                    /* Reserved for future management */
+                } //doFirst {
+
+                // Post-build output file handling
+                //
+                variant.getAssembleProvider().get().doLast {
+                        variant.outputs.forEach{ file->
+                            // If debugging, copy to the WinBoLL backup management folder
+                            //
+                            if(variant.flavorName == "beta"&&variant.buildType.name == "debug"){
+                                // BaseVersion.flag gate: check before creating build.properties
+                                def betaDebugGateResult = winbollBaseVersionFlagCheck()
+                                File outBuildBckDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/${variant.buildType.name}")
+                                // Create target directory
+                                if(!outBuildBckDir.exists()) {
+                                    outBuildBckDir.mkdirs();
+                                    println "Output Folder Created.(WinBoLLStudio) : " + outBuildBckDir.getAbsolutePath()
+                                }
+                                if(outBuildBckDir.exists()) {
+                                    def targetApkFile = new File(outBuildBckDir, outputFileName)
+                                    copy{
+                                        from file.outputFile
+                                        into outBuildBckDir
+                                        rename {
+                                            String fileName -> "${outputFileName}"
+                                        }
+                                        println "Output APK (WinBoLLStudio): " + outBuildBckDir.getAbsolutePath() + "/${outputFileName}"
+                                    }
+                                    if(betaDebugGateResult == 'equal') {
+                                        // Check build flag configuration
+                                        assert (winbollBuildProps['buildCount'] != null)
+                                        assert (winbollBuildProps['libraryProject'] != null)
+                                        // Increment build count
+                                        int buildCount = Integer.parseInt(winbollBuildProps['buildCount']) + 1;
+                                        // Set build count
+                                        winbollBuildProps.setProperty("buildCount", Integer.toString(buildCount));
+                                    }
+
+                                    // Save build flag configuration
+                                    FileOutputStream fos = new FileOutputStream(winbollBuildPropsFile)
+                                    winbollBuildProps.store(fos, "${winbollBuildPropsDesc}");
+                                    fos.close();
+									println "\n\n>>> Project build.properties saved.\n\n";
+
+                                    if(betaDebugGateResult == 'adjusted') {
+                                        // BaseVersion.flag gate: the adjusted build.properties is copied
+                                        // to every module folder enabled in settings.gradle
+                                        winbollCopyBuildPropsToAllModules()
+                                    } else if(winbollBuildProps['libraryProject'] != "") {
+                                        // If the app build.properties file defines a library module project name,
+                                        // copy the new build flag configuration to the library project folder
+                                        File libraryProjectBuildPropsFile = new File("$RootProjectDir/" + winbollBuildProps['libraryProject'] + "/build.properties")
+                                        assert(winbollBuildPropsFile.exists())
+                                        assert(libraryProjectBuildPropsFile.exists())
+                                        java.nio.file.Path sourceFilePath = winbollBuildPropsFile.toPath();
+                                        java.nio.file.Path targetFilePath = libraryProjectBuildPropsFile.toPath();
+                                        java.nio.file.Files.copy(sourceFilePath, targetFilePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+										println "\n\n>>> Library Project build.properties saved.\n\n";
+                                    }
+                                }
+                            }
+
+                            // If publishing, copy to the WinBoLL tag management folder and run Git repository management tasks.
+                            //
+                            if(variant.flavorName == "stage"&&variant.buildType.name == "release"){
+                                // BaseVersion.flag gate: check before creating build.properties
+                                def stageReleaseGateResult = winbollBaseVersionFlagCheck()
+                                // Publish the APK file
+                                String szVersionName = "${versionName}"
+                                String[] szlistTemp = szVersionName.split("-")
+                                String szShortVersionName = szlistTemp[0]
+                                String szCommonTagAPKName = project.rootDir.name + "_" + szShortVersionName + ".apk"
+                                println "CommonTagAPKName is : " + szCommonTagAPKName
+
+                                File outTagDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/tag/")
+                                // Create target directory
+                                if(!outTagDir.exists()) {
+                                    outTagDir.mkdirs();
+                                    println "Output Folder Created.(Tags) : " + outTagDir.getAbsolutePath()
+                                }
+
+                                if(outTagDir.exists()) {
+                                    File targetAPK = new File(outTagDir, "${szCommonTagAPKName}")
+                                    if(targetAPK.exists()) {
+                                        assert (!targetAPK.exists())
+                                    }
+                                    // Copy the full-version APK
+                                    def fullApkFile = new File(outTagDir, outputFileName)
+                                    copy{
+                                        from file.outputFile
+                                        into outTagDir
+                                        rename {
+                                            String fileName -> "${outputFileName}"
+                                        }
+                                        println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${outputFileName}"
+                                    }
+                                    // Copy the short-version-name APK
+                                    def shortApkFile = new File(outTagDir, szCommonTagAPKName)
+                                    copy{
+                                        from file.outputFile
+                                        into outTagDir
+                                        rename {
+                                            String fileName -> "${szCommonTagAPKName}"
+                                        }
+                                        println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${szCommonTagAPKName}"
+                                    }
+                                    if(stageReleaseGateResult == 'equal') {
+                                        // Check build flag configuration
+                                        assert (winbollBuildProps['stageCount'] != null)
+                                        assert (winbollBuildProps['publishVersion'] != null)
+                                        assert (winbollBuildProps['buildCount'] != null)
+                                        assert (winbollBuildProps['baseVersion'] != null)
+                                        assert (winbollBuildProps['baseBetaVersion'] != null)
+                                        assert (winbollBuildProps['libraryProject'] != null)
+
+                                        // Set the default library version name
+                                        winbollBuildProps.setProperty("publishVersion", "${versionName}");
+                                        // Increment Stage publish count
+                                        int stageCount = Integer.parseInt(winbollBuildProps['stageCount']) + 1;
+                                        winbollBuildProps.setProperty("stageCount", Integer.toString(stageCount));
+                                        // Set the default library beta version name
+                                        winbollBuildProps.setProperty("baseBetaVersion", winbollBuildProps['baseVersion'] + "." + Integer.toString(stageCount));
+                                        // Reset build count
+                                        winbollBuildProps.setProperty("buildCount", "0");
+                                    }
+
+                                    // Save build flag configuration
+                                    FileOutputStream fos = new FileOutputStream(winbollBuildPropsFile)
+                                    winbollBuildProps.store(fos, "${winbollBuildPropsDesc}");
+                                    fos.close();
+
+                                    if(stageReleaseGateResult == 'adjusted') {
+                                        // BaseVersion.flag gate: the adjusted build.properties is copied
+                                        // to every module folder enabled in settings.gradle
+                                        winbollCopyBuildPropsToAllModules()
+                                    } else if(winbollBuildProps['libraryProject'] != "") {
+                                        File libraryProjectBuildPropsFile = new File("$RootProjectDir/" + winbollBuildProps['libraryProject'] + "/build.properties")
+                                        assert(winbollBuildPropsFile.exists())
+                                        assert(libraryProjectBuildPropsFile.exists())
+                                        java.nio.file.Path sourceFilePath = winbollBuildPropsFile.toPath();
+                                        java.nio.file.Path targetFilePath = libraryProjectBuildPropsFile.toPath();
+                                        java.nio.file.Files.copy(sourceFilePath, targetFilePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                                    }
+
+                                    // Commit the new build flag configuration
+									println 'exec bashCommitAppPublishBuildFlagInfoFilePath ...'
+                                    def resultCommitBuildFlag = exec {
+                                        commandLine 'bash', '--', "${RootProjectDir}/${bashCommitAppPublishBuildFlagInfoFilePath}", "${RootProjectDir}", "${versionName}", variant.buildType.name , rootProject.name
+                                    }
+                                    // Check the bash exit value (non-zero means failure)
+                                    assert(resultCommitBuildFlag.getExitValue() == 0)
+                                }
+                            } //  if(variant.buildType.name == "release"){
+
+							// If debugging the release build, only generate and output the APK file;
+							// do not handle Git repository commit/update tasks.
+							//
+					        if(variant.flavorName == "stage"&&variant.buildType.name == "debug"){
+                                String szVersionName = "${versionName}"
+                                String[] szlistTemp = szVersionName.split("-")
+                                String szShortVersionName = szlistTemp[0]
+                                String szCommonTagAPKName = project.rootDir.name + "_" + szShortVersionName + ".apk"
+                                println "CommonTagAPKName is : " + szCommonTagAPKName
+
+                                File outTagDir = new File(fWinBoLLStudioDir, "/" + project.rootDir.name + "/${variant.buildType.name}/")
+                                // Create target directory
+                                if(!outTagDir.exists()) {
+                                    outTagDir.mkdirs();
+                                    println "Output Folder Created.(Tags) : " + outTagDir.getAbsolutePath()
+                                }
+
+                                if(outTagDir.exists()) {
+                                    File targetAPK = new File(outTagDir, "${szCommonTagAPKName}")
+                                    if(targetAPK.exists()) {
+										println 'If debugging the Stage app build, please delete the existing Stage APK (in the debug folder): ' + targetAPK.getAbsolutePath() + ' and build again.'
+                                        assert (!targetAPK.exists())
+                                    }
+                                    // Copy the full-version APK
+                                    def debugFullApk = new File(outTagDir, outputFileName)
+                                    copy{
+                                        from file.outputFile
+                                        into outTagDir
+                                        rename {
+                                            String fileName -> "${outputFileName}"
+                                        }
+                                        println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${outputFileName}"
+                                    }
+                                    // Copy the short-version-name APK
+                                    def debugShortApk = new File(outTagDir, szCommonTagAPKName)
+                                    copy{
+                                        from file.outputFile
+                                        into outTagDir
+                                        rename {
+                                            String fileName -> "${szCommonTagAPKName}"
+                                        }
+                                        println "Output APK (Tags): "+ outTagDir.getAbsolutePath() + "/${szCommonTagAPKName}"
+                                    }
+                                }
+                            }
+
+                            // If an extra APK output path is configured, copy the APK there as well.
+                            //
+							if(winbollProps != null && winbollProps['ExtraAPKOutputPath'] != null ) {
+                                File apkFile = new File(winbollProps['ExtraAPKOutputPath'])
+								File outCommonDir = apkFile.getParentFile();
+                                String commandAPKName = apkFile.getName();
+                                if(outCommonDir.exists()) {
+                                    copy{
+                                        from file.outputFile
+                                        into outCommonDir
+                                        rename {
+                                            String fileName -> "${commandAPKName}"
+                                        }
+                                        println "Output APK (Common): " + outCommonDir.getAbsolutePath() + "/${commandAPKName}"
+                                    }
+                                }
+						    }
+
+
+                    }
+	            }// End of (variant.getAssembleProvider().get().doLast {)
+            }/// APK publishing and source management operations of the WINBOLL host end ///
+        }
+
+    } // End of (android.applicationVariants.all { variant ->)
+}
