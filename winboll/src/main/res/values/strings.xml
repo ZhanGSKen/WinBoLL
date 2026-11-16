@@ -12,7 +12,6 @@
     <string name="tileservice_name">WinBoLL</string>
     <string name="toolbar_icon_description">WinBoLL APP</string>
     <string name="my_termux_activity">MyTermuxActivity</string>
-    <string name="pattern_lock_title">图案密码设置</string>
     <string name="add_termux_button">+ 添加Termux按钮</string>
     <string name="menu_execute">执行</string>
     <string name="menu_edit">编辑</string>

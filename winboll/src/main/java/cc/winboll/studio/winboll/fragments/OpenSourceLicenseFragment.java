@@ -3,7 +3,7 @@ package cc.winboll.studio.winboll.fragments;
 /**
  * @Author ZhanGSKen&豆包大模型<zhangsken@qq.com>
  * @Describe 开源许可说明窗口 Fragment（Java 7 语法）。
- * 列出本程序分发的第三方开源组件及其许可证，对 LGPL 组件做显著标注；
+ * 列出本程序分发的第三方开源组件及其许可证（当前无 GPL/AGPL/LGPL/EPL 组件）；
  * 终端功能由独立 Termux 应用经 Intent 提供，不列入分发组件，仅在页面底部说明。
  * 遵循 DrawerFragmentActivity 架构，通过 addFragment()/showFragment() 组装。
  */
@@ -163,15 +163,10 @@ public class OpenSourceLicenseFragment extends Fragment implements View.OnClickL
             tvView.setTag(item);
             tvView.setOnClickListener(this);
 
-            // LGPL 弱著佐权组件显著标注，其余宽松许可使用普通标签
-            boolean isLgpl = item.license != null && item.license.startsWith("LGPL");
-            if (isLgpl) {
-                tvType.setBackgroundResource(R.drawable.bg_license_badge_lgpl);
-                tvType.setTextColor(0xFFE65100);
-            } else {
-                tvType.setBackgroundResource(R.drawable.bg_license_badge_normal);
-                tvType.setTextColor(0xFF455A64);
-            }
+            // No copyleft component ships with this app, so every entry uses the normal badge;
+            // the former LGPL badge drawable and its highlight branch were removed as dead code.
+            tvType.setBackgroundResource(R.drawable.bg_license_badge_normal);
+            tvType.setTextColor(0xFF455A64);
 
             mListContainer.addView(card);
         }
@@ -206,7 +201,10 @@ public class OpenSourceLicenseFragment extends Fragment implements View.OnClickL
         if (getActivity() == null) {
             return;
         }
-        String text = readAssetText(licenseAsset(item));
+        String assetName = licenseAsset(item);
+        String text = assetName == null
+                ? "本程序不分发 " + item.license + " 组件，故未随包该许可证全文。"
+                : readAssetText(assetName);
 
         ScrollView scrollView = new ScrollView(getActivity());
         TextView tv = new TextView(getActivity());
@@ -249,7 +247,9 @@ public class OpenSourceLicenseFragment extends Fragment implements View.OnClickL
         } else if ("BSD-2-Clause".equals(license)) {
             return "open_source_licenses/BSD-2-Clause.txt";
         } else if (license != null && license.startsWith("LGPL")) {
-            return "open_source_licenses/LGPL-2.1.txt";
+            // No LGPL component is shipped by this app, so no LGPL text is bundled.
+            // Returning null keeps the dialog honest instead of pointing to a missing asset.
+            return null;
         }
         return "open_source_licenses/Apache-2.0.txt";
     }
