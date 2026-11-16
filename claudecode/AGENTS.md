@@ -20,8 +20,10 @@
 
 ```
 ClaudeCodeAndroid/
-├── AGENTS.md                       # 本文档
-├── claudecode/                     # 安卓模块
+├── claudecode/                     # 安卓模块（含项目文档）
+│   ├── AGENTS.md                   # 本文档
+│   ├── 使用说明.md                  # 安装、配置、反代说明
+│   ├── docs/screenshot-chat.png    # 会话界面截图
 │   └── src/main/java/cc/winboll/studio/claudecodeandroid/
 │       ├── AppSettings.java        # 地址 / token / 默认工作目录
 │       ├── ViewColorTable.java     # 全局颜色常量
@@ -42,7 +44,7 @@ ClaudeCodeAndroid/
 │   ├── start-bridge.ps1            # 启动脚本
 │   └── scripts/register-task.ps1   # 计划任务注册
 ├── configure-bridge-firewall.ps1   # 防火墙放行脚本（需管理员）
-└── 使用说明.md                      # 安装、配置、反代说明
+└── gradle/ · build.gradle · settings.gradle
 ```
 
 ## 二、构建
