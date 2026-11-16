@@ -7,7 +7,7 @@
 
 | 项目 | 值 |
 |---|---|
-| 项目路径 | `C:\0WINBOT\\ClaudeCodeAndroid-Project-Development\\ClaudeCodeAndroid` |
+| 项目路径 | `C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid` |
 | 包名 / applicationId | `cc.winboll.studio.claudecodeandroid` |
 | 应用名 | Claude 远程 |
 | 构建系统 | Gradle 9.8.0 + AGP 9.3.3 |
@@ -48,7 +48,7 @@ ClaudeCodeAndroid/
 ## 二、构建
 
 ```powershell
-cd C:\0WINBOT\\ClaudeCodeAndroid-Project-Development\\ClaudeCodeAndroid
+cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid
 java -jar gradle\wrapper\gradle-wrapper.jar assembleDebug
 ```
 
@@ -82,7 +82,7 @@ cmd /c mklink /J "C:\0WINBOT\AndroidStudio\AndroidSDK" "C:\0WINBOT\AndroidStudio
 Start-ScheduledTask -TaskName ClaudeBridge
 Stop-ScheduledTask  -TaskName ClaudeBridge
 # 或前台调试
-cd C:\0WINBOT\\ClaudeCodeAndroid-Project-Development\\ClaudeCodeAndroid\bridge; node src/server.mjs
+cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid\bridge; node src/server.mjs
 ```
 
 ## 四、接口约定

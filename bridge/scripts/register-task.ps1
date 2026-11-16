@@ -9,7 +9,7 @@
 $ErrorActionPreference = "Stop"
 
 $TaskName = "ClaudeBridge"
-$StartScript = "C:\0WINBOT\\ClaudeCodeAndroid-Project-Development\\ClaudeCodeAndroid\bridge\start-bridge.ps1"
+$StartScript = "C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid\bridge\start-bridge.ps1"
 
 if (-not (Test-Path -LiteralPath $StartScript)) {
     throw "启动脚本不存在: $StartScript"

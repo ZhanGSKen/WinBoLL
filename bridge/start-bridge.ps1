@@ -7,7 +7,7 @@
 
 $ErrorActionPreference = "Stop"
 
-$BridgeRoot = "C:\0WINBOT\\ClaudeCodeAndroid-Project-Development\\ClaudeCodeAndroid\bridge"
+$BridgeRoot = "C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid\bridge"
 $NodeExe = "C:\Program Files\nodejs\node.exe"
 
 if (-not (Test-Path -LiteralPath $NodeExe)) {

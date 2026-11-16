@@ -7,7 +7,7 @@
 ## 快速开始
 
 ```powershell
-cd C:\0WINBOT\\ClaudeCodeAndroid-Project-Development\\ClaudeCodeAndroid\bridge
+cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid\bridge
 npm install          # 仅首次
 node src/server.mjs  # 前台调试
 ```
@@ -57,7 +57,7 @@ data: {"type":"delta","text":"好","seq":12,"ts":...}
 ## 端到端自测
 
 ```powershell
-cd C:\0WINBOT\\ClaudeCodeAndroid-Project-Development\\ClaudeCodeAndroid\bridge
+cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid\bridge
 node tools/test-client.mjs "请用一句中文回复：桥接已接通"
 ```
 
