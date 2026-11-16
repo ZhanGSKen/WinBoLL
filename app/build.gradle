@@ -1,0 +1,33 @@
+// =====================================================================
+// ClaudeCodeAndroid — app 模块构建脚本
+// =====================================================================
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'cc.winboll.studio.claudecodeandroid'
+    compileSdk 36
+    // 该 SDK 中仅 30.0.3 / 35.0.0 / 36.0.0 含 Windows 版 build-tools
+    buildToolsVersion '36.0.0'
+
+    defaultConfig {
+        applicationId 'cc.winboll.studio.claudecodeandroid'
+        minSdk 24
+        targetSdk 36
+        versionCode 1
+        versionName '1.0.0'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}

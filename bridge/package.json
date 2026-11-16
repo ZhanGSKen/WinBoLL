@@ -1,0 +1,17 @@
+{
+  "name": "claude-bridge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WINBOT 主机 Claude Code 桥接服务：为安卓客户端提供 REST + SSE 接口",
+  "type": "module",
+  "main": "src/server.mjs",
+  "scripts": {
+    "start": "node src/server.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.326"
+  }
+}
