@@ -6,38 +6,17 @@ and the license texts they require.
 
 Components
 ----------
-1) com.sun.mail:android-mail:1.6.7
-   License: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
-   (declared in META-INF/NOTICE.md, SPDX-License-Identifier:
-    EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0)
-   Project home: https://projects.eclipse.org/projects/ee4j.mail
-   Source code:  https://github.com/eclipse-ee4j/mail
+None. The current APPBase build does not bundle any third-party open source
+components; all functionality is implemented by the project's own code
+(:appbase and :libappbase) or by the Android platform.
 
-2) com.sun.mail:android-activation:1.6.7
-   License: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
-   Project home: https://projects.eclipse.org/projects/ee4j.mail
-   Source code:  https://github.com/eclipse-ee4j/mail
-
-Both artifacts are used unmodified as Maven dependencies; no source files
-were changed. APPBase elects the Eclipse Public License 2.0 (EPL-2.0) for
-distribution. The full license text is in EPL-2.0.txt, the upstream notice
-is in JavaMail-NOTICE.md.
-
-Source code availability
-------------------------
-The Jakarta Mail components listed above are unmodified upstream binaries.
-Their Source Code is available under the Eclipse Public License 2.0 at:
-
-    https://github.com/eclipse-ee4j/mail
-
-You may obtain the corresponding Source Code from that repository, or by
-written request to studio@winboll.cc. This statement applies for as long as
-this application is distributed.
+Project license
+---------------
+APPBase source code is licensed under the Apache License 2.0. The full text
+is in APPBase-LICENSE.txt (Copyright 2026 WinBoLL Studio).
 
 Files
 -----
-EPL-2.0.txt           Eclipse Public License 2.0 full text
-JavaMail-NOTICE.md    Upstream Jakarta Mail NOTICE (trademarks, source links)
 APPBase-LICENSE.txt   Project's own Apache License 2.0
                       (Copyright 2026 WinBoLL Studio)
 README.txt            This inventory

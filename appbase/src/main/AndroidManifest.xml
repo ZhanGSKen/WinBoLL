@@ -56,9 +56,6 @@
 
         <activity android:name=".OpenSourceLicensesActivity"/>
 
-        <activity android:name="cc.winboll.studio.appbase.develop.APPExcetionMailSettingsActivity"
-			android:exported="true"/>
-
     </application>
 
 </manifest>

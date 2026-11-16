@@ -72,18 +72,6 @@
 -dontwarn android.support.v8.renderscript.*
 -dontwarn java.util.function.**
 
-# ============================== 第三方框架规则 ==============================
-# JavaMail（APPBase 邮件/SMTP 依赖：android-mail + android-activation 1.6.7）
-# javax.mail API 之外，还必须保留 com.sun.mail 实现与 javax.activation：
-# Provider/mailcap 通过 META-INF 配置按类名反射加载（SMTPTransport 等），
-# 被 R8 改名/删除后 release 包发邮件会 ClassNotFoundException。
--keep class javax.mail.** { *; }
--dontwarn javax.mail.**
--keep class com.sun.mail.** { *; }
--dontwarn com.sun.mail.**
--keep class javax.activation.** { *; }
--dontwarn javax.activation.**
-
 # ============================== 优化与调试 ==============================
 -optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
 -optimizationpasses 5
