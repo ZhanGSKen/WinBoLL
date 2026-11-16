@@ -34,18 +34,12 @@ ClaudeCodeAndroid/
 │       ├── ui/ChatActivity.java    # 聊天 + 工具卡片 + 权限弹窗
 │       ├── ui/SettingsActivity.java# 设置 / 测试连接
 │       └── utils/LogUtils.java     # 统一日志
-├── bridge/                         # WINBOT 端桥接服务（Node）
-│   ├── src/server.mjs              # HTTP + SSE 路由
-│   ├── src/agent.mjs               # Claude Agent SDK 执行器
-│   ├── src/store.mjs               # 会话与事件存储
-│   ├── src/config.mjs              # 配置加载
-│   ├── config.json                 # 运行配置（含 token，勿外传）
-│   ├── tools/test-client.mjs       # 端到端测试客户端
-│   ├── start-bridge.ps1            # 启动脚本
-│   └── scripts/register-task.ps1   # 计划任务注册
 ├── configure-bridge-firewall.ps1   # 防火墙放行脚本（需管理员）
 └── gradle/ · build.gradle · settings.gradle
 ```
+
+> 桥接服务 `bridge/` 已迁至**项目根目录**（与本仓库同级，即 `..\bridge`），由父仓库 `ClaudeCodeAndroid-Project-Development` 托管；
+> 本仓库只保留安卓模块 `claudecode/` 与文档。桥接说明见 `..\bridge\README.md`。
 
 ## 二、构建
 
@@ -71,12 +65,13 @@ cmd /c mklink /J "C:\0WINBOT\AndroidStudio\AndroidSDK" "C:\0WINBOT\AndroidStudio
 
 | 项 | 值 |
 |---|---|
+| 服务目录 | 项目根 `bridge/`（子模块外，`..\bridge`） |
 | 监听 | `0.0.0.0:8787` |
 | 鉴权 | `Authorization: Bearer <config.json 的 token>` |
 | 模型 | `gemma4:12b`（Ollama，Anthropic 兼容接口 `/v1/messages`） |
 | 允许目录 | `C:\0WINBOT`、`C:\Users\ZhanGSKen` |
 | 常驻 | 计划任务 `ClaudeBridge`（登录自启，隐藏窗口） |
-| 数据 | `bridge/data/sessions.json` + `bridge/data/transcripts/<id>.jsonl` |
+| 数据 | 项目根 `bridge\data\sessions.json` + `bridge\data\transcripts\<id>.jsonl` |
 
 启动 / 停止：
 
@@ -84,7 +79,7 @@ cmd /c mklink /J "C:\0WINBOT\AndroidStudio\AndroidSDK" "C:\0WINBOT\AndroidStudio
 Start-ScheduledTask -TaskName ClaudeBridge
 Stop-ScheduledTask  -TaskName ClaudeBridge
 # 或前台调试
-cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid\bridge; node src/server.mjs
+cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\bridge; node src/server.mjs
 ```
 
 ## 四、接口约定
