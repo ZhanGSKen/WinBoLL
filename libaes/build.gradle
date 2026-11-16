@@ -49,5 +49,6 @@ dependencies {
     api 'com.github.bumptech.glide:glide:4.9.0'
 
     // WinBoLL 库 nexus.winboll.cc 地址
-    api 'cc.winboll.studio:libappbase:15.22.+'
+    // Pinned to an exact version for reproducible builds; bump it explicitly when upgrading.
+    api 'cc.winboll.studio:libappbase:15.22.7'
 }
