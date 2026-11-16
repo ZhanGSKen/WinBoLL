@@ -1,14 +1,16 @@
-APPBase - Third-Party Open Source Components
-============================================
+APPBase - Open Source License Inventory
+=======================================
 
-This directory lists the open source components bundled in the APPBase APK
-and the license texts they require.
+This directory contains the license texts distributed with the APPBase
+library artifact (:libappbase). It describes only what this library itself
+ships. A consuming application may add its own third-party dependencies and
+must list their licenses separately in that application's own inventory.
 
 Components
 ----------
-None. The current APPBase build does not bundle any third-party open source
-components; all functionality is implemented by the project's own code
-(:appbase and :libappbase) or by the Android platform.
+None declared by this library. All APPBase functionality (:appbase and
+:libappbase) is implemented by the project's own code or by the Android
+platform.
 
 Project license
 ---------------
