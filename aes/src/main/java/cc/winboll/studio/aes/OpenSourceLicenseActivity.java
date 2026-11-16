@@ -253,12 +253,6 @@ public class OpenSourceLicenseActivity extends BaseWinBoLLActivity {
                 "io.github.medyo:android-about-page:2.0.0", "MIT", "MIT.txt",
                 "https://github.com/medyo/android-about-page",
                 "io.github.medyo:android-about-page:2.0.0"));
-        list.add(new LicenseEntry("JavaMail for Android（android-mail / android-activation）",
-                "com.sun.mail:android-mail:1.6.7",
-                "EPL-2.0（父 POM 三选一，本项目选 EPL-2.0）", "EPL-2.0.txt",
-                "https://javaee.github.io/javamail/",
-                "com.sun.mail:android-mail:1.6.7\n"
-                + "com.sun.mail:android-activation:1.6.7"));
         // Own modules (libappbase, libaes) are not third-party components and stay out of this list
         return list;
     }

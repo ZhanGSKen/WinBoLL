@@ -30,10 +30,7 @@ android {
 dependencies {
     // 下拉控件
     api 'com.baoyz.pullrefreshlayout:library:1.2.0'
-    // 拼音搜索：已移除 pinyin4j 2.5.0
-    // 原因见《开源许可证合规检查报告.md》P0：该构件源码为 GPL-2.0-or-later
-    // （POM 标 BSD、社区文档称 LGPL-2.1，三处冲突），且本项目源码对 pinyin4j 零引用；
-    // 后续若需拼音能力，改用 Apache-2.0 的 com.github.promeg:tinypinyin。
+    // 拼音搜索：已移除 pinyin4j 2.5.0（GPL-2.0-or-later，本项目零引用），详见《开源许可证合规检查报告.md》P0
     // SSH
     api 'com.jcraft:jsch:0.1.55'
     // Html 解析
@@ -47,27 +44,10 @@ dependencies {
     api 'com.squareup.okhttp3:okhttp:4.4.1'
     // AndroidX 类库
     api 'androidx.appcompat:appcompat:1.1.0'
-    //api 'com.google.android.material:material:1.4.0'
-    //api 'androidx.viewpager:viewpager:1.0.0'
-    //api 'androidx.vectordrawable:vectordrawable:1.1.0'
-    //api 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
-    //api 'androidx.fragment:fragment:1.1.0'
-	
-    //implementation 'androidx.appcompat:appcompat:1.4.1'
     api 'androidx.recyclerview:recyclerview:1.0.0'
     api 'com.google.code.gson:gson:2.8.5'
     api 'com.github.bumptech.glide:glide:4.9.0'
-    //annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-	
-	// WinBoLL库 nexus.winboll.cc 地址
+
+    // WinBoLL 库 nexus.winboll.cc 地址
     api 'cc.winboll.studio:libappbase:15.22.+'
-	
-	// 备用库 jitpack.io 地址
-	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.22.+'
-
-    // JavaMail SMTP (Android兼容版)
-    api 'com.sun.mail:android-mail:1.6.7'
-    api 'com.sun.mail:android-activation:1.6.7'
-
-    api fileTree(dir: 'libs', include: ['*.jar'])
 }
