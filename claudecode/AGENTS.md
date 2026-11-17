@@ -20,21 +20,26 @@
 
 ```
 ClaudeCodeAndroid/
-├── claudecode/                     # 安卓模块（含项目文档）
-│   ├── AGENTS.md                   # 本文档
-│   ├── 使用说明.md                  # 安装、配置、反代说明
-│   ├── docs/screenshot-chat.png    # 会话界面截图
-│   └── src/main/java/cc/winboll/studio/claudecodeandroid/
-│       ├── AppSettings.java        # 地址 / token / 默认工作目录
-│       ├── ViewColorTable.java     # 全局颜色常量
-│       ├── model/SessionInfo.java  # 会话元信息
-│       ├── net/BridgeApi.java      # REST 客户端（HttpURLConnection）
-│       ├── net/SseClient.java      # SSE 长连接 + 自动重连
-│       ├── ui/MainActivity.java    # 会话列表
-│       ├── ui/ChatActivity.java    # 聊天 + 工具卡片 + 权限弹窗
-│       ├── ui/SettingsActivity.java# 设置 / 测试连接
-│       └── utils/LogUtils.java     # 统一日志
-└── gradle/ · build.gradle · settings.gradle
+├── .winboll/                       # WinBoLL 编译框架脚本（随 origin/winboll 同步）
+├── BaseVersion.flag                # 版本下限闸门（baseVersion 低于此值会被自动上调）
+├── build.gradle                    # 框架入口：apply from '.winboll/winboll_app_build.gradle'
+├── settings.gradle                 # rootProject.name = "ClaudeCode" + include ':claudecode'
+├── gradle/ · gradlew · gradlew.bat
+└── claudecode/                     # 安卓模块（含项目文档）
+    ├── AGENTS.md                   # 本文档
+    ├── 使用说明.md                  # 安装、配置、反代说明
+    ├── build.gradle · build.properties   # 应用构建配置 / 版本数据（编译时回写）
+    ├── docs/screenshot-chat.png    # 会话界面截图
+    └── src/main/java/cc/winboll/studio/claudecodeandroid/
+        ├── AppSettings.java        # 地址 / token / 默认工作目录
+        ├── ViewColorTable.java     # 全局颜色常量
+        ├── model/SessionInfo.java  # 会话元信息
+        ├── net/BridgeApi.java      # REST 客户端（HttpURLConnection）
+        ├── net/SseClient.java      # SSE 长连接 + 自动重连
+        ├── ui/MainActivity.java    # 会话列表
+        ├── ui/ChatActivity.java    # 聊天 + 工具卡片 + 权限弹窗
+        ├── ui/SettingsActivity.java# 设置 / 测试连接
+        └── utils/LogUtils.java     # 统一日志
 ```
 
 > 桥接服务 `bridge/` 已迁至**项目根目录**（与本仓库同级，即 `..\bridge`），由父仓库 `ClaudeCodeAndroid-Project-Development` 托管；
