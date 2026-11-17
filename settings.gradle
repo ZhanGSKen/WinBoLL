@@ -35,3 +35,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ClaudeCodeAndroid"
 include ':claudecode'
+include ':winboll'
