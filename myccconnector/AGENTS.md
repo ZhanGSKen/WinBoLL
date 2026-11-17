@@ -23,7 +23,7 @@ MyCCConnector/
 ├── .winboll/                       # WinBoLL 编译框架脚本（随 origin/winboll 同步）
 ├── BaseVersion.flag                # 版本下限闸门（baseVersion 低于此值会被自动上调）
 ├── build.gradle                    # 框架入口：apply from '.winboll/winboll_app_build.gradle'
-├── settings.gradle                 # rootProject.name = "MyCCConnector" + include ':myccconnector'
+├── settings.gradle                 # rootProject.name = "myccconnector" + include ':myccconnector'
 ├── gradle/ · gradlew · gradlew.bat
 └── myccconnector/                  # 安卓模块（含项目文档）
     ├── AGENTS.md                   # 本文档
