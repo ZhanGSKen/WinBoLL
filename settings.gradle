@@ -1,2 +1,2 @@
-rootProject.name = "ClaudeCode"
-include ':claudecode'
+rootProject.name = "ClaudeCodeAndroid"
+include ':claudecodeandroid'

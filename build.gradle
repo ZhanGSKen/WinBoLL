@@ -69,25 +69,21 @@ allprojects {
         lintXmlReportFilePath = "build/reports/lint-results.xml"
         lintHTMLReportFilePath = "build/reports/lint-results.html"
 
-        // Check the build configuration file of each module.
-        // 框架按 <root>/<projectName>/build.properties 查找；本仓库根工程 ClaudeCode 目录下
-        // 没有嵌套的同名目录，根工程本身也没有 build.properties，故断言只对子模块生效。
+        // Check the build configuration file
         subProjectPath = "$RootProjectDir/$project.name"
         println "Sub project path: $subProjectPath"
         winbollBuildPropsDesc="Created by .winboll/winboll_app_build.gradle"
         winbollBuildPropsFile = rootProject.file("$subProjectPath/build.properties")
         winbollBuildPropsFilePath = winbollBuildPropsFile.getAbsolutePath();
+        assert(winbollBuildPropsFile.exists())
         winbollBuildProps = new Properties()
-        if (project != rootProject) {
-            assert(winbollBuildPropsFile.exists()) : ">>> Missing build.properties: $winbollBuildPropsFilePath"
-            // Load the build flag configuration file
-            winbollBuildProps.load(new FileInputStream(winbollBuildPropsFile))
-            // Check the build flag configuration file
-            assert (winbollBuildProps['stageCount'] != null)
-            assert (winbollBuildProps['baseVersion'] != null)
-            assert (winbollBuildProps['publishVersion'] != null)
-            assert (winbollBuildProps['buildCount'] != null)
-        }
+        // Load the build flag configuration file
+        winbollBuildProps.load(new FileInputStream(winbollBuildPropsFile))
+        // Load the build flag configuration file
+        assert (winbollBuildProps['stageCount'] != null)
+        assert (winbollBuildProps['baseVersion'] != null)
+        assert (winbollBuildProps['publishVersion'] != null)
+	    assert (winbollBuildProps['buildCount'] != null)
     }
 
     afterEvaluate {
