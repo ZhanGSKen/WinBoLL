@@ -33,10 +33,11 @@ MyCCConnector/
     └── src/main/java/cc/winboll/studio/myccconnector/
         ├── AppSettings.java        # 地址 / token / 默认工作目录
         ├── ViewColorTable.java     # 全局颜色常量
-        ├── model/SessionInfo.java  # 会话元信息
+        ├── model/SessionInfo.java  # 会话元信息（含 workId 归属）
+        ├── model/WorkInfo.java     # 工作任务元信息（会话分组容器）
         ├── net/BridgeApi.java      # REST 客户端（HttpURLConnection）
         ├── net/SseClient.java      # SSE 长连接 + 自动重连
-        ├── ui/MainActivity.java    # 会话列表
+        ├── ui/MainActivity.java    # 工作任务分组折叠列表
         ├── ui/ChatActivity.java    # 聊天 + 工具卡片 + 权限弹窗
         ├── ui/SettingsActivity.java# 设置 / 测试连接
         └── utils/LogUtils.java     # 统一日志
@@ -96,8 +97,13 @@ cd C:\0WINBOT\MyCCConnector-Project-Development\bridge; node src/server.mjs
 | 方法 | 路径 | 说明 |
 |---|---|---|
 | GET | `/api/ping` | 健康检查（无需鉴权） |
-| GET | `/api/sessions` | 会话列表 |
-| POST | `/api/sessions` | 新建会话 `{title, cwd}` |
+| GET | `/api/works` | 工作任务列表（含 `sessionCount`） |
+| POST | `/api/works` | 新建工作任务 `{name, cwd}` |
+| PATCH | `/api/works/:id` | 修改工作任务 `{name?, cwd?}` |
+| DELETE | `/api/works/:id` | 删除工作任务（默认级联删其下会话，`?keepSessions=1` 保留） |
+| GET | `/api/sessions` | 会话列表（含 `workId`） |
+| POST | `/api/sessions` | 新建会话 `{title, cwd, workId?}` |
+| PATCH | `/api/sessions/:id` | 会话改挂任务 `{workId}`（`null` 即移出，转为未归档） |
 | DELETE | `/api/sessions/:id` | 删除会话 |
 | GET | `/api/sessions/:id/messages` | 会话历史事件 |
 | GET | `/api/sessions/:id/events?afterSeq=N` | SSE 事件流（断线重放） |
@@ -138,6 +144,8 @@ cd C:\0WINBOT\MyCCConnector-Project-Development\bridge; node src/server.mjs
 | 纯对话流式回复 | 通过（159 tokens，增量 delta 26 条） |
 | 工具调用（Bash `find`） | 通过（只读命令自动放行） |
 | 权限审批（Write） | 通过（先 `permission_request`，允许后执行） |
+| 工作任务接口（works CRUD / 会话改挂 / 级联删除） | 通过（PowerShell 直连桥接自测，白名单越界返回 400） |
+| App 工作任务分组折叠 | 通过（模拟器 Pixel_5_API_30：建任务 → 任务下建会话 → 折叠/展开 → 会话移出/移入 → 删任务级联删会话） |
 | 安卓 App 会话列表 | 通过（模拟器 API 29，显示“已连接 · N 个会话”） |
 | 安卓 App 收发消息 | 通过（“say hello…” → “Hello!” 完成 3.1 秒） |
 | 历史回放不重复弹窗 | 通过（显示“历史审批 · Write”） |

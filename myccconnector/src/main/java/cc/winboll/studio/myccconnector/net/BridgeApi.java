@@ -112,6 +112,50 @@ public final class BridgeApi {
         return requestJson(baseUrl, token, "GET", "/api/ping", null);
     }
 
+    /** 工作任务列表 */
+    public static JSONArray listWorks(final String baseUrl, final String token) throws IOException {
+        final JSONObject obj = requestJson(baseUrl, token, "GET", "/api/works", null);
+        return obj.optJSONArray("works");
+    }
+
+    /** 新建工作任务 */
+    public static JSONObject createWork(final String baseUrl, final String token,
+                                        final String name, final String cwd) throws IOException {
+        final JSONObject body = new JSONObject();
+        try {
+            body.put("name", name);
+            body.put("cwd", cwd);
+        } catch (org.json.JSONException e) {
+            throw new IOException("构造请求失败", e);
+        }
+        return requestJson(baseUrl, token, "POST", "/api/works", body);
+    }
+
+    /** 修改工作任务（name/cwd 传 null 表示不改） */
+    public static JSONObject updateWork(final String baseUrl, final String token, final String workId,
+                                        final String name, final String cwd) throws IOException {
+        final JSONObject body = new JSONObject();
+        try {
+            if (name != null) {
+                body.put("name", name);
+            }
+            if (cwd != null) {
+                body.put("cwd", cwd);
+            }
+        } catch (org.json.JSONException e) {
+            throw new IOException("构造请求失败", e);
+        }
+        return requestJson(baseUrl, token, "PATCH", "/api/works/" + workId, body);
+    }
+
+    /** 删除工作任务（级联删除其下会话） */
+    public static boolean deleteWork(final String baseUrl, final String token,
+                                     final String workId) throws IOException {
+        final JSONObject obj = requestJson(baseUrl, token, "DELETE",
+                "/api/works/" + workId, null);
+        return obj.optInt("_httpCode", 0) == 200;
+    }
+
     /** 会话列表 */
     public static JSONArray listSessions(final String baseUrl, final String token) throws IOException {
         final JSONObject obj = requestJson(baseUrl, token, "GET", "/api/sessions", null);
@@ -121,14 +165,36 @@ public final class BridgeApi {
     /** 新建会话 */
     public static JSONObject createSession(final String baseUrl, final String token,
                                            final String title, final String cwd) throws IOException {
+        return createSession(baseUrl, token, title, cwd, null);
+    }
+
+    /** 新建会话（可指定归属工作任务，workId 为 null 表示未归档） */
+    public static JSONObject createSession(final String baseUrl, final String token,
+                                           final String title, final String cwd,
+                                           final String workId) throws IOException {
         final JSONObject body = new JSONObject();
         try {
             body.put("title", title);
             body.put("cwd", cwd);
+            if (workId != null && workId.length() > 0) {
+                body.put("workId", workId);
+            }
         } catch (org.json.JSONException e) {
             throw new IOException("构造请求失败", e);
         }
         return requestJson(baseUrl, token, "POST", "/api/sessions", body);
+    }
+
+    /** 会话改挂工作任务（workId 为 null 表示移出任务） */
+    public static JSONObject moveSession(final String baseUrl, final String token,
+                                         final String sessionId, final String workId) throws IOException {
+        final JSONObject body = new JSONObject();
+        try {
+            body.put("workId", workId == null ? JSONObject.NULL : workId);
+        } catch (org.json.JSONException e) {
+            throw new IOException("构造请求失败", e);
+        }
+        return requestJson(baseUrl, token, "PATCH", "/api/sessions/" + sessionId, body);
     }
 
     /** 删除会话 */
