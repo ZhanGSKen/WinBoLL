@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 会话窗口工具栏菜单：中断当前回复 -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_interrupt"
+        android:title="@string/action_interrupt"
+        app:showAsAction="ifRoom" />
+
+</menu>

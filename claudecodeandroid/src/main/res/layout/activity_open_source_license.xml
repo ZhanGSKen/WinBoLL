@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 开源许可窗口：工具栏 + 说明与组件许可卡片列表（仿 WinBoLL 项目 OpenSourceLicenseFragment 布局） -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <cc.winboll.studio.libaes.views.ASupportToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="3dp"
+                android:paddingLeft="12dp"
+                android:paddingTop="14dp"
+                android:paddingRight="12dp"
+                android:text="@string/open_source_license_intro"
+                android:textColor="#FF424242"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="12dp"
+                android:paddingTop="14dp"
+                android:paddingRight="12dp"
+                android:text="@string/open_source_license_group_title"
+                android:textColor="#FF00796B"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- 组件许可卡片由 OpenSourceLicenseActivity 动态填充 -->
+            <LinearLayout
+                android:id="@+id/ll_license_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:background="#FFF5F5F5"
+                android:lineSpacingExtra="2dp"
+                android:padding="10dp"
+                android:text="@string/open_source_license_notice"
+                android:textColor="#FF616161"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="2dp"
+                android:paddingLeft="12dp"
+                android:paddingTop="18dp"
+                android:paddingRight="12dp"
+                android:text="@string/open_source_license_footer"
+                android:textColor="#FF808080"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

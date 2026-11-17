@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +48,7 @@ import cc.winboll.studio.claudecodeandroid.utils.LogUtils;
  * @author 豆包&amp;Big Pickle&amp;MiMo&amp;ZhanGSKen
  * @since 1.0.0
  */
-public class MainActivity extends Activity {
+public class MainActivity extends BaseWinBoLLActivity {
 
     private static final String TAG = "MainActivity";
     private static final int DP_UNIT = 1;
@@ -60,11 +64,53 @@ public class MainActivity extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUtils.d(TAG, "onCreate: enter");
-        setContentView(buildRootView());
+        setContentView(R.layout.activity_main);
+
+        // 工具栏（ASupportToolbar）：主窗口不显示返回箭头
+        Toolbar toolbar = bindToolbar(R.id.toolbar, false);
+        if (toolbar != null) {
+            toolbar.setTitle(R.string.app_name);
+        }
+
+        // 内容区仍由代码构建，挂到工具栏下方容器
+        final LinearLayout container = (LinearLayout) findViewById(R.id.content_container);
+        if (container != null) {
+            container.addView(buildRootView());
+        }
+
         if (AppSettings.getToken(this).length() == 0) {
             showSettingsHint();
         }
         refreshSessions();
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final int itemId = item.getItemId();
+        if (itemId == R.id.action_about) {
+            startActivity(new Intent(this, AboutActivity.class));
+            return true;
+        } else if (itemId == R.id.action_open_source) {
+            startActivity(new Intent(this, OpenSourceLicenseActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -73,20 +119,11 @@ public class MainActivity extends Activity {
         refreshSessions();
     }
 
-    /** 纯代码构建界面，避免额外布局资源 */
+    /** 纯代码构建内容区（顶栏已由 ASupportToolbar 承担） */
     private View buildRootView() {
         final LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(ViewColorTable.COLOR_BG_GRAY);
-
-        final TextView title = new TextView(this);
-        title.setText(R.string.app_name);
-        title.setTextSize(20.0f);
-        title.setTextColor(ViewColorTable.COLOR_WHITE_TEXT);
-        title.setBackgroundColor(ViewColorTable.COLOR_PRIMARY_DARK);
-        title.setPadding(dp(16), dp(14), dp(16), dp(14));
-        root.addView(title, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         statusView = new TextView(this);
         statusView.setTextSize(12.0f);

@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.InputType;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,10 +20,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cc.winboll.studio.claudecodeandroid.AppSettings;
+import cc.winboll.studio.claudecodeandroid.R;
 import cc.winboll.studio.claudecodeandroid.ViewColorTable;
 import cc.winboll.studio.claudecodeandroid.net.BridgeApi;
 import cc.winboll.studio.claudecodeandroid.net.SseClient;
@@ -36,7 +41,7 @@ import cc.winboll.studio.claudecodeandroid.utils.LogUtils;
  * @author 豆包&amp;Big Pickle&amp;MiMo&amp;ZhanGSKen
  * @since 1.0.0
  */
-public class ChatActivity extends Activity {
+public class ChatActivity extends BaseWinBoLLActivity {
 
     public static final String EXTRA_SESSION_ID = "session_id";
     public static final String EXTRA_SESSION_TITLE = "session_title";
@@ -54,11 +59,10 @@ public class ChatActivity extends Activity {
 
     private LinearLayout messagesContainer;
     private ScrollView scrollView;
-    private TextView headerTitle;
-    private TextView headerStatus;
     private EditText inputBox;
     private Button sendButton;
-    private Button interruptButton;
+    private MenuItem interruptMenuItem;
+    private boolean interruptEnabled;
 
     private SseClient sseClient;
     private TextView currentAssistantBubble;
@@ -76,8 +80,55 @@ public class ChatActivity extends Activity {
             finish();
             return;
         }
-        setContentView(buildRootView());
+        setContentView(R.layout.activity_chat);
+
+        // 工具栏（ASupportToolbar）：标题为会话名，副标题为工作目录与连接状态
+        Toolbar toolbar = bindToolbar(R.id.toolbar, true);
+        if (toolbar != null) {
+            toolbar.setTitle(sessionTitle == null ? getString(R.string.title_chat) : sessionTitle);
+            toolbar.setSubtitle((sessionCwd == null ? "" : sessionCwd + " · ") + "连接中…");
+        }
+
+        final LinearLayout container = (LinearLayout) findViewById(R.id.content_container);
+        if (container != null) {
+            container.addView(buildRootView());
+        }
         startStream();
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_chat, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        interruptMenuItem = menu.findItem(R.id.action_interrupt);
+        if (interruptMenuItem != null) {
+            interruptMenuItem.setEnabled(interruptEnabled);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final int itemId = item.getItemId();
+        if (itemId == R.id.action_interrupt) {
+            doInterrupt();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -93,43 +144,7 @@ public class ChatActivity extends Activity {
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(ViewColorTable.COLOR_BG_GRAY);
 
-        // ---- 顶栏：标题 + 连接状态 + 中断按钮 ----
-        final LinearLayout header = new LinearLayout(this);
-        header.setOrientation(LinearLayout.HORIZONTAL);
-        header.setBackgroundColor(ViewColorTable.COLOR_PRIMARY_DARK);
-        header.setPadding(dp(14), dp(10), dp(8), dp(10));
-
-        final LinearLayout headerTexts = new LinearLayout(this);
-        headerTexts.setOrientation(LinearLayout.VERTICAL);
-        headerTitle = new TextView(this);
-        headerTitle.setText(sessionTitle == null ? "会话" : sessionTitle);
-        headerTitle.setTextSize(16.0f);
-        headerTitle.setTextColor(ViewColorTable.COLOR_WHITE_TEXT);
-        headerTexts.addView(headerTitle);
-
-        headerStatus = new TextView(this);
-        headerStatus.setText((sessionCwd == null ? "" : sessionCwd) + " · 连接中…");
-        headerStatus.setTextSize(11.0f);
-        headerStatus.setTextColor(ViewColorTable.COLOR_WHITE_TEXT);
-        headerTexts.addView(headerStatus);
-
-        header.addView(headerTexts, new LinearLayout.LayoutParams(0,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
-
-        interruptButton = new Button(this);
-        interruptButton.setText("中断");
-        interruptButton.setTextSize(12.0f);
-        interruptButton.setEnabled(false);
-        interruptButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                doInterrupt();
-            }
-        });
-        header.addView(interruptButton, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        root.addView(header, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        // 顶栏（标题 / 连接状态 / 中断）已由 ASupportToolbar 与菜单承担，内容区直接从消息区开始
 
         // ---- 消息区 ----
         scrollView = new ScrollView(this);
@@ -199,9 +214,7 @@ public class ChatActivity extends Activity {
                 uiHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        headerStatus.setText((sessionCwd == null ? "" : sessionCwd + " · ") + text);
-                        headerStatus.setTextColor(connected
-                                ? ViewColorTable.COLOR_WHITE_TEXT : ViewColorTable.COLOR_WARNING);
+                        updateToolbarStatus((sessionCwd == null ? "" : sessionCwd + " · ") + text, connected);
                     }
                 });
             }
@@ -284,7 +297,21 @@ public class ChatActivity extends Activity {
     private void setBusy(final boolean value) {
         busy = value;
         sendButton.setEnabled(!value);
-        interruptButton.setEnabled(value);
+        interruptEnabled = value;
+        supportInvalidateOptionsMenu();
+    }
+
+    /**
+     * 更新工具栏副标题中的连接状态；断开时用警示色提示。
+     */
+    private void updateToolbarStatus(final String text, final boolean connected) {
+        final Toolbar toolbar = getWindowToolbar();
+        if (toolbar == null) {
+            return;
+        }
+        toolbar.setSubtitle(text);
+        toolbar.setSubtitleTextColor(connected ? ViewColorTable.COLOR_WHITE_TEXT
+                : ViewColorTable.COLOR_WARNING);
     }
 
     // ---------------------------------------------------------------- 视图构建

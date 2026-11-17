@@ -11,9 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
+
 import org.json.JSONObject;
 
 import cc.winboll.studio.claudecodeandroid.AppSettings;
+import cc.winboll.studio.claudecodeandroid.R;
 import cc.winboll.studio.claudecodeandroid.ViewColorTable;
 import cc.winboll.studio.claudecodeandroid.net.BridgeApi;
 import cc.winboll.studio.claudecodeandroid.utils.LogUtils;
@@ -26,7 +29,7 @@ import cc.winboll.studio.claudecodeandroid.utils.LogUtils;
  * @author 豆包&amp;Big Pickle&amp;MiMo&amp;ZhanGSKen
  * @since 1.0.0
  */
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends BaseWinBoLLActivity {
 
     private static final String TAG = "SettingsActivity";
 
@@ -40,7 +43,29 @@ public class SettingsActivity extends Activity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(buildRootView());
+        setContentView(R.layout.activity_settings);
+
+        // 工具栏（ASupportToolbar）：子窗口，显示返回箭头
+        Toolbar toolbar = bindToolbar(R.id.toolbar, true);
+        if (toolbar != null) {
+            toolbar.setTitle(R.string.title_settings);
+            toolbar.setSubtitle(TAG);
+        }
+
+        final LinearLayout container = (LinearLayout) findViewById(R.id.content_container);
+        if (container != null) {
+            container.addView(buildRootView());
+        }
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 
     private View buildRootView() {

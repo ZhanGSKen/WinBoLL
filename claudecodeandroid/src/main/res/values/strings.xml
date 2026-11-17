@@ -3,4 +3,25 @@
     <string name="app_name">Claude 远程</string>
     <string name="title_chat">会话</string>
     <string name="title_settings">设置</string>
+    <string name="title_about">关于</string>
+    <string name="title_open_source">开源许可</string>
+
+    <string name="app_description">Claude Code 的安卓远程客户端，通过局域网桥接服务在手机上发起会话、查看工具调用与进度。</string>
+
+    <string name="action_about">关于</string>
+    <string name="action_open_source">开源许可</string>
+    <string name="action_interrupt">中断</string>
+
+    <string name="open_source_license_intro">本程序使用了下列开源软件组件，我们尊重并感谢所有开源项目的贡献。各组件的著作权归其各自权利人所有，并依据其对应的开源许可证授权使用。</string>
+    <string name="open_source_license_group_title">随本程序分发的开源组件</string>
+    <string name="open_source_license_notice">合规提示：本程序不含 GPL / AGPL / LGPL / EPL 组件。依赖范围仅为自有库 libaes、libappbase 及其传递引入的 AndroidX AppCompat 组件。</string>
+    <string name="open_source_license_footer">本页面仅为开源许可的署名与提示，各组件的具体权利义务以其随附的原始许可证文本为准。</string>
+    <string name="open_source_license_view_full">查看完整许可证</string>
+    <string name="open_source_license_read_failed">许可证文本加载失败：</string>
+    <string name="open_source_license_not_bundled">该许可证全文未随包分发。</string>
+    <string name="license_self_name">ClaudeCodeAndroid 本项目</string>
+    <string name="license_self_desc">本程序源码（含自有库 libaes / libappbase，源码同在本项目远程仓库）依据仓库根 LICENSE 的 Apache-2.0 授权分发。</string>
+    <string name="license_libaes_desc">WinBoLL 自有组件：AES 主题、工具栏与 Activity 框架库。</string>
+    <string name="license_libappbase_desc">WinBoLL 自有组件：日志、提示、关于页与通用模型库。</string>
+    <string name="license_androidx_desc">Google Android Jetpack 组件库（AppCompat、Core、Fragment、RecyclerView 等）。</string>
 </resources>
