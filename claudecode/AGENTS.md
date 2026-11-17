@@ -10,9 +10,9 @@
 | 项目路径 | `C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCode` |
 | 包名 / applicationId | `cc.winboll.studio.claudecodeandroid` |
 | 应用名 | Claude 远程 |
-| 构建系统 | Gradle 9.8.0 + AGP 9.3.3 |
-| compileSdk / targetSdk / minSdk | 36 / 36 / 24 |
-| buildToolsVersion | 36.0.0 |
+| 构建系统 | Gradle 7.5.1 + AGP 7.2.1（随 WinBoLL 编译框架） |
+| compileSdk / targetSdk / minSdk | 30 / 30 / 24 |
+| buildToolsVersion | 30.0.3 |
 | 版本 | 1.0.0（versionCode 1） |
 | 架构 | 安卓 App ⇄ HTTP/SSE ⇄ 桥接服务 ⇄ Claude Agent SDK ⇄ claude.exe ⇄ Ollama |
 
@@ -34,12 +34,12 @@ ClaudeCode/
 │       ├── ui/ChatActivity.java    # 聊天 + 工具卡片 + 权限弹窗
 │       ├── ui/SettingsActivity.java# 设置 / 测试连接
 │       └── utils/LogUtils.java     # 统一日志
-├── configure-bridge-firewall.ps1   # 防火墙放行脚本（需管理员）
 └── gradle/ · build.gradle · settings.gradle
 ```
 
 > 桥接服务 `bridge/` 已迁至**项目根目录**（与本仓库同级，即 `..\bridge`），由父仓库 `ClaudeCodeAndroid-Project-Development` 托管；
 > 本仓库只保留安卓模块 `claudecode/` 与文档。桥接说明见 `..\bridge\README.md`。
+> 防火墙放行脚本 `configure-bridge-firewall.ps1` 也已移至父仓库根目录（`..\configure-bridge-firewall.ps1`）。
 
 ## 二、构建
 
