@@ -19,7 +19,8 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    // 采用 WinBoLL 框架根脚本（allprojects 仓库）后，仓库由各工程自行声明；
+    // 此处保留 settings 侧仓库作为兜底，不再强制 FAIL_ON_PROJECT_REPOS。
     repositories {
         // 阿里云镜像（国内加速，优先）
         maven { url 'https://maven.aliyun.com/repository/google/' }

@@ -1,17 +1,114 @@
-// =====================================================================
-// WINBOT 主机安卓项目开发模板 — 根构建脚本
-// 本文件为模板级配置，派生新项目时通常无需修改。
-// 版本统一管理见 gradle.properties 中的 ext 常量或各模块 build.gradle。
-// =====================================================================
-plugins {
-    id 'com.android.application' version '9.3.3' apply false
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+        maven { url 'https://dl.bintray.com/ppartisan/maven/' }
+        maven { url "https://clojars.org/repo/" }
+        maven { url "https://jitpack.io" }
+        mavenCentral()
+        google()
+
+        mavenLocal {
+            // Set local Maven repository path
+            url 'file:///sdcard/.m2/repository/'
+        }
+
+        // Nexus Maven repository URLs
+        // "WinBoLL Release"
+        maven { url "https://nexus.winboll.cc/repository/maven-releases/" }
+        // "WinBoLL Group"
+        maven { url "https://nexus.winboll.cc/repository/maven-public/" }
+        // "WinBoLL Snapshot"
+        maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
+    }
+    dependencies {
+	    // Compatible with MIUI12
+        classpath 'com.android.tools.build:gradle:7.2.1' // matches compileSdkVersion 32
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
 }
 
-// 同步自 WinBoLL 编译框架（功能菜单 D）：统一子模块 Java 编译编码为 UTF-8。
-// 上游根脚本的其余内容（buildscript AGP 7.2.1、allprojects 仓库、每模块 build.properties
-// 断言）与本项目的 AGP 9.3.3 + settings 仓库模式冲突，未采用。
-subprojects {
-    tasks.withType(JavaCompile).configureEach {
-        options.encoding = 'UTF-8'
+allprojects {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+        maven { url 'https://dl.bintray.com/ppartisan/maven/' }
+        maven { url "https://clojars.org/repo/" }
+        maven { url "https://jitpack.io" }
+        mavenCentral()
+        google()
+
+        mavenLocal {
+            // Set local Maven repository path
+            url 'file:///sdcard/.m2/repository/'
+        }
+
+        // Nexus Maven repository URLs
+        // "WinBoLL Release"
+        maven { url "https://nexus.winboll.cc/repository/maven-releases/" }
+        // "WinBoLL Group"
+        maven { url "https://nexus.winboll.cc/repository/maven-public/" }
+        // "WinBoLL Snapshot"
+        maven { url "https://nexus.winboll.cc/repository/maven-snapshots/" }
     }
+    ext {
+        // Global variables commonly used for version management.
+        // Sub-module build.gradle files reference them directly as $NAME.
+        // Version management file definitions
+        RootProjectDir = "${rootProject.projectDir}".replace("\\", "/")
+        bashCheckGitCommitStatusFilePath = ".winboll/bashCheckGitCommitStatus.sh"
+        bashCommitAppPublishBuildFlagInfoFilePath = ".winboll/bashCommitAppPublishBuildFlagInfo.sh"
+
+        winbollFilePath = "winboll.properties"
+        keyPropsFilePath = "appkey.keystore"
+        // Lint report output files
+        lintXmlReportFilePath = "build/reports/lint-results.xml"
+        lintHTMLReportFilePath = "build/reports/lint-results.html"
+
+        // Check the build configuration file of each module.
+        // 本仓库根工程名与目录名不同（rootProject.name=ClaudeCodeAndroid），根工程不存在
+        // <root>/<rootName>/build.properties，故断言只对子模块生效。
+        subProjectPath = "$RootProjectDir/$project.name"
+        println "Sub project path: $subProjectPath"
+        winbollBuildPropsDesc="Created by .winboll/winboll_app_build.gradle"
+        winbollBuildPropsFile = rootProject.file("$subProjectPath/build.properties")
+        winbollBuildPropsFilePath = winbollBuildPropsFile.getAbsolutePath();
+        winbollBuildProps = new Properties()
+        if (project != rootProject) {
+            assert(winbollBuildPropsFile.exists()) : ">>> Missing build.properties: $winbollBuildPropsFilePath"
+            // Load the build flag configuration file
+            winbollBuildProps.load(new FileInputStream(winbollBuildPropsFile))
+            // Check the build flag configuration file
+            assert (winbollBuildProps['stageCount'] != null)
+            assert (winbollBuildProps['baseVersion'] != null)
+            assert (winbollBuildProps['publishVersion'] != null)
+            assert (winbollBuildProps['buildCount'] != null)
+        }
+    }
+
+    afterEvaluate {
+        task cleanLintFile() {
+            dependsOn tasks.findAll { task -> task.name.startsWith('lint') }
+            doFirst {
+                // Code here runs before the lint tasks start
+                println "Lint task will run after this setup."
+            }
+	    }
+    }
+
+    subprojects {
+        tasks.withType(JavaCompile) {
+            options.encoding = "UTF-8"
+            // Silence obsolete source/target option warnings; the Java 7 target is intentional.
+            options.compilerArgs << '-Xlint:-options'
+        }
+	}
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

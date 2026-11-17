@@ -1,15 +1,11 @@
 // =====================================================================
 // WinBoLL 模块构建脚本
-// 参照 claudecode 模块现代化：
-//   · plugins{} 声明取代 apply plugin
-//   · .winboll/winboll_app_build.gradle 与 .winboll/winboll_lint_build.gradle
-//     中的版本、签名、lint、打包排除逻辑全部内联到本文件
-//   · SDK / build-tools / Java 级别与 claudecode 对齐
+// 工具链随 WinBoLL 框架：AGP 7.2.1 + Gradle 7.5.1。
+// 版本/签名/渠道/lint/打包排除逻辑内联自 .winboll/winboll_app_build.gradle
+// 与 .winboll/winboll_lint_build.gradle（AGP 7 下使用 packagingOptions/lintOptions）。
 // =====================================================================
 
-plugins {
-    id 'com.android.application'
-}
+apply plugin: 'com.android.application'
 
 // -------- 版本信息：读自模块根 build.properties --------
 def propsFile = file('build.properties')
@@ -26,15 +22,14 @@ def winbollVersionName = "${baseVersion}.${stageCount}"
 def keyPropsFile = rootProject.file('appkey.keystore')
 
 android {
-    namespace 'cc.winboll.studio.winboll'
-    compileSdk 36
+    compileSdk 30
     // 该 SDK 中仅 30.0.3 / 35.0.0 / 36.0.0 含 Windows 版 build-tools
-    buildToolsVersion '36.0.0'
+    buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId 'cc.winboll.studio.winboll'
         minSdk 26
-        targetSdk 36
+        targetSdk 30
         versionCode 1
         versionName winbollVersionName
     }
@@ -91,22 +86,18 @@ android {
         }
     }
 
-    packaging {
-        resources {
-            // 不要排除 META-INF/NOTICE.md 或 META-INF/LICENSE.md：Apache/MIT/BSD/EPL
-            // 许可要求随产物分发许可文本与 NOTICE；按文件名剔除会去掉上游署名。
-            // 以下 4 个是 fastjson 1.2.76 内置的 JAX-RS/Jersey 可选集成 service 注册文件，
-            // 对应实现类不在 classpath，属死服务注册，排除以消除 R8 "missing service class" 警告。
-            excludes += [
-                    'META-INF/services/javax.ws.rs.ext.MessageBodyReader',
-                    'META-INF/services/javax.ws.rs.ext.MessageBodyWriter',
-                    'META-INF/services/javax.ws.rs.ext.Providers',
-                    'META-INF/services/org.glassfish.jersey.internal.spi.AutoDiscoverable'
-            ]
-        }
+    packagingOptions {
+        // 不要排除 META-INF/NOTICE.md 或 META-INF/LICENSE.md：Apache/MIT/BSD/EPL
+        // 许可要求随产物分发许可文本与 NOTICE；按文件名剔除会去掉上游署名。
+        // 以下 4 个是 fastjson 1.2.76 内置的 JAX-RS/Jersey 可选集成 service 注册文件，
+        // 对应实现类不在 classpath，属死服务注册，排除以消除 R8 "missing service class" 警告。
+        exclude 'META-INF/services/javax.ws.rs.ext.MessageBodyReader'
+        exclude 'META-INF/services/javax.ws.rs.ext.MessageBodyWriter'
+        exclude 'META-INF/services/javax.ws.rs.ext.Providers'
+        exclude 'META-INF/services/org.glassfish.jersey.internal.spi.AutoDiscoverable'
     }
 
-    lint {
+    lintOptions {
         abortOnError false
         checkAllWarnings true
         showAll true
