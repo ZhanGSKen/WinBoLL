@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  应用级网络安全配置：覆盖 libappbase / libaes 携带的同名资源。
+  桥接服务默认监听本机 0.0.0.0:8787，App 以明文 HTTP 访问局域网地址
+  （如 http://192.168.123.202:8787），因此需放开明文流量；
+  库自带的配置只允许 winboll.cc 明文，且 targetSdk 28+ 默认禁止明文，
+  会直接把连接拦成 "Cleartext HTTP traffic not permitted"。
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    <!-- debug 包额外信任用户证书，便于 HTTPS 反向代理调试 -->
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>

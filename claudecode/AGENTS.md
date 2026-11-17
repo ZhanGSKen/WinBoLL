@@ -56,6 +56,10 @@ java -jar gradle\wrapper\gradle-wrapper.jar :claudecode:assembleBetaDebug
 产物：`claudecode\build\outputs\apk\beta\debug\claudecode-beta-debug.apk`
 
 > 中文路径下 `gradlew.bat` 会因 cmd 编码报错，统一走 `java -jar gradle\wrapper\gradle-wrapper.jar <任务>`。
+>
+> 明文 HTTP 放行：库（`libappbase` / `libaes`）自带 `res/xml/network_security_config.xml`，只允许 `winboll.cc` 明文，
+> 会把局域网桥接地址拦成 `Cleartext HTTP traffic not permitted`。`claudecode/src/main/res/xml/` 下的应用级同名文件
+> 优先级更高，声明 `base-config cleartextTrafficPermitted=true` 覆盖之，勿删。
 
 ### 本机 SDK 说明
 
