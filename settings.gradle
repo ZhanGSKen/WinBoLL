@@ -1,2 +1,2 @@
-rootProject.name = "MyClaudeCode"
-include ':myclaudecode'
+rootProject.name = "MyCCConnector"
+include ':myccconnector'

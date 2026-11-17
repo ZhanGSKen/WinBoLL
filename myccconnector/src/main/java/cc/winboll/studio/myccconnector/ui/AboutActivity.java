@@ -71,12 +71,12 @@ public class AboutActivity extends BaseWinBoLLActivity {
         appInfo.setAppGitName("WinBoLL");
         appInfo.setAppGitOwner("Studio");
         // AboutView 拼接规则：{owner}/{gitName}/src/branch/{branch}/{subFolder}
-        // 结果为 https://gitea.winboll.cc/Studio/WinBoLL/src/branch/myclaudecode/myclaudecode
-        appInfo.setAppGitAPPBranch("myclaudecode");
-        appInfo.setAppGitAPPSubProjectFolder("myclaudecode");
+        // 结果为 https://gitea.winboll.cc/Studio/WinBoLL/src/branch/myccconnector/myccconnector
+        appInfo.setAppGitAPPBranch("myccconnector");
+        appInfo.setAppGitAPPSubProjectFolder("myccconnector");
         appInfo.setAppHomePage("https://gitea.winboll.cc/Studio/WinBoLL");
-        appInfo.setAppAPKName("MyClaudeCode");
-        appInfo.setAppAPKFolderName("MyClaudeCode");
+        appInfo.setAppAPKName("MyCCConnector");
+        appInfo.setAppAPKFolderName("MyCCConnector");
         appInfo.setIsAddDebugTools(false);
         return appInfo;
     }

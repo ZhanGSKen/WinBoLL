@@ -23,14 +23,14 @@ MyCCConnector/
 ├── .winboll/                       # WinBoLL 编译框架脚本（随 origin/winboll 同步）
 ├── BaseVersion.flag                # 版本下限闸门（baseVersion 低于此值会被自动上调）
 ├── build.gradle                    # 框架入口：apply from '.winboll/winboll_app_build.gradle'
-├── settings.gradle                 # rootProject.name = "myclaudecode" + include ':myclaudecode'
+├── settings.gradle                 # rootProject.name = "MyCCConnector" + include ':myccconnector'
 ├── gradle/ · gradlew · gradlew.bat
-└── myclaudecode/              # 安卓模块（含项目文档）
+└── myccconnector/                  # 安卓模块（含项目文档）
     ├── AGENTS.md                   # 本文档
     ├── 使用说明.md                  # 安装、配置、反代说明
     ├── build.gradle · build.properties   # 应用构建配置 / 版本数据（编译时回写）
     ├── docs/screenshot-chat.png    # 会话界面截图
-    └── src/main/java/cc/winboll/studio/myclaudecode/
+    └── src/main/java/cc/winboll/studio/myccconnector/
         ├── AppSettings.java        # 地址 / token / 默认工作目录
         ├── ViewColorTable.java     # 全局颜色常量
         ├── model/SessionInfo.java  # 会话元信息
@@ -43,22 +43,22 @@ MyCCConnector/
 ```
 
 > 桥接服务 `bridge/` 已迁至**项目根目录**（与本仓库同级，即 `..\bridge`），由父仓库 `MyCCConnector-Project-Development` 托管；
-> 本仓库只保留安卓模块 `myclaudecode/` 与文档。桥接说明见 `..\bridge\README.md`。
+> 本仓库只保留安卓模块 `myccconnector/` 与文档。桥接说明见 `..\bridge\README.md`。
 > 防火墙放行脚本 `configure-bridge-firewall.ps1` 也已移至父仓库根目录（`..\configure-bridge-firewall.ps1`）。
 
 ## 二、构建
 
 ```powershell
 cd C:\0WINBOT\MyCCConnector-Project-Development\MyCCConnector
-java -jar gradle\wrapper\gradle-wrapper.jar :myclaudecode:assembleBetaDebug
+java -jar gradle\wrapper\gradle-wrapper.jar :myccconnector:assembleBetaDebug
 ```
 
-产物：`myclaudecode\build\outputs\apk\beta\debug\myclaudecode-beta-debug.apk`
+产物：`myccconnector\build\outputs\apk\beta\debug\myccconnector-beta-debug.apk`
 
 > 中文路径下 `gradlew.bat` 会因 cmd 编码报错，统一走 `java -jar gradle\wrapper\gradle-wrapper.jar <任务>`。
 >
 > 明文 HTTP 放行：库（`libappbase` / `libaes`）自带 `res/xml/network_security_config.xml`，只允许 `winboll.cc` 明文，
-> 会把局域网桥接地址拦成 `Cleartext HTTP traffic not permitted`。`myclaudecode/src/main/res/xml/` 下的应用级同名文件
+> 会把局域网桥接地址拦成 `Cleartext HTTP traffic not permitted`。`myccconnector/src/main/res/xml/` 下的应用级同名文件
 > 优先级更高，声明 `base-config cleartextTrafficPermitted=true` 覆盖之，勿删。
 
 ### 本机 SDK 说明
