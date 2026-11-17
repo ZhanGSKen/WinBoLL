@@ -24,6 +24,10 @@ import android.webkit.WebView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,6 +141,16 @@ public final class MidiBridge {
     private static float sHostPendingRate = 1.0f;
     private static boolean sHostPendingLoop;
     private static boolean sHostPendingPaused;
+
+    /**
+     * Playlist HTTP channel (spec §3.1 / appendix A.2): the message push is
+     * one channel, GET {site}/midi/playlist.json is the other. One pull per
+     * host negotiation at most, so a stale or never-arrived playlist gets
+     * rebuilt instead of aborting the takeover.
+     */
+    private static volatile boolean sPlaylistPullInFlight = false;
+    private static volatile boolean sHostPullAttempted = false;
+    private static final int PLAYLIST_PULL_TIMEOUT_MS = 15000;
 
     /** Spec §9 idiom: a host negotiation that gets no ACK within 3s falls
      *  back to non-hosted mode — the queued command is delivered anyway. */
@@ -843,15 +857,15 @@ public final class MidiBridge {
         sWebState = parseState(p.optString("state"));
         sWebPositionMs = Math.max(0, p.optLong("positionMs", 0));
         sWebDurationMs = Math.max(0, p.optLong("durationMs", 0));
-        String title = p.optString("title");
-        if (title != null && title.length() > 0) {
+        String title = trimOrNull(p.optString("title"));
+        if (title != null) {
             sWebTitle = title;
         }
-        String artist = p.optString("artist");
-        if (artist != null && artist.length() > 0) {
+        String artist = trimOrNull(p.optString("artist"));
+        if (artist != null) {
             sWebArtist = artist;
         }
-        String trackId = p.optString("trackId");
+        String trackId = trimOrNull(p.optString("trackId"));
         if (trackId != null) {
             sWebTrackId = trackId;
         }
@@ -933,22 +947,51 @@ public final class MidiBridge {
             double rate = p.optDouble("rate", 0);
             sHostWebRate = rate > 0 ? (float) rate : 1.0f;
             sHostWebLoop = p.optBoolean("loop", false);
-            String trackId = p.optString("trackId");
-            String title = p.optString("title");
+            String trackId = trimOrNull(p.optString("trackId"));
+            String title = trimOrNull(p.optString("title"));
             if (sHosting) {
                 // Idempotent re-request (e.g. install ⓘ while already hosted).
                 sendControlHostAck();
                 return;
             }
             sHosting = true;
+            // New negotiation: the HTTP refresh below is that one allowed pull.
+            sHostPullAttempted = true;
             saveHostPrefs(true, sHostWebState, trackId != null ? trackId : "",
                 title != null ? title : "", sHostWebPositionMs, sHostWebRate, sHostWebLoop);
             sendControlHostAck();
             // Spec §4/§8: the takeover respects the page's playback state — a
             // paused/stopped page parks the native engine (startPaused) instead
             // of auto-playing under the user.
-            startHostedPlayback(trackId, title, sHostWebPositionMs, sHostWebRate, sHostWebLoop,
-                sHostWebState != STATE_PLAYING);
+            final boolean startPaused = sHostWebState != STATE_PLAYING;
+            // Refresh the playlist over HTTP before taking over (spec A.2).
+            // The pushed list can be a stale copy left over from another page
+            // in the same WebView (observed 2026-11-17 on API 36: the home
+            // page's iframe push selected a wrong track after navigating to
+            // the test site), while /midi/playlist.json is no-cache and
+            // authoritative. Falls back to the in-memory list on failure.
+            // A fresh negotiation supersedes any deferred retry; the HTTP pull
+            // below is the single owner of this takeover's start.
+            sHostPendingRetry = false;
+            sHostPendingTrackId = trackId;
+            sHostPendingTitle = title;
+            sHostPendingStartMs = sHostWebPositionMs;
+            sHostPendingRate = sHostWebRate;
+            sHostPendingLoop = sHostWebLoop;
+            sHostPendingPaused = startPaused;
+            pullPlaylistAsync(new Runnable() {
+                @Override
+                public void run() {
+                    // Runs on the main thread once the pull settled (applied or
+                    // failed); handlePlaylist() does not auto-start here because
+                    // sHostPendingRetry stays false during the pull.
+                    if (sHosting) {
+                        startHostedPlayback(sHostPendingTrackId, sHostPendingTitle,
+                            sHostPendingStartMs, sHostPendingRate, sHostPendingLoop,
+                            sHostPendingPaused);
+                    }
+                }
+            });
         } else {
             // A pending deferred takeover is cancelled by this unhost/query.
             sHostPendingRetry = false;
@@ -1269,23 +1312,145 @@ public final class MidiBridge {
 
     // ------------------- hosted engine (spec §4) -------------------
 
-    /** Timeout for a host request that never saw its trailing playlist. */
+    /**
+     * Timeout for a host request that never saw its trailing playlist
+     * message. Spec appendix A.2 gives the browser a second playlist channel,
+     * so instead of unwinding right away the takeover first rebuilds the list
+     * from GET /midi/playlist.json and retries; only a failed pull aborts.
+     */
     private static final Runnable sHostPendingTimeout = new Runnable() {
         @Override
         public void run() {
             if (!sHostPendingRetry) {
                 return;
             }
-            sHostPendingRetry = false;
-            Log.w(TAG, "hosting aborted: playlist never arrived");
-            sHosting = false;
-            saveHostPrefs(false, STATE_STOPPED, "", "", 0, 1.0f, false);
-            sendControlUnhost(sHostWebState, sHostWebPositionMs,
-                sHostPendingTrackId != null ? sHostPendingTrackId : "",
-                sHostPendingTitle != null ? sHostPendingTitle : "",
-                sHostPendingRate, sHostPendingLoop);
+            if (sPlaylistPullInFlight) {
+                // The pull is already running: let it finish and re-check.
+                sMain.postDelayed(this, 1000);
+                return;
+            }
+            if (!sHostPullAttempted) {
+                sHostPullAttempted = true;
+                Log.w(TAG, "hosting: playlist missing, pulling playlist.json (spec A.2)");
+                pullPlaylistAsync(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Started inline after handlePlaylist ran the retry;
+                        // reaching here with the flag still set means the pull
+                        // produced nothing (network error / empty library).
+                        if (!sHostPendingRetry) {
+                            return;
+                        }
+                        abortPendingHost("playlist pull produced no entry");
+                    }
+                });
+                return;
+            }
+            abortPendingHost("playlist never arrived");
         }
     };
+
+    /** Unwind a deferred takeover and hand playback back to the web player. */
+    private static void abortPendingHost(String reason) {
+        sHostPendingRetry = false;
+        Log.w(TAG, "hosting aborted: " + reason);
+        sHosting = false;
+        saveHostPrefs(false, STATE_STOPPED, "", "", 0, 1.0f, false);
+        sendControlUnhost(sHostWebState, sHostWebPositionMs,
+            sHostPendingTrackId != null ? sHostPendingTrackId : "",
+            sHostPendingTitle != null ? sHostPendingTitle : "",
+            sHostPendingRate, sHostPendingLoop);
+    }
+
+    /** "scheme://authority" of the page currently driving the bridge. */
+    private static String currentSiteBase() {
+        WebView wv = sWebView;
+        String url = wv != null ? wv.getUrl() : null;
+        if (url == null || url.length() == 0) {
+            url = sDefaultHomeUrl;
+        }
+        try {
+            Uri uri = Uri.parse(url);
+            String scheme = uri.getScheme();
+            String authority = uri.getAuthority();
+            if (scheme == null || authority == null || authority.length() == 0) {
+                return null;
+            }
+            return scheme + "://" + authority;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Pull the playlist over HTTP (spec §3.1 HTTP channel / appendix A.2).
+     * Public read-only endpoint, `Cache-Control: no-cache`; the whole `tracks`
+     * snapshot replaces the local cache (never merged), and `rev` is only
+     * compared for "changed", since it is a content signature and does not
+     * increase monotonically. `onDone` always runs on the main thread.
+     */
+    private static void pullPlaylistAsync(final Runnable onDone) {
+        if (sPlaylistPullInFlight) {
+            return;
+        }
+        sPlaylistPullInFlight = true;
+        final String base = currentSiteBase();
+        Thread worker = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject root = null;
+                HttpURLConnection conn = null;
+                if (base != null) {
+                    try {
+                        URL u = new URL(base + "/midi/playlist.json");
+                        conn = (HttpURLConnection) u.openConnection();
+                        conn.setConnectTimeout(8000);
+                        conn.setReadTimeout(PLAYLIST_PULL_TIMEOUT_MS);
+                        conn.setRequestProperty("Cache-Control", "no-cache");
+                        conn.setRequestProperty("Accept", "application/json");
+                        if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                            InputStream in = conn.getInputStream();
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                            byte[] buf = new byte[4096];
+                            int n;
+                            while ((n = in.read(buf)) != -1) {
+                                bos.write(buf, 0, n);
+                            }
+                            in.close();
+                            root = new JSONObject(bos.toString("UTF-8"));
+                        } else {
+                            Log.w(TAG, "playlist pull http " + conn.getResponseCode());
+                        }
+                    } catch (Exception e) {
+                        Log.w(TAG, "playlist pull failed: " + e.getMessage());
+                    } finally {
+                        if (conn != null) {
+                            conn.disconnect();
+                        }
+                    }
+                } else {
+                    Log.w(TAG, "playlist pull skipped: no page base url");
+                }
+                final JSONObject parsed = root;
+                sMain.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        sPlaylistPullInFlight = false;
+                        if (parsed != null) {
+                            // Same payload shape as the message push; applying it
+                            // also finishes a deferred takeover (spec §4.3-②).
+                            handlePlaylist(parsed);
+                        }
+                        if (onDone != null) {
+                            onDone.run();
+                        }
+                    }
+                });
+            }
+        }, "midi-playlist-pull");
+        worker.setDaemon(true);
+        worker.start();
+    }
 
     private static void startHostedPlayback(String trackId, String title, long startPosMs,
                                             float rate, boolean loop, boolean startPaused) {
@@ -1310,8 +1475,24 @@ public final class MidiBridge {
                 sMain.postDelayed(sHostPendingTimeout, HOST_PLAYLIST_WAIT_MS);
                 return;
             }
-            // Playlist is present but has no usable entry: unwind hosting
-            // gracefully so the web synthesizer resumes (spec §9 fallback).
+            // Playlist is present but has no usable entry: the cached list may
+            // be stale (library re-indexed server-side, spec A.2 `rev` is a
+            // content signature that also changes on deletes/reorders), so
+            // refresh it over HTTP once before unwinding.
+            if (!sHostPullAttempted) {
+                sHostPullAttempted = true;
+                Log.d(TAG, "hosting: no entry for " + trackId + ", refreshing playlist");
+                sHostPendingRetry = true;
+                sHostPendingTrackId = trackId;
+                sHostPendingTitle = title;
+                sHostPendingStartMs = startPosMs;
+                sHostPendingRate = rate;
+                sHostPendingLoop = loop;
+                sHostPendingPaused = startPaused;
+                sMain.removeCallbacks(sHostPendingTimeout);
+                sMain.postDelayed(sHostPendingTimeout, HOST_PLAYLIST_WAIT_MS);
+                return;
+            }
             Log.w(TAG, "hosting aborted: no playlist entry for " + trackId);
             sHostPendingRetry = false;
             sHosting = false;
@@ -1564,6 +1745,37 @@ public final class MidiBridge {
 
     // ------------------- helpers -------------------
 
+    /** Trimmed value, or null when absent/blank (web payloads carry padding). */
+    private static String trimOrNull(String s) {
+        if (s == null) {
+            return null;
+        }
+        String t = s.trim();
+        return t.length() == 0 ? null : t;
+    }
+
+    /**
+     * Legacy web-side track id form "t&lt;index&gt;": the page still emits it
+     * even though spec appendix A (2026-11-17) corrected the examples to the
+     * stable "midi000001" ids that playlist.json actually serves. Mapping it
+     * to a playlist index keeps hosted playback on the right track.
+     */
+    private static int legacyTrackIndex(String trackId) {
+        if (trackId == null || trackId.length() < 2 || trackId.charAt(0) != 't') {
+            return -1;
+        }
+        for (int i = 1; i < trackId.length(); i++) {
+            if (!Character.isDigit(trackId.charAt(i))) {
+                return -1;
+            }
+        }
+        try {
+            return Integer.parseInt(trackId.substring(1));
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
     private static HostedMidiPlayer.Track findTrack(String trackId, String title) {
         synchronized (sTracks) {
             if (sTracks.isEmpty()) {
@@ -1576,12 +1788,22 @@ public final class MidiBridge {
                     }
                 }
             }
-            if (title != null && title.length() > 0) {
+            // Title match before the legacy "t<index>" mapping: the page's
+            // legacy index does not reliably line up with the playlist order
+            // (observed 2026-11-17: t0 while the selected entry was the second
+            // playlist row), whereas the reported title names the right track.
+            String wanted = trimOrNull(title);
+            if (wanted != null) {
                 for (int i = 0; i < sTracks.size(); i++) {
-                    if (title.equalsIgnoreCase(sTracks.get(i).title)) {
+                    String have = trimOrNull(sTracks.get(i).title);
+                    if (have != null && wanted.equalsIgnoreCase(have)) {
                         return sTracks.get(i);
                     }
                 }
+            }
+            int legacy = legacyTrackIndex(trackId);
+            if (legacy >= 0 && legacy < sTracks.size()) {
+                return sTracks.get(legacy);
             }
             if (!sTracks.isEmpty()) {
                 return sTracks.get(0);

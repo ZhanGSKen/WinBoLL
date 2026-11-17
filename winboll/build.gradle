@@ -126,7 +126,7 @@ dependencies {
     // dependency graph between builds, which invalidates license compliance
     // conclusions without notice (see license audit rounds 5-7).
     api 'cc.winboll.studio:libappbase:15.22.7'
-    api 'cc.winboll.studio:libaes:15.22.7'
+    api 'cc.winboll.studio:libaes:15.22.8'
 
 	// Fallback libraries from jitpack.io
 	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.21.+'
