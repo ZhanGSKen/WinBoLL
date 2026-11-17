@@ -50,6 +50,8 @@ public class MediaPlaybackService extends MediaBrowserService {
     public static final String ACTION_STOP = "cc.winboll.studio.winboll.action.MEDIA_STOP";
     public static final String ACTION_PREV = "cc.winboll.studio.winboll.action.MEDIA_PREV";
     public static final String ACTION_NEXT = "cc.winboll.studio.winboll.action.MEDIA_NEXT";
+    /** Hosted-only: cycle the playback mode (sequence / shuffle / single). */
+    public static final String ACTION_CYCLE_MODE = "cc.winboll.studio.winboll.action.MEDIA_CYCLE_MODE";
 
     // Intent extras
     public static final String EXTRA_PLAYING = "playing";
@@ -288,6 +290,8 @@ public class MediaPlaybackService extends MediaBrowserService {
             dispatchSkip(false);
         } else if (ACTION_NEXT.equals(action)) {
             dispatchSkip(true);
+        } else if (ACTION_CYCLE_MODE.equals(action)) {
+            dispatchCycleMode();
         } else if (ACTION_STATE_CHANGED.equals(action)) {
             if (intent != null) {
                 if (intent.hasExtra(EXTRA_STATE)) {
@@ -420,6 +424,34 @@ public class MediaPlaybackService extends MediaBrowserService {
         }
     }
 
+    /**
+     * Notification mode button: cycle 单曲播放 -> 顺序播放 -> 随机播放. The hosted
+     * engine loop flag follows at once (MidiBridge.cyclePlayMode) and the bar is
+     * rebuilt so the button label matches the new mode.
+     */
+    private void dispatchCycleMode() {
+        int mode = MidiBridge.cyclePlayMode(this);
+        Log.i(TAG, "dispatchCycleMode " + MidiBridge.getPlayModeLabel(mode));
+        NotificationManager nm = getNotificationManager();
+        if (nm != null) {
+            nm.notify(NOTIFICATION_ID, buildNotification());
+        }
+        markNotificationPosted();
+        updatePlaybackState();
+    }
+
+    /** Content text: hosted sessions also name the current playback mode. */
+    private String playbackText() {
+        if (mPlayState != PLAY_STATE_PLAYING) {
+            return "播放已暂停";
+        }
+        if (mHosted) {
+            return "MIDI 播放托管中（原生合成）· "
+                + MidiBridge.getPlayModeLabel(MidiBridge.getPlayMode(this));
+        }
+        return "网页音频播放中（后台持续播放）";
+    }
+
     private void updatePlaybackState() {
         if (mSession == null) {
             return;
@@ -466,9 +498,7 @@ public class MediaPlaybackService extends MediaBrowserService {
      * rebuild makes SystemUI re-anchor the seekbar thumb and the drag stutters.
      */
     private void postNotificationIfChanged(boolean foreground) {
-        String text = mPlayState == PLAY_STATE_PLAYING
-            ? (mHosted ? "MIDI 播放托管中（原生合成）" : "网页音频播放中（后台持续播放）")
-            : "播放已暂停";
+        String text = playbackText();
         if (mPlayState == mPostedState && mHosted == mPostedHosted
                 && strEq(mTitle, mPostedTitle) && strEq(text, mPostedText)) {
             return;
@@ -492,9 +522,7 @@ public class MediaPlaybackService extends MediaBrowserService {
         mPostedState = mPlayState;
         mPostedHosted = mHosted;
         mPostedTitle = mTitle;
-        mPostedText = mPlayState == PLAY_STATE_PLAYING
-            ? (mHosted ? "MIDI 播放托管中（原生合成）" : "网页音频播放中（后台持续播放）")
-            : "播放已暂停";
+        mPostedText = playbackText();
     }
 
     private static boolean strEq(String a, String b) {
@@ -524,9 +552,13 @@ public class MediaPlaybackService extends MediaBrowserService {
             new Intent(this, MediaPlaybackService.class).setAction(ACTION_PREV), flags);
         PendingIntent nextPi = PendingIntent.getService(this, 6,
             new Intent(this, MediaPlaybackService.class).setAction(ACTION_NEXT), flags);
+        PendingIntent modePi = PendingIntent.getService(this, 7,
+            new Intent(this, MediaPlaybackService.class).setAction(ACTION_CYCLE_MODE), flags);
 
-        // Toolbar order: previous / play-pause / next / stop. The stop action
-        // must NOT reuse the skip-previous glyph (it read as a track button).
+        // Toolbar order: previous / play-pause / next / [mode] / stop. The stop
+        // action must NOT reuse the skip-previous glyph (it read as a track
+        // button). The hosted mode button sits at index 3 so that it lands in
+        // the compact row (indices 1,2,3) that Android 11 media cards render.
         Notification.Action prevAction = new Notification.Action.Builder(
             android.R.drawable.ic_media_previous, "上一曲", prevPi).build();
         Notification.Action playAction = new Notification.Action.Builder(
@@ -537,13 +569,19 @@ public class MediaPlaybackService extends MediaBrowserService {
             android.R.drawable.ic_media_next, "下一曲", nextPi).build();
         Notification.Action stopAction = new Notification.Action.Builder(
             android.R.drawable.ic_menu_close_clear_cancel, "停止", stopPi).build();
-
-        String contentText;
-        if (mPlayState == PLAY_STATE_PLAYING) {
-            contentText = mHosted ? "MIDI 播放托管中（原生合成）" : "网页音频播放中（后台持续播放）";
-        } else {
-            contentText = "播放已暂停";
+        // Hosted-only mode button: the icon and label both show the CURRENT mode
+        // (playlist / shuffle / loop-one), tapping it advances to the next one.
+        int mode = MidiBridge.getPlayMode(this);
+        int modeIcon = R.drawable.ic_play_mode_single;
+        if (mode == MidiBridge.PLAY_MODE_SEQUENCE) {
+            modeIcon = R.drawable.ic_play_mode_sequence;
+        } else if (mode == MidiBridge.PLAY_MODE_SHUFFLE) {
+            modeIcon = R.drawable.ic_play_mode_shuffle;
         }
+        Notification.Action modeAction = new Notification.Action.Builder(
+            modeIcon, MidiBridge.getPlayModeLabel(mode), modePi).build();
+
+        String contentText = playbackText();
 
         Notification.Builder builder = new Notification.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_winboll_logo)
@@ -554,11 +592,16 @@ public class MediaPlaybackService extends MediaBrowserService {
             .setShowWhen(false)
             .setStyle(new Notification.MediaStyle()
                 .setMediaSession(mSession.getSessionToken())
-                .setShowActionsInCompactView(0, 1, 2))
+                // Android 11 media cards only render the three compact actions,
+                // so the hosted mode button must occupy one of them to be tappable.
+                .setShowActionsInCompactView(1, 2, 3))
             .addAction(prevAction)
             .addAction(mPlayState == PLAY_STATE_PLAYING ? pauseAction : playAction)
-            .addAction(nextAction)
-            .addAction(stopAction);
+            .addAction(nextAction);
+        if (mHosted) {
+            builder.addAction(modeAction);
+        }
+        builder.addAction(stopAction);
         return builder.build();
     }
 

@@ -90,6 +90,8 @@ public final class MidiBridge {
     private static final String KEY_HOST_POS = "host_pos";
     private static final String KEY_HOST_RATE = "host_rate";
     private static final String KEY_HOST_LOOP = "host_loop";
+    /** Hosted playback mode: sequence / shuffle / single (notification button). */
+    private static final String KEY_PLAY_MODE = "play_mode";
 
     /** Playback states, aligned with android.media.session.PlaybackState. */
     public static final int STATE_STOPPED = 1;
@@ -162,6 +164,8 @@ public final class MidiBridge {
     private static volatile HostedMidiPlayer sEngine;
     private static boolean sPositionTickRunning = false;
     private static int sTickCount = 0;
+    /** Shuffle selection source for PLAY_MODE_SHUFFLE. */
+    private static final java.util.Random sRandom = new java.util.Random();
 
     private MidiBridge() {
     }
@@ -321,6 +325,94 @@ public final class MidiBridge {
             return model;
         }
         return PLAYBACK_MODEL_CLASSIC;
+    }
+
+    // ------------------- hosted playback mode -------------------
+
+    /** Play the playlist in order; stop after the last entry. */
+    public static final int PLAY_MODE_SEQUENCE = 0;
+    /** Pick a random entry (never the current one) at track end. */
+    public static final int PLAY_MODE_SHUFFLE = 1;
+    /** Repeat the current entry (the historic hosted behaviour). */
+    public static final int PLAY_MODE_SINGLE = 2;
+
+    /**
+     * Hosted playback mode shown by the notification mode button. Defaults to
+     * single-track repeat, which is what hosted playback did before the mode
+     * existed (the page typically reports loop=true).
+     */
+    public static int getPlayMode(Context context) {
+        return normalizePlayMode(context.getApplicationContext()
+            .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getInt(KEY_PLAY_MODE, PLAY_MODE_SINGLE));
+    }
+
+    /** Persist the hosted playback mode. */
+    public static void setPlayMode(Context context, int mode) {
+        context.getApplicationContext()
+            .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putInt(KEY_PLAY_MODE, normalizePlayMode(mode))
+            .apply();
+    }
+
+    private static int normalizePlayMode(int mode) {
+        if (mode == PLAY_MODE_SEQUENCE || mode == PLAY_MODE_SHUFFLE) {
+            return mode;
+        }
+        return PLAY_MODE_SINGLE;
+    }
+
+    /** Notification label of a mode. */
+    public static String getPlayModeLabel(int mode) {
+        if (mode == PLAY_MODE_SEQUENCE) {
+            return "顺序播放";
+        }
+        if (mode == PLAY_MODE_SHUFFLE) {
+            return "随机播放";
+        }
+        return "单曲播放";
+    }
+
+    /**
+     * Advance the notification mode button: 单曲播放 -> 顺序播放 -> 随机播放 ->
+     * 单曲播放. The engine loop flag follows at once so the current track
+     * behaves like the new mode without a track restart.
+     */
+    public static int cyclePlayMode(Context context) {
+        int current = getPlayMode(context);
+        int next;
+        if (current == PLAY_MODE_SINGLE) {
+            next = PLAY_MODE_SEQUENCE;
+        } else if (current == PLAY_MODE_SEQUENCE) {
+            next = PLAY_MODE_SHUFFLE;
+        } else {
+            next = PLAY_MODE_SINGLE;
+        }
+        setPlayMode(context, next);
+        Log.i(TAG, "play mode -> " + getPlayModeLabel(next));
+        HostedMidiPlayer engine = sEngine;
+        if (engine != null && sHosting) {
+            engine.setLooping(next == PLAY_MODE_SINGLE);
+            pushHostedState();
+        }
+        return next;
+    }
+
+    /** True when the current mode repeats the loaded track instead of advancing. */
+    public static boolean isSinglePlayMode() {
+        Context ctx = appContext();
+        return ctx == null || getPlayMode(ctx) == PLAY_MODE_SINGLE;
+    }
+
+    /**
+     * Effective engine loop flag. The mode is authoritative (the page's own
+     * loop flag only described what the web player did before the takeover):
+     * single repeats the track, sequence/shuffle must end so the listener
+     * advances.
+     */
+    private static boolean effectiveHostedLoop(boolean ignoredWebLoop) {
+        return isSinglePlayMode();
     }
 
     /** Model 2 gain slider range in millibels (100 mB = 1 dB), 0..+30 dB, step 1 dB. */
@@ -1024,7 +1116,10 @@ public final class MidiBridge {
             state = engine.getState();
             pos = engine.getPositionMs();
             rate = engine.getRate();
-            loop = engine.isLooping();
+            // The payload carries the page's own loop flag, not the engine's:
+            // the notification mode button may have forced single-track
+            // looping, and the page must resume exactly as it left off.
+            loop = sHostWebLoop;
             track = engine.getTrack();
         } else {
             // No meaningful native position yet (takeover still
@@ -1287,13 +1382,24 @@ public final class MidiBridge {
                     return false;
                 }
                 int idx = currentTrackIndex();
-                int target = next ? idx + 1 : idx - 1;
-                if (target < 0) {
-                    target = sTracks.size() - 1;
-                } else if (target >= sTracks.size()) {
-                    target = 0;
+                int target;
+                Context ctx = appContext();
+                if (ctx != null && getPlayMode(ctx) == PLAY_MODE_SHUFFLE) {
+                    // Shuffle: both directions pick the next random entry.
+                    target = nextPlaylistIndex(idx, true, sTracks.size());
+                    if (target < 0) {
+                        target = 0;
+                    }
+                } else {
+                    target = next ? idx + 1 : idx - 1;
+                    if (target < 0) {
+                        target = sTracks.size() - 1;
+                    } else if (target >= sTracks.size()) {
+                        target = 0;
+                    }
                 }
                 HostedMidiPlayer.Track t = sTracks.get(target);
+                Log.i(TAG, "skip " + (next ? "next" : "prev") + " -> " + target + " (" + t.id + ")");
                 startHostedPlayback(t.id, t.title, 0, sHostWebRate, sHostWebLoop, false);
             }
             return true;
@@ -1507,7 +1613,8 @@ public final class MidiBridge {
         if (sEngine == null) {
             sEngine = new HostedMidiPlayer(appContext(), sEngineListener);
         }
-        sEngine.playTrack(track, startPosMs, rate, loop, startPaused);
+        // The notification mode owns the loop flag (see effectiveHostedLoop).
+        sEngine.playTrack(track, startPosMs, rate, effectiveHostedLoop(loop), startPaused);
         startPositionTick();
         // A hidden-page command queued ahead of the takeover now lands on
         // the native engine (spec §8: hosted mode is driven natively).
@@ -1542,7 +1649,10 @@ public final class MidiBridge {
                 title = track.title;
             }
             rate = engine.getRate();
-            loop = engine.isLooping();
+            // The unhost payload carries the page's own loop flag: the mode
+            // button only drives the native engine, so the page resumes with
+            // the loop state it had before the takeover.
+            loop = sHostWebLoop;
         }
         sHosting = false;
         stopHostedPlayback();
@@ -1570,17 +1680,30 @@ public final class MidiBridge {
 
             @Override
             public void onTrackEnded() {
-                // Auto-advance through the playlist; stop at the end.
+                if (!sHosting) {
+                    return;
+                }
+                Context ctx = appContext();
+                int mode = ctx != null ? getPlayMode(ctx) : PLAY_MODE_SINGLE;
+                if (mode == PLAY_MODE_SINGLE) {
+                    // The engine loops the track itself, so a completion here
+                    // only comes from a seek/pause race: keep the state as is.
+                    pushHostedState();
+                    return;
+                }
                 synchronized (sTracks) {
                     int idx = currentTrackIndex();
-                    if (idx >= 0 && idx + 1 < sTracks.size()) {
-                        HostedMidiPlayer.Track t = sTracks.get(idx + 1);
-                        if (sEngine != null) {
-                            sEngine.playTrack(t, 0, sHostWebRate, sHostWebLoop);
-                            return;
-                        }
+                    int next = nextPlaylistIndex(idx, mode == PLAY_MODE_SHUFFLE, sTracks.size());
+                    if (next >= 0 && sEngine != null) {
+                        HostedMidiPlayer.Track t = sTracks.get(next);
+                        Log.i(TAG, "track ended, mode=" + getPlayModeLabel(mode)
+                                + " idx " + idx + " -> " + next);
+                        sEngine.playTrack(t, 0, sHostWebRate, effectiveHostedLoop(sHostWebLoop));
+                        return;
                     }
                 }
+                // Sequence mode ran off the end of the playlist: playback ends.
+                Log.i(TAG, "track ended, playlist finished");
                 pushHostedState();
             }
 
@@ -1823,6 +1946,31 @@ public final class MidiBridge {
             }
         }
         return -1;
+    }
+
+    /**
+     * Entry to play after the current one ends, or after a shuffle skip.
+     * Shuffle never returns the current entry (unless the list has one row);
+     * sequence returns idx+1 and -1 once the last row finished.
+     */
+    private static int nextPlaylistIndex(int idx, boolean shuffle, int size) {
+        if (size <= 0) {
+            return -1;
+        }
+        if (shuffle) {
+            if (size == 1) {
+                return 0;
+            }
+            int next = sRandom.nextInt(size - 1);
+            if (idx >= 0 && next >= idx) {
+                next++;
+            }
+            return Math.max(0, Math.min(size - 1, next));
+        }
+        if (idx < 0) {
+            return 0;
+        }
+        return idx + 1 < size ? idx + 1 : -1;
     }
 
     private static void saveHostPrefs(boolean hosted, int state, String trackId, String title,
