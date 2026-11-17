@@ -7,7 +7,7 @@
 
 | 项目 | 值 |
 |---|---|
-| 项目路径 | `C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCode` |
+| 项目路径 | `C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid` |
 | 包名 / applicationId | `cc.winboll.studio.claudecodeandroid` |
 | 应用名 | Claude 远程 |
 | 构建系统 | Gradle 7.5.1 + AGP 7.2.1（随 WinBoLL 编译框架） |
@@ -19,7 +19,7 @@
 ### 目录结构
 
 ```
-ClaudeCode/
+ClaudeCodeAndroid/
 ├── claudecode/                     # 安卓模块（含项目文档）
 │   ├── AGENTS.md                   # 本文档
 │   ├── 使用说明.md                  # 安装、配置、反代说明
@@ -44,11 +44,11 @@ ClaudeCode/
 ## 二、构建
 
 ```powershell
-cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCode
-java -jar gradle\wrapper\gradle-wrapper.jar assembleDebug
+cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid
+java -jar gradle\wrapper\gradle-wrapper.jar :claudecode:assembleBetaDebug
 ```
 
-产物：`claudecode\build\outputs\apk\debug\claudecode-debug.apk`
+产物：`claudecode\build\outputs\apk\beta\debug\claudecode-beta-debug.apk`
 
 > 中文路径下 `gradlew.bat` 会因 cmd 编码报错，统一走 `java -jar gradle\wrapper\gradle-wrapper.jar <任务>`。
 
