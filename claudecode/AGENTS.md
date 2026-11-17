@@ -7,7 +7,7 @@
 
 | 项目 | 值 |
 |---|---|
-| 项目路径 | `C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid` |
+| 项目路径 | `C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCode` |
 | 包名 / applicationId | `cc.winboll.studio.claudecodeandroid` |
 | 应用名 | Claude 远程 |
 | 构建系统 | Gradle 9.8.0 + AGP 9.3.3 |
@@ -19,7 +19,7 @@
 ### 目录结构
 
 ```
-ClaudeCodeAndroid/
+ClaudeCode/
 ├── claudecode/                     # 安卓模块（含项目文档）
 │   ├── AGENTS.md                   # 本文档
 │   ├── 使用说明.md                  # 安装、配置、反代说明
@@ -44,7 +44,7 @@ ClaudeCodeAndroid/
 ## 二、构建
 
 ```powershell
-cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCodeAndroid
+cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\ClaudeCode
 java -jar gradle\wrapper\gradle-wrapper.jar assembleDebug
 ```
 
