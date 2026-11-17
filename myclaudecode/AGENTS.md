@@ -7,7 +7,7 @@
 
 | 项目 | 值 |
 |---|---|
-| 项目路径 | `C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode` |
+| 项目路径 | `C:\0WINBOT\MyCCConnector-Project-Development\MyClaudeCode` |
 | 包名 / applicationId | `cc.winboll.studio.myccconnector` |
 | 应用名 | MyCCConnector |
 | 构建系统 | Gradle 7.5.1 + AGP 7.2.1（随 WinBoLL 编译框架） |
@@ -42,14 +42,14 @@ MyClaudeCode/
         └── utils/LogUtils.java     # 统一日志
 ```
 
-> 桥接服务 `bridge/` 已迁至**项目根目录**（与本仓库同级，即 `..\bridge`），由父仓库 `ClaudeCodeAndroid-Project-Development` 托管；
+> 桥接服务 `bridge/` 已迁至**项目根目录**（与本仓库同级，即 `..\bridge`），由父仓库 `MyCCConnector-Project-Development` 托管；
 > 本仓库只保留安卓模块 `myclaudecode/` 与文档。桥接说明见 `..\bridge\README.md`。
 > 防火墙放行脚本 `configure-bridge-firewall.ps1` 也已移至父仓库根目录（`..\configure-bridge-firewall.ps1`）。
 
 ## 二、构建
 
 ```powershell
-cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode
+cd C:\0WINBOT\MyCCConnector-Project-Development\MyClaudeCode
 java -jar gradle\wrapper\gradle-wrapper.jar :myclaudecode:assembleBetaDebug
 ```
 
@@ -88,7 +88,7 @@ cmd /c mklink /J "C:\0WINBOT\AndroidStudio\AndroidSDK" "C:\0WINBOT\AndroidStudio
 Start-ScheduledTask -TaskName ClaudeBridge
 Stop-ScheduledTask  -TaskName ClaudeBridge
 # 或前台调试
-cd C:\0WINBOT\ClaudeCodeAndroid-Project-Development\bridge; node src/server.mjs
+cd C:\0WINBOT\MyCCConnector-Project-Development\bridge; node src/server.mjs
 ```
 
 ## 四、接口约定
