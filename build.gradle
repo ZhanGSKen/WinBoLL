@@ -6,3 +6,12 @@
 plugins {
     id 'com.android.application' version '9.3.3' apply false
 }
+
+// 同步自 WinBoLL 编译框架（功能菜单 D）：统一子模块 Java 编译编码为 UTF-8。
+// 上游根脚本的其余内容（buildscript AGP 7.2.1、allprojects 仓库、每模块 build.properties
+// 断言）与本项目的 AGP 9.3.3 + settings 仓库模式冲突，未采用。
+subprojects {
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
+}
