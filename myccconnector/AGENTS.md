@@ -79,7 +79,7 @@ cmd /c mklink /J "C:\0WINBOT\AndroidStudio\AndroidSDK" "C:\0WINBOT\AndroidStudio
 | 鉴权 | `Authorization: Bearer <config.json 的 token>` |
 | 模型 | `gemma4:12b`（Ollama，Anthropic 兼容接口 `/v1/messages`） |
 | 允许目录 | `C:\0WINBOT`、`C:\Users\ZhanGSKen` |
-| 常驻 | 计划任务 `ClaudeBridge`（S4U：不管用户是否登录都运行，无窗口） |
+| 常驻 | 计划任务 `ClaudeBridge`（S4U：AtStartup/AtLogOn 双触发器，开机或登录即起，无窗口） |
 | 数据 | 项目根 `bridge\data\sessions.json` + `bridge\data\transcripts\<id>.jsonl` |
 
 启动 / 停止：
