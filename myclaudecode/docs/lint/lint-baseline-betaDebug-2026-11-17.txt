@@ -1,0 +1,689 @@
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\build.gradle:33: Warning: Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details. [OldTargetApi]
+        targetSdkVersion 30
+        ~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "OldTargetApi":
+   When your application runs on a version of Android that is more recent than
+   your targetSdkVersion specifies that it has been tested with, various
+   compatibility modes kick in. This ensures that your application continues
+   to work, but it may look out of place. For example, if the targetSdkVersion
+   is less than 14, your app may get an option button in the UI.
+
+   To fix this issue, set the targetSdkVersion to the highest available value.
+   Then test your app to make sure everything works correctly. You may want to
+   consult the compatibility notes to see what changes apply to each version
+   you are adding support for:
+   https://developer.android.com/reference/android/os/Build.VERSION_CODES.html
+   as well as follow this guide:
+   https://developer.android.com/distribute/best-practices/develop/target-sdk.
+   html
+
+   https://developer.android.com/distribute/best-practices/develop/target-sdk.html
+
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\res\xml\network_security_config.xml:10: Warning: Insecure Base Configuration [InsecureBaseConfiguration]
+    <base-config cleartextTrafficPermitted="true">
+                                            ~~~~
+
+   Explanation for issues of type "InsecureBaseConfiguration":
+   Permitting cleartext traffic could allow eavesdroppers to intercept data
+   sent by your app, which impacts the privacy of your users. Consider only
+   allowing encrypted traffic by setting the cleartextTrafficPermitted tag to
+   "false".
+
+   https://developer.android.com/preview/features/security-config.html
+
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:49: Warning: Unnecessary; SDK_INT is never < 26 [ObsoleteSdkInt]
+        if (Build.VERSION.SDK_INT <= 19) {
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "ObsoleteSdkInt":
+   This check flags version checks that are not necessary, because the
+   minSdkVersion (or surrounding known API level) is already at least as high
+   as the version checked for.
+
+   Similarly, it also looks for resources in -vNN folders, such as values-v14
+   where the version qualifier is less than or equal to the minSdkVersion,
+   where the contents should be merged into the best folder.
+
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\res\layout\activity_open_source_license.xml:6: Warning: Possible overdraw: Root element paints background @android:color/white with a theme that also paints a background (inferred theme is @style/AESTheme) [Overdraw]
+    android:background="@android:color/white"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "Overdraw":
+   If you set a background drawable on a root view, then you should use a
+   custom theme where the theme background is null. Otherwise, the theme
+   background will be painted first, only to have your custom background
+   completely cover it; this is called "overdraw".
+
+   NOTE: This detector relies on figuring out which layouts are associated
+   with which activities based on scanning the Java code, and it's currently
+   doing that using an inexact pattern matching algorithm. Therefore, it can
+   incorrectly conclude which activity the layout is associated with and then
+   wrongly complain that a background-theme is hidden.
+
+   If you want your custom background on multiple pages, then you should
+   consider making a custom theme with your custom background and just using
+   that theme instead of a root element background.
+
+   Of course it's possible that your custom drawable is translucent and you
+   want it to be mixed with the background. However, you will get better
+   performance if you pre-mix the background with your drawable and use that
+   resulting image or color as a custom theme background instead.
+
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\res\values\colors.xml:3: Warning: The resource R.color.primary appears to be unused [UnusedResources]
+    <color name="primary">#1976D2</color>
+           ~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\res\values\colors.xml:4: Warning: The resource R.color.primary_dark appears to be unused [UnusedResources]
+    <color name="primary_dark">#1565C0</color>
+           ~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\res\values\colors.xml:5: Warning: The resource R.color.accent appears to be unused [UnusedResources]
+    <color name="accent">#FF4081</color>
+           ~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\res\values\colors.xml:6: Warning: The resource R.color.white appears to be unused [UnusedResources]
+    <color name="white">#FFFFFF</color>
+           ~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\res\values\colors.xml:7: Warning: The resource R.color.black appears to be unused [UnusedResources]
+    <color name="black">#000000</color>
+           ~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\res\xml\network_security_config.xml:9: Warning: The resource R.xml.network_security_config appears to be unused [UnusedResources]
+<network-security-config>
+^
+
+   Explanation for issues of type "UnusedResources":
+   Unused resources make applications larger and slow down builds.
+
+   The unused resource check can ignore tests. If you want to include
+   resources that are only referenced from tests, consider packaging them in a
+   test source set instead.
+
+   You can include test sources in the unused resource check by setting the
+   system property lint.unused-resources.include-tests=true, and to exclude
+   them (usually for performance reasons), use
+   lint.unused-resources.exclude-tests=true.
+
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:186: Warning: Access to private method doSend of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                doSend();
+                ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:209: Warning: Access to private field uiHandler of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                uiHandler.post(new Runnable() {
+                ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:212: Warning: Access to private method renderEvent of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        renderEvent(event);
+                        ~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:219: Warning: Access to private field uiHandler of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                uiHandler.post(new Runnable() {
+                ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:222: Warning: Access to private field sessionCwd of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        updateToolbarStatus((sessionCwd == null ? "" : sessionCwd + " · ") + text, connected);
+                                             ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:222: Warning: Access to private field sessionCwd of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        updateToolbarStatus((sessionCwd == null ? "" : sessionCwd + " · ") + text, connected);
+                                                                       ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:222: Warning: Access to private method updateToolbarStatus of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        updateToolbarStatus((sessionCwd == null ? "" : sessionCwd + " · ") + text, connected);
+                        ~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:395: Warning: Access to private field scrollView of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                scrollView.fullScroll(View.FOCUS_DOWN);
+                ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:428: Warning: Access to private field sessionId of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                    final int code = BridgeApi.sendMessage(baseUrl, token, sessionId, text);
+                                                                           ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:430: Warning: Access to private field uiHandler of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        uiHandler.post(new Runnable() {
+                        ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:433: Warning: Access to private method setBusy of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                                setBusy(false);
+                                ~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:440: Warning: Access to private field uiHandler of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                    uiHandler.post(new Runnable() {
+                    ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:443: Warning: Access to private field inputBox of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                            inputBox.setText("");
+                            ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:448: Warning: Access to private field uiHandler of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                    uiHandler.post(new Runnable() {
+                    ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:451: Warning: Access to private method setBusy of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                            setBusy(false);
+                            ~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:468: Warning: Access to private field sessionId of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                    final boolean ok = BridgeApi.interrupt(baseUrl, token, sessionId);
+                                                                           ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:469: Warning: Access to private field uiHandler of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                    uiHandler.post(new Runnable() {
+                    ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:472: Warning: Access to private method addSystemLine of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                            addSystemLine(ok ? "已请求中断" : "中断请求未生效",
+                            ~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:500: Warning: Access to private method answerPermission of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        answerPermission(requestId, true, false, toolName);
+                        ~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:501: Warning: Access to private field permissionDialogShowing of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        permissionDialogShowing = false;
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:507: Warning: Access to private method answerPermission of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        answerPermission(requestId, true, true, toolName);
+                        ~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:508: Warning: Access to private field permissionDialogShowing of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        permissionDialogShowing = false;
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:514: Warning: Access to private method answerPermission of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        answerPermission(requestId, false, false, toolName);
+                        ~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:515: Warning: Access to private field permissionDialogShowing of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        permissionDialogShowing = false;
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:521: Warning: Access to private method answerPermission of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        answerPermission(requestId, false, false, toolName);
+                        ~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:522: Warning: Access to private field permissionDialogShowing of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                        permissionDialogShowing = false;
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:538: Warning: Access to private field uiHandler of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                    uiHandler.post(new Runnable() {
+                    ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:541: Warning: Access to private method addSystemLine of class ChatActivity requires synthetic accessor [SyntheticAccessor]
+                            addSystemLine((allow ? "已允许：" : "已拒绝：") + toolName,
+                            ~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:144: Warning: Access to private member of class SessionAdapter requires synthetic accessor [SyntheticAccessor]
+        adapter = new SessionAdapter();
+                  ~~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:150: Warning: Access to private field sessions of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                openChat(sessions.get(position));
+                         ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:150: Warning: Access to private method openChat of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                openChat(sessions.get(position));
+                ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:157: Warning: Access to private field sessions of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                confirmDelete(sessions.get(position));
+                              ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:157: Warning: Access to private method confirmDelete of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                confirmDelete(sessions.get(position));
+                ~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:173: Warning: Access to private method showNewSessionDialog of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                showNewSessionDialog();
+                ~~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:179: Warning: Access to private method refreshSessions of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                refreshSessions();
+                ~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:242: Warning: Access to private field uiHandler of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                    uiHandler.post(new Runnable() {
+                    ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:245: Warning: Access to private field sessions of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                            sessions.clear();
+                            ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:246: Warning: Access to private field sessions of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                            sessions.addAll(loaded);
+                            ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:247: Warning: Access to private field adapter of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                            adapter.notifyDataSetChanged();
+                            ~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:248: Warning: Access to private field sessions of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                            statusView.setText("已连接 · " + sessions.size() + " 个会话 · "
+                                                          ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:248: Warning: Access to private field statusView of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                            statusView.setText("已连接 · " + sessions.size() + " 个会话 · "
+                            ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:250: Warning: Access to private field statusView of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                            statusView.setTextColor(ViewColorTable.COLOR_SUCCESS);
+                            ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:255: Warning: Access to private field uiHandler of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                    uiHandler.post(new Runnable() {
+                    ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:258: Warning: Access to private field statusView of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                            statusView.setText("连接失败：" + e.getMessage());
+                            ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:259: Warning: Access to private field statusView of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                            statusView.setTextColor(ViewColorTable.COLOR_ERROR);
+                            ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:297: Warning: Access to private method createSession of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                        createSession(title, cwd);
+                        ~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:316: Warning: Access to private field uiHandler of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                    uiHandler.post(new Runnable() {
+                    ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:319: Warning: Access to private method refreshSessions of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                            refreshSessions();
+                            ~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:320: Warning: Access to private method openChat of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                            openChat(SessionInfo.fromJson(sessionJson));
+                            ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:325: Warning: Access to private field uiHandler of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                    uiHandler.post(new Runnable() {
+                    ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:344: Warning: Access to private method deleteSession of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                        deleteSession(session);
+                        ~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:359: Warning: Access to private field uiHandler of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                    uiHandler.post(new Runnable() {
+                    ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:362: Warning: Access to private method refreshSessions of class MainActivity requires synthetic accessor [SyntheticAccessor]
+                            refreshSessions();
+                            ~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:388: Warning: Access to private field sessions of class MainActivity requires synthetic accessor [SyntheticAccessor]
+            return sessions.size();
+                   ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:393: Warning: Access to private field sessions of class MainActivity requires synthetic accessor [SyntheticAccessor]
+            return sessions.get(position);
+                   ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:403: Warning: Access to private field sessions of class MainActivity requires synthetic accessor [SyntheticAccessor]
+            final SessionInfo session = sessions.get(position);
+                                        ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:406: Warning: Access to private method dp of class MainActivity requires synthetic accessor [SyntheticAccessor]
+            row.setPadding(dp(16), dp(12), dp(16), dp(12));
+                           ~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:406: Warning: Access to private method dp of class MainActivity requires synthetic accessor [SyntheticAccessor]
+            row.setPadding(dp(16), dp(12), dp(16), dp(12));
+                                   ~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:406: Warning: Access to private method dp of class MainActivity requires synthetic accessor [SyntheticAccessor]
+            row.setPadding(dp(16), dp(12), dp(16), dp(12));
+                                           ~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:406: Warning: Access to private method dp of class MainActivity requires synthetic accessor [SyntheticAccessor]
+            row.setPadding(dp(16), dp(12), dp(16), dp(12));
+                                                   ~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:421: Warning: Access to private method dp of class MainActivity requires synthetic accessor [SyntheticAccessor]
+            detail.setPadding(0, dp(4), 0, 0);
+                                 ~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:103: Warning: Access to private method saveSettings of class SettingsActivity requires synthetic accessor [SyntheticAccessor]
+                saveSettings();
+                ~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:113: Warning: Access to private method saveSettings of class SettingsActivity requires synthetic accessor [SyntheticAccessor]
+                saveSettings();
+                ~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:114: Warning: Access to private method testConnection of class SettingsActivity requires synthetic accessor [SyntheticAccessor]
+                testConnection();
+                ~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:184: Warning: Access to private field uiHandler of class SettingsActivity requires synthetic accessor [SyntheticAccessor]
+                    uiHandler.post(new Runnable() {
+                    ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:187: Warning: Access to private field resultView of class SettingsActivity requires synthetic accessor [SyntheticAccessor]
+                            resultView.setText(text);
+                            ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:188: Warning: Access to private field resultView of class SettingsActivity requires synthetic accessor [SyntheticAccessor]
+                            resultView.setTextColor(exeOk ? ViewColorTable.COLOR_SUCCESS
+                            ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:194: Warning: Access to private field uiHandler of class SettingsActivity requires synthetic accessor [SyntheticAccessor]
+                    uiHandler.post(new Runnable() {
+                    ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:197: Warning: Access to private field resultView of class SettingsActivity requires synthetic accessor [SyntheticAccessor]
+                            resultView.setText("连接失败：" + e.getMessage());
+                            ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:198: Warning: Access to private field resultView of class SettingsActivity requires synthetic accessor [SyntheticAccessor]
+                            resultView.setTextColor(ViewColorTable.COLOR_ERROR);
+                            ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\SseClient.java:65: Warning: Access to private method loop of class SseClient requires synthetic accessor [SyntheticAccessor]
+                loop();
+                ~~~~
+
+   Explanation for issues of type "SyntheticAccessor":
+   A private inner class which is accessed from the outer class will force the
+   compiler to insert a synthetic accessor; this means that you are causing
+   extra overhead. This is not important in small projects, but is important
+   for large apps running up against the 64K method handle limit, and
+   especially for libraries where you want to make sure your library is as
+   small as possible for the cases where your library is used in an app
+   running up against the 64K limit.
+
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\res\values\strings.xml:6: Warning: Duplicate string value 关于, used in action_about and title_about [DuplicateStrings]
+    <string name="title_about">关于</string>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\res\values\strings.xml:11: Duplicates value in title_about
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\res\values\strings.xml:7: Warning: Duplicate string value 开源许可, used in action_open_source and title_open_source [DuplicateStrings]
+    <string name="title_open_source">开源许可</string>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\res\values\strings.xml:12: Duplicates value in title_open_source
+
+   Explanation for issues of type "DuplicateStrings":
+   Duplicate strings can make applications larger unnecessarily.
+
+   This lint check looks for duplicate strings, including differences for
+   strings where the only difference is in capitalization. Title casing and
+   all uppercase can all be adjusted in the layout or in code.
+
+   https://developer.android.com/reference/android/widget/TextView.html#attr_android:inputType
+
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:359: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+        titleView.setText((isResult ? "? " : "? ") + title);
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:137: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+        statusView.setText("正在连接 " + AppSettings.getServerUrl(this));
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:248: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+                            statusView.setText("已连接 · " + sessions.size() + " 个会话 · "
+                                               ^
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:258: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+                            statusView.setText("连接失败：" + e.getMessage());
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:418: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            detail.setText(session.cwd + " · " + session.turnCount + " 轮 · " + timeText);
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:170: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+        resultView.setText("正在连接 " + baseUrl + " …");
+                           ~~~~~~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:197: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+                            resultView.setText("连接失败：" + e.getMessage());
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "SetTextI18n":
+   When calling TextView#setText
+   * Never call Number#toString() to format numbers; it will not handle
+   fraction separators and locale-specific digits properly. Consider using
+   String#format with proper format specifications (%d or %f) instead.
+   * Do not pass a string literal (e.g. "Hello") to display text. Hardcoded
+   text can not be properly translated to other languages. Consider using
+   Android resource strings instead.
+   * Do not build messages by concatenating text chunks. Such messages can not
+   be properly translated.
+
+   https://developer.android.com/guide/topics/resources/localization.html
+
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\AboutActivity.java:32: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public String getTag() {
+           ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\AboutActivity.java:37: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public Activity getActivity() {
+           ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\AboutActivity.java:42: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    protected void onCreate(Bundle savedInstanceState) {
+                            ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:85: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static String getServerUrl(final Context context) {
+                  ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:85: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static String getServerUrl(final Context context) {
+                                            ~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:93: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void setServerUrl(final Context context, final String url) {
+                                          ~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:93: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void setServerUrl(final Context context, final String url) {
+                                                                 ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:97: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static String getToken(final Context context) {
+                  ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:97: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static String getToken(final Context context) {
+                                        ~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:102: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void setToken(final Context context, final String token) {
+                                      ~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:102: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void setToken(final Context context, final String token) {
+                                                             ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:106: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static String getCwd(final Context context) {
+                  ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:106: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static String getCwd(final Context context) {
+                                      ~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:114: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void setCwd(final Context context, final String cwd) {
+                                    ~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:114: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void setCwd(final Context context, final String cwd) {
+                                                           ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:119: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static String normalizeBaseUrl(final String url) {
+                  ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\AppSettings.java:119: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static String normalizeBaseUrl(final String url) {
+                                                ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\BaseWinBoLLActivity.java:42: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    protected volatile AESThemeBean.ThemeType mThemeType;
+                       ~~~~~~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\BaseWinBoLLActivity.java:50: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    protected void onCreate(Bundle savedInstanceState) {
+                            ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\BaseWinBoLLActivity.java:73: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    protected Toolbar bindToolbar(int toolbarId, boolean showBack) {
+              ~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\BaseWinBoLLActivity.java:98: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    protected Toolbar getWindowToolbar() {
+              ~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\BaseWinBoLLActivity.java:103: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public boolean onOptionsItemSelected(MenuItem item) {
+                                         ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\BaseWinBoLLActivity.java:115: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public abstract String getTag();
+                    ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\BaseWinBoLLActivity.java:120: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public abstract Activity getActivity();
+                    ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:111: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static JSONObject ping(final String baseUrl, final String token) throws IOException {
+                  ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:111: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static JSONObject ping(final String baseUrl, final String token) throws IOException {
+                                        ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:111: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static JSONObject ping(final String baseUrl, final String token) throws IOException {
+                                                              ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:116: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static JSONArray listSessions(final String baseUrl, final String token) throws IOException {
+                  ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:116: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static JSONArray listSessions(final String baseUrl, final String token) throws IOException {
+                                               ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:116: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static JSONArray listSessions(final String baseUrl, final String token) throws IOException {
+                                                                     ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:122: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static JSONObject createSession(final String baseUrl, final String token,
+                  ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:122: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static JSONObject createSession(final String baseUrl, final String token,
+                                                 ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:122: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static JSONObject createSession(final String baseUrl, final String token,
+                                                                       ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:123: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+                                           final String title, final String cwd) throws IOException {
+                                                 ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:123: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+                                           final String title, final String cwd) throws IOException {
+                                                                     ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:135: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static boolean deleteSession(final String baseUrl, final String token,
+                                              ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:135: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static boolean deleteSession(final String baseUrl, final String token,
+                                                                    ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:136: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+                                        final String sessionId) throws IOException {
+                                              ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:143: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static int sendMessage(final String baseUrl, final String token,
+                                        ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:143: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static int sendMessage(final String baseUrl, final String token,
+                                                              ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:144: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+                                  final String sessionId, final String text) throws IOException {
+                                        ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:144: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+                                  final String sessionId, final String text) throws IOException {
+                                                                ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:157: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static boolean answerPermission(final String baseUrl, final String token,
+                                                 ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:157: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static boolean answerPermission(final String baseUrl, final String token,
+                                                                       ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:158: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+                                           final String requestId, final boolean allow,
+                                                 ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:159: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+                                           final boolean remember, final String toolName) throws IOException {
+                                                                         ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:174: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static boolean interrupt(final String baseUrl, final String token,
+                                          ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:174: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static boolean interrupt(final String baseUrl, final String token,
+                                                                ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:175: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+                                    final String sessionId) throws IOException {
+                                          ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:182: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static HttpURLConnection openEventStream(final String baseUrl, final String token,
+                  ~~~~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:182: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static HttpURLConnection openEventStream(final String baseUrl, final String token,
+                                                          ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:182: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static HttpURLConnection openEventStream(final String baseUrl, final String token,
+                                                                                ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:183: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+                                                    final String sessionId, final long afterSeq,
+                                                          ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:194: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static String readLine(final BufferedReader reader) throws IOException {
+                  ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:194: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static String readLine(final BufferedReader reader) throws IOException {
+                                        ~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:199: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static BufferedReader newReader(final InputStream input) {
+                  ~~~~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\BridgeApi.java:199: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static BufferedReader newReader(final InputStream input) {
+                                                 ~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:79: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    protected void onCreate(final Bundle savedInstanceState) {
+                                  ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:105: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public String getTag() {
+           ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:110: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public Activity getActivity() {
+           ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\ChatActivity.java:130: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public boolean onOptionsItemSelected(MenuItem item) {
+                                         ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:31: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void v(final String tag, final String msg) {
+                               ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:31: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void v(final String tag, final String msg) {
+                                                 ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:37: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void d(final String tag, final String msg) {
+                               ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:37: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void d(final String tag, final String msg) {
+                                                 ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:43: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void i(final String tag, final String msg) {
+                               ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:43: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void i(final String tag, final String msg) {
+                                                 ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:49: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void w(final String tag, final String msg) {
+                               ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:49: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void w(final String tag, final String msg) {
+                                                 ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:55: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void e(final String tag, final String msg) {
+                               ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:55: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void e(final String tag, final String msg) {
+                                                 ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:61: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void e(final String tag, final String msg, final Throwable tr) {
+                               ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:61: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void e(final String tag, final String msg, final Throwable tr) {
+                                                 ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\utils\LogUtils.java:61: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static void e(final String tag, final String msg, final Throwable tr) {
+                                                                   ~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:69: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    protected void onCreate(final Bundle savedInstanceState) {
+                                  ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:93: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public String getTag() {
+           ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:98: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public Activity getActivity() {
+           ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\MainActivity.java:109: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public boolean onOptionsItemSelected(MenuItem item) {
+                                         ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\OpenSourceLicenseActivity.java:132: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public String getTag() {
+           ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\OpenSourceLicenseActivity.java:137: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public Activity getActivity() {
+           ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\OpenSourceLicenseActivity.java:142: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    protected void onCreate(Bundle savedInstanceState) {
+                            ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\model\SessionInfo.java:24: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public SessionInfo(final String id, final String title, final String cwd,
+                             ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\model\SessionInfo.java:24: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public SessionInfo(final String id, final String title, final String cwd,
+                                              ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\model\SessionInfo.java:24: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public SessionInfo(final String id, final String title, final String cwd,
+                                                                  ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\model\SessionInfo.java:33: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static SessionInfo fromJson(final JSONObject json) {
+                  ~~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\model\SessionInfo.java:33: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public static SessionInfo fromJson(final JSONObject json) {
+                                             ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:49: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    protected void onCreate(final Bundle savedInstanceState) {
+                                  ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:67: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public String getTag() {
+           ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\ui\SettingsActivity.java:72: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public Activity getActivity() {
+           ~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\SseClient.java:28: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+        void onEvent(final JSONObject event);
+                           ~~~~~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\SseClient.java:30: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+        void onStatus(final String text, final boolean connected);
+                            ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\SseClient.java:45: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public SseClient(final String baseUrl, final String token, final String sessionId,
+                           ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\SseClient.java:45: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public SseClient(final String baseUrl, final String token, final String sessionId,
+                                                 ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\SseClient.java:45: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+    public SseClient(final String baseUrl, final String token, final String sessionId,
+                                                                     ~~~~~~
+C:\0WINBOT\ClaudeCodeAndroid-Project-Development\MyClaudeCode\myclaudecode\src\main\java\cc\winboll\studio\myccconnector\net\SseClient.java:46: Warning: Unknown nullability; explicitly declare as @Nullable or @NonNull to improve Kotlin interoperability; see https://developer.android.com/kotlin/interop#nullability_annotations [UnknownNullness]
+                     final Listener listener) {
+                           ~~~~~~~~
+
+   Explanation for issues of type "UnknownNullness":
+   To improve referencing this code from Kotlin, consider adding explicit
+   nullness information here with either @NonNull or @Nullable.
+
+   https://developer.android.com/kotlin/interop#nullability_annotations
+
+   Available options:
+
+   **ignore-deprecated** (default is false):
+   Whether to ignore classes and members that have been annotated with `@Deprecated`.
+
+   Normally this lint check will flag all unannotated elements, but by setting this option to `true` it will skip any deprecated elements.
+
+   To configure this option, use a `lint.xml` file with an <option> like this:
+
+   ```xml
+   <lint>
+       <issue id="UnknownNullness">
+           <option name="ignore-deprecated" value="false" />
+       </issue>
+   </lint>
+   ```
+
+0 errors, 185 warnings

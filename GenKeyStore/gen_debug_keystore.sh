@@ -1,6 +1,10 @@
 #!/bin/bash
 # 应用秘钥创建脚本
 # Linux 命令行创建JKS秘钥，alias和keyAlias可配置，文件名含时间戳
+#
+# 注意：本脚本仅用于生成 debug 调试签名。STORE_PASS / KEY_PASS 采用
+# Android 通用调试口令（androiddebugkey），不具备任何安全强度。
+# 正式发布签名必须另行生成私钥并妥善保管，禁止复用此脚本的口令。
 
 # 可配置参数（按需修改）
 ALIAS="WinBoLL.CC_Debug"  # 别名（与keyAlias一致）

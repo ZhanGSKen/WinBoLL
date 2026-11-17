@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyCCConnector</string>
+    <string name="title_chat">会话</string>
+    <string name="title_settings">设置</string>
+    <string name="title_about">关于</string>
+    <string name="title_open_source">开源许可</string>
+
+    <string name="app_description">命令行编码助手的安卓远程客户端（非官方，与 Anthropic PBC 无关联）。通过局域网桥接服务在手机上发起会话、查看工具调用与进度。</string>
+
+    <string name="action_about">关于</string>
+    <string name="action_open_source">开源许可</string>
+    <string name="action_interrupt">中断</string>
+
+    <string name="open_source_license_intro">本程序使用了下列开源软件组件，我们尊重并感谢所有开源项目的贡献。各组件的著作权归其各自权利人所有，并依据其对应的开源许可证授权使用。</string>
+    <string name="open_source_license_group_title">随本程序分发的开源组件</string>
+    <string name="open_source_license_notice">合规提示：本程序不含 GPL / AGPL / LGPL / EPL 组件；所列组件均为 Apache-2.0、BSD 或 MIT 系列宽松许可，许可全文随 App 分发，可在各条目内查看。</string>
+    <string name="open_source_license_footer">本页面仅为开源许可的署名与提示，各组件的具体权利义务以其随附的原始许可证文本为准。</string>
+    <string name="open_source_license_view_full">查看完整许可证</string>
+    <string name="open_source_license_read_failed">许可证文本加载失败：</string>
+    <string name="open_source_license_not_bundled">该许可证全文未随包分发，可在源码地址查看。</string>
+</resources>
