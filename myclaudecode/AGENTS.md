@@ -1,4 +1,4 @@
-# MyClaudeCode 项目说明
+# MyCCConnector 项目说明
 
 > 安卓端 Claude 客户端，通过本机 WINBOT 上的桥接服务连接 Claude Code（底层模型为 Ollama `gemma4:12b`）。
 > 本项目基于 `C:\0WINBOT\WINBOT主机安卓项目开发模板` 派生。
@@ -7,7 +7,7 @@
 
 | 项目 | 值 |
 |---|---|
-| 项目路径 | `C:\0WINBOT\MyCCConnector-Project-Development\MyClaudeCode` |
+| 项目路径 | `C:\0WINBOT\MyCCConnector-Project-Development\MyCCConnector` |
 | 包名 / applicationId | `cc.winboll.studio.myccconnector` |
 | 应用名 | MyCCConnector |
 | 构建系统 | Gradle 7.5.1 + AGP 7.2.1（随 WinBoLL 编译框架） |
@@ -19,7 +19,7 @@
 ### 目录结构
 
 ```
-MyClaudeCode/
+MyCCConnector/
 ├── .winboll/                       # WinBoLL 编译框架脚本（随 origin/winboll 同步）
 ├── BaseVersion.flag                # 版本下限闸门（baseVersion 低于此值会被自动上调）
 ├── build.gradle                    # 框架入口：apply from '.winboll/winboll_app_build.gradle'
@@ -49,7 +49,7 @@ MyClaudeCode/
 ## 二、构建
 
 ```powershell
-cd C:\0WINBOT\MyCCConnector-Project-Development\MyClaudeCode
+cd C:\0WINBOT\MyCCConnector-Project-Development\MyCCConnector
 java -jar gradle\wrapper\gradle-wrapper.jar :myclaudecode:assembleBetaDebug
 ```
 
