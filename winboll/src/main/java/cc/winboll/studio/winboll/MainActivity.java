@@ -1,10 +1,14 @@
 package cc.winboll.studio.winboll;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +22,7 @@ import cc.winboll.studio.libappbase.LogUtils;
 import cc.winboll.studio.winboll.R;
 import cc.winboll.studio.winboll.activities.AboutActivity;
 import cc.winboll.studio.winboll.activities.SettingsActivity;
+import cc.winboll.studio.winboll.media.MidiBridge;
 import cc.winboll.studio.winboll.termux.MyTermuxActivity;
 import cc.winboll.studio.winboll.fragments.ManagementFragment;
 import cc.winboll.studio.winboll.fragments.OpenSourceLicenseFragment;
@@ -26,12 +31,21 @@ import cc.winboll.studio.winboll.push.PushNotifier;
 import cc.winboll.studio.winboll.services.PushService;
 import cc.winboll.studio.winboll.unittest.TermuxEnvTestActivity;
 import cc.winboll.studio.winboll.utils.CertTrustUtils;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends DrawerFragmentActivity {
 
 
     public static final String TAG = "MainActivity";
+
+    /** 接收到的 MIDI 文件（系统“打开方式”/“分享”）保存在应用内部此目录，供后续组织播放。 */
+    public static final String MIDI_INBOX_DIR = "midi_inbox";
 
     // 网站管理窗口 Fragment（启动时不创建，点击"网站管理/HOME"菜单时懒加载）
     ManagementFragment mManagementFragment;
@@ -54,12 +68,15 @@ public class MainActivity extends DrawerFragmentActivity {
         setTheme(cc.winboll.studio.winboll.theme.WinBoLLThemeUtil.getThemeTypeID(getApplicationContext()));
         super.onCreate(savedInstanceState);
         initMainHandler();
+        // 系统“打开方式”/“分享”传入的 MIDI 文件先落盘到应用内收件箱并托管播放；
+        // 命中的意图不再当作外部 URL 交给浏览器窗口。
+        boolean midiReceived = handleMidiReceiveIntent(getIntent());
         // 启动默认窗口为 WWWBrowser（浏览器窗口）。外部 ACTION_VIEW 传入的 URL 由 WWWBrowser 打开，
         // 无外部 URL 时加载 Settings 配置的自定义首页。
         if (mWWWBrowserFragment == null) {
             // 推送通知跳转的 URL 优先于外部 ACTION_VIEW 传入的 URL
             String initialUrl = extractPushUrl(getIntent());
-            if (initialUrl == null) {
+            if (initialUrl == null && !midiReceived) {
                 initialUrl = extractExternalUrl(getIntent());
             }
             if (initialUrl != null) {
@@ -82,7 +99,11 @@ public class MainActivity extends DrawerFragmentActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        // 仅处理推送通知跳转；ACTION_VIEW 外部链接刻意只在 onCreate 生效（见下方 extractExternalUrl）。
+        // MIDI 文件再次“打开/分享”时（应用已在运行）继续接住。
+        if (handleMidiReceiveIntent(intent)) {
+            return;
+        }
+        // 其余仅处理推送通知跳转；ACTION_VIEW 外部链接刻意只在 onCreate 生效（见下方 extractExternalUrl）。
         if (intent != null && PushNotifier.ACTION_PUSH_OPEN.equals(intent.getAction())) {
             String url = intent.getStringExtra(PushNotifier.EXTRA_PUSH_URL);
             if (url != null && mWWWBrowserFragment != null) {
@@ -226,6 +247,295 @@ public class MainActivity extends DrawerFragmentActivity {
             return intent.getStringExtra(PushNotifier.EXTRA_PUSH_URL);
         }
         return null;
+    }
+
+    // ------------------- 系统 MIDI 文件接收（打开方式 / 分享） -------------------
+
+    /**
+     * 处理系统“打开方式”(ACTION_VIEW) 与“分享”(ACTION_SEND/SEND_MULTIPLE) 送来的
+     * MIDI 文件：复制进应用内部收件箱目录 {@link #MIDI_INBOX_DIR}，再用托管播放
+     * （HostedMidiPlayer + MediaPlaybackService 通知栏）播放。
+     *
+     * @return true 表示该 Intent 确实是 MIDI 文件接收，调用方不应再把它当作外部 URL。
+     */
+    private boolean handleMidiReceiveIntent(Intent intent) {
+        if (intent == null) {
+            return false;
+        }
+        final ArrayList<Uri> uris = new ArrayList<Uri>();
+        String action = intent.getAction();
+        if (Intent.ACTION_VIEW.equals(action)) {
+            Uri data = intent.getData();
+            if (isMidiReceiveUri(intent.getType(), data)) {
+                uris.add(data);
+            }
+        } else if (Intent.ACTION_SEND.equals(action)) {
+            Uri stream = streamExtra(intent);
+            if (isMidiReceiveUri(intent.getType(), stream)) {
+                uris.add(stream);
+            }
+        } else if (Intent.ACTION_SEND_MULTIPLE.equals(action)) {
+            ArrayList<Uri> streams = streamsExtra(intent);
+            for (int i = 0; i < streams.size(); i++) {
+                if (isMidiReceiveUri(intent.getType(), streams.get(i))) {
+                    uris.add(streams.get(i));
+                }
+            }
+        }
+        if (uris.isEmpty()) {
+            return false;
+        }
+        Log.i(TAG, "received MIDI intent: " + action + ", files=" + uris.size());
+        // 复制是 IO，放后台线程；播放回主线程（引擎与 MediaSession 都在主线程）。
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final ArrayList<File> saved = saveMidiToInbox(uris);
+                if (saved.isEmpty()) {
+                    return;
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MidiBridge.init(getApplicationContext());
+                        MidiBridge.playLocalMidiFiles(getApplicationContext(), saved, 0);
+                        if (mWWWBrowserFragment != null) {
+                            showFragment(mWWWBrowserFragment);
+                        }
+                    }
+                });
+            }
+        }, "midi-inbox").start();
+        return true;
+    }
+
+    /**
+     * 读取 EXTRA_STREAM：标准发送方给 Uri，个别发送方（命令行 am、部分旧应用）
+     * 给字符串 URI，两种都接受。
+     */
+    private static Uri streamExtra(Intent intent) {
+        Bundle extras = intent.getExtras();
+        if (extras == null) {
+            return null;
+        }
+        Object value = extras.get(Intent.EXTRA_STREAM);
+        if (value instanceof Uri) {
+            return (Uri) value;
+        }
+        if (value instanceof String) {
+            try {
+                return Uri.parse((String) value);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    private static ArrayList<Uri> streamsExtra(Intent intent) {
+        ArrayList<Uri> result = new ArrayList<Uri>();
+        Bundle extras = intent.getExtras();
+        if (extras == null) {
+            return result;
+        }
+        Object value = extras.get(Intent.EXTRA_STREAM);
+        if (value instanceof Object[]) {
+            Object[] array = (Object[]) value;
+            for (int i = 0; i < array.length; i++) {
+                Object item = array[i];
+                if (item instanceof Uri) {
+                    result.add((Uri) item);
+                } else if (item instanceof String) {
+                    result.add(Uri.parse((String) item));
+                }
+            }
+        } else if (value instanceof ArrayList) {
+            ArrayList<?> list = (ArrayList<?>) value;
+            for (int i = 0; i < list.size(); i++) {
+                Object item = list.get(i);
+                if (item instanceof Uri) {
+                    result.add((Uri) item);
+                } else if (item instanceof String) {
+                    result.add(Uri.parse((String) item));
+                }
+            }
+        } else if (value instanceof Uri) {
+            result.add((Uri) value);
+        } else if (value instanceof String) {
+            result.add(Uri.parse((String) value));
+        }
+        return result;
+    }
+
+    /**
+     * 判断 URI 是否是本应用要接收的 MIDI 文件。只接受 file/content 来源，
+     * http(s) 链接仍交给浏览器窗口按普通网址打开。
+     */
+    private boolean isMidiReceiveUri(String mimeType, Uri uri) {
+        if (uri == null) {
+            return false;
+        }
+        String scheme = uri.getScheme();
+        if (scheme == null) {
+            return false;
+        }
+        String s = scheme.toLowerCase(Locale.US);
+        if (!s.equals("file") && !s.equals("content")) {
+            return false;
+        }
+        if (mimeType != null && isMidiMimeType(mimeType)) {
+            return true;
+        }
+        String name = displayNameOf(uri);
+        return hasMidiExtension(name) || hasMidiExtension(uri.getPath());
+    }
+
+    private static boolean isMidiMimeType(String mimeType) {
+        String t = mimeType.toLowerCase(Locale.US).trim();
+        return t.equals("audio/midi") || t.equals("audio/x-midi")
+            || t.equals("audio/mid") || t.equals("application/x-midi")
+            || t.equals("application/midi") || t.equals("audio/sp-midi");
+    }
+
+    private static boolean hasMidiExtension(String name) {
+        if (name == null) {
+            return false;
+        }
+        String lower = name.toLowerCase(Locale.US);
+        return lower.endsWith(".mid") || lower.endsWith(".midi")
+            || lower.endsWith(".kar") || lower.endsWith(".rmi");
+    }
+
+    /** content:// 走 OpenableColumns；file:// 取路径末段。 */
+    private String displayNameOf(Uri uri) {
+        if (uri == null) {
+            return null;
+        }
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            Cursor cursor = null;
+            try {
+                ContentResolver cr = getContentResolver();
+                cursor = cr.query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    int idx = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (idx >= 0) {
+                        String name = cursor.getString(idx);
+                        if (name != null && name.length() > 0) {
+                            return name;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "query display name failed: " + e.getMessage());
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+        return uri.getLastPathSegment();
+    }
+
+    /**
+     * 把收到的 MIDI 复制进应用内部收件箱目录（files/midi_inbox），文件名为
+     * 「时间戳_原文件名」，重名自动加序号。目录长期保留，供后续组织播放。
+     */
+    private ArrayList<File> saveMidiToInbox(ArrayList<Uri> uris) {
+        ArrayList<File> saved = new ArrayList<File>();
+        File dir = new File(getFilesDir(), MIDI_INBOX_DIR);
+        if (!dir.exists() && !dir.mkdirs()) {
+            Log.w(TAG, "cannot create MIDI inbox dir: " + dir);
+            return saved;
+        }
+        String stamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        for (int i = 0; i < uris.size(); i++) {
+            Uri uri = uris.get(i);
+            String raw = displayNameOf(uri);
+            String name = sanitizeFileName(raw);
+            if (name == null) {
+                name = "received_" + (i + 1);
+            }
+            if (!hasMidiExtension(name)) {
+                name = name + ".mid";
+            }
+            File target = new File(dir, stamp + "_" + name);
+            int seq = 2;
+            while (target.exists()) {
+                target = new File(dir, stamp + "_" + seq + "_" + name);
+                seq++;
+            }
+            if (copyUriToFile(uri, target)) {
+                saved.add(target);
+                Log.i(TAG, "MIDI saved to inbox: " + target.getAbsolutePath());
+            }
+        }
+        return saved;
+    }
+
+    private boolean copyUriToFile(Uri uri, File target) {
+        InputStream in = null;
+        FileOutputStream out = null;
+        File tmp = new File(target.getAbsolutePath() + ".part");
+        try {
+            in = getContentResolver().openInputStream(uri);
+            if (in == null) {
+                Log.w(TAG, "no stream for MIDI uri: " + uri);
+                return false;
+            }
+            out = new FileOutputStream(tmp);
+            byte[] buf = new byte[8192];
+            int n;
+            while ((n = in.read(buf)) > 0) {
+                out.write(buf, 0, n);
+            }
+            out.close();
+            out = null;
+            if (!tmp.renameTo(target)) {
+                target.delete();
+                if (!tmp.renameTo(target)) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            Log.w(TAG, "copy MIDI failed: " + e.getMessage());
+            tmp.delete();
+            return false;
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+        }
+    }
+
+    private static String sanitizeFileName(String raw) {
+        if (raw == null) {
+            return null;
+        }
+        String name = raw.trim();
+        int slash = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\'));
+        if (slash >= 0) {
+            name = name.substring(slash + 1);
+        }
+        if (name.length() == 0) {
+            return null;
+        }
+        name = name.replaceAll("[\\\\/:*?\"<>|]", "_");
+        if (name.length() > 120) {
+            name = name.substring(name.length() - 120);
+        }
+        return name;
     }
 
 	public static void sendMessage(Message msg) {

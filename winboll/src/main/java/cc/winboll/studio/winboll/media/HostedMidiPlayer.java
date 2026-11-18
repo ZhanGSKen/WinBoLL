@@ -17,6 +17,7 @@ import android.media.PlaybackParams;
 import android.media.audiofx.DynamicsProcessing;
 import android.media.audiofx.EnvironmentalReverb;
 import android.media.audiofx.LoudnessEnhancer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -174,9 +175,14 @@ public class HostedMidiPlayer {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                File local = cacheFile;
-                if (!local.exists()) {
-                    local = download(track.url, cacheFile);
+                // file://, content:// and plain paths (system MIDI open/share)
+                // are read in place; only http(s) goes through the cache.
+                File local = localFileFor(track.url);
+                if (local == null) {
+                    local = cacheFile;
+                    if (!local.exists()) {
+                        local = download(track.url, cacheFile);
+                    }
                 }
                 if (local == null || !local.exists()) {
                     notifyError("download failed: " + track.url);
@@ -897,6 +903,89 @@ public class HostedMidiPlayer {
             dir.mkdirs();
         }
         return new File(dir, md5(url) + ".mid");
+    }
+
+    /**
+     * Resolve a non-HTTP track source to a readable file: `file://` and plain
+     * absolute paths are used in place, `content://` (system VIEW / SEND
+     * hand-off, SAF providers) is copied into the bridge cache first because
+     * MediaPlayer needs a file it can seek. Returns null for http(s) sources,
+     * which keep using the download/cache path.
+     */
+    private File localFileFor(String urlStr) {
+        if (urlStr == null || urlStr.length() == 0) {
+            return null;
+        }
+        try {
+            Uri uri = Uri.parse(urlStr);
+            String scheme = uri.getScheme();
+            if (scheme == null) {
+                File plain = new File(urlStr);
+                return plain.exists() && plain.isFile() ? plain : null;
+            }
+            if ("file".equalsIgnoreCase(scheme)) {
+                String path = uri.getPath();
+                if (path == null) {
+                    return null;
+                }
+                File f = new File(path);
+                return f.exists() && f.isFile() ? f : null;
+            }
+            if ("content".equalsIgnoreCase(scheme)) {
+                return copyContentToCache(uri, cacheFileFor(urlStr));
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "local source resolve failed: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /** Stream a content:// source into the bridge cache (background thread). */
+    private File copyContentToCache(Uri uri, File target) {
+        File tmp = new File(target.getAbsolutePath() + ".part");
+        InputStream in = null;
+        FileOutputStream out = null;
+        try {
+            in = mAppContext.getContentResolver().openInputStream(uri);
+            if (in == null) {
+                Log.w(TAG, "content source has no stream: " + uri);
+                return null;
+            }
+            out = new FileOutputStream(tmp);
+            byte[] buf = new byte[8192];
+            int n;
+            while ((n = in.read(buf)) > 0) {
+                out.write(buf, 0, n);
+            }
+            out.close();
+            out = null;
+            if (!tmp.renameTo(target)) {
+                target.delete();
+                if (!tmp.renameTo(target)) {
+                    return null;
+                }
+            }
+            return target;
+        } catch (Exception e) {
+            Log.w(TAG, "content copy failed: " + e.getMessage());
+            tmp.delete();
+            return null;
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    // Ignore close failure.
+                }
+            }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    // Ignore close failure.
+                }
+            }
+        }
     }
 
     private File download(String urlStr, File target) {

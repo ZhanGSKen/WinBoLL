@@ -68,6 +68,49 @@
                 <data android:mimeType="audio/*"/>
             </intent-filter>
 
+            <!-- MIDI 文件“打开方式”（按 MIME 注册）：在文件管理器/下载列表
+                 点 .mid 即可交给本应用，用托管播放（通知栏）临时播放。 -->
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.MUSIC_PLAYER"/>
+                <data android:scheme="file" android:mimeType="audio/midi"/>
+                <data android:scheme="content" android:mimeType="audio/midi"/>
+                <data android:scheme="file" android:mimeType="audio/x-midi"/>
+                <data android:scheme="content" android:mimeType="audio/x-midi"/>
+                <data android:scheme="file" android:mimeType="audio/mid"/>
+                <data android:scheme="content" android:mimeType="audio/mid"/>
+                <data android:scheme="file" android:mimeType="application/x-midi"/>
+                <data android:scheme="content" android:mimeType="application/x-midi"/>
+                <data android:scheme="file" android:mimeType="application/midi"/>
+                <data android:scheme="content" android:mimeType="application/midi"/>
+            </intent-filter>
+
+            <!-- MIDI 文件“打开方式”（按扩展名注册）：部分文件管理器把 .mid 报成
+                 application/octet-stream 或不带类型，此时按路径后缀命中。 -->
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="file" android:pathPattern=".*\\.mid"/>
+                <data android:scheme="file" android:pathPattern=".*\\.midi"/>
+                <data android:scheme="file" android:pathPattern=".*\\.kar"/>
+                <data android:scheme="file" android:pathPattern=".*\\.rmi"/>
+            </intent-filter>
+
+            <!-- MIDI 文件“分享接收”：其他应用分享 .mid 时可选择本应用，
+                 收到的文件存入应用内部收件箱目录（files/midi_inbox）。 -->
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.SEND"/>
+                <action android:name="android.intent.action.SEND_MULTIPLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="audio/midi"/>
+                <data android:mimeType="audio/x-midi"/>
+                <data android:mimeType="audio/mid"/>
+                <data android:mimeType="application/x-midi"/>
+                <data android:mimeType="application/midi"/>
+                <data android:mimeType="audio/sp-midi"/>
+            </intent-filter>
+
         </activity>
 
         <activity android:name=".activities.ShortcutActionActivity"/>

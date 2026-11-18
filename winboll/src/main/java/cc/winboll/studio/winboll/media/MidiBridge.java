@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -160,6 +161,16 @@ public final class MidiBridge {
 
     private static volatile String sPlaylistRev = "";
     private static final List<HostedMidiPlayer.Track> sTracks =
+        new ArrayList<HostedMidiPlayer.Track>();
+
+    /**
+     * Local file session (system MIDI VIEW / SEND hand-off). Such a session has
+     * no web page counterpart: the queue is the received-file list, no
+     * cmd:unhost is ever sent, and playback recovery must not fall back to the
+     * web playlist snapshot.
+     */
+    private static volatile boolean sLocalSession = false;
+    private static final List<HostedMidiPlayer.Track> sLocalTracks =
         new ArrayList<HostedMidiPlayer.Track>();
     private static volatile HostedMidiPlayer sEngine;
     private static boolean sPositionTickRunning = false;
@@ -1034,6 +1045,13 @@ public final class MidiBridge {
                 Log.i(TAG, "handleHost ignored: hosting disabled by settings");
                 return;
             }
+            if (sLocalSession) {
+                // A local file session (system MIDI open/share) is playing under
+                // the user; hand the session over to the page instead of
+                // ACKing "already hosted" for a session the page never made.
+                Log.i(TAG, "handleHost: dropping local file session for the page");
+                endLocalSession();
+            }
             sHostWebState = parseState(p.optString("state"));
             sHostWebPositionMs = Math.max(0, p.optLong("positionMs", 0));
             double rate = p.optDouble("rate", 0);
@@ -1104,6 +1122,12 @@ public final class MidiBridge {
      * (spec D-6). Shared by the cover-button unhost and the Settings switch.
      */
     private static void performUnhost() {
+        if (sLocalSession) {
+            // A local file session has no page counterpart: the page reporting
+            // "not hosted" (or sending cmd:unhost) says nothing about it.
+            Log.i(TAG, "performUnhost ignored: local file session is playing");
+            return;
+        }
         HostedMidiPlayer engine = sEngine;
         int state = STATE_STOPPED;
         long pos = 0;
@@ -1377,8 +1401,9 @@ public final class MidiBridge {
      */
     public static boolean onMediaSkipCommand(boolean next) {
         if (sHosting) {
-            synchronized (sTracks) {
-                if (sTracks.isEmpty()) {
+            final List<HostedMidiPlayer.Track> queue = activeTracks();
+            synchronized (queue) {
+                if (queue.isEmpty()) {
                     return false;
                 }
                 int idx = currentTrackIndex();
@@ -1386,21 +1411,28 @@ public final class MidiBridge {
                 Context ctx = appContext();
                 if (ctx != null && getPlayMode(ctx) == PLAY_MODE_SHUFFLE) {
                     // Shuffle: both directions pick the next random entry.
-                    target = nextPlaylistIndex(idx, true, sTracks.size());
+                    target = nextPlaylistIndex(idx, true, queue.size());
                     if (target < 0) {
                         target = 0;
                     }
                 } else {
                     target = next ? idx + 1 : idx - 1;
                     if (target < 0) {
-                        target = sTracks.size() - 1;
-                    } else if (target >= sTracks.size()) {
+                        target = queue.size() - 1;
+                    } else if (target >= queue.size()) {
                         target = 0;
                     }
                 }
-                HostedMidiPlayer.Track t = sTracks.get(target);
+                HostedMidiPlayer.Track t = queue.get(target);
                 Log.i(TAG, "skip " + (next ? "next" : "prev") + " -> " + target + " (" + t.id + ")");
-                startHostedPlayback(t.id, t.title, 0, sHostWebRate, sHostWebLoop, false);
+                if (sLocalSession) {
+                    // Local queues have no deferred playlist: start directly.
+                    if (sEngine != null) {
+                        sEngine.playTrack(t, 0, sHostWebRate, effectiveHostedLoop(false));
+                    }
+                } else {
+                    startHostedPlayback(t.id, t.title, 0, sHostWebRate, sHostWebLoop, false);
+                }
             }
             return true;
         }
@@ -1630,6 +1662,95 @@ public final class MidiBridge {
         }
     }
 
+    // ------------------- local file session (system MIDI open / share) -------------------
+
+    /**
+     * Play a queue of MIDI files handed over by the system (ACTION_VIEW on a
+     * .mid file, ACTION_SEND from another app). The queue is the in-app inbox
+     * list, so next/prev and the notification play-mode button behave exactly
+     * like a hosted page session; nothing is reported back to the web page.
+     * Always call on the main thread.
+     *
+     * @param context    application context (initialises the bridge on cold start)
+     * @param files      readable local files, in playback order
+     * @param startIndex entry to start from (clamped into the queue)
+     */
+    public static void playLocalMidiFiles(Context context, List<File> files, int startIndex) {
+        if (context != null) {
+            init(context);
+        }
+        if (files == null || files.isEmpty()) {
+            return;
+        }
+        List<HostedMidiPlayer.Track> queue = new ArrayList<HostedMidiPlayer.Track>();
+        for (int i = 0; i < files.size(); i++) {
+            File f = files.get(i);
+            if (f == null || !f.isFile()) {
+                continue;
+            }
+            String name = f.getName();
+            int dot = name.lastIndexOf('.');
+            String title = dot > 0 ? name.substring(0, dot) : name;
+            // Drop the inbox timestamp prefix ("20261118_071514_") so the
+            // notification shows the original file name.
+            title = title.replaceFirst("^\\d{8}_\\d{6}(_\\d+)?_", "");
+            if (title.length() == 0) {
+                title = name;
+            }
+            queue.add(new HostedMidiPlayer.Track(
+                "file:" + f.getAbsolutePath(), title, f.getAbsolutePath(), 0));
+        }
+        if (queue.isEmpty()) {
+            Log.w(TAG, "local playback: no readable MIDI file");
+            return;
+        }
+        // Replace whatever session was running. A web page, if any, keeps its
+        // own state and is deliberately not sent an unhost command.
+        sHostPendingRetry = false;
+        sMain.removeCallbacks(sHostPendingTimeout);
+        stopPositionTick();
+        if (sEngine != null) {
+            sEngine.release();
+            sEngine = null;
+        }
+        sLocalSession = true;
+        synchronized (sLocalTracks) {
+            sLocalTracks.clear();
+            sLocalTracks.addAll(queue);
+        }
+        sHostWebState = STATE_PLAYING;
+        sHostWebPositionMs = 0;
+        sHostWebRate = 1.0f;
+        sHostWebLoop = false;
+        sHosting = true;
+        int start = startIndex >= 0 && startIndex < queue.size() ? startIndex : 0;
+        if (sEngine == null) {
+            sEngine = new HostedMidiPlayer(appContext(), sEngineListener);
+        }
+        sEngine.playTrack(queue.get(start), 0, 1.0f, effectiveHostedLoop(false));
+        startPositionTick();
+        Log.i(TAG, "local session start: " + queue.get(start).id
+            + " (queue " + queue.size() + ")");
+    }
+
+    /** End a local file session and dismiss the media notification. */
+    private static void endLocalSession() {
+        Log.i(TAG, "local session end");
+        sHosting = false;
+        stopHostedPlayback();
+        synchronized (sLocalTracks) {
+            sLocalTracks.clear();
+        }
+        sLocalSession = false;
+        saveHostPrefs(false, STATE_STOPPED, "", "", 0, 1.0f, false);
+        Context ctx = appContext();
+        if (ctx != null) {
+            // Stopped is terminal for MediaPlaybackService: it dismisses the
+            // notification and the media session.
+            MediaPlaybackService.pushState(ctx, STATE_STOPPED, 0, 0, 1.0f, "", "", true);
+        }
+    }
+
     /**
      * Stop ends the hosted session too (notification ✕): stop the native
      * engine, cancel hosting and send cmd:unhost to the page with a stopped
@@ -1637,6 +1758,11 @@ public final class MidiBridge {
      * player in the stopped state.
      */
     private static void stopHostedAndUnhost() {
+        if (sLocalSession) {
+            // No page holds this session; just end it.
+            endLocalSession();
+            return;
+        }
         HostedMidiPlayer engine = sEngine;
         String trackId = sWebTrackId;
         String title = sWebTitle;
@@ -1691,11 +1817,12 @@ public final class MidiBridge {
                     pushHostedState();
                     return;
                 }
-                synchronized (sTracks) {
+                final List<HostedMidiPlayer.Track> queue = activeTracks();
+                synchronized (queue) {
                     int idx = currentTrackIndex();
-                    int next = nextPlaylistIndex(idx, mode == PLAY_MODE_SHUFFLE, sTracks.size());
+                    int next = nextPlaylistIndex(idx, mode == PLAY_MODE_SHUFFLE, queue.size());
                     if (next >= 0 && sEngine != null) {
-                        HostedMidiPlayer.Track t = sTracks.get(next);
+                        HostedMidiPlayer.Track t = queue.get(next);
                         Log.i(TAG, "track ended, mode=" + getPlayModeLabel(mode)
                                 + " idx " + idx + " -> " + next);
                         sEngine.playTrack(t, 0, sHostWebRate, effectiveHostedLoop(sHostWebLoop));
@@ -1704,6 +1831,10 @@ public final class MidiBridge {
                 }
                 // Sequence mode ran off the end of the playlist: playback ends.
                 Log.i(TAG, "track ended, playlist finished");
+                if (sLocalSession) {
+                    endLocalSession();
+                    return;
+                }
                 pushHostedState();
             }
 
@@ -1712,6 +1843,12 @@ public final class MidiBridge {
                 // Native playback unavailable: hand playback back to the web
                 // synthesizer with the original host params so audio continues.
                 if (!sHosting) {
+                    return;
+                }
+                if (sLocalSession) {
+                    // No web counterpart to unwind; just drop the local session.
+                    Log.w(TAG, "local session error: " + message);
+                    endLocalSession();
                     return;
                 }
                 sHosting = false;
@@ -1935,12 +2072,19 @@ public final class MidiBridge {
         return null;
     }
 
+    /** Queue backing the active session: the inbox list for a local file
+     *  session, otherwise the web playlist. */
+    private static List<HostedMidiPlayer.Track> activeTracks() {
+        return sLocalSession ? sLocalTracks : sTracks;
+    }
+
     private static int currentTrackIndex() {
         HostedMidiPlayer engine = sEngine;
         String id = engine != null && engine.getTrack() != null ? engine.getTrack().id : "";
-        synchronized (sTracks) {
-            for (int i = 0; i < sTracks.size(); i++) {
-                if (sTracks.get(i).id.equals(id)) {
+        final List<HostedMidiPlayer.Track> queue = activeTracks();
+        synchronized (queue) {
+            for (int i = 0; i < queue.size(); i++) {
+                if (queue.get(i).id.equals(id)) {
                     return i;
                 }
             }
@@ -1975,6 +2119,15 @@ public final class MidiBridge {
 
     private static void saveHostPrefs(boolean hosted, int state, String trackId, String title,
                                       long pos, float rate, boolean loop) {
+        if (sLocalSession) {
+            // A local file session must never be recovered as a page session:
+            // keep the hosted flag off so the sticky service restart dismisses
+            // instead of pulling the web playlist.
+            if (!hosted) {
+                prefs().edit().putBoolean(KEY_HOSTED, false).apply();
+            }
+            return;
+        }
         prefs().edit()
             .putBoolean(KEY_HOSTED, hosted)
             .putInt(KEY_HOST_STATE, state)
