@@ -53,8 +53,6 @@ MERGE_OBJECTS_LIST=(
 .winboll
 GenKeyStore
 LICENSE
-LICENSE-Private-Demo
-LICENSE-Private-Demo_docs
 README.md
 aes
 appbase

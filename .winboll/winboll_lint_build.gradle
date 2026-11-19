@@ -1,50 +1,51 @@
 android {
     lintOptions {
-        // true--关闭lint报告的分析进度
+        // true -- silence lint analysis progress
         //quiet true
-        // true--错误发生后停止gradle构建
+        // true -- stop the Gradle build on error
         abortOnError false
-        // true--只报告error
+        // true -- report errors only
         //ignoreWarnings true
-        // true--忽略有错误的文件的全/绝对路径(默认是true)
+        // true -- use full/absolute paths for files with errors (default true)
         //absolutePaths true
-        // true--检查所有问题点，包含其他默认关闭项
+        // true -- check all issues, including ones disabled by default
         checkAllWarnings true
-        // true--所有warning当做error
+        // true -- treat all warnings as errors
         //warningsAsErrors true
-        // 关闭指定问题检查
+        // Disable specific issue checks
         //disable 'ExpiredTargetSdkVersion','HardcodedText','UnknownNullness','ButtonStyle','GradleDependency','UnusedResources'
-        // 打开指定问题检查
+        // Enable specific issue checks
         //enable 'RtlHardcoded','RtlCompat', 'RtlEnabled'
-        // 仅检查指定问题
+        // Check only specific issues
         //check 'NewApi', 'InlinedApi'
-        // true--error输出文件不包含源码行号
+        // true -- omit source line numbers in error output
         //noLines true
-        // true--显示错误的所有发生位置，不截取
+        // true -- show all error occurrences without truncation
         showAll true
-        // 回退lint设置(默认规则)
+        // Fall back to default lint settings
         //lintConfig file("default-lint.xml")
-        // true--生成txt格式报告(默认false)
+        // true -- generate a TXT report (default false)
         //textReport true
-        // 重定向输出；可以是文件或'stdout'
+        // Redirect output; can be a file or 'stdout'
         //textOutput 'stdout'
-        // true--生成XML格式报告
+        // true -- generate an XML report
         xmlReport true
-        // 指定xml报告文档(默认lint-results.xml)
+        // XML report file (default lint-results.xml)
         xmlOutput file("${lintXmlReportFilePath}")
-        // true--生成HTML报告(带问题解释，源码位置，等)
+        // true -- generate an HTML report (with issue explanations, source locations, etc.)
         htmlReport true
-        // html报告可选路径(构建器默认是lint-results.html )
+        // Optional HTML report path (build default is lint-results.html)
         htmlOutput file("${lintHTMLReportFilePath}")
-        //  true--所有正式版构建执行规则生成崩溃的lint检查，如果有崩溃问题将停止构建
+        // true -- run crash-generating lint checks on all release builds;
+        // the build stops if any crash issue is found
         checkReleaseBuilds true
-        // 在发布版本编译时检查(即使不包含lint目标)，指定问题的规则生成崩溃
+        // On release builds (even without a lint target), specified issues are treated as fatal crashes
         //fatal 'NewApi', 'InlineApi'
-        // 指定问题的规则生成错误
+        // Treat specified issues as errors
         //error 'Wakelock', 'TextViewEdits'
-        // 指定问题的规则生成警告
+        // Treat specified issues as warnings
         //warning 'ResourceAsColor'
-        // 忽略指定问题的规则(同关闭检查)
+        // Ignore specified issues (same as disabling checks)
         //ignore 'TypographyQuotes'
     }
 }
