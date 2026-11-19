@@ -49,7 +49,7 @@ dependencies {
 
     // WinBoLL 库 nexus.winboll.cc 地址
     // Pinned to an exact version for reproducible builds; bump it explicitly when upgrading.
-    api 'cc.winboll.studio:libappbase:15.22.7'
+    api 'cc.winboll.studio:libappbase:15.22.8'
 
     // JavaMail SMTP (Android-compatible), EPL-2.0; see the license page entry
     api 'com.sun.mail:android-mail:1.6.7'

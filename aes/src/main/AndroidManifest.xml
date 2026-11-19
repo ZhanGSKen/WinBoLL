@@ -7,6 +7,10 @@
     <!-- 对正在运行的应用重新排序 -->
     <uses-permission android:name="android.permission.REORDER_TASKS"/>
 
+    <!-- This project does not configure network security: the app declares no
+         android:networkSecurityConfig and strips any inherited one. libappbase
+         15.22.8 no longer declares the attribute, but tools:remove stays as a guard
+         so an upstream regression cannot silently re-enable the whitelist. -->
     <application
         android:name=".App"
         android:allowBackup="false"
