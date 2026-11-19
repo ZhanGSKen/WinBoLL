@@ -106,9 +106,6 @@
 # Jsoup HTML解析
 -keep class org.jsoup.** { *; }
 
-# Pinyin4j 拼音搜索
--keep class net.sourceforge.pinyin4j.** { *; }
-
 # JSch SSH组件
 -keep class com.jcraft.jsch.** { *; }
 # JSch 可选集成（jzlib 压缩、GSSAPI/Kerberos 认证，运行时按需加载，本项目未打包）

@@ -13,8 +13,11 @@
 -dontwarn javax.mail.**
 -keep class javax.mail.** { *; }
 -keep class javax.mail.internet.** { *; }
+-dontwarn javax.activation.**
+-keep class javax.activation.** { *; }
 -dontwarn com.sun.mail.**
 -keep class com.sun.mail.** { *; }
+-keepclassmembers class * extends javax.mail.Authenticator { *; }
 
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
