@@ -1,13 +1,7 @@
-// APPBase project build settings
-//include ':appbase'
-//include ':libappbase'
-//rootProject.name = "appbase"
+// MyWinBoLL 项目编译设置
+//include ':mywinboll'
+//rootProject.name = "mywinboll"
 
-// AES project build settings
-//include ':aes'
-//include ':libaes'
-//rootProject.name = "aes"
-
-// WinBoLL project build settings
-//include ':winboll'
-//rootProject.name = "winboll"
+// ByTheWay 项目编译设置
+//include ':bytheway'
+//rootProject.name = "bytheway"
