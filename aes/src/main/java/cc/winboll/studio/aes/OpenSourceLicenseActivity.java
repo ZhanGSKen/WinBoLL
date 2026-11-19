@@ -240,11 +240,7 @@ public class OpenSourceLicenseActivity extends BaseWinBoLLActivity {
                 "com.journeyapps:zxing-android-embedded:3.6.0", "Apache-2.0", "Apache-2.0.txt",
                 "https://github.com/journeyapps/zxing-android-embedded",
                 "com.journeyapps:zxing-android-embedded:3.6.0"));
-        list.add(new LicenseEntry("JSch",
-                "com.jcraft:jsch:0.1.55", "BSD-3-Clause（JCraft Revised BSD 三条款式）",
-                "BSD-3-Clause.txt",
-                "http://www.jcraft.com/jsch/",
-                "com.jcraft:jsch:0.1.55"));
+        // JSch 条目已随依赖出栈移除（FTPUtils 删除后零引用），详见报告 P5-16
         list.add(new LicenseEntry("PullRefreshLayout",
                 "com.baoyz.pullrefreshlayout:library:1.2.0", "MIT", "MIT.txt",
                 "https://github.com/baoyongzhang/android-PullRefreshLayout",

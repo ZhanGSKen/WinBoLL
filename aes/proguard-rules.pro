@@ -104,11 +104,7 @@
 # Jsoup HTML解析
 -keep class org.jsoup.** { *; }
 
-# JSch SSH组件
--keep class com.jcraft.jsch.** { *; }
-# JSch 可选集成（jzlib 压缩、GSSAPI/Kerberos 认证，运行时按需加载，本项目未打包）
--dontwarn com.jcraft.jzlib.**
--dontwarn org.ietf.jgss.**
+# JSch SSH组件：已随 com.jcraft:jsch 出栈删除（唯一使用者 FTPUtils 已移除，零引用），详见报告 P5-16
 
 # JavaMail SMTP（邮件发送核心库，Release编译必须保留）
 -dontwarn javax.mail.**

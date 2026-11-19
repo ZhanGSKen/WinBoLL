@@ -31,8 +31,7 @@ dependencies {
     // 下拉控件
     api 'com.baoyz.pullrefreshlayout:library:1.2.0'
     // 拼音搜索：已移除 pinyin4j 2.5.0（GPL-2.0-or-later，本项目零引用），详见《开源许可证合规检查报告.md》P0
-    // SSH
-    api 'com.jcraft:jsch:0.1.55'
+    // SSH：已移除 com.jcraft:jsch:0.1.55（唯一使用者 FTPUtils 已于第 15 版整改删除，零引用），详见报告 P5-16
     // Html 解析
     api 'org.jsoup:jsoup:1.13.1'
     // 二维码类库
