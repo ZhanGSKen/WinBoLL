@@ -95,9 +95,7 @@
 }
 
 # 其他第三方框架（按引入依赖保留，无则可删除）
-# XXPermissions 18.63
--keep class com.hjq.permissions.** { *; }
--keep interface com.hjq.permissions.** { *; }
+# （XXPermissions 已于历史清理中移除，其 keep 规则同步删除）
 
 # ZXing 二维码（核心解析组件）
 -keep class com.google.zxing.** { *; }
