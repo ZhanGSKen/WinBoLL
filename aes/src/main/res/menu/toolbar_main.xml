@@ -62,6 +62,9 @@
                 android:id="@+id/item_settings"
                 android:title="Settings"/>
             <item
+                android:id="@+id/item_smtp_settings"
+                android:title="SMTP设置"/>
+            <item
                 android:id="@+id/item_about"
                 android:title="About"/>
         </menu>
