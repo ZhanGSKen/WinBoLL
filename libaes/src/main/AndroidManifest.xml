@@ -10,7 +10,6 @@
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
-        android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="GoogleAppIndexingWarning">
 
         <!-- Test harness activities stay inside the app; debug builds re-export them
