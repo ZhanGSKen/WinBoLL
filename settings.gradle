@@ -1,3 +1,2 @@
-// MyGallery 项目编译设置
-include ':mygallery'
-rootProject.name = "mygallery"
+rootProject.name = "myccconnector"
+include ':myccconnector'
