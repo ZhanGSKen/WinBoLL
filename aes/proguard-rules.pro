@@ -56,7 +56,6 @@
 
 # 屏蔽 Java 8+ 警告（适配 Java 7 语法）
 -dontwarn java.lang.invoke.*
--dontwarn android.support.v8.renderscript.*
 -dontwarn java.util.function.**
 
 # ============================== 第三方框架专项规则 ==============================
@@ -99,7 +98,9 @@
 
 # ZXing 二维码（核心解析组件）
 -keep class com.google.zxing.** { *; }
--keep class com.journeyapps.zxing.** { *; }
+# ZXing Android Embedded 的真实包名是 com.journeyapps.barcodescanner
+# （com.journeyapps.zxing 是错误包名，写错会使该包失去 keep 保护）
+-keep class com.journeyapps.barcodescanner.** { *; }
 
 # Jsoup HTML解析
 -keep class org.jsoup.** { *; }

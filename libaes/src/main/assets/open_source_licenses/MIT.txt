@@ -1,6 +1,17 @@
 MIT License
 
-Copyright (c) <year> <copyright holders>
+This file covers the MIT-licensed third-party components bundled with this
+application. The copyright notices below belong to each component; the
+permission terms that follow apply to all of them.
+
+  jsoup 1.13.1
+      Copyright (c) 2009-2020 Jonathan Hedley (https://jsoup.org/)
+
+  PullRefreshLayout 1.2.0 (com.baoyz.pullrefreshlayout:library)
+      Copyright (c) 2014 baoyongzhang
+
+  android-about-page 2.0.0 (io.github.medyo:android-about-page)
+      Copyright (c) 2016 Mehdi Sakout
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

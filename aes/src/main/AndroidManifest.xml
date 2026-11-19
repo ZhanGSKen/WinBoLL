@@ -35,13 +35,31 @@
             android:name="android.max_aspect"
             android:value="4.0"/>
 
-        <activity android:name=".TestActivityManagerActivity"/>
+        <activity android:name=".TestActivityManagerActivity" android:exported="false"/>
 
-        <activity android:name=".SettingsActivity"/>
+        <activity android:name=".SettingsActivity" android:exported="false"/>
 
-        <activity android:name=".AboutActivity"/>
+        <activity android:name=".AboutActivity" android:exported="false"/>
 
-        <activity android:name=".OpenSourceLicenseActivity"/>
+        <activity android:name=".OpenSourceLicenseActivity" android:exported="false"/>
+
+        <!-- Upstream AAR components: declare exported explicitly so that
+             targetSdk 31+ (which requires an explicit value) stays installable. -->
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name="cc.winboll.studio.libappbase.CrashActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name="cc.winboll.studio.libappbase.GlobalCrashActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name="cc.winboll.studio.libappbase.activities.NfcRsaLoginActivity"
+            android:exported="false"/>
 
         <!-- SMTP 配置页仅由本应用菜单进入，不对其他应用导出 -->
         <activity android:name=".SMTPSettingsActivity" android:exported="false"/>
