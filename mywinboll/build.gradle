@@ -3,76 +3,99 @@ apply from: '../.winboll/winboll_app_build.gradle'
 apply from: '../.winboll/winboll_lint_build.gradle'
 
 def genVersionName(def versionName){
-    // 检查编译标志位配置
+    // Check build flag configuration
     assert (winbollBuildProps['stageCount'] != null)
     assert (winbollBuildProps['baseVersion'] != null)
-    // 保存基础版本号
+    // Save base version
     winbollBuildProps.setProperty("baseVersion", "${versionName}");
-    //保存编译标志配置
+    // Save build flag configuration
     FileOutputStream fos = new FileOutputStream(winbollBuildPropsFile)
     winbollBuildProps.store(fos, "${winbollBuildPropsDesc}");
     fos.close();
-    
-    // 返回编译版本号
+
+    // Return assembled version name
     return "${versionName}." + winbollBuildProps['stageCount']
 }
 
 android {
-	// 适配MIUI12
-	compileSdkVersion 30
-    buildToolsVersion "30.0.3"
-	
+ 	// Compatible with MIUI12
+     compileSdkVersion 30
+
+     compileOptions {
+         sourceCompatibility JavaVersion.VERSION_1_7
+         targetCompatibility JavaVersion.VERSION_1_7
+     }
+
     defaultConfig {
         applicationId "cc.winboll.studio.mywinboll"
         minSdkVersion 26
+		// Compatible with MIUI12
         targetSdkVersion 30
-        //1. Android 官方规则
-		//-  versionCode  类型：int 整型
-		//- Java int 最大值：2147483647
-        versionCode 1520000
-        // versionName 更新后需要手动设置 
-        // 项目模块目录的 build.gradle 文件的 stageCount=0
-        // Gradle编译环境下合起来的 versionName 就是 "${versionName}.0"
-        versionName "15.20" 
+        versionCode 1
+        // After updating versionName, manually set stageCount=0
+        // in the .winboll/winbollBuildProps.properties file.
+        // The combined versionName under the Gradle build is "${versionName}.0"
+        versionName "15.22"
         if(true) {
             versionName = genVersionName("${versionName}")
         }
     }
-	
+
+    packagingOptions {
+        // Do NOT exclude META-INF/NOTICE.md or META-INF/LICENSE.md: Apache/MIT/BSD/EPL
+        // licenses require shipping the license text and NOTICE of every distributed
+        // component. Stripping them by file name would remove upstream attribution.
+        // fastjson 1.2.76 内置的 JAX-RS/Jersey 可选集成 service 注册文件，
+        // 对应实现类不在 classpath，属死服务注册，排除以消除 R8 "missing service class" 警告
+        exclude 'META-INF/services/javax.ws.rs.ext.MessageBodyReader'
+        exclude 'META-INF/services/javax.ws.rs.ext.MessageBodyWriter'
+        exclude 'META-INF/services/javax.ws.rs.ext.Providers'
+        exclude 'META-INF/services/org.glassfish.jersey.internal.spi.AutoDiscoverable'
+    }
 }
 
 dependencies {
+    // License compliance (2026-11-15): the two artifacts below are pulled transitively
+    // by cc.winboll.studio:libappbase / libaes but are never referenced by this app or
+    // by their own code. They are excluded so that the APK ships no LGPL/EPL code:
+    //  - com.github.open-android:pinyin4j bundles com.hp.hpl.sparta (LGPL-2.1)
+    //  - com.sun.mail:android-mail / android-activation are under EPL-2.0
+    configurations.all {
+        exclude group: 'com.github.open-android', module: 'pinyin4j'
+        exclude group: 'com.sun.mail'
+    }
+
     api 'com.google.code.gson:gson:2.10.1'
-	
-	// 下拉控件
+
+	// Pull-to-refresh widget
     api 'com.baoyz.pullrefreshlayout:library:1.2.0'
-    
+
     // SSH
     api 'com.jcraft:jsch:0.1.55'
-    // Html 解析
+    // HTML parsing
     api 'org.jsoup:jsoup:1.13.1'
-    // 二维码类库
+    // QR code libraries
     api 'com.google.zxing:core:3.4.1'
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
-    // 应用介绍页类库
+    // About-page library
     api 'io.github.medyo:android-about-page:2.0.0'
-	// 网络连接类库
+	// Networking library
     api 'com.squareup.okhttp3:okhttp:4.4.1'
-     // FastJSON解析
+     // FastJSON parsing
      implementation 'com.alibaba:fastjson:1.2.76'
-    
-	// AndroidX 类库
+
+	// AndroidX libraries
     /*api 'androidx.appcompat:appcompat:1.1.0'
     //api 'com.google.android.material:material:1.4.0'
     //api 'androidx.viewpager:viewpager:1.0.0'
     //api 'androidx.vectordrawable:vectordrawable:1.1.0'
     //api 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
     //api 'androidx.fragment:fragment:1.1.0'*/
-	
-	
-	// 米盟
-	//api 'com.miui.zeus:mimo-ad-sdk:5.3.+'//请使用最新版sdk
-     //注意：以下5个库必须要引入
+
+
+	// MiMo ad SDK
+	//api 'com.miui.zeus:mimo-ad-sdk:5.3.+'// please use the latest SDK
+     // Note: the following 5 libraries are required
     //implementation 'androidx.appcompat:appcompat:1.4.1'
     api 'androidx.recyclerview:recyclerview:1.0.0'
     api 'com.github.bumptech.glide:glide:4.9.0'
@@ -91,20 +114,23 @@ dependencies {
     implementation "io.noties.markwon:linkify:$markwonVersion"
     implementation "io.noties.markwon:recycler:$markwonVersion"
 	*/
-	implementation 'com.termux:terminal-emulator:0.118.0'
-	implementation 'com.termux:terminal-view:0.118.0'
-	implementation 'com.termux:termux-shared:0.118.0'
+	// Termux terminal is NOT bundled: it runs in a separate standalone Termux app
+	// and is only invoked through the RUN_COMMAND Intent interface (see
+	// TermuxCommandExecutor), so no com.termux GPL-3.0 libraries are linked here.
 
-	// Biometric (指纹识别)
+	// Biometric (fingerprint) recognition
 	implementation 'androidx.biometric:biometric:1.1.0'
-	
-	// WinBoLL库 nexus.winboll.cc 地址
-    api 'cc.winboll.studio:libappbase:15.20.34'
-    api 'cc.winboll.studio:libaes:15.20.17'
-	
-	// 备用库 jitpack.io 地址
-	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.20.33'
-	//api 'com.github.ZhanGSKen:libaes:aes-v15.20.16'
-	
+
+	// WinBoLL libraries from nexus.winboll.cc
+    // Pinned versions: a dynamic "15.22.+" range lets Nexus silently change the
+    // dependency graph between builds, which invalidates license compliance
+    // conclusions without notice (see license audit rounds 5-7).
+    api 'cc.winboll.studio:libappbase:15.22.7'
+    api 'cc.winboll.studio:libaes:15.22.8'
+
+	// Fallback libraries from jitpack.io
+	//api 'com.github.ZhanGSKen:libappbase:appbase-v15.21.+'
+	//api 'com.github.ZhanGSKen:libaes:aes-v15.21.+'
+
 	api fileTree(dir: 'libs', include: ['*.jar'])
 }
