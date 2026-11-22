@@ -1,5 +1,6 @@
 package cc.winboll.studio.winboll.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +45,19 @@ public class AboutActivity extends BaseWinBoLLActivity {
 
 		AboutView aboutView = getActivity().findViewById(R.id.aboutview);
 		aboutView.setAPPInfo(genDefaultAppInfo());
+
+		// 窗口底部按钮：打开开源许可窗口（许可页由 MainActivity 内的 Fragment 承载，
+		// MainActivity 为 singleTask，已有实例时经 onNewIntent 切换过去）
+		findViewById(R.id.btn_open_source_license).setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					LogUtils.d(TAG, "点击打开开源许可窗口");
+					Intent intent = new Intent(MainActivity.ACTION_SHOW_LICENSE);
+					intent.setClass(getActivity(), MainActivity.class);
+					startActivity(intent);
+					getActivity().finish();
+				}
+			});
     }
 
 	private void initToolbar() {

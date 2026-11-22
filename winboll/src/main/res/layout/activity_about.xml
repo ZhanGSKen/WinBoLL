@@ -17,4 +17,15 @@
 		android:layout_weight="1.0"
 		android:id="@+id/aboutview"/>
 
+	<!-- 窗口底部：打开应用的开源许可窗口 -->
+	<Button
+		android:id="@+id/btn_open_source_license"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginEnd="16dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="16dp"
+		android:text="开源许可"/>
+
 </LinearLayout>

@@ -44,6 +44,9 @@ public class MainActivity extends DrawerFragmentActivity {
 
     public static final String TAG = "MainActivity";
 
+    /** 打开开源许可窗口的 Intent action（由 About 窗口底部按钮发起）。 */
+    public static final String ACTION_SHOW_LICENSE = "cc.winboll.studio.winboll.ACTION_SHOW_LICENSE";
+
     /** 接收到的 MIDI 文件（系统“打开方式”/“分享”）保存在应用内部此目录，供后续组织播放。 */
     public static final String MIDI_INBOX_DIR = "midi_inbox";
 
@@ -94,11 +97,20 @@ public class MainActivity extends DrawerFragmentActivity {
         refreshCertTrustedState();
         // 启动消息推送前台服务（自建 WSS 通道，收通知帧发系统通知）
         PushService.start(this);
+        // About 窗口底部按钮经 ACTION_SHOW_LICENSE 进来时，直接显示开源许可窗口
+        if (isShowLicenseIntent(getIntent())) {
+            showOpenSourceLicense();
+        }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        // About 窗口底部按钮：应用已在运行时直接切到开源许可窗口
+        if (isShowLicenseIntent(intent)) {
+            showOpenSourceLicense();
+            return;
+        }
         // MIDI 文件再次“打开/分享”时（应用已在运行）继续接住。
         if (handleMidiReceiveIntent(intent)) {
             return;
@@ -150,6 +162,13 @@ public class MainActivity extends DrawerFragmentActivity {
             manageItem.setVisible(mCertTrusted);
         }
         return true;
+    }
+
+    /**
+     * 是否请求显示开源许可窗口（About 窗口底部按钮与菜单入口都用它判断）。
+     */
+    private boolean isShowLicenseIntent(Intent intent) {
+        return intent != null && ACTION_SHOW_LICENSE.equals(intent.getAction());
     }
 
     /**
@@ -658,9 +677,6 @@ public class MainActivity extends DrawerFragmentActivity {
                 showWebsiteManage();
             } else if (nItemId == R.id.item_settings) {
                 WinBoLLActivityManager.getInstance().startWinBoLLActivity(getApplicationContext(), SettingsActivity.class);
-            } else if (nItemId == R.id.item_open_source) {
-                // 点击显示开源许可说明窗口
-                showOpenSourceLicense();
             } else if (nItemId == R.id.item_about) {
                 Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
                 WinBoLLActivityManager.getInstance().startWinBoLLActivity(getApplicationContext(), intent, AboutActivity.class);
