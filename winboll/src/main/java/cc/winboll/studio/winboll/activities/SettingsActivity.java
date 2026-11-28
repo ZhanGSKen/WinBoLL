@@ -31,6 +31,7 @@ import cc.winboll.studio.winboll.R;
 import cc.winboll.studio.winboll.fragments.WWWBrowserFragment;
 import cc.winboll.studio.winboll.media.MidiBridge;
 import cc.winboll.studio.winboll.utils.CertTrustUtils;
+import cc.winboll.studio.winboll.utils.IntranetDns;
 
 /**
  * @Author ZhanGSKen&豆包大模型<zhangsken@qq.com>
@@ -97,6 +98,56 @@ public class SettingsActivity extends BaseWinBoLLActivity {
             @Override
             public void onClick(View v) {
                 openCertPicker();
+            }
+        });
+
+        // 内网 DNS：主 DNS 为内网解析服务，公网 DNS 仅作回退
+        final EditText etDnsPrimary = (EditText) findViewById(R.id.et_dns_primary);
+        final EditText etDnsSecondary = (EditText) findViewById(R.id.et_dns_secondary);
+        etDnsPrimary.setText(IntranetDns.getPrimary(this));
+        etDnsSecondary.setText(IntranetDns.getSecondary(this));
+
+        Button btnSaveDns = (Button) findViewById(R.id.btn_save_dns);
+        btnSaveDns.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String primary = etDnsPrimary.getText().toString().trim();
+                String secondary = etDnsSecondary.getText().toString().trim();
+                if (TextUtils.isEmpty(primary) || !isIpv4Literal(primary)) {
+                    Toast.makeText(SettingsActivity.this, R.string.toast_dns_invalid, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!TextUtils.isEmpty(secondary) && !isIpv4Literal(secondary)) {
+                    Toast.makeText(SettingsActivity.this, R.string.toast_dns_invalid, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                IntranetDns.saveServers(SettingsActivity.this, primary, secondary);
+                Toast.makeText(SettingsActivity.this, R.string.toast_dns_saved, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        final TextView tvDnsResult = (TextView) findViewById(R.id.tv_dns_result);
+        Button btnCheckDns = (Button) findViewById(R.id.btn_check_dns);
+        btnCheckDns.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String primary = etDnsPrimary.getText().toString().trim();
+                final String secondary = etDnsSecondary.getText().toString().trim();
+                IntranetDns.saveServers(SettingsActivity.this, primary, secondary);
+                tvDnsResult.setText(R.string.settings_dns_checking);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final IntranetDns.Result result = IntranetDns.resolve(
+                                SettingsActivity.this, "www.studio.winboll");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tvDnsResult.setText(result.toDisplayString("www.studio.winboll"));
+                            }
+                        });
+                    }
+                }).start();
             }
         });
 
@@ -814,6 +865,27 @@ public class SettingsActivity extends BaseWinBoLLActivity {
             int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.7f);
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, height);
         }
+    }
+
+    /**
+     * Accept only a dotted IPv4 literal for the DNS fields.
+     */
+    private boolean isIpv4Literal(String value) {
+        String[] parts = value.split("\\.");
+        if (parts.length != 4) {
+            return false;
+        }
+        for (int i = 0; i < parts.length; i++) {
+            try {
+                int octet = Integer.parseInt(parts[i]);
+                if (octet < 0 || octet > 255 || parts[i].length() == 0) {
+                    return false;
+                }
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

@@ -44,6 +44,15 @@
     <string name="settings_section_security">安全</string>
     <string name="settings_install_cert">安装证书</string>
     <string name="settings_install_cert_desc">从设备存储选择 CA 根证书（.crt/.cer/.pem）安装到系统，用于信任 WinBoLL 内部 HTTPS 服务。</string>
+    <string name="settings_section_dns">内网 DNS 解析</string>
+    <string name="settings_dns_primary_hint">主 DNS（内网），如 192.168.123.222</string>
+    <string name="settings_dns_secondary_hint">次 DNS（公网回退），如 223.5.5.5</string>
+    <string name="settings_dns_save">保存</string>
+    <string name="settings_dns_check">检测解析</string>
+    <string name="settings_dns_checking">正在检测解析…</string>
+    <string name="toast_dns_invalid">DNS 地址必须是 IPv4 形式</string>
+    <string name="toast_dns_saved">内网 DNS 设置已保存</string>
+    <string name="settings_dns_desc">内网域名（*.studio.winboll）只用主 DNS 的应答，且必须来自内网地址才算可信；公网 DNS 仅在主 DNS 不响应时回退。修改后建议同时确认系统 DNS 也指向主 DNS。</string>
     <string name="toast_cert_picker_failed">无法打开文件选择器</string>
     <string name="toast_cert_canceled">已取消选择证书</string>
     <string name="toast_cert_read_failed">读取证书失败，请选择有效的 CA 证书文件</string>

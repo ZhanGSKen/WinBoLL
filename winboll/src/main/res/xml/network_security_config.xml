@@ -5,6 +5,16 @@
         <domain includeSubdomains="true">winboll.cc</domain> <!-- 你的目标域名 -->
         <domain includeSubdomains="true">www.winboll.cc</domain> <!-- 其他需要兼容的域名 -->
     </domain-config>
+    <!-- 内网 (studio.winboll) 专用：信任随包分发的 WinBoLL Studio 根 CA，用户无需手动安装 -->
+    <domain-config>
+        <domain includeSubdomains="true">studio.winboll</domain>
+        <trust-anchors>
+            <certificates src="@raw/winboll_studio_root_ca" />
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </domain-config>
+
     <!-- 全局允许HTTP明文请求（支持网站HTTP协议访问） -->
     <base-config cleartextTrafficPermitted="true">
         <trust-anchors>

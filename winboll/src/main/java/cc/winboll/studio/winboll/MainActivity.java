@@ -141,7 +141,7 @@ public class MainActivity extends DrawerFragmentActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final boolean trusted = CertTrustUtils.isWinBoLLRootTrusted();
+                final boolean trusted = CertTrustUtils.isWinBoLLRootTrusted(MainActivity.this);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
