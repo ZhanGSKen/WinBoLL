@@ -71,6 +71,16 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                 }
             });
 
+        // Join the official WeCom enterprise: optional, used only for notifications.
+        Button btnJoinEnterprise = findViewById(R.id.btn_join_enterprise_entry);
+        btnJoinEnterprise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, JoinEnterpriseActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // 安装证书：从设备存储选择 CA 根证书，再调系统 KeyChain 安装（不内置证书）
         Button btnInstallCert = findViewById(R.id.btn_install_cert);
         btnInstallCert.setOnClickListener(new View.OnClickListener() {

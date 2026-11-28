@@ -120,4 +120,25 @@
     <string name="toast_playback_model_classic">已选择模型一（原生合成）</string>
     <string name="toast_playback_model_enhanced">已选择模型二（原生合成 + 增益）</string>
     <string name="toast_playback_model_dynamic">已选择模型三（原生合成 + 压限增益）</string>
+    <!-- Settings entry: request to join the official WinBoLL enterprise on WeCom. -->
+    <string name="settings_section_community">社区与账号</string>
+    <string name="settings_join_enterprise_entry">申请加入 WinBoLL 企业</string>
+    <string name="settings_join_enterprise_desc">加入后在园区的官方企业微信内接收通知（可选，随时可退出）。</string>
+
+    <string name="join_enterprise_title">加入 WinBoLL 企业</string>
+    <string name="join_enterprise_intro">WinBoLL 在企业微信维护一个官方企业（工作室主体，已认证）。加入后可以用企业微信接收平台通知，也可以在成员额度内使用官方邮箱。</string>
+    <string name="join_enterprise_bullet_voluntary">· 加入完全自愿，不加入不影响 App 任何功能。</string>
+    <string name="join_enterprise_bullet_notice">· 加入后会出现在该企业通讯录中，并收到结算单、维护公告等官方消息。</string>
+    <string name="join_enterprise_bullet_boundary">· 不打卡、不派任务、不签劳动合同：加入仅用于接收通知，不构成劳动关系。</string>
+    <string name="join_enterprise_quota_label">成员名额</string>
+    <string name="join_enterprise_quota_value">待服务端下发（本版本未接入账号服务）</string>
+    <string name="join_enterprise_open_btn">打开企业微信加入</string>
+    <string name="join_enterprise_exit_btn">如何退出企业</string>
+    <string name="join_enterprise_exit_dialog_title">退出 WinBoLL 企业</string>
+    <string name="join_enterprise_exit_dialog_msg">在企业微信中依次操作：我 → 设置 → 我的企业 → 选中「WinBoLL」→ 退出企业。退出后平台会解绑你的账号，元宝与历史结算记录不受影响。</string>
+    <string name="join_enterprise_exit_dialog_ok">确定</string>
+    <string name="join_enterprise_footer">说明：邀请链接每 7 天更新一次，因此本页只打开固定短链，由服务器指向当前有效的邀请；若提示链接失效，请稍后重试。</string>
+    <string name="toast_join_enterprise_not_installed">未检测到企业微信，已为你打开下载入口；安装后请回到本页重新加入。</string>
+    <string name="toast_join_enterprise_failed">无法打开加入页面，请检查网络或手动访问 winboll.cc/join。</string>
+
 </resources>

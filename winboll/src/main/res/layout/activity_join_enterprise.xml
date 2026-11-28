@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<cc.winboll.studio.libaes.views.ASupportToolbar
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/toolbar"/>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:fillViewport="true"
+		android:scrollbars="vertical">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="16dp"
+				android:text="@string/join_enterprise_intro"
+				android:textSize="15sp"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"
+				android:paddingBottom="4dp"
+				android:text="@string/join_enterprise_bullet_voluntary"
+				android:textSize="13sp"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"
+				android:paddingBottom="4dp"
+				android:text="@string/join_enterprise_bullet_notice"
+				android:textSize="13sp"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"
+				android:paddingBottom="12dp"
+				android:text="@string/join_enterprise_bullet_boundary"
+				android:textSize="13sp"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"
+				android:paddingBottom="4dp"
+				android:text="@string/join_enterprise_quota_label"
+				android:textSize="13sp"
+				android:textStyle="bold"/>
+
+			<TextView
+				android:id="@+id/tv_join_quota"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"
+				android:paddingBottom="12dp"
+				android:text="@string/join_enterprise_quota_value"
+				android:textSize="13sp"/>
+
+			<Button
+				android:id="@+id/btn_join_enterprise"
+				android:textAllCaps="false"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="12dp"
+				android:layout_marginRight="12dp"
+				android:padding="12dp"
+				android:text="@string/join_enterprise_open_btn"
+				android:textSize="16sp"/>
+
+			<Button
+				android:id="@+id/btn_join_exit_guide"
+				android:textAllCaps="false"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="12dp"
+				android:layout_marginTop="8dp"
+				android:layout_marginRight="12dp"
+				android:padding="12dp"
+				android:text="@string/join_enterprise_exit_btn"
+				android:textSize="16sp"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="16dp"
+				android:text="@string/join_enterprise_footer"
+				android:textSize="12sp"/>
+
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>
