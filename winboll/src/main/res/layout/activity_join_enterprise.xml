@@ -57,6 +57,17 @@
 				android:textSize="13sp"/>
 
 			<TextView
+				android:id="@+id/tv_join_status"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"
+				android:paddingBottom="8dp"
+				android:text="@string/join_enterprise_status_wecom_off"
+				android:textIsSelectable="true"
+				android:textSize="13sp"/>
+
+			<TextView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:paddingLeft="16dp"
@@ -104,6 +115,7 @@
 				android:layout_height="wrap_content"
 				android:padding="16dp"
 				android:text="@string/join_enterprise_footer"
+				android:textIsSelectable="true"
 				android:textSize="12sp"/>
 
 		</LinearLayout>
