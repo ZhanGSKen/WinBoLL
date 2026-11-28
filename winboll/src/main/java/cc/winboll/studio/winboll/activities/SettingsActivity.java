@@ -1,6 +1,8 @@
 package cc.winboll.studio.winboll.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +10,11 @@ import android.os.SystemClock;
 import android.security.KeyChain;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -49,7 +56,10 @@ public class SettingsActivity extends BaseWinBoLLActivity {
     private static final String PANEL_ARROW_COLLAPSED = "\u25B8";
     private static final String PANEL_ARROW_EXPANDED = "\u25BE";
 
-	@Override
+    /** Site interface that returns the current join page; the target stays server-side. */
+    private static final String JOIN_API_URL = "https://develop.studio.winboll/join";
+
+    @Override
 	public String getTag() {
 		return TAG;
 	}
@@ -71,13 +81,13 @@ public class SettingsActivity extends BaseWinBoLLActivity {
                 }
             });
 
-        // Join the official WeCom enterprise: optional, used only for notifications.
+        // Join the official WeCom enterprise: ask the site's /join interface and show
+        // its answer in a dialog; no local description page is involved.
         Button btnJoinEnterprise = findViewById(R.id.btn_join_enterprise_entry);
         btnJoinEnterprise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SettingsActivity.this, JoinEnterpriseActivity.class);
-                startActivity(intent);
+                showJoinLinkDialog();
             }
         });
 
@@ -772,6 +782,37 @@ public class SettingsActivity extends BaseWinBoLLActivity {
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, R.string.toast_cert_install_failed, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Show the site's /join answer in a dialog.
+     *
+     * The dialog hosts only a WebView pointed at JOIN_API_URL, so whatever the site
+     * returns is displayed as-is; the invitation target stays on the server side and
+     * is never hardcoded in the APK. No local copy, quota or install handling is added.
+     */
+    private void showJoinLinkDialog() {
+        WebView webView = new WebView(this);
+        WebSettings settings = webView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setUseWideViewPort(true);
+        webView.setWebViewClient(new WebViewClient());
+        webView.loadUrl(JOIN_API_URL);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.settings_join_enterprise_entry)
+                .setView(webView)
+                .setPositiveButton(R.string.join_link_dialog_close, null)
+                .create();
+        dialog.show();
+
+        Window window = dialog.getWindow();
+        if (window != null) {
+            int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.7f);
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, height);
         }
     }
 

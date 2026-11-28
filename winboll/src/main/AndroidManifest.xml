@@ -381,10 +381,6 @@
 
         <activity android:name="cc.winboll.studio.winboll.activities.SettingsActivity"/>
 
-        <activity android:name="cc.winboll.studio.winboll.activities.JoinEnterpriseActivity"/>
-
-        <activity android:name="cc.winboll.studio.winboll.unittest.TestWeWorkSpecSDK"/>
-
         <activity android:name="cc.winboll.studio.winboll.activities.WXPayActivity"/>
 
         <activity android:name="cc.winboll.studio.winboll.activities.PatternLockActivity"

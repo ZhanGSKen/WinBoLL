@@ -125,26 +125,5 @@
     <string name="settings_join_enterprise_entry">申请加入 WinBoLL 企业</string>
     <string name="settings_join_enterprise_desc">加入后在园区的官方企业微信内接收通知（可选，随时可退出）。</string>
 
-    <string name="join_enterprise_title">加入 WinBoLL 企业</string>
-    <string name="join_enterprise_intro">WinBoLL 在企业微信维护一个官方企业（工作室主体，已认证）。加入后可以用企业微信接收平台通知，也可以在成员额度内使用官方邮箱。</string>
-    <string name="join_enterprise_bullet_voluntary">· 加入完全自愿，不加入不影响 App 任何功能。</string>
-    <string name="join_enterprise_bullet_notice">· 加入后会出现在该企业通讯录中，并收到结算单、维护公告等官方消息。</string>
-    <string name="join_enterprise_bullet_boundary">· 不打卡、不派任务、不签劳动合同：加入仅用于接收通知，不构成劳动关系。</string>
-    <string name="join_enterprise_quota_label">成员名额</string>
-    <string name="join_enterprise_quota_value">企业已认证，成员上限 1,000 人；实时名额与成员数待服务端下发（本版本未接入账号服务）</string>
-    <string name="join_enterprise_open_btn">打开企业微信加入</string>
-    <string name="join_enterprise_install_btn">先安装企业微信</string>
-    <string name="join_enterprise_status_wecom_on">企业微信：已安装 ✓</string>
-    <string name="join_enterprise_status_wecom_off">企业微信：未安装（点击下方按钮先安装）</string>
-    <string name="join_enterprise_status_last_open">本机上次打开加入页：%1$s（累计 %2$d 次）</string>
-    <string name="join_enterprise_status_never_open">本机尚未打开过加入页</string>
-    <string name="join_enterprise_status_joined_unknown">是否已加入：需在企业微信内查看（本版本无法自动检测，可向 WinBoLL 客服核对）</string>
-    <string name="join_enterprise_exit_btn">如何退出企业</string>
-    <string name="join_enterprise_exit_dialog_title">退出 WinBoLL 企业</string>
-    <string name="join_enterprise_exit_dialog_msg">在企业微信中依次操作：我 → 设置 → 我的企业 → 选中「WinBoLL」→ 退出企业。退出后平台会解绑你的账号，元宝与历史结算记录不受影响。</string>
-    <string name="join_enterprise_exit_dialog_ok">确定</string>
-    <string name="join_enterprise_footer">说明：本页只打开固定短链 https://develop.studio.winboll/join（联调地址），由服务器指向当前有效的企业微信邀请；固定短链不随邀请过期，若提示链接失效请稍后重试。</string>
-    <string name="toast_join_enterprise_not_installed">未检测到企业微信，已为你打开下载入口；安装后请回到本页重新加入。</string>
-    <string name="toast_join_enterprise_failed">无法打开加入页面，请检查网络，或手动在浏览器访问 develop.studio.winboll/join。</string>
-
+    <string name="join_link_dialog_close">关闭</string>
 </resources>
